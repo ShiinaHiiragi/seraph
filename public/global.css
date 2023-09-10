@@ -1,17 +1,3 @@
-/* BODY */
-body {
-  margin: 0;
-}
-
-/* Selection */
-html {
-  user-select: none;
-}
-
-::selection {
-  background: rgb(173, 214, 255);
-}
-
 /* Global Scrollbar Setting */
 ::-webkit-scrollbar {
   width: 6px;

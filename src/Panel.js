@@ -15,6 +15,10 @@ const Root = styled('div')(({ theme }) => ({
   height: "100vh",
   display: "flex",
   flexDirection: "column",
+  userSelect: "none",
+  "& ::selection": {
+    background: "rgb(173, 214, 255)"
+  }
 }));
 
 const HeaderField = styled('div')(({ theme }) => ({
