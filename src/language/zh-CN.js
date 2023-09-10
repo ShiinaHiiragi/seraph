@@ -1,8 +1,9 @@
-const zhCN = {
+const zhCN = en = {
   header: {
     title: "SERAPH"
   },
   nav: {
+    title: "SERAPH",
     public: "Public",
     private: "Private",
     utility: {
@@ -18,7 +19,10 @@ const zhCN = {
       title: "Welcome"
     },
     file: {
-      // TODO: fill this
+      bread: {
+        public: "Public",
+        private: "Private"
+      }
     }
   }
 }

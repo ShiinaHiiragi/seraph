@@ -9,14 +9,14 @@ const FileExplorer = (props) => {
   } = props;
   const { folderName } = useParams();
   const context = React.useContext(GlobalContext);
-  const breadCrumb = `main.file.bread.${type}`
 
   return (
     <RouteField
       path={[
-        context.languagePicker(breadCrumb),
+        context.languagePicker(`main.file.bread.${type}`),
         folderName
       ]}
+      title={folderName}
     >
     </RouteField>
   )
