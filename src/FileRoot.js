@@ -1,45 +1,40 @@
-import * as React from 'react';
-import { CssVarsProvider, useColorScheme } from '@mui/joy/styles';
-import CssBaseline from '@mui/joy/CssBaseline';
-import AspectRatio from '@mui/joy/AspectRatio';
-import Avatar from '@mui/joy/Avatar';
-import AvatarGroup from '@mui/joy/AvatarGroup';
-import Box from '@mui/joy/Box';
-import Button from '@mui/joy/Button';
-import Card from '@mui/joy/Card';
-import CardOverflow from '@mui/joy/CardOverflow';
-import CardCover from '@mui/joy/CardCover';
-import CardContent from '@mui/joy/CardContent';
-import Typography from '@mui/joy/Typography';
-import Input from '@mui/joy/Input';
-import IconButton from '@mui/joy/IconButton';
-import Divider from '@mui/joy/Divider';
-import Sheet from '@mui/joy/Sheet';
-import Table from '@mui/joy/Table';
-import Tabs from '@mui/joy/Tabs';
-import TabList from '@mui/joy/TabList';
-import Tab from '@mui/joy/Tab';
-import List from '@mui/joy/List';
-import ListItem from '@mui/joy/ListItem';
-import ListItemButton from '@mui/joy/ListItemButton';
-import ListItemContent from '@mui/joy/ListItemContent';
+import * as React from "react";
+import { CssVarsProvider, useColorScheme } from "@mui/joy/styles";
+import CssBaseline from "@mui/joy/CssBaseline";
+import AspectRatio from "@mui/joy/AspectRatio";
+import Avatar from "@mui/joy/Avatar";
+import AvatarGroup from "@mui/joy/AvatarGroup";
+import Box from "@mui/joy/Box";
+import Card from "@mui/joy/Card";
+import CardOverflow from "@mui/joy/CardOverflow";
+import CardCover from "@mui/joy/CardCover";
+import CardContent from "@mui/joy/CardContent";
+import Typography from "@mui/joy/Typography";
+import Input from "@mui/joy/Input";
+import IconButton from "@mui/joy/IconButton";
+import Divider from "@mui/joy/Divider";
+import Sheet from "@mui/joy/Sheet";
+import Table from "@mui/joy/Table";
+import List from "@mui/joy/List";
+import ListItem from "@mui/joy/ListItem";
+import ListItemButton from "@mui/joy/ListItemButton";
+import ListItemContent from "@mui/joy/ListItemContent";
 
 // Icons import
-import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
-import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
-import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
-import GridViewRoundedIcon from '@mui/icons-material/GridViewRounded';
-import FindInPageRoundedIcon from '@mui/icons-material/FindInPageRounded';
-import MenuIcon from '@mui/icons-material/Menu';
-import FolderOpenIcon from '@mui/icons-material/FolderOpen';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import CloseIcon from '@mui/icons-material/Close';
-import BookRoundedIcon from '@mui/icons-material/BookRounded';
+import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
+import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
+import LightModeRoundedIcon from "@mui/icons-material/LightModeRounded";
+import GridViewRoundedIcon from "@mui/icons-material/GridViewRounded";
+import FindInPageRoundedIcon from "@mui/icons-material/FindInPageRounded";
+import MenuIcon from "@mui/icons-material/Menu";
+import FolderOpenIcon from "@mui/icons-material/FolderOpen";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import BookRoundedIcon from "@mui/icons-material/BookRounded";
 
 // custom
-import Menu from './components/Menu';
-import Layout from './components/Layout';
-import Navigation from './components/Navigation';
+import Menu from "./components/Menu";
+import Layout from "./components/Layout";
+import Navigation from "./components/Navigation";
 
 function ColorSchemeToggle() {
   const { mode, setMode } = useColorScheme();
@@ -57,14 +52,14 @@ function ColorSchemeToggle() {
       variant="soft"
       color="neutral"
       onClick={() => {
-        if (mode === 'light') {
-          setMode('dark');
+        if (mode === "light") {
+          setMode("dark");
         } else {
-          setMode('light');
+          setMode("light");
         }
       }}
     >
-      {mode === 'light' ? <DarkModeRoundedIcon /> : <LightModeRoundedIcon />}
+      {mode === "light" ? <DarkModeRoundedIcon /> : <LightModeRoundedIcon />}
     </IconButton>
   );
 }
@@ -83,22 +78,22 @@ export default function FileRoot() {
       <Layout.Root
         sx={{
           gridTemplateColumns: {
-            xs: '1fr',
-            sm: 'minmax(64px, 200px) minmax(450px, 1fr)',
-            md: 'minmax(160px, 300px) minmax(600px, 1fr) minmax(300px, 420px)',
+            xs: "1fr",
+            sm: "minmax(64px, 200px) minmax(450px, 1fr)",
+            md: "minmax(160px, 300px) minmax(600px, 1fr) minmax(300px, 420px)",
           },
           ...(drawerOpen && {
-            height: '100vh',
-            overflow: 'hidden',
+            height: "100vh",
+            overflow: "hidden",
           }),
         }}
       >
         <Layout.Header>
           <Box
             sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
               gap: 1.5,
             }}
           >
@@ -106,14 +101,14 @@ export default function FileRoot() {
               variant="outlined"
               size="sm"
               onClick={() => setDrawerOpen(true)}
-              sx={{ display: { sm: 'none' } }}
+              sx={{ display: { sm: "none" } }}
             >
               <MenuIcon />
             </IconButton>
             <IconButton
               size="sm"
               variant="soft"
-              sx={{ display: { xs: 'none', sm: 'inline-flex' } }}
+              sx={{ display: { xs: "none", sm: "inline-flex" } }}
             >
               <FindInPageRoundedIcon />
             </IconButton>
@@ -134,20 +129,20 @@ export default function FileRoot() {
               </IconButton>
             }
             sx={{
-              flexBasis: '500px',
+              flexBasis: "500px",
               display: {
-                xs: 'none',
-                sm: 'flex',
+                xs: "none",
+                sm: "flex",
               },
-              boxShadow: 'sm',
+              boxShadow: "sm",
             }}
           />
-          <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1.5 }}>
+          <Box sx={{ display: "flex", flexDirection: "row", gap: 1.5 }}>
             <IconButton
               size="sm"
               variant="outlined"
               color="neutral"
-              sx={{ display: { xs: 'inline-flex', sm: 'none' } }}
+              sx={{ display: { xs: "inline-flex", sm: "none" } }}
             >
               <SearchRoundedIcon />
             </IconButton>
@@ -175,18 +170,18 @@ export default function FileRoot() {
               }
               menus={[
                 {
-                  label: 'Email',
-                  href: '/joy-ui/getting-started/templates/email/',
+                  label: "Email",
+                  href: "/joy-ui/getting-started/templates/email/",
                 },
                 {
-                  label: 'Team',
-                  href: '/joy-ui/getting-started/templates/team/',
+                  label: "Team",
+                  href: "/joy-ui/getting-started/templates/team/",
                 },
                 {
-                  label: 'Files',
+                  label: "Files",
                   active: true,
-                  'aria-current': 'page',
-                  href: '/joy-ui/getting-started/templates/files/',
+                  "aria-current": "page",
+                  href: "/joy-ui/getting-started/templates/files/",
                 },
               ]}
             />
@@ -199,19 +194,19 @@ export default function FileRoot() {
         <Layout.Main>
           <Box
             sx={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
               gap: 2,
             }}
           >
             <Sheet
               variant="outlined"
-              sx={{ borderRadius: 'sm', gridColumn: '1/-1' }}
+              sx={{ borderRadius: "sm", gridColumn: "1/-1" }}
             >
               <Table
                 sx={{
-                  '--TableCell-paddingX': '1rem',
-                  '--TableCell-paddingY': '1rem',
+                  "--TableCell-paddingX": "1rem",
+                  "--TableCell-paddingY": "1rem",
                 }}
               >
                 <thead>
@@ -228,7 +223,7 @@ export default function FileRoot() {
                       <Typography
                         level="body-sm"
                         startDecorator={<FolderOpenIcon color="primary" />}
-                        sx={{ alignItems: 'flex-start' }}
+                        sx={{ alignItems: "flex-start" }}
                       >
                         Travel pictures
                       </Typography>
@@ -242,7 +237,7 @@ export default function FileRoot() {
                     <td>
                       <AvatarGroup
                         size="sm"
-                        sx={{ '--AvatarGroup-gap': '-8px', '--Avatar-size': '24px' }}
+                        sx={{ "--AvatarGroup-gap": "-8px", "--Avatar-size": "24px" }}
                       >
                         <Avatar
                           src="https://i.pravatar.cc/24?img=6"
@@ -268,7 +263,7 @@ export default function FileRoot() {
                       <Typography
                         level="body-sm"
                         startDecorator={<FolderOpenIcon color="primary" />}
-                        sx={{ alignItems: 'flex-start' }}
+                        sx={{ alignItems: "flex-start" }}
                       >
                         Important documents
                       </Typography>
@@ -282,7 +277,7 @@ export default function FileRoot() {
                     <td>
                       <AvatarGroup
                         size="sm"
-                        sx={{ '--AvatarGroup-gap': '-8px', '--Avatar-size': '24px' }}
+                        sx={{ "--AvatarGroup-gap": "-8px", "--Avatar-size": "24px" }}
                       >
                         <Avatar
                           src="https://i.pravatar.cc/24?img=6"
@@ -310,13 +305,13 @@ export default function FileRoot() {
             <Sheet
               variant="outlined"
               sx={{
-                display: { xs: 'inherit', sm: 'none' },
-                borderRadius: 'sm',
-                overflow: 'auto',
-                '& > *': {
-                  '&:nth-of-type(n):not(:nth-last-of-type(-n+4))': {
-                    borderBottom: '1px solid',
-                    borderColor: 'divider',
+                display: { xs: "inherit", sm: "none" },
+                borderRadius: "sm",
+                overflow: "auto",
+                "& > *": {
+                  "&:nth-of-type(n):not(:nth-last-of-type(-n+4))": {
+                    borderBottom: "1px solid",
+                    borderColor: "divider",
                   },
                 },
               }}
@@ -324,34 +319,34 @@ export default function FileRoot() {
               <List
                 aria-labelledby="table-in-list"
                 sx={{
-                  '& .JoyListItemButton-root': { p: '0px' },
+                  "& .JoyListItemButton-root": { p: "0px" },
                 }}
               >
                 <ListItem>
-                  <ListItemButton variant="soft" sx={{ bgcolor: 'transparent' }}>
+                  <ListItemButton variant="soft" sx={{ bgcolor: "transparent" }}>
                     <ListItemContent sx={{ p: 2 }}>
                       <Box
                         sx={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
+                          display: "flex",
+                          justifyContent: "space-between",
                           mb: 1,
                         }}
                       >
                         <Typography
                           level="body-sm"
                           startDecorator={<FolderOpenIcon color="primary" />}
-                          sx={{ alignItems: 'flex-start' }}
+                          sx={{ alignItems: "flex-start" }}
                         >
                           Travel pictures
                         </Typography>
-                        <Typography level="body-sm" sx={{ color: 'success.600' }}>
+                        <Typography level="body-sm" sx={{ color: "success.600" }}>
                           987.5MB
                         </Typography>
                       </Box>
                       <Box
                         sx={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
+                          display: "flex",
+                          justifyContent: "space-between",
                           mt: 2,
                         }}
                       >
@@ -359,8 +354,8 @@ export default function FileRoot() {
                           <AvatarGroup
                             size="sm"
                             sx={{
-                              '--AvatarGroup-gap': '-8px',
-                              '--Avatar-size': '24px',
+                              "--AvatarGroup-gap": "-8px",
+                              "--Avatar-size": "24px",
                             }}
                           >
                             <Avatar
@@ -388,30 +383,30 @@ export default function FileRoot() {
                 </ListItem>
                 <Divider />
                 <ListItem>
-                  <ListItemButton variant="soft" sx={{ bgcolor: 'transparent' }}>
+                  <ListItemButton variant="soft" sx={{ bgcolor: "transparent" }}>
                     <ListItemContent sx={{ p: 2 }}>
                       <Box
                         sx={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
+                          display: "flex",
+                          justifyContent: "space-between",
                           mb: 1,
                         }}
                       >
                         <Typography
                           level="body-sm"
                           startDecorator={<FolderOpenIcon color="primary" />}
-                          sx={{ alignItems: 'flex-start' }}
+                          sx={{ alignItems: "flex-start" }}
                         >
                           Important documents
                         </Typography>
-                        <Typography level="body-sm" sx={{ color: 'success.600' }}>
+                        <Typography level="body-sm" sx={{ color: "success.600" }}>
                           123.3KB
                         </Typography>
                       </Box>
                       <Box
                         sx={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
+                          display: "flex",
+                          justifyContent: "space-between",
                           mt: 2,
                         }}
                       >
@@ -419,8 +414,8 @@ export default function FileRoot() {
                           <AvatarGroup
                             size="sm"
                             sx={{
-                              '--AvatarGroup-gap': '-8px',
-                              '--Avatar-size': '24px',
+                              "--AvatarGroup-gap": "-8px",
+                              "--Avatar-size": "24px",
                             }}
                           >
                             <Avatar
@@ -451,30 +446,30 @@ export default function FileRoot() {
             <Card
               variant="outlined"
               sx={{
-                '--Card-radius': (theme) => theme.vars.radius.sm,
-                boxShadow: 'none',
+                "--Card-radius": (theme) => theme.vars.radius.sm,
+                boxShadow: "none",
               }}
             >
               <CardOverflow
                 sx={{
-                  borderBottom: '1px solid',
-                  borderColor: 'neutral.outlinedBorder',
+                  borderBottom: "1px solid",
+                  borderColor: "neutral.outlinedBorder",
                 }}
               >
                 <AspectRatio ratio="16/9" color="primary">
                   <Typography
                     sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: 'primary.plainColor',
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      color: "primary.plainColor",
                     }}
                   >
                     .zip
                   </Typography>
                 </AspectRatio>
               </CardOverflow>
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Box sx={{ flex: 1 }}>
                   <Typography>photos-travel.zip</Typography>
                   <Typography level="body-xs" mt={0.5}>
@@ -490,8 +485,8 @@ export default function FileRoot() {
               variant="solid"
               invertedColors
               sx={{
-                '--Card-radius': (theme) => theme.vars.radius.sm,
-                boxShadow: 'none',
+                "--Card-radius": (theme) => theme.vars.radius.sm,
+                boxShadow: "none",
               }}
             >
               <CardCover>
@@ -503,15 +498,15 @@ export default function FileRoot() {
               <CardCover
                 sx={{
                   background:
-                    'linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.12))',
+                    "linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.12))",
                 }}
               />
               <CardContent
                 sx={{
-                  mt: 'auto',
+                  mt: "auto",
                   flexGrow: 0,
-                  flexDirection: 'row',
-                  alignItems: 'center',
+                  flexDirection: "row",
+                  alignItems: "center",
                 }}
               >
                 <Box sx={{ flex: 1 }}>
@@ -528,30 +523,30 @@ export default function FileRoot() {
             <Card
               variant="outlined"
               sx={{
-                '--Card-radius': (theme) => theme.vars.radius.sm,
-                boxShadow: 'none',
+                "--Card-radius": (theme) => theme.vars.radius.sm,
+                boxShadow: "none",
               }}
             >
               <CardOverflow
                 sx={{
-                  borderBottom: '1px solid',
-                  borderColor: 'neutral.outlinedBorder',
+                  borderBottom: "1px solid",
+                  borderColor: "neutral.outlinedBorder",
                 }}
               >
                 <AspectRatio ratio="16/9" color="primary">
                   <Typography
                     sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: 'primary.plainColor',
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      color: "primary.plainColor",
                     }}
                   >
                     .zip
                   </Typography>
                 </AspectRatio>
               </CardOverflow>
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Box sx={{ flex: 1 }}>
                   <Typography>platform_ios.zip</Typography>
                   <Typography level="body-xs" mt={0.5}>
@@ -565,111 +560,6 @@ export default function FileRoot() {
             </Card>
           </Box>
         </Layout.Main>
-        <Sheet
-          sx={{
-            display: { xs: 'none', sm: 'initial' },
-            borderLeft: '1px solid',
-            borderColor: 'neutral.outlinedBorder',
-          }}
-        >
-          <Box sx={{ p: 2, display: 'flex', alignItems: 'center' }}>
-            <Typography sx={{ flex: 1 }}>torres-del-paine.png</Typography>
-            <IconButton variant="outlined" color="neutral" size="sm">
-              <CloseIcon />
-            </IconButton>
-          </Box>
-          <Divider />
-          <Tabs>
-            <TabList color="primary">
-              <Tab color="primary" sx={{ flexGrow: 1 }}>
-                Details
-              </Tab>
-              <Tab color="primary" sx={{ flexGrow: 1 }}>
-                Activity
-              </Tab>
-            </TabList>
-          </Tabs>
-          <AspectRatio ratio="21/9">
-            <img
-              alt=""
-              src="https://images.unsplash.com/photo-1534067783941-51c9c23ecefd?auto=format&fit=crop&w=774"
-            />
-          </AspectRatio>
-          <Box sx={{ p: 2, display: 'flex', gap: 1, alignItems: 'center' }}>
-            <Typography level="body-sm" mr={1}>
-              Shared with
-            </Typography>
-            <AvatarGroup size="sm" sx={{ '--Avatar-size': '24px' }}>
-              <Avatar
-                src="https://i.pravatar.cc/24?img=6"
-                srcSet="https://i.pravatar.cc/48?img=6 2x"
-              />
-              <Avatar
-                src="https://i.pravatar.cc/24?img=7"
-                srcSet="https://i.pravatar.cc/48?img=7 2x"
-              />
-              <Avatar
-                src="https://i.pravatar.cc/24?img=8"
-                srcSet="https://i.pravatar.cc/48?img=8 2x"
-              />
-              <Avatar
-                src="https://i.pravatar.cc/24?img=9"
-                srcSet="https://i.pravatar.cc/48?img=9 2x"
-              />
-            </AvatarGroup>
-          </Box>
-          <Divider />
-          <Box
-            sx={{
-              gap: 2,
-              p: 2,
-              display: 'grid',
-              gridTemplateColumns: 'auto 1fr',
-              '& > *:nth-of-type(odd)': { color: 'text.secondary' },
-            }}
-          >
-            <Typography level="body-sm">Type</Typography>
-            <Typography level="body-sm" textColor="text.primary">
-              Image
-            </Typography>
-
-            <Typography level="body-sm">Size</Typography>
-            <Typography level="body-sm" textColor="text.primary">
-              3,6 MB (3,258,385 bytes)
-            </Typography>
-
-            <Typography level="body-sm">Storage used</Typography>
-            <Typography level="body-sm" textColor="text.primary">
-              3,6 MB (3,258,385 bytes)
-            </Typography>
-
-            <Typography level="body-sm">Location</Typography>
-            <Typography level="body-sm" textColor="text.primary">
-              Travel pictures
-            </Typography>
-
-            <Typography level="body-sm">Owner</Typography>
-            <Typography level="body-sm" textColor="text.primary">
-              Michael Scott
-            </Typography>
-
-            <Typography level="body-sm">Modified</Typography>
-            <Typography level="body-sm" textColor="text.primary">
-              26 October 2016
-            </Typography>
-
-            <Typography level="body-sm">Created</Typography>
-            <Typography level="body-sm" textColor="text.primary">
-              5 August 2016
-            </Typography>
-          </Box>
-          <Divider />
-          <Box sx={{ py: 2, px: 1 }}>
-            <Button variant="plain" size="sm" endDecorator={<EditOutlinedIcon />}>
-              Add a description
-            </Button>
-          </Box>
-        </Sheet>
       </Layout.Root>
     </CssVarsProvider>
   );

@@ -1,7 +1,7 @@
-import * as React from 'react';
-import JoyMenu from '@mui/joy/Menu';
-import MenuItem from '@mui/joy/MenuItem';
-import { ListActionTypes } from '@mui/base/useList';
+import * as React from "react";
+import JoyMenu from "@mui/joy/Menu";
+import MenuItem from "@mui/joy/MenuItem";
+import { ListActionTypes } from "@mui/base/useList";
 
 function Menu({
   control,
@@ -29,10 +29,10 @@ function Menu({
   };
 
   const handleButtonKeyDown = (event) => {
-    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
       event.preventDefault();
       setOpen(true);
-      if (event.key === 'ArrowUp') {
+      if (event.key === "ArrowUp") {
         menuActions.current?.dispatch({
           type: ListActionTypes.keyDown,
           key: event.key,
@@ -50,13 +50,13 @@ function Menu({
   return (
     <React.Fragment>
       {React.cloneElement(control, {
-        type: 'button',
+        type: "button",
         onClick: handleButtonClick,
         onKeyDown: handleButtonKeyDown,
         ref: updateAnchor,
-        'aria-controls': isOpen ? id : undefined,
-        'aria-expanded': isOpen || undefined,
-        'aria-haspopup': 'menu',
+        "aria-controls": isOpen ? id : undefined,
+        "aria-expanded": isOpen || undefined,
+        "aria-haspopup": "menu",
       })}
       <JoyMenu
         id={id}
@@ -71,7 +71,7 @@ function Menu({
           const menuItem = (
             <MenuItem
               selected={active}
-              variant={active ? 'soft' : 'plain'}
+              variant={active ? "soft" : "plain"}
               onClick={close}
               {...item}
             >
@@ -81,7 +81,7 @@ function Menu({
           if (item.href) {
             return (
               <li key={label} role="none">
-                {React.cloneElement(menuItem, { component: 'a' })}
+                {React.cloneElement(menuItem, { component: "a" })}
               </li>
             );
           }
