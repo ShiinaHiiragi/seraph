@@ -19,7 +19,7 @@ export default function Navigation() {
     <List size="sm" sx={{ "--ListItem-radius": "8px", "--List-gap": "4px" }}>
       <ListItem sx={{ paddingLeft: 0, display: { xs: "inline-flex", sm: "none" } }}>
         <IconButton disabled sx={{ paddingLeft: "0px" }}>
-          <img src={GreyLogo} width={24} height={24}/>
+          <img src={GreyLogo} width={24} height={24} alt=""/>
         </IconButton>
         <Typography component="h1" fontWeight="lg" sx={{ letterSpacing: "0.06em" }}>
           SERAPH
@@ -74,26 +74,10 @@ export default function Navigation() {
         >
           <ListItem>
             <ListItemButton>
-              <ListItemDecorator>
-                <FolderOpenIcon fontSize="small" />
-              </ListItemDecorator>
-              <ListItemContent>My files</ListItemContent>
-            </ListItemButton>
-          </ListItem>
-          <ListItem>
-            <ListItemButton>
               <ListItemDecorator sx={{ color: "neutral.500" }}>
                 <ShareOutlinedIcon fontSize="small" />
               </ListItemDecorator>
-              <ListItemContent>Shared files</ListItemContent>
-            </ListItemButton>
-          </ListItem>
-          <ListItem>
-            <ListItemButton>
-              <ListItemDecorator sx={{ color: "neutral.500" }}>
-                <DeleteRoundedIcon fontSize="small" />
-              </ListItemDecorator>
-              <ListItemContent>Trash</ListItemContent>
+              <ListItemContent>Links</ListItemContent>
             </ListItemButton>
           </ListItem>
         </List>

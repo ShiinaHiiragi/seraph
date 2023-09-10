@@ -62,7 +62,7 @@ const Header = (props) => {
           disabled
           sx={{ display: { xs: "none", sm: "inline-flex" } }}
         >
-          <img src={GreyLogo} width={24} height={24}/>
+          <img src={GreyLogo} width={24} height={24} alt=""/>
         </IconButton>
         <Typography component="h1" fontWeight="lg" sx={{ letterSpacing: "0.06em" }}>
           SERAPH
