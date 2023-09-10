@@ -9,7 +9,7 @@ const zhCN = {
     utility: {
       title: "实用",
       archive: "档案",
-      deposit: "寄存",
+      links: "链接",
       milkdown: "Milkdown",
       todo: "待办"
     }

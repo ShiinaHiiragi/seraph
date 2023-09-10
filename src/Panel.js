@@ -73,7 +73,7 @@ const MainField = styled('div')(({ theme }) => ({
 }));
 
 const Panel = () => {
-  const [language, setLanguage] = React.useState(defaultLanguage);
+  const [language, setLanguage] = React.useState("ja");
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const languagePicker = React.useMemo(() => languagePickerSpawner(language), [language])
 

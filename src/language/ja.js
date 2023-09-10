@@ -9,7 +9,7 @@ const ja = {
     utility: {
       title: "ユーティリティ",
       archive: "アーカイブ",
-      deposit: "リンク",
+      links: "リンク",
       milkdown: "ミルクダウン",
       todo: "トゥードゥー"
     }
