@@ -101,7 +101,10 @@ function Main(props) {
       component="main"
       className="Main"
       {...props}
-      sx={[{ p: 2 }, ...(Array.isArray(props.sx) ? props.sx : [props.sx])]}
+      sx={[{
+        p: 2,
+        overflow: "auto"
+      }, ...(Array.isArray(props.sx) ? props.sx : [props.sx])]}
     />
   );
 }

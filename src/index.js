@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import FileRoot from "./FileRoot";
+import Panel from "./Panel";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import "@fontsource/inter";
@@ -10,7 +10,7 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route exact path="/" element={<FileRoot />} />
+        <Route exact path="/" element={<Panel />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
