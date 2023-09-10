@@ -19,7 +19,7 @@ const en = {
       title: "Welcome"
     },
     file: {
-      title: {
+      bread: {
         public: "Public",
         private: "Private"
       }

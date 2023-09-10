@@ -54,6 +54,43 @@ export default function Navigation() {
               <ListItemContent>Folder 02</ListItemContent>
             </ListItemButton>
           </ListItem>
+          <ListItem>
+            <ListItemButton>
+              <ListItemDecorator>
+                <FolderOpenIcon fontSize="small" />
+              </ListItemDecorator>
+              <ListItemContent>Folder 03</ListItemContent>
+            </ListItemButton>
+          </ListItem>
+        </List>
+      </ListItem>
+
+      <ListItem nested>
+        <ListSubheader>
+          {context.languagePicker("nav.private")}
+        </ListSubheader>
+        <List
+          aria-labelledby="nav-list-browse"
+          sx={{
+            "& .JoyListItemButton-root": { p: "8px" },
+          }}
+        >
+          <ListItem>
+            <ListItemButton>
+              <ListItemDecorator>
+                <FolderOpenIcon fontSize="small" />
+              </ListItemDecorator>
+              <ListItemContent>Folder 01</ListItemContent>
+            </ListItemButton>
+          </ListItem>
+          <ListItem>
+            <ListItemButton>
+              <ListItemDecorator>
+                <FolderOpenIcon fontSize="small" />
+              </ListItemDecorator>
+              <ListItemContent>Folder 02</ListItemContent>
+            </ListItemButton>
+          </ListItem>
         </List>
       </ListItem>
 

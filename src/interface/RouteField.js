@@ -14,14 +14,14 @@ const RouteFieldRaw = styled("div")(({ theme }) => ({
 
 const RouteField = (props) => {
   const { path, children, ...otherProps } = props;
-  const [breadcrumb, setBreadcrumb] = React.useState((path ?? "").split("/"));
+  const [breadcrumb, setBreadcrumb] = React.useState(path ?? []);
 
   return (
     <RouteFieldRaw sx={(theme) => ({
       flexDirection: "column",
       padding: theme.spacing(2, 3),
     })}>
-      {path &&
+      {path.length &&
         <Breadcrumbs
           size="md"
           separator={<ChevronRightRoundedIcon fontSize="sm" />}
