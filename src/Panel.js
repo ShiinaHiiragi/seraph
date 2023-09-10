@@ -18,12 +18,30 @@ const Root = styled('div')(({ theme }) => ({
   userSelect: "none",
   "& ::selection": {
     background: "rgb(173, 214, 255)"
+  },
+  "& ::-webkit-scrollbar": {
+    width: "6px",
+    height: "6px"
+  },
+  "& ::-webkit-scrollbar-track": {
+    borderRadius: 0,
+    backgroundColor: "rgb(250, 250, 250)"
+  },
+  "& ::-webkit-scrollbar-thumb": {
+    borderRadius: 0,
+    backgroundColor: "rgb(190, 190, 190)"
   }
 }));
 
 const HeaderField = styled('div')(({ theme }) => ({
   width: "100%",
-  minHeight: "64px",
+  
+  [theme.breakpoints.only("xs")]: {
+    minHeight: "64px",
+  },
+  [theme.breakpoints.up("sm")]: {
+    minHeight: "72px",
+  }
 }));
 
 const ContentField = styled('div')(({ theme }) => ({
