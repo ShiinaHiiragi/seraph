@@ -1,8 +1,10 @@
+import React from "react";
 import { styled } from "@mui/joy/styles";
 import { CssVarsProvider } from "@mui/joy/styles";
 import CssBaseline from "@mui/joy/CssBaseline";
 import Header from "./components/Header";
 import Navigation from "./components/Navigation";
+import SideDrawer from "./components/SideDrawer";
 
 const Root = styled('div')(({ theme }) => ({
   width: "100vw",
@@ -45,12 +47,21 @@ const MainField = styled('div')(({ theme }) => ({
 }));
 
 const Panel = () => {
+  const [drawerOpen, setDrawerOpen] = React.useState(false);
+
   return (
     <Root>
       <CssVarsProvider disableTransitionOnChange>
         <CssBaseline />
+        {drawerOpen && (
+          <SideDrawer onClose={() => setDrawerOpen(false)}>
+            <Navigation />
+          </SideDrawer>
+        )}
         <HeaderField>
-          <Header/>
+          <Header
+            setDrawerOpen={setDrawerOpen}
+          />
         </HeaderField>
         <ContentField>
           <NavigationField>

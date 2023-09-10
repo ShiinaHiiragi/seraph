@@ -35,8 +35,10 @@ const HeaderLayout = (props) => {
   );
 }
 
-const Header = () => {
-  const [drawerOpen, setDrawerOpen] = React.useState(false);
+const Header = (props) => {
+  const {
+    setDrawerOpen
+  } = props;
 
   return (
     <HeaderLayout>

@@ -1,6 +1,4 @@
 import * as React from "react";
-import Box from "@mui/joy/Box";
-import IconButton from "@mui/joy/IconButton";
 import List from "@mui/joy/List";
 import ListSubheader from "@mui/joy/ListSubheader";
 import ListItem from "@mui/joy/ListItem";
@@ -11,7 +9,6 @@ import ListItemContent from "@mui/joy/ListItemContent";
 // Icons import
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
-import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 
 export default function Navigation() {
@@ -19,15 +16,7 @@ export default function Navigation() {
     <List size="sm" sx={{ "--ListItem-radius": "8px", "--List-gap": "4px" }}>
       <ListItem nested>
         <ListSubheader>
-          Browse
-          <IconButton
-            size="sm"
-            variant="plain"
-            color="primary"
-            sx={{ "--IconButton-size": "24px", ml: "auto" }}
-          >
-            <KeyboardArrowDownRoundedIcon fontSize="small" color="primary" />
-          </IconButton>
+          File Browser
         </ListSubheader>
         <List
           aria-labelledby="nav-list-browse"
@@ -62,83 +51,38 @@ export default function Navigation() {
         </List>
       </ListItem>
 
-      <ListItem nested sx={{ mt: 2 }}>
+      <ListItem nested>
         <ListSubheader>
-          Tags
-          <IconButton
-            size="sm"
-            variant="plain"
-            color="primary"
-            sx={{ "--IconButton-size": "24px", ml: "auto" }}
-          >
-            <KeyboardArrowDownRoundedIcon fontSize="small" color="primary" />
-          </IconButton>
+          Utility
         </ListSubheader>
         <List
-          aria-labelledby="nav-list-tags"
-          size="sm"
+          aria-labelledby="nav-list-browse"
           sx={{
-            "--ListItemDecorator-size": "32px",
+            "& .JoyListItemButton-root": { p: "8px" },
           }}
         >
           <ListItem>
             <ListItemButton>
               <ListItemDecorator>
-                <Box
-                  sx={{
-                    width: "10px",
-                    height: "10px",
-                    borderRadius: "99px",
-                    bgcolor: "primary.300",
-                  }}
-                />
+                <FolderOpenIcon fontSize="small" />
               </ListItemDecorator>
-              <ListItemContent>Personal</ListItemContent>
+              <ListItemContent>My files</ListItemContent>
             </ListItemButton>
           </ListItem>
           <ListItem>
             <ListItemButton>
-              <ListItemDecorator>
-                <Box
-                  sx={{
-                    width: "10px",
-                    height: "10px",
-                    borderRadius: "99px",
-                    bgcolor: "danger.400",
-                  }}
-                />
+              <ListItemDecorator sx={{ color: "neutral.500" }}>
+                <ShareOutlinedIcon fontSize="small" />
               </ListItemDecorator>
-              <ListItemContent>Work</ListItemContent>
+              <ListItemContent>Shared files</ListItemContent>
             </ListItemButton>
           </ListItem>
           <ListItem>
             <ListItemButton>
-              <ListItemDecorator>
-                <Box
-                  sx={{
-                    width: "10px",
-                    height: "10px",
-                    borderRadius: "99px",
-                    bgcolor: "warning.500",
-                  }}
-                />
+              <ListItemDecorator sx={{ color: "neutral.500" }}>
+                <DeleteRoundedIcon fontSize="small" />
               </ListItemDecorator>
-              <ListItemContent>Travels</ListItemContent>
-            </ListItemButton>
-          </ListItem>
-          <ListItem>
-            <ListItemButton>
-              <ListItemDecorator>
-                <Box
-                  sx={{
-                    width: "10px",
-                    height: "10px",
-                    borderRadius: "99px",
-                    bgcolor: "success.400",
-                  }}
-                />
-              </ListItemDecorator>
-              <ListItemContent>Concert tickets</ListItemContent>
+              <ListItemContent>Trash</ListItemContent>
             </ListItemButton>
           </ListItem>
         </List>
