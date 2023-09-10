@@ -6,7 +6,7 @@ import Header from "./components/Header";
 import Navigation from "./components/Navigation";
 import SideDrawer from "./components/SideDrawer";
 import { BrowserRouter, Routes, Route } from "react-router-dom"
-import RouteField from "./interface/RouteField";
+import Welcome from "./main/Welcome";
 import FileExplorer from "./main/FileExplorer"
 import Links from "./main/Links"
 
@@ -96,7 +96,7 @@ const Panel = () => {
           <MainField>
             <BrowserRouter>
               <Routes>
-                <Route exact path="/" element={<RouteField />} />
+                <Route exact path="/" element={<Welcome />} />
                 <Route path="/links" element={<Links />} />
                 <Route path="/files/:folderName" element={<FileExplorer />} />
               </Routes>

@@ -2,7 +2,7 @@ import RouteField from "../interface/RouteField";
 
 const Welcome = () => {
   return (
-    <RouteField>
+    <RouteField path="Welcome">
       WELCOME
     </RouteField>
   )
