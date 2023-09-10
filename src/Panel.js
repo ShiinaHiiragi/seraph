@@ -1,7 +1,8 @@
 import { styled } from "@mui/joy/styles";
-import IconButton from "@mui/joy/IconButton";
-import GridViewRoundedIcon from "@mui/icons-material/GridViewRounded";
-import Menu from "./components/Menu";
+import { CssVarsProvider } from "@mui/joy/styles";
+import CssBaseline from "@mui/joy/CssBaseline";
+import Header from "./components/Header";
+import Navigation from "./components/Navigation";
 
 const Root = styled('div')(({ theme }) => ({
   width: "100vw",
@@ -10,10 +11,9 @@ const Root = styled('div')(({ theme }) => ({
   flexDirection: "column",
 }));
 
-const MenuField = styled('div')(({ theme }) => ({
+const HeaderField = styled('div')(({ theme }) => ({
   width: "100%",
   minHeight: "64px",
-  backgroundColor: theme.palette.background.level1
 }));
 
 const ContentField = styled('div')(({ theme }) => ({
@@ -26,8 +26,8 @@ const ContentField = styled('div')(({ theme }) => ({
 
 const NavigationField = styled('div')(({ theme }) => ({
   width: "225px",
-  backgroundColor: theme.palette.background.level2,
   overflow: "auto",
+  padding: theme.spacing(2),
   [theme.breakpoints.only("xs")]: {
     display: "none",
   },
@@ -41,21 +41,25 @@ const NavigationField = styled('div')(({ theme }) => ({
 
 const MainField = styled('div')(({ theme }) => ({
   flexGrow: 1,
-  backgroundColor: theme.palette.background.level3,
   overflow: "auto",
 }));
 
 const Panel = () => {
   return (
     <Root>
-      <HeaderField>
-      </HeaderField>
-      <ContentField>
-        <NavigationField>
-        </NavigationField>
-        <MainField>
-        </MainField>
-      </ContentField>
+      <CssVarsProvider disableTransitionOnChange>
+        <CssBaseline />
+        <HeaderField>
+          <Header/>
+        </HeaderField>
+        <ContentField>
+          <NavigationField>
+            <Navigation />
+          </NavigationField>
+          <MainField>
+          </MainField>
+        </ContentField>
+      </CssVarsProvider>
     </Root>
   );
 }
