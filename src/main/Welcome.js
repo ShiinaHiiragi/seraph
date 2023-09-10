@@ -1,11 +1,11 @@
 import RouteField from "../interface/RouteField";
 
-const Links = () => {
+const Welcome = () => {
   return (
     <RouteField>
-      LINKS
+      WELCOME
     </RouteField>
   )
 }
 
-export default Links;
+export default Welcome;

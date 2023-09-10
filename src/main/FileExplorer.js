@@ -6,7 +6,7 @@ const FileExplorer = () => {
 
   return (
     <RouteField>
-      folderName: {folderName}
+      FILENAME: {folderName}
     </RouteField>
   )
 }
