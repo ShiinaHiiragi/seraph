@@ -1,6 +1,6 @@
 const ja = {
   header: {
-    title: "Seraph"
+    title: "SERAPH"
   },
   nav: {
     public: "Public",

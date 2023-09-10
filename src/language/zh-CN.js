@@ -1,6 +1,6 @@
 const zhCN = {
   header: {
-    title: "Seraph"
+    title: "SERAPH"
   },
   nav: {
     public: "Public",

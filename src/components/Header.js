@@ -6,6 +6,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import BookRoundedIcon from "@mui/icons-material/BookRounded";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import GreyLogo from "../logo-grey.svg";
+import GlobalContext from "../interface/constants";
 
 const HeaderLayout = (props) => {
   return (
@@ -39,6 +40,7 @@ const Header = (props) => {
   const {
     setDrawerOpen
   } = props;
+  const context = React.useContext(GlobalContext);
 
   return (
     <HeaderLayout>
@@ -65,7 +67,7 @@ const Header = (props) => {
           <img src={GreyLogo} width={24} height={24} alt=""/>
         </IconButton>
         <Typography component="h1" fontWeight="lg" sx={{ letterSpacing: "0.06em" }}>
-          SERAPH
+          {context.languagePicker("header.title")}
         </Typography>
       </Box>
       <Box sx={{ display: "flex", flexDirection: "row", gap: 1.5 }}>

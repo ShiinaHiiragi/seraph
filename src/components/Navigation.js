@@ -13,8 +13,11 @@ import DoneIcon from "@mui/icons-material/Done";
 import CloudOutlinedIcon from "@mui/icons-material/CloudOutlined";
 import EventNoteOutlinedIcon from "@mui/icons-material/EventNoteOutlined";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
+import GlobalContext from "../interface/constants";
 
 export default function Navigation() {
+  const context = React.useContext(GlobalContext);
+
   return (
     <List size="sm" sx={{ "--ListItem-radius": "8px", "--List-gap": "4px" }}>
       <ListItem sx={{ paddingLeft: 0, display: { xs: "inline-flex", sm: "none" } }}>
@@ -22,12 +25,12 @@ export default function Navigation() {
           <img src={GreyLogo} width={24} height={24} alt="" />
         </IconButton>
         <Typography component="h1" fontWeight="lg" sx={{ letterSpacing: "0.06em" }}>
-          SERAPH
+          {context.languagePicker("header.title")}
         </Typography>
       </ListItem>
       <ListItem nested>
         <ListSubheader>
-          Public
+          {context.languagePicker("nav.public")}
         </ListSubheader>
         <List
           aria-labelledby="nav-list-browse"
@@ -56,7 +59,7 @@ export default function Navigation() {
 
       <ListItem nested>
         <ListSubheader>
-          Utility
+          {context.languagePicker("nav.utility.title")}
         </ListSubheader>
         <List
           aria-labelledby="nav-list-browse"
@@ -69,7 +72,7 @@ export default function Navigation() {
               <ListItemDecorator sx={{ color: "neutral.500" }}>
                 <ShareOutlinedIcon fontSize="small" />
               </ListItemDecorator>
-              <ListItemContent>Archive</ListItemContent>
+              <ListItemContent>{context.languagePicker("nav.utility.archive")}</ListItemContent>
             </ListItemButton>
           </ListItem>
           <ListItem>
@@ -77,7 +80,7 @@ export default function Navigation() {
               <ListItemDecorator sx={{ color: "neutral.500" }}>
                 <CloudOutlinedIcon fontSize="small" />
               </ListItemDecorator>
-              <ListItemContent>Deposit</ListItemContent>
+              <ListItemContent>{context.languagePicker("nav.utility.deposit")}</ListItemContent>
             </ListItemButton>
           </ListItem>
           <ListItem>
@@ -85,7 +88,7 @@ export default function Navigation() {
               <ListItemDecorator sx={{ color: "neutral.500" }}>
                 <EventNoteOutlinedIcon fontSize="small" />
               </ListItemDecorator>
-              <ListItemContent>Milkdown</ListItemContent>
+              <ListItemContent>{context.languagePicker("nav.utility.milkdown")}</ListItemContent>
             </ListItemButton>
           </ListItem>
           <ListItem>
@@ -93,7 +96,7 @@ export default function Navigation() {
               <ListItemDecorator sx={{ color: "neutral.500" }}>
                 <DoneIcon fontSize="small" />
               </ListItemDecorator>
-              <ListItemContent>TODO</ListItemContent>
+              <ListItemContent>{context.languagePicker("nav.utility.todo")}</ListItemContent>
             </ListItemButton>
           </ListItem>
         </List>
