@@ -3,7 +3,7 @@ import RouteField from "../interface/RouteField";
 const Welcome = () => {
   return (
     <RouteField>
-      WELCOME
+      WELCOME PAGE
     </RouteField>
   )
 }

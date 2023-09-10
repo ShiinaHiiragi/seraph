@@ -13,6 +13,8 @@ import GreyLogo from "../logo-grey.svg";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import EventNoteOutlinedIcon from "@mui/icons-material/EventNoteOutlined";
+import DoneIcon from "@mui/icons-material/Done";
+import InboxOutlinedIcon from "@mui/icons-material/InboxOutlined";
 
 export default function Navigation() {
   return (
@@ -27,7 +29,7 @@ export default function Navigation() {
       </ListItem>
       <ListItem nested>
         <ListSubheader>
-          File
+          Public
         </ListSubheader>
         <List
           aria-labelledby="nav-list-browse"
@@ -67,9 +69,9 @@ export default function Navigation() {
           <ListItem>
             <ListItemButton>
               <ListItemDecorator sx={{ color: "neutral.500" }}>
-                <ShareOutlinedIcon fontSize="small" />
+                <DoneIcon fontSize="small" />
               </ListItemDecorator>
-              <ListItemContent>Links</ListItemContent>
+              <ListItemContent>TODO</ListItemContent>
             </ListItemButton>
           </ListItem>
           <ListItem>
@@ -78,6 +80,22 @@ export default function Navigation() {
                 <EventNoteOutlinedIcon fontSize="small" />
               </ListItemDecorator>
               <ListItemContent>Milkdown</ListItemContent>
+            </ListItemButton>
+          </ListItem>
+          <ListItem>
+            <ListItemButton>
+              <ListItemDecorator sx={{ color: "neutral.500" }}>
+                <InboxOutlinedIcon fontSize="small" />
+              </ListItemDecorator>
+              <ListItemContent>Archive</ListItemContent>
+            </ListItemButton>
+          </ListItem>
+          <ListItem>
+            <ListItemButton>
+              <ListItemDecorator sx={{ color: "neutral.500" }}>
+                <ShareOutlinedIcon fontSize="small" />
+              </ListItemDecorator>
+              <ListItemContent>Links</ListItemContent>
             </ListItemButton>
           </ListItem>
         </List>

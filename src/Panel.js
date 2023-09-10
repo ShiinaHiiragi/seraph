@@ -98,7 +98,8 @@ const Panel = () => {
               <Routes>
                 <Route exact path="/" element={<Welcome />} />
                 <Route path="/links" element={<Links />} />
-                <Route path="/files/:folderName" element={<FileExplorer />} />
+                <Route path="/public/:folderName" element={<FileExplorer type="public" />} />
+                <Route path="/private/:folderName" element={<FileExplorer type="private" />} />
               </Routes>
             </BrowserRouter>
           </MainField>
