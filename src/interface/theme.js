@@ -9,6 +9,11 @@ const GlobalTheme = extendTheme({
       lg: 1000,
       xl: 1200,
     },
+  },
+  typography: {
+    h3: {
+      letterSpacing: "0.02em"
+    }
   }
 });
 

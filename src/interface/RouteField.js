@@ -13,8 +13,8 @@ const RouteFieldRaw = styled("div")(({ theme }) => ({
 }));
 
 const RouteField = (props) => {
-  const { path, title, children, ...otherProps } = props;
-  const [breadcrumb, setBreadcrumb] = React.useState(path ?? []);
+  const { path, title, children } = props;
+  const breadcrumb = path ?? [];
 
   return (
     <RouteFieldRaw sx={(theme) => ({
@@ -48,16 +48,15 @@ const RouteField = (props) => {
           ))}
         </Breadcrumbs>
       }
-      <Typography
-        level="h3"
-        children={title}
-        sx={{ letterSpacing: "0.04em" }}
-      />
-      <RouteFieldRaw
-        children={children}
-        setBreadcrumb={setBreadcrumb}
-        {...otherProps}
-      />
+      {
+        title &&
+        <Typography
+          level="h3"
+          children={title}
+          sx={(theme) => ({ paddingBottom: theme.spacing(2) })}
+        />
+      }
+      <RouteFieldRaw children={children} />
     </RouteFieldRaw>
   )
 }

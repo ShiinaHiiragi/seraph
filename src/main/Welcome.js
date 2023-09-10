@@ -6,10 +6,8 @@ const Welcome = () => {
   const context = React.useContext(GlobalContext);
 
   return (
-    <RouteField
-      title={context.languagePicker("main.welcome.title")}
-    >
-      WELCOME PAGE HERE
+    <RouteField>
+      {context.languagePicker("main.welcome.title")} Page Here
     </RouteField>
   )
 }
