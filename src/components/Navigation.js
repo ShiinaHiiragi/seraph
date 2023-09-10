@@ -11,10 +11,10 @@ import Typography from "@mui/joy/Typography"
 // Icons import
 import GreyLogo from "../logo-grey.svg";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
-import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
-import EventNoteOutlinedIcon from "@mui/icons-material/EventNoteOutlined";
 import DoneIcon from "@mui/icons-material/Done";
-import InboxOutlinedIcon from "@mui/icons-material/InboxOutlined";
+import CloudOutlinedIcon from "@mui/icons-material/CloudOutlined";
+import EventNoteOutlinedIcon from "@mui/icons-material/EventNoteOutlined";
+import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 
 export default function Navigation() {
   return (
@@ -69,9 +69,17 @@ export default function Navigation() {
           <ListItem>
             <ListItemButton>
               <ListItemDecorator sx={{ color: "neutral.500" }}>
-                <DoneIcon fontSize="small" />
+                <ShareOutlinedIcon fontSize="small" />
               </ListItemDecorator>
-              <ListItemContent>TODO</ListItemContent>
+              <ListItemContent>Archive</ListItemContent>
+            </ListItemButton>
+          </ListItem>
+          <ListItem>
+            <ListItemButton>
+              <ListItemDecorator sx={{ color: "neutral.500" }}>
+                <CloudOutlinedIcon fontSize="small" />
+              </ListItemDecorator>
+              <ListItemContent>Deposit</ListItemContent>
             </ListItemButton>
           </ListItem>
           <ListItem>
@@ -85,17 +93,9 @@ export default function Navigation() {
           <ListItem>
             <ListItemButton>
               <ListItemDecorator sx={{ color: "neutral.500" }}>
-                <InboxOutlinedIcon fontSize="small" />
+                <DoneIcon fontSize="small" />
               </ListItemDecorator>
-              <ListItemContent>Archive</ListItemContent>
-            </ListItemButton>
-          </ListItem>
-          <ListItem>
-            <ListItemButton>
-              <ListItemDecorator sx={{ color: "neutral.500" }}>
-                <ShareOutlinedIcon fontSize="small" />
-              </ListItemDecorator>
-              <ListItemContent>Links</ListItemContent>
+              <ListItemContent>TODO</ListItemContent>
             </ListItemButton>
           </ListItem>
         </List>

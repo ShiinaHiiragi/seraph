@@ -8,7 +8,6 @@ import SideDrawer from "./components/SideDrawer";
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Welcome from "./main/Welcome";
 import FileExplorer from "./main/FileExplorer"
-import Links from "./main/Links"
 
 const Root = styled('div')(({ theme }) => ({
   width: "100vw",
@@ -97,7 +96,6 @@ const Panel = () => {
             <BrowserRouter>
               <Routes>
                 <Route exact path="/" element={<Welcome />} />
-                <Route path="/links" element={<Links />} />
                 <Route path="/public/:folderName" element={<FileExplorer type="public" />} />
                 <Route path="/private/:folderName" element={<FileExplorer type="private" />} />
               </Routes>
