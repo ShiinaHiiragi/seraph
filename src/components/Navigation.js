@@ -13,6 +13,7 @@ import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import GreyLogo from "../logo-grey.svg";
+import EventNoteOutlinedIcon from "@mui/icons-material/EventNoteOutlined";
 
 export default function Navigation() {
   return (
@@ -40,23 +41,15 @@ export default function Navigation() {
               <ListItemDecorator>
                 <FolderOpenIcon fontSize="small" />
               </ListItemDecorator>
-              <ListItemContent>My files</ListItemContent>
+              <ListItemContent>Folder 01</ListItemContent>
             </ListItemButton>
           </ListItem>
           <ListItem>
             <ListItemButton>
-              <ListItemDecorator sx={{ color: "neutral.500" }}>
-                <ShareOutlinedIcon fontSize="small" />
+              <ListItemDecorator>
+                <FolderOpenIcon fontSize="small" />
               </ListItemDecorator>
-              <ListItemContent>Shared files</ListItemContent>
-            </ListItemButton>
-          </ListItem>
-          <ListItem>
-            <ListItemButton>
-              <ListItemDecorator sx={{ color: "neutral.500" }}>
-                <DeleteRoundedIcon fontSize="small" />
-              </ListItemDecorator>
-              <ListItemContent>Trash</ListItemContent>
+              <ListItemContent>Folder 02</ListItemContent>
             </ListItemButton>
           </ListItem>
         </List>
@@ -78,6 +71,14 @@ export default function Navigation() {
                 <ShareOutlinedIcon fontSize="small" />
               </ListItemDecorator>
               <ListItemContent>Links</ListItemContent>
+            </ListItemButton>
+          </ListItem>
+          <ListItem>
+          <ListItemButton>
+              <ListItemDecorator sx={{ color: "neutral.500" }}>
+                <EventNoteOutlinedIcon fontSize="small" />
+              </ListItemDecorator>
+              <ListItemContent>Milkdown</ListItemContent>
             </ListItemButton>
           </ListItem>
         </List>

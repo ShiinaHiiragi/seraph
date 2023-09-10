@@ -5,6 +5,7 @@ import CssBaseline from "@mui/joy/CssBaseline";
 import Header from "./components/Header";
 import Navigation from "./components/Navigation";
 import SideDrawer from "./components/SideDrawer";
+import { BrowserRouter, Routes, Route } from "react-router-dom"
 
 const Root = styled('div')(({ theme }) => ({
   width: "100vw",
@@ -38,7 +39,7 @@ const NavigationField = styled('div')(({ theme }) => ({
   },
   [theme.breakpoints.up("sm")]: {
     minWidth: "225px",
-  },
+  }
 }));
 
 const MainField = styled('div')(({ theme }) => ({
@@ -68,6 +69,11 @@ const Panel = () => {
             <Navigation />
           </NavigationField>
           <MainField>
+            <BrowserRouter>
+              <Routes>
+                <Route exact path="/" element={<div />} />
+              </Routes>
+            </BrowserRouter>
           </MainField>
         </ContentField>
       </CssVarsProvider>
