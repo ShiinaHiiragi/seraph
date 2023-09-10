@@ -11,7 +11,7 @@ const ja = {
       archive: "アーカイブ",
       deposit: "デポジット",
       milkdown: "Milkdown",
-      todo: "トゥードゥー"
+      // todo: "トゥードゥー"
     }
   },
   main: {
