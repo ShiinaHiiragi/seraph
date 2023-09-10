@@ -19,7 +19,7 @@ export default function Navigation() {
     <List size="sm" sx={{ "--ListItem-radius": "8px", "--List-gap": "4px" }}>
       <ListItem sx={{ paddingLeft: 0, display: { xs: "inline-flex", sm: "none" } }}>
         <IconButton disabled sx={{ paddingLeft: "0px" }}>
-          <img src={GreyLogo} width={24} height={24} alt=""/>
+          <img src={GreyLogo} width={24} height={24} alt="" />
         </IconButton>
         <Typography component="h1" fontWeight="lg" sx={{ letterSpacing: "0.06em" }}>
           SERAPH
@@ -73,7 +73,7 @@ export default function Navigation() {
             </ListItemButton>
           </ListItem>
           <ListItem>
-          <ListItemButton>
+            <ListItemButton>
               <ListItemDecorator sx={{ color: "neutral.500" }}>
                 <EventNoteOutlinedIcon fontSize="small" />
               </ListItemDecorator>
