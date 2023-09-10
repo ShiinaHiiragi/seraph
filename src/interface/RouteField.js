@@ -17,29 +17,35 @@ const RouteField = (props) => {
   const [breadcrumb, setBreadcrumb] = React.useState((path ?? "").split("/"));
 
   return (
-    <RouteFieldRaw sx={{
-      flexDirection: "column"
-    }}>
-      {path && <Breadcrumbs size="sm" separator={<ChevronRightRoundedIcon fontSize="sm" />}>
-        <Link
-          underline="none"
-          color="neutral"
-          href="/"
-          aria-label="Home"
+    <RouteFieldRaw sx={(theme) => ({
+      flexDirection: "column",
+      padding: theme.spacing(2, 3),
+    })}>
+      {path &&
+        <Breadcrumbs
+          size="md"
+          separator={<ChevronRightRoundedIcon fontSize="sm" />}
+          sx={{ paddingLeft: 0 }}
         >
-          <HomeRoundedIcon />
-        </Link>
-        {breadcrumb.map((item, index) => (
-          <Typography
-            key={index}
-            color={index + 1 === breadcrumb.length ? "primary" : "neutral"}
-            fontWeight={500}
-            fontSize={12}
+          <Link
+            underline="none"
+            color="neutral"
+            href="/"
+            aria-label="Home"
           >
-            {item}
-          </Typography>
-        ))}
-      </Breadcrumbs>}
+            <HomeRoundedIcon />
+          </Link>
+          {breadcrumb.map((item, index) => (
+            <Typography
+              key={index}
+              color={index + 1 === breadcrumb.length ? "primary" : "neutral"}
+              fontWeight={500}
+              fontSize={12}
+            >
+              {item}
+            </Typography>
+          ))}
+        </Breadcrumbs>}
       <RouteFieldRaw
         children={children}
         setBreadcrumb={setBreadcrumb}
