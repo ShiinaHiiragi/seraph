@@ -63,8 +63,11 @@ const NavigationField = styled('div')(({ theme }) => ({
   [theme.breakpoints.only("xs")]: {
     display: "none",
   },
-  [theme.breakpoints.up("sm")]: {
-    minWidth: "275px",
+  [theme.breakpoints.only("sm")]: {
+    minWidth: "37.5%",
+  },
+  [theme.breakpoints.up("md")]: {
+    minWidth: "300px",
   }
 }));
 
