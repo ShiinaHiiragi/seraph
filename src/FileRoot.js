@@ -314,7 +314,7 @@ export default function FileRoot() {
                 borderRadius: 'sm',
                 overflow: 'auto',
                 '& > *': {
-                  '&:nth-child(n):not(:nth-last-child(-n+4))': {
+                  '&:nth-of-type(n):not(:nth-last-of-type(-n+4))': {
                     borderBottom: '1px solid',
                     borderColor: 'divider',
                   },
@@ -625,7 +625,7 @@ export default function FileRoot() {
               p: 2,
               display: 'grid',
               gridTemplateColumns: 'auto 1fr',
-              '& > *:nth-child(odd)': { color: 'text.secondary' },
+              '& > *:nth-of-type(odd)': { color: 'text.secondary' },
             }}
           >
             <Typography level="body-sm">Type</Typography>
