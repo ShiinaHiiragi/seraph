@@ -1,17 +1,17 @@
 const ja = {
   header: {
-    title: "SERAPH"
+    title: "セラフ"
   },
   nav: {
-    title: "SERAPH",
+    title: "セラフ",
     public: "パブリック",
     private: "プライベート",
     utility: {
       title: "ユーティリティ",
       archive: "アーカイブ",
-      deposit: "デポジット",
-      milkdown: "Milkdown",
-      // todo: "トゥードゥー"
+      deposit: "リンク",
+      milkdown: "ミルクダウン",
+      todo: "トゥードゥー"
     }
   },
   main: {

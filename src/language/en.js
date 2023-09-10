@@ -9,7 +9,7 @@ const en = {
     utility: {
       title: "Utility",
       archive: "Archive",
-      deposit: "Deposit",
+      links: "Links",
       milkdown: "Milkdown",
       todo: "TODO"
     }

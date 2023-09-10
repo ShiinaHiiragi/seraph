@@ -107,7 +107,7 @@ export default function Navigation() {
           <ListItem>
             <ListItemButton>
               <ListItemDecorator sx={{ color: "neutral.500" }}>
-                <ShareOutlinedIcon fontSize="small" />
+                <CloudOutlinedIcon fontSize="small" />
               </ListItemDecorator>
               <ListItemContent>{context.languagePicker("nav.utility.archive")}</ListItemContent>
             </ListItemButton>
@@ -115,9 +115,9 @@ export default function Navigation() {
           <ListItem>
             <ListItemButton>
               <ListItemDecorator sx={{ color: "neutral.500" }}>
-                <CloudOutlinedIcon fontSize="small" />
+                <ShareOutlinedIcon fontSize="small" />
               </ListItemDecorator>
-              <ListItemContent>{context.languagePicker("nav.utility.deposit")}</ListItemContent>
+              <ListItemContent>{context.languagePicker("nav.utility.links")}</ListItemContent>
             </ListItemButton>
           </ListItem>
           <ListItem>
