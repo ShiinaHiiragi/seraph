@@ -20,7 +20,7 @@ const RouteField = (props) => {
     <RouteFieldRaw sx={{
       flexDirection: "column"
     }}>
-      <Breadcrumbs size="sm" separator={<ChevronRightRoundedIcon fontSize="sm" />}>
+      {path && <Breadcrumbs size="sm" separator={<ChevronRightRoundedIcon fontSize="sm" />}>
         <Link
           underline="none"
           color="neutral"
@@ -39,7 +39,7 @@ const RouteField = (props) => {
             {item}
           </Typography>
         ))}
-      </Breadcrumbs>
+      </Breadcrumbs>}
       <RouteFieldRaw
         children={children}
         setBreadcrumb={setBreadcrumb}
