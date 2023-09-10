@@ -9,10 +9,9 @@ import IconButton from "@mui/joy/IconButton";
 import Typography from "@mui/joy/Typography"
 
 // Icons import
+import GreyLogo from "../logo-grey.svg";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
-import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
-import GreyLogo from "../logo-grey.svg";
 import EventNoteOutlinedIcon from "@mui/icons-material/EventNoteOutlined";
 
 export default function Navigation() {

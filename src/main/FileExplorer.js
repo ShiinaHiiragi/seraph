@@ -1,9 +1,12 @@
+import { useParams } from "react-router";
 
 const FileExplorer = () => {
+  const { folderName } = useParams();
+
   return (
     <div>
-      FILE
-    </div>        
+      folderName: {folderName}
+    </div>
   )
 }
 
