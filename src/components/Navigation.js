@@ -7,8 +7,6 @@ import ListItemDecorator from "@mui/joy/ListItemDecorator";
 import ListItemContent from "@mui/joy/ListItemContent";
 import IconButton from "@mui/joy/IconButton";
 import Typography from "@mui/joy/Typography"
-
-// Icons import
 import GreyLogo from "../logo-grey.svg";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import DoneIcon from "@mui/icons-material/Done";

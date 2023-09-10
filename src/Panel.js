@@ -8,6 +8,8 @@ import SideDrawer from "./components/SideDrawer";
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Welcome from "./main/Welcome";
 import FileExplorer from "./main/FileExplorer"
+import { defaultLanguage, languagePickerSpawner } from "./interface/languagePicker";
+import GlobalContext from "./interface/constants";
 
 const Root = styled('div')(({ theme }) => ({
   width: "100vw",
@@ -34,7 +36,6 @@ const Root = styled('div')(({ theme }) => ({
 
 const HeaderField = styled('div')(({ theme }) => ({
   width: "100%",
-  
   [theme.breakpoints.only("xs")]: {
     minHeight: "64px",
   },
@@ -72,38 +73,44 @@ const MainField = styled('div')(({ theme }) => ({
 }));
 
 const Panel = () => {
+  const [language, setLanguage] = React.useState(defaultLanguage);
   const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const languagePicker = React.useMemo(() => languagePickerSpawner(language), [language])
 
   return (
-    <Root>
-      <CssVarsProvider disableTransitionOnChange>
-        <CssBaseline />
-        {drawerOpen && (
-          <SideDrawer onClose={() => setDrawerOpen(false)}>
-            <Navigation />
-          </SideDrawer>
-        )}
-        <HeaderField>
-          <Header
-            setDrawerOpen={setDrawerOpen}
-          />
-        </HeaderField>
-        <ContentField>
-          <NavigationField>
-            <Navigation />
-          </NavigationField>
-          <MainField>
-            <BrowserRouter>
-              <Routes>
-                <Route exact path="/" element={<Welcome />} />
-                <Route path="/public/:folderName" element={<FileExplorer type="public" />} />
-                <Route path="/private/:folderName" element={<FileExplorer type="private" />} />
-              </Routes>
-            </BrowserRouter>
-          </MainField>
-        </ContentField>
-      </CssVarsProvider>
-    </Root>
+    <GlobalContext.Provider value={{
+      languagePicker: languagePicker
+    }}>
+      <Root>
+        <CssVarsProvider disableTransitionOnChange>
+          <CssBaseline />
+          {drawerOpen && (
+            <SideDrawer onClose={() => setDrawerOpen(false)}>
+              <Navigation />
+            </SideDrawer>
+          )}
+          <HeaderField>
+            <Header
+              setDrawerOpen={setDrawerOpen}
+            />
+          </HeaderField>
+          <ContentField>
+            <NavigationField>
+              <Navigation />
+            </NavigationField>
+            <MainField>
+              <BrowserRouter>
+                <Routes>
+                  <Route exact path="/" element={<Welcome />} />
+                  <Route path="/public/:folderName" element={<FileExplorer type="public" />} />
+                  <Route path="/private/:folderName" element={<FileExplorer type="private" />} />
+                </Routes>
+              </BrowserRouter>
+            </MainField>
+          </ContentField>
+        </CssVarsProvider>
+      </Root>
+    </GlobalContext.Provider>
   );
 }
 
