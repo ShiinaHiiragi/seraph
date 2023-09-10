@@ -1,4 +1,7 @@
 import { styled } from "@mui/joy/styles";
+import IconButton from "@mui/joy/IconButton";
+import GridViewRoundedIcon from "@mui/icons-material/GridViewRounded";
+import Menu from "./components/Menu";
 
 const Root = styled('div')(({ theme }) => ({
   width: "100vw",
@@ -45,8 +48,8 @@ const MainField = styled('div')(({ theme }) => ({
 const Panel = () => {
   return (
     <Root>
-      <MenuField>
-      </MenuField>
+      <HeaderField>
+      </HeaderField>
       <ContentField>
         <NavigationField>
         </NavigationField>
