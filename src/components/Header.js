@@ -63,7 +63,7 @@ const Header = () => {
         >
           <FindInPageRoundedIcon />
         </IconButton>
-        <Typography component="h1" fontWeight="xl">
+        <Typography component="h1" fontWeight="lg" sx={{ letterSpacing: "0.06em" }}>
           SERAPH
         </Typography>
       </Box>
