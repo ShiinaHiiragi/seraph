@@ -4,6 +4,10 @@ body {
 }
 
 /* Selection */
+html {
+  user-select: none;
+}
+
 ::selection {
   background: rgb(173, 214, 255);
 }

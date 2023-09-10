@@ -196,7 +196,6 @@ export default function FileRoot() {
               display: "grid",
               gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
               gap: 2,
-              height: "calc(100vh - 64px)",
               overflow: "visible"
             }}
           >

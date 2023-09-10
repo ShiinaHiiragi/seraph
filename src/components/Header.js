@@ -5,7 +5,7 @@ import Typography from "@mui/joy/Typography"
 import MenuIcon from "@mui/icons-material/Menu";
 import BookRoundedIcon from "@mui/icons-material/BookRounded";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
-import FindInPageRoundedIcon from "@mui/icons-material/FindInPageRounded";
+import GreyLogo from "../logo-grey.svg";
 
 const HeaderLayout = (props) => {
   return (
@@ -59,11 +59,10 @@ const Header = (props) => {
           <MenuIcon />
         </IconButton>
         <IconButton
-          size="sm"
-          variant="soft"
+          disabled
           sx={{ display: { xs: "none", sm: "inline-flex" } }}
         >
-          <FindInPageRoundedIcon />
+          <img src={GreyLogo} width={24} height={24}/>
         </IconButton>
         <Typography component="h1" fontWeight="lg" sx={{ letterSpacing: "0.06em" }}>
           SERAPH
