@@ -1,9 +1,10 @@
+import RouteField from "../interface/RouteField";
 
 const Links = () => {
   return (
-    <div>
+    <RouteField>
       LINKS
-    </div>
+    </RouteField>
   )
 }
 
