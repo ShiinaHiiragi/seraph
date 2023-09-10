@@ -60,14 +60,14 @@ const NavigationField = styled('div')(({ theme }) => ({
   backgroundColor: theme.palette.background.surface,
   borderRight: "1px solid",
   borderColor: theme.palette.divider,
-  [theme.breakpoints.only("xs")]: {
+  [theme.breakpoints.down("md")]: {
     display: "none",
   },
-  [theme.breakpoints.only("sm")]: {
-    minWidth: "37.5%",
+  [theme.breakpoints.only("md")]: {
+    minWidth: "28.5%",
   },
-  [theme.breakpoints.up("md")]: {
-    minWidth: "300px",
+  [theme.breakpoints.up("lg")]: {
+    minWidth: "285px",
   }
 }));
 
