@@ -1,27 +1,27 @@
-const ja = en = {
+const ja = {
   header: {
     title: "SERAPH"
   },
   nav: {
     title: "SERAPH",
-    public: "Public",
-    private: "Private",
+    public: "パブリック",
+    private: "プライベート",
     utility: {
-      title: "Utility",
-      archive: "Archive",
-      deposit: "Deposit",
+      title: "ユーティリティ",
+      archive: "アーカイブ",
+      deposit: "デポジット",
       milkdown: "Milkdown",
-      todo: "TODO"
+      todo: "トゥードゥー"
     }
   },
   main: {
     welcome: {
-      title: "Welcome"
+      title: "ようこそ"
     },
     file: {
       bread: {
-        public: "Public",
-        private: "Private"
+        public: "パブリック",
+        private: "プライベート"
       }
     }
   }

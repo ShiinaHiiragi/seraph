@@ -1,27 +1,27 @@
-const zhCN = en = {
+const zhCN = {
   header: {
     title: "SERAPH"
   },
   nav: {
     title: "SERAPH",
-    public: "Public",
-    private: "Private",
+    public: "公有",
+    private: "私有",
     utility: {
-      title: "Utility",
-      archive: "Archive",
-      deposit: "Deposit",
+      title: "实用",
+      archive: "档案",
+      deposit: "寄存",
       milkdown: "Milkdown",
-      todo: "TODO"
+      todo: "待办"
     }
   },
   main: {
     welcome: {
-      title: "Welcome"
+      title: "欢迎"
     },
     file: {
       bread: {
-        public: "Public",
-        private: "Private"
+        public: "公有",
+        private: "私有"
       }
     }
   }
