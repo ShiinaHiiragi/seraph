@@ -10,6 +10,7 @@ import Welcome from "./main/Welcome";
 import FileExplorer from "./main/FileExplorer"
 import { defaultLanguage, languagePickerSpawner } from "./interface/languagePicker";
 import GlobalContext from "./interface/constants";
+import GlobalTheme from "./interface/theme";
 
 const Root = styled('div')(({ theme }) => ({
   width: "100vw",
@@ -73,7 +74,7 @@ const MainField = styled('div')(({ theme }) => ({
 }));
 
 const Panel = () => {
-  const [language, setLanguage] = React.useState("ja");
+  const [language, setLanguage] = React.useState(defaultLanguage);
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const languagePicker = React.useMemo(() => languagePickerSpawner(language), [language])
 
@@ -82,7 +83,10 @@ const Panel = () => {
       languagePicker: languagePicker
     }}>
       <Root>
-        <CssVarsProvider disableTransitionOnChange>
+        <CssVarsProvider
+          disableTransitionOnChange
+          theme={GlobalTheme}
+        >
           <CssBaseline />
           {drawerOpen && (
             <SideDrawer onClose={() => setDrawerOpen(false)}>

@@ -16,9 +16,6 @@ const RouteField = (props) => {
   const { path, title, children, ...otherProps } = props;
   const [breadcrumb, setBreadcrumb] = React.useState(path ?? []);
 
-  // TODO: draw title
-  console.log(title)
-
   return (
     <RouteFieldRaw sx={(theme) => ({
       flexDirection: "column",
@@ -51,6 +48,11 @@ const RouteField = (props) => {
           ))}
         </Breadcrumbs>
       }
+      <Typography
+        level="h3"
+        children={title}
+        sx={{ letterSpacing: "0.04em" }}
+      />
       <RouteFieldRaw
         children={children}
         setBreadcrumb={setBreadcrumb}
