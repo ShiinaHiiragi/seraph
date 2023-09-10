@@ -7,7 +7,7 @@ const Root = styled('div')(({ theme }) => ({
   flexDirection: "column",
 }));
 
-const NavigationField = styled('div')(({ theme }) => ({
+const MenuField = styled('div')(({ theme }) => ({
   width: "100%",
   minHeight: "64px",
   backgroundColor: theme.palette.background.level1
@@ -21,7 +21,7 @@ const ContentField = styled('div')(({ theme }) => ({
   overflow: "hidden",
 }));
 
-const MenuField = styled('div')(({ theme }) => ({
+const NavigationField = styled('div')(({ theme }) => ({
   width: "225px",
   backgroundColor: theme.palette.background.level2,
   overflow: "auto",
@@ -45,11 +45,11 @@ const MainField = styled('div')(({ theme }) => ({
 const Panel = () => {
   return (
     <Root>
-      <NavigationField>
-      </NavigationField>
+      <MenuField>
+      </MenuField>
       <ContentField>
-        <MenuField>
-        </MenuField>
+        <NavigationField>
+        </NavigationField>
         <MainField>
         </MainField>
       </ContentField>
