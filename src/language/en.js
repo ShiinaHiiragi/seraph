@@ -3,6 +3,7 @@ const en = {
     title: "SERAPH"
   },
   nav: {
+    title: "SERAPH",
     public: "Public",
     private: "Private",
     utility: {
@@ -18,7 +19,10 @@ const en = {
       title: "Welcome"
     },
     file: {
-      // TODO: fill this
+      title: {
+        public: "Public",
+        private: "Private"
+      }
     }
   }
 }

@@ -10,7 +10,7 @@ const FileExplorer = (props) => {
   const { folderName } = useParams();
 
   return (
-    <RouteField path={`${capitalized(type)}/${folderName}`}>
+    <RouteField path={`${type}/${folderName}`}>
     </RouteField>
   )
 }
