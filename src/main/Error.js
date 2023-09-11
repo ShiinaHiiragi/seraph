@@ -3,7 +3,7 @@ import RouteField from "../interface/RouteField";
 import GlobalContext from "../interface/constants";
 import Caption from "../components/Caption";
 
-const Welcome = () => {
+const Error = () => {
   const context = React.useContext(GlobalContext);
 
   return (
@@ -14,11 +14,11 @@ const Welcome = () => {
       }}
     >
       <Caption
-        title={context.languagePicker("universal.inDevelopment.title")}
-        caption={context.languagePicker("universal.inDevelopment.caption")}
+        title={context.languagePicker("universal.notFound.title")}
+        caption={context.languagePicker("universal.notFound.caption")}
       />
     </RouteField>
   )
 }
 
-export default Welcome;
+export default Error;

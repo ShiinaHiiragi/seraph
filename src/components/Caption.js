@@ -12,19 +12,33 @@ const Center = styled('div')(({ theme }) => ({
   alignItems: "center",
 }));
 
-const InDevelopment = () => {
+const Caption = (props) => {
+  const {
+    title,
+    caption
+  } = props;
   const context = React.useContext(GlobalContext);
 
   return (
     <Center>
-      <Typography level="h2" color="neutral" fontWeight={400} sx={{ paddingBottom: 1 }}>
-        {context.languagePicker("universal.inDevelopment.title")}
+      <Typography
+        level="h2"
+        color="neutral"
+        fontWeight={400}
+        sx={{ paddingBottom: 1 }}
+      >
+        {title}
       </Typography>
-      <Typography level="body-sm" color="neutral" fontWeight={400} sx={{ paddingBottom: 8 }}>
-        {context.languagePicker("universal.inDevelopment.caption")}
+      <Typography
+        level="body-sm"
+        color="neutral"
+        fontWeight={400}
+        sx={{ paddingBottom: 8 }}
+      >
+        {caption}
       </Typography>
     </Center>
   );
 }
 
-export default InDevelopment;
+export default Caption;

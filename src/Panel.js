@@ -13,6 +13,7 @@ import Links from "./main/Links";
 import Milkdown from "./main/Milkdown";
 import Subscription from "./main/Subscription";
 import TODO from "./main/TODO";
+import Error from "./main/Error";
 import { defaultLanguage, languagePickerSpawner } from "./interface/languagePicker";
 import GlobalContext from "./interface/constants";
 import GlobalTheme from "./interface/theme";
@@ -124,7 +125,7 @@ const Panel = () => {
                   <Route path="/milkdown" element={<Milkdown />} />
                   <Route path="/subscription" element={<Subscription />} />
                   <Route path="/todo" element={<TODO />} />
-                  <Route path="*" element={<Welcome />} />
+                  <Route path="*" element={<Error />} />
                 </Routes>
               </MainField>
             </BrowserRouter>
