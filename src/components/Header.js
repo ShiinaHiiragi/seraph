@@ -67,7 +67,7 @@ const Header = (props) => {
           <img src={GreyLogo} width={24} height={24} alt=""/>
         </IconButton>
         <Typography component="h1" fontWeight="lg" sx={{ letterSpacing: "0.06em" }}>
-          {context.languagePicker("header.title")}
+          {context.languagePicker("nav.title")}
         </Typography>
       </Box>
       <Box sx={{ display: "flex", flexDirection: "row", gap: 1.5 }}>

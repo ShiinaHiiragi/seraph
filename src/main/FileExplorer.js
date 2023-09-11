@@ -14,7 +14,7 @@ const FileExplorer = (props) => {
   return (
     <RouteField
       path={[
-        context.languagePicker(`main.file.bread.${type}`),
+        context.languagePicker(`nav.${type}`),
         folderName
       ]}
       title={folderName}

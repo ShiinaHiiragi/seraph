@@ -1,6 +1,5 @@
 const en = {
   header: {
-    title: "SERAPH"
   },
   nav: {
     title: "SERAPH",
@@ -17,14 +16,15 @@ const en = {
   },
   main: {
     welcome: {
-      title: "Welcome"
     },
     file: {
-      bread: {
-        public: "Public",
-        private: "Private"
-      }
+    },
+    archive: {
     }
+  },
+  universal: {
+    inDevelopment: "In Development",
+    inDevelopmentCaption: "Please upvote this in GitHub Issue if you are in need of it."
   }
 }
 

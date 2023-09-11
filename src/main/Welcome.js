@@ -1,13 +1,12 @@
 import React from "react";
 import RouteField from "../interface/RouteField";
-import GlobalContext from "../interface/constants";
+import InDevelopment from "../components/InDevelopment";
 
 const Welcome = () => {
-  const context = React.useContext(GlobalContext);
 
   return (
     <RouteField>
-      {context.languagePicker("main.welcome.title")} Page Here
+      <InDevelopment />
     </RouteField>
   )
 }

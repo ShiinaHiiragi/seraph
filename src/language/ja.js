@@ -1,6 +1,5 @@
 const ja = {
   header: {
-    title: "セラフ"
   },
   nav: {
     title: "セラフ",
@@ -17,14 +16,15 @@ const ja = {
   },
   main: {
     welcome: {
-      title: "ようこそ"
     },
     file: {
-      bread: {
-        public: "パブリック",
-        private: "プライベート"
-      }
+    },
+    archive: {
     }
+  },
+  universal: {
+    inDevelopment: "開発中",
+    inDevelopmentCaption: "必要であればギットハブイシューでこれについて言及してください"
   }
 }
 

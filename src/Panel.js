@@ -8,6 +8,7 @@ import SideDrawer from "./components/SideDrawer";
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Welcome from "./main/Welcome";
 import FileExplorer from "./main/FileExplorer"
+import Archive from "./main/Archive";
 import { defaultLanguage, languagePickerSpawner } from "./interface/languagePicker";
 import GlobalContext from "./interface/constants";
 import GlobalTheme from "./interface/theme";
@@ -80,7 +81,7 @@ const MainField = styled('div')(({ theme }) => ({
 }));
 
 const Panel = () => {
-  const [language, setLanguage] = React.useState(defaultLanguage);
+  const [language, setLanguage] = React.useState("ja" || defaultLanguage);
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const languagePicker = React.useMemo(() => languagePickerSpawner(language), [language])
 
@@ -114,6 +115,7 @@ const Panel = () => {
                   <Route exact path="/" element={<Welcome />} />
                   <Route path="/public/:folderName" element={<FileExplorer type="public" />} />
                   <Route path="/private/:folderName" element={<FileExplorer type="private" />} />
+                  <Route path="/archive" element={<Archive />} />
                 </Routes>
               </BrowserRouter>
             </MainField>
