@@ -15,6 +15,7 @@ const Status = {
     AuthSuccess: "AS",
     ExecFailed: "EF",
     ExecSuccess: "ES",
+    Unknown: "U"
   },
   authErrCode: {
     NotInit: "NI",

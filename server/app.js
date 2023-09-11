@@ -32,8 +32,7 @@ app.use((req, res, next) => {
     );
     next();
   } else {
-    req.status.addAuthStatus();
-    next();
+    // TODO: fill this
   }
 });
 
@@ -51,7 +50,6 @@ app.use((err, req, res, next) => {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
   switch (req.status.status) {
     case api.Status.statusCode.AuthFailed:
     case api.Status.statusCode.ExecFailed:
