@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Module dependencies.
+ * Init file system and os information.
  */
 
 require('./init')();

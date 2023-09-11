@@ -1,7 +1,7 @@
 let express = require('express');
 let router = express.Router();
 
-router.get('/', function(req, res, next) {
+router.get('/meta', (req, res) => {
   res.send('respond with a resource');
 });
 

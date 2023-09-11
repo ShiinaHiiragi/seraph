@@ -1,11 +1,9 @@
-let createError = require('http-errors');
 let express = require('express');
 let cookieParser = require('cookie-parser');
 let logger = require('morgan');
 let cors = require('cors');
 
 let api = require('./api');
-let indexRouter = require('./routes/index');
 let authRouter = require('./routes/auth');
 
 let app = express();
@@ -23,12 +21,11 @@ app.use(cors({
   credentials: true,
 }));
 
-app.use('/', indexRouter);
 app.use('/auth', authRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
+app.use((req, res) => {
+  res.redirect(new URL(req.originalUrl, api.reactBaseURL).href);
 });
 
 // error handler
