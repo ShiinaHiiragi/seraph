@@ -46,7 +46,7 @@ app.use((req, res) => {
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use((err, req, res, next) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -55,7 +55,7 @@ app.use(function(err, req, res, next) {
   switch (req.status.status) {
     case api.Status.statusCode.AuthFailed:
     case api.Status.statusCode.ExecFailed:
-      res.send(res.status.generateReport());
+      res.send(req.status.generateReport());
       break;
     default:
       res.status(500).send({

@@ -4,7 +4,7 @@ let createError = require('http-errors');
 
 let router = express.Router();
 
-router.get('/meta', (_, req, res, next) => {
+router.get('/meta', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
     if (req.status.err == api.Status.authErrCode.NotInit) {
       next(createError());
