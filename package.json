@@ -11,6 +11,7 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "concurrently": "^8.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router": "^6.15.0",
@@ -19,8 +20,10 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "start": "concurrently 'npm run react' 'cd server/ && npm run dev'",
+    "start:sudo": "concurrently 'npm run react:linux' 'cd server/ && npm run dev:linux'",
     "react": "react-scripts start",
-    "react:linux": "sudo node ./node_modules/.bin/react-scripts start"
+    "react:sudo": "sudo node ./node_modules/.bin/react-scripts start"
   },
   "eslintConfig": {
     "extends": [
