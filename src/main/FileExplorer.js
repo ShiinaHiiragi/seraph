@@ -3,6 +3,7 @@ import RouteField from "../interface/RouteField";
 import { useParams } from "react-router";
 import GlobalContext from "../interface/constants";
 import FileTable from "../components/FileTable";
+import FileList from "../components/FileList";
 
 const FileExplorer = (props) => {
   const {
@@ -18,13 +19,23 @@ const FileExplorer = (props) => {
         folderName
       ]}
       title={folderName}
+      sxRaw={{
+        overflowY: {
+          xs: "auto",
+          sm: "hidden"
+        }
+      }}
       sx={{
         flexDirection: "column",
-        overflowY: "hidden",
+        overflowY: {
+          xs: "visible",
+          sm: "hidden"
+        },
         overflowX: "hidden"
       }}
     >
       <FileTable />
+      <FileList />
     </RouteField>
   )
 }

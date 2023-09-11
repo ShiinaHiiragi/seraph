@@ -13,14 +13,18 @@ const RouteFieldRaw = styled("div")(({ theme }) => ({
 }));
 
 const RouteField = (props) => {
-  const { path, title, children, ...otherProps } = props;
+  const { path, title, sxRaw, children, ...otherProps } = props;
   const breadcrumb = path ?? [];
 
   return (
-    <RouteFieldRaw sx={(theme) => ({
-      flexDirection: "column",
-      padding: theme.spacing(2, 3),
-    })}>
+    <RouteFieldRaw
+      className="RouteFieldRawOuter"
+      sx={(theme) => ({
+        flexDirection: "column",
+        padding: theme.spacing(2, 3),
+        ...sxRaw
+      })}
+    >
       {
         path &&
         <Breadcrumbs
@@ -56,7 +60,11 @@ const RouteField = (props) => {
           sx={(theme) => ({ paddingBottom: theme.spacing(2) })}
         />
       }
-      <RouteFieldRaw children={children} {...otherProps} />
+      <RouteFieldRaw
+        className="RouteFieldRawInner"
+        children={children}
+        {...otherProps}
+      />
     </RouteFieldRaw>
   )
 }

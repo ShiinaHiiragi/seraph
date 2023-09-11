@@ -94,28 +94,28 @@ const Panel = () => {
     <GlobalContext.Provider value={{
       languagePicker: languagePicker
     }}>
-      <Root>
+      <Root className="Root">
         <CssVarsProvider
           disableTransitionOnChange
           theme={GlobalTheme}
         >
           <CssBaseline />
-          {drawerOpen && (
-            <SideDrawer onClose={() => setDrawerOpen(false)}>
-              <Navigation />
-            </SideDrawer>
-          )}
-          <HeaderField>
+          <HeaderField className="HeaderField">
             <Header
               setDrawerOpen={setDrawerOpen}
             />
           </HeaderField>
-          <ContentField>
+          <ContentField className="ContentField">
             <BrowserRouter>
-              <NavigationField>
+              {drawerOpen && (
+                <SideDrawer onClose={() => setDrawerOpen(false)}>
+                  <Navigation />
+                </SideDrawer>
+              )}
+              <NavigationField className="NavigationField">
                 <Navigation />
               </NavigationField>
-              <MainField>
+              <MainField className="MainField">
                 <Routes>
                   <Route exact path="/" element={<Welcome />} />
                   <Route path="/public/:folderName" element={<FileExplorer type="public" />} />

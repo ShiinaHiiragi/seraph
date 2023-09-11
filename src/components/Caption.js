@@ -1,7 +1,6 @@
 import React from "react";
 import { styled } from "@mui/joy/styles";
 import Typography from "@mui/joy/Typography";
-import GlobalContext from "../interface/constants";
 
 const Center = styled('div')(({ theme }) => ({
   width: "100%",
@@ -17,7 +16,6 @@ const Caption = (props) => {
     title,
     caption
   } = props;
-  const context = React.useContext(GlobalContext);
 
   return (
     <Center>
