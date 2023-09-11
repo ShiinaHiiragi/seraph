@@ -25,7 +25,11 @@ const ja = {
   universal: {
     inDevelopment: {
       title: "開発中",
-      caption: "必要であればギットハブイシューでこれについて言及してください"
+      caption: "必要であればギットハブイシューでこれについて言及してください。"
+    },
+    notFound: {
+      title: "404",
+      caption: "要求されたパスが存在ありません。"
     }
   }
 }

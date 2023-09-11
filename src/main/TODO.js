@@ -3,16 +3,16 @@ import RouteField from "../interface/RouteField";
 import GlobalContext from "../interface/constants";
 import InDevelopment from "../components/InDevelopment";
 
-const Archive = () => {
+const TODO = () => {
   const context = React.useContext(GlobalContext);
 
   return (
     <RouteField
       path={[
         context.languagePicker("nav.utility.title"),
-        context.languagePicker("nav.utility.archive")
+        context.languagePicker("nav.utility.todo")
       ]}
-      title={context.languagePicker("nav.utility.archive")}
+      title={context.languagePicker("nav.utility.todo")}
       sx={{
         overflowY: "hidden",
         overflowX: "hidden"
@@ -23,4 +23,4 @@ const Archive = () => {
   )
 }
 
-export default Archive;
+export default TODO;

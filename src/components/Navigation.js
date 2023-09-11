@@ -16,9 +16,11 @@ import ForwardToInboxOutlinedIcon from "@mui/icons-material/ForwardToInboxOutlin
 import DoneIcon from "@mui/icons-material/Done";
 import GlobalContext from "../interface/constants";
 import { pathStartWith } from "../interface/constants";
+import { useNavigate } from "react-router-dom";
 
 export default function Navigation() {
   const context = React.useContext(GlobalContext);
+  const navigate = useNavigate();
 
   return (
     <List size="sm" sx={{ "--ListItem-radius": "8px", "--List-gap": "4px" }}>
@@ -41,7 +43,10 @@ export default function Navigation() {
           }}
         >
           <ListItem>
-            <ListItemButton selected={pathStartWith("/public/Folder 01")}>
+            <ListItemButton
+              selected={pathStartWith("/public/Folder 01")}
+              onClick={() => navigate("/public/Folder 01")}
+            >
               <ListItemDecorator>
                 <FolderOpenIcon fontSize="small" />
               </ListItemDecorator>
@@ -49,7 +54,10 @@ export default function Navigation() {
             </ListItemButton>
           </ListItem>
           <ListItem>
-            <ListItemButton selected={pathStartWith("/public/Folder 02")}>
+            <ListItemButton
+              selected={pathStartWith("/public/Folder 02")}
+              onClick={() => navigate("/public/Folder 02")}
+            >
               <ListItemDecorator>
                 <FolderOpenIcon fontSize="small" />
               </ListItemDecorator>
@@ -57,7 +65,10 @@ export default function Navigation() {
             </ListItemButton>
           </ListItem>
           <ListItem>
-            <ListItemButton selected={pathStartWith("/public/Folder 03")}>
+            <ListItemButton
+              selected={pathStartWith("/public/Folder 03")}
+              onClick={() => navigate("/public/Folder 03")}
+            >
               <ListItemDecorator>
                 <FolderOpenIcon fontSize="small" />
               </ListItemDecorator>
@@ -78,7 +89,10 @@ export default function Navigation() {
           }}
         >
           <ListItem>
-            <ListItemButton selected={pathStartWith("/private/Folder 01")}>
+            <ListItemButton
+              selected={pathStartWith("/private/Folder 01")}
+              onClick={() => navigate("/private/Folder 01")}
+            >
               <ListItemDecorator>
                 <FolderOpenIcon fontSize="small" />
               </ListItemDecorator>
@@ -86,7 +100,10 @@ export default function Navigation() {
             </ListItemButton>
           </ListItem>
           <ListItem>
-            <ListItemButton selected={pathStartWith("/private/Folder 02")}>
+            <ListItemButton
+              selected={pathStartWith("/private/Folder 02")}
+              onClick={() => navigate("/private/Folder 02")}
+            >
               <ListItemDecorator>
                 <FolderOpenIcon fontSize="small" />
               </ListItemDecorator>
@@ -106,8 +123,11 @@ export default function Navigation() {
             "& .JoyListItemButton-root": { p: "8px" },
           }}
         >
-          <ListItem>
-            <ListItemButton selected={pathStartWith("/archive")}>
+          <ListItem button>
+            <ListItemButton
+              selected={pathStartWith("/archive")}
+              onClick={() => navigate("/archive")}
+            >
               <ListItemDecorator sx={{ color: "neutral.500" }}>
                 <CloudOutlinedIcon fontSize="small" />
               </ListItemDecorator>
@@ -115,7 +135,10 @@ export default function Navigation() {
             </ListItemButton>
           </ListItem>
           <ListItem>
-            <ListItemButton selected={pathStartWith("/links")}>
+            <ListItemButton
+              selected={pathStartWith("/links")}
+              onClick={() => navigate("/links")}
+            >
               <ListItemDecorator sx={{ color: "neutral.500" }}>
                 <ShareOutlinedIcon fontSize="small" />
               </ListItemDecorator>
@@ -123,7 +146,10 @@ export default function Navigation() {
             </ListItemButton>
           </ListItem>
           <ListItem>
-            <ListItemButton selected={pathStartWith("/milkdown")}>
+            <ListItemButton
+              selected={pathStartWith("/milkdown")}
+              onClick={() => navigate("/milkdown")}
+            >
               <ListItemDecorator sx={{ color: "neutral.500" }}>
                 <EventNoteOutlinedIcon fontSize="small" />
               </ListItemDecorator>
@@ -131,7 +157,10 @@ export default function Navigation() {
             </ListItemButton>
           </ListItem>
           <ListItem>
-            <ListItemButton selected={pathStartWith("/subscription")}>
+            <ListItemButton
+              selected={pathStartWith("/subscription")}
+              onClick={() => navigate("/subscription")}
+            >
               <ListItemDecorator sx={{ color: "neutral.500" }}>
                 <ForwardToInboxOutlinedIcon fontSize="small" />
               </ListItemDecorator>
@@ -139,7 +168,10 @@ export default function Navigation() {
             </ListItemButton>
           </ListItem>
           <ListItem>
-            <ListItemButton  selected={pathStartWith("/todo")}>
+            <ListItemButton
+              selected={pathStartWith("/todo")}
+              onClick={() => navigate("/todo")}
+            >
               <ListItemDecorator sx={{ color: "neutral.500" }}>
                 <DoneIcon fontSize="small" />
               </ListItemDecorator>

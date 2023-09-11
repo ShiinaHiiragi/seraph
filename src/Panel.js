@@ -9,6 +9,10 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Welcome from "./main/Welcome";
 import FileExplorer from "./main/FileExplorer"
 import Archive from "./main/Archive";
+import Links from "./main/Links";
+import Milkdown from "./main/Milkdown";
+import Subscription from "./main/Subscription";
+import TODO from "./main/TODO";
 import { defaultLanguage, languagePickerSpawner } from "./interface/languagePicker";
 import GlobalContext from "./interface/constants";
 import GlobalTheme from "./interface/theme";
@@ -106,19 +110,24 @@ const Panel = () => {
             />
           </HeaderField>
           <ContentField>
-            <NavigationField>
-              <Navigation />
-            </NavigationField>
-            <MainField>
-              <BrowserRouter>
+            <BrowserRouter>
+              <NavigationField>
+                <Navigation />
+              </NavigationField>
+              <MainField>
                 <Routes>
                   <Route exact path="/" element={<Welcome />} />
                   <Route path="/public/:folderName" element={<FileExplorer type="public" />} />
                   <Route path="/private/:folderName" element={<FileExplorer type="private" />} />
                   <Route path="/archive" element={<Archive />} />
+                  <Route path="/links" element={<Links />} />
+                  <Route path="/milkdown" element={<Milkdown />} />
+                  <Route path="/subscription" element={<Subscription />} />
+                  <Route path="/todo" element={<TODO />} />
+                  <Route path="*" element={<Welcome />} />
                 </Routes>
-              </BrowserRouter>
-            </MainField>
+              </MainField>
+            </BrowserRouter>
           </ContentField>
         </CssVarsProvider>
       </Root>

@@ -26,6 +26,10 @@ const en = {
     inDevelopment: {
       title: "In Development",
       caption: "Please upvote this in GitHub Issue if you are in need of it."
+    },
+    notFound: {
+      title: "404",
+      caption: "The requested path does not exist."
     }
   }
 }
