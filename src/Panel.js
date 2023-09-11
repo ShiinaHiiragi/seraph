@@ -109,11 +109,15 @@ const Panel = () => {
             <BrowserRouter>
               {drawerOpen && (
                 <SideDrawer onClose={() => setDrawerOpen(false)}>
-                  <Navigation />
+                  <Navigation
+                    setDrawerOpen={setDrawerOpen}
+                  />
                 </SideDrawer>
               )}
               <NavigationField className="NavigationField">
-                <Navigation />
+                <Navigation
+                  setDrawerOpen={setDrawerOpen}
+                />
               </NavigationField>
               <MainField className="MainField">
                 <Routes>
