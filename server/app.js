@@ -2,8 +2,9 @@ let createError = require('http-errors');
 let express = require('express');
 let cookieParser = require('cookie-parser');
 let logger = require('morgan');
-var cors = require('cors');
+let cors = require('cors');
 
+let api = require('./api');
 let indexRouter = require('./routes/index');
 let authRouter = require('./routes/auth');
 
@@ -15,7 +16,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use(cors({
-  origin: ['*'],
+  origin: [api.reactBaseURL],
   methods: ["GET", "POST"],
   alloweHeaders: ['Conten-Type', 'Authorization', 'Accept', 'Origin'],
   exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],

@@ -1,4 +1,7 @@
 const path = require('path');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 exports.dataPath = {
   dataDirPath: path.join(__dirname, "./data"),
@@ -7,4 +10,12 @@ exports.dataPath = {
   settingFilePath: path.join(__dirname, "./data/setting.json")
 };
 
-exports.generateBaseURL = (protocol, hostname, port) => `${protocol}//${hostname}:${port}`
+const generateBaseURL = (protocol, hostname, port) => `${protocol}//${hostname}:${port}`
+
+exports.dotenv = process.env
+exports.generateBaseURL = generateBaseURL
+exports.reactBaseURL = generateBaseURL(
+  process.env.PROTOCOL,
+  process.env.HOSTNAME,
+  process.env.REPORT
+)
