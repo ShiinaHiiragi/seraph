@@ -89,13 +89,9 @@ Status.prototype.addexecStatus = function (errorCode) {
     : [Status.statusCode.execSuccess, null]
 }
 
-Status.prototype.isAuthPass = function() {
-  return this.status == Status.statusCode.AuthSuccess ||
-    this.status == Status.statusCode.execSuccess;
-}
-
-Status.prototype.isexecPass = function() {
-  return this.status == Status.statusCode.execSuccess;
+Status.prototype.notAuthPass = function() {
+  return this.status !== Status.statusCode.AuthSuccess &&
+    this.status !== Status.statusCode.execSuccess;
 }
 
 Status.prototype.generateReport = function () {
