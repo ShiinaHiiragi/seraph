@@ -1,15 +1,20 @@
 const path = require('path');
 const dotenv = require('dotenv');
 
-dotenv.config();
+exports.defaultSetting = {
+  // TODO: finish default Setting
+}
 
 exports.dataPath = {
   dataDirPath: path.join(__dirname, "./data"),
   publicDirPath: path.join(__dirname, "./data/public"),
   privateDirPath: path.join(__dirname, "./data/private"),
-  settingFilePath: path.join(__dirname, "./data/setting.json")
+  settingFilePath: path.join(__dirname, "./data/setting.json"),
+  publicFolderDirPath: (folderName) => path.join(__dirname, "./data/public", folderName),
+  privateFolderDirPath: (folderName) => path.join(__dirname, "./data/private", folderName)
 };
 
+dotenv.config();
 const generateBaseURL = (protocol, hostname, port) => `${protocol}//${hostname}:${port}`
 
 exports.dotenv = process.env

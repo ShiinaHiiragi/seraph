@@ -5,7 +5,7 @@ const init = () => {
   FileOperator.probeDir(api.dataPath.dataDirPath);
   FileOperator.probeDir(api.dataPath.publicDirPath);
   FileOperator.probeDir(api.dataPath.privateDirPath);
-  FileOperator.initSetting();
+  FileOperator.readSetting();
 }
 
 module.exports = init;
