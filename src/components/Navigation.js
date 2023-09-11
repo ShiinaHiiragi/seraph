@@ -11,10 +11,11 @@ import GreyLogo from "../logo-grey.svg";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import CloudOutlinedIcon from "@mui/icons-material/CloudOutlined";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
-import ForwardToInboxOutlinedIcon from "@mui/icons-material/ForwardToInboxOutlined";
 import EventNoteOutlinedIcon from "@mui/icons-material/EventNoteOutlined";
+import ForwardToInboxOutlinedIcon from "@mui/icons-material/ForwardToInboxOutlined";
 import DoneIcon from "@mui/icons-material/Done";
 import GlobalContext from "../interface/constants";
+import { pathStartWith } from "../interface/constants";
 
 export default function Navigation() {
   const context = React.useContext(GlobalContext);
@@ -40,7 +41,7 @@ export default function Navigation() {
           }}
         >
           <ListItem>
-            <ListItemButton selected>
+            <ListItemButton selected={pathStartWith("/public/Folder 01")}>
               <ListItemDecorator>
                 <FolderOpenIcon fontSize="small" />
               </ListItemDecorator>
@@ -48,7 +49,7 @@ export default function Navigation() {
             </ListItemButton>
           </ListItem>
           <ListItem>
-            <ListItemButton>
+            <ListItemButton selected={pathStartWith("/public/Folder 02")}>
               <ListItemDecorator>
                 <FolderOpenIcon fontSize="small" />
               </ListItemDecorator>
@@ -56,7 +57,7 @@ export default function Navigation() {
             </ListItemButton>
           </ListItem>
           <ListItem>
-            <ListItemButton>
+            <ListItemButton selected={pathStartWith("/public/Folder 03")}>
               <ListItemDecorator>
                 <FolderOpenIcon fontSize="small" />
               </ListItemDecorator>
@@ -77,7 +78,7 @@ export default function Navigation() {
           }}
         >
           <ListItem>
-            <ListItemButton>
+            <ListItemButton selected={pathStartWith("/private/Folder 01")}>
               <ListItemDecorator>
                 <FolderOpenIcon fontSize="small" />
               </ListItemDecorator>
@@ -85,7 +86,7 @@ export default function Navigation() {
             </ListItemButton>
           </ListItem>
           <ListItem>
-            <ListItemButton>
+            <ListItemButton selected={pathStartWith("/private/Folder 02")}>
               <ListItemDecorator>
                 <FolderOpenIcon fontSize="small" />
               </ListItemDecorator>
@@ -106,7 +107,7 @@ export default function Navigation() {
           }}
         >
           <ListItem>
-            <ListItemButton>
+            <ListItemButton selected={pathStartWith("/archive")}>
               <ListItemDecorator sx={{ color: "neutral.500" }}>
                 <CloudOutlinedIcon fontSize="small" />
               </ListItemDecorator>
@@ -114,7 +115,7 @@ export default function Navigation() {
             </ListItemButton>
           </ListItem>
           <ListItem>
-            <ListItemButton>
+            <ListItemButton selected={pathStartWith("/links")}>
               <ListItemDecorator sx={{ color: "neutral.500" }}>
                 <ShareOutlinedIcon fontSize="small" />
               </ListItemDecorator>
@@ -122,15 +123,7 @@ export default function Navigation() {
             </ListItemButton>
           </ListItem>
           <ListItem>
-            <ListItemButton>
-              <ListItemDecorator sx={{ color: "neutral.500" }}>
-                <ForwardToInboxOutlinedIcon fontSize="small" />
-              </ListItemDecorator>
-              <ListItemContent>{context.languagePicker("nav.utility.subscription")}</ListItemContent>
-            </ListItemButton>
-          </ListItem>
-          <ListItem>
-            <ListItemButton>
+            <ListItemButton selected={pathStartWith("/milkdown")}>
               <ListItemDecorator sx={{ color: "neutral.500" }}>
                 <EventNoteOutlinedIcon fontSize="small" />
               </ListItemDecorator>
@@ -138,7 +131,15 @@ export default function Navigation() {
             </ListItemButton>
           </ListItem>
           <ListItem>
-            <ListItemButton>
+            <ListItemButton selected={pathStartWith("/subscription")}>
+              <ListItemDecorator sx={{ color: "neutral.500" }}>
+                <ForwardToInboxOutlinedIcon fontSize="small" />
+              </ListItemDecorator>
+              <ListItemContent>{context.languagePicker("nav.utility.subscription")}</ListItemContent>
+            </ListItemButton>
+          </ListItem>
+          <ListItem>
+            <ListItemButton  selected={pathStartWith("/todo")}>
               <ListItemDecorator sx={{ color: "neutral.500" }}>
                 <DoneIcon fontSize="small" />
               </ListItemDecorator>
