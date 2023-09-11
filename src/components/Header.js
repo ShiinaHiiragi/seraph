@@ -2,9 +2,10 @@ import React from "react";
 import Box from "@mui/joy/Box";
 import IconButton from "@mui/joy/IconButton";
 import Typography from "@mui/joy/Typography"
+
 import MenuIcon from "@mui/icons-material/Menu";
-import BookRoundedIcon from "@mui/icons-material/BookRounded";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
+import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
 import GreyLogo from "../logo-grey.svg";
 import GlobalContext from "../interface/constants";
 
@@ -84,10 +85,8 @@ const Header = (props) => {
           size="sm"
           variant="soft"
           color="neutral"
-          component="a"
-          href="#"
         >
-          <BookRoundedIcon />
+          <LoginOutlinedIcon />
         </IconButton>
       </Box>
     </HeaderLayout>

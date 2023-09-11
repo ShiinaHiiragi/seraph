@@ -8,17 +8,28 @@ const pathStartWith = (prefix) => {
     new RegExp(`^${prefix}/`).test(pathname)
 }
 
-const authStatusCode = {
-  NotInitialized: "NI",
-  InvalidToken: "IT",
-  AccountUnmatch: "AU",
-  PasswordUnmatch: "PU",
-  AuthSuccess: "AS",
+const Status = {
+  statusCode: {
+    BeforeAuth: "BA",
+    AuthFailed: "AF",
+    AuthSuccess: "AS",
+    ExecFailed: "EF",
+    ExecSuccess: "ES",
+  },
+  authErrCode: {
+    NotInit: "NI",
+    InvalidToken: "IT",
+    FormUnmatch: "FU"
+  },
+  execErrCode: {
+    UnknownErr: "UE",
+    InternalServerErr: "ISE"
+  }
 }
 
 export default GlobalContext;
 export {
   GlobalContext,
   pathStartWith,
-  authStatusCode
+  Status,
 };

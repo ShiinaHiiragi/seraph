@@ -3,11 +3,11 @@ let api = require('../api');
 
 let router = express.Router();
 
-router.get('/meta', (req, res) => {
-  if (req.status.notAuthPass() && req.status.error == api.Status.authErrCode.NotInit) {
-    res.send({
-      ...req.status.generateReport()
-    })
+router.get('/meta', (req, res, next) => {
+  if (req.status.notAuthSuccess()) {
+    if (req.status.err == api.Status.authErrCode.NotInit) {
+      next();
+    }
   }
 });
 

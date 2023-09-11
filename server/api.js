@@ -59,8 +59,9 @@ Status.statusCode = {
   BeforeAuth: "BA",
   AuthFailed: "AF",
   AuthSuccess: "AS",
-  execFailed: "EF",
-  execSuccess: "ES",
+  ExecFailed: "EF",
+  ExecSuccess: "ES",
+  Unknown: "U"
 }
 
 Status.authErrCode = {
@@ -75,26 +76,34 @@ Status.execErrCode = {
 }
 
 Status.prototype.status = Status.statusCode.BeforeAuth;
-Status.prototype.error = null;
+Status.prototype.err = null;
 
 Status.prototype.addAuthStatus = function (errorCode) {
-  [this.status, this.error] = errorCode
+  [this.status, this.err] = errorCode
     ? [Status.statusCode.AuthFailed, errorCode]
-    : [Status.statusCode.AuthSuccess, null]
+    : [Status.statusCode.AuthSuccess, null];
 }
 
-Status.prototype.addexecStatus = function (errorCode) {
-  [this.status, this.error] = errorCode
-    ? [Status.statusCode.execFailed, errorCode]
-    : [Status.statusCode.execSuccess, null]
+Status.prototype.addExecStatus = function (errorCode) {
+  console.assert(this.status === Status.statusCode.AuthSuccess);
+  [this.status, this.err] = errorCode
+    ? [Status.statusCode.ExecFailed, errorCode]
+    : [Status.statusCode.ExecSuccess, null];
 }
 
-Status.prototype.notAuthPass = function() {
-  return this.status !== Status.statusCode.AuthSuccess &&
-    this.status !== Status.statusCode.execSuccess;
+Status.prototype.notAuthSuccess = function() {
+  return this.status !== Status.statusCode.AuthSuccess;
+}
+
+Status.prototype.notPass = function() {
+  return [
+    Status.statusCode.BeforeAuth,
+    Status.statusCode.AuthFailed,
+    Status.statusCode.ExecFailed
+  ].includes(this.status);
 }
 
 Status.prototype.generateReport = function () {
   let result = { status: this.status }
-  return this.error ? { ...result, errorCode: this.error } : result;
+  return this.err ? { ...result, errorCode: this.err } : result;
 }
