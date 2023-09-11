@@ -52,53 +52,53 @@ const fileOperator = {
 };
 exports.fileOperator = fileOperator;
 
-function StatusMananger() { }
-exports.StatusMananger = StatusMananger;
+function Status() { }
+exports.Status = Status;
 
-StatusMananger.statusCode = {
-  BeforeAuthentication: "BA",
-  AuthenticationFailed: "AF",
-  AuthenticationSuccess: "AS",
-  ExecutionFailed: "EF",
-  ExecutionSuccess: "ES",
+Status.statusCode = {
+  BeforeAuth: "BA",
+  AuthFailed: "AF",
+  AuthSuccess: "AS",
+  execFailed: "EF",
+  execSuccess: "ES",
 }
 
-StatusMananger.authenticationErrorCode = {
-  NotInitialized: "NI",
+Status.authErrCode = {
+  NotInit: "NI",
   InvalidToken: "IT",
   FormUnmatch: "FU"
 }
 
-StatusMananger.executionErrorCode = {
-  UnknownError: "UE",
-  InternalServerError: "ISE"
+Status.execErrCode = {
+  UnknownErr: "UE",
+  InternalServerErr: "ISE"
 }
 
-StatusMananger.prototype.status = StatusMananger.statusCode.BeforeAuthentication;
-StatusMananger.prototype.error = null;
+Status.prototype.status = Status.statusCode.BeforeAuth;
+Status.prototype.error = null;
 
-StatusMananger.prototype.addAuthenticationStatus = function (errorCode) {
+Status.prototype.addAuthStatus = function (errorCode) {
   [this.status, this.error] = errorCode
-    ? [StatusMananger.statusCode.AuthenticationFailed, errorCode]
-    : [StatusMananger.statusCode.AuthenticationSuccess, null]
+    ? [Status.statusCode.AuthFailed, errorCode]
+    : [Status.statusCode.AuthSuccess, null]
 }
 
-StatusMananger.prototype.addExecutionStatus = function (errorCode) {
+Status.prototype.addexecStatus = function (errorCode) {
   [this.status, this.error] = errorCode
-    ? [StatusMananger.statusCode.ExecutionFailed, errorCode]
-    : [StatusMananger.statusCode.ExecutionSuccess, null]
+    ? [Status.statusCode.execFailed, errorCode]
+    : [Status.statusCode.execSuccess, null]
 }
 
-StatusMananger.prototype.isAuthenticationPass = function() {
-  return this.status == StatusMananger.statusCode.AuthenticationSuccess ||
-    this.status == StatusMananger.statusCode.ExecutionSuccess;
+Status.prototype.isAuthPass = function() {
+  return this.status == Status.statusCode.AuthSuccess ||
+    this.status == Status.statusCode.execSuccess;
 }
 
-StatusMananger.prototype.isExecutionPass = function() {
-  return this.status == StatusMananger.statusCode.ExecutionSuccess;
+Status.prototype.isexecPass = function() {
+  return this.status == Status.statusCode.execSuccess;
 }
 
-StatusMananger.prototype.generateReport = function () {
+Status.prototype.generateReport = function () {
   let result = { status: this.status }
   return this.error ? { ...result, errorCode: this.error } : result;
 }

@@ -7,7 +7,7 @@
 ## Usage
 
 ## Memo
-### Plan
+
 1. Authorization
 2. File Explorer
     - upload
@@ -27,5 +27,3 @@
 7. TODO
     - sync: clear when finish
     - async: 60 s
-
-### Response

@@ -24,15 +24,15 @@ app.use(cors({
 // unified authenticator
 app.use((req, res, next) => {
   setting = api.fileOperator.readSetting();
-  req.status = new api.StatusMananger();
+  req.status = new api.Status();
 
   if (setting.password === undefined) {
-    req.status.addAuthenticationStatus(
-      api.StatusMananger.authenticationErrorCode.NotInitialized
+    req.status.addAuthStatus(
+      api.Status.authErrCode.NotInit
     );
     next();
   } else {
-    req.status.addAuthenticationStatus();
+    req.status.addAuthStatus();
     next();
   }
 });
