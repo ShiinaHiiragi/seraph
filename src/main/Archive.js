@@ -13,10 +13,6 @@ const Archive = () => {
         context.languagePicker("nav.utility.archive")
       ]}
       title={context.languagePicker("nav.utility.archive")}
-      sx={{
-        overflowY: "hidden",
-        overflowX: "hidden"
-      }}
     >
       <Caption
         title={context.languagePicker("universal.inDevelopment.title")}

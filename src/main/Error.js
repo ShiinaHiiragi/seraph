@@ -7,12 +7,7 @@ const Error = () => {
   const context = React.useContext(GlobalContext);
 
   return (
-    <RouteField
-      sx={{
-        overflowY: "hidden",
-        overflowX: "hidden"
-      }}
-    >
+    <RouteField>
       <Caption
         title={context.languagePicker("universal.notFound.title")}
         caption={context.languagePicker("universal.notFound.caption")}

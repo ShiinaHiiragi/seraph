@@ -13,10 +13,6 @@ const Links = () => {
         context.languagePicker("nav.utility.links")
       ]}
       title={context.languagePicker("nav.utility.links")}
-      sx={{
-        overflowY: "hidden",
-        overflowX: "hidden"
-      }}
     >
       <Caption
         title={context.languagePicker("universal.inDevelopment.title")}

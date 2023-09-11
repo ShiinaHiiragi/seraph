@@ -13,10 +13,6 @@ const TODO = () => {
         context.languagePicker("nav.utility.todo")
       ]}
       title={context.languagePicker("nav.utility.todo")}
-      sx={{
-        overflowY: "hidden",
-        overflowX: "hidden"
-      }}
     >
       <Caption
         title={context.languagePicker("universal.inDevelopment.title")}

@@ -13,10 +13,6 @@ const Milkdown = () => {
         context.languagePicker("nav.utility.milkdown")
       ]}
       title={context.languagePicker("nav.utility.milkdown")}
-      sx={{
-        overflowY: "hidden",
-        overflowX: "hidden"
-      }}
     >
       <Caption
         title={context.languagePicker("universal.inDevelopment.title")}

@@ -62,8 +62,6 @@ const ContentField = styled('div')(({ theme }) => ({
 
 const NavigationField = styled('div')(({ theme }) => ({
   width: "225px",
-  overflowY: "auto",
-  overflowX: "auto",
   padding: theme.spacing(2),
   backgroundColor: theme.palette.background.surface,
   borderRight: "1px solid",
@@ -76,7 +74,9 @@ const NavigationField = styled('div')(({ theme }) => ({
   },
   [theme.breakpoints.up("lg")]: {
     minWidth: "285px",
-  }
+  },
+  overflowY: "auto",
+  overflowX: "auto",
 }));
 
 const MainField = styled('div')(({ theme }) => ({

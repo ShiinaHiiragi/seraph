@@ -13,10 +13,6 @@ const Subscription = () => {
         context.languagePicker("nav.utility.subscription")
       ]}
       title={context.languagePicker("nav.utility.subscription")}
-      sx={{
-        overflowY: "hidden",
-        overflowX: "hidden"
-      }}
     >
       <Caption
         title={context.languagePicker("universal.inDevelopment.title")}

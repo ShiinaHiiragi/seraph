@@ -7,12 +7,7 @@ const Welcome = () => {
   const context = React.useContext(GlobalContext);
 
   return (
-    <RouteField
-      sx={{
-        overflowY: "hidden",
-        overflowX: "hidden"
-      }}
-    >
+    <RouteField>
       <Caption
         title={context.languagePicker("universal.inDevelopment.title")}
         caption={context.languagePicker("universal.inDevelopment.caption")}
