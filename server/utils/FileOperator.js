@@ -7,6 +7,7 @@ const FileOperator = {
   probeDir: (dirPath) => {
     if (!fs.existsSync(dirPath)) {
       fs.mkdirSync(dirPath);
+      fs.chmodSync(dirPath, 0o777);
       return false;
     }
     return true;

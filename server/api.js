@@ -11,7 +11,9 @@ exports.dataPath = {
   privateDirPath: path.join(__dirname, "./data/private"),
   settingFilePath: path.join(__dirname, "./data/setting.json"),
   publicFolderDirPath: (folderName) => path.join(__dirname, "./data/public", folderName),
-  privateFolderDirPath: (folderName) => path.join(__dirname, "./data/private", folderName)
+  privateFolderDirPath: (folderName) => path.join(__dirname, "./data/private", folderName),
+  publicMarkdownDirPath: path.join(__dirname, "./data/public/markdown"),
+  privateMarkdownDirPath: path.join(__dirname, "./data/private/markdown"),
 };
 
 dotenv.config();
