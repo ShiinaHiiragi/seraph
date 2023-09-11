@@ -23,13 +23,16 @@ app.use(cors({
 
 // unified authenticator
 app.use((req, res, next) => {
-  setting = api.fileOperator.readSetting()
-  req.preprocess = new Object();
+  setting = api.fileOperator.readSetting();
+  req.status = new api.StatusMananger();
 
   if (setting.password === undefined) {
-    req.preprocess.auth = api.authStatusCode.NotInitialized;
+    req.status.addAuthenticationStatus(
+      api.StatusMananger.authenticationErrorCode.NotInitialized
+    );
     next();
   } else {
+    req.status.addAuthenticationStatus();
     next();
   }
 });

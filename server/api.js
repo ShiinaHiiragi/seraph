@@ -52,11 +52,53 @@ const fileOperator = {
 };
 exports.fileOperator = fileOperator;
 
-const authStatusCode = {
+function StatusMananger() { }
+exports.StatusMananger = StatusMananger;
+
+StatusMananger.statusCode = {
+  BeforeAuthentication: "BA",
+  AuthenticationFailed: "AF",
+  AuthenticationSuccess: "AS",
+  ExecutionFailed: "EF",
+  ExecutionSuccess: "ES",
+}
+
+StatusMananger.authenticationErrorCode = {
   NotInitialized: "NI",
   InvalidToken: "IT",
-  AccountUnmatch: "AU",
-  PasswordUnmatch: "PU",
-  AuthSuccess: "AS",
+  FormUnmatch: "FU"
 }
-exports.authStatusCode = authStatusCode;
+
+StatusMananger.executionErrorCode = {
+  UnknownError: "UE",
+  InternalServerError: "ISE"
+}
+
+StatusMananger.prototype.status = StatusMananger.statusCode.BeforeAuthentication;
+StatusMananger.prototype.error = null;
+
+StatusMananger.prototype.addAuthenticationStatus = function (errorCode) {
+  [this.status, this.error] = errorCode
+    ? [StatusMananger.statusCode.AuthenticationFailed, errorCode]
+    : [StatusMananger.statusCode.AuthenticationSuccess, null]
+}
+
+StatusMananger.prototype.addExecutionStatus = function (errorCode) {
+  [this.status, this.error] = errorCode
+    ? [StatusMananger.statusCode.ExecutionFailed, errorCode]
+    : [StatusMananger.statusCode.ExecutionSuccess, null]
+}
+
+StatusMananger.prototype.isAuthenticationPass = function() {
+  return this.status == StatusMananger.statusCode.AuthenticationSuccess ||
+    this.status == StatusMananger.statusCode.ExecutionSuccess;
+}
+
+StatusMananger.prototype.isExecutionPass = function() {
+  return this.status == StatusMananger.statusCode.ExecutionSuccess;
+}
+
+StatusMananger.prototype.generateReport = function () {
+  let result = { status: this.status }
+  return this.error ? { ...result, errorCode: this.error } : result;
+}
