@@ -11,8 +11,7 @@ const FileOperator = {
     return true;
   },
 
-  probeSetting: () => {
-    
+  initSetting: () => {
   }
 }
 
