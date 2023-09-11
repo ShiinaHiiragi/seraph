@@ -4,7 +4,7 @@ import IconButton from "@mui/joy/IconButton";
 import Typography from "@mui/joy/Typography"
 
 import MenuIcon from "@mui/icons-material/Menu";
-import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
+import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
 import GreyLogo from "../logo-grey.svg";
 import GlobalContext from "../interface/constants";
@@ -76,14 +76,12 @@ const Header = (props) => {
           size="sm"
           variant="outlined"
           color="neutral"
-          sx={{ display: { xs: "inline-flex", sm: "none" } }}
         >
-          <SearchRoundedIcon />
+          <SettingsOutlinedIcon />
         </IconButton>
-
         <IconButton
           size="sm"
-          variant="soft"
+          variant="outlined"
           color="neutral"
         >
           <LoginOutlinedIcon />
