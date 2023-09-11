@@ -59,4 +59,4 @@ const authStatusCode = {
   PasswordUnmatch: "PU",
   AuthSuccess: "AS",
 }
-exports.authStateCode = authStatusCode;
+exports.authStatusCode = authStatusCode;

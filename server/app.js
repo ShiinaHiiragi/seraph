@@ -24,12 +24,10 @@ app.use(cors({
 // unified authenticator
 app.use((req, res, next) => {
   setting = api.fileOperator.readSetting()
-  req.preprocess = {
-    notInitialized: null
-  };
+  req.preprocess = new Object();
 
   if (setting.password === undefined) {
-    req.preprocess.notInitialized = true;
+    req.preprocess.auth = api.authStatusCode.NotInitialized;
     next();
   } else {
     next();

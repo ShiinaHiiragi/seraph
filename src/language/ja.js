@@ -25,7 +25,7 @@ const ja = {
   universal: {
     inDevelopment: {
       title: "開発中",
-      caption: "必要であればギットハブイシューでこれについて言及してください。"
+      caption: "必要であればギットハブで新たなイシューを提出してください。"
     },
     notFound: {
       title: "404",

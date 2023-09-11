@@ -25,7 +25,7 @@ const zhCN = {
   universal: {
     inDevelopment: {
       title: "开发中",
-      caption: "如果对此功能有需要，请在 GitHub Issue 提出。"
+      caption: "如有需要，请在 GitHub 上提交新 Issue。"
     },
     notFound: {
       title: "404",

@@ -25,7 +25,7 @@ const en = {
   universal: {
     inDevelopment: {
       title: "In Development",
-      caption: "Please upvote this in GitHub Issue if you are in need of it."
+      caption: "Please submit a new issue on GitHub if you are in need of it."
     },
     notFound: {
       title: "404",
