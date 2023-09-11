@@ -2,6 +2,7 @@ import React from "react";
 import RouteField from "../interface/RouteField";
 import { useParams } from "react-router";
 import GlobalContext from "../interface/constants";
+import FileTable from "../components/FileTable";
 
 const FileExplorer = (props) => {
   const {
@@ -17,7 +18,9 @@ const FileExplorer = (props) => {
         folderName
       ]}
       title={folderName}
+      sx={{ flexDirection: "column" }}
     >
+      <FileTable />
     </RouteField>
   )
 }

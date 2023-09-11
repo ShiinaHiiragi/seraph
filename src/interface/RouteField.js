@@ -13,7 +13,7 @@ const RouteFieldRaw = styled("div")(({ theme }) => ({
 }));
 
 const RouteField = (props) => {
-  const { path, title, children } = props;
+  const { path, title, children, ...otherProps } = props;
   const breadcrumb = path ?? [];
 
   return (
@@ -56,7 +56,7 @@ const RouteField = (props) => {
           sx={(theme) => ({ paddingBottom: theme.spacing(2) })}
         />
       }
-      <RouteFieldRaw children={children} />
+      <RouteFieldRaw children={children} {...otherProps} />
     </RouteFieldRaw>
   )
 }
