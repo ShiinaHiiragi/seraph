@@ -24,6 +24,16 @@ app.use(cors({
 // unified authenticator
 app.use((req, res, next) => {
   setting = api.fileOperator.readSetting()
+  req.preprocess = {
+    notInitialized: null
+  };
+
+  if (setting.password === undefined) {
+    req.preprocess.notInitialized = true;
+    next();
+  } else {
+    next();
+  }
 });
 
 // express-router
