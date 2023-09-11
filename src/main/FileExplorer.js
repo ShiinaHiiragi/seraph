@@ -34,6 +34,10 @@ const FileExplorer = (props) => {
         overflowX: {
           xs: "visible",
           sm: "hidden"
+        },
+        height: {
+          xs: "auto",
+          sm: "100%"
         }
       }}
     >

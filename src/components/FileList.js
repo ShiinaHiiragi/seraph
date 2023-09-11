@@ -109,10 +109,11 @@ export default function FileList() {
     <Box
       sx={{
         display: { xs: 'block', sm: 'none' },
-        overflowY: "visible"
+        overflowY: "visible",
       }}
     >
-      {listItems.map((listItem, index) => (
+      <ListDivider sx={{ mb: 1 }} />
+      {listItems.map((listItem) => (
         <List
           key={listItem.id}
           size="sm"
@@ -120,7 +121,6 @@ export default function FileList() {
             '--ListItem-paddingX': 0,
           }}
         >
-          { index === 0 && <ListDivider /> }
           <ListItem
             sx={{
               display: 'flex',
