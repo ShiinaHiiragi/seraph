@@ -20,10 +20,12 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "concurrently 'npm run react' 'cd server/ && npm run dev'",
-    "start:sudo": "concurrently 'npm run react:linux' 'cd server/ && npm run dev:linux'",
+    "start": "concurrently 'npm run react' 'npm run dev'",
     "react": "react-scripts start",
-    "react:sudo": "sudo node ./node_modules/.bin/react-scripts start"
+    "dev": "cd server/ && npm run dev",
+    "start:sudo": "concurrently 'npm run react:sudo' 'npm run dev:sudo'",
+    "react:sudo": "sudo node ./node_modules/.bin/react-scripts start",
+    "dev:sudo": "cd server/ && npm run dev:sudo"
   },
   "eslintConfig": {
     "extends": [
