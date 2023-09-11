@@ -9,10 +9,11 @@ import IconButton from "@mui/joy/IconButton";
 import Typography from "@mui/joy/Typography"
 import GreyLogo from "../logo-grey.svg";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
-import DoneIcon from "@mui/icons-material/Done";
 import CloudOutlinedIcon from "@mui/icons-material/CloudOutlined";
-import EventNoteOutlinedIcon from "@mui/icons-material/EventNoteOutlined";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
+import ForwardToInboxOutlinedIcon from "@mui/icons-material/ForwardToInboxOutlined";
+import EventNoteOutlinedIcon from "@mui/icons-material/EventNoteOutlined";
+import DoneIcon from "@mui/icons-material/Done";
 import GlobalContext from "../interface/constants";
 
 export default function Navigation() {
@@ -20,7 +21,7 @@ export default function Navigation() {
 
   return (
     <List size="sm" sx={{ "--ListItem-radius": "8px", "--List-gap": "4px" }}>
-      <ListItem sx={{ paddingLeft: 0, display: { xs: "inline-flex", sm: "none" } }}>
+      <ListItem sx={{ paddingLeft: 0, display: { xs: "inline-flex", sm: "inline-flex", md: "none" } }}>
         <IconButton disabled sx={{ paddingLeft: "0px" }}>
           <img src={GreyLogo} width={24} height={24} alt="" />
         </IconButton>
@@ -118,6 +119,14 @@ export default function Navigation() {
                 <ShareOutlinedIcon fontSize="small" />
               </ListItemDecorator>
               <ListItemContent>{context.languagePicker("nav.utility.links")}</ListItemContent>
+            </ListItemButton>
+          </ListItem>
+          <ListItem>
+            <ListItemButton>
+              <ListItemDecorator sx={{ color: "neutral.500" }}>
+                <ForwardToInboxOutlinedIcon fontSize="small" />
+              </ListItemDecorator>
+              <ListItemContent>{context.languagePicker("nav.utility.subscription")}</ListItemContent>
             </ListItemButton>
           </ListItem>
           <ListItem>

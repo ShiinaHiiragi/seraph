@@ -56,13 +56,13 @@ const Header = (props) => {
           variant="outlined"
           size="sm"
           onClick={() => setDrawerOpen(true)}
-          sx={{ display: { sm: "none" } }}
+          sx={{ display: { md: "none" } }}
         >
           <MenuIcon />
         </IconButton>
         <IconButton
           disabled
-          sx={{ display: { xs: "none", sm: "inline-flex" } }}
+          sx={{ display: { xs: "none", sm: "none", md: "inline-flex" } }}
         >
           <img src={GreyLogo} width={24} height={24} alt=""/>
         </IconButton>

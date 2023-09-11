@@ -10,6 +10,7 @@ const ja = {
       title: "ユーティリティ",
       archive: "アーカイブ",
       links: "リンク",
+      subscription: "サブスクリプション",
       milkdown: "ミルクダウン",
       todo: "トゥードゥー"
     }

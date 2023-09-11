@@ -10,6 +10,7 @@ const zhCN = {
       title: "实用",
       archive: "档案",
       links: "链接",
+      subscription: "订阅",
       milkdown: "Milkdown",
       todo: "待办"
     }
