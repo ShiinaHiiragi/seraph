@@ -31,7 +31,10 @@ const FileExplorer = (props) => {
           xs: "visible",
           sm: "hidden"
         },
-        overflowX: "hidden"
+        overflowX: {
+          xs: "visible",
+          sm: "hidden"
+        }
       }}
     >
       <FileTable />

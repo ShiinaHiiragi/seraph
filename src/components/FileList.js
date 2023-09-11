@@ -109,7 +109,7 @@ export default function FileList() {
     <Box
       sx={{
         display: { xs: 'block', sm: 'none' },
-        overflow: "visible"
+        overflowY: "visible"
       }}
     >
       {listItems.map((listItem, index) => (
