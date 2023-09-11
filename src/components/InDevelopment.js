@@ -18,10 +18,10 @@ const InDevelopment = () => {
   return (
     <Center>
       <Typography level="h2" color="neutral" fontWeight={400} sx={{ paddingBottom: 1 }}>
-        {context.languagePicker("universal.inDevelopment")}
+        {context.languagePicker("universal.inDevelopment.title")}
       </Typography>
       <Typography level="body-sm" color="neutral" fontWeight={400} sx={{ paddingBottom: 8 }}>
-        {context.languagePicker("universal.inDevelopmentCaption")}
+        {context.languagePicker("universal.inDevelopment.caption")}
       </Typography>
     </Center>
   );

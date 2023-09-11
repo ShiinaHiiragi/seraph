@@ -23,8 +23,10 @@ const ja = {
     }
   },
   universal: {
-    inDevelopment: "開発中",
-    inDevelopmentCaption: "必要であればギットハブイシューでこれについて言及してください"
+    inDevelopment: {
+      title: "開発中",
+      caption: "必要であればギットハブイシューでこれについて言及してください"
+    }
   }
 }
 

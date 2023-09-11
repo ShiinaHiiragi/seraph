@@ -23,8 +23,10 @@ const en = {
     }
   },
   universal: {
-    inDevelopment: "In Development",
-    inDevelopmentCaption: "Please upvote this in GitHub Issue if you are in need of it."
+    inDevelopment: {
+      title: "In Development",
+      caption: "Please upvote this in GitHub Issue if you are in need of it."
+    }
   }
 }
 
