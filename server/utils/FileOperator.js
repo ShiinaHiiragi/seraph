@@ -10,6 +10,10 @@ const FileOperator = {
     }
     return true;
   },
+
+  probeSetting: () => {
+    
+  }
 }
 
 module.exports = FileOperator;

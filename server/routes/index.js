@@ -1,7 +1,7 @@
 let express = require('express');
 let router = express.Router();
 let dotenv = require('dotenv');
-let api = require('../utils/api');
+let api = require('../api');
 
 dotenv.config();
 
