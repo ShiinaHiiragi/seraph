@@ -123,7 +123,7 @@ export default function Navigation() {
             "& .JoyListItemButton-root": { p: "8px" },
           }}
         >
-          <ListItem button>
+          <ListItem>
             <ListItemButton
               selected={pathStartWith("/archive")}
               onClick={() => navigate("/archive")}
