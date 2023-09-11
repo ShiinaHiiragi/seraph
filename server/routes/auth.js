@@ -6,7 +6,7 @@ let router = express.Router();
 router.get('/meta', (req, res) => {
   if (req.preprocess.notInitialized) {
     res.send({
-      auth: api.authStateCode.NotInitialized
+      auth: api.authStatusCode.NotInitialized
     })
   }
 });

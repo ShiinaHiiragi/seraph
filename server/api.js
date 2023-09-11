@@ -52,11 +52,11 @@ const fileOperator = {
 };
 exports.fileOperator = fileOperator;
 
-const authStateCode = {
+const authStatusCode = {
   NotInitialized: "NI",
   InvalidToken: "IT",
   AccountUnmatch: "AU",
   PasswordUnmatch: "PU",
   AuthSuccess: "AS",
 }
-exports.authStateCode = authStateCode;
+exports.authStateCode = authStatusCode;
