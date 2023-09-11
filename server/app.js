@@ -42,25 +42,27 @@ app.use('/auth', authRouter);
 
 // redirect all other pages to react-router
 app.use((req, res) => {
-  if (req.status.notPass()) {
-    res.send(req.status.generateReport());
-  } else {
-    res.redirect(new URL(req.originalUrl, api.reactBaseURL).href);
-  }
+  res.redirect(new URL(req.originalUrl, api.reactBaseURL).href);
 });
 
 // error handler
-app.use(function(err, req, res) {
+app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
-  res.status(err.status || 500);
-  res.send({
-    status: api.Status.statusCode.Unknown,
-    errorCode: api.Status.execErrCode.UnknownErr
-  });
+  switch (req.status.status) {
+    case api.Status.statusCode.AuthFailed:
+    case api.Status.statusCode.ExecFailed:
+      res.send(res.status.generateReport());
+      break;
+    default:
+      res.status(500).send({
+        status: api.Status.statusCode.Unknown,
+        errorCode: api.Status.execErrCode.UnknownErr
+      });
+  }
 });
 
 module.exports = app;

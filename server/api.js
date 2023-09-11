@@ -95,14 +95,6 @@ Status.prototype.notAuthSuccess = function() {
   return this.status !== Status.statusCode.AuthSuccess;
 }
 
-Status.prototype.notPass = function() {
-  return [
-    Status.statusCode.BeforeAuth,
-    Status.statusCode.AuthFailed,
-    Status.statusCode.ExecFailed
-  ].includes(this.status);
-}
-
 Status.prototype.generateReport = function () {
   let result = { status: this.status }
   return this.err ? { ...result, errorCode: this.err } : result;
