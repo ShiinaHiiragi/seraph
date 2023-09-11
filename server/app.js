@@ -3,8 +3,8 @@ let cookieParser = require('cookie-parser');
 let logger = require('morgan');
 let cors = require('cors');
 
-let api = require('./api');
 let authRouter = require('./routes/auth');
+let api = require('./api');
 
 let app = express();
 
@@ -23,7 +23,7 @@ app.use(cors({
 
 // unified authenticator
 app.use((req, res, next) => {
-  // TODO: fill this
+  setting = api.fileOperator.readSetting()
 });
 
 // express-router
