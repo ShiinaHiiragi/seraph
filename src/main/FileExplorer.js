@@ -18,7 +18,11 @@ const FileExplorer = (props) => {
         folderName
       ]}
       title={folderName}
-      sx={{ flexDirection: "column" }}
+      sx={{
+        flexDirection: "column",
+        overflowY: "hidden",
+        overflowX: "hidden"
+      }}
     >
       <FileTable />
     </RouteField>

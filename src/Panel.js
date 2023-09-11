@@ -50,12 +50,14 @@ const ContentField = styled('div')(({ theme }) => ({
   flexGrow: 1,
   display: "flex",
   flexDirection: "row",
-  overflow: "hidden",
+  overflowY: "hidden",
+  overflowX: "hidden",
 }));
 
 const NavigationField = styled('div')(({ theme }) => ({
   width: "225px",
-  overflow: "auto",
+  overflowY: "auto",
+  overflowX: "auto",
   padding: theme.spacing(2),
   backgroundColor: theme.palette.background.surface,
   borderRight: "1px solid",
@@ -73,7 +75,8 @@ const NavigationField = styled('div')(({ theme }) => ({
 
 const MainField = styled('div')(({ theme }) => ({
   flexGrow: 1,
-  overflow: "auto",
+  overflowY: "hidden",
+  overflowX: "hidden",
 }));
 
 const Panel = () => {
