@@ -44,10 +44,10 @@ const Root = styled('div')(({ theme }) => ({
 const HeaderField = styled('div')(({ theme }) => ({
   width: "100%",
   [theme.breakpoints.down("md")]: {
-    minHeight: "64px",
+    minHeight: "65px",
   },
   [theme.breakpoints.up("md")]: {
-    minHeight: "72px",
+    minHeight: "73px",
   }
 }));
 
