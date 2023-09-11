@@ -7,7 +7,6 @@ import Divider from "@mui/joy/Divider";
 import Link from "@mui/joy/Link";
 import Table from "@mui/joy/Table";
 import Sheet from "@mui/joy/Sheet";
-import Checkbox from "@mui/joy/Checkbox";
 import IconButton from "@mui/joy/IconButton";
 import Typography from "@mui/joy/Typography";
 import Menu from "@mui/joy/Menu";
@@ -260,7 +259,6 @@ function RowMenu() {
 
 export default function FileTable() {
   const [order, setOrder] = React.useState("desc");
-  const [selected, setSelected] = React.useState([]);
 
   return (
     <Sheet
@@ -291,25 +289,7 @@ export default function FileTable() {
       >
         <thead>
           <tr>
-            <th style={{ width: 48, textAlign: "center", padding: "12px 6px" }}>
-              <Checkbox
-                size="sm"
-                indeterminate={
-                  selected.length > 0 && selected.length !== rows.length
-                }
-                checked={selected.length === rows.length}
-                onChange={(event) => {
-                  setSelected(
-                    event.target.checked ? rows.map((row) => row.id) : [],
-                  );
-                }}
-                color={
-                  selected.length > 0 || selected.length === rows.length
-                    ? "primary"
-                    : undefined
-                }
-                sx={{ verticalAlign: "text-bottom" }}
-              />
+            <th style={{ width: 24 }}>
             </th>
             <th style={{ width: 120, padding: "12px 6px" }}>
               <Link
@@ -339,21 +319,7 @@ export default function FileTable() {
         <tbody>
           {stableSort(rows, getComparator(order, "id")).map((row, index) => (
             <tr key={index}>
-              <td style={{ textAlign: "center", width: 120 }}>
-                <Checkbox
-                  size="sm"
-                  checked={selected.includes(row.id)}
-                  color={selected.includes(row.id) ? "primary" : undefined}
-                  onChange={(event) => {
-                    setSelected((ids) =>
-                      event.target.checked
-                        ? ids.concat(row.id)
-                        : ids.filter((itemId) => itemId !== row.id),
-                    );
-                  }}
-                  slotProps={{ checkbox: { sx: { textAlign: "left" } } }}
-                  sx={{ verticalAlign: "text-bottom" }}
-                />
+              <td>
               </td>
               <td>
                 <Typography level="body-xs">{row.id}</Typography>
