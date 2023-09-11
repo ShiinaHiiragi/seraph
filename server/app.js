@@ -2,6 +2,7 @@ let createError = require('http-errors');
 let express = require('express');
 let cookieParser = require('cookie-parser');
 let logger = require('morgan');
+var cors = require('cors');
 
 let indexRouter = require('./routes/index');
 let usersRouter = require('./routes/users');
@@ -12,6 +13,14 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+app.use(cors({
+  origin: ['*'],
+  methods: ["GET", "POST"],
+  alloweHeaders: ['Conten-Type', 'Authorization', 'Accept', 'Origin'],
+  exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
+  credentials: true,
+}));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
