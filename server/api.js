@@ -14,6 +14,7 @@ const dataPath = {
   publicDirPath: path.join(__dirname, "./data/public"),
   privateDirPath: path.join(__dirname, "./data/private"),
   configFilePath: path.join(__dirname, "./data/config.json"),
+  tokenFilePath: path.join(__dirname, "./data/token.json"),
   publicFolderDirPath: (folderName) => path.join(__dirname, "./data/public", folderName),
   privateFolderDirPath: (folderName) => path.join(__dirname, "./data/private", folderName),
   publicMarkdownDirPath: path.join(__dirname, "./data/public/markdown"),
@@ -46,6 +47,7 @@ const fileOperator = {
         dataPath.configFilePath,
         JSON.stringify(defaultConfig, null, 2)
       );
+      fs.chmodSync(dataPath.configFilePath, 0o777);
     }
     return JSON.parse(fs.readFileSync(dataPath.configFilePath));
   },
@@ -55,6 +57,17 @@ const fileOperator = {
       dataPath.configFilePath,
       JSON.stringify(config, null, 2)
     );
+  },
+
+  readToken: () => {
+    if (!fs.existsSync(dataPath.tokenFilePath)) {
+      fs.writeFileSync(
+        dataPath.tokenFilePath,
+        JSON.stringify([], null, 2)
+      );
+      fs.chmodSync(dataPath.tokenFilePath, 0o777);
+    }
+    return JSON.parse(fs.readFileSync(dataPath.tokenFilePath));
   }
 };
 exports.fileOperator = fileOperator;
