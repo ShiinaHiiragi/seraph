@@ -6,6 +6,7 @@ const GlobalContext = React.createContext({});
 const ConstantContext = {};
 export default GlobalContext;
 
+// eslint-disable-next-line
 String.prototype.format = function () {
   let formatted = this;
   for (let i = 0; i < arguments.length; i++) {
@@ -75,6 +76,7 @@ const toastTheme = (theme) => `
 
   [data-sonner-toast][data-styled=true] {
     box-shadow: none;
+    cursor: default;
   }
 
   &.sonner-toast-warn {
