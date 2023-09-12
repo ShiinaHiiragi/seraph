@@ -44,15 +44,8 @@ export default function Init(props) {
   const context = React.useContext(GlobalContext);
   const [formPasswordText, setFormPasswordText] = React.useState("");
   const [formPasswordType, setFormPasswordType] = React.useState("password");
-  const [formPasswordError, setFormPasswordError] = React.useState(false);
 
   const handleClickSubmit = React.useCallback(() => {
-    if (formPasswordText === "") {
-      setFormPasswordError(true);
-      toast.error("..");
-      return;
-    }
-
     request("POST/auth/init", {
       language: language,
       password: formPasswordText
@@ -100,7 +93,7 @@ export default function Init(props) {
           </FormControl>
           <form>
             <Input type="text" autoComplete="username" sx={{ display: "none" }} />
-            <FormControl error={formPasswordError}>
+            <FormControl>
               <FormLabel>{context.languagePicker("modal.init.password.label")}</FormLabel>
               <Input
                 endDecorator={
@@ -126,7 +119,7 @@ export default function Init(props) {
               />
             </FormControl>
           </form>
-          <Button onClick={handleClickSubmit}>
+          <Button disabled={formPasswordText.length === 0} onClick={handleClickSubmit}>
             {context.languagePicker("universal.button.submit")}
           </Button>
         </Stack>
