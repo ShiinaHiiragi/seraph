@@ -39,8 +39,7 @@ const Status = {
   },
   authErrCode: {
     NotInit: "NI",
-    InvalidToken: "IT",
-    PasswordUnmatch: "PU"
+    InvalidToken: "IT"
   },
   execErrCode: {
     InternalServerError: "ISE"

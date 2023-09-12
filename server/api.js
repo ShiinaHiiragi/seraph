@@ -103,17 +103,23 @@ const tokenOperator = {
     fileOperator.saveToken(token.filter((item) => item.session !== session));
   },
 
-  clearExpiredSession: () => {
-    const timeNow = Date.now();
-    const token = fileOperator.readToken();
-    fileOperator.saveToken(token.filter((item) => item.timestamp - timeNow > 0 ));
-  },
+  validateUpdateSession: (session) => {
+    const __clearExpiredSession = () => {
+      const timeNow = Date.now();
+      const token = fileOperator.readToken();
+      fileOperator.saveToken(token.filter((item) => item.timestamp - timeNow > 0 ));
+    };
 
-  validateSession: (session) => {
-    tokenOperator.clearExpiredSession();
-
+    __clearExpiredSession();
     const token = fileOperator.readToken();
-    return Boolean(token.find((item) => item.session === session))
+    sessionIndex = token.findIndex((item) => item.session === session)
+    if (sessionIndex >= 0) {
+      token[sessionIndex].timestamp = Date.now() + expiredPeriod;
+      fileOperator.saveToken(token);
+      return true;
+    } else {
+      return false;
+    }
   }
 }
 exports.expiredPeriod = expiredPeriod;
@@ -132,8 +138,7 @@ Status.statusCode = {
 
 Status.authErrCode = {
   NotInit: "NI",
-  InvalidToken: "IT",
-  PasswordUnmatch: "PU"
+  InvalidToken: "IT"
 }
 
 Status.execErrCode = {

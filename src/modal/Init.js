@@ -58,7 +58,7 @@ export default function Init(props) {
   }, [language, formPasswordText]);
 
   return (
-    <Modal open={modalInitOpen}>
+    <Modal open={modalInitOpen} sx={{ userSelect: "none" }}>
       <ModalDialog
         variant="outlined"
         role="alertdialog"

@@ -26,12 +26,15 @@ app.use((req, res, next) => {
   config = api.fileOperator.readConfig();
   req.status = new api.Status();
 
-  if (config.meta.password === "") {
-    req.status.addAuthStatus(api.Status.authErrCode.NotInit);
-    next();
-  } else {
-    // TODO: fill this
-  }
+  req.status.addAuthStatus(
+    config.meta.password === ""
+      ? api.Status.authErrCode.NotInit
+      : api.tokenOperator.validateUpdateSession(
+        req.cookies.seraphSession
+      ) ? undefined
+      : api.Status.authErrCode.InvalidToken
+  );
+  next();
 });
 
 // express-router
