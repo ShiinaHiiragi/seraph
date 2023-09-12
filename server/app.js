@@ -23,6 +23,11 @@ app.use(cors({
 
 // unified authenticator
 app.use((req, res, next) => {
+  res.status(500).send({
+    statusCode: api.Status.statusCode.UnknownStatus,
+    errorCode: api.Status.execErrCode.InternalServerError
+  });
+
   setting = api.fileOperator.readSetting();
   req.status = new api.Status();
 

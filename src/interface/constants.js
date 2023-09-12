@@ -72,9 +72,12 @@ const toastTheme = (theme) => `
 `
 
 const request = (query, params) => {
-  const [method, path] = query.match(/(GET|POST)(.+)/).slice(1)
-  return axios[method.toLowerCase()](new URL(path, serverBaseURL).href, params)
-    .catch(console.log);
+  const [method, path] = query.match(/(GET|POST)(.+)/).slice(1);
+  return new Promise((resolve) => {
+    axios[method.toLowerCase()](new URL(path, serverBaseURL).href, params)
+      .then((res) => resolve(res.data))
+      .catch((res) => console.log(res.response.data))
+  });
 }
 
 const GlobalContext = React.createContext({});

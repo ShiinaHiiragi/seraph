@@ -84,8 +84,6 @@ Status.prototype.addAuthStatus = function (errorCode) {
 }
 
 Status.prototype.addExecStatus = function (errorCode) {
-  console.assert(this.status === Status.statusCode.AuthSuccess);
-
   [this.status, this.err] = errorCode
     ? [Status.statusCode.ExecFailed, errorCode]
     : [Status.statusCode.ExecSuccess, null];

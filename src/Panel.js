@@ -99,9 +99,11 @@ const Panel = () => {
   }, [])
 
   return (
-    <GlobalContext.Provider value={{
-      languagePicker: languagePicker
-    }}>
+    <GlobalContext.Provider
+      value={{
+        languagePicker: languagePicker
+      }}
+    >
       <GlobalStyles styles={toastTheme} />
       <Root className="Root">
         <CssVarsProvider
