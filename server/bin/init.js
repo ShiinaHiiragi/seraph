@@ -1,4 +1,11 @@
+const fs = require('fs');
+const path = require('path');
 const dotenv = require('dotenv');
+
+fs.copyFileSync(
+  path.join(__dirname, '../../.env'),
+  path.join(__dirname, '../.env')
+);
 dotenv.config();
 
 const api = require('../api');

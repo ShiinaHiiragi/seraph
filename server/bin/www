@@ -16,7 +16,7 @@ let http = require('http');
  * Get port from environment and store in Express.
  */
 
-let port = normalizePort(process.env.PORT);
+let port = normalizePort(process.env.REACT_APP_SPORT);
 app.set('port', port);
 
 /**

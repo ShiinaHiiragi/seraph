@@ -21,11 +21,11 @@ const dataPath = {
 };
 exports.dataPath = dataPath;
 
-const generateBaseURL = (protocol, hostname, port) => `${protocol}//${hostname}:${port}`;
+const generateBaseURL = (protocol, hostname, port) => `${protocol}://${hostname}:${port}`;
 const reactBaseURL = generateBaseURL(
-  process.env.PROTOCOL,
-  process.env.HOSTNAME,
-  process.env.REPORT
+  process.env.REACT_APP_PROTOCOL,
+  process.env.REACT_APP_HOSTNAME,
+  process.env.PORT
 );
 
 exports.generateBaseURL = generateBaseURL;

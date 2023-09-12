@@ -16,7 +16,7 @@ String.prototype.format = function () {
   return formatted;
 };
 
-const generateBaseURL = (protocol, hostname, port) => `${protocol}//${hostname}:${port}`;
+const generateBaseURL = (protocol, hostname, port) => `${protocol}://${hostname}:${port}`;
 const serverBaseURL = generateBaseURL(
   process.env.REACT_APP_PROTOCOL,
   process.env.REACT_APP_HOSTNAME,
