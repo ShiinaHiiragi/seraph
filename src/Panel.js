@@ -23,9 +23,10 @@ import {
   Status,
   toastTheme,
   request,
-  defaultSetting
+  defaultSetting,
+  globalState
 } from "./interface/constants";
-import ModalForm from "./modal/Init";
+import Init from "./modal/Init";
 
 const Root = styled('div')(({ theme }) => ({
   width: "100vw",
@@ -98,9 +99,10 @@ const Panel = () => {
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [modalInitOpen, setModalInitOpen] = React.useState(false);
 
-  const [language, setLanguage] = React.useState("ja" || defaultLanguage);
-  const [folders, setFolders] = React.useState({ });
+  const [globalSwitch, setGlobalSwitch] = React.useState(globalState.INNOCENT);
+  const [language, setLanguage] = React.useState(defaultLanguage);
   const [setting, setSetting] = React.useState(defaultSetting);
+  const [folders, setFolders] = React.useState({ });
 
   const languagePicker = React.useMemo(() => {
     ConstantContext.languagePicker = languagePickerSpawner(language);
@@ -120,7 +122,7 @@ const Panel = () => {
           request.unparseableResponse(data);
         }
       })
-  }, [])
+  }, [ ])
 
   return (
     <GlobalContext.Provider
@@ -169,9 +171,11 @@ const Panel = () => {
               </MainField>
             </BrowserRouter>
           </ContentField>
-          <ModalForm
+          <Init
+            setGlobalSwitch={setGlobalSwitch}
             language={language}
             setLanguage={setLanguage}
+            setFolders={setFolders}
             modalInitOpen={modalInitOpen}
           />
           <Toaster position="top-center" richColors closeButton />

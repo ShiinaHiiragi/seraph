@@ -2,7 +2,7 @@ import en from "../language/en";
 import zhCN from "../language/zh-CN";
 import ja from "../language/ja";
 
-const defaultLanguage = "en";
+const defaultLanguage = "ja";
 const languageMap = {
   "en": {
     object: en,

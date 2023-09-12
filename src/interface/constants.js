@@ -2,8 +2,8 @@ import React from "react";
 import axios from "axios";
 import { toast } from "sonner";
 
-const GlobalContext = React.createContext({});
-const ConstantContext = {};
+const GlobalContext = React.createContext({ });
+const ConstantContext = { };
 export default GlobalContext;
 
 // eslint-disable-next-line
@@ -112,6 +112,12 @@ request.unparseableResponse = (data) => {
 
 const defaultSetting = { };
 
+const globalState = {
+  INNOCENT: "innocent",
+  ANONYMOUS: "anonymous",
+  AUTHORITY: "authority"
+};
+
 export {
   ConstantContext,
   generateBaseURL,
@@ -120,5 +126,6 @@ export {
   Status,
   toastTheme,
   request,
-  defaultSetting
+  defaultSetting,
+  globalState
 };

@@ -18,7 +18,7 @@ import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
 import IconButton from "@mui/joy/IconButton";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { request, Status } from "../interface/constants";
+import { request, Status, globalState } from "../interface/constants";
 import { languageMap } from "../interface/languagePicker";
 
 const Aligned = styled("span")(({ theme }) => ({
@@ -37,8 +37,10 @@ const AlignedOption = (props) => {
 
 export default function Init(props) {
   const {
+    setGlobalSwitch,
     language,
     setLanguage,
+    setFolders,
     modalInitOpen
   } = props;
   const context = React.useContext(GlobalContext);
@@ -53,6 +55,8 @@ export default function Init(props) {
       .then((res) => {
         if (res.statusCode === Status.statusCode.ExecSuccess) {
           toast.success(context.languagePicker("modal.toast.success.init"));
+          setFolders({ public: [ ], private: [ ] })
+          setGlobalSwitch(globalState.AUTHORITY);
         }
       })
       .catch(request.unparseableResponse);

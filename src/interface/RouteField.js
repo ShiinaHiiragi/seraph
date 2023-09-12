@@ -14,7 +14,7 @@ const RouteFieldRaw = styled("div")(({ theme }) => ({
 
 const RouteField = (props) => {
   const { path, title, sxRaw, children, ...otherProps } = props;
-  const breadcrumb = path ?? [];
+  const breadcrumb = path ?? [ ];
 
   return (
     <RouteFieldRaw

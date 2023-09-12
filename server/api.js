@@ -67,7 +67,7 @@ const fileOperator = {
     if (!fs.existsSync(dataPath.tokenFilePath)) {
       fs.writeFileSync(
         dataPath.tokenFilePath,
-        JSON.stringify([], null, 2)
+        JSON.stringify([ ], null, 2)
       );
       fs.chmodSync(dataPath.tokenFilePath, 0o777);
     }
