@@ -22,7 +22,24 @@ const zhCN = {
     archive: {
     }
   },
+  modal: {
+    init: {
+      title: "初始化",
+      caption: "首次使用请设置密码。",
+      password: {
+        label: "密码"
+      }
+    }
+  },
+  setting: {
+    general: {
+      language: "语言"
+    }
+  },
   universal: {
+    button: {
+      submit: "提交"
+    },
     inDevelopment: {
       title: "开发中",
       caption: "如有需要，请在 GitHub 上提交新 Issue。"

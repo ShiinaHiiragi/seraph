@@ -11,13 +11,11 @@ import Input from "@mui/joy/Input";
 import Select from "@mui/joy/Select";
 import Option from "@mui/joy/Option";
 import Stack from "@mui/joy/Stack";
+import GlobalContext from "../interface/constants";
 
-export default function AlertDialogModal(props) {
-  const {
-    title,
-    caption
-  } = props;
+export default function Init(props) {
   const [open, setOpen] = React.useState(false);
+  const context = React.useContext(GlobalContext);
 
   return (
     <Modal open={true} onClose={() => setOpen(false)}>
@@ -32,25 +30,25 @@ export default function AlertDialogModal(props) {
           level="h2"
           startDecorator={<InfoOutlinedIcon />}
         >
-          Confirmation
+          {context.languagePicker("modal.init.title")}
         </Typography>
         <Divider />
         <Typography id="alert-dialog-modal-description" textColor="text.tertiary">
-          Are you sure you want to discard all of your notes?
+          {context.languagePicker("modal.init.caption")}
         </Typography>
         <Stack spacing={2}>
           <FormControl>
-            <FormLabel>Name</FormLabel>
-            <Select placeholder="Select Language">
+            <FormLabel>{context.languagePicker("setting.general.language")}</FormLabel>
+            <Select value="dog" placeholder="Select Language">
               <Option value="dog">A</Option>
               <Option value="cat">B</Option>
             </Select>
           </FormControl>
           <FormControl>
-            <FormLabel>Description</FormLabel>
+            <FormLabel>{context.languagePicker("modal.init.password.label")}</FormLabel>
             <Input required />
           </FormControl>
-          <Button type="submit">Submit</Button>
+          <Button type="submit">{context.languagePicker("universal.button.submit")}</Button>
         </Stack>
       </ModalDialog>
     </Modal>

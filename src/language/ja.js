@@ -22,7 +22,24 @@ const ja = {
     archive: {
     }
   },
+  modal: {
+    init: {
+      title: "イニシャライズ",
+      caption: "初回利用時にパスワードを設定してください。",
+      password: {
+        label: "パスワード"
+      }
+    }
+  },
+  setting: {
+    general: {
+      language: "ランゲージ"
+    }
+  },
   universal: {
+    button: {
+      submit: "サブミット"
+    },
     inDevelopment: {
       title: "開発中",
       caption: "必要であればギットハブで新たなイシューを提出してください。"

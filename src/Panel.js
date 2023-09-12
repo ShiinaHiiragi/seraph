@@ -17,7 +17,7 @@ import Error from "./main/Error";
 import { defaultLanguage, languagePickerSpawner } from "./interface/languagePicker";
 import GlobalContext from "./interface/constants";
 import GlobalTheme from "./interface/theme";
-import ModalForm from "./interface/ModalForm";
+import ModalForm from "./modal/Init";
 
 const Root = styled('div')(({ theme }) => ({
   width: "100vw",
