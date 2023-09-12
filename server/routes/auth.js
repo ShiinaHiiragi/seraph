@@ -17,7 +17,6 @@ router.get('/meta', (req, res, next) => {
       req.status.addExecStatus();
       res.send({
         ...req.status.generateReport(),
-        language: config.meta.language,
         public: publicFolder,
         setting: config.setting
       })
@@ -32,7 +31,6 @@ router.get('/meta', (req, res, next) => {
     req.status.addExecStatus();
     res.send({
       ...req.status.generateReport(),
-      language: config.meta.language,
       public: publicFolder,
       private: privateFolder,
       setting: config.setting
@@ -44,10 +42,10 @@ router.get('/meta', (req, res, next) => {
 router.post('/init', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
     if (req.status.err == api.Status.authErrCode.NotInit) {
-      const { language, password } = req.body;
+      const { password, language } = req.body;
       config = api.fileOperator.readConfig();
-      config.meta.language = language;
       config.meta.password = password;
+      config.setting.meta.language = language;
 
       if (!password.length) {
         // abnormal request

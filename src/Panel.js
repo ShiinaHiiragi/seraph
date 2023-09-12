@@ -17,7 +17,7 @@ import TODO from "./main/TODO";
 import Error from "./main/Error";
 import GlobalContext from "./interface/constants";
 import GlobalTheme from "./interface/theme";
-import { defaultLanguage, languagePickerSpawner } from "./interface/languagePicker";
+import { languagePickerSpawner } from "./interface/languagePicker";
 import {
   ConstantContext,
   Status,
@@ -100,20 +100,18 @@ const Panel = () => {
   const [modalInitOpen, setModalInitOpen] = React.useState(false);
 
   const [globalSwitch, setGlobalSwitch] = React.useState(globalState.INNOCENT);
-  const [language, setLanguage] = React.useState(defaultLanguage);
   const [setting, setSetting] = React.useState(defaultSetting);
   const [publicFolders, setPublicFolders] = React.useState([ ]);
   const [privateFolders, setPrivateFolders] = React.useState([ ]);
 
   const languagePicker = React.useMemo(() => {
-    ConstantContext.languagePicker = languagePickerSpawner(language);
-    return languagePickerSpawner(language);
-  }, [language]);
+    ConstantContext.languagePicker = languagePickerSpawner(setting.meta.language);
+    return languagePickerSpawner(setting.meta.language);
+  }, [setting.meta.language]);
 
   React.useEffect(() => {
     request("GET/auth/meta")
       .then((data) => {
-        setLanguage(data.language);
         setSetting(data.setting);
         setPublicFolders(
           data.public.map((item) => ({ name: item }))
@@ -192,8 +190,8 @@ const Panel = () => {
           </ContentField>
           <Init
             setGlobalSwitch={setGlobalSwitch}
-            language={language}
-            setLanguage={setLanguage}
+            setting={setting}
+            setSetting={setSetting}
             setPublicFolders={setPublicFolders}
             setPrivateFolders={setPrivateFolders}
             modalInitOpen={modalInitOpen}

@@ -38,8 +38,8 @@ const AlignedOption = (props) => {
 export default function Init(props) {
   const {
     setGlobalSwitch,
-    language,
-    setLanguage,
+    setting,
+    setSetting,
     setPublicFolders,
     setPrivateFolders,
     modalInitOpen,
@@ -53,7 +53,7 @@ export default function Init(props) {
   const handleClickSubmit = React.useCallback(() => {
     setFormPasswordDisabled(true);
     request("POST/auth/init", {
-      language: language,
+      language: setting.meta.language,
       password: formPasswordText
     })
       .then((res) => {
@@ -69,7 +69,7 @@ export default function Init(props) {
       .catch(request.unparseableResponse);
   }, [
     context,
-    language,
+    setting.meta.language,
     formPasswordText,
     setPublicFolders,
     setPrivateFolders,
@@ -100,9 +100,15 @@ export default function Init(props) {
           <FormControl>
             <FormLabel>{context.languagePicker("setting.general.language")}</FormLabel>
             <Select
-              value={language}
+              value={setting.meta.language}
               startDecorator={<LanguageOutlinedIcon />}
-              onChange={(_, newValue) => setLanguage(newValue)}
+              onChange={(_, newValue) => setSetting((setting) => ({
+                ...setting,
+                meta: {
+                  ...setting.meta,
+                  language: newValue
+                }
+              }))}
             >
               {Object.keys(languageMap).map((item, index) => (
                 <AlignedOption value={item} key={index}>

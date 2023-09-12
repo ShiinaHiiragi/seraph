@@ -4,10 +4,13 @@ const CryptoJS = require('crypto-js');
 
 const defaultConfig = {
   meta: {
-    language: "en",
     password: ""
   },
-  setting: { }
+  setting: {
+    meta: {
+      language: "en",
+    }
+  }
 };
 exports.defaultConfig = defaultConfig;
 

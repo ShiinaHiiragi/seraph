@@ -110,7 +110,11 @@ request.unparseableResponse = (data) => {
   );
 }
 
-const defaultSetting = { };
+const defaultSetting = {
+  meta: {
+    language: "en"
+  }
+};
 
 const globalState = {
   INNOCENT: "innocent",

@@ -1,8 +1,8 @@
 import en from "../language/en";
 import zhCN from "../language/zh-CN";
 import ja from "../language/ja";
+import { defaultSetting } from "./constants";
 
-const defaultLanguage = "ja";
 const languageMap = {
   "en": {
     object: en,
@@ -26,12 +26,12 @@ const languagePicker = (language, keys) => {
   );
 }
 
-const languagePickerSpawner = (language) => (keys) =>
-  languagePicker(language, keys) ?? languagePicker(defaultLanguage, keys);
+const languagePickerSpawner = (language) => (keys) => 
+  languagePicker(language, keys)
+    ?? languagePicker(defaultSetting.meta.language, keys);
 
-export default defaultLanguage;
+export default languageMap;
 export {
-  defaultLanguage,
   languageMap,
   languagePickerSpawner
 }
