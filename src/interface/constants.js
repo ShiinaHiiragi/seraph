@@ -20,7 +20,7 @@ const Status = {
   authErrCode: {
     NotInit: "NI",
     InvalidToken: "IT",
-    FormUnmatch: "FU"
+    PasswordUnmatch: "PU"
   },
   execErrCode: {
     UnknownErr: "UE",

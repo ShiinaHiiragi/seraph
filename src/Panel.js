@@ -17,6 +17,7 @@ import Error from "./main/Error";
 import { defaultLanguage, languagePickerSpawner } from "./interface/languagePicker";
 import GlobalContext from "./interface/constants";
 import GlobalTheme from "./interface/theme";
+import ModalForm from "./interface/ModalForm";
 
 const Root = styled('div')(({ theme }) => ({
   width: "100vw",
@@ -94,6 +95,7 @@ const Panel = () => {
     <GlobalContext.Provider value={{
       languagePicker: languagePicker
     }}>
+      <ModalForm />
       <Root className="Root">
         <CssVarsProvider
           disableTransitionOnChange

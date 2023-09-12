@@ -67,7 +67,7 @@ Status.statusCode = {
 Status.authErrCode = {
   NotInit: "NI",
   InvalidToken: "IT",
-  FormUnmatch: "FU"
+  PasswordUnmatch: "PU"
 }
 
 Status.execErrCode = {
