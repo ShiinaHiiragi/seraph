@@ -3,7 +3,7 @@ const path = require('path');
 const CryptoJS = require('crypto-js');
 
 const defaultConfig = {
-  meta: {
+  metadata: {
     password: ""
   },
   setting: {

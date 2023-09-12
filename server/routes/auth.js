@@ -44,7 +44,7 @@ router.post('/init', (req, res, next) => {
     if (req.status.err == api.Status.authErrCode.NotInit) {
       const { password, language } = req.body;
       config = api.fileOperator.readConfig();
-      config.meta.password = password;
+      config.metadata.password = password;
       config.setting.meta.language = language;
 
       if (!password.length) {

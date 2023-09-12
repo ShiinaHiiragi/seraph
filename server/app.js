@@ -27,7 +27,7 @@ app.use((req, res, next) => {
   req.status = new api.Status();
 
   req.status.addAuthStatus(
-    config.meta.password === ""
+    config.metadata.password === ""
       ? api.Status.authErrCode.NotInit
       : api.tokenOperator.validateUpdateSession(
         req.cookies.seraphSession
