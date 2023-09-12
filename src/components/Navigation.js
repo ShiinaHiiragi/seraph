@@ -14,17 +14,20 @@ import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import EventNoteOutlinedIcon from "@mui/icons-material/EventNoteOutlined";
 import ForwardToInboxOutlinedIcon from "@mui/icons-material/ForwardToInboxOutlined";
 import DoneIcon from "@mui/icons-material/Done";
-import GlobalContext from "../interface/constants";
+import GlobalContext, { globalState } from "../interface/constants";
 import { pathStartWith } from "../interface/constants";
 import { useNavigate } from "react-router-dom";
 
 export default function Navigation(props) {
   const {
+    publicFolders,
+    privateFolders,
     setDrawerOpen
   } = props;
   const context = React.useContext(GlobalContext);
   const navigate = useNavigate();
-
+  
+  const isAuthority = context.globalSwitch === globalState.AUTHORITY;
   const navigateTo = React.useCallback((pathname) => {
     navigate(pathname);
     setDrawerOpen(false);
@@ -50,43 +53,23 @@ export default function Navigation(props) {
             "& .JoyListItemButton-root": { p: "8px" },
           }}
         >
-          <ListItem>
-            <ListItemButton
-              selected={pathStartWith("/public/Folder 01")}
-              onClick={() => navigateTo("/public/Folder 01")}
-            >
-              <ListItemDecorator>
-                <FolderOpenIcon fontSize="small" />
-              </ListItemDecorator>
-              <ListItemContent>Folder 01</ListItemContent>
-            </ListItemButton>
-          </ListItem>
-          <ListItem>
-            <ListItemButton
-              selected={pathStartWith("/public/Folder 02")}
-              onClick={() => navigateTo("/public/Folder 02")}
-            >
-              <ListItemDecorator>
-                <FolderOpenIcon fontSize="small" />
-              </ListItemDecorator>
-              <ListItemContent>Folder 02</ListItemContent>
-            </ListItemButton>
-          </ListItem>
-          <ListItem>
-            <ListItemButton
-              selected={pathStartWith("/public/Folder 03")}
-              onClick={() => navigateTo("/public/Folder 03")}
-            >
-              <ListItemDecorator>
-                <FolderOpenIcon fontSize="small" />
-              </ListItemDecorator>
-              <ListItemContent>Folder 03</ListItemContent>
-            </ListItemButton>
-          </ListItem>
+          {publicFolders.map((item, index) => (
+            <ListItem key={index}>
+              <ListItemButton
+                selected={pathStartWith(`/public/${item.name}`)}
+                onClick={() => navigateTo(`/public/${item.name}`)}
+              >
+                <ListItemDecorator>
+                  <FolderOpenIcon fontSize="small" />
+                </ListItemDecorator>
+                <ListItemContent>{item.name}</ListItemContent>
+              </ListItemButton>
+            </ListItem>
+          ))}
         </List>
       </ListItem>
 
-      <ListItem nested>
+      {isAuthority && <ListItem nested>
         <ListSubheader>
           {context.languagePicker("nav.private")}
         </ListSubheader>
@@ -96,30 +79,21 @@ export default function Navigation(props) {
             "& .JoyListItemButton-root": { p: "8px" },
           }}
         >
-          <ListItem>
-            <ListItemButton
-              selected={pathStartWith("/private/Folder 01")}
-              onClick={() => navigateTo("/private/Folder 01")}
-            >
-              <ListItemDecorator>
-                <FolderOpenIcon fontSize="small" />
-              </ListItemDecorator>
-              <ListItemContent>Folder 01</ListItemContent>
-            </ListItemButton>
-          </ListItem>
-          <ListItem>
-            <ListItemButton
-              selected={pathStartWith("/private/Folder 02")}
-              onClick={() => navigateTo("/private/Folder 02")}
-            >
-              <ListItemDecorator>
-                <FolderOpenIcon fontSize="small" />
-              </ListItemDecorator>
-              <ListItemContent>Folder 02</ListItemContent>
-            </ListItemButton>
-          </ListItem>
+          {privateFolders.map((item, index) => (
+            <ListItem key={index}>
+              <ListItemButton
+                selected={pathStartWith(`/private/${item.name}`)}
+                onClick={() => navigateTo(`/private/${item.name}`)}
+              >
+                <ListItemDecorator>
+                  <FolderOpenIcon fontSize="small" />
+                </ListItemDecorator>
+                <ListItemContent>{item.name}</ListItemContent>
+              </ListItemButton>
+            </ListItem>
+          ))}
         </List>
-      </ListItem>
+      </ListItem>}
 
       <ListItem nested>
         <ListSubheader>
@@ -131,7 +105,7 @@ export default function Navigation(props) {
             "& .JoyListItemButton-root": { p: "8px" },
           }}
         >
-          <ListItem>
+          {isAuthority && <ListItem>
             <ListItemButton
               selected={pathStartWith("/archive")}
               onClick={() => navigateTo("/archive")}
@@ -141,8 +115,8 @@ export default function Navigation(props) {
               </ListItemDecorator>
               <ListItemContent>{context.languagePicker("nav.utility.archive")}</ListItemContent>
             </ListItemButton>
-          </ListItem>
-          <ListItem>
+          </ListItem>}
+          {isAuthority && <ListItem>
             <ListItemButton
               selected={pathStartWith("/links")}
               onClick={() => navigateTo("/links")}
@@ -152,7 +126,7 @@ export default function Navigation(props) {
               </ListItemDecorator>
               <ListItemContent>{context.languagePicker("nav.utility.links")}</ListItemContent>
             </ListItemButton>
-          </ListItem>
+          </ListItem>}
           <ListItem>
             <ListItemButton
               selected={pathStartWith("/milkdown")}
@@ -164,7 +138,7 @@ export default function Navigation(props) {
               <ListItemContent>{context.languagePicker("nav.utility.milkdown")}</ListItemContent>
             </ListItemButton>
           </ListItem>
-          <ListItem>
+          {isAuthority && <ListItem>
             <ListItemButton
               selected={pathStartWith("/subscription")}
               onClick={() => navigateTo("/subscription")}
@@ -174,8 +148,8 @@ export default function Navigation(props) {
               </ListItemDecorator>
               <ListItemContent>{context.languagePicker("nav.utility.subscription")}</ListItemContent>
             </ListItemButton>
-          </ListItem>
-          <ListItem>
+          </ListItem>}
+          {isAuthority && <ListItem>
             <ListItemButton
               selected={pathStartWith("/todo")}
               onClick={() => navigateTo("/todo")}
@@ -185,7 +159,7 @@ export default function Navigation(props) {
               </ListItemDecorator>
               <ListItemContent>{context.languagePicker("nav.utility.todo")}</ListItemContent>
             </ListItemButton>
-          </ListItem>
+          </ListItem>}
         </List>
       </ListItem>
     </List>

@@ -102,8 +102,8 @@ const Panel = () => {
   const [globalSwitch, setGlobalSwitch] = React.useState(globalState.INNOCENT);
   const [language, setLanguage] = React.useState(defaultLanguage);
   const [setting, setSetting] = React.useState(defaultSetting);
-  const [publicFolders, setPublicFolders] = React.useState({ });
-  const [privateFolders, setPrivateFolders] = React.useState({ });
+  const [publicFolders, setPublicFolders] = React.useState([ ]);
+  const [privateFolders, setPrivateFolders] = React.useState([ ]);
 
   const languagePicker = React.useMemo(() => {
     ConstantContext.languagePicker = languagePickerSpawner(language);
@@ -113,6 +113,7 @@ const Panel = () => {
   React.useEffect(() => {
     request("GET/auth/meta")
       .then((data) => {
+        console.log(data)
         setLanguage(data.language);
         setSetting(data.setting);
         setPublicFolders(
@@ -141,7 +142,8 @@ const Panel = () => {
   return (
     <GlobalContext.Provider
       value={{
-        languagePicker: languagePicker
+        languagePicker: languagePicker,
+        globalSwitch: globalSwitch
       }}
     >
       <GlobalStyles styles={toastTheme} />
@@ -161,12 +163,16 @@ const Panel = () => {
               {drawerOpen && (
                 <SideDrawer onClose={() => setDrawerOpen(false)}>
                   <Navigation
+                    publicFolders={publicFolders}
+                    privateFolders={privateFolders}
                     setDrawerOpen={setDrawerOpen}
                   />
                 </SideDrawer>
               )}
               <NavigationField className="NavigationField">
                 <Navigation
+                  publicFolders={publicFolders}
+                  privateFolders={privateFolders}
                   setDrawerOpen={setDrawerOpen}
                 />
               </NavigationField>
