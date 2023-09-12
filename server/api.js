@@ -1,19 +1,27 @@
 const fs = require('fs');
 const path = require('path');
+const dotenv = require('dotenv');
 const CryptoJS = require('crypto-js');
 
-const defaultConfig = {
-  metadata: {
-    password: ""
-  },
-  setting: {
-    meta: {
-      language: "en",
-    }
-  }
-};
-exports.defaultConfig = defaultConfig;
+// copy .env in react directory
+// use .env to build base URL
+fs.copyFileSync(
+  path.join(__dirname, '../.env'),
+  path.join(__dirname, '/.env')
+);
 
+dotenv.config();
+const generateBaseURL = (protocol, hostname, port) => `${protocol}://${hostname}:${port}`;
+const reactBaseURL = generateBaseURL(
+  process.env.REACT_APP_PROTOCOL,
+  process.env.REACT_APP_HOSTNAME,
+  process.env.PORT
+);
+exports.generateBaseURL = generateBaseURL;
+exports.reactBaseURL = reactBaseURL;
+
+
+// intro __dirname
 const dataPath = {
   dataDirPath: path.join(__dirname, "./data"),
   publicDirPath: path.join(__dirname, "./data/public"),
@@ -29,15 +37,18 @@ const dataPath = {
 };
 exports.dataPath = dataPath;
 
-const generateBaseURL = (protocol, hostname, port) => `${protocol}://${hostname}:${port}`;
-const reactBaseURL = generateBaseURL(
-  process.env.REACT_APP_PROTOCOL,
-  process.env.REACT_APP_HOSTNAME,
-  process.env.PORT
-);
-
-exports.generateBaseURL = generateBaseURL;
-exports.reactBaseURL = reactBaseURL;
+// setting should be consistent with defaultSetting in react
+const defaultConfig = {
+  metadata: {
+    password: ""
+  },
+  setting: {
+    meta: {
+      language: "en",
+    }
+  }
+};
+exports.defaultConfig = defaultConfig;
 
 const fileOperator = {
   probeDir: (dirPath) => {
@@ -93,8 +104,39 @@ const fileOperator = {
 };
 exports.fileOperator = fileOperator;
 
+(function () {
+  fileOperator
+    .probeDir(dataPath.dataDirPath)
+    .probeDir(dataPath.publicDirPath)
+    .probeDir(dataPath.privateDirPath)
+    .probeDir(dataPath.markdownDirPath)
+    .probeDir(dataPath.publicMarkdownDirPath)
+    .probeDir(dataPath.privateMarkdownDirPath)
+    .probeDir(dataPath.independentMarkdownDirPath);
+
+  fileOperator.readConfig();
+  fileOperator.readToken();
+})();
+
+const configOperator = {
+  config: fileOperator.readConfig(),
+  setConfig: (handle) => {
+    const newConfig = handle(configOperator.config);
+    fileOperator.saveConfig(newConfig);
+    configOperator.config = newConfig;
+  }
+}
+exports.configOperator = configOperator;
+
 const expiredPeriod = 24 * 60 * 60 * 1000;
 const tokenOperator = {
+  token: fileOperator.readToken(),
+  setToken: (handle) => {
+    const newToken = handle(tokenOperator.token);
+    fileOperator.saveToken(newToken);
+    tokenOperator.token = newToken;
+  },
+
   addNewSession: () => {
     const session = CryptoJS.SHA256(
       Array(16).fill().reduce(
@@ -103,33 +145,35 @@ const tokenOperator = {
       )
     ).toString();
 
-    const token = fileOperator.readToken();
-    token.push({
-      session: session,
-      timestamp: Date.now() + expiredPeriod
-    })
-    fileOperator.saveToken(token);
+    tokenOperator.setToken((token) => [
+      ...token,
+      {
+        session: session,
+        timestamp: Date.now() + expiredPeriod
+      }
+    ])
     return session;
   },
 
   deleteSession: (session) => {
-    const token = fileOperator.readToken();
-    fileOperator.saveToken(token.filter((item) => item.session !== session));
+    tokenOperator.setToken((token) =>
+      token.filter((item) => item.session !== session)
+    );
   },
 
   validateUpdateSession: (session) => {
-    const __clearExpiredSession = () => {
+    const __clearExpiredSessions = () => {
       const timeNow = Date.now();
-      const token = fileOperator.readToken();
-      fileOperator.saveToken(token.filter((item) => item.timestamp - timeNow > 0 ));
+      tokenOperator.setToken((token) => 
+        token.filter((item) => item.timestamp - timeNow > 0 )
+      );
     };
 
-    __clearExpiredSession();
-    const token = fileOperator.readToken();
-    sessionIndex = token.findIndex((item) => item.session === session)
+    __clearExpiredSessions();
+    sessionIndex = tokenOperator.token.findIndex((item) => item.session === session)
     if (sessionIndex >= 0) {
-      token[sessionIndex].timestamp = Date.now() + expiredPeriod;
-      fileOperator.saveToken(token);
+      tokenOperator.token[sessionIndex].timestamp = Date.now() + expiredPeriod;
+      fileOperator.saveToken(tokenOperator.token);
       return true;
     } else {
       return false;
@@ -138,6 +182,7 @@ const tokenOperator = {
 }
 exports.expiredPeriod = expiredPeriod;
 exports.tokenOperator = tokenOperator;
+
 
 function Status() { }
 exports.Status = Status;

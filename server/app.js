@@ -23,11 +23,9 @@ app.use(cors({
 
 // unified authenticator
 app.use((req, res, next) => {
-  config = api.fileOperator.readConfig();
   req.status = new api.Status();
-
   req.status.addAuthStatus(
-    config.metadata.password === ""
+    api.configOperator.config.metadata.password === ""
       ? api.Status.authErrCode.NotInit
       : api.tokenOperator.validateUpdateSession(
         req.cookies.seraphSession

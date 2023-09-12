@@ -18,7 +18,7 @@ import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
 import IconButton from "@mui/joy/IconButton";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { request, Status, globalState } from "../interface/constants";
+import { request, globalState } from "../interface/constants";
 import { languageMap } from "../interface/languagePicker";
 
 const Aligned = styled("span")(({ theme }) => ({

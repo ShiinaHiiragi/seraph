@@ -1,9 +1,4 @@
 #!/usr/bin/env node
-/**
- * Init file system and os information.
- */
-
-require('./init')();
 
 /**
  * Module dependencies.
