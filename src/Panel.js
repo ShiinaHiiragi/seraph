@@ -89,7 +89,7 @@ const MainField = styled('div')(({ theme }) => ({
 }));
 
 const Panel = () => {
-  const [language, setLanguage] = React.useState("ja" || defaultLanguage);
+  const [language, setLanguage] = React.useState("zh-CN" || defaultLanguage);
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [modalInitOpen, setModalInitOpen] = React.useState(false);
 

@@ -6,6 +6,15 @@ const GlobalContext = React.createContext({});
 const ConstantContext = {};
 export default GlobalContext;
 
+String.prototype.format = function () {
+  let formatted = this;
+  for (let i = 0; i < arguments.length; i++) {
+    let regexp = new RegExp("\\{" + i + "\\}", "gi");
+    formatted = formatted.replace(regexp, arguments[i]);
+  }
+  return formatted;
+};
+
 const generateBaseURL = (protocol, hostname, port) => `${protocol}//${hostname}:${port}`;
 const serverBaseURL = generateBaseURL(
   process.env.REACT_APP_PROTOCOL,
@@ -80,7 +89,11 @@ const request = (query, params) => {
   return new Promise((resolve) => {
     axios[method.toLowerCase()](new URL(path, serverBaseURL).href, params)
       .then((res) => resolve(res.data))
-      .catch((res) => toast.error(`Server Error: Request failed with error code ${res.response.data.errorCode}.`));
+      .catch((res) => toast.error(
+        ConstantContext
+          .languagePicker("modal.toast.error.serverError")
+          .format(res.response.data.errorCode)
+      ));
   });
 }
 

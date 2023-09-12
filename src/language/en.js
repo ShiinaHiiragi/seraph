@@ -21,6 +21,11 @@ const en = {
     }
   },
   modal: {
+    toast: {
+      error: {
+        serverError: "Server Error: Request failed with error code {0}."
+      }
+    },
     init: {
       title: "Initialization",
       caption: "Please set up password on first usage.",

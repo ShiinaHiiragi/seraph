@@ -21,6 +21,11 @@ const zhCN = {
     }
   },
   modal: {
+    toast: {
+      error: {
+        serverError: "服务器错误：请求失败，错误代码 {0}。"
+      }
+    },
     init: {
       title: "初始化",
       caption: "首次使用请设置密码。",

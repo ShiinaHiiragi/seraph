@@ -21,6 +21,11 @@ const ja = {
     }
   },
   modal: {
+    toast: {
+      error: {
+        serverError: "サーバーエラー：リクエストは失敗しましてエラーコードが {0} です。"
+      }
+    },
     init: {
       title: "イニシャライズ",
       caption: "初回利用時にパスワードを設定してください。",
