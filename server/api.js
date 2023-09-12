@@ -61,7 +61,7 @@ Status.statusCode = {
   AuthSuccess: "AS",
   ExecFailed: "EF",
   ExecSuccess: "ES",
-  Unknown: "U"
+  UnknownStatus: "US"
 }
 
 Status.authErrCode = {
@@ -71,8 +71,7 @@ Status.authErrCode = {
 }
 
 Status.execErrCode = {
-  UnknownErr: "UE",
-  InternalServerErr: "ISE"
+  InternalServerError: "ISE"
 }
 
 Status.prototype.status = Status.statusCode.BeforeAuth;
@@ -86,6 +85,7 @@ Status.prototype.addAuthStatus = function (errorCode) {
 
 Status.prototype.addExecStatus = function (errorCode) {
   console.assert(this.status === Status.statusCode.AuthSuccess);
+
   [this.status, this.err] = errorCode
     ? [Status.statusCode.ExecFailed, errorCode]
     : [Status.statusCode.ExecSuccess, null];
@@ -96,6 +96,6 @@ Status.prototype.notAuthSuccess = function() {
 }
 
 Status.prototype.generateReport = function () {
-  let result = { status: this.status }
+  let result = { statusCode: this.status }
   return this.err ? { ...result, errorCode: this.err } : result;
 }

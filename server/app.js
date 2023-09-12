@@ -27,9 +27,7 @@ app.use((req, res, next) => {
   req.status = new api.Status();
 
   if (setting.password === undefined) {
-    req.status.addAuthStatus(
-      api.Status.authErrCode.NotInit
-    );
+    req.status.addAuthStatus(api.Status.authErrCode.NotInit);
     next();
   } else {
     // TODO: fill this
@@ -57,8 +55,8 @@ app.use((err, req, res, next) => {
       break;
     default:
       res.status(500).send({
-        status: api.Status.statusCode.Unknown,
-        errorCode: api.Status.execErrCode.UnknownErr
+        statusCode: api.Status.statusCode.UnknownStatus,
+        errorCode: api.Status.execErrCode.InternalServerError
       });
   }
 });

@@ -15,7 +15,7 @@ const Status = {
     AuthSuccess: "AS",
     ExecFailed: "EF",
     ExecSuccess: "ES",
-    Unknown: "U"
+    UnknownStatus: "US"
   },
   authErrCode: {
     NotInit: "NI",
@@ -23,8 +23,7 @@ const Status = {
     PasswordUnmatch: "PU"
   },
   execErrCode: {
-    UnknownErr: "UE",
-    InternalServerErr: "ISE"
+    InternalServerError: "ISE"
   }
 }
 
