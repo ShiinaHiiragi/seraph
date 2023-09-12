@@ -52,7 +52,7 @@ export default function Init(props) {
     })
       .then((res) => {
         if (res.statusCode === Status.statusCode.ExecSuccess) {
-          toast.success("");
+          toast.success(context.languagePicker("modal.toast.success.init"));
         }
       })
   }, [language, formPasswordText]);

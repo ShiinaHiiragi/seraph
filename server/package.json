@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "node-dev -r dotenv/config ./bin/www",
-    "dev:sudo": "sudo node ./node_modules/.bin/node-dev -r dotenv/config ./bin/www"
+    "dev": "node-dev ./bin/www",
+    "dev:sudo": "sudo node ./node_modules/.bin/node-dev ./bin/www"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",

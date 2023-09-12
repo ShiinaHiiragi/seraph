@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const dotenv = require('dotenv');
 
 const defaultConfig = {
   meta: {
@@ -22,7 +21,6 @@ const dataPath = {
 };
 exports.dataPath = dataPath;
 
-dotenv.config();
 const generateBaseURL = (protocol, hostname, port) => `${protocol}//${hostname}:${port}`;
 const reactBaseURL = generateBaseURL(
   process.env.PROTOCOL,
@@ -30,7 +28,6 @@ const reactBaseURL = generateBaseURL(
   process.env.REPORT
 );
 
-exports.dotenv = process.env;
 exports.generateBaseURL = generateBaseURL;
 exports.reactBaseURL = reactBaseURL;
 
