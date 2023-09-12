@@ -40,7 +40,8 @@ export default function Login(props) {
   }, [
     formPasswordText,
     setGlobalSwitch,
-    setPrivateFolders
+    setPrivateFolders,
+    setModalLoginOpen
   ]);
 
   return (

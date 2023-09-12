@@ -2,10 +2,6 @@ import React from "react";
 import axios from "axios";
 import { toast } from "sonner";
 
-const GlobalContext = React.createContext({ });
-const ConstantContext = { };
-export default GlobalContext;
-
 // eslint-disable-next-line
 String.prototype.format = function () {
   let formatted = this;
@@ -16,18 +12,46 @@ String.prototype.format = function () {
   return formatted;
 };
 
-const generateBaseURL = (protocol, hostname, port) => `${protocol}://${hostname}:${port}`;
-const serverBaseURL = generateBaseURL(
-  process.env.REACT_APP_PROTOCOL,
-  process.env.REACT_APP_HOSTNAME,
-  process.env.REACT_APP_SPORT
-);
+const GlobalContext = React.createContext({ });
+const ConstantContext = { };
+const globalState = {
+  INNOCENT: "innocent",
+  ANONYMOUS: "anonymous",
+  AUTHORITY: "authority"
+};
+const defaultSetting = {
+  meta: {
+    language: "en"
+  }
+};
+
+export default GlobalContext;
+export {
+  ConstantContext,
+  globalState,
+  defaultSetting
+};
+
 const pathStartWith = (prefix) => {
   prefix = prefix.slice(-1) === "/" ? prefix.slice(0, -1) : prefix;
   const pathname = decodeURIComponent(window.location.pathname);
   return new RegExp(`^${prefix}$`).test(pathname) ||
     new RegExp(`^${prefix}/`).test(pathname)
 }
+const generateBaseURL = (protocol, hostname, port) => 
+  `${protocol}://${hostname}:${port}`;
+const serverBaseURL = generateBaseURL(
+  process.env.REACT_APP_PROTOCOL,
+  process.env.REACT_APP_HOSTNAME,
+  process.env.REACT_APP_SPORT
+);
+
+export {
+  pathStartWith,
+  generateBaseURL,
+  serverBaseURL
+}
+
 
 const Status = {
   statusCode: {
@@ -46,6 +70,35 @@ const Status = {
     InternalServerError: "ISE"
   }
 }
+
+const request = (query, params) => {
+  const [method, path] = query.match(/(GET|POST)(.+)/).slice(1);
+  return new Promise((resolve, reject) => {
+    axios[method.toLowerCase()](new URL(path, serverBaseURL).href, params)
+      .then((res) => res.data.statusCode === Status.statusCode.ExecSuccess
+        ? resolve(res.data)
+        : reject(res.data)
+      ).catch((res) => console.log(res) ?? toast.error(
+        ConstantContext
+          .languagePicker("modal.toast.error.serverError")
+          .format(res.response.status)
+      ));
+  });
+}
+
+request.unparseableResponse = (data) => {
+  toast.error(
+    ConstantContext
+      .languagePicker("modal.toast.error.unparseableResponse")
+      .format(data.statusCode + (data.errorCode
+        ? "_" + data.errorCode
+        : ""
+      ))
+  );
+}
+
+export { Status, request };
+
 
 const toastTheme = (theme) => `
   [data-sonner-toaster][data-theme] {
@@ -85,57 +138,11 @@ const toastTheme = (theme) => `
   }
 `
 
-const request = (query, params) => {
-  const [method, path] = query.match(/(GET|POST)(.+)/).slice(1);
-  return new Promise((resolve, reject) => {
-    axios[method.toLowerCase()](new URL(path, serverBaseURL).href, params)
-      .then((res) => res.data.statusCode === Status.statusCode.ExecSuccess
-        ? resolve(res.data)
-        : reject(res.data)
-      ).catch((res) => console.log(res) ?? toast.error(
-        ConstantContext
-          .languagePicker("modal.toast.error.serverError")
-          .format(res.response.status)
-      ));
-  });
-}
 
-request.unparseableResponse = (data) => {
-  toast.error(
-    ConstantContext
-      .languagePicker("modal.toast.error.unparseableResponse")
-      .format(data.statusCode + (data.errorCode
-        ? "_" + data.errorCode
-        : ""
-      ))
-  );
-}
-
-const defaultSetting = {
-  meta: {
-    language: "en"
-  }
-};
-
-const globalState = {
-  INNOCENT: "innocent",
-  ANONYMOUS: "anonymous",
-  AUTHORITY: "authority"
-};
+export { toastTheme };
 
 const formatter = {
   folderFormatter: (folder) => folder.map((item) => ({ name: item }))
 }
 
-export {
-  ConstantContext,
-  generateBaseURL,
-  serverBaseURL,
-  pathStartWith,
-  Status,
-  toastTheme,
-  request,
-  defaultSetting,
-  globalState,
-  formatter
-};
+export { formatter };
