@@ -1,6 +1,13 @@
 import React from "react";
 import axios from "axios";
+import { toast } from "sonner";
 
+const generateBaseURL = (protocol, hostname, port) => `${protocol}//${hostname}:${port}`;
+const serverBaseURL = generateBaseURL(
+  process.env.REACT_APP_PROTOCOL,
+  process.env.REACT_APP_HOSTNAME,
+  process.env.REACT_APP_SPORT
+);
 const pathStartWith = (prefix) => {
   prefix = prefix.slice(-1) === "/" ? prefix.slice(0, -1) : prefix;
   const pathname = decodeURIComponent(window.location.pathname);
@@ -64,16 +71,20 @@ const toastTheme = (theme) => `
   }
 `
 
-const request = (router, params, config) => {
-  // TODO: fill this
+const request = (query, params) => {
+  const [method, path] = query.match(/(GET|POST)(.+)/).slice(1)
+  return axios[method.toLowerCase()](new URL(path, serverBaseURL).href, params)
+    .catch(console.log);
 }
 
 const GlobalContext = React.createContext({});
 export default GlobalContext;
 
 export {
-  GlobalContext,
+  generateBaseURL,
+  serverBaseURL,
   pathStartWith,
   Status,
-  toastTheme
+  toastTheme,
+  request
 };

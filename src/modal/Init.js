@@ -24,7 +24,7 @@ export default function Init(props) {
   const context = React.useContext(GlobalContext);
 
   return (
-    <Modal open={true} onClose={() => setOpen(false)}>
+    <Modal open={open} onClose={() => setOpen(false)}>
       <ModalDialog
         variant="outlined"
         role="alertdialog"

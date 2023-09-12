@@ -18,7 +18,7 @@ import Error from "./main/Error";
 import GlobalContext from "./interface/constants";
 import GlobalTheme from "./interface/theme";
 import { defaultLanguage, languagePickerSpawner } from "./interface/languagePicker";
-import { toastTheme } from "./interface/constants";
+import { toastTheme, request } from "./interface/constants";
 import ModalForm from "./modal/Init";
 
 const Root = styled('div')(({ theme }) => ({
@@ -93,10 +93,14 @@ const Panel = () => {
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const languagePicker = React.useMemo(() => languagePickerSpawner(language), [language])
 
+  React.useEffect(() => {
+    request("GET/auth/meta")
+      .then(console.log)
+  }, [])
+
   return (
     <GlobalContext.Provider value={{
-      languagePicker: languagePicker,
-      toast: toast
+      languagePicker: languagePicker
     }}>
       <GlobalStyles styles={toastTheme} />
       <Root className="Root">
