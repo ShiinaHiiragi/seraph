@@ -38,13 +38,9 @@ const zhCN = {
     button: {
       submit: "提交"
     },
-    inDevelopment: {
+    placeholder: {
       title: "开发中",
       caption: "如有需要，请在 GitHub 上提交新 Issue。"
-    },
-    notFound: {
-      title: "404",
-      caption: "请求的路径不存在。"
     }
   }
 }

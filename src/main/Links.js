@@ -15,8 +15,8 @@ const Links = () => {
       title={context.languagePicker("nav.utility.links")}
     >
       <Caption
-        title={context.languagePicker("universal.inDevelopment.title")}
-        caption={context.languagePicker("universal.inDevelopment.caption")}
+        title={context.languagePicker("universal.placeholder.title")}
+        caption={context.languagePicker("universal.placeholder.caption")}
       />
     </RouteField>
   )

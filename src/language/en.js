@@ -38,13 +38,9 @@ const en = {
     button: {
       submit: "Submit"
     },
-    inDevelopment: {
+    placeholder: {
       title: "In Development",
       caption: "Please submit a new issue on GitHub if you are in need of it."
-    },
-    notFound: {
-      title: "404",
-      caption: "The requested path does not exist."
     }
   }
 }

@@ -38,13 +38,9 @@ const ja = {
     button: {
       submit: "サブミット"
     },
-    inDevelopment: {
+    placeholder: {
       title: "開発中",
       caption: "必要であればギットハブで新たなイシューを提出してください。"
-    },
-    notFound: {
-      title: "404",
-      caption: "要求されたパスが存在ありません。"
     }
   }
 }
