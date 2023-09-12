@@ -48,15 +48,11 @@ app.use((err, req, res, next) => {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  switch (req.status.status) {
-    case api.Status.statusCode.AuthFailed:
-    case api.Status.statusCode.ExecFailed:
-      res.send(req.status.generateReport());
-      break;
-    default:
-      req.status.addExecStatus(api.Status.execErrCode.InternalServerError)
-      res.status(500).send(req.status.generateReport());
+  if (!err.validity) {
+    req.status.addExecStatus(api.Status.execErrCode.InternalServerError);
+    res.status(500);
   }
+  res.send(req.status.generateReport());
 });
 
 module.exports = app;

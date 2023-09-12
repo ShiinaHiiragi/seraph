@@ -77,7 +77,6 @@ Status.authErrCode = {
 }
 
 Status.execErrCode = {
-  InitChannelClosed: "ICC",
   InternalServerError: "ISE"
 }
 
@@ -104,3 +103,7 @@ Status.prototype.generateReport = function () {
   let result = { statusCode: this.status }
   return this.err ? { ...result, errorCode: this.err } : result;
 }
+
+const errorStreamControl = new Error("SERAPH");
+errorStreamControl.validity = true;
+exports.errorStreamControl = errorStreamControl;

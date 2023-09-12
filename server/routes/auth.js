@@ -7,7 +7,7 @@ let router = express.Router();
 router.get('/meta', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
     if (req.status.err == api.Status.authErrCode.NotInit) {
-      next(createError());
+      next(api.errorStreamControl);
     } else {
       // TODO: fill this
     }
@@ -19,11 +19,11 @@ router.get('/meta', (req, res, next) => {
 router.get('/init', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
     if (req.status.err == api.Status.authErrCode.NotInit) {
-      
+      // TODO: fill this
     }
   }
   req.status.addExecStatus(api.Status.execErrCode.InitChannelClosed);
-  next(createError());
+  next(api.errorStreamControl);
 });
 
 module.exports = router;
