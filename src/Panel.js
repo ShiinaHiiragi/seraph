@@ -1,11 +1,12 @@
 import React from "react";
-import { styled } from "@mui/joy/styles";
-import { CssVarsProvider } from "@mui/joy/styles";
+import GlobalStyles from "@mui/joy/GlobalStyles";
 import CssBaseline from "@mui/joy/CssBaseline";
+import { styled, CssVarsProvider } from "@mui/joy/styles";
+import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { Toaster, toast } from "sonner";
 import Header from "./components/Header";
 import Navigation from "./components/Navigation";
 import SideDrawer from "./components/SideDrawer";
-import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Welcome from "./main/Welcome";
 import FileExplorer from "./main/FileExplorer"
 import Archive from "./main/Archive";
@@ -14,9 +15,10 @@ import Milkdown from "./main/Milkdown";
 import Subscription from "./main/Subscription";
 import TODO from "./main/TODO";
 import Error from "./main/Error";
-import { defaultLanguage, languagePickerSpawner } from "./interface/languagePicker";
 import GlobalContext from "./interface/constants";
 import GlobalTheme from "./interface/theme";
+import { defaultLanguage, languagePickerSpawner } from "./interface/languagePicker";
+import { toastTheme } from "./interface/constants";
 import ModalForm from "./modal/Init";
 
 const Root = styled('div')(({ theme }) => ({
@@ -90,12 +92,13 @@ const Panel = () => {
   const [language, setLanguage] = React.useState("ja" || defaultLanguage);
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const languagePicker = React.useMemo(() => languagePickerSpawner(language), [language])
+  window.toast = toast;
 
   return (
     <GlobalContext.Provider value={{
       languagePicker: languagePicker
     }}>
-      <ModalForm />
+      <GlobalStyles styles={toastTheme} />
       <Root className="Root">
         <CssVarsProvider
           disableTransitionOnChange
@@ -138,6 +141,8 @@ const Panel = () => {
           </ContentField>
         </CssVarsProvider>
       </Root>
+      <ModalForm />
+      <Toaster position="top-center" richColors closeButton />
     </GlobalContext.Provider>
   );
 }
