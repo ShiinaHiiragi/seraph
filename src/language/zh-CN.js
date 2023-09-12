@@ -15,11 +15,9 @@ const zhCN = {
     }
   },
   main: {
-    welcome: {
-    },
-    file: {
-    },
-    archive: {
+    error: {
+      title: "404",
+      caption: "请求的路径不存在。"
     }
   },
   modal: {

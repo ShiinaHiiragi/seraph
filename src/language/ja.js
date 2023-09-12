@@ -15,11 +15,9 @@ const ja = {
     }
   },
   main: {
-    welcome: {
-    },
-    file: {
-    },
-    archive: {
+    error: {
+      title: "404",
+      caption: "要求されたパスが存在ありません。"
     }
   },
   modal: {

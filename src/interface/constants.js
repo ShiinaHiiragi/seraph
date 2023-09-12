@@ -2,6 +2,10 @@ import React from "react";
 import axios from "axios";
 import { toast } from "sonner";
 
+const GlobalContext = React.createContext({});
+const ConstantContext = {};
+export default GlobalContext;
+
 const generateBaseURL = (protocol, hostname, port) => `${protocol}//${hostname}:${port}`;
 const serverBaseURL = generateBaseURL(
   process.env.REACT_APP_PROTOCOL,
@@ -76,14 +80,12 @@ const request = (query, params) => {
   return new Promise((resolve) => {
     axios[method.toLowerCase()](new URL(path, serverBaseURL).href, params)
       .then((res) => resolve(res.data))
-      .catch((res) => toast.error(`Server Error: ${res.response.data.errorCode}`));
+      .catch((res) => toast.error(`Server Error: Request failed with error code ${res.response.data.errorCode}.`));
   });
 }
 
-const GlobalContext = React.createContext({});
-export default GlobalContext;
-
 export {
+  ConstantContext,
   generateBaseURL,
   serverBaseURL,
   pathStartWith,

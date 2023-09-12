@@ -20,6 +20,10 @@ const Aligned = styled("span")(({ theme }) => ({
 }));
 
 export default function Init(props) {
+  const {
+    modalInitOpen,
+    setLanguage
+  } = props;
   const [open, setOpen] = React.useState(false);
   const context = React.useContext(GlobalContext);
 

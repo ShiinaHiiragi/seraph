@@ -15,11 +15,9 @@ const en = {
     }
   },
   main: {
-    welcome: {
-    },
-    file: {
-    },
-    archive: {
+    error: {
+      title: "404",
+      caption: "The requested path does not exist."
     }
   },
   modal: {

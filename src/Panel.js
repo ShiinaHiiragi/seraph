@@ -18,7 +18,7 @@ import Error from "./main/Error";
 import GlobalContext from "./interface/constants";
 import GlobalTheme from "./interface/theme";
 import { defaultLanguage, languagePickerSpawner } from "./interface/languagePicker";
-import { toastTheme, request } from "./interface/constants";
+import { ConstantContext, toastTheme, request } from "./interface/constants";
 import ModalForm from "./modal/Init";
 
 const Root = styled('div')(({ theme }) => ({
@@ -91,11 +91,18 @@ const MainField = styled('div')(({ theme }) => ({
 const Panel = () => {
   const [language, setLanguage] = React.useState("ja" || defaultLanguage);
   const [drawerOpen, setDrawerOpen] = React.useState(false);
-  const languagePicker = React.useMemo(() => languagePickerSpawner(language), [language])
+  const [modalInitOpen, setModalInitOpen] = React.useState(false);
+
+  const languagePicker = React.useMemo(() => {
+    ConstantContext.languagePicker = languagePickerSpawner(language);
+    return languagePickerSpawner(language);
+  }, [language]);
 
   React.useEffect(() => {
     request("GET/auth/meta")
-      .then(console.log)
+      .then((data) => {
+        // TODO: fill this
+      })
   }, [])
 
   return (
@@ -147,7 +154,10 @@ const Panel = () => {
           </ContentField>
         </CssVarsProvider>
       </Root>
-      <ModalForm />
+      <ModalForm
+        modalInitOpen={modalInitOpen}
+        setLanguage={setLanguage}
+      />
       <Toaster position="top-center" richColors closeButton />
     </GlobalContext.Provider>
   );

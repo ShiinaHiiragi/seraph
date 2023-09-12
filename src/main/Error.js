@@ -9,8 +9,8 @@ const Error = () => {
   return (
     <RouteField>
       <Caption
-        title={context.languagePicker("universal.notFound.title")}
-        caption={context.languagePicker("universal.notFound.caption")}
+        title={context.languagePicker("main.error.title")}
+        caption={context.languagePicker("main.error.caption")}
       />
     </RouteField>
   )
