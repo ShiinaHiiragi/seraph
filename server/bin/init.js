@@ -15,8 +15,10 @@ const init = () => {
     .probeDir(api.dataPath.dataDirPath)
     .probeDir(api.dataPath.publicDirPath)
     .probeDir(api.dataPath.privateDirPath)
+    .probeDir(api.dataPath.markdownDirPath)
     .probeDir(api.dataPath.publicMarkdownDirPath)
-    .probeDir(api.dataPath.privateMarkdownDirPath);
+    .probeDir(api.dataPath.privateMarkdownDirPath)
+    .probeDir(api.dataPath.independentMarkdownDirPath);
 
   api.fileOperator.readConfig();
   api.fileOperator.readToken();

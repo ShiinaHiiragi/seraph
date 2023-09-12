@@ -6,7 +6,7 @@ let router = express.Router();
 router.get('/meta', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
     if (req.status.err == api.Status.authErrCode.NotInit) {
-      // only place that return (AF, NI)
+      // the ONLY place that return (AF, NI)
       next(api.errorStreamControl);
     } else {
       // TODO: fill this
@@ -25,6 +25,7 @@ router.post('/init', (req, res, next) => {
       config.meta.password = password;
       api.fileOperator.saveConfig(config);
 
+      // return (ES)
       req.status.addExecStatus();
       res.send(req.status.generateReport());
       return;

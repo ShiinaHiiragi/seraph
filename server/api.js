@@ -16,10 +16,12 @@ const dataPath = {
   privateDirPath: path.join(__dirname, "./data/private"),
   configFilePath: path.join(__dirname, "./data/config.json"),
   tokenFilePath: path.join(__dirname, "./data/token.json"),
+  markdownDirPath: path.join(__dirname, "./data/markdown"),
+  publicMarkdownDirPath: path.join(__dirname, "./data/markdown/public"),
+  privateMarkdownDirPath: path.join(__dirname, "./data/markdown/private"),
+  independentMarkdownDirPath: path.join(__dirname, "./data/markdown/independent"),
   publicFolderDirPath: (folderName) => path.join(__dirname, "./data/public", folderName),
   privateFolderDirPath: (folderName) => path.join(__dirname, "./data/private", folderName),
-  publicMarkdownDirPath: path.join(__dirname, "./data/public/markdown"),
-  privateMarkdownDirPath: path.join(__dirname, "./data/private/markdown"),
 };
 exports.dataPath = dataPath;
 
