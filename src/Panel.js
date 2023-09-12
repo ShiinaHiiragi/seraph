@@ -96,19 +96,23 @@ const MainField = styled('div')(({ theme }) => ({
 }));
 
 const Panel = () => {
+  // independent components
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [modalInitOpen, setModalInitOpen] = React.useState(false);
 
+  // global states
   const [globalSwitch, setGlobalSwitch] = React.useState(globalState.INNOCENT);
   const [setting, setSetting] = React.useState(defaultSetting);
   const [publicFolders, setPublicFolders] = React.useState([ ]);
   const [privateFolders, setPrivateFolders] = React.useState([ ]);
 
+  // language related
   const languagePicker = React.useMemo(() => {
     ConstantContext.languagePicker = languagePickerSpawner(setting.meta.language);
     return languagePickerSpawner(setting.meta.language);
   }, [setting.meta.language]);
 
+  // init the whole page; only load once
   React.useEffect(() => {
     request("GET/auth/meta")
       .then((data) => {
@@ -192,8 +196,6 @@ const Panel = () => {
             setGlobalSwitch={setGlobalSwitch}
             setting={setting}
             setSetting={setSetting}
-            setPublicFolders={setPublicFolders}
-            setPrivateFolders={setPrivateFolders}
             modalInitOpen={modalInitOpen}
             setModalInitOpen={setModalInitOpen}
           />
