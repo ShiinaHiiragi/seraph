@@ -6,13 +6,13 @@ let router = express.Router();
 router.get('/meta', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
     if (req.status.err == api.Status.authErrCode.NotInit) {
-      // -> the ONLY place that return (AF, NI)
+      // -> the ONLY place that return AF_NI
       next(api.errorStreamControl);
       return;
     } else {
       const publicFolder = api.fileOperator.readFolder(api.dataPath.publicDirPath);
 
-      // -> return (ES) and publicly available metadata
+      // -> return ES and publicly available metadata
       req.status.addExecStatus();
       res.send({
         ...req.status.generateReport(),
@@ -25,7 +25,7 @@ router.get('/meta', (req, res, next) => {
     const publicFolder = api.fileOperator.readFolder(api.dataPath.publicDirPath);
     const privateFolder = api.fileOperator.readFolder(api.dataPath.privateDirPath);
 
-    // -> return (ES) and all metadata
+    // -> return ES and all metadata
     req.status.addExecStatus();
     res.send({
       ...req.status.generateReport(),
@@ -44,28 +44,42 @@ router.post('/init', (req, res, next) => {
       api.configOperator.setConfigMetadata("password", password);
       api.configOperator.setConfigSetting("meta.language", language);
 
-      // return (ES)
+      // -> return ES
       req.status.addExecStatus();
       res.send(req.status.generateReport());
       return;
     }
   }
 
-  // abnormal request
+  // -> abnormal request
   next(api.errorStreamControl);
   return;
 });
 
 router.post('/login', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
-    if (req.status.err == api.Status.authErrCode.InvalidToken) {
+    if (req.status.err === api.Status.authErrCode.InvalidToken) {
       const { password } = req.body;
+      if (password === api.configOperator.config.metadata.password) {
+        const privateFolder = api.fileOperator.readFolder(api.dataPath.privateDirPath);
 
-
+        // -> return ES
+        req.status.addExecStatus();
+        res.send({
+          ...req.status.generateReport(),
+          private: privateFolder,
+        });
+        return;
+      } else {
+        // -> wrong password, return EF_IP
+        req.status.addExecStatus(api.Status.execErrCode.IncorrectPassword);
+        res.send(req.status.generateReport());
+        return;
+      }
     }
   }
 
-  // abnormal request
+  // -> abnormal request
   next(api.errorStreamControl);
   return;
 });

@@ -42,6 +42,7 @@ const Status = {
     InvalidToken: "IT"
   },
   execErrCode: {
+    IncorrectPassword: "IP",
     InternalServerError: "ISE"
   }
 }
@@ -122,6 +123,10 @@ const globalState = {
   AUTHORITY: "authority"
 };
 
+const formatter = {
+  folderFormatter: (folder) => folder.map((item) => ({ name: item }))
+}
+
 export {
   ConstantContext,
   generateBaseURL,
@@ -131,5 +136,6 @@ export {
   toastTheme,
   request,
   defaultSetting,
-  globalState
+  globalState,
+  formatter
 };

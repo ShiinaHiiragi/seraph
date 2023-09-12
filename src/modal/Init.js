@@ -61,7 +61,10 @@ export default function Init(props) {
         toast.success(context.languagePicker("modal.toast.success.init"));
         setGlobalSwitch(globalState.AUTHORITY);
       })
-      .catch(request.unparseableResponse);
+      .catch((data) => {
+        setFormPasswordDisabled(false);
+        request.unparseableResponse(data);
+      });
   }, [
     context,
     setting.meta.language,

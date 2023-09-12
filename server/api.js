@@ -225,6 +225,7 @@ Status.authErrCode = {
 }
 
 Status.execErrCode = {
+  IncorrectPassword: "IP",
   InternalServerError: "ISE"
 }
 

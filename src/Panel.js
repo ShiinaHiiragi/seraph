@@ -24,7 +24,8 @@ import {
   toastTheme,
   request,
   defaultSetting,
-  globalState
+  globalState,
+  formatter
 } from "./interface/constants";
 import Init from "./modal/Init";
 
@@ -117,14 +118,10 @@ const Panel = () => {
     request("GET/auth/meta")
       .then((data) => {
         setSetting(data.setting);
-        setPublicFolders(
-          data.public.map((item) => ({ name: item }))
-        );
+        setPublicFolders(formatter.folderFormatter(data.public));
 
         if (data.private) {
-          setPrivateFolders(
-            data.private.map((item) => ({ name: item }))
-          );
+          setPrivateFolders(formatter.folderFormatter(data.private));
           setGlobalSwitch(globalState.AUTHORITY);
         } else {
           setGlobalSwitch(globalState.ANONYMOUS);
@@ -157,6 +154,8 @@ const Panel = () => {
           <HeaderField className="HeaderField">
             <Header
               setDrawerOpen={setDrawerOpen}
+              setGlobalSwitch={setGlobalSwitch}
+              setPrivateFolders={setPrivateFolders}
             />
           </HeaderField>
           <ContentField className="ContentField">

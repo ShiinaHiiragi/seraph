@@ -39,7 +39,9 @@ const HeaderLayout = (props) => {
 
 const Header = (props) => {
   const {
-    setDrawerOpen
+    setDrawerOpen,
+    setGlobalSwitch,
+    setPrivateFolders
   } = props;
   const context = React.useContext(GlobalContext);
 
@@ -93,6 +95,8 @@ const Header = (props) => {
       <Login
         modalLoginOpen={modalLoginOpen}
         setModalLoginOpen={setModalLoginOpen}
+        setGlobalSwitch={setGlobalSwitch}
+        setPrivateFolders={setPrivateFolders}
       />
     </HeaderLayout>
   );

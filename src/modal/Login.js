@@ -9,20 +9,39 @@ import FormControl from "@mui/joy/FormControl";
 import FormLabel from "@mui/joy/FormLabel";
 import Input from "@mui/joy/Input";
 import Stack from "@mui/joy/Stack";
-import GlobalContext from "../interface/constants";
+import GlobalContext, { request, formatter, globalState } from "../interface/constants";
 
 export default function Login(props) {
   const {
     modalLoginOpen,
-    setModalLoginOpen
+    setModalLoginOpen,
+    setGlobalSwitch,
+    setPrivateFolders
   } = props;
   const context = React.useContext(GlobalContext);
   const [formPasswordText, setFormPasswordText] = React.useState("");
   const [formPasswordDisabled, setFormPasswordDisabled] = React.useState(false);
 
   const handleClickSubmit = React.useCallback(() => {
-    // TODO: fill this
-  }, [ ]);
+    setFormPasswordDisabled(true);
+
+    request("POST/auth/login", { password: formPasswordText })
+      .then((data) => {
+        setFormPasswordDisabled(false);
+        setModalLoginOpen(false);
+
+        setPrivateFolders(formatter.folderFormatter(data.private));
+        setGlobalSwitch(globalState.AUTHORITY);
+      })
+      .catch((data) => {
+        setFormPasswordDisabled(false);
+        request.unparseableResponse(data);
+      })
+  }, [
+    formPasswordText,
+    setGlobalSwitch,
+    setPrivateFolders
+  ]);
 
   return (
     <Modal
