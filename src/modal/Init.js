@@ -1,5 +1,6 @@
 import * as React from "react";
 import { styled } from "@mui/joy/styles";
+import { toast } from "sonner";
 import Button from "@mui/joy/Button";
 import Divider from "@mui/joy/Divider";
 import Modal from "@mui/joy/Modal";
@@ -17,6 +18,7 @@ import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
 import IconButton from "@mui/joy/IconButton";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { request } from "../interface/constants";
 import { languageMap } from "../interface/languagePicker";
 
 const Aligned = styled("span")(({ theme }) => ({
@@ -42,6 +44,23 @@ export default function Init(props) {
   const context = React.useContext(GlobalContext);
   const [formPasswordText, setFormPasswordText] = React.useState("");
   const [formPasswordType, setFormPasswordType] = React.useState("password");
+  const [formPasswordError, setFormPasswordError] = React.useState(false);
+
+  const handleClickSubmit = React.useCallback(() => {
+    if (formPasswordText === "") {
+      setFormPasswordError(true);
+      toast.error("..");
+      return;
+    }
+
+    request("POST/auth/init", {
+      language: language,
+      password: formPasswordText
+    })
+      .then(() => {
+        // TODO: fill this
+      })
+  }, [language, formPasswordText]);
 
   return (
     <Modal open={modalInitOpen}>
@@ -77,7 +96,7 @@ export default function Init(props) {
               ))}
             </Select>
           </FormControl>
-          <FormControl>
+          <FormControl error={formPasswordError}>
             <FormLabel>{context.languagePicker("modal.init.password.label")}</FormLabel>
             <Input
               endDecorator={
@@ -101,7 +120,9 @@ export default function Init(props) {
               slotProps={{ input: { type: formPasswordType } }}
             />
           </FormControl>
-          <Button type="submit">{context.languagePicker("universal.button.submit")}</Button>
+          <Button>
+            {context.languagePicker("universal.button.submit")}
+          </Button>
         </Stack>
       </ModalDialog>
     </Modal>

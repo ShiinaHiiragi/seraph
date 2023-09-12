@@ -67,8 +67,7 @@ Status.statusCode = {
   AuthFailed: "AF",
   AuthSuccess: "AS",
   ExecFailed: "EF",
-  ExecSuccess: "ES",
-  UnknownStatus: "US"
+  ExecSuccess: "ES"
 }
 
 Status.authErrCode = {
@@ -78,6 +77,7 @@ Status.authErrCode = {
 }
 
 Status.execErrCode = {
+  InitChannelClosed: "ICC",
   InternalServerError: "ISE"
 }
 

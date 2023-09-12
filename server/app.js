@@ -50,16 +50,12 @@ app.use((err, req, res, next) => {
 
   switch (req.status.status) {
     case api.Status.statusCode.AuthFailed:
+    case api.Status.statusCode.ExecFailed:
       res.send(req.status.generateReport());
       break;
-    case api.Status.statusCode.ExecFailed:
-      res.status(500).send(req.status.generateReport());
-      break;
     default:
-      res.status(500).send({
-        statusCode: api.Status.statusCode.UnknownStatus,
-        errorCode: api.Status.execErrCode.InternalServerError
-      });
+      req.status.addExecStatus(api.Status.execErrCode.InternalServerError)
+      res.status(500).send(req.status.generateReport());
   }
 });
 
