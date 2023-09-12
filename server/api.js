@@ -2,16 +2,23 @@ const fs = require('fs');
 const path = require('path');
 const dotenv = require('dotenv');
 
-const defaultSetting = {
-  // TODO: finish default Setting
+const defaultConfig = {
+  meta: {
+    password: ""
+  },
+  setting: {
+    general: {
+      language: "en"
+    }
+  }
 };
-exports.defaultSetting = defaultSetting;
+exports.defaultConfig = defaultConfig;
 
 const dataPath = {
   dataDirPath: path.join(__dirname, "./data"),
   publicDirPath: path.join(__dirname, "./data/public"),
   privateDirPath: path.join(__dirname, "./data/private"),
-  settingFilePath: path.join(__dirname, "./data/setting.json"),
+  configFilePath: path.join(__dirname, "./data/config.json"),
   publicFolderDirPath: (folderName) => path.join(__dirname, "./data/public", folderName),
   privateFolderDirPath: (folderName) => path.join(__dirname, "./data/private", folderName),
   publicMarkdownDirPath: path.join(__dirname, "./data/public/markdown"),
@@ -40,14 +47,14 @@ const fileOperator = {
     return fileOperator;
   },
 
-  readSetting: () => {
-    if (!fs.existsSync(dataPath.settingFilePath)) {
+  readConfig: () => {
+    if (!fs.existsSync(dataPath.configFilePath)) {
       fs.writeFileSync(
-        dataPath.settingFilePath,
-        JSON.stringify(defaultSetting)
+        dataPath.configFilePath,
+        JSON.stringify(defaultConfig, null, 2)
       );
     }
-    return JSON.parse(fs.readFileSync(dataPath.settingFilePath), null, 2);
+    return JSON.parse(fs.readFileSync(dataPath.configFilePath));
   }
 };
 exports.fileOperator = fileOperator;

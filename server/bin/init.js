@@ -7,7 +7,7 @@ const init = () => {
     .probeDir(api.dataPath.privateDirPath)
     .probeDir(api.dataPath.publicMarkdownDirPath)
     .probeDir(api.dataPath.privateMarkdownDirPath);
-  api.fileOperator.readSetting();
+  api.fileOperator.readConfig();
 }
 
 module.exports = init;

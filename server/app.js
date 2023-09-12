@@ -23,10 +23,10 @@ app.use(cors({
 
 // unified authenticator
 app.use((req, res, next) => {
-  setting = api.fileOperator.readSetting();
+  config = api.fileOperator.readConfig();
   req.status = new api.Status();
 
-  if (setting.password === undefined) {
+  if (config.meta.password === "") {
     req.status.addAuthStatus(api.Status.authErrCode.NotInit);
     next();
   } else {
