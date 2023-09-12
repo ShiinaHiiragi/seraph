@@ -1,12 +1,12 @@
 let express = require('express');
 let api = require('../api');
-let createError = require('http-errors');
 
 let router = express.Router();
 
 router.get('/meta', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
     if (req.status.err == api.Status.authErrCode.NotInit) {
+      // only place that return (AF, NI)
       next(api.errorStreamControl);
     } else {
       // TODO: fill this
@@ -16,13 +16,21 @@ router.get('/meta', (req, res, next) => {
   }
 });
 
-router.get('/init', (req, res, next) => {
+router.post('/init', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
     if (req.status.err == api.Status.authErrCode.NotInit) {
-      // TODO: fill this
+      const { language, password } = req.body;
+      config = api.fileOperator.readConfig();
+      config.meta.language = language;
+      config.meta.password = password;
+      api.fileOperator.saveConfig(config);
+
+      req.status.addExecStatus();
+      res.send(req.status.generateReport());
+      return;
     }
   }
-  req.status.addExecStatus(api.Status.execErrCode.InitChannelClosed);
+  // abnormal request
   next(api.errorStreamControl);
 });
 

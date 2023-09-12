@@ -42,13 +42,10 @@ app.use((req, res) => {
   res.redirect(new URL(req.originalUrl, api.reactBaseURL).href);
 });
 
-// error handler
-app.use((err, req, res, next) => {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
+// error handler must possess four parameters
+app.use((err, req, res, _) => {
   if (!err.validity) {
+    console.error(err);
     req.status.addExecStatus(api.Status.execErrCode.InternalServerError);
     res.status(500);
   }

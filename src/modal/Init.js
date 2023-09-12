@@ -18,7 +18,7 @@ import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
 import IconButton from "@mui/joy/IconButton";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { request } from "../interface/constants";
+import { request, Status } from "../interface/constants";
 import { languageMap } from "../interface/languagePicker";
 
 const Aligned = styled("span")(({ theme }) => ({
@@ -57,8 +57,10 @@ export default function Init(props) {
       language: language,
       password: formPasswordText
     })
-      .then(() => {
-        // TODO: fill this
+      .then((res) => {
+        if (res.statusCode === Status.statusCode.ExecSuccess) {
+          toast.loading("123");
+        }
       })
   }, [language, formPasswordText]);
 
@@ -120,7 +122,7 @@ export default function Init(props) {
               slotProps={{ input: { type: formPasswordType } }}
             />
           </FormControl>
-          <Button>
+          <Button onClick={handleClickSubmit}>
             {context.languagePicker("universal.button.submit")}
           </Button>
         </Stack>

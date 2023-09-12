@@ -4,13 +4,9 @@ const dotenv = require('dotenv');
 
 const defaultConfig = {
   meta: {
+    language: "en",
     password: ""
   },
-  setting: {
-    general: {
-      language: "en"
-    }
-  }
 };
 exports.defaultConfig = defaultConfig;
 
@@ -55,6 +51,13 @@ const fileOperator = {
       );
     }
     return JSON.parse(fs.readFileSync(dataPath.configFilePath));
+  },
+
+  saveConfig: (config) => {
+    fs.writeFileSync(
+      dataPath.configFilePath,
+      JSON.stringify(config, null, 2)
+    );
   }
 };
 exports.fileOperator = fileOperator;
