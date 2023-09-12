@@ -23,7 +23,7 @@ const zhCN = {
   modal: {
     toast: {
       error: {
-        serverError: "服务器错误：请求失败，错误代码 {0}。"
+        serverError: "服务器错误：请求失败，状态码 {0}。"
       }
     },
     init: {

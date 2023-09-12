@@ -93,7 +93,7 @@ const request = (query, params) => {
       .catch((res) => toast.error(
         ConstantContext
           .languagePicker("modal.toast.error.serverError")
-          .format(res.response.data.errorCode)
+          .format(res.response.status)
       ));
   });
 }

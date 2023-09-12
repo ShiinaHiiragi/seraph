@@ -23,7 +23,7 @@ const en = {
   modal: {
     toast: {
       error: {
-        serverError: "Server Error: Request failed with error code {0}."
+        serverError: "Server Error: Request failed with status code {0}."
       }
     },
     init: {

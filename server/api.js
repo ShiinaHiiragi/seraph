@@ -104,6 +104,7 @@ Status.prototype.generateReport = function () {
   return this.err ? { ...result, errorCode: this.err } : result;
 }
 
+// next(api.errorStreamControl) indicates a controllable error
 const errorStreamControl = new Error("SERAPH");
 errorStreamControl.validity = true;
 exports.errorStreamControl = errorStreamControl;

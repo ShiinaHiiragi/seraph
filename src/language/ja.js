@@ -23,7 +23,7 @@ const ja = {
   modal: {
     toast: {
       error: {
-        serverError: "サーバーエラー：リクエストは失敗しましてエラーコードが {0} です。"
+        serverError: "サーバーエラー：リクエストは失敗しましてステータスコードが {0} です。"
       }
     },
     init: {
