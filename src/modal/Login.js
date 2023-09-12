@@ -1,4 +1,5 @@
 import * as React from "react";
+import { toast } from "sonner";
 import Button from "@mui/joy/Button";
 import Divider from "@mui/joy/Divider";
 import Modal from "@mui/joy/Modal";
@@ -9,7 +10,12 @@ import FormControl from "@mui/joy/FormControl";
 import FormLabel from "@mui/joy/FormLabel";
 import Input from "@mui/joy/Input";
 import Stack from "@mui/joy/Stack";
-import GlobalContext, { request, formatter, globalState } from "../interface/constants";
+import GlobalContext, {
+  request,
+  formatter,
+  globalState,
+  Status
+} from "../interface/constants";
 
 export default function Login(props) {
   const {
@@ -21,6 +27,7 @@ export default function Login(props) {
   const context = React.useContext(GlobalContext);
   const [formPasswordText, setFormPasswordText] = React.useState("");
   const [formPasswordDisabled, setFormPasswordDisabled] = React.useState(false);
+  const [formPasswordError, setFormPasswordError] = React.useState(false);
 
   const handleClickSubmit = React.useCallback(() => {
     setFormPasswordDisabled(true);
@@ -28,6 +35,7 @@ export default function Login(props) {
     request("POST/auth/login", { password: formPasswordText })
       .then((data) => {
         setFormPasswordDisabled(false);
+        setFormPasswordError(false);
         setModalLoginOpen(false);
 
         setPrivateFolders(formatter.folderFormatter(data.private));
@@ -35,9 +43,18 @@ export default function Login(props) {
       })
       .catch((data) => {
         setFormPasswordDisabled(false);
-        request.unparseableResponse(data);
+
+        if (data.statusCode === Status.statusCode.ExecFailed
+          && data.errorCode === Status.execErrCode.IncorrectPassword
+        ) {
+          setFormPasswordError(true);
+          toast.error(context.languagePicker("modal.toast.error.incorrectPassword"));
+        } else {
+          request.unparseableResponse(data);
+        }
       })
   }, [
+    context,
     formPasswordText,
     setGlobalSwitch,
     setPrivateFolders,
@@ -47,7 +64,12 @@ export default function Login(props) {
   return (
     <Modal
       open={modalLoginOpen}
-      onClose={() => setModalLoginOpen(false)}
+      onClose={() => {
+        setModalLoginOpen(false);
+        setFormPasswordText("");
+        setFormPasswordError(false);
+        setFormPasswordDisabled(false);
+      }}
       sx={{ userSelect: "none" }}
     >
       <ModalDialog
@@ -77,6 +99,7 @@ export default function Login(props) {
                 autoComplete="current-password"
                 onChange={(event) => setFormPasswordText(event.target.value)}
                 slotProps={{ input: { type: "password" } }}
+                error={formPasswordError}
               />
             </FormControl>
           </form>

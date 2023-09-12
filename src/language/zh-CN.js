@@ -26,6 +26,7 @@ const zhCN = {
         init: "密码设置成功，欢迎使用 SERAPH。"
       },
       error: {
+        incorrectPassword: "密码错误",
         unparseableResponse: "响应无法解析：请求失败，错误代码 {0}。",
         serverError: "服务器错误：请求失败，状态码 {0}。"
       }
