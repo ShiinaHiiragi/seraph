@@ -22,6 +22,9 @@ const zhCN = {
   },
   modal: {
     toast: {
+      success: {
+        init: "密码设置成功，欢迎使用 SERAPH。"
+      },
       error: {
         serverError: "服务器错误：请求失败，状态码 {0}。"
       }

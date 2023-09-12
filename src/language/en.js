@@ -22,6 +22,9 @@ const en = {
   },
   modal: {
     toast: {
+      success: {
+        init: "Password set successfully. Welcome to Seraph!"
+      },
       error: {
         serverError: "Server Error: Request failed with status code {0}."
       }
