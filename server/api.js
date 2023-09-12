@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const CryptoJS = require('crypto-js');
 
 const defaultConfig = {
   meta: {
@@ -68,9 +69,55 @@ const fileOperator = {
       fs.chmodSync(dataPath.tokenFilePath, 0o777);
     }
     return JSON.parse(fs.readFileSync(dataPath.tokenFilePath));
+  },
+
+  saveToken: (token) => {
+    fs.writeFileSync(
+      dataPath.tokenFilePath,
+      JSON.stringify(token, null, 2)
+    );
   }
 };
 exports.fileOperator = fileOperator;
+
+const expiredPeriod = 24 * 60 * 60 * 1000;
+const tokenOperator = {
+  addNewSession: () => {
+    const session = CryptoJS.SHA256(
+      Array(16).fill().reduce(
+        (current) => current + Math.random().toString(36).slice(2, 6),
+        ""
+      )
+    ).toString();
+
+    const token = fileOperator.readToken();
+    token.push({
+      session: session,
+      timestamp: Date.now() + expiredPeriod
+    })
+    fileOperator.saveToken(token);
+  },
+
+  deleteSession: (session) => {
+    const token = fileOperator.readToken();
+    fileOperator.saveToken(token.filter((item) => item.session !== session));
+  },
+
+  clearExpiredSession: () => {
+    const timeNow = Date.now();
+    const token = fileOperator.readToken();
+    fileOperator.saveToken(token.filter((item) => item.timestamp - timeNow > 0 ));
+  },
+
+  validateSession: (session) => {
+    tokenOperator.clearExpiredSession();
+
+    const token = fileOperator.readToken();
+    return Boolean(token.find((item) => item.session === session))
+  }
+}
+exports.expiredPeriod = expiredPeriod;
+exports.tokenOperator = tokenOperator;
 
 function Status() { }
 exports.Status = Status;
