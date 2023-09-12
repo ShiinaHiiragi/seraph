@@ -52,7 +52,7 @@ export default function Init(props) {
     })
       .then((res) => {
         if (res.statusCode === Status.statusCode.ExecSuccess) {
-          toast.loading("123");
+          toast.success("");
         }
       })
   }, [language, formPasswordText]);
