@@ -5,8 +5,9 @@ import Typography from "@mui/joy/Typography"
 import MenuIcon from "@mui/icons-material/Menu";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
+import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import GreyLogo from "../logo-grey.svg";
-import GlobalContext from "../interface/constants";
+import GlobalContext, { globalState } from "../interface/constants";
 import Login from "../modal/Login";
 
 const HeaderLayout = (props) => {
@@ -76,21 +77,31 @@ const Header = (props) => {
         </Typography>
       </Box>
       <Box sx={{ display: "flex", flexDirection: "row", gap: 1.5 }}>
-        <IconButton
-          size="sm"
-          variant="outlined"
-          color="neutral"
-        >
-          <SettingsOutlinedIcon />
-        </IconButton>
-        <IconButton
-          size="sm"
-          variant="outlined"
-          color="neutral"
-          onClick={() => setModalLoginOpen(true)}
-        >
-          <LoginOutlinedIcon />
-        </IconButton>
+        {context.globalSwitch === globalState.AUTHORITY &&
+          <IconButton
+            size="sm"
+            variant="outlined"
+            color="neutral"
+          >
+            <SettingsOutlinedIcon />
+          </IconButton>}
+        {context.globalSwitch === globalState.AUTHORITY
+          ? <IconButton
+            size="sm"
+            variant="outlined"
+            color="danger"
+          >
+            <LogoutOutlinedIcon />
+          </IconButton>
+          : <IconButton
+            size="sm"
+            variant="outlined"
+            color="neutral"
+            onClick={() => setModalLoginOpen(true)}
+          >
+            <LoginOutlinedIcon />
+          </IconButton>
+        }
       </Box>
       <Login
         modalLoginOpen={modalLoginOpen}
