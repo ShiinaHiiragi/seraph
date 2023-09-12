@@ -1,4 +1,5 @@
 import * as React from "react";
+import { styled } from "@mui/joy/styles";
 import Button from "@mui/joy/Button";
 import Divider from "@mui/joy/Divider";
 import Modal from "@mui/joy/Modal";
@@ -12,13 +13,18 @@ import Select from "@mui/joy/Select";
 import Option from "@mui/joy/Option";
 import Stack from "@mui/joy/Stack";
 import GlobalContext from "../interface/constants";
+import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
+
+const Aligned = styled("span")(({ theme }) => ({
+  paddingLeft: theme.spacing(4)
+}));
 
 export default function Init(props) {
   const [open, setOpen] = React.useState(false);
   const context = React.useContext(GlobalContext);
 
   return (
-    <Modal open={open} onClose={() => setOpen(false)}>
+    <Modal open={true} onClose={() => setOpen(false)}>
       <ModalDialog
         variant="outlined"
         role="alertdialog"
@@ -39,9 +45,12 @@ export default function Init(props) {
         <Stack spacing={2}>
           <FormControl>
             <FormLabel>{context.languagePicker("setting.general.language")}</FormLabel>
-            <Select value="dog" placeholder="Select Language">
-              <Option value="dog">A</Option>
-              <Option value="cat">B</Option>
+            <Select
+              value="dog"
+              startDecorator={<LanguageOutlinedIcon />}
+            >
+              <Option value="dog"><Aligned>A</Aligned></Option>
+              <Option value="cat"><Aligned>B</Aligned></Option>
             </Select>
           </FormControl>
           <FormControl>

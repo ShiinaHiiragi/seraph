@@ -92,11 +92,11 @@ const Panel = () => {
   const [language, setLanguage] = React.useState("ja" || defaultLanguage);
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const languagePicker = React.useMemo(() => languagePickerSpawner(language), [language])
-  window.toast = toast;
 
   return (
     <GlobalContext.Provider value={{
-      languagePicker: languagePicker
+      languagePicker: languagePicker,
+      toast: toast
     }}>
       <GlobalStyles styles={toastTheme} />
       <Root className="Root">

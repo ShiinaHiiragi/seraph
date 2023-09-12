@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 
 const pathStartWith = (prefix) => {
   prefix = prefix.slice(-1) === "/" ? prefix.slice(0, -1) : prefix;
@@ -31,7 +32,7 @@ const toastTheme = (theme) => `
     font-family: ${theme.vars.fontFamily.body};
     font-size: ${theme.fontSize.md};
     --border-radius: ${theme.vars.radius.sm};
-    --normal-bg: ${theme.vars.palette.background.surface};
+    --normal-bg: ${theme.vars.palette.background.body};
     --normal-border: ${theme.vars.palette.divider};
     --normal-text: ${theme.vars.palette.text.primary};
     --success-bg: ${theme.vars.palette.success.softBg};
@@ -62,6 +63,10 @@ const toastTheme = (theme) => `
     --normal-text: ${theme.vars.palette.warning.softColor};
   }
 `
+
+const request = (router, params, config) => {
+  // TODO: fill this
+}
 
 const GlobalContext = React.createContext({});
 export default GlobalContext;
