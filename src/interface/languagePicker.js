@@ -32,5 +32,6 @@ const languagePickerSpawner = (language) => (keys) =>
 export default defaultLanguage;
 export {
   defaultLanguage,
+  languageMap,
   languagePickerSpawner
 }

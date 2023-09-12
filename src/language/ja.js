@@ -30,7 +30,8 @@ const ja = {
       title: "イニシャライズ",
       caption: "初回利用時にパスワードを設定してください。",
       password: {
-        label: "パスワード"
+        label: "パスワード",
+        placeholder: "制限なし"
       }
     }
   },

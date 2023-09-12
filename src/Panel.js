@@ -18,7 +18,7 @@ import Error from "./main/Error";
 import GlobalContext from "./interface/constants";
 import GlobalTheme from "./interface/theme";
 import { defaultLanguage, languagePickerSpawner } from "./interface/languagePicker";
-import { ConstantContext, toastTheme, request } from "./interface/constants";
+import { ConstantContext, Status, toastTheme, request } from "./interface/constants";
 import ModalForm from "./modal/Init";
 
 const Root = styled('div')(({ theme }) => ({
@@ -101,7 +101,10 @@ const Panel = () => {
   React.useEffect(() => {
     request("GET/auth/meta")
       .then((data) => {
-        // TODO: fill this
+        if (data.statusCode === Status.statusCode.AuthFailed
+          && data.errorCode === Status.authErrCode.NotInit) {
+          setModalInitOpen(true);
+        }
       })
   }, [])
 
@@ -152,13 +155,14 @@ const Panel = () => {
               </MainField>
             </BrowserRouter>
           </ContentField>
+          <ModalForm
+            language={language}
+            setLanguage={setLanguage}
+            modalInitOpen={modalInitOpen}
+          />
+          <Toaster position="top-center" richColors closeButton />
         </CssVarsProvider>
       </Root>
-      <ModalForm
-        modalInitOpen={modalInitOpen}
-        setLanguage={setLanguage}
-      />
-      <Toaster position="top-center" richColors closeButton />
     </GlobalContext.Provider>
   );
 }

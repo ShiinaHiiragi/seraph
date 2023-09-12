@@ -30,7 +30,8 @@ const en = {
       title: "Initialization",
       caption: "Please set up password on first usage.",
       password: {
-        label: "Password"
+        label: "Password",
+        placeholder: "No Restriction"
       }
     }
   },

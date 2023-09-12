@@ -30,7 +30,8 @@ const zhCN = {
       title: "初始化",
       caption: "首次使用请设置密码。",
       password: {
-        label: "密码"
+        label: "密码",
+        placeholder: "无限制"
       }
     }
   },

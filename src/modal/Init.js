@@ -14,21 +14,37 @@ import Option from "@mui/joy/Option";
 import Stack from "@mui/joy/Stack";
 import GlobalContext from "../interface/constants";
 import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
+import IconButton from "@mui/joy/IconButton";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { languageMap } from "../interface/languagePicker";
 
 const Aligned = styled("span")(({ theme }) => ({
   paddingLeft: theme.spacing(4)
 }));
 
-export default function Init(props) {
-  const {
-    modalInitOpen,
-    setLanguage
-  } = props;
-  const [open, setOpen] = React.useState(false);
-  const context = React.useContext(GlobalContext);
+const AlignedOption = (props) => {
+  const { children, ...otherProps } = props;
 
   return (
-    <Modal open={open} onClose={() => setOpen(false)}>
+    <Option {...otherProps}>
+      <Aligned>{children}</Aligned>
+    </Option>
+  );
+}
+
+export default function Init(props) {
+  const {
+    language,
+    setLanguage,
+    modalInitOpen
+  } = props;
+  const context = React.useContext(GlobalContext);
+  const [formPasswordText, setFormPasswordText] = React.useState("");
+  const [formPasswordType, setFormPasswordType] = React.useState("password");
+
+  return (
+    <Modal open={modalInitOpen}>
       <ModalDialog
         variant="outlined"
         role="alertdialog"
@@ -50,16 +66,40 @@ export default function Init(props) {
           <FormControl>
             <FormLabel>{context.languagePicker("setting.general.language")}</FormLabel>
             <Select
-              value="dog"
+              value={language}
               startDecorator={<LanguageOutlinedIcon />}
+              onChange={(_, newValue) => setLanguage(newValue)}
             >
-              <Option value="dog"><Aligned>A</Aligned></Option>
-              <Option value="cat"><Aligned>B</Aligned></Option>
+              {Object.keys(languageMap).map((item, index) => (
+                <AlignedOption value={item} key={index}>
+                  {languageMap[item].displayName}
+                </AlignedOption>
+              ))}
             </Select>
           </FormControl>
           <FormControl>
             <FormLabel>{context.languagePicker("modal.init.password.label")}</FormLabel>
-            <Input required />
+            <Input
+              endDecorator={
+                <IconButton
+                  onClick={() => {
+                    setFormPasswordType((formPasswordType) => 
+                      formPasswordType === "password"
+                        ? "text"
+                        : "password"
+                    );
+                  }}
+                >
+                  {formPasswordType === "password"
+                    ? <VisibilityIcon />
+                    : <VisibilityOffIcon />}
+                </IconButton>
+              }
+              placeholder={context.languagePicker("modal.init.password.placeholder")}
+              value={formPasswordText}
+              onChange={(event) => setFormPasswordText(event.target.value)}
+              slotProps={{ input: { type: formPasswordType } }}
+            />
           </FormControl>
           <Button type="submit">{context.languagePicker("universal.button.submit")}</Button>
         </Stack>
