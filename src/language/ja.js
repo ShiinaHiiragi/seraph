@@ -37,6 +37,11 @@ const ja = {
         label: "パスワード",
         placeholder: "制限なし"
       }
+    },
+    login: {
+      title: "ログイン",
+      caption: "フルアクセスを取得するにはパスワードを入力してください。",
+      password: "パスワード"
     }
   },
   setting: {

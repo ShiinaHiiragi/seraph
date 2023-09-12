@@ -113,7 +113,6 @@ const Panel = () => {
   React.useEffect(() => {
     request("GET/auth/meta")
       .then((data) => {
-        console.log(data)
         setLanguage(data.language);
         setSetting(data.setting);
         setPublicFolders(

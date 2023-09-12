@@ -48,13 +48,16 @@ export default function Init(props) {
   const context = React.useContext(GlobalContext);
   const [formPasswordText, setFormPasswordText] = React.useState("");
   const [formPasswordType, setFormPasswordType] = React.useState("password");
+  const [formPasswordDisabled, setFormPasswordDisabled] = React.useState(false);
 
   const handleClickSubmit = React.useCallback(() => {
+    setFormPasswordDisabled(true);
     request("POST/auth/init", {
       language: language,
       password: formPasswordText
     })
       .then((res) => {
+        setFormPasswordDisabled(false);
         if (res.statusCode === Status.statusCode.ExecSuccess) {
           setModalInitOpen(false);
           toast.success(context.languagePicker("modal.toast.success.init"));
@@ -70,7 +73,8 @@ export default function Init(props) {
     formPasswordText,
     setPublicFolders,
     setPrivateFolders,
-    setGlobalSwitch
+    setGlobalSwitch,
+    setModalInitOpen
   ]);
 
   return (
@@ -135,7 +139,10 @@ export default function Init(props) {
               />
             </FormControl>
           </form>
-          <Button disabled={formPasswordText.length === 0} onClick={handleClickSubmit}>
+          <Button
+            disabled={formPasswordText.length === 0 || formPasswordDisabled}
+            onClick={handleClickSubmit}
+          >
             {context.languagePicker("universal.button.submit")}
           </Button>
         </Stack>

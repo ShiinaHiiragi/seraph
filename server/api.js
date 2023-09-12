@@ -106,6 +106,7 @@ const tokenOperator = {
       timestamp: Date.now() + expiredPeriod
     })
     fileOperator.saveToken(token);
+    return session;
   },
 
   deleteSession: (session) => {

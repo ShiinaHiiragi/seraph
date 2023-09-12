@@ -37,6 +37,11 @@ const en = {
         label: "Password",
         placeholder: "No Restriction"
       }
+    },
+    login: {
+      title: "Login",
+      caption: "Please enter password to acquire full access.",
+      password: "Password"
     }
   },
   setting: {

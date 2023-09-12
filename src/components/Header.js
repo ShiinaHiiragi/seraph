@@ -2,12 +2,12 @@ import React from "react";
 import Box from "@mui/joy/Box";
 import IconButton from "@mui/joy/IconButton";
 import Typography from "@mui/joy/Typography"
-
 import MenuIcon from "@mui/icons-material/Menu";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
 import GreyLogo from "../logo-grey.svg";
 import GlobalContext from "../interface/constants";
+import Login from "../modal/Login";
 
 const HeaderLayout = (props) => {
   return (
@@ -42,6 +42,8 @@ const Header = (props) => {
     setDrawerOpen
   } = props;
   const context = React.useContext(GlobalContext);
+
+  const [modalLoginOpen, setModalLoginOpen] = React.useState(false);
 
   return (
     <HeaderLayout>
@@ -83,10 +85,15 @@ const Header = (props) => {
           size="sm"
           variant="outlined"
           color="neutral"
+          onClick={() => setModalLoginOpen(true)}
         >
           <LoginOutlinedIcon />
         </IconButton>
       </Box>
+      <Login
+        modalLoginOpen={modalLoginOpen}
+        setModalLoginOpen={setModalLoginOpen}
+      />
     </HeaderLayout>
   );
 }
