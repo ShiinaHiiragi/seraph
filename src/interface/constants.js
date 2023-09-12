@@ -76,7 +76,7 @@ const request = (query, params) => {
   return new Promise((resolve) => {
     axios[method.toLowerCase()](new URL(path, serverBaseURL).href, params)
       .then((res) => resolve(res.data))
-      .catch((res) => console.log(res.response.data))
+      .catch((res) => toast.error(`Server Error: ${res.response.data.errorCode}`));
   });
 }
 
