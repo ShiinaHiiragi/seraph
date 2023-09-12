@@ -78,6 +78,13 @@ const fileOperator = {
       dataPath.tokenFilePath,
       JSON.stringify(token, null, 2)
     );
+  },
+
+  // folder means public/ or private/
+  readFolder: (folderPath) => {
+    folderInfo = fs.readdirSync(dataPath.publicDirPath, { withFileTypes: true })
+    folderInfo.filter((item) => item.isDirectory())
+    return folderInfo.map((item) => item.name);
   }
 };
 exports.fileOperator = fileOperator;

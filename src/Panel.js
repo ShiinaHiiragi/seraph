@@ -104,6 +104,9 @@ const Panel = () => {
   React.useEffect(() => {
     request("GET/auth/meta")
       .then((data) => {
+        // TODO: fill this
+      })
+      .catch((data) => {
         if (data.statusCode === Status.statusCode.AuthFailed
           && data.errorCode === Status.authErrCode.NotInit) {
           setModalInitOpen(true);

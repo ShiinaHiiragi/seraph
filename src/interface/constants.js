@@ -86,15 +86,28 @@ const toastTheme = (theme) => `
 
 const request = (query, params) => {
   const [method, path] = query.match(/(GET|POST)(.+)/).slice(1);
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     axios[method.toLowerCase()](new URL(path, serverBaseURL).href, params)
-      .then((res) => resolve(res.data))
-      .catch((res) => console.log(res) ?? toast.error(
+      .then((res) => res.data.statusCode == Status.statusCode.ExecSuccess
+        ? resolve(res.data)
+        : reject(res.data)
+      ).catch((res) => console.log(res) ?? toast.error(
         ConstantContext
           .languagePicker("modal.toast.error.serverError")
           .format(res.response.status)
       ));
   });
+}
+
+request.unparseableResponse = (data) => {
+  toast.error(
+    ConstantContext
+      .languagePicker("modal.toast.error.unparseableResponse")
+      .format(data.statusCode + (data.errorCode
+        ? "_" + data.errorCode
+        : ""
+      ))
+  );
 }
 
 export {

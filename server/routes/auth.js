@@ -8,11 +8,36 @@ router.get('/meta', (req, res, next) => {
     if (req.status.err == api.Status.authErrCode.NotInit) {
       // the ONLY place that return (AF, NI)
       next(api.errorStreamControl);
+      return;
     } else {
-      // TODO: fill this
+      const config = api.fileOperator.readConfig();
+      const publicFolder = api.fileOperator.readFolder(api.dataPath.publicDirPath);
+
+      // return (ES) and publicly available metadata
+      req.status.addExecStatus();
+      res.send({
+        ...req.status.generateReport(),
+        language: config.meta.language,
+        public: publicFolder,
+        setting: { }
+      })
+      return;
     }
   } else {
-    // TODO: fill this
+    const config = api.fileOperator.readConfig();
+    const publicFolder = api.fileOperator.readFolder(api.dataPath.publicDirPath);
+    const privateFolder = api.fileOperator.readFolder(api.dataPath.privateDirPath);
+
+    // return (ES) and all metadata
+    req.status.addExecStatus();
+    res.send({
+      ...req.status.generateReport(),
+      language: config.meta.language,
+      public: publicFolder,
+      private: privateFolder,
+      setting: { }
+    })
+    return;
   }
 });
 
