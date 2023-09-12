@@ -5,7 +5,6 @@ let cors = require('cors');
 
 let authRouter = require('./routes/auth');
 let api = require('./api');
-
 let app = express();
 
 // init middleware

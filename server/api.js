@@ -124,6 +124,30 @@ const configOperator = {
     const newConfig = handle(configOperator.config);
     fileOperator.saveConfig(newConfig);
     configOperator.config = newConfig;
+  },
+
+  setConfigMetadata: (key, value) => {
+    configOperator.setConfig((config) => ({
+      ...config,
+      metadata: {
+        ...config.metadata,
+        [key]: value
+      }
+    }));
+  },
+
+  setConfigSetting: (key, value) => {
+    const [ item, subItem ] = key.split(".");
+    configOperator.setConfig((config) => ({
+      ...config,
+      setting: {
+        ...config.setting,
+        [item]: {
+          ...config.setting["item"],
+          [subItem]: value
+        }
+      }
+    }));
   }
 }
 exports.configOperator = configOperator;

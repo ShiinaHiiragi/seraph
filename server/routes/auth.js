@@ -41,26 +41,8 @@ router.post('/init', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
     if (req.status.err == api.Status.authErrCode.NotInit) {
       const { password, language } = req.body;
-      api.configOperator.setConfig((config) => ({
-        ...config,
-        metadata: {
-          ...config.metadata,
-          password: password
-        },
-        setting: {
-          ...config.setting,
-          meta: {
-            ...config.setting.meta,
-            language: language
-          }
-        }
-      }));
-
-      if (!password.length) {
-        // abnormal request
-        next(api.errorStreamControl);
-        return;
-      }
+      api.configOperator.setConfigMetadata("password", password);
+      api.configOperator.setConfigSetting("meta.language", language);
 
       // return (ES)
       req.status.addExecStatus();
