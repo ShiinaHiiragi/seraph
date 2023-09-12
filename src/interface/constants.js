@@ -90,7 +90,7 @@ const request = (query, params) => {
   return new Promise((resolve) => {
     axios[method.toLowerCase()](new URL(path, serverBaseURL).href, params)
       .then((res) => resolve(res.data))
-      .catch((res) => toast.error(
+      .catch((res) => console.log(res) ?? toast.error(
         ConstantContext
           .languagePicker("modal.toast.error.serverError")
           .format(res.response.status)

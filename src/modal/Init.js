@@ -98,30 +98,34 @@ export default function Init(props) {
               ))}
             </Select>
           </FormControl>
-          <FormControl error={formPasswordError}>
-            <FormLabel>{context.languagePicker("modal.init.password.label")}</FormLabel>
-            <Input
-              endDecorator={
-                <IconButton
-                  onClick={() => {
-                    setFormPasswordType((formPasswordType) => 
-                      formPasswordType === "password"
-                        ? "text"
-                        : "password"
-                    );
-                  }}
-                >
-                  {formPasswordType === "password"
-                    ? <VisibilityIcon />
-                    : <VisibilityOffIcon />}
-                </IconButton>
-              }
-              placeholder={context.languagePicker("modal.init.password.placeholder")}
-              value={formPasswordText}
-              onChange={(event) => setFormPasswordText(event.target.value)}
-              slotProps={{ input: { type: formPasswordType } }}
-            />
-          </FormControl>
+          <form>
+            <Input type="text" autoComplete="username" sx={{ display: "none" }} />
+            <FormControl error={formPasswordError}>
+              <FormLabel>{context.languagePicker("modal.init.password.label")}</FormLabel>
+              <Input
+                endDecorator={
+                  <IconButton
+                    onClick={() => {
+                      setFormPasswordType((formPasswordType) => 
+                        formPasswordType === "password"
+                          ? "text"
+                          : "password"
+                      );
+                    }}
+                  >
+                    {formPasswordType === "password"
+                      ? <VisibilityIcon />
+                      : <VisibilityOffIcon />}
+                  </IconButton>
+                }
+                placeholder={context.languagePicker("modal.init.password.placeholder")}
+                value={formPasswordText}
+                autoComplete="new-password"
+                onChange={(event) => setFormPasswordText(event.target.value)}
+                slotProps={{ input: { type: formPasswordType } }}
+              />
+            </FormControl>
+          </form>
           <Button onClick={handleClickSubmit}>
             {context.languagePicker("universal.button.submit")}
           </Button>
