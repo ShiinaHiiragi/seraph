@@ -7,6 +7,7 @@ const defaultConfig = {
     language: "en",
     password: ""
   },
+  setting: { }
 };
 exports.defaultConfig = defaultConfig;
 

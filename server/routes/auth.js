@@ -19,7 +19,7 @@ router.get('/meta', (req, res, next) => {
         ...req.status.generateReport(),
         language: config.meta.language,
         public: publicFolder,
-        setting: { }
+        setting: config.setting
       })
       return;
     }
@@ -35,7 +35,7 @@ router.get('/meta', (req, res, next) => {
       language: config.meta.language,
       public: publicFolder,
       private: privateFolder,
-      setting: { }
+      setting: config.setting
     })
     return;
   }

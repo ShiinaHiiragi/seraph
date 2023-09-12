@@ -18,7 +18,13 @@ import Error from "./main/Error";
 import GlobalContext from "./interface/constants";
 import GlobalTheme from "./interface/theme";
 import { defaultLanguage, languagePickerSpawner } from "./interface/languagePicker";
-import { ConstantContext, Status, toastTheme, request } from "./interface/constants";
+import {
+  ConstantContext,
+  Status,
+  toastTheme,
+  request,
+  defaultSetting
+} from "./interface/constants";
 import ModalForm from "./modal/Init";
 
 const Root = styled('div')(({ theme }) => ({
@@ -93,8 +99,8 @@ const Panel = () => {
   const [modalInitOpen, setModalInitOpen] = React.useState(false);
 
   const [language, setLanguage] = React.useState("ja" || defaultLanguage);
-  // const [folders, setFolders] = React.useState([ ]);
-  // const [setting, setSetting] = React.useState({ });
+  const [folders, setFolders] = React.useState({ });
+  const [setting, setSetting] = React.useState(defaultSetting);
 
   const languagePicker = React.useMemo(() => {
     ConstantContext.languagePicker = languagePickerSpawner(language);
@@ -110,6 +116,8 @@ const Panel = () => {
         if (data.statusCode === Status.statusCode.AuthFailed
           && data.errorCode === Status.authErrCode.NotInit) {
           setModalInitOpen(true);
+        } else {
+          request.unparseableResponse(data);
         }
       })
   }, [])

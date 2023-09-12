@@ -55,7 +55,8 @@ export default function Init(props) {
           toast.success(context.languagePicker("modal.toast.success.init"));
         }
       })
-  }, [language, formPasswordText]);
+      .catch(request.unparseableResponse);
+  }, [context, language, formPasswordText]);
 
   return (
     <Modal open={modalInitOpen} sx={{ userSelect: "none" }}>
