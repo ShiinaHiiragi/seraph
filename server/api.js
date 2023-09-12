@@ -152,7 +152,7 @@ const configOperator = {
 }
 exports.configOperator = configOperator;
 
-const expiredPeriod = 24 * 60 * 60 * 1000;
+const expiredPeriod = 2 * 60 * 60 * 1000;
 const tokenOperator = {
   token: fileOperator.readToken(),
   setToken: (handle) => {
@@ -203,9 +203,21 @@ const tokenOperator = {
       return false;
     }
   }
-}
+};
+
+
+const cookieOperator = {
+  sessionName: "seraphSession",
+  setSessionCookie: (res, session) => res.cookie(
+    cookieOperator.sessionName,
+    session,
+    { expires: new Date(Date.now() + expiredPeriod) }
+  )
+};
+
 exports.expiredPeriod = expiredPeriod;
 exports.tokenOperator = tokenOperator;
+exports.cookieOperator = cookieOperator;
 
 
 function Status() { }

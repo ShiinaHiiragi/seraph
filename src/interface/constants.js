@@ -71,6 +71,7 @@ const Status = {
   }
 }
 
+axios.defaults.withCredentials = true;
 const request = (query, params) => {
   const [method, path] = query.match(/(GET|POST)(.+)/).slice(1);
   return new Promise((resolve, reject) => {
