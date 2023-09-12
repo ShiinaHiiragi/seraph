@@ -40,8 +40,10 @@ export default function Init(props) {
     setGlobalSwitch,
     language,
     setLanguage,
-    setFolders,
-    modalInitOpen
+    setPublicFolders,
+    setPrivateFolders,
+    modalInitOpen,
+    setModalInitOpen
   } = props;
   const context = React.useContext(GlobalContext);
   const [formPasswordText, setFormPasswordText] = React.useState("");
@@ -54,13 +56,22 @@ export default function Init(props) {
     })
       .then((res) => {
         if (res.statusCode === Status.statusCode.ExecSuccess) {
+          setModalInitOpen(false);
           toast.success(context.languagePicker("modal.toast.success.init"));
-          setFolders({ public: [ ], private: [ ] })
+          setPublicFolders([ ]);
+          setPrivateFolders([ ]);
           setGlobalSwitch(globalState.AUTHORITY);
         }
       })
       .catch(request.unparseableResponse);
-  }, [context, language, formPasswordText]);
+  }, [
+    context,
+    language,
+    formPasswordText,
+    setPublicFolders,
+    setPrivateFolders,
+    setGlobalSwitch
+  ]);
 
   return (
     <Modal open={modalInitOpen} sx={{ userSelect: "none" }}>

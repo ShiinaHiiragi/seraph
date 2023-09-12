@@ -102,7 +102,8 @@ const Panel = () => {
   const [globalSwitch, setGlobalSwitch] = React.useState(globalState.INNOCENT);
   const [language, setLanguage] = React.useState(defaultLanguage);
   const [setting, setSetting] = React.useState(defaultSetting);
-  const [folders, setFolders] = React.useState({ });
+  const [publicFolders, setPublicFolders] = React.useState({ });
+  const [privateFolders, setPrivateFolders] = React.useState({ });
 
   const languagePicker = React.useMemo(() => {
     ConstantContext.languagePicker = languagePickerSpawner(language);
@@ -112,7 +113,20 @@ const Panel = () => {
   React.useEffect(() => {
     request("GET/auth/meta")
       .then((data) => {
-        // TODO: fill this
+        setLanguage(data.language);
+        setSetting(data.setting);
+        setPublicFolders(
+          data.public.map((item) => ({ name: item }))
+        );
+
+        if (data.private) {
+          setPrivateFolders(
+            data.private.map((item) => ({ name: item }))
+          );
+          setGlobalSwitch(globalState.AUTHORITY);
+        } else {
+          setGlobalSwitch(globalState.ANONYMOUS);
+        }
       })
       .catch((data) => {
         if (data.statusCode === Status.statusCode.AuthFailed
@@ -175,8 +189,10 @@ const Panel = () => {
             setGlobalSwitch={setGlobalSwitch}
             language={language}
             setLanguage={setLanguage}
-            setFolders={setFolders}
+            setPublicFolders={setPublicFolders}
+            setPrivateFolders={setPrivateFolders}
             modalInitOpen={modalInitOpen}
+            setModalInitOpen={setModalInitOpen}
           />
           <Toaster position="top-center" richColors closeButton />
         </CssVarsProvider>

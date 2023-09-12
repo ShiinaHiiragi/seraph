@@ -48,6 +48,12 @@ router.post('/init', (req, res, next) => {
       config = api.fileOperator.readConfig();
       config.meta.language = language;
       config.meta.password = password;
+
+      if (!password.length) {
+        // abnormal request
+        next(api.errorStreamControl);
+        return;
+      }
       api.fileOperator.saveConfig(config);
 
       // return (ES)
@@ -58,6 +64,7 @@ router.post('/init', (req, res, next) => {
   }
   // abnormal request
   next(api.errorStreamControl);
+  return;
 });
 
 module.exports = router;
