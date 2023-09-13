@@ -51,7 +51,7 @@ const Header = (props) => {
   const handleLogoutClick = React.useCallback(() => {
     request("POST/auth/logout")
       .then((data) => {
-        toast.success("...");
+        toast.success(context.languagePicker("modal.toast.success.logout"));
         setGlobalSwitch(globalState.ANONYMOUS);
       })
       .catch(request.unparseableResponse)

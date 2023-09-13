@@ -23,7 +23,12 @@ const zhCN = {
   modal: {
     toast: {
       success: {
-        init: "密码设置成功，欢迎使用 SERAPH。"
+        init: "密码设置成功，感谢使用 SERAPH。",
+        login: "欢迎回到 SERAPH。",
+        logout: "退出成功。"
+      },
+      exception: {
+        incorrectPassword: "密码错误",
       },
       error: {
         incorrectPassword: "密码错误",

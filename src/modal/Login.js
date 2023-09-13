@@ -47,7 +47,7 @@ export default function Login(props) {
     request("POST/auth/login", { password: formPasswordText })
       .then((data) => {
         closeModal();
-        toast("...");
+        toast(context.languagePicker("modal.toast.success.login"));
 
         setPrivateFolders(formatter.folderFormatter(data.private));
         setGlobalSwitch(globalState.AUTHORITY);
@@ -59,7 +59,7 @@ export default function Login(props) {
           && data.errorCode === Status.execErrCode.IncorrectPassword
         ) {
           setFormPasswordError(true);
-          toast.error(context.languagePicker("modal.toast.error.incorrectPassword"));
+          toast.error(context.languagePicker("modal.toast.exception.incorrectPassword"));
         } else {
           request.unparseableResponse(data);
         }

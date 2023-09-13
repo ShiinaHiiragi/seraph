@@ -23,10 +23,14 @@ const en = {
   modal: {
     toast: {
       success: {
-        init: "Password set successfully. Welcome to Seraph!"
+        init: "Password is set successfully. Thanks for using SERAPH.",
+        login: "Welcome back to SERAPH.",
+        logout: "Logged out successfully."
+      },
+      exception: {
+        incorrectPassword: "Incorrect password.",
       },
       error: {
-        incorrectPassword: "Incorrect password.",
         unparseableResponse: "Unparseable Response: Request failed with error code {0}.",
         serverError: "Server Error: Request failed with status code {0}."
       }

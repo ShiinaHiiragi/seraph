@@ -23,7 +23,12 @@ const ja = {
   modal: {
     toast: {
       success: {
-        init: "パスワードが設定されました、セラフのご利用ありがとうございます。"
+        init: "パスワードが設定されました、セラフのご利用ありがとうございます。",
+        login: "セラフへようこそ。",
+        logout: "ログアウトしました。"
+      },
+      exception: {
+        incorrectPassword: "パスワードが間違っています。",
       },
       error: {
         incorrectPassword: "パスワードが間違っています。",
