@@ -56,12 +56,7 @@ const Root = styled('div')(({ theme }) => ({
 
 const HeaderField = styled('div')(({ theme }) => ({
   width: "100%",
-  [theme.breakpoints.down("md")]: {
-    minHeight: "65px",
-  },
-  [theme.breakpoints.up("md")]: {
-    minHeight: "73px",
-  }
+  minHeight: { xs: "65px", sm: "65px", md: "73px" }
 }));
 
 const ContentField = styled('div')(({ theme }) => ({
