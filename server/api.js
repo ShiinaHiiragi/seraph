@@ -159,6 +159,10 @@ const cookieOperator = {
     cookieOperator.sessionName,
     session,
     { expires: new Date(Date.now() + expiredPeriod) }
+  ),
+
+  deleteSessionCookie: (res) => res.clearCookie(
+    cookieOperator.sessionName
   )
 };
 
@@ -190,7 +194,8 @@ const tokenOperator = {
     return session;
   },
 
-  deleteSession: (session) => {
+  deleteSession: (res, session) => {
+    cookieOperator.deleteSessionCookie(res);
     tokenOperator.setToken((token) =>
       token.filter((item) => item.session !== session)
     );

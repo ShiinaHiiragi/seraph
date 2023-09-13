@@ -86,4 +86,22 @@ router.post('/login', (req, res, next) => {
   return;
 });
 
+router.post('/logout', (req, res, next) => {
+  if (req.status.notAuthSuccess()) {
+    // -> abnormal request
+    next(api.errorStreamControl);
+    return;
+  }
+
+  api.tokenOperator.deleteSession(
+    res,
+    req.cookies[api.cookieOperator.sessionName]
+  );
+
+  // -> return ES
+  req.status.addExecStatus();
+  res.send(req.status.generateReport());
+  return;
+});
+
 module.exports = router;

@@ -1,4 +1,5 @@
 import React from "react";
+import { toast } from "sonner";
 import Box from "@mui/joy/Box";
 import IconButton from "@mui/joy/IconButton";
 import Typography from "@mui/joy/Typography"
@@ -7,7 +8,7 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import GreyLogo from "../logo-grey.svg";
-import GlobalContext, { globalState } from "../interface/constants";
+import GlobalContext, { globalState, request } from "../interface/constants";
 import Login from "../modal/Login";
 
 const HeaderLayout = (props) => {
@@ -47,6 +48,13 @@ const Header = (props) => {
   const context = React.useContext(GlobalContext);
 
   const [modalLoginOpen, setModalLoginOpen] = React.useState(false);
+  const handleLogoutClick = React.useCallback(() => {
+    request("POST/auth/logout")
+      .then((data) => {
+        toast.success("...")
+      })
+      .catch(request.unparseableResponse)
+  }, [])
 
   return (
     <HeaderLayout>
@@ -90,6 +98,7 @@ const Header = (props) => {
             size="sm"
             variant="outlined"
             color="danger"
+            onClick={handleLogoutClick}
           >
             <LogoutOutlinedIcon />
           </IconButton>
