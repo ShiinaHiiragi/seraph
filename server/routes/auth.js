@@ -5,13 +5,13 @@ let router = express.Router();
 router.get('/meta', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
     if (req.status.err == api.Status.authErrCode.NotInit) {
-      // -> the ONLY place that return AF_NI
+      // -> AF_NI: the ONLY place returning this code
       next(api.errorStreamControl);
       return;
     } else {
-      const publicFolder = api.fileOperator.readFolder(api.dataPath.publicDirPath);
+      const publicFolder = api.fileOperator.readFoldersList(api.dataPath.publicDirPath);
 
-      // -> return ES and publicly available metadata
+      // -> ES: return publicly available metadata
       req.status.addExecStatus();
       res.send({
         ...req.status.generateReport(),
@@ -21,10 +21,10 @@ router.get('/meta', (req, res, next) => {
       return;
     }
   } else {
-    const publicFolder = api.fileOperator.readFolder(api.dataPath.publicDirPath);
-    const privateFolder = api.fileOperator.readFolder(api.dataPath.privateDirPath);
+    const publicFolder = api.fileOperator.readFoldersList(api.dataPath.publicDirPath);
+    const privateFolder = api.fileOperator.readFoldersList(api.dataPath.privateDirPath);
 
-    // -> return ES and all metadata
+    // -> ES: return all metadata
     req.status.addExecStatus();
     res.send({
       ...req.status.generateReport(),
@@ -44,7 +44,7 @@ router.post('/init', (req, res, next) => {
       api.configOperator.setConfigSetting("meta.language", language);
       api.tokenOperator.addNewSession(res);
 
-      // -> return ES
+      // -> ES: no extra info
       req.status.addExecStatus();
       res.send(req.status.generateReport());
       return;
@@ -62,9 +62,9 @@ router.post('/login', (req, res, next) => {
       const { password } = req.body;
       if (password === api.configOperator.config.metadata.password) {
         api.tokenOperator.addNewSession(res);
-        const privateFolder = api.fileOperator.readFolder(api.dataPath.privateDirPath);
+        const privateFolder = api.fileOperator.readFoldersList(api.dataPath.privateDirPath);
 
-        // -> return ES
+        // -> ES: return private folders list
         req.status.addExecStatus();
         res.send({
           ...req.status.generateReport(),
@@ -72,7 +72,7 @@ router.post('/login', (req, res, next) => {
         });
         return;
       } else {
-        // -> wrong password, return EF_IP
+        // -> EF_IP: wrong password
         req.status.addExecStatus(api.Status.execErrCode.IncorrectPassword);
         res.send(req.status.generateReport());
         return;
@@ -97,7 +97,7 @@ router.post('/logout', (req, res, next) => {
     req.cookies[api.cookieOperator.sessionName]
   );
 
-  // -> return ES
+  // -> ES: no extra info
   req.status.addExecStatus();
   res.send(req.status.generateReport());
   return;

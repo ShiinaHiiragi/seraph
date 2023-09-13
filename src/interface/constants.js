@@ -67,6 +67,7 @@ const Status = {
   },
   execErrCode: {
     IncorrectPassword: "IP",
+    ResourcesUnexist: "RU",
     InternalServerError: "ISE"
   }
 }

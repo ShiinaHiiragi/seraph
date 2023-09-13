@@ -95,16 +95,31 @@ const fileOperator = {
     );
   },
 
-  // folder means public/ or private/
-  readFolder: (folderPath) => {
-    folderInfo = fs.readdirSync(dataPath.publicDirPath, { withFileTypes: true })
+  // folder means dir under public/ or private/
+  readFoldersList: (dirPath) => {
+    if (!fs.existsSync(dirPath)) {
+      return null;
+    }
+
+    folderInfo = fs.readdirSync(dirPath, { withFileTypes: true })
     folderInfo.filter((item) => item.isDirectory())
     return folderInfo.map((item) => item.name);
+  },
+
+  readFolderInfo: (folderPath) => {
+    if (!fs.existsSync(folderPath)) {
+      return null;
+    }
+
+    folderInfo = fs.readdirSync(folderPath, { withFileTypes: true })
+    folderInfo.filter((item) => !item.isDirectory())
+    return folderInfo.map((item) => fs.statSync(path.join(folderPath, item.name)));
   }
 };
 exports.fileOperator = fileOperator;
 
-(function () {
+// avoid console.log error
+;(function () {
   fileOperator
     .probeDir(dataPath.dataDirPath)
     .probeDir(dataPath.publicDirPath)
@@ -247,6 +262,7 @@ Status.authErrCode = {
 
 Status.execErrCode = {
   IncorrectPassword: "IP",
+  ResourcesUnexist: "RU",
   InternalServerError: "ISE"
 }
 
