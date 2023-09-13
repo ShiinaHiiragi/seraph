@@ -42,15 +42,18 @@ const HeaderLayout = (props) => {
 
 const Header = (props) => {
   const {
-    setDrawerOpen,
     setGlobalSwitch,
+    setDrawerOpen,
     setPrivateFolders
   } = props;
   const context = React.useContext(GlobalContext);
   const navigate = useNavigate();
 
-  const isAuthority = context.globalSwitch === globalState.AUTHORITY;
   const [modalLoginOpen, setModalLoginOpen] = React.useState(false);
+  const isAuthority = React.useMemo(() => {
+    return context.globalSwitch === globalState.AUTHORITY
+  }, [context.globalSwitch]);
+
   const handleLogout = React.useCallback(() => {
     request("POST/auth/logout")
       .then((data) => {
@@ -123,10 +126,10 @@ const Header = (props) => {
         }
       </Box>
       <Login
-        modalLoginOpen={modalLoginOpen}
-        setModalLoginOpen={setModalLoginOpen}
         setGlobalSwitch={setGlobalSwitch}
         setPrivateFolders={setPrivateFolders}
+        modalLoginOpen={modalLoginOpen}
+        setModalLoginOpen={setModalLoginOpen}
       />
     </HeaderLayout>
   );

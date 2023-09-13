@@ -154,12 +154,10 @@ const Panel = () => {
   // second tick starts after first tick were set
   // second tick end after globalSwitch were set
   React.useEffect(() => {
-    if (firstTick) {
-      console.log(globalSwitch);
+    if (firstTick && globalSwitch !== globalState.INNOCENT) {
       setSecondTick(true);
     }
-  // eslint-disable-next-line
-  }, [globalSwitch]);
+  }, [firstTick, globalSwitch]);
 
   return (
     <GlobalContext.Provider
@@ -181,8 +179,8 @@ const Panel = () => {
           <BrowserRouter>
             <HeaderField className="HeaderField">
               <Header
-                setDrawerOpen={setDrawerOpen}
                 setGlobalSwitch={setGlobalSwitch}
+                setDrawerOpen={setDrawerOpen}
                 setPrivateFolders={setPrivateFolders}
               />
             </HeaderField>

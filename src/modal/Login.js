@@ -19,17 +19,18 @@ import GlobalContext, {
 
 export default function Login(props) {
   const {
-    modalLoginOpen,
-    setModalLoginOpen,
     setGlobalSwitch,
-    setPrivateFolders
+    setPrivateFolders,
+    modalLoginOpen,
+    setModalLoginOpen
   } = props;
   const context = React.useContext(GlobalContext);
+
   const [formPasswordText, setFormPasswordText] = React.useState("");
   const [formPasswordDisabled, setFormPasswordDisabled] = React.useState(false);
   const [formPasswordError, setFormPasswordError] = React.useState(false);
 
-  const closeModal = React.useCallback(() => {
+  const handleCloseModal = React.useCallback(() => {
     setModalLoginOpen(false);
     setFormPasswordText("");
     setFormPasswordError(false);
@@ -46,7 +47,7 @@ export default function Login(props) {
 
     request("POST/auth/login", { password: formPasswordText })
       .then((data) => {
-        closeModal();
+        handleCloseModal();
         toast(context.languagePicker("modal.toast.success.login"));
 
         setPrivateFolders(formatter.folderFormatter(data.private));
@@ -65,7 +66,7 @@ export default function Login(props) {
         }
       })
   }, [
-    closeModal,
+    handleCloseModal,
     context,
     formPasswordText,
     setGlobalSwitch,
@@ -75,7 +76,7 @@ export default function Login(props) {
   return (
     <Modal
       open={modalLoginOpen}
-      onClose={closeModal}
+      onClose={handleCloseModal}
       sx={{ userSelect: "none" }}
     >
       <ModalDialog
