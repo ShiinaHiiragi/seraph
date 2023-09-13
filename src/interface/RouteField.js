@@ -26,20 +26,16 @@ const RouteField = (props) => {
   const context = React.useContext(GlobalContext);
   const breadcrumb = React.useMemo(() => path ?? [ ], [path]);
 
-  // const permissionCheck = React.useMemo(() => {
-  //   return noCheck || context.isAuthority;
-  // }, [noCheck, context.isAuthority]);
-
   // after second tick, the globalSwitch were set properly
-  // React.useEffect(() => {
-  //   if (context.secondTick && !permissionCheck) {
-  //     const loginButton = document.querySelector("#loginButton");
-  //     if (loginButton) {
-  //       loginButton.click()
-  //     }
-  //   }
-  // // eslint-disable-next-line
-  // }, [context.secondTick]);
+  React.useEffect(() => {
+    if (context.secondTick && !display) {
+      const loginButton = document.querySelector("#loginButton");
+      if (loginButton) {
+        loginButton.click()
+      }
+    }
+  // eslint-disable-next-line
+  }, [context.secondTick]);
 
   return (
     <RouteFieldRaw
@@ -89,8 +85,9 @@ const RouteField = (props) => {
         className="RouteFieldRawInner"
         {...otherProps}
       >
-        {display ? children :
-          <Caption
+        {display
+          ? children
+          : <Caption
             title={context.languagePicker("universal.deny.title")}
             caption={context.languagePicker("universal.deny.caption")}
           />}
