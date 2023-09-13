@@ -26,6 +26,9 @@ const ja = {
         type: "タイプ",
         time: "作成日時",
         operation: "オペレーション"
+      },
+      tableView: {
+        unknown: "未知"
       }
     }
   },

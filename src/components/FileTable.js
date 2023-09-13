@@ -91,9 +91,21 @@ export default function FileTable(props) {
             <tr key={index}>
               <td>
               </td>
-              <td><Typography level="body-xs">{item.name}</Typography></td>
-              <td><Typography level="body-xs">{item.size.sizeFormat()}</Typography></td>
-              <td><Typography level="body-xs">{item.type}</Typography></td>
+              <td>
+                <Typography level="body-xs">
+                  {item.name}
+                </Typography>
+              </td>
+              <td>
+                <Typography level="body-xs">
+                  {item.size.sizeFormat()}
+                </Typography>
+              </td>
+              <td>
+                <Typography level="body-xs">
+                  {item.type || context.languagePicker("main.folder.tableView.unknown")}
+                </Typography>
+              </td>
               <td>
                 <Typography level="body-xs">
                   {item.time.timeFormat(

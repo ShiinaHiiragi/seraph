@@ -26,6 +26,9 @@ const zhHans = {
         type: "类型",
         time: "创建时间",
         operation: "操作"
+      },
+      tableView: {
+        unknown: "不明"
       }
     }
   },

@@ -26,6 +26,9 @@ const en = {
         type: "Type",
         time: "Created Time",
         operation: "Operations"
+      },
+      tableView: {
+        unknown: "Unknown"
       }
     }
   },
