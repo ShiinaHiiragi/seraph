@@ -18,6 +18,15 @@ const ja = {
     error: {
       title: "404",
       caption: "リクエストされたページが存在しません。"
+    },
+    folder: {
+      fileAttribute: {
+        name: "ファイル名",
+        size: "サイズ",
+        type: "タイプ",
+        time: "作成日時",
+        operation: "オペレーション"
+      }
     }
   },
   modal: {

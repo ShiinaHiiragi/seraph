@@ -18,6 +18,15 @@ const en = {
     error: {
       title: "404",
       caption: "The requested page does not exist."
+    },
+    folder: {
+      fileAttribute: {
+        name: "Name",
+        size: "Size",
+        type: "Type",
+        time: "Created Time",
+        operation: "Operations"
+      }
     }
   },
   modal: {

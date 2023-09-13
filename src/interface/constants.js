@@ -76,7 +76,10 @@ axios.defaults.withCredentials = true;
 const request = (query, params) => {
   const [method, path] = query.match(/(GET|POST)(.+)/).slice(1);
   return new Promise((resolve, reject) => {
-    axios[method.toLowerCase()](new URL(path, serverBaseURL).href, params)
+    axios[method.toLowerCase()](
+      new URL(path, serverBaseURL).href,
+      method === "POST" ? params : { params: params }
+    )
       .then((res) => res.data.statusCode === Status.statusCode.ExecSuccess
         ? resolve(res.data)
         : reject(res.data)

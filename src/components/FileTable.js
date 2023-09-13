@@ -1,10 +1,6 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import * as React from "react";
-import Avatar from "@mui/joy/Avatar";
 import Box from "@mui/joy/Box";
-import Chip from "@mui/joy/Chip";
 import Divider from "@mui/joy/Divider";
-import Link from "@mui/joy/Link";
 import Table from "@mui/joy/Table";
 import Sheet from "@mui/joy/Sheet";
 import IconButton from "@mui/joy/IconButton";
@@ -13,229 +9,8 @@ import Menu from "@mui/joy/Menu";
 import MenuButton from "@mui/joy/MenuButton";
 import MenuItem from "@mui/joy/MenuItem";
 import Dropdown from "@mui/joy/Dropdown";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
-import BlockIcon from "@mui/icons-material/Block";
-import AutorenewRoundedIcon from "@mui/icons-material/AutorenewRounded";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
-
-const rows = [
-  {
-    id: "INV-1234",
-    date: "Feb 3, 2023",
-    status: "Refunded",
-    customer: {
-      initial: "O",
-      name: "Olivia Ryhe",
-      email: "olivia@email.com",
-    },
-  },
-  {
-    id: "INV-1233",
-    date: "Feb 3, 2023",
-    status: "Paid",
-    customer: {
-      initial: "S",
-      name: "Steve Hampton",
-      email: "steve.hamp@email.com",
-    },
-  },
-  {
-    id: "INV-1232",
-    date: "Feb 3, 2023",
-    status: "Refunded",
-    customer: {
-      initial: "C",
-      name: "Ciaran Murray",
-      email: "ciaran.murray@email.com",
-    },
-  },
-  {
-    id: "INV-1231",
-    date: "Feb 3, 2023",
-    status: "Refunded",
-    customer: {
-      initial: "M",
-      name: "Maria Macdonald",
-      email: "maria.mc@email.com",
-    },
-  },
-  {
-    id: "INV-1230",
-    date: "Feb 3, 2023",
-    status: "Cancelled",
-    customer: {
-      initial: "C",
-      name: "Charles Fulton",
-      email: "fulton@email.com",
-    },
-  },
-  {
-    id: "INV-1229",
-    date: "Feb 3, 2023",
-    status: "Cancelled",
-    customer: {
-      initial: "J",
-      name: "Jay Hooper",
-      email: "hooper@email.com",
-    },
-  },
-  {
-    id: "INV-1228",
-    date: "Feb 3, 2023",
-    status: "Refunded",
-    customer: {
-      initial: "K",
-      name: "Krystal Stevens",
-      email: "k.stevens@email.com",
-    },
-  },
-  {
-    id: "INV-1227",
-    date: "Feb 3, 2023",
-    status: "Paid",
-    customer: {
-      initial: "S",
-      name: "Sachin Flynn",
-      email: "s.flyn@email.com",
-    },
-  },
-  {
-    id: "INV-1226",
-    date: "Feb 3, 2023",
-    status: "Cancelled",
-    customer: {
-      initial: "B",
-      name: "Bradley Rosales",
-      email: "brad123@email.com",
-    },
-  },
-  {
-    id: "INV-1234",
-    date: "Feb 3, 2023",
-    status: "Paid",
-    customer: {
-      initial: "O",
-      name: "Olivia Ryhe",
-      email: "olivia@email.com",
-    },
-  },
-  {
-    id: "INV-1233",
-    date: "Feb 3, 2023",
-    status: "Cancelled",
-    customer: {
-      initial: "S",
-      name: "Steve Hampton",
-      email: "steve.hamp@email.com",
-    },
-  },
-  {
-    id: "INV-1232",
-    date: "Feb 3, 2023",
-    status: "Paid",
-    customer: {
-      initial: "C",
-      name: "Ciaran Murray",
-      email: "ciaran.murray@email.com",
-    },
-  },
-  {
-    id: "INV-1231",
-    date: "Feb 3, 2023",
-    status: "Refunded",
-    customer: {
-      initial: "M",
-      name: "Maria Macdonald",
-      email: "maria.mc@email.com",
-    },
-  },
-  {
-    id: "INV-1230",
-    date: "Feb 3, 2023",
-    status: "Paid",
-    customer: {
-      initial: "C",
-      name: "Charles Fulton",
-      email: "fulton@email.com",
-    },
-  },
-  {
-    id: "INV-1229",
-    date: "Feb 3, 2023",
-    status: "Cancelled",
-    customer: {
-      initial: "J",
-      name: "Jay Hooper",
-      email: "hooper@email.com",
-    },
-  },
-  {
-    id: "INV-1228",
-    date: "Feb 3, 2023",
-    status: "Cancelled",
-    customer: {
-      initial: "K",
-      name: "Krystal Stevens",
-      email: "k.stevens@email.com",
-    },
-  },
-  {
-    id: "INV-1227",
-    date: "Feb 3, 2023",
-    status: "Paid",
-    customer: {
-      initial: "S",
-      name: "Sachin Flynn",
-      email: "s.flyn@email.com",
-    },
-  },
-  {
-    id: "INV-1226",
-    date: "Feb 3, 2023",
-    status: "Cancelled",
-    customer: {
-      initial: "B",
-      name: "Bradley Rosales",
-      email: "brad123@email.com",
-    },
-  },
-];
-
-function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-function getComparator(
-  order,
-  orderBy,
-) {
-  return order === "desc"
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-// Since 2020 all major browsers ensure sort stability with Array.prototype.sort().
-// stableSort() brings sort stability to non-modern browsers (notably IE11). If you
-// only support modern browsers you can replace stableSort(exampleArray, exampleComparator)
-// with exampleArray.slice().sort(exampleComparator)
-function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) {
-      return order;
-    }
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
-}
+import GlobalContext from "../interface/constants";
 
 function RowMenu() {
   return (
@@ -257,8 +32,11 @@ function RowMenu() {
   );
 }
 
-export default function FileTable() {
-  const [order, setOrder] = React.useState("desc");
+export default function FileTable(props) {
+  const {
+    filesList
+  } = props;
+  const context = React.useContext(GlobalContext);
 
   return (
     <Sheet
@@ -292,72 +70,31 @@ export default function FileTable() {
             <th style={{ width: 24 }}>
             </th>
             <th style={{ width: 120, padding: "12px 6px" }}>
-              <Link
-                underline="none"
-                color="primary"
-                component="button"
-                onClick={() => setOrder(order === "asc" ? "desc" : "asc")}
-                fontWeight="lg"
-                endDecorator={<ArrowDropDownIcon />}
-                sx={{
-                  "& svg": {
-                    transition: "0.2s",
-                    transform:
-                      order === "desc" ? "rotate(0deg)" : "rotate(180deg)",
-                  },
-                }}
-              >
-                Invoice
-              </Link>
+              {context.languagePicker("main.folder.fileAttribute.name")}
             </th>
-            <th style={{ width: 140, padding: "12px 6px" }}>Date</th>
-            <th style={{ width: 140, padding: "12px 6px" }}>Status</th>
-            <th style={{ width: 240, padding: "12px 6px" }}>Customer</th>
-            <th style={{ width: 140, padding: "12px 6px" }}>Operation</th>
+            <th style={{ width: 140, padding: "12px 6px" }}>
+              {context.languagePicker("main.folder.fileAttribute.size")}
+            </th>
+            <th style={{ width: 140, padding: "12px 6px" }}>
+              {context.languagePicker("main.folder.fileAttribute.type")}
+            </th>
+            <th style={{ width: 140, padding: "12px 6px" }}>
+              {context.languagePicker("main.folder.fileAttribute.time")}
+            </th>
+            <th style={{ width: 140, padding: "12px 6px" }}>
+              {context.languagePicker("main.folder.fileAttribute.operation")}
+            </th>
           </tr>
         </thead>
         <tbody>
-          {stableSort(rows, getComparator(order, "id")).map((row, index) => (
+          {filesList.map((item, index) => (
             <tr key={index}>
               <td>
               </td>
-              <td>
-                <Typography level="body-xs">{row.id}</Typography>
-              </td>
-              <td>
-                <Typography level="body-xs">{row.date}</Typography>
-              </td>
-              <td>
-                <Chip
-                  variant="soft"
-                  size="sm"
-                  startDecorator={
-                    {
-                      Paid: <CheckRoundedIcon />,
-                      Refunded: <AutorenewRoundedIcon />,
-                      Cancelled: <BlockIcon />,
-                    }[row.status]
-                  }
-                  color={
-                    {
-                      Paid: "success",
-                      Refunded: "neutral",
-                      Cancelled: "danger",
-                    }[row.status]
-                  }
-                >
-                  {row.status}
-                </Chip>
-              </td>
-              <td>
-                <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-                  <Avatar size="sm">{row.customer.initial}</Avatar>
-                  <div>
-                    <Typography level="body-xs">{row.customer.name}</Typography>
-                    <Typography level="body-xs">{row.customer.email}</Typography>
-                  </div>
-                </Box>
-              </td>
+              <td><Typography level="body-xs">{item.name}</Typography></td>
+              <td><Typography level="body-xs">{item.size}</Typography></td>
+              <td><Typography level="body-xs">{item.type}</Typography></td>
+              <td><Typography level="body-xs">{item.time}</Typography></td>
               <td>
                 <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
                   <RowMenu />
