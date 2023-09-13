@@ -18,7 +18,6 @@ const FileExplorer = (props) => {
     return type === "public" || context.isAuthority;
   }, [type, context.isAuthority])
 
-  console.log(folderName);
   // after second tick, the globalSwitch were set properly
   React.useEffect(() => {
     if (context.secondTick && display) {

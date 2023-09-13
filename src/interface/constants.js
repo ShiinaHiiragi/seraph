@@ -12,6 +12,18 @@ String.prototype.format = function () {
   return formatted;
 };
 
+// eslint-disable-next-line
+Number.prototype.sizeFormat = function() {
+  let formatted = this;
+  let index = 0;
+  const suffix = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB'];
+  while (formatted >= 1024 && index + 1 < suffix.length) {
+    index += 1;
+    formatted /= 1024;
+  }
+  return formatted.toFixed(1).replace(/\.0$/, '') + " " + suffix[index];
+}
+
 const GlobalContext = React.createContext({ });
 const ConstantContext = { };
 const globalState = {
@@ -144,18 +156,3 @@ const toastTheme = (theme) => `
 `
 
 export { toastTheme };
-
-
-const formatter = {
-  sizeFormatter: (size) => {
-    let index = 0;
-    const suffix = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB'];
-    while (size >= 1024 && index + 1 < suffix.length) {
-      index += 1;
-      size /= 1024;
-    }
-    return size.toFixed(2) + " " + suffix[index];
-  }
-}
-
-export { formatter };

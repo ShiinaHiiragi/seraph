@@ -92,7 +92,7 @@ export default function FileTable(props) {
               <td>
               </td>
               <td><Typography level="body-xs">{item.name}</Typography></td>
-              <td><Typography level="body-xs">{item.size}</Typography></td>
+              <td><Typography level="body-xs">{item.size.sizeFormat()}</Typography></td>
               <td><Typography level="body-xs">{item.type}</Typography></td>
               <td><Typography level="body-xs">{item.time}</Typography></td>
               <td>
