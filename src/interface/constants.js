@@ -140,11 +140,4 @@ const toastTheme = (theme) => `
   }
 `
 
-
 export { toastTheme };
-
-const formatter = {
-  folderFormatter: (folder) => folder.map((item) => ({ name: item }))
-}
-
-export { formatter };

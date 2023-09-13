@@ -130,11 +130,11 @@ const Panel = () => {
     request("GET/auth/meta")
       .then((data) => {
         setSetting(data.setting);
-        setPublicFolders(formatter.folderFormatter(data.public));
+        setPublicFolders(formatter.data.public);
         setFirstTick(true);
 
         if (data.private) {
-          setPrivateFolders(formatter.folderFormatter(data.private));
+          setPrivateFolders(formatter.data.private);
           setGlobalSwitch(globalState.AUTHORITY);
         } else {
           setGlobalSwitch(globalState.ANONYMOUS);

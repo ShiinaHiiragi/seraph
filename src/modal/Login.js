@@ -50,7 +50,7 @@ export default function Login(props) {
         handleCloseModal();
         toast(context.languagePicker("modal.toast.success.login"));
 
-        setPrivateFolders(formatter.folderFormatter(data.private));
+        setPrivateFolders(formatter.data.private);
         setGlobalSwitch(globalState.AUTHORITY);
       })
       .catch((data) => {
