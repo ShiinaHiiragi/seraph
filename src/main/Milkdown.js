@@ -8,6 +8,7 @@ const Milkdown = () => {
 
   return (
     <RouteField
+      noCheck
       path={[
         context.languagePicker("nav.utility.title"),
         context.languagePicker("nav.utility.milkdown")

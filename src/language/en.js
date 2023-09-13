@@ -67,6 +67,10 @@ const en = {
       continue: "Continue",
       cancel: "Cancel"
     },
+    deny: {
+      title: "Permission Denied",
+      caption: "Log in to acquire full access."
+    },
     placeholder: {
       title: "In Development",
       caption: "Please submit a new issue on GitHub if you are in need of it."

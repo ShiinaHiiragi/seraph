@@ -7,7 +7,7 @@ const Welcome = () => {
   const context = React.useContext(GlobalContext);
 
   return (
-    <RouteField>
+    <RouteField noCheck>
       <Caption
         title={context.languagePicker("universal.placeholder.title")}
         caption={context.languagePicker("universal.placeholder.caption")}

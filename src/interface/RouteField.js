@@ -5,6 +5,8 @@ import Link from "@mui/joy/Link";
 import Typography from "@mui/joy/Typography";
 import ChevronRightRoundedIcon from "@mui/icons-material/ChevronRightRounded";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
+import GlobalContext, { globalState } from "./constants";
+import Caption from "../components/Caption";
 
 const RouteFieldRaw = styled("div")(({ theme }) => ({
   width: "100%",
@@ -13,7 +15,8 @@ const RouteFieldRaw = styled("div")(({ theme }) => ({
 }));
 
 const RouteField = (props) => {
-  const { path, title, sxRaw, children, ...otherProps } = props;
+  const { noCheck, path, title, sxRaw, children, ...otherProps } = props;
+  const context = React.useContext(GlobalContext);
   const breadcrumb = path ?? [ ];
 
   return (
@@ -62,9 +65,15 @@ const RouteField = (props) => {
       }
       <RouteFieldRaw
         className="RouteFieldRawInner"
-        children={children}
         {...otherProps}
-      />
+      >
+        {noCheck || context.globalSwitch === globalState.AUTHORITY
+          ? children
+          : <Caption
+          title={context.languagePicker("universal.deny.title")}
+          caption={context.languagePicker("universal.deny.caption")}
+        />}
+      </RouteFieldRaw>
     </RouteFieldRaw>
   )
 }

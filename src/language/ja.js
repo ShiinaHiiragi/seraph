@@ -67,6 +67,10 @@ const ja = {
       continue: "続く",
       cancel: "キャンセル"
     },
+    deny: {
+      title: "許可が拒否され",
+      caption: "フルアクセスを取得するにはログインしてください。"
+    },
     placeholder: {
       title: "イン ディベロップメント",
       caption: "必要であればギットハブで新たなイシューを提出してください。"

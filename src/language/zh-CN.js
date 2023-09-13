@@ -67,6 +67,10 @@ const zhCN = {
       continue: "继续",
       cancel: "取消"
     },
+    deny: {
+      title: "没有权限",
+      caption: "登录以获得完全访问权限。"
+    },
     placeholder: {
       title: "开发中",
       caption: "如有需要，请在 GitHub 上提交新 Issue。"

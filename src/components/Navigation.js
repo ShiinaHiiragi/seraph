@@ -26,7 +26,7 @@ export default function Navigation(props) {
   } = props;
   const context = React.useContext(GlobalContext);
   const navigate = useNavigate();
-  
+
   const isAuthority = context.globalSwitch === globalState.AUTHORITY;
   const navigateTo = React.useCallback((pathname) => {
     navigate(pathname);

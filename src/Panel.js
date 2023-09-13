@@ -108,8 +108,8 @@ const Panel = () => {
   // global states
   const [globalSwitch, setGlobalSwitch] = React.useState(globalState.INNOCENT);
   const [setting, setSetting] = React.useState(defaultSetting);
-  const [publicFolders, setPublicFolders] = React.useState([ ]);
-  const [privateFolders, setPrivateFolders] = React.useState([ ]);
+  const [publicFolders, setPublicFolders] = React.useState([]);
+  const [privateFolders, setPrivateFolders] = React.useState([]);
 
   // language related
   const languagePicker = React.useMemo(() => {
@@ -140,7 +140,7 @@ const Panel = () => {
           request.unparseableResponse(data);
         }
       })
-  }, [ ])
+  }, [])
 
   return (
     <GlobalContext.Provider
@@ -157,15 +157,15 @@ const Panel = () => {
           theme={GlobalTheme}
         >
           <CssBaseline />
-          <HeaderField className="HeaderField">
-            <Header
-              setDrawerOpen={setDrawerOpen}
-              setGlobalSwitch={setGlobalSwitch}
-              setPrivateFolders={setPrivateFolders}
-            />
-          </HeaderField>
-          <ContentField className="ContentField">
-            <BrowserRouter>
+          <BrowserRouter>
+            <HeaderField className="HeaderField">
+              <Header
+                setDrawerOpen={setDrawerOpen}
+                setGlobalSwitch={setGlobalSwitch}
+                setPrivateFolders={setPrivateFolders}
+              />
+            </HeaderField>
+            <ContentField className="ContentField">
               {drawerOpen && (
                 <SideDrawer onClose={() => setDrawerOpen(false)}>
                   <Navigation
@@ -195,8 +195,8 @@ const Panel = () => {
                   <Route path="*" element={<Error />} />
                 </Routes>
               </MainField>
-            </BrowserRouter>
-          </ContentField>
+            </ContentField>
+          </BrowserRouter>
           <Init
             setGlobalSwitch={setGlobalSwitch}
             setting={setting}

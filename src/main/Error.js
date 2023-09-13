@@ -7,7 +7,7 @@ const Error = () => {
   const context = React.useContext(GlobalContext);
 
   return (
-    <RouteField>
+    <RouteField noCheck>
       <Caption
         title={context.languagePicker("main.error.title")}
         caption={context.languagePicker("main.error.caption")}
