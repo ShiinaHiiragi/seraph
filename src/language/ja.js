@@ -41,6 +41,7 @@ const ja = {
       },
       exception: {
         incorrectPassword: "パスワードが間違っています。",
+        resourcesUnexist: "リクエストされたリソースは存在しません。"
       },
       error: {
         unparseableResponse: "解析不能のレスポンス：リクエストはフェイルしましてエラーコードが {0} です。",
@@ -75,7 +76,7 @@ const ja = {
   },
   universal: {
     time: {
-      dateFormat: "yyyy 年 MM 月 dd 日",
+      dateFormat: "yyyy 年 M 月 d 日",
       timeFormat: "hh:mm:ss"
     },
     button: {
@@ -83,13 +84,15 @@ const ja = {
       continue: "進む",
       cancel: "キャンセル"
     },
-    deny: {
-      title: "許可が拒否され",
-      caption: "フルアクセスを取得するにはログインしてください。"
-    },
     placeholder: {
-      title: "イン・ディベロップメント",
-      caption: "必要であればギットハブで新たなイシューを提出してください。"
+      deny: {
+        title: "許可が拒否され",
+        caption: "フルアクセスを取得するにはログインしてください。"
+      },
+      inDevelopment: {
+        title: "イン・ディベロップメント",
+        caption: "必要であればギットハブで新たなイシューを提出してください。"
+      }
     }
   }
 }

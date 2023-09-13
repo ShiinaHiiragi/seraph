@@ -41,6 +41,7 @@ const zhHans = {
       },
       exception: {
         incorrectPassword: "密码错误。",
+        resourcesUnexist: "请求的资源不存在。"
       },
       error: {
         unparseableResponse: "响应无法解析：请求失败，错误代码 {0}。",
@@ -83,13 +84,15 @@ const zhHans = {
       continue: "继续",
       cancel: "取消"
     },
-    deny: {
-      title: "没有权限",
-      caption: "登录以获得完全访问权限。"
-    },
     placeholder: {
-      title: "开发中",
-      caption: "如有需要，请在 GitHub 上提交新 Issue。"
+      deny: {
+        title: "没有权限",
+        caption: "登录以获得完全访问权限。"
+      },
+      inDevelopment: {
+        title: "开发中",
+        caption: "如有需要，请在 GitHub 上提交新 Issue。"
+      }
     }
   }
 }

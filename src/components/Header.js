@@ -106,9 +106,9 @@ const Header = (props) => {
                 case "ja":
                   setSettingPair("meta.language", "en");
                   break;
+                default:
+                  setSettingPair("meta.language", "en");
               }
-              
-              
             }}
           >
             <SettingsOutlinedIcon />
