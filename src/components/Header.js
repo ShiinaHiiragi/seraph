@@ -7,6 +7,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
+import { useNavigate } from "react-router-dom";
 import GreyLogo from "../logo-grey.svg";
 import GlobalContext, { globalState, request } from "../interface/constants";
 import Login from "../modal/Login";
@@ -46,6 +47,7 @@ const Header = (props) => {
     setPrivateFolders
   } = props;
   const context = React.useContext(GlobalContext);
+  const navigate = useNavigate();
 
   const [modalLoginOpen, setModalLoginOpen] = React.useState(false);
   const handleLogout = React.useCallback(() => {
@@ -53,9 +55,10 @@ const Header = (props) => {
       .then((data) => {
         toast.success(context.languagePicker("modal.toast.success.logout"));
         setGlobalSwitch(globalState.ANONYMOUS);
+        navigate("/");
       })
       .catch(request.unparseableResponse)
-  }, [context, setGlobalSwitch])
+  }, [context, setGlobalSwitch, navigate])
 
   return (
     <HeaderLayout>
@@ -108,6 +111,7 @@ const Header = (props) => {
             <LogoutOutlinedIcon />
           </IconButton>
           : <IconButton
+            id="loginButton"
             size="sm"
             variant="outlined"
             color="neutral"

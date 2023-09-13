@@ -17,7 +17,18 @@ const RouteFieldRaw = styled("div")(({ theme }) => ({
 const RouteField = (props) => {
   const { noCheck, path, title, sxRaw, children, ...otherProps } = props;
   const context = React.useContext(GlobalContext);
+
+  const permissionCheck = noCheck || context.globalSwitch === globalState.AUTHORITY;
   const breadcrumb = path ?? [ ];
+
+  React.useEffect(() => {
+    if (!permissionCheck) {
+      const loginButton = document.querySelector("#loginButton");
+      if (loginButton) {
+        loginButton.click()
+      }
+    }
+  }, [permissionCheck])
 
   return (
     <RouteFieldRaw
@@ -67,12 +78,11 @@ const RouteField = (props) => {
         className="RouteFieldRawInner"
         {...otherProps}
       >
-        {noCheck || context.globalSwitch === globalState.AUTHORITY
-          ? children
-          : <Caption
-          title={context.languagePicker("universal.deny.title")}
-          caption={context.languagePicker("universal.deny.caption")}
-        />}
+        {permissionCheck ? children :
+          <Caption
+            title={context.languagePicker("universal.deny.title")}
+            caption={context.languagePicker("universal.deny.caption")}
+          />}
       </RouteFieldRaw>
     </RouteFieldRaw>
   )
