@@ -8,23 +8,22 @@
 
 ## Memo
 
-1. Authorization
-2. File Explorer
+1. File Explorer
     - upload
     - view in new tab / rename / move / download / delete
     - edit in milkdown
     - attached markdown
     - preview markdown
-3. Archive
+2. Archive
     - arXiv
     - external link / save in file explorer
-4. Links
-5. Mail Server
-6. Milkdown
+3. Links
+4. Mail Server
+5. Milkdown
     - edit only
     - attach to file / save in file explorer
     - export
-7. TODO
+6. TODO
     - sync: clear when finish
     - async: 60 s
 
