@@ -28,7 +28,7 @@ const zhHans = {
         operation: "操作"
       },
       tableView: {
-        unknown: "不明"
+        unknown: "未知"
       }
     }
   },

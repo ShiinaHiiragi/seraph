@@ -163,7 +163,7 @@ const configOperator = {
   },
 
   setConfigSetting: (key, value) => {
-    const [ item, subItem ] = key.split(".");
+    const [item, subItem] = key.split(".");
     configOperator.setConfig((config) => ({
       ...config,
       setting: {

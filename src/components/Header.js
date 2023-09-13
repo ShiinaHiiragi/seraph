@@ -44,7 +44,8 @@ const Header = (props) => {
   const {
     setGlobalSwitch,
     setDrawerOpen,
-    setPrivateFolders
+    setPrivateFolders,
+    setSettingPair
   } = props;
   const context = React.useContext(GlobalContext);
   const navigate = useNavigate();
@@ -94,6 +95,21 @@ const Header = (props) => {
             size="sm"
             variant="outlined"
             color="neutral"
+            onClick={() => {
+              switch (document.documentElement.lang) {
+                case "en":
+                  setSettingPair("meta.language", "zh-Hans");
+                  break;
+                case "zh-Hans":
+                  setSettingPair("meta.language", "ja");
+                  break;
+                case "ja":
+                  setSettingPair("meta.language", "en");
+                  break;
+              }
+              
+              
+            }}
           >
             <SettingsOutlinedIcon />
           </IconButton>}

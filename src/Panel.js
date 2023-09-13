@@ -162,6 +162,17 @@ const Panel = () => {
     return globalSwitch === globalState.AUTHORITY
   }, [globalSwitch]);
 
+  const setSettingPair = React.useCallback((key, value) => {
+    const [item, subItem] = key.split(".");
+    setSetting((setting) => ({
+      ...setting,
+      [item]: {
+        ...setting["item"],
+        [subItem]: value
+      }
+    }));
+  }, [ ]);
+
   return (
     <GlobalContext.Provider
       value={{
@@ -186,6 +197,7 @@ const Panel = () => {
                 setGlobalSwitch={setGlobalSwitch}
                 setDrawerOpen={setDrawerOpen}
                 setPrivateFolders={setPrivateFolders}
+                setSettingPair={setSettingPair}
               />
             </HeaderField>
             <ContentField className="ContentField">
