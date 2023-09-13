@@ -4,6 +4,7 @@ let logger = require('morgan');
 let cors = require('cors');
 
 let authRouter = require('./routes/auth');
+let folderRouter = require('./routes/folder');
 let api = require('./api');
 let app = express();
 
@@ -36,6 +37,7 @@ app.use((req, res, next) => {
 
 // express-router
 app.use('/auth', authRouter);
+app.use('/folder', folderRouter);
 
 // redirect all other pages to react-router
 app.use((req, res) => {

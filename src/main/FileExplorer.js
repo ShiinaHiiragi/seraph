@@ -12,9 +12,21 @@ const FileExplorer = (props) => {
   const { folderName } = useParams();
   const context = React.useContext(GlobalContext);
 
+  const display = React.useMemo(() => {
+    return type === "public" || context.isAuthority;
+  }, [type, context.isAuthority])
+
+  // after second tick, the globalSwitch were set properly
+  React.useEffect(() => {
+    if (context.secondTick && display) {
+      // request("GET/")
+    }
+  // eslint-disable-next-line
+  }, [context.secondTick]);
+
   return (
     <RouteField
-      display={type === "public" || context.isAuthority}
+      display={display}
       path={[
         context.languagePicker(`nav.${type}`),
         folderName

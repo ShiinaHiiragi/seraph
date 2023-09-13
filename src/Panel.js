@@ -150,8 +150,8 @@ const Panel = () => {
       })
   }, [])
 
-  // second tick starts after first tick were set
-  //             ends after globalSwitch were set
+  // second tick starts after first tick is set
+  //             ends after globalSwitch is set
   React.useEffect(() => {
     if (firstTick && globalSwitch !== globalState.INNOCENT) {
       setSecondTick(true);
