@@ -1,4 +1,4 @@
-const zhCN = {
+const zhHans = {
   header: {
   },
   nav: {
@@ -78,4 +78,4 @@ const zhCN = {
   }
 }
 
-export default zhCN;
+export default zhHans;

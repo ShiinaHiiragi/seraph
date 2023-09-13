@@ -1,5 +1,5 @@
 import en from "../language/en";
-import zhCN from "../language/zh-CN";
+import zhHans from "../language/zh-Hans";
 import ja from "../language/ja";
 import { defaultSetting } from "./constants";
 
@@ -8,8 +8,8 @@ const languageMap = {
     object: en,
     displayName: "English"
   },
-  "zh-CN": {
-    object: zhCN,
+  "zh-Hans": {
+    object: zhHans,
     displayName: "简体中文"
   },
   "ja": {
