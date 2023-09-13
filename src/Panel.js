@@ -111,9 +111,8 @@ const Panel = () => {
   const [publicFolders, setPublicFolders] = React.useState([]);
   const [privateFolders, setPrivateFolders] = React.useState([]);
 
-  // global clocks, only set once
+  // global clocks, explicit life cycles, only set once
   // when set to true, the corresponding tick ends
-  // explicit life cycles
   const [firstTick, setFirstTick] = React.useState(false);
   const [secondTick, setSecondTick] = React.useState(false);
 
@@ -125,8 +124,8 @@ const Panel = () => {
     return languagePickerSpawner(setting.meta.language);
   }, [setting.meta.language]);
 
-  // first tick start on page loaded
-  // first tick end after receiving metadata
+  // first tick starts on page loaded
+  //            ends after receiving metadata
   React.useEffect(() => {
     request("GET/auth/meta")
       .then((data) => {
@@ -152,13 +151,14 @@ const Panel = () => {
   }, [])
 
   // second tick starts after first tick were set
-  // second tick end after globalSwitch were set
+  //             ends after globalSwitch were set
   React.useEffect(() => {
     if (firstTick && globalSwitch !== globalState.INNOCENT) {
       setSecondTick(true);
     }
   }, [firstTick, globalSwitch]);
 
+  // hide some elements
   const isAuthority = React.useMemo(() => {
     return globalSwitch === globalState.AUTHORITY
   }, [globalSwitch]);
