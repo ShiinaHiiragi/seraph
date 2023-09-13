@@ -51,10 +51,11 @@ const Header = (props) => {
   const handleLogoutClick = React.useCallback(() => {
     request("POST/auth/logout")
       .then((data) => {
-        toast.success("...")
+        toast.success("...");
+        setGlobalSwitch(globalState.ANONYMOUS);
       })
       .catch(request.unparseableResponse)
-  }, [])
+  }, [setGlobalSwitch])
 
   return (
     <HeaderLayout>

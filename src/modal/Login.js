@@ -29,14 +29,25 @@ export default function Login(props) {
   const [formPasswordDisabled, setFormPasswordDisabled] = React.useState(false);
   const [formPasswordError, setFormPasswordError] = React.useState(false);
 
+  const closeModal = React.useCallback(() => {
+    setModalLoginOpen(false);
+    setFormPasswordText("");
+    setFormPasswordError(false);
+    setFormPasswordDisabled(false);
+  }, [
+    setModalLoginOpen,
+    setFormPasswordText,
+    setFormPasswordError,
+    setFormPasswordDisabled
+  ]);
+
   const handleClickSubmit = React.useCallback(() => {
     setFormPasswordDisabled(true);
 
     request("POST/auth/login", { password: formPasswordText })
       .then((data) => {
-        setFormPasswordDisabled(false);
-        setFormPasswordError(false);
-        setModalLoginOpen(false);
+        closeModal();
+        toast("...");
 
         setPrivateFolders(formatter.folderFormatter(data.private));
         setGlobalSwitch(globalState.AUTHORITY);
@@ -54,22 +65,17 @@ export default function Login(props) {
         }
       })
   }, [
+    closeModal,
     context,
     formPasswordText,
     setGlobalSwitch,
-    setPrivateFolders,
-    setModalLoginOpen
+    setPrivateFolders
   ]);
 
   return (
     <Modal
       open={modalLoginOpen}
-      onClose={() => {
-        setModalLoginOpen(false);
-        setFormPasswordText("");
-        setFormPasswordError(false);
-        setFormPasswordDisabled(false);
-      }}
+      onClose={closeModal}
       sx={{ userSelect: "none" }}
     >
       <ModalDialog
