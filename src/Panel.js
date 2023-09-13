@@ -4,9 +4,12 @@ import CssBaseline from "@mui/joy/CssBaseline";
 import { styled, CssVarsProvider } from "@mui/joy/styles";
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { Toaster } from "sonner";
+
 import Header from "./components/Header";
 import Navigation from "./components/Navigation";
 import SideDrawer from "./components/SideDrawer";
+import Init from "./modal/Init";
+
 import Welcome from "./main/Welcome";
 import FileExplorer from "./main/FileExplorer"
 import Archive from "./main/Archive";
@@ -15,19 +18,18 @@ import Milkdown from "./main/Milkdown";
 import Subscription from "./main/Subscription";
 import TODO from "./main/TODO";
 import Error from "./main/Error";
-import GlobalContext from "./interface/constants";
-import GlobalTheme from "./interface/theme";
+
 import { languagePickerSpawner } from "./interface/languagePicker";
-import {
+import GlobalTheme from "./interface/theme";
+import GlobalContext, {
   ConstantContext,
-  Status,
-  toastTheme,
-  request,
-  defaultSetting,
   globalState,
+  defaultSetting,
+  Status,
+  request,
+  toastTheme,
   formatter
 } from "./interface/constants";
-import Init from "./modal/Init";
 
 const Root = styled('div')(({ theme }) => ({
   width: "100vw",
