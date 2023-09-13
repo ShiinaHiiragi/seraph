@@ -89,6 +89,10 @@ const zhHans = {
         title: "没有权限",
         caption: "登录以获得完全访问权限。"
       },
+      unexist: {
+        title: "资源不可用",
+        caption: "URL 中可能存在拼写错误，请重新检查输入并重试。"
+      },
       inDevelopment: {
         title: "开发中",
         caption: "如有需要，请在 GitHub 上提交新 Issue。"

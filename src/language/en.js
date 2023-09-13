@@ -89,10 +89,14 @@ const en = {
         title: "Permission Denied",
         caption: "Log in to acquire full access."
       },
+      unexist: {
+        title: "Resources Unavailable",
+        caption: "A typo may be made in URL. Re-check your input and try again."
+      },
       inDevelopment: {
         title: "In Development",
         caption: "Please submit a new issue on GitHub if you are in need of it."
-      }
+      },
     }
   }
 }
