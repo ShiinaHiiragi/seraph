@@ -113,7 +113,14 @@ const fileOperator = {
 
     folderInfo = fs.readdirSync(folderPath, { withFileTypes: true })
     folderInfo.filter((item) => !item.isDirectory())
-    return folderInfo.map((item) => fs.statSync(path.join(folderPath, item.name)));
+    return folderInfo.map((item) => {
+      const stat = fs.statSync(path.join(folderPath, item.name));
+      return {
+        name: item.name,
+        size: stat.size,
+        time: stat.birthtime
+      }
+    });
   }
 };
 exports.fileOperator = fileOperator;
