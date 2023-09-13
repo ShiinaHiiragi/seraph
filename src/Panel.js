@@ -159,6 +159,10 @@ const Panel = () => {
     }
   }, [firstTick, globalSwitch]);
 
+  const isAuthority = React.useMemo(() => {
+    return globalSwitch === globalState.AUTHORITY
+  }, [globalSwitch]);
+
   return (
     <GlobalContext.Provider
       value={{
@@ -166,7 +170,8 @@ const Panel = () => {
         setModalReconfirm: setModalReconfirm,
         globalSwitch: globalSwitch,
         firstTick: firstTick,
-        secondTick: secondTick
+        secondTick: secondTick,
+        isAuthority: isAuthority
       }}
     >
       <GlobalStyles styles={toastTheme} />

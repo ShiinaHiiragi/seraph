@@ -15,11 +15,20 @@ const RouteFieldRaw = styled("div")(({ theme }) => ({
 }));
 
 const RouteField = (props) => {
-  const { noCheck, path, title, sxRaw, children, ...otherProps } = props;
+  const {
+    noCheck,
+    path,
+    title,
+    sxRaw,
+    children,
+    ...otherProps
+  } = props;
   const context = React.useContext(GlobalContext);
 
-  const permissionCheck = noCheck || context.globalSwitch === globalState.AUTHORITY;
-  const breadcrumb = path ?? [ ];
+  const breadcrumb = React.useMemo(() => path ?? [ ], [path]);
+  const permissionCheck = React.useMemo(() => {
+    return noCheck || context.globalSwitch === globalState.AUTHORITY;
+  }, [noCheck, context.globalSwitch]);
 
   // after second tick, the globalSwitch were set properly
   React.useEffect(() => {

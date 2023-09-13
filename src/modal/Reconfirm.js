@@ -15,7 +15,7 @@ export default function Reconfirm(props) {
   } = props;
   const context = React.useContext(GlobalContext);
 
-  const closeModalReconfirm = React.useCallback(() => {
+  const handleCloseModalReconfirm = React.useCallback(() => {
     setModalReconfirm((modalReconfirm) => ({
       ...modalReconfirm,
       open: false
@@ -25,7 +25,7 @@ export default function Reconfirm(props) {
   return (
     <Modal
       open={modalReconfirm.open}
-      onClose={closeModalReconfirm}
+      onClose={handleCloseModalReconfirm}
       sx={{ userSelect: "none" }}
     >
       <ModalDialog
@@ -47,12 +47,12 @@ export default function Reconfirm(props) {
             context.languagePicker("modal.reconfirm.captionSecondHalf")}
         </Typography>
         <Box sx={{ display: "flex", gap: 1, justifyContent: "flex-end", pt: 2 }}>
-          <Button variant="plain" color="neutral" onClick={closeModalReconfirm}>
+          <Button variant="plain" color="neutral" onClick={handleCloseModalReconfirm}>
             {context.languagePicker("universal.button.cancel")}
           </Button>
           <Button variant="solid" color="danger" onClick={() => {
             modalReconfirm.handleAction();
-            closeModalReconfirm();
+            handleCloseModalReconfirm();
           }}>
             {context.languagePicker("universal.button.continue")}
           </Button>

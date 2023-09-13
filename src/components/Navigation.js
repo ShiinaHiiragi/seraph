@@ -14,7 +14,7 @@ import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import EventNoteOutlinedIcon from "@mui/icons-material/EventNoteOutlined";
 import ForwardToInboxOutlinedIcon from "@mui/icons-material/ForwardToInboxOutlined";
 import DoneIcon from "@mui/icons-material/Done";
-import GlobalContext, { globalState } from "../interface/constants";
+import GlobalContext from "../interface/constants";
 import { pathStartWith } from "../interface/constants";
 import { useNavigate } from "react-router-dom";
 
@@ -25,9 +25,8 @@ export default function Navigation(props) {
     setDrawerOpen
   } = props;
   const context = React.useContext(GlobalContext);
-  const navigate = useNavigate();
 
-  const isAuthority = context.globalSwitch === globalState.AUTHORITY;
+  const navigate = useNavigate();
   const navigateTo = React.useCallback((pathname) => {
     navigate(pathname);
     setDrawerOpen(false);
@@ -69,7 +68,7 @@ export default function Navigation(props) {
         </List>
       </ListItem>
 
-      {isAuthority && <ListItem nested>
+      {context.isAuthority && <ListItem nested>
         <ListSubheader>
           {context.languagePicker("nav.private")}
         </ListSubheader>
@@ -105,7 +104,7 @@ export default function Navigation(props) {
             "& .JoyListItemButton-root": { p: "8px" },
           }}
         >
-          {isAuthority && <ListItem>
+          {context.isAuthority && <ListItem>
             <ListItemButton
               selected={pathStartWith("/archive")}
               onClick={() => navigateTo("/archive")}
@@ -116,7 +115,7 @@ export default function Navigation(props) {
               <ListItemContent>{context.languagePicker("nav.utility.archive")}</ListItemContent>
             </ListItemButton>
           </ListItem>}
-          {isAuthority && <ListItem>
+          {context.isAuthority && <ListItem>
             <ListItemButton
               selected={pathStartWith("/links")}
               onClick={() => navigateTo("/links")}
@@ -138,7 +137,7 @@ export default function Navigation(props) {
               <ListItemContent>{context.languagePicker("nav.utility.milkdown")}</ListItemContent>
             </ListItemButton>
           </ListItem>
-          {isAuthority && <ListItem>
+          {context.isAuthority && <ListItem>
             <ListItemButton
               selected={pathStartWith("/subscription")}
               onClick={() => navigateTo("/subscription")}
@@ -149,7 +148,7 @@ export default function Navigation(props) {
               <ListItemContent>{context.languagePicker("nav.utility.subscription")}</ListItemContent>
             </ListItemButton>
           </ListItem>}
-          {isAuthority && <ListItem>
+          {context.isAuthority && <ListItem>
             <ListItemButton
               selected={pathStartWith("/todo")}
               onClick={() => navigateTo("/todo")}
