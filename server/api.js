@@ -1,6 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 const dotenv = require('dotenv');
+const mime = require('mime');
+const isTextPath = require('is-text-path');
 const CryptoJS = require('crypto-js');
 
 // copy .env in react directory
@@ -118,7 +120,11 @@ const fileOperator = {
       return {
         name: item.name,
         size: stat.size,
-        time: stat.birthtime
+        time: stat.birthtime,
+        type: mime.getExtension(
+          mime.getType(item.name)
+        ),
+        isText: isTextPath(item.name)
       }
     });
   }
