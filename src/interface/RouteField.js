@@ -5,7 +5,7 @@ import Link from "@mui/joy/Link";
 import Typography from "@mui/joy/Typography";
 import ChevronRightRoundedIcon from "@mui/icons-material/ChevronRightRounded";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
-import GlobalContext, { globalState } from "./constants";
+import GlobalContext from "./constants";
 import Caption from "../components/Caption";
 
 const RouteFieldRaw = styled("div")(({ theme }) => ({
@@ -16,7 +16,7 @@ const RouteFieldRaw = styled("div")(({ theme }) => ({
 
 const RouteField = (props) => {
   const {
-    noCheck,
+    display,
     path,
     title,
     sxRaw,
@@ -24,22 +24,22 @@ const RouteField = (props) => {
     ...otherProps
   } = props;
   const context = React.useContext(GlobalContext);
-
   const breadcrumb = React.useMemo(() => path ?? [ ], [path]);
-  const permissionCheck = React.useMemo(() => {
-    return noCheck || context.globalSwitch === globalState.AUTHORITY;
-  }, [noCheck, context.globalSwitch]);
+
+  // const permissionCheck = React.useMemo(() => {
+  //   return noCheck || context.isAuthority;
+  // }, [noCheck, context.isAuthority]);
 
   // after second tick, the globalSwitch were set properly
-  React.useEffect(() => {
-    if (context.secondTick && !permissionCheck) {
-      const loginButton = document.querySelector("#loginButton");
-      if (loginButton) {
-        loginButton.click()
-      }
-    }
-  // eslint-disable-next-line
-  }, [context.secondTick]);
+  // React.useEffect(() => {
+  //   if (context.secondTick && !permissionCheck) {
+  //     const loginButton = document.querySelector("#loginButton");
+  //     if (loginButton) {
+  //       loginButton.click()
+  //     }
+  //   }
+  // // eslint-disable-next-line
+  // }, [context.secondTick]);
 
   return (
     <RouteFieldRaw
@@ -89,7 +89,7 @@ const RouteField = (props) => {
         className="RouteFieldRawInner"
         {...otherProps}
       >
-        {permissionCheck ? children :
+        {display ? children :
           <Caption
             title={context.languagePicker("universal.deny.title")}
             caption={context.languagePicker("universal.deny.caption")}

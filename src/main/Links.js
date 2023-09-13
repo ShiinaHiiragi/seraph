@@ -8,6 +8,7 @@ const Links = () => {
 
   return (
     <RouteField
+      display={context.isAuthority}
       path={[
         context.languagePicker("nav.utility.title"),
         context.languagePicker("nav.utility.links")
