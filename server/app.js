@@ -24,12 +24,12 @@ app.use(cors({
 app.use((req, res, next) => {
   req.status = new api.Status();
   req.status.addAuthStatus(
-    api.configOperator.config.metadata.password === ""
-      ? api.Status.authErrCode.NotInit
-      : api.tokenOperator.validateUpdateSession(
-        req.cookies.seraphSession
+    api.configOperator.config.metadata.password.length
+      ? api.tokenOperator.validateUpdateSession(
+        res, req.cookies[api.cookieOperator.sessionName]
       ) ? undefined
       : api.Status.authErrCode.InvalidToken
+      : api.Status.authErrCode.NotInit
   );
   next();
 });

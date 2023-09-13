@@ -41,10 +41,9 @@ router.post('/init', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
     if (req.status.err == api.Status.authErrCode.NotInit) {
       const { password, language } = req.body;
-      const newSession = api.tokenOperator.addNewSession();
       api.configOperator.setConfigMetadata("password", password);
       api.configOperator.setConfigSetting("meta.language", language);
-      api.cookieOperator.setSessionCookie(res, newSession);
+      api.tokenOperator.addNewSession(res);
 
       // -> return ES
       req.status.addExecStatus();
@@ -63,9 +62,8 @@ router.post('/login', (req, res, next) => {
     if (req.status.err === api.Status.authErrCode.InvalidToken) {
       const { password } = req.body;
       if (password === api.configOperator.config.metadata.password) {
+        api.tokenOperator.addNewSession(res);
         const privateFolder = api.fileOperator.readFolder(api.dataPath.privateDirPath);
-        const newSession = api.tokenOperator.addNewSession();
-        api.cookieOperator.setSessionCookie(res, newSession);
 
         // -> return ES
         req.status.addExecStatus();

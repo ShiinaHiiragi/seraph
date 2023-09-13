@@ -153,59 +153,6 @@ const configOperator = {
 exports.configOperator = configOperator;
 
 const expiredPeriod = 2 * 60 * 60 * 1000;
-const tokenOperator = {
-  token: fileOperator.readToken(),
-  setToken: (handle) => {
-    const newToken = handle(tokenOperator.token);
-    fileOperator.saveToken(newToken);
-    tokenOperator.token = newToken;
-  },
-
-  addNewSession: () => {
-    const session = CryptoJS.SHA256(
-      Array(16).fill().reduce(
-        (current) => current + Math.random().toString(36).slice(2, 6),
-        ""
-      )
-    ).toString();
-
-    tokenOperator.setToken((token) => [
-      ...token,
-      {
-        session: session,
-        timestamp: Date.now() + expiredPeriod
-      }
-    ])
-    return session;
-  },
-
-  deleteSession: (session) => {
-    tokenOperator.setToken((token) =>
-      token.filter((item) => item.session !== session)
-    );
-  },
-
-  validateUpdateSession: (session) => {
-    const __clearExpiredSessions = () => {
-      const timeNow = Date.now();
-      tokenOperator.setToken((token) => 
-        token.filter((item) => item.timestamp - timeNow > 0 )
-      );
-    };
-
-    __clearExpiredSessions();
-    sessionIndex = tokenOperator.token.findIndex((item) => item.session === session)
-    if (sessionIndex >= 0) {
-      tokenOperator.token[sessionIndex].timestamp = Date.now() + expiredPeriod;
-      fileOperator.saveToken(tokenOperator.token);
-      return true;
-    } else {
-      return false;
-    }
-  }
-};
-
-
 const cookieOperator = {
   sessionName: "seraphSession",
   setSessionCookie: (res, session) => res.cookie(
@@ -215,9 +162,66 @@ const cookieOperator = {
   )
 };
 
+const tokenOperator = {
+  token: fileOperator.readToken(),
+  setToken: (handle) => {
+    const newToken = handle(tokenOperator.token);
+    fileOperator.saveToken(newToken);
+    tokenOperator.token = newToken;
+  },
+
+  addNewSession: (res) => {
+    const session = CryptoJS.SHA256(
+      Array(16).fill().reduce(
+        (current) => current +
+          Math.random().toString(36).slice(2, 6),
+        ""
+      )
+    ).toString();
+
+    cookieOperator.setSessionCookie(res, session);
+    tokenOperator.setToken((token) => [
+      ...token,
+      {
+        session: session,
+        timestamp: Date.now() + expiredPeriod
+      }
+    ]);
+    return session;
+  },
+
+  deleteSession: (session) => {
+    tokenOperator.setToken((token) =>
+      token.filter((item) => item.session !== session)
+    );
+  },
+
+  validateUpdateSession: (res, session) => {
+    const __clearExpiredSessions = () => {
+      const timeNow = Date.now();
+      tokenOperator.setToken((token) => 
+        token.filter((item) => item.timestamp - timeNow > 0 )
+      );
+    };
+    __clearExpiredSessions();
+
+    sessionIndex = tokenOperator.token.findIndex((item) => item.session === session)
+    if (sessionIndex >= 0) {
+      cookieOperator.setSessionCookie(res, session);
+      tokenOperator.setToken((token) => {
+        token[sessionIndex].timestamp = Date.now() + expiredPeriod;
+        return token;
+      });
+      return true;
+    } else {
+      return false;
+    }
+  }
+};
+
 exports.expiredPeriod = expiredPeriod;
-exports.tokenOperator = tokenOperator;
 exports.cookieOperator = cookieOperator;
+exports.tokenOperator = tokenOperator;
 
 
 function Status() { }
