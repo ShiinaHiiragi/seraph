@@ -17,13 +17,13 @@ const ja = {
   main: {
     error: {
       title: "404",
-      caption: "要求されたページが存在ありません。"
+      caption: "リクエストされたページが存在しません。"
     }
   },
   modal: {
     toast: {
       success: {
-        init: "パスワードが設定されました、セラフのご利用ありがとうございます。",
+        init: "パスワードがセットされました。セラフのご利用いただき、ありがとうございます。",
         login: "セラフへようこそ。",
         logout: "ログアウトしました。"
       },
@@ -31,13 +31,13 @@ const ja = {
         incorrectPassword: "パスワードが間違っています。",
       },
       error: {
-        unparseableResponse: "解析不能のレスポンス：リクエストは失敗しましてエラーコードが {0} です。",
-        serverError: "サーバーエラー：リクエストは失敗しましてステータスコードが {0} です。"
+        unparseableResponse: "解析不能のレスポンス：リクエストはフェイルしましてエラーコードが {0} です。",
+        serverError: "サーバーエラー：リクエストはフェイルしましてステータスコードが {0} です。"
       }
     },
     init: {
       title: "イニシャライズ",
-      caption: "初回利用時にパスワードを設定してください。",
+      caption: "初回利用時にパスワードをセットしてください。",
       password: {
         label: "パスワード",
         placeholder: "制限なし"
@@ -50,7 +50,7 @@ const ja = {
     },
     reconfirm: {
       title: "再確認",
-      captionSecondHalf: "「続く」を押すと変更を適用できる。",
+      captionSecondHalf: "「進む」を押すと変更を適用できる。",
       captionFirstHalf: {
         logout: "セラフからログアウトしようとしています。"
       }
@@ -63,8 +63,8 @@ const ja = {
   },
   universal: {
     button: {
-      submit: "サブミット",
-      continue: "続く",
+      submit: "送信する",
+      continue: "進む",
       cancel: "キャンセル"
     },
     deny: {
@@ -72,7 +72,7 @@ const ja = {
       caption: "フルアクセスを取得するにはログインしてください。"
     },
     placeholder: {
-      title: "イン ディベロップメント",
+      title: "イン・ディベロップメント",
       caption: "必要であればギットハブで新たなイシューを提出してください。"
     }
   }

@@ -28,7 +28,7 @@ const zhCN = {
         logout: "退出成功。"
       },
       exception: {
-        incorrectPassword: "密码错误",
+        incorrectPassword: "密码错误。",
       },
       error: {
         unparseableResponse: "响应无法解析：请求失败，错误代码 {0}。",
