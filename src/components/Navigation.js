@@ -55,13 +55,13 @@ export default function Navigation(props) {
           {publicFolders.map((item, index) => (
             <ListItem key={index}>
               <ListItemButton
-                selected={pathStartWith(`/public/${item.name}`)}
-                onClick={() => navigateTo(`/public/${item.name}`)}
+                selected={pathStartWith(`/public/${item}`)}
+                onClick={() => navigateTo(`/public/${item}`)}
               >
                 <ListItemDecorator>
                   <FolderOpenIcon fontSize="small" />
                 </ListItemDecorator>
-                <ListItemContent>{item.name}</ListItemContent>
+                <ListItemContent>{item}</ListItemContent>
               </ListItemButton>
             </ListItem>
           ))}
@@ -81,13 +81,13 @@ export default function Navigation(props) {
           {privateFolders.map((item, index) => (
             <ListItem key={index}>
               <ListItemButton
-                selected={pathStartWith(`/private/${item.name}`)}
-                onClick={() => navigateTo(`/private/${item.name}`)}
+                selected={pathStartWith(`/private/${item}`)}
+                onClick={() => navigateTo(`/private/${item}`)}
               >
                 <ListItemDecorator>
                   <FolderOpenIcon fontSize="small" />
                 </ListItemDecorator>
-                <ListItemContent>{item.name}</ListItemContent>
+                <ListItemContent>{item}</ListItemContent>
               </ListItemButton>
             </ListItem>
           ))}

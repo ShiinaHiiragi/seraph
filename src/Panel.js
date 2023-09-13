@@ -29,8 +29,7 @@ import GlobalContext, {
   defaultSetting,
   Status,
   request,
-  toastTheme,
-  formatter
+  toastTheme
 } from "./interface/constants";
 
 const Root = styled('div')(({ theme }) => ({
@@ -130,11 +129,11 @@ const Panel = () => {
     request("GET/auth/meta")
       .then((data) => {
         setSetting(data.setting);
-        setPublicFolders(formatter.data.public);
+        setPublicFolders(data.public);
         setFirstTick(true);
 
         if (data.private) {
-          setPrivateFolders(formatter.data.private);
+          setPrivateFolders(data.private);
           setGlobalSwitch(globalState.AUTHORITY);
         } else {
           setGlobalSwitch(globalState.ANONYMOUS);

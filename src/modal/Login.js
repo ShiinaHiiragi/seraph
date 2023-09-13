@@ -12,7 +12,6 @@ import Input from "@mui/joy/Input";
 import Stack from "@mui/joy/Stack";
 import GlobalContext, {
   request,
-  formatter,
   globalState,
   Status
 } from "../interface/constants";
@@ -50,7 +49,7 @@ export default function Login(props) {
         handleCloseModal();
         toast(context.languagePicker("modal.toast.success.login"));
 
-        setPrivateFolders(formatter.data.private);
+        setPrivateFolders(data.private);
         setGlobalSwitch(globalState.AUTHORITY);
       })
       .catch((data) => {
