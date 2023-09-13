@@ -55,7 +55,7 @@ const Header = (props) => {
         setGlobalSwitch(globalState.ANONYMOUS);
       })
       .catch(request.unparseableResponse)
-  }, [setGlobalSwitch])
+  }, [context, setGlobalSwitch])
 
   return (
     <HeaderLayout>

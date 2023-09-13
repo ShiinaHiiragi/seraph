@@ -47,6 +47,10 @@ const en = {
       title: "Login",
       caption: "Please enter password to acquire full access.",
       password: "Password"
+    },
+    reconfirm: {
+      title: "Reconfirmation",
+      captionSecondHalf: "Click 'Continue' to apply changes."
     }
   },
   setting: {
@@ -56,7 +60,9 @@ const en = {
   },
   universal: {
     button: {
-      submit: "Submit"
+      submit: "Submit",
+      continue: "Continue",
+      cancel: "Cancel"
     },
     placeholder: {
       title: "In Development",

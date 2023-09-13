@@ -8,7 +8,6 @@ import { Toaster } from "sonner";
 import Header from "./components/Header";
 import Navigation from "./components/Navigation";
 import SideDrawer from "./components/SideDrawer";
-import Init from "./modal/Init";
 
 import Welcome from "./main/Welcome";
 import FileExplorer from "./main/FileExplorer"
@@ -18,6 +17,9 @@ import Milkdown from "./main/Milkdown";
 import Subscription from "./main/Subscription";
 import TODO from "./main/TODO";
 import Error from "./main/Error";
+
+import Init from "./modal/Init";
+import Reconfirm from "./modal/Reconfirm";
 
 import { languagePickerSpawner } from "./interface/languagePicker";
 import GlobalTheme from "./interface/theme";
@@ -97,6 +99,7 @@ const Panel = () => {
   // independent components
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [modalInitOpen, setModalInitOpen] = React.useState(false);
+  const [modalReconfirmOpen, setModalReconfirmOpen] = React.useState(true);
 
   // global states
   const [globalSwitch, setGlobalSwitch] = React.useState(globalState.INNOCENT);
@@ -195,6 +198,10 @@ const Panel = () => {
             setSetting={setSetting}
             modalInitOpen={modalInitOpen}
             setModalInitOpen={setModalInitOpen}
+          />
+          <Reconfirm
+            modalReconfirmOpen={modalReconfirmOpen}
+            setModalReconfirmOpen={setModalReconfirmOpen}
           />
           <Toaster position="top-center" richColors closeButton />
         </CssVarsProvider>

@@ -47,6 +47,10 @@ const ja = {
       title: "ログイン",
       caption: "フルアクセスを取得するにはパスワードを入力してください。",
       password: "パスワード"
+    },
+    reconfirm: {
+      title: "再確認",
+      captionSecondHalf: "「続く」を押すと変更を適用できる。"
     }
   },
   setting: {
@@ -56,10 +60,12 @@ const ja = {
   },
   universal: {
     button: {
-      submit: "サブミット"
+      submit: "サブミット",
+      continue: "続く",
+      cancel: "キャンセル"
     },
     placeholder: {
-      title: "開発中",
+      title: "イン ディベロップメント",
       caption: "必要であればギットハブで新たなイシューを提出してください。"
     }
   }

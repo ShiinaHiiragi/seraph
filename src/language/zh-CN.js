@@ -47,6 +47,10 @@ const zhCN = {
       title: "登录",
       caption: "请输入密码以获得完全访问权限。",
       password: "密码"
+    },
+    reconfirm: {
+      title: "二次确认",
+      captionSecondHalf: "点击「继续」以应用更改。"
     }
   },
   setting: {
@@ -56,7 +60,9 @@ const zhCN = {
   },
   universal: {
     button: {
-      submit: "提交"
+      submit: "提交",
+      continue: "继续",
+      cancel: "取消"
     },
     placeholder: {
       title: "开发中",
