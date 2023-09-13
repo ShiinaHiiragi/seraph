@@ -99,7 +99,11 @@ const Panel = () => {
   // independent components
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [modalInitOpen, setModalInitOpen] = React.useState(false);
-  const [modalReconfirmOpen, setModalReconfirmOpen] = React.useState(true);
+  const [modalReconfirm, setModalReconfirm] = React.useState({
+    open: false,
+    captionFirstHalf: "",
+    handleAction: () => { }
+  });
 
   // global states
   const [globalSwitch, setGlobalSwitch] = React.useState(globalState.INNOCENT);
@@ -200,8 +204,10 @@ const Panel = () => {
             setModalInitOpen={setModalInitOpen}
           />
           <Reconfirm
-            modalReconfirmOpen={modalReconfirmOpen}
-            setModalReconfirmOpen={setModalReconfirmOpen}
+            modalReconfirmOpen={modalReconfirm.open}
+            captionFirstHalf={modalReconfirm.captionFirstHalf}
+            handleAction={modalReconfirm.handleAction}
+            setModalReconfirm={setModalReconfirm}
           />
           <Toaster position="top-center" richColors closeButton />
         </CssVarsProvider>
