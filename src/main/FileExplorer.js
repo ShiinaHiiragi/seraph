@@ -14,7 +14,7 @@ const FileExplorer = (props) => {
 
   return (
     <RouteField
-      noCheck
+      noCheck={type === "public"}
       path={[
         context.languagePicker(`nav.${type}`),
         folderName

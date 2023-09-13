@@ -111,6 +111,12 @@ const Panel = () => {
   const [publicFolders, setPublicFolders] = React.useState([]);
   const [privateFolders, setPrivateFolders] = React.useState([]);
 
+  // global clocks, only set once
+  // when set to true, the corresponding tick ends
+  // explicit life cycles
+  const [firstTick, setFirstTick] = React.useState(false);
+  const [secondTick, setSecondTick] = React.useState(false);
+
   // language related
   const languagePicker = React.useMemo(() => {
     ConstantContext.languagePicker = languagePickerSpawner(setting.meta.language);
@@ -119,12 +125,14 @@ const Panel = () => {
     return languagePickerSpawner(setting.meta.language);
   }, [setting.meta.language]);
 
-  // init the whole page; only load once
+  // first tick start on page loaded
+  // first tick end after receiving metadata
   React.useEffect(() => {
     request("GET/auth/meta")
       .then((data) => {
         setSetting(data.setting);
         setPublicFolders(formatter.folderFormatter(data.public));
+        setFirstTick(true);
 
         if (data.private) {
           setPrivateFolders(formatter.folderFormatter(data.private));
@@ -143,12 +151,24 @@ const Panel = () => {
       })
   }, [])
 
+  // second tick starts after first tick were set
+  // second tick end after globalSwitch were set
+  React.useEffect(() => {
+    if (firstTick) {
+      console.log(globalSwitch);
+      setSecondTick(true);
+    }
+  // eslint-disable-next-line
+  }, [globalSwitch]);
+
   return (
     <GlobalContext.Provider
       value={{
         languagePicker: languagePicker,
+        setModalReconfirm: setModalReconfirm,
         globalSwitch: globalSwitch,
-        setModalReconfirm: setModalReconfirm
+        firstTick: firstTick,
+        secondTick: secondTick
       }}
     >
       <GlobalStyles styles={toastTheme} />
@@ -199,6 +219,7 @@ const Panel = () => {
             </ContentField>
           </BrowserRouter>
           <Init
+            setFirstTick={setFirstTick}
             setGlobalSwitch={setGlobalSwitch}
             setting={setting}
             setSetting={setSetting}

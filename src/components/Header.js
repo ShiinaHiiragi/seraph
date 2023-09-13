@@ -49,6 +49,7 @@ const Header = (props) => {
   const context = React.useContext(GlobalContext);
   const navigate = useNavigate();
 
+  const isAuthority = context.globalSwitch === globalState.AUTHORITY;
   const [modalLoginOpen, setModalLoginOpen] = React.useState(false);
   const handleLogout = React.useCallback(() => {
     request("POST/auth/logout")
@@ -89,7 +90,7 @@ const Header = (props) => {
         </Typography>
       </Box>
       <Box sx={{ display: "flex", flexDirection: "row", gap: 1.5 }}>
-        {context.globalSwitch === globalState.AUTHORITY &&
+        {isAuthority &&
           <IconButton
             size="sm"
             variant="outlined"
@@ -97,7 +98,7 @@ const Header = (props) => {
           >
             <SettingsOutlinedIcon />
           </IconButton>}
-        {context.globalSwitch === globalState.AUTHORITY
+        {isAuthority
           ? <IconButton
             size="sm"
             variant="outlined"

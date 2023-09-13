@@ -21,14 +21,16 @@ const RouteField = (props) => {
   const permissionCheck = noCheck || context.globalSwitch === globalState.AUTHORITY;
   const breadcrumb = path ?? [ ];
 
+  // after second tick, the globalSwitch were set properly
   React.useEffect(() => {
-    if (!permissionCheck) {
+    if (context.secondTick && !permissionCheck) {
       const loginButton = document.querySelector("#loginButton");
       if (loginButton) {
         loginButton.click()
       }
     }
-  }, [permissionCheck])
+  // eslint-disable-next-line
+  }, [context.secondTick]);
 
   return (
     <RouteFieldRaw

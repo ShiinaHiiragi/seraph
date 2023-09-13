@@ -37,6 +37,7 @@ const AlignedOption = (props) => {
 
 export default function Init(props) {
   const {
+    setFirstTick,
     setGlobalSwitch,
     setting,
     setSetting,
@@ -60,6 +61,7 @@ export default function Init(props) {
 
         toast.success(context.languagePicker("modal.toast.success.init"));
         setGlobalSwitch(globalState.AUTHORITY);
+        setFirstTick(true);
       })
       .catch((data) => {
         setFormPasswordDisabled(false);
@@ -70,7 +72,8 @@ export default function Init(props) {
     setting.meta.language,
     formPasswordText,
     setGlobalSwitch,
-    setModalInitOpen
+    setModalInitOpen,
+    setFirstTick
   ]);
 
   return (
