@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const dotenv = require('dotenv');
 const mime = require('mime');
-const isTextPath = require('is-text-path');
+const isBinaryPath = require('is-binary-path');
 const CryptoJS = require('crypto-js');
 
 // copy .env in react directory
@@ -124,7 +124,7 @@ const fileOperator = {
         type: mime.getExtension(
           mime.getType(item.name)
         ),
-        isText: isTextPath(item.name)
+        bin: isBinaryPath(item.name)
       }
     });
   }

@@ -14,7 +14,7 @@
     "dotenv": "^16.3.1",
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
-    "is-text-path": "^2.0.0",
+    "is-binary-path": "^2.1.0",
     "mime": "^3.0.0",
     "morgan": "~1.9.1",
     "node-dev": "^8.0.0"
