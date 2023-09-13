@@ -146,7 +146,8 @@ const Panel = () => {
     <GlobalContext.Provider
       value={{
         languagePicker: languagePicker,
-        globalSwitch: globalSwitch
+        globalSwitch: globalSwitch,
+        setModalReconfirm: setModalReconfirm
       }}
     >
       <GlobalStyles styles={toastTheme} />
@@ -204,9 +205,7 @@ const Panel = () => {
             setModalInitOpen={setModalInitOpen}
           />
           <Reconfirm
-            modalReconfirmOpen={modalReconfirm.open}
-            captionFirstHalf={modalReconfirm.captionFirstHalf}
-            handleAction={modalReconfirm.handleAction}
+            modalReconfirm={modalReconfirm}
             setModalReconfirm={setModalReconfirm}
           />
           <Toaster position="top-center" richColors closeButton />

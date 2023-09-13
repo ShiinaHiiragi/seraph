@@ -50,7 +50,10 @@ const en = {
     },
     reconfirm: {
       title: "Reconfirmation",
-      captionSecondHalf: "Click 'Continue' to apply changes."
+      captionSecondHalf: "Click 'Continue' to apply changes.",
+      captionFirstHalf: {
+        logout: "You are logging out Seraph."
+      }
     }
   },
   setting: {

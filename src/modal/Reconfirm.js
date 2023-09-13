@@ -10,9 +10,7 @@ import GlobalContext from "../interface/constants";
 
 export default function Reconfirm(props) {
   const {
-    modalReconfirmOpen,
-    captionFirstHalf,
-    handleAction,
+    modalReconfirm,
     setModalReconfirm
   } = props;
   const context = React.useContext(GlobalContext);
@@ -26,7 +24,7 @@ export default function Reconfirm(props) {
 
   return (
     <Modal
-      open={modalReconfirmOpen}
+      open={modalReconfirm.open}
       onClose={closeModalReconfirm}
       sx={{ userSelect: "none" }}
     >
@@ -45,13 +43,17 @@ export default function Reconfirm(props) {
         </Typography>
         <Divider />
         <Typography id="alert-dialog-modal-description" textColor="text.tertiary">
-          {captionFirstHalf + context.languagePicker("modal.reconfirm.captionSecondHalf")}
+          {modalReconfirm.captionFirstHalf + 
+            context.languagePicker("modal.reconfirm.captionSecondHalf")}
         </Typography>
         <Box sx={{ display: "flex", gap: 1, justifyContent: "flex-end", pt: 2 }}>
           <Button variant="plain" color="neutral" onClick={closeModalReconfirm}>
             {context.languagePicker("universal.button.cancel")}
           </Button>
-          <Button variant="solid" color="danger" onClick={handleAction}>
+          <Button variant="solid" color="danger" onClick={() => {
+            modalReconfirm.handleAction();
+            closeModalReconfirm();
+          }}>
             {context.languagePicker("universal.button.continue")}
           </Button>
         </Box>

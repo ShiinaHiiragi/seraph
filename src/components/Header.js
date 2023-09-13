@@ -48,7 +48,7 @@ const Header = (props) => {
   const context = React.useContext(GlobalContext);
 
   const [modalLoginOpen, setModalLoginOpen] = React.useState(false);
-  const handleLogoutClick = React.useCallback(() => {
+  const handleLogout = React.useCallback(() => {
     request("POST/auth/logout")
       .then((data) => {
         toast.success(context.languagePicker("modal.toast.success.logout"));
@@ -99,7 +99,11 @@ const Header = (props) => {
             size="sm"
             variant="outlined"
             color="danger"
-            onClick={handleLogoutClick}
+            onClick={() => context.setModalReconfirm({
+              open: true,
+              captionFirstHalf: context.languagePicker("modal.reconfirm.captionFirstHalf.logout"),
+              handleAction: handleLogout
+            })}
           >
             <LogoutOutlinedIcon />
           </IconButton>

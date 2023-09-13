@@ -50,7 +50,10 @@ const ja = {
     },
     reconfirm: {
       title: "再確認",
-      captionSecondHalf: "「続く」を押すと変更を適用できる。"
+      captionSecondHalf: "「続く」を押すと変更を適用できる。",
+      captionFirstHalf: {
+        logout: "セラフからログアウトしようとしています。"
+      }
     }
   },
   setting: {
