@@ -71,6 +71,10 @@ const zhHans = {
     }
   },
   universal: {
+    time: {
+      dateFormat: "yyyy-MM-dd",
+      timeFormat: "hh:mm:ss"
+    },
     button: {
       submit: "提交",
       continue: "继续",

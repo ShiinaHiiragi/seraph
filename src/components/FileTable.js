@@ -94,7 +94,15 @@ export default function FileTable(props) {
               <td><Typography level="body-xs">{item.name}</Typography></td>
               <td><Typography level="body-xs">{item.size.sizeFormat()}</Typography></td>
               <td><Typography level="body-xs">{item.type}</Typography></td>
-              <td><Typography level="body-xs">{item.time}</Typography></td>
+              <td>
+                <Typography level="body-xs">
+                  {item.time.timeFormat(
+                    context.languagePicker("universal.time.dateFormat")
+                      + " "
+                      + context.languagePicker("universal.time.timeFormat")
+                  )}
+                </Typography>
+              </td>
               <td>
                 <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
                   <RowMenu />

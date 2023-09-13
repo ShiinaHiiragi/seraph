@@ -71,6 +71,10 @@ const en = {
     }
   },
   universal: {
+    time: {
+      dateFormat: "MM/dd/yyyy",
+      timeFormat: "hh:mm:ss"
+    },
     button: {
       submit: "Submit",
       continue: "Continue",

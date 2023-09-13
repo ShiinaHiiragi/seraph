@@ -71,6 +71,10 @@ const ja = {
     }
   },
   universal: {
+    time: {
+      dateFormat: "yyyy 年 MM 月 dd 日",
+      timeFormat: "hh:mm:ss"
+    },
     button: {
       submit: "送信する",
       continue: "進む",

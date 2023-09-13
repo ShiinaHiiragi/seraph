@@ -24,6 +24,44 @@ Number.prototype.sizeFormat = function() {
   return formatted.toFixed(1).replace(/\.0$/, '') + " " + suffix[index];
 }
 
+// eslint-disable-next-line
+Date.prototype.timeFormat = function(formatString) {
+  let formatted = this;
+  let formatComponent = {
+    "M+": formatted.getMonth() + 1,
+    "d+": formatted.getDate(),
+    "h+": formatted.getHours(),
+    "m+": formatted.getMinutes(),
+    "s+": formatted.getSeconds(),
+    "q+": Math.floor((formatted.getMonth() + 3) / 3),
+    S: formatted.getMilliseconds()
+  };
+
+  formatString = formatString.replace(/(y+)/, (_, _1) => {
+    return ("" + formatted.getFullYear()).slice(4 - _1.length)
+  });
+
+  for (let index in formatComponent) {
+    formatString = formatString.replace(
+      new RegExp(`(${index})`),
+      (_, _1) => {
+        return _1.length === 1
+          ? formatComponent[index]
+          : ("00" + formatComponent[index]).slice(
+            ("" + formatComponent[index]).length
+          )
+      }
+    )
+  }
+  return formatString;
+};
+
+// eslint-disable-next-line
+String.prototype.timeFormat = function(formatString) {
+  return new Date(this).timeFormat(formatString);
+}
+
+
 const GlobalContext = React.createContext({ });
 const ConstantContext = { };
 const globalState = {
