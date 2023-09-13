@@ -26,7 +26,12 @@ export default function Reconfirm(props) {
     <Modal
       open={modalReconfirm.open}
       onClose={handleCloseModalReconfirm}
-      sx={{ userSelect: "none" }}
+      sx={{
+        userSelect: "none",
+        "& ::selection": {
+          background: "rgb(173, 214, 255)"
+        }
+      }}
     >
       <ModalDialog
         variant="outlined"

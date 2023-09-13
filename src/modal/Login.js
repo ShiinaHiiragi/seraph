@@ -76,7 +76,12 @@ export default function Login(props) {
     <Modal
       open={modalLoginOpen}
       onClose={handleCloseModal}
-      sx={{ userSelect: "none" }}
+      sx={{
+        userSelect: "none",
+        "& ::selection": {
+          background: "rgb(173, 214, 255)"
+        }
+      }}
     >
       <ModalDialog
         variant="outlined"

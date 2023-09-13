@@ -77,7 +77,15 @@ export default function Init(props) {
   ]);
 
   return (
-    <Modal open={modalInitOpen} sx={{ userSelect: "none" }}>
+    <Modal
+      open={modalInitOpen}
+      sx={{
+        userSelect: "none",
+        "& ::selection": {
+          background: "rgb(173, 214, 255)"
+        }
+      }}
+    >
       <ModalDialog
         variant="outlined"
         role="alertdialog"
