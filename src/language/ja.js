@@ -31,7 +31,6 @@ const ja = {
         incorrectPassword: "パスワードが間違っています。",
       },
       error: {
-        incorrectPassword: "パスワードが間違っています。",
         unparseableResponse: "解析不能のレスポンス：リクエストは失敗しましてエラーコードが {0} です。",
         serverError: "サーバーエラー：リクエストは失敗しましてステータスコードが {0} です。"
       }
