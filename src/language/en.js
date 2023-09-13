@@ -2,7 +2,7 @@ const en = {
   header: {
   },
   nav: {
-    title: "SERAPH",
+    title: "Seraph",
     public: "Public",
     private: "Private",
     utility: {
@@ -23,8 +23,8 @@ const en = {
   modal: {
     toast: {
       success: {
-        init: "Password is set successfully. Thanks for using SERAPH.",
-        login: "Welcome back to SERAPH.",
+        init: "Password is set successfully. Thanks for using Seraph.",
+        login: "Welcome back to Seraph.",
         logout: "Logged out successfully."
       },
       exception: {

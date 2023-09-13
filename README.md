@@ -1,4 +1,4 @@
-# SERAPH
+# Seraph
 
 <p align="right"> Ichinoe </p>
 
