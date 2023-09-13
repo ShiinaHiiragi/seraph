@@ -17,7 +17,7 @@ const ja = {
   main: {
     error: {
       title: "404",
-      caption: "要求されたパスが存在ありません。"
+      caption: "要求されたページが存在ありません。"
     }
   },
   modal: {

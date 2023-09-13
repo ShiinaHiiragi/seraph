@@ -17,7 +17,7 @@ const zhCN = {
   main: {
     error: {
       title: "404",
-      caption: "请求的路径不存在。"
+      caption: "请求的页面不存在。"
     }
   },
   modal: {

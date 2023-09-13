@@ -17,7 +17,7 @@ const en = {
   main: {
     error: {
       title: "404",
-      caption: "The requested path does not exist."
+      caption: "The requested page does not exist."
     }
   },
   modal: {
