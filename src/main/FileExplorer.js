@@ -60,6 +60,7 @@ const FileExplorer = (props) => {
   // states and function for rename
   const [modalRenameOpen, setModalRenameOpen] = React.useState(null);
   const [formNewNameText, setFormNewNameText] = React.useState("");
+  const [modalRenameDisabled, setModalRenameDisabled] = React.useState(false);
   const handleRename = React.useCallback(() => {
     if (!isValidFilename(formNewNameText)) {
       toast.error(context.languagePicker("modal.toast.warning.illegalRename"));
@@ -67,12 +68,17 @@ const FileExplorer = (props) => {
     }
 
     const originFilename = `${modalRenameOpen}`;
-    request("POST/file/rename", {
-      type: type,
-      folderName: folderName,
-      filename: originFilename,
-      newFilename: formNewNameText
-    })
+    setModalRenameDisabled(true);
+    request(
+      "POST/file/rename",
+      {
+        type: type,
+        folderName: folderName,
+        filename: originFilename,
+        newFilename: formNewNameText
+      },
+      { "": () => setModalRenameDisabled(false) }
+    )
       .then((data) => {
         setModalRenameOpen(null);
         setFilesList((filesList) => filesList.map((item) =>
@@ -85,6 +91,7 @@ const FileExplorer = (props) => {
         ));
         toast.success(context.languagePicker("modal.toast.success.rename"));
       })
+      .finally(() => setModalRenameDisabled(false));
   }, [
     context,
     type,
@@ -96,16 +103,21 @@ const FileExplorer = (props) => {
   // states and function for move
   const [modalMoveOpen, setModalMoveOpen] = React.useState(null);
   const [formSelectedFolder, setFormSelectedFolder] = React.useState([null, null]);
+  const [modalMoveDisabled, setModalMoveDisabled] = React.useState(false);
   const handleMove = React.useCallback(() => {
     const filename = `${modalMoveOpen}`;
-
-    request("POST/file/move", {
-      type: type,
-      folderName: folderName,
-      filename: filename,
-      newType: formSelectedFolder[0],
-      newFolderName: formSelectedFolder[1]
-    })
+    setModalMoveDisabled(true);
+    request(
+      "POST/file/move",
+      {
+        type: type,
+        folderName: folderName,
+        filename: filename,
+        newType: formSelectedFolder[0],
+        newFolderName: formSelectedFolder[1]
+      },
+      { "": () => setModalMoveDisabled(false) }
+    )
       .then(() => {
         setModalMoveOpen(null);
         setFormSelectedFolder([null, null]);
@@ -114,6 +126,7 @@ const FileExplorer = (props) => {
         ));
         toast.success(context.languagePicker("modal.toast.success.move"));
       })
+      .finally(() => setModalMoveDisabled(true));
   }, [
     context,
     type,
@@ -188,7 +201,11 @@ const FileExplorer = (props) => {
         />}
       <ModalForm
         open={Boolean(modalRenameOpen)}
-        disabled={formNewNameText.length === 0 || formNewNameText === modalRenameOpen}
+        disabled={
+          modalRenameDisabled
+          || formNewNameText.length === 0
+          || formNewNameText === modalRenameOpen
+        }
         handleClose={() => setModalRenameOpen(null)}
         handleClick={handleRename}
         title={context.languagePicker("modal.form.rename.title")}
@@ -204,7 +221,10 @@ const FileExplorer = (props) => {
       </ModalForm>
       <ModalForm
         open={Boolean(modalMoveOpen)}
-        disabled={formSelectedFolder[1] === null}
+        disabled={
+          modalMoveDisabled
+          || formSelectedFolder[1] === null
+        }
         handleClose={() => {
           setModalMoveOpen(false);
           setFormSelectedFolder([null, null]);

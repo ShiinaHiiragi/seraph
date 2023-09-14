@@ -9,11 +9,11 @@ import IconButton from "@mui/joy/IconButton";
 import Typography from "@mui/joy/Typography"
 import GreyLogo from "../logo-grey.svg";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
-import CloudOutlinedIcon from "@mui/icons-material/CloudOutlined";
-import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
-import EventNoteOutlinedIcon from "@mui/icons-material/EventNoteOutlined";
-import ForwardToInboxOutlinedIcon from "@mui/icons-material/ForwardToInboxOutlined";
-import DoneIcon from "@mui/icons-material/Done";
+// import CloudOutlinedIcon from "@mui/icons-material/CloudOutlined";
+// import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
+// import EventNoteOutlinedIcon from "@mui/icons-material/EventNoteOutlined";
+// import ForwardToInboxOutlinedIcon from "@mui/icons-material/ForwardToInboxOutlined";
+// import DoneIcon from "@mui/icons-material/Done";
 import GlobalContext from "../interface/constants";
 import { pathStartWith } from "../interface/constants";
 import { useNavigate } from "react-router-dom";

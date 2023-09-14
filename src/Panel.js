@@ -27,7 +27,6 @@ import GlobalContext, {
   ConstantContext,
   globalState,
   defaultSetting,
-  Status,
   request,
   toastTheme
 } from "./interface/constants";
