@@ -3,14 +3,17 @@ import { toast } from "sonner";
 import Box from "@mui/joy/Box";
 import IconButton from "@mui/joy/IconButton";
 import Typography from "@mui/joy/Typography"
+import FormControl from "@mui/joy/FormControl";
+import FormLabel from "@mui/joy/FormLabel";
+import Input from "@mui/joy/Input";
 import MenuIcon from "@mui/icons-material/Menu";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import { useNavigate } from "react-router-dom";
 import GreyLogo from "../logo-grey.svg";
-import GlobalContext, { globalState, request } from "../interface/constants";
-import Login from "../modal/Login";
+import GlobalContext, { globalState, request, Status } from "../interface/constants";
+import ModalForm from "../modal/Form";
 
 const HeaderLayout = (props) => {
   return (
@@ -50,7 +53,53 @@ const Header = (props) => {
   const context = React.useContext(GlobalContext);
   const navigate = useNavigate();
 
+  // function and states for login
   const [modalLoginOpen, setModalLoginOpen] = React.useState(false);
+  const [buttonDisabled, setButtonDisabled] = React.useState(false);
+  const [formPasswordError, setFormPasswordError] = React.useState(false);
+  const [formPasswordText, setFormPasswordText] = React.useState("");
+
+  const handleCloseLogin = React.useCallback(() => {
+    setModalLoginOpen(false);
+    setButtonDisabled(false);
+    setFormPasswordError(false);
+    setFormPasswordText("");
+  }, [
+    setModalLoginOpen,
+    setButtonDisabled,
+    setFormPasswordError,
+    setFormPasswordText
+  ]);
+
+  const handleLogin = React.useCallback(() => {
+    setButtonDisabled(true);
+    request("POST/auth/login", { password: formPasswordText })
+      .then((data) => {
+        handleCloseLogin();
+        toast(context.languagePicker("modal.toast.success.login"));
+        setPrivateFolders(data.private);
+        setGlobalSwitch(globalState.AUTHORITY);
+      })
+      .catch((data) => {
+        setButtonDisabled(false);
+        if (data.statusCode === Status.statusCode.ExecFailed
+          && data.errorCode === Status.execErrCode.IncorrectPassword
+        ) {
+          setFormPasswordError(true);
+          toast.error(context.languagePicker("modal.toast.exception.incorrectPassword"));
+        } else {
+          request.unparseableResponse(data);
+        }
+      })
+  }, [
+    context,
+    setGlobalSwitch,
+    setPrivateFolders,
+    formPasswordText,
+    handleCloseLogin
+  ]);
+
+  // function for logout
   const handleLogout = React.useCallback(() => {
     request("POST/auth/logout")
       .then((data) => {
@@ -137,12 +186,29 @@ const Header = (props) => {
           </IconButton>
         }
       </Box>
-      <Login
-        setGlobalSwitch={setGlobalSwitch}
-        setPrivateFolders={setPrivateFolders}
-        modalLoginOpen={modalLoginOpen}
-        setModalLoginOpen={setModalLoginOpen}
-      />
+      <ModalForm
+        open={modalLoginOpen}
+        disabled={buttonDisabled || formPasswordText.length === 0}
+        handleCloseModal={handleCloseLogin}
+        handleClickSubmit={handleLogin}
+        title={context.languagePicker("modal.login.title")}
+        caption={context.languagePicker("modal.login.caption")}
+        button={context.languagePicker("universal.button.submit")}
+      >
+        <form>
+          <Input type="text" autoComplete="username" sx={{ display: "none" }} />
+          <FormControl>
+            <FormLabel>{context.languagePicker("modal.login.password")}</FormLabel>
+            <Input
+              value={formPasswordText}
+              autoComplete="current-password"
+              onChange={(event) => setFormPasswordText(event.target.value)}
+              slotProps={{ input: { type: "password" } }}
+              error={formPasswordError}
+            />
+          </FormControl>
+        </form>
+      </ModalForm>
     </HeaderLayout>
   );
 }
