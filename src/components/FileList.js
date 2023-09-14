@@ -21,7 +21,7 @@ import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import BlockIcon from '@mui/icons-material/Block';
 import AutorenewRoundedIcon from '@mui/icons-material/AutorenewRounded';
 
-const listItems = [
+const filesList = [
   {
     id: 'INV-1234',
     date: 'Feb 3, 2023',
@@ -104,7 +104,11 @@ function RowMenu() {
   );
 }
 
-export default function FileList() {
+export default function FileList(props) {
+  const {
+    filesList
+  } = props;
+
   return (
     <Box
       sx={{
@@ -113,13 +117,11 @@ export default function FileList() {
       }}
     >
       <ListDivider sx={{ mb: 1 }} />
-      {listItems.map((listItem) => (
+      {filesList.map((item, index) => (
         <List
-          key={listItem.id}
+          key={index}
           size="sm"
-          sx={{
-            '--ListItem-paddingX': 0,
-          }}
+          sx={{ '--ListItem-paddingX': 0 }}
         >
           <ListItem
             sx={{
@@ -129,15 +131,12 @@ export default function FileList() {
             }}
           >
             <ListItemContent sx={{ display: 'flex', gap: 2, alignItems: 'start' }}>
-              <ListItemDecorator>
-                <Avatar size="sm">{listItem.customer.initial}</Avatar>
-              </ListItemDecorator>
               <div>
                 <Typography fontWeight={600} gutterBottom>
-                  {listItem.customer.name}
+                  {item.name}
                 </Typography>
                 <Typography level="body-xs" gutterBottom>
-                  {listItem.customer.email}
+                  {item.type}
                 </Typography>
                 <Box
                   sx={{
@@ -148,38 +147,13 @@ export default function FileList() {
                     mb: 1,
                   }}
                 >
-                  <Typography level="body-xs">{listItem.date}</Typography>
+                  <Typography level="body-xs">{item.size}</Typography>
                   <Typography level="body-xs">&bull;</Typography>
-                  <Typography level="body-xs">{listItem.id}</Typography>
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
-                  <Link level="body-sm" component="button">
-                    Download
-                  </Link>
-                  <RowMenu />
+                  <Typography level="body-xs">{item.time}</Typography>
                 </Box>
               </div>
             </ListItemContent>
-            <Chip
-              variant="soft"
-              size="sm"
-              startDecorator={
-                {
-                  Paid: <CheckRoundedIcon />,
-                  Refunded: <AutorenewRoundedIcon />,
-                  Cancelled: <BlockIcon />,
-                }[listItem.status]
-              }
-              color={
-                {
-                  Paid: 'success',
-                  Refunded: 'neutral',
-                  Cancelled: 'danger',
-                }[listItem.status]
-              }
-            >
-              {listItem.status}
-            </Chip>
+            <RowMenu />
           </ListItem>
           <ListDivider />
         </List>
