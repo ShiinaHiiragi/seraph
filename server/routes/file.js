@@ -2,6 +2,7 @@ let express = require('express');
 let fs = require('fs');
 let path = require('path');
 let api = require('../api');
+const mime = require('mime');
 let router = express.Router();
 
 router.post('/upload', (req, res, next) => {
@@ -42,7 +43,10 @@ router.post('/rename', (req, res, next) => {
 
   // -> ES: no extra info
   req.status.addExecStatus();
-  res.send(req.status.generateReport());
+  res.send({
+    ...req.status.generateReport(),
+    type: mime.getType(newFilePath)
+  });
   return;
 });
 

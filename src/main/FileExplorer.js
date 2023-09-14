@@ -66,13 +66,14 @@ const FileExplorer = (props) => {
       filename: modalRenameOpen,
       newFilename: formNewNameText
     })
-      .then(() => {
+      .then((data) => {
         setModalRenameOpen(null);
         setFilesList((filesList) => filesList.map((item) =>
           item.name === originFilename
             ? {
               ...item,
-              name: formNewNameText
+              name: formNewNameText,
+              type: data.type
             } : item
           ));
         toast.success(context.languagePicker("modal.toast.success.rename"));
