@@ -131,6 +131,7 @@ const FileExplorer = (props) => {
             sortedFilesList={sortedFilesList}
             setModalRenameOpen={setModalRenameOpen}
             setFormNewNameText={setFormNewNameText}
+            setFilesList={setFilesList}
           />
           <FileList
             type={type}
@@ -138,6 +139,7 @@ const FileExplorer = (props) => {
             sortedFilesList={sortedFilesList}
             setModalRenameOpen={setModalRenameOpen}
             setFormNewNameText={setFormNewNameText}
+            setFilesList={setFilesList}
           />
         </React.Fragment>}
       {folderState < 0 &&

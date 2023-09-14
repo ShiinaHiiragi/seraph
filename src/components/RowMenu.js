@@ -1,4 +1,5 @@
 import React from "react";
+import { toast } from "sonner";
 import Divider from "@mui/joy/Divider";
 import Menu from "@mui/joy/Menu";
 import MenuButton from "@mui/joy/MenuButton";
@@ -6,7 +7,7 @@ import MenuItem from "@mui/joy/MenuItem";
 import Dropdown from "@mui/joy/Dropdown";
 import IconButton from "@mui/joy/IconButton";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
-import GlobalContext from "../interface/constants";
+import GlobalContext, { request } from "../interface/constants";
 
 export default function RowMenu(props) {
   const {
@@ -14,7 +15,8 @@ export default function RowMenu(props) {
     folderName,
     filename,
     setModalRenameOpen,
-    setFormNewNameText
+    setFormNewNameText,
+    setFilesList
   } = props;
   const context = React.useContext(GlobalContext);
 
@@ -23,9 +25,20 @@ export default function RowMenu(props) {
     setModalRenameOpen(filename);
   }, [setFormNewNameText, setModalRenameOpen, filename]);
 
-  const handleDelete = React.useCallback(() => {
-    // TODO: fill this
-  }, [ ])
+  const handleDelete = React.useCallback((type, folderName, filename) => {
+    request("POST/file/delete", {
+      type: type,
+      folderName: folderName,
+      filename: filename
+    })
+      .then(() => {
+        toast.success(context.languagePicker("modal.toast.success.delete"));
+        setFilesList((filesList) => filesList.filter(
+          (item) => item.name !== filename
+        ));
+      })
+      .catch(request.unparseableResponse)
+  }, [setFilesList])
 
   return (
     <Dropdown>
@@ -51,7 +64,7 @@ export default function RowMenu(props) {
               captionFirstHalf: context
                 .languagePicker("modal.reconfirm.captionFirstHalf.delete")
                 .format(folderName + "/" + filename),
-              handleAction: () => handleDelete()
+              handleAction: () => handleDelete(type, folderName, filename)
             })
           }}
         >

@@ -48,7 +48,8 @@ const zhHans = {
         init: "密码设置成功，感谢使用 SERAPH。",
         login: "欢迎回到 SERAPH。",
         logout: "退出成功。",
-        rename: "文件名已更改。"
+        rename: "文件名已更改。",
+        delete: "文件已删除。"
       },
       warning: {
         invalidToken: "令牌无效或已过期，页面将在若干秒内自动刷新。",
