@@ -94,7 +94,7 @@ export default function Navigation(props) {
         </List>
       </ListItem>}
 
-      <ListItem nested>
+      {/* <ListItem nested>
         <ListSubheader>
           {context.languagePicker("nav.utility.title")}
         </ListSubheader>
@@ -160,7 +160,7 @@ export default function Navigation(props) {
             </ListItemButton>
           </ListItem>}
         </List>
-      </ListItem>
+      </ListItem> */}
     </List>
   );
 }
