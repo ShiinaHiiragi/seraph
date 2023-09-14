@@ -9,10 +9,12 @@
 ## Memo
 ### Plan
 1. File Explorer
+    - table sort
+    - copy
+    - move / copy -> conflict & replace
     - upload
     - edit in milkdown
     - create / edit attached markdown
-    - table sort
 2. Archive
     - arXiv
     - external link / save in folder
