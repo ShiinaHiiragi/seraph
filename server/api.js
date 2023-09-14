@@ -121,8 +121,8 @@ const fileOperator = {
         name: item.name,
         size: stat.size,
         time: stat.birthtime,
-        type: mime.getType(item.name),
-        bin: isBinaryPath(item.name)
+        mtime: stat.mtime,
+        type: mime.getType(item.name)
       }
     });
   }

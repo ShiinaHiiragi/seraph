@@ -68,11 +68,22 @@ export default function FileList(props) {
                   {item.name}
                 </Typography>
                 <Typography level="body-xs" gutterBottom>
-                  {item.time.timeFormat(
-                    context.languagePicker("universal.time.dateFormat")
-                      + " "
-                      + context.languagePicker("universal.time.timeFormat")
-                  )}
+                  {context
+                    .languagePicker("main.folder.listHint.createTime")
+                    .format(item.time.timeFormat(
+                      context.languagePicker("universal.time.dateFormat")
+                        + " "
+                        + context.languagePicker("universal.time.timeFormat")
+                    ))}
+                </Typography>
+                <Typography level="body-xs" gutterBottom>
+                  {context
+                    .languagePicker("main.folder.listHint.modifiedTime")
+                    .format(item.mtime.timeFormat(
+                      context.languagePicker("universal.time.dateFormat")
+                        + " "
+                        + context.languagePicker("universal.time.timeFormat")
+                    ))}
                 </Typography>
                 <Box
                   sx={{

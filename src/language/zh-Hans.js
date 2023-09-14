@@ -27,6 +27,10 @@ const zhHans = {
         time: "创建时间",
         operation: "操作"
       },
+      listHint: {
+        createTime: "创建于 {0}",
+        modifiedTime: "最后修改于 {0}"
+      },
       viewRegulate: {
         unknown: "未知"
       }

@@ -27,6 +27,10 @@ const ja = {
         time: "作成日時",
         operation: "オペレーション"
       },
+      listHint: {
+        createTime: "{0} に作成",
+        modifiedTime: "{0} に最後更新"
+      },
       viewRegulate: {
         unknown: "未知"
       }

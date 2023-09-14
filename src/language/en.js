@@ -27,6 +27,10 @@ const en = {
         time: "Created Time",
         operation: "Operations"
       },
+      listHint: {
+        createTime: "Created at {0}",
+        modifiedTime: "Last modified at {0}"
+      },
       viewRegulate: {
         unknown: "Unknown"
       }
