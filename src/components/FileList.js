@@ -17,7 +17,8 @@ export default function FileList(props) {
     sortedFilesList,
     setModalRenameOpen,
     setFormNewNameText,
-    setFilesList
+    setFilesList,
+    folderCount
   } = props;
   const context = React.useContext(GlobalContext);
 
@@ -97,6 +98,7 @@ export default function FileList(props) {
                 setModalRenameOpen={setModalRenameOpen}
                 setFormNewNameText={setFormNewNameText}
                 setFilesList={setFilesList}
+                folderCount={folderCount}
               />}
           </ListItem>
           <ListDivider />

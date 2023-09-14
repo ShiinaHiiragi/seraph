@@ -12,7 +12,8 @@ import ModalForm from "../modal/Form";
 
 const FileExplorer = (props) => {
   const {
-    type
+    type,
+    folderCount
   } = props;
   const { folderName } = useParams();
   const context = React.useContext(GlobalContext);
@@ -132,6 +133,7 @@ const FileExplorer = (props) => {
             setModalRenameOpen={setModalRenameOpen}
             setFormNewNameText={setFormNewNameText}
             setFilesList={setFilesList}
+            folderCount={folderCount}
           />
           <FileList
             type={type}
@@ -140,6 +142,7 @@ const FileExplorer = (props) => {
             setModalRenameOpen={setModalRenameOpen}
             setFormNewNameText={setFormNewNameText}
             setFilesList={setFilesList}
+            folderCount={folderCount}
           />
         </React.Fragment>}
       {folderState < 0 &&

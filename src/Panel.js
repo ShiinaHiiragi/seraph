@@ -109,6 +109,9 @@ const Panel = () => {
   const [setting, setSetting] = React.useState(defaultSetting);
   const [publicFolders, setPublicFolders] = React.useState([]);
   const [privateFolders, setPrivateFolders] = React.useState([]);
+  const folderCount = React.useMemo(() => {
+    return publicFolders.length + privateFolders.length;
+  }, [publicFolders, privateFolders]);
 
   // global clocks, explicit life cycles, only set once
   // when set to true, the corresponding tick ends
@@ -220,8 +223,14 @@ const Panel = () => {
               <MainField className="MainField">
                 <Routes>
                   <Route exact path="/" element={<Welcome />} />
-                  <Route path="/public/:folderName" element={<FileExplorer type="public" />} />
-                  <Route path="/private/:folderName" element={<FileExplorer type="private" />} />
+                  <Route
+                    path="/public/:folderName"
+                    element={<FileExplorer folderCount={folderCount} type="public" />}
+                  />
+                  <Route
+                    path="/private/:folderName"
+                    element={<FileExplorer folderCount={folderCount} type="private" />}
+                  />
                   <Route path="/archive" element={<Archive />} />
                   <Route path="/links" element={<Links />} />
                   <Route path="/milkdown" element={<Milkdown />} />

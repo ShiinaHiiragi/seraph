@@ -14,7 +14,8 @@ export default function FileTable(props) {
     sortedFilesList,
     setModalRenameOpen,
     setFormNewNameText,
-    setFilesList
+    setFilesList,
+    folderCount
   } = props;
   const context = React.useContext(GlobalContext);
 
@@ -109,6 +110,7 @@ export default function FileTable(props) {
                     setModalRenameOpen={setModalRenameOpen}
                     setFormNewNameText={setFormNewNameText}
                     setFilesList={setFilesList}
+                    folderCount={folderCount}
                   />
                 </Box>
               </td>}
