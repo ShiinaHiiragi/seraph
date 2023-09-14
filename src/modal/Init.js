@@ -56,17 +56,14 @@ export default function Init(props) {
       password: formPasswordText
     })
       .then(() => {
-        setFormPasswordDisabled(false);
         setModalInitOpen(false);
 
         toast.success(context.languagePicker("modal.toast.success.init"));
         setGlobalSwitch(globalState.AUTHORITY);
         setFirstTick(true);
       })
-      .catch((data) => {
-        setFormPasswordDisabled(false);
-        request.unparseableResponse(data);
-      });
+      .catch(request.unparseableResponse)
+      .finally(() => setFormPasswordDisabled(false));
   }, [
     context,
     setting.meta.language,

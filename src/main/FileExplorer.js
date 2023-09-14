@@ -26,20 +26,18 @@ const FileExplorer = (props) => {
   // after second tick, the globalSwitch were set properly
   React.useEffect(() => {
     if (context.secondTick && display) {
-      request(`GET/${type}/${folderName}`)
+      request(
+        `GET/${type}/${folderName}`,
+        { },
+        { [Status.execErrCode.ResourcesUnexist]: () => {
+          setFolderState(-1);
+        } }
+      )
         .then((data) => {
           setFolderState(1);
           setFilesList(data.info);
         })
-        .catch((data) => {
-          if (data.statusCode === Status.statusCode.ExecFailed
-            && data.errorCode === Status.execErrCode.ResourcesUnexist) {
-            setFolderState(-1);
-            toast.error(context.languagePicker("modal.toast.exception.resourcesUnexist"));
-          } else {
-            request.unparseableResponse(data);
-          }
-        })
+        .catch(request.unparseableResponse);
     }
   // eslint-disable-next-line
   }, [

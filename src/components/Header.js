@@ -71,24 +71,22 @@ const Header = (props) => {
 
   const handleLogin = React.useCallback(() => {
     setButtonDisabled(true);
-    request("POST/auth/login", { password: formPasswordText })
+    request(
+      "POST/auth/login",
+      { password: formPasswordText },
+      { [Status.execErrCode.IncorrectPassword]: () => {
+        setButtonDisabled(false);
+        setFormPasswordError(true);
+      } }
+    )
       .then((data) => {
-        handleCloseLogin();
-        toast(context.languagePicker("modal.toast.success.login"));
         setPrivateFolders(data.private);
         setGlobalSwitch(globalState.AUTHORITY);
+        handleCloseLogin();
+        toast(context.languagePicker("modal.toast.success.login"));
       })
-      .catch((data) => {
-        setButtonDisabled(false);
-        if (data.statusCode === Status.statusCode.ExecFailed
-          && data.errorCode === Status.execErrCode.IncorrectPassword
-        ) {
-          setFormPasswordError(true);
-          toast.error(context.languagePicker("modal.toast.exception.incorrectPassword"));
-        } else {
-          request.unparseableResponse(data);
-        }
-      })
+      .catch(request.unparseableResponse)
+      .finally(() => setButtonDisabled(false));
   }, [
     context,
     setGlobalSwitch,
@@ -100,7 +98,7 @@ const Header = (props) => {
   // function for logout
   const handleLogout = React.useCallback(() => {
     request("POST/auth/logout")
-      .then((data) => {
+      .then(() => {
         toast.success(context.languagePicker("modal.toast.success.logout"));
         setGlobalSwitch(globalState.ANONYMOUS);
         navigate("/");

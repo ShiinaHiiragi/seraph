@@ -130,7 +130,7 @@ const Status = {
 }
 
 axios.defaults.withCredentials = true;
-const request = (query, params) => {
+const request = (query, params, todo) => {
   const [method, path] = query.match(/(GET|POST)(.+)/).slice(1);
   return new Promise((resolve, reject) => {
     axios[method.toLowerCase()](
@@ -153,22 +153,34 @@ const request = (query, params) => {
           setTimeout(() => {
             window.location.reload();
           }, 4000);
-        // returning EF
-        } else if (Object
-          .keys(ConstantContext.languagePicker("modal.toast.exception"))
-          .map((item) => Status.execErrCode[item.upperCaseFirst()])
-          .includes(res.data.errorCode)
-        ) {
-          toast.error(ConstantContext.languagePicker(
-            "modal.toast.exception." + Object
-              .keys(ConstantContext.languagePicker("modal.toast.exception"))
+        } else {
+          const exceptions = Object.keys(
+            ConstantContext.languagePicker("modal.toast.exception")
+          );
+          const errorCodes = exceptions.map(
+            (item) => Status.execErrCode[item.upperCaseFirst()]
+          );
+          // returning EF
+          if (errorCodes.includes(res.data.errorCode)) {
+            const mathcedErrorState = exceptions
               .filter((item) => Status.execErrCode[
                 item.upperCaseFirst()
-              ] === res.data.errorCode)[0]
-          ));
-        // returning others, such as AF_NI
-        } else {
-          reject(res.data);
+              ] === res.data.errorCode)[0];
+            const matchedErrorCode = Status.execErrCode[
+              mathcedErrorState.upperCaseFirst()
+            ];
+            toast.error(ConstantContext.languagePicker(
+              "modal.toast.exception." + mathcedErrorState
+            ));
+
+            const planned = todo?.[matchedErrorCode];
+            if (planned instanceof Function) {
+              planned();
+            }
+          // returning others, such as AF_NI
+          } else {
+            reject(res.data);
+          }
         }
       }).catch((res) => console.log(res) ?? toast.error(
         ConstantContext
