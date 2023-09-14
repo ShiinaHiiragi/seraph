@@ -23,7 +23,7 @@ const ja = {
       fileAttribute: {
         name: "ファイル名",
         size: "サイズ",
-        type: "タイプ",
+        type: "MIME タイプ",
         time: "作成日時",
         operation: "オペレーション"
       },

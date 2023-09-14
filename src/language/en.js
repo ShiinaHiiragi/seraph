@@ -23,7 +23,7 @@ const en = {
       fileAttribute: {
         name: "Name",
         size: "Size",
-        type: "Type",
+        type: "MIME Type",
         time: "Created Time",
         operation: "Operations"
       },

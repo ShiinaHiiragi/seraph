@@ -23,7 +23,7 @@ const zhHans = {
       fileAttribute: {
         name: "文件名",
         size: "大小",
-        type: "类型",
+        type: "MIME 类型",
         time: "创建时间",
         operation: "操作"
       },
