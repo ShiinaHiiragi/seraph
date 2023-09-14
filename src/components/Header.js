@@ -85,7 +85,6 @@ const Header = (props) => {
         handleCloseLogin();
         toast(context.languagePicker("modal.toast.success.login"));
       })
-      .catch(request.unparseableResponse)
       .finally(() => setButtonDisabled(false));
   }, [
     context,
@@ -103,7 +102,6 @@ const Header = (props) => {
         setGlobalSwitch(globalState.ANONYMOUS);
         navigate("/");
       })
-      .catch(request.unparseableResponse)
   }, [context, setGlobalSwitch, navigate])
 
   return (

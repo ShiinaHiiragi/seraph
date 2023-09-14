@@ -45,7 +45,6 @@ const FileExplorer = (props) => {
           setFolderState(1);
           setFilesList(data.info);
         })
-        .catch(request.unparseableResponse);
     }
   // eslint-disable-next-line
   }, [
@@ -86,7 +85,6 @@ const FileExplorer = (props) => {
         ));
         toast.success(context.languagePicker("modal.toast.success.rename"));
       })
-      .catch(request.unparseableResponse);
   }, [
     context,
     type,
@@ -115,7 +113,6 @@ const FileExplorer = (props) => {
         ));
         toast.success(context.languagePicker("modal.toast.success.move"));
       })
-      .catch(request.unparseableResponse);
   }, [
     context,
     type,

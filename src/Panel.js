@@ -133,7 +133,7 @@ const Panel = () => {
   // first tick starts on page loaded
   //            ends after receiving metadata
   React.useEffect(() => {
-    request("GET/auth/meta")
+    request("GET/auth/meta", undefined, undefined, setModalInitOpen)
       .then((data) => {
         setSetting(data.setting);
         setPublicFolders(data.public);
@@ -144,14 +144,6 @@ const Panel = () => {
           setGlobalSwitch(globalState.AUTHORITY);
         } else {
           setGlobalSwitch(globalState.ANONYMOUS);
-        }
-      })
-      .catch((data) => {
-        if (data.statusCode === Status.statusCode.AuthFailed
-          && data.errorCode === Status.authErrCode.NotInit) {
-          setModalInitOpen(true);
-        } else {
-          request.unparseableResponse(data);
         }
       })
   }, [])

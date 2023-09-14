@@ -152,7 +152,7 @@ const Status = {
  *      须务必保持除了服务器内部错误 ISE 外其他所有错误名字相同（除了首字母）
  */
 axios.defaults.withCredentials = true;
-const request = (query, params, todo) => {
+const request = (query, params, todo, handleInit) => {
   const [method, path] = query.match(/(GET|POST)(.+)/).slice(1);
   return new Promise((resolve, reject) => {
     axios[method.toLowerCase()](
@@ -175,6 +175,9 @@ const request = (query, params, todo) => {
           setTimeout(() => {
             window.location.reload();
           }, 4000);
+        } else if (res.data.statusCode === Status.statusCode.AuthFailed
+          && res.data.errorCode === Status.authErrCode.NotInit) {
+            handleInit(true);
         } else {
           const exceptions = Object.keys(
             ConstantContext.languagePicker("modal.toast.exception")
@@ -206,7 +209,14 @@ const request = (query, params, todo) => {
             }
           // returning others, such as AF_NI
           } else {
-            reject(res.data);
+            toast.error(
+              ConstantContext
+                .languagePicker("modal.toast.error.unparseableResponse")
+                .format(res.data.statusCode + (res.data.errorCode
+                  ? "_" + res.data.errorCode
+                  : ""
+                ))
+            );
           }
         }
       }).catch((res) => console.log(res) ?? toast.error(
@@ -215,17 +225,6 @@ const request = (query, params, todo) => {
           .format(res.response.status)
       ));
   });
-}
-
-request.unparseableResponse = (data) => {
-  toast.error(
-    ConstantContext
-      .languagePicker("modal.toast.error.unparseableResponse")
-      .format(data.statusCode + (data.errorCode
-        ? "_" + data.errorCode
-        : ""
-      ))
-  );
 }
 
 export { Status, request };

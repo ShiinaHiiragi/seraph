@@ -39,7 +39,6 @@ export default function RowMenu(props) {
           (item) => item.name !== filename
         ));
       })
-      .catch(request.unparseableResponse)
   }, [context, setFilesList])
 
   return (
