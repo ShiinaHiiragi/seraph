@@ -108,6 +108,7 @@ const FileExplorer = (props) => {
     })
       .then(() => {
         setModalMoveOpen(null);
+        setFormSelectedFolder([null, null]);
         setFilesList((filesList) => filesList.filter(
           (item) => item.name !== filename
         ));
