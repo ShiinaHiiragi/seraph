@@ -1,4 +1,6 @@
 let express = require('express');
+let fs = require('fs');
+let path = require('path');
 let api = require('../api');
 let router = express.Router();
 
@@ -13,8 +15,12 @@ router.post('/rename', (req, res, next) => {
     return;
   }
 
-  const { folderName, filename, newFilename } = req.body;
-  const folderPath = api.dataPath.privateDirFolderPath(folderName);
+  const { type, folderName, filename, newFilename } = req.body;
+  const folderPath = api.dataPath[
+    type === "private"
+      ? "privateDirFolderPath"
+      : "publicDirFolderPath"
+  ](folderName);
   const filePath = path.join(folderPath, filename);
   const newFilePath = path.join(folderPath, newFilename);
 
@@ -41,12 +47,17 @@ router.post('/move', (req, res, next) => {
   }
 
   const {
+    type,
     folderName,
     filename,
     newType,
     newFolderName
   } = req.body;
-  const folderPath = api.dataPath.privateDirFolderPath(folderName);
+  const folderPath = api.dataPath[
+    type === "private"
+      ? "privateDirFolderPath"
+      : "publicDirFolderPath"
+  ](folderName);
   const filePath = path.join(folderPath, filename);
   const newFolderPath = api.dataPath[
     newType === "private"
@@ -80,8 +91,12 @@ router.post('/delete', (req, res, next) => {
     return;
   }
 
-  const { folderName, filename } = req.body;
-  const folderPath = api.dataPath.privateDirFolderPath(folderName);
+  const { type, folderName, filename } = req.body;
+  const folderPath = api.dataPath[
+    type === "private"
+      ? "privateDirFolderPath"
+      : "publicDirFolderPath"
+  ](folderName);
   const filePath = path.join(folderPath, filename);
 
   if (!fs.existsSync(folderPath) || !fs.existsSync(filePath)) {

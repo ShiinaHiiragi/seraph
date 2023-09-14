@@ -2,6 +2,7 @@ import React from "react";
 import { toast } from "sonner";
 import { useParams } from "react-router";
 import Input from "@mui/joy/Input";
+import isValidFilename from 'valid-filename';
 import GlobalContext, { Status, request } from "../interface/constants";
 import RouteField from "../interface/RouteField";
 import FileTable from "../components/FileTable";
@@ -52,11 +53,31 @@ const FileExplorer = (props) => {
   ]);
 
   // states and function for rename
-  const [modalRenameOpen, setModalRenameOpen] = React.useState(false);
+  const [modalRenameOpen, setModalRenameOpen] = React.useState(null);
   const [formNewNameText, setFormNewNameText] = React.useState("");
   const handleRename = React.useCallback(() => {
-    console.log(formNewNameText)
-  }, [formNewNameText]);
+    if (!isValidFilename(formNewNameText)) {
+      toast.error("234");
+      return;
+    }
+
+    request("POST/file/rename", {
+      type: type,
+      folderName: folderName,
+      filename: modalRenameOpen,
+      newFilename: formNewNameText
+    })
+      .then(() => {
+        setModalRenameOpen(false);
+        toast.success("123");
+      })
+      .catch(request.unparseableResponse);
+  }, [
+    type,
+    folderName,
+    modalRenameOpen,
+    formNewNameText
+  ]);
 
   return (
     <RouteField
@@ -113,7 +134,7 @@ const FileExplorer = (props) => {
       <ModalForm
         open={Boolean(modalRenameOpen)}
         disabled={formNewNameText.length === 0 || formNewNameText === modalRenameOpen}
-        handleClose={() => setModalRenameOpen(false)}
+        handleClose={() => setModalRenameOpen(null)}
         handleClick={handleRename}
         title={context.languagePicker("modal.form.rename.title")}
         caption={context.languagePicker("modal.form.rename.caption")}

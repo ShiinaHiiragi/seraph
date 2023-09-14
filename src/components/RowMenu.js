@@ -10,8 +10,6 @@ import GlobalContext from "../interface/constants";
 
 export default function RowMenu(props) {
   const {
-    type,
-    folderName,
     filename,
     setModalRenameOpen,
     setFormNewNameText

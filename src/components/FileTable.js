@@ -102,8 +102,6 @@ export default function FileTable(props) {
               {context.isAuthority && <td>
                 <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
                   <RowMenu
-                    type={type}
-                    folderName={folderName}
                     filename={item.name}
                     setModalRenameOpen={setModalRenameOpen}
                     setFormNewNameText={setFormNewNameText}

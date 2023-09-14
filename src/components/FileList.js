@@ -90,8 +90,6 @@ export default function FileList(props) {
             </ListItemContent>
             {context.isAuthority &&
               <RowMenu
-                type={type}
-                folderName={folderName}
                 filename={item.name}
                 setModalRenameOpen={setModalRenameOpen}
                 setFormNewNameText={setFormNewNameText}
