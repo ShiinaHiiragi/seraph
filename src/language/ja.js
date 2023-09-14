@@ -20,14 +20,14 @@ const ja = {
       caption: "リクエストされたページが存在しません。"
     },
     folder: {
-      fileAttribute: {
+      tableColumn: {
         name: "ファイル名",
         size: "サイズ",
         type: "MIME タイプ",
         time: "作成日時",
         operation: "オペレーション"
       },
-      tableView: {
+      viewRegulate: {
         unknown: "未知"
       }
     }

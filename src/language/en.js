@@ -20,14 +20,14 @@ const en = {
       caption: "The requested page does not exist."
     },
     folder: {
-      fileAttribute: {
+      tableColumn: {
         name: "Name",
         size: "Size",
         type: "MIME Type",
         time: "Created Time",
         operation: "Operations"
       },
-      tableView: {
+      viewRegulate: {
         unknown: "Unknown"
       }
     }

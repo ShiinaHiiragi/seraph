@@ -70,19 +70,19 @@ export default function FileTable(props) {
             <th style={{ width: 24 }}>
             </th>
             <th style={{ width: 120, padding: "12px 6px" }}>
-              {context.languagePicker("main.folder.fileAttribute.name")}
+              {context.languagePicker("main.folder.tableColumn.name")}
             </th>
             <th style={{ width: 140, padding: "12px 6px" }}>
-              {context.languagePicker("main.folder.fileAttribute.size")}
+              {context.languagePicker("main.folder.tableColumn.size")}
             </th>
             <th style={{ width: 140, padding: "12px 6px" }}>
-              {context.languagePicker("main.folder.fileAttribute.type")}
+              {context.languagePicker("main.folder.tableColumn.type")}
             </th>
             <th style={{ width: 140, padding: "12px 6px" }}>
-              {context.languagePicker("main.folder.fileAttribute.time")}
+              {context.languagePicker("main.folder.tableColumn.time")}
             </th>
             <th style={{ width: 140, padding: "12px 6px" }}>
-              {context.languagePicker("main.folder.fileAttribute.operation")}
+              {context.languagePicker("main.folder.tableColumn.operation")}
             </th>
           </tr>
         </thead>
@@ -103,7 +103,7 @@ export default function FileTable(props) {
               </td>
               <td>
                 <Typography level="body-xs">
-                  {item.type || context.languagePicker("main.folder.tableView.unknown")}
+                  {item.type || context.languagePicker("main.folder.viewRegulate.unknown")}
                 </Typography>
               </td>
               <td>

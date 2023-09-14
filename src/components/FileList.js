@@ -1,88 +1,19 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import * as React from 'react';
 import Box from '@mui/joy/Box';
-import Avatar from '@mui/joy/Avatar';
-import Chip from '@mui/joy/Chip';
-import Link from '@mui/joy/Link';
 import Divider from '@mui/joy/Divider';
 import IconButton from '@mui/joy/IconButton';
 import Typography from '@mui/joy/Typography';
 import List from '@mui/joy/List';
 import ListItem from '@mui/joy/ListItem';
 import ListItemContent from '@mui/joy/ListItemContent';
-import ListItemDecorator from '@mui/joy/ListItemDecorator';
 import ListDivider from '@mui/joy/ListDivider';
 import Menu from '@mui/joy/Menu';
 import MenuButton from '@mui/joy/MenuButton';
 import MenuItem from '@mui/joy/MenuItem';
 import Dropdown from '@mui/joy/Dropdown';
 import MoreHorizRoundedIcon from '@mui/icons-material/MoreHorizRounded';
-import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
-import BlockIcon from '@mui/icons-material/Block';
-import AutorenewRoundedIcon from '@mui/icons-material/AutorenewRounded';
-
-const filesList = [
-  {
-    id: 'INV-1234',
-    date: 'Feb 3, 2023',
-    status: 'Refunded',
-    customer: {
-      initial: 'O',
-      name: 'Olivia Ryhe',
-      email: 'olivia@email.com',
-    },
-  },
-  {
-    id: 'INV-1233',
-    date: 'Feb 3, 2023',
-    status: 'Paid',
-    customer: {
-      initial: 'S',
-      name: 'Steve Hampton',
-      email: 'steve.hamp@email.com',
-    },
-  },
-  {
-    id: 'INV-1232',
-    date: 'Feb 3, 2023',
-    status: 'Refunded',
-    customer: {
-      initial: 'C',
-      name: 'Ciaran Murray',
-      email: 'ciaran.murray@email.com',
-    },
-  },
-  {
-    id: 'INV-1231',
-    date: 'Feb 3, 2023',
-    status: 'Refunded',
-    customer: {
-      initial: 'M',
-      name: 'Maria Macdonald',
-      email: 'maria.mc@email.com',
-    },
-  },
-  {
-    id: 'INV-1230',
-    date: 'Feb 3, 2023',
-    status: 'Cancelled',
-    customer: {
-      initial: 'C',
-      name: 'Charles Fulton',
-      email: 'fulton@email.com',
-    },
-  },
-  {
-    id: 'INV-1229',
-    date: 'Feb 3, 2023',
-    status: 'Cancelled',
-    customer: {
-      initial: 'J',
-      name: 'Jay Hooper',
-      email: 'hooper@email.com',
-    },
-  },
-];
+import GlobalContext from '../interface/constants';
 
 function RowMenu() {
   return (
@@ -108,6 +39,7 @@ export default function FileList(props) {
   const {
     filesList
   } = props;
+  const context = React.useContext(GlobalContext);
 
   return (
     <Box
@@ -136,20 +68,28 @@ export default function FileList(props) {
                   {item.name}
                 </Typography>
                 <Typography level="body-xs" gutterBottom>
-                  {item.type}
+                  {item.time.timeFormat(
+                    context.languagePicker("universal.time.dateFormat")
+                      + " "
+                      + context.languagePicker("universal.time.timeFormat")
+                  )}
                 </Typography>
                 <Box
                   sx={{
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'space-between',
+                    justifyContent: 'flex-start',
                     gap: 0.5,
                     mb: 1,
                   }}
                 >
-                  <Typography level="body-xs">{item.size}</Typography>
+                  <Typography level="body-xs" component="span">
+                    {item.size.sizeFormat()}
+                  </Typography>
                   <Typography level="body-xs">&bull;</Typography>
-                  <Typography level="body-xs">{item.time}</Typography>
+                  <Typography level="body-xs">
+                    {item.type || context.languagePicker("main.folder.viewRegulate.unknown")}
+                  </Typography>
                 </Box>
               </div>
             </ListItemContent>

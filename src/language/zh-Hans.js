@@ -20,14 +20,14 @@ const zhHans = {
       caption: "请求的页面不存在。"
     },
     folder: {
-      fileAttribute: {
+      tableColumn: {
         name: "文件名",
         size: "大小",
         type: "MIME 类型",
         time: "创建时间",
         operation: "操作"
       },
-      tableView: {
+      viewRegulate: {
         unknown: "未知"
       }
     }
