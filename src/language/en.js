@@ -50,10 +50,10 @@ const en = {
         logout: "Logged out successfully."
       },
       warning: {
+        invalidToken: "Token is invalid or expired. The page will be refreshed automatically in seconds.",
         illegalRename: "Filename pre-check failed."
       },
       exception: {
-        invalidToken: "Token is invalid or expired. The page will be refreshed automatically in seconds.",
         incorrectPassword: "Incorrect password.",
         resourcesUnexist: "Resources requested do not exist."
       },

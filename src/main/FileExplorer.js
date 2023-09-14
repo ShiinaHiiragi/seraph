@@ -81,6 +81,7 @@ const FileExplorer = (props) => {
       })
       .catch(request.unparseableResponse);
   }, [
+    context,
     type,
     folderName,
     modalRenameOpen,

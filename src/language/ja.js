@@ -50,10 +50,10 @@ const ja = {
         logout: "ログアウトしました。"
       },
       warning: {
+        invalidToken: "トークンが無効又は期限切れになれ、ページは数秒内にリフレッシュされることになっています。",
         illegalRename: "新たなファイル名の事前チェックはフェイル。"
       },
       exception: {
-        invalidToken: "トークンが無効又は期限切れになれ、ページは数秒内にリフレッシュされることになっています。",
         incorrectPassword: "パスワードが間違っています。",
         resourcesUnexist: "リクエストされたリソースは存在しません。"
       },

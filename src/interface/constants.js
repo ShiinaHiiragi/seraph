@@ -138,13 +138,16 @@ const request = (query, params) => {
         ) {
           toast.error(
             ConstantContext
-              .languagePicker("modal.toast.exception.invalidToken"),
+              .languagePicker("modal.toast.warning.invalidToken"),
             { duration: Infinity }
           );
           setTimeout(() => {
             window.location.reload();
           }, 4000);
         } else {
+          // Object.keys(ConstantContext.languagePicker("modal.toast.exception"))
+          //   .map((item) => Status.execErrCode[item])
+          //   .includes(res.data.errorCode)
           reject(res.data)
         }
       }).catch((res) => console.log(res) ?? toast.error(
