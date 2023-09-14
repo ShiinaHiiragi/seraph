@@ -5,7 +5,7 @@ let router = express.Router();
 router.get('/meta', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
     if (req.status.err == api.Status.authErrCode.NotInit) {
-      // -> AF_NI: the ONLY place returning this code
+      // -> AF_NI: the ONLY place legally returning this code
       next(api.errorStreamControl);
       return;
     } else {

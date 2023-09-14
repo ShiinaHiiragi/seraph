@@ -6,7 +6,7 @@ let router = express.Router();
 
 router.get('/:folderName', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
-    // -> abnormal request
+    // -> EF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }
@@ -33,7 +33,7 @@ router.get('/:folderName', (req, res, next) => {
 
 router.get('/:folderName/:filename', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
-    // -> abnormal request
+    // -> EF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }
