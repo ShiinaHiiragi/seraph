@@ -35,4 +35,20 @@ router.get('/info', (req, res, next) => {
   return;
 });
 
+router.post('/upload', (req, res, next) => {
+  res.send('/upload');
+});
+
+router.post('/rename', (req, res, next) => {
+  res.send('/rename');
+});
+
+router.post('/move', (req, res, next) => {
+  res.send('/move');
+});
+
+router.post('/delete', (req, res, next) => {
+  res.send('/delete');
+});
+
 module.exports = router;

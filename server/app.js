@@ -5,6 +5,8 @@ let cors = require('cors');
 
 let authRouter = require('./routes/auth');
 let folderRouter = require('./routes/folder');
+let publicRouter = require('./routes/public');
+let privateRouter = require('./routes/private');
 let api = require('./api');
 let app = express();
 
@@ -38,6 +40,8 @@ app.use((req, res, next) => {
 // express-router
 app.use('/auth', authRouter);
 app.use('/folder', folderRouter);
+app.use('/public', publicRouter);
+app.use('/private', privateRouter);
 
 // redirect all other pages to react-router
 app.use((req, res) => {
