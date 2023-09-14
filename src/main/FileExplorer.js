@@ -57,10 +57,11 @@ const FileExplorer = (props) => {
   const [formNewNameText, setFormNewNameText] = React.useState("");
   const handleRename = React.useCallback(() => {
     if (!isValidFilename(formNewNameText)) {
-      toast.error("234");
+      toast.error(context.languagePicker("modal.toast.warning.illegalRename"));
       return;
     }
 
+    const originFilename = `${modalRenameOpen}`;
     request("POST/file/rename", {
       type: type,
       folderName: folderName,
@@ -68,7 +69,14 @@ const FileExplorer = (props) => {
       newFilename: formNewNameText
     })
       .then(() => {
-        setModalRenameOpen(false);
+        setModalRenameOpen(null);
+        setFilesList((filesList) => filesList.map((item) =>
+          item.name === originFilename
+            ? {
+              ...item,
+              name: formNewNameText
+            } : item
+          ));
         toast.success("123");
       })
       .catch(request.unparseableResponse);

@@ -49,6 +49,9 @@ const ja = {
         login: "セラフへようこそ。",
         logout: "ログアウトしました。"
       },
+      warning: {
+        illegalRename: "新たなファイル名の事前チェックはフェイル。"
+      },
       exception: {
         invalidToken: "トークンが無効又は期限切れになれ、ページは数秒内にリフレッシュされることになっています。",
         incorrectPassword: "パスワードが間違っています。",

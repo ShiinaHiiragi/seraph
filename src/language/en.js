@@ -49,6 +49,9 @@ const en = {
         login: "Welcome back to Seraph.",
         logout: "Logged out successfully."
       },
+      warning: {
+        illegalRename: "Filename pre-check failed."
+      },
       exception: {
         invalidToken: "Token is invalid or expired. The page will be refreshed automatically in seconds.",
         incorrectPassword: "Incorrect password.",
