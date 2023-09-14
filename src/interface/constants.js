@@ -130,10 +130,24 @@ const request = (query, params) => {
       new URL(path, serverBaseURL).href,
       method === "POST" ? params : { params: params }
     )
-      .then((res) => res.data.statusCode === Status.statusCode.ExecSuccess
-        ? resolve(res.data)
-        : reject(res.data)
-      ).catch((res) => console.log(res) ?? toast.error(
+      .then((res) => {
+        if (res.data.statusCode === Status.statusCode.ExecSuccess) {
+          resolve(res.data)
+        } else if (res.data.statusCode === Status.statusCode.AuthFailed
+          && res.data.errorCode === Status.authErrCode.InvalidToken
+        ) {
+          toast.error(
+            ConstantContext
+              .languagePicker("modal.toast.exception.invalidToken"),
+            { duration: Infinity }
+          );
+          setTimeout(() => {
+            window.location.reload();
+          }, 4000);
+        } else {
+          reject(res.data)
+        }
+      }).catch((res) => console.log(res) ?? toast.error(
         ConstantContext
           .languagePicker("modal.toast.error.serverError")
           .format(res.response.status)

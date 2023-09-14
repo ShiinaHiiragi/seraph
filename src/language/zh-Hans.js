@@ -50,6 +50,7 @@ const zhHans = {
         logout: "退出成功。"
       },
       exception: {
+        invalidToken: "令牌无效或已过期，页面将在若干秒内自动刷新。",
         incorrectPassword: "密码错误。",
         resourcesUnexist: "请求的资源不存在。"
       },
