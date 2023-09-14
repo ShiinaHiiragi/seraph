@@ -237,6 +237,8 @@ const Panel = () => {
             setGlobalSwitch={setGlobalSwitch}
             setting={setting}
             setSetting={setSetting}
+            setPublicFolders={setPublicFolders}
+            setPrivateFolders={setPrivateFolders}
             modalInitOpen={modalInitOpen}
             setModalInitOpen={setModalInitOpen}
           />

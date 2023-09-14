@@ -41,6 +41,8 @@ export default function Init(props) {
     setGlobalSwitch,
     setting,
     setSetting,
+    setPublicFolders,
+    setPrivateFolders,
     modalInitOpen,
     setModalInitOpen
   } = props;
@@ -55,12 +57,15 @@ export default function Init(props) {
       language: setting.meta.language,
       password: formPasswordText
     })
-      .then(() => {
+      .then((data) => {
+        setFirstTick(true);
         setModalInitOpen(false);
 
-        toast.success(context.languagePicker("modal.toast.success.init"));
+        setPublicFolders(data.public);
+        setPrivateFolders(data.private);
+        setSetting(data.setSetting);
         setGlobalSwitch(globalState.AUTHORITY);
-        setFirstTick(true);
+        toast.success(context.languagePicker("modal.toast.success.init"));
       })
       .catch(request.unparseableResponse)
       .finally(() => setFormPasswordDisabled(false));
@@ -70,7 +75,10 @@ export default function Init(props) {
     formPasswordText,
     setGlobalSwitch,
     setModalInitOpen,
-    setFirstTick
+    setFirstTick,
+    setPublicFolders,
+    setPrivateFolders,
+    setSetting
   ]);
 
   return (

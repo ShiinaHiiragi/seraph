@@ -44,9 +44,17 @@ router.post('/init', (req, res, next) => {
       api.configOperator.setConfigSetting("meta.language", language);
       api.tokenOperator.addNewSession(res);
 
-      // -> ES: no extra info
+      const publicFolder = api.fileOperator.readFoldersList(api.dataPath.publicDirPath);
+      const privateFolder = api.fileOperator.readFoldersList(api.dataPath.privateDirPath);
+
+      // -> ES: return all metadata
       req.status.addExecStatus();
-      res.send(req.status.generateReport());
+      res.send({
+        ...req.status.generateReport(),
+        public: publicFolder,
+        private: privateFolder,
+        setting: api.configOperator.config.setting
+      });
       return;
     }
   }
