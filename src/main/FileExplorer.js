@@ -166,6 +166,15 @@ const FileExplorer = (props) => {
           onChange={(event) => setFormNewNameText(event.target.value)}
         />
       </ModalForm>
+      <ModalForm
+        open={true}
+        disabled={false}
+        handleClose={() => { }}
+        handleClick={() => { }}
+        title={context.languagePicker("modal.form.move")}
+        button={context.languagePicker("universal.button.continue")}
+      >
+      </ModalForm>
     </RouteField>
   )
 }

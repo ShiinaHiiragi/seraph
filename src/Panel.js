@@ -52,6 +52,10 @@ const Root = styled('div')(({ theme }) => ({
   "& ::-webkit-scrollbar-thumb": {
     borderRadius: 0,
     backgroundColor: "rgb(190, 190, 190)"
+  },
+  "& html": {
+    userSelect: "none",
+    "scrollbar-color": "rgb(190, 190, 190) rgb(250, 250, 250)"
   }
 }));
 

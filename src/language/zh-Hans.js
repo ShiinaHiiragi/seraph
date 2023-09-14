@@ -83,7 +83,8 @@ const zhHans = {
         title: "重命名",
         caption: "命名限制取决于服务器所在平台，尽量不要修改扩展名。",
         placeholder: "新文件名"
-      }
+      },
+      move: "移动到……"
     },
     reconfirm: {
       title: "二次确认",

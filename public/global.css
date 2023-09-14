@@ -7,11 +7,6 @@ html {
   background: rgb(173, 214, 255);
 }
 
-/* Mozilla & Firefox Scrollbar */
-html {
-  scrollbar-color: rgb(190, 190, 190) rgb(250, 250, 250);
-}
-
 /* cyrillic-ext */
 @font-face {
   font-family: 'Inter';
