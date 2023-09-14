@@ -75,7 +75,7 @@ const FileExplorer = (props) => {
               name: formNewNameText
             } : item
           ));
-        toast.success("123");
+        toast.success(context.languagePicker("modal.toast.success.rename"));
       })
       .catch(request.unparseableResponse);
   }, [
