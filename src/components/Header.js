@@ -189,16 +189,16 @@ const Header = (props) => {
       <ModalForm
         open={modalLoginOpen}
         disabled={buttonDisabled || formPasswordText.length === 0}
-        handleCloseModal={handleCloseLogin}
-        handleClickSubmit={handleLogin}
-        title={context.languagePicker("modal.login.title")}
-        caption={context.languagePicker("modal.login.caption")}
+        handleClose={handleCloseLogin}
+        handleClick={handleLogin}
+        title={context.languagePicker("modal.form.login.title")}
+        caption={context.languagePicker("modal.form.login.caption")}
         button={context.languagePicker("universal.button.submit")}
       >
         <form>
           <Input type="text" autoComplete="username" sx={{ display: "none" }} />
           <FormControl>
-            <FormLabel>{context.languagePicker("modal.login.password")}</FormLabel>
+            <FormLabel>{context.languagePicker("modal.form.login.password")}</FormLabel>
             <Input
               value={formPasswordText}
               autoComplete="current-password"

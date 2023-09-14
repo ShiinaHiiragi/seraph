@@ -67,10 +67,12 @@ const en = {
         placeholder: "No Restriction"
       }
     },
-    login: {
-      title: "Login",
-      caption: "Please enter password to acquire full access.",
-      password: "Password"
+    form: {
+      login: {
+        title: "Login",
+        caption: "Please enter password to acquire full access.",
+        password: "Password"
+      },
     },
     reconfirm: {
       title: "Reconfirmation",

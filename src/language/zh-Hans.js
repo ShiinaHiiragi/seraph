@@ -67,10 +67,12 @@ const zhHans = {
         placeholder: "无限制"
       }
     },
-    login: {
-      title: "登录",
-      caption: "请输入密码以获得完全访问权限。",
-      password: "密码"
+    form: {
+      login: {
+        title: "登录",
+        caption: "请输入密码以获得完全访问权限。",
+        password: "密码"
+      },
     },
     reconfirm: {
       title: "二次确认",

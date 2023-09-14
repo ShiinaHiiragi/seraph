@@ -10,8 +10,8 @@ export default function ModalForm(props) {
   const {
     open,
     disabled,
-    handleCloseModal,
-    handleClickSubmit,
+    handleClose,
+    handleClick,
     title,
     caption,
     button,
@@ -21,7 +21,7 @@ export default function ModalForm(props) {
   return (
     <Modal
       open={open}
-      onClose={handleCloseModal}
+      onClose={handleClose}
       sx={{
         userSelect: "none",
         "& ::selection": {
@@ -52,7 +52,7 @@ export default function ModalForm(props) {
           {children}
           <Button
             disabled={disabled}
-            onClick={handleClickSubmit}
+            onClick={handleClick}
           >
             {button}
           </Button>

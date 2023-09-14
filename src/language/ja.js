@@ -67,10 +67,12 @@ const ja = {
         placeholder: "制限なし"
       }
     },
-    login: {
-      title: "ログイン",
-      caption: "フルアクセスを取得するにはパスワードを入力してください。",
-      password: "パスワード"
+    form: {
+      login: {
+        title: "ログイン",
+        caption: "フルアクセスを取得するにはパスワードを入力してください。",
+        password: "パスワード"
+      },
     },
     reconfirm: {
       title: "再確認",
