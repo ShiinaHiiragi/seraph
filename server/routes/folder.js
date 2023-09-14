@@ -14,8 +14,8 @@ router.get('/info', (req, res, next) => {
 
   const folderPath = api.dataPath[
     isPrivate
-      ? "privateFolderDirPath"
-      : "publicFolderDirPath"
+      ? "privateDirFolderPath"
+      : "publicDirFolderPath"
   ](name);
   const folderInfo = api.fileOperator.readFolderInfo(folderPath);
 

@@ -33,8 +33,8 @@ const dataPath = {
   publicMarkdownDirPath: path.join(__dirname, "./data/markdown/public"),
   privateMarkdownDirPath: path.join(__dirname, "./data/markdown/private"),
   independentMarkdownDirPath: path.join(__dirname, "./data/markdown/independent"),
-  publicFolderDirPath: (folderName) => path.join(__dirname, "./data/public", folderName),
-  privateFolderDirPath: (folderName) => path.join(__dirname, "./data/private", folderName),
+  publicDirFolderPath: (folderName) => path.join(__dirname, "./data/public", folderName),
+  privateDirFolderPath: (folderName) => path.join(__dirname, "./data/private", folderName),
 };
 exports.dataPath = dataPath;
 
