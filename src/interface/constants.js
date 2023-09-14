@@ -136,10 +136,12 @@ const Status = {
  *       - ES：直接进入 then
  *       - EF：如果能在 languagePicker 处找到错误，自动报出对应错误
  *       - AF：IT 直接处理，NI 进入 catch
- *       - 余下的进入 catch
- *       - 返回 500：node 出错，进入 axios 的 catch
+ *       - 余下的进入 catch，一般用 request.unparseableResponse（第一类不可控错误）
+ *       - 返回 500：node 出错，进入 axios 的 catch（第二类不可控错误）
  *   2. todo 是什么：EF 在 languagePicker 处找到错误后，不会进入返回的 Promise 流，因
- *      此额外动作需要用 todo 指定，当第二项参数不需要指定的时候，填 undefined 即可
+ *      此额外动作需要用 todo 指定，这个函数被传入返回的响应体 data 部分
+ *       - 当第二项参数不需要指定的时候，填 undefined 即可
+ *       - key 为 "" 时，对应的函数一定会被执行，相当于 finally
  *   3. 注意一致性
  *       - 服务器返回错误码中，只分为认证错误和执行错误
  *       - 但在 languagePicker 中，错误分为警告、异常和错误三种
@@ -194,8 +196,13 @@ const request = (query, params, todo) => {
             ));
 
             const planned = todo?.[matchedErrorCode];
+            const universalPlanned = todo?.[""];
+
             if (planned instanceof Function) {
-              planned();
+              planned(res.data);
+            }
+            if (universalPlanned instanceof Function) {
+              universalPlanned(res.data);
             }
           // returning others, such as AF_NI
           } else {

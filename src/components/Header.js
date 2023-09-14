@@ -74,10 +74,10 @@ const Header = (props) => {
     request(
       "POST/auth/login",
       { password: formPasswordText },
-      { [Status.execErrCode.IncorrectPassword]: () => {
-        setButtonDisabled(false);
-        setFormPasswordError(true);
-      } }
+      {
+        "": () => setButtonDisabled(false),
+        [Status.execErrCode.IncorrectPassword]: () => setFormPasswordError(true)
+      }
     )
       .then((data) => {
         setPrivateFolders(data.private);
