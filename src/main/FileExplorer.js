@@ -24,10 +24,7 @@ const FileExplorer = (props) => {
   // after second tick, the globalSwitch were set properly
   React.useEffect(() => {
     if (context.secondTick && display) {
-      request("GET/folder/info", {
-        type: type,
-        name: folderName
-      })
+      request(`GET/${type}/${folderName}`)
         .then((data) => {
           setFolderState(1);
           setFilesList(data.info);
