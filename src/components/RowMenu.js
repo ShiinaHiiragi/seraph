@@ -10,6 +10,8 @@ import GlobalContext from "../interface/constants";
 
 export default function RowMenu(props) {
   const {
+    type,
+    folderName,
     filename,
     setModalRenameOpen,
     setFormNewNameText
@@ -20,6 +22,10 @@ export default function RowMenu(props) {
     setFormNewNameText(filename);
     setModalRenameOpen(filename);
   }, [setFormNewNameText, setModalRenameOpen, filename]);
+
+  const handleDelete = React.useCallback(() => {
+    // TODO: fill this
+  }, [ ])
 
   return (
     <Dropdown>
@@ -37,7 +43,18 @@ export default function RowMenu(props) {
           {context.languagePicker("main.folder.rowMenu.move")}
         </MenuItem>
         <Divider />
-        <MenuItem color="danger">
+        <MenuItem
+          color="danger"
+          onClick={() => {
+            context.setModalReconfirm({
+              open: true,
+              captionFirstHalf: context
+                .languagePicker("modal.reconfirm.captionFirstHalf.delete")
+                .format(folderName + "/" + filename),
+              handleAction: () => handleDelete()
+            })
+          }}
+        >
           {context.languagePicker("main.folder.rowMenu.delete")}
         </MenuItem>
       </Menu>

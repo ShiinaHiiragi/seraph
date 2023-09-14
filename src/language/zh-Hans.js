@@ -88,7 +88,8 @@ const zhHans = {
       title: "二次确认",
       captionSecondHalf: "点击「继续」以应用更改。",
       captionFirstHalf: {
-        logout: "即将退出 SERAPH。"
+        logout: "即将退出 SERAPH。",
+        delete: "正在删除文件 {0}。"
       }
     }
   },

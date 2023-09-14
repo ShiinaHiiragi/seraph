@@ -88,7 +88,8 @@ const ja = {
       title: "再確認",
       captionSecondHalf: "「進む」を押すと変更を適用できる。",
       captionFirstHalf: {
-        logout: "セラフからログアウトしようとしています。"
+        logout: "セラフからログアウトしようとしています。",
+        delete: "ファイル {0} をデリートしようとしています。"
       }
     }
   },

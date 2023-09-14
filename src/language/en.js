@@ -88,7 +88,8 @@ const en = {
       title: "Reconfirmation",
       captionSecondHalf: "Click 'Continue' to apply changes.",
       captionFirstHalf: {
-        logout: "You are logging out Seraph. "
+        logout: "You are logging out Seraph. ",
+        delete: "You are deleting file {0}. "
       }
     }
   },
