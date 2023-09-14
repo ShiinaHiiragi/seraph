@@ -2,16 +2,16 @@ import * as React from "react";
 import Box from "@mui/joy/Box";
 import Table from "@mui/joy/Table";
 import Sheet from "@mui/joy/Sheet";
+import Link from "@mui/joy/Link";
 import Typography from "@mui/joy/Typography";
-import GlobalContext from "../interface/constants";
+import GlobalContext, { serverBaseURL } from "../interface/constants";
 import RowMenu from "./RowMenu";
 
 export default function FileTable(props) {
   const {
     type,
     folderName,
-    filesList,
-    openNewTab
+    filesList
   } = props;
   const context = React.useContext(GlobalContext);
 
@@ -70,7 +70,12 @@ export default function FileTable(props) {
               </td>
               <td>
                 <Typography level="body-xs">
-                  {item.name}
+                  <Link
+                    target="_blank"
+                    href={new URL(`/${type}/${folderName}/${item.name}`, serverBaseURL).href}
+                  >
+                    {item.name}
+                  </Link>
                 </Typography>
               </td>
               <td>
@@ -94,12 +99,7 @@ export default function FileTable(props) {
               </td>
               <td>
                 <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-                  <RowMenu
-                    type={type}
-                    folderName={folderName}
-                    filename={item.name}
-                    openNewTab={openNewTab}
-                  />
+                  <RowMenu />
                 </Box>
               </td>
             </tr>

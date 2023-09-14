@@ -6,15 +6,15 @@ import List from '@mui/joy/List';
 import ListItem from '@mui/joy/ListItem';
 import ListItemContent from '@mui/joy/ListItemContent';
 import ListDivider from '@mui/joy/ListDivider';
-import GlobalContext from '../interface/constants';
+import Link from "@mui/joy/Link";
+import GlobalContext, { serverBaseURL } from "../interface/constants";
 import RowMenu from './RowMenu';
 
 export default function FileList(props) {
   const {
     type,
     folderName,
-    filesList,
-    openNewTab
+    filesList
   } = props;
   const context = React.useContext(GlobalContext);
 
@@ -42,7 +42,12 @@ export default function FileList(props) {
             <ListItemContent sx={{ display: 'flex', gap: 2, alignItems: 'start' }}>
               <div>
                 <Typography fontWeight={600} gutterBottom>
-                  {item.name}
+                  <Link
+                    target="_blank"
+                    href={new URL(`/${type}/${folderName}/${item.name}`, serverBaseURL).href}
+                  >
+                    {item.name}
+                  </Link>
                 </Typography>
                 <Typography level="body-xs" gutterBottom>
                   {context
@@ -81,12 +86,7 @@ export default function FileList(props) {
                 </Box>
               </div>
             </ListItemContent>
-            <RowMenu
-              type={type}
-              folderName={folderName}
-              filename={item.name}
-              openNewTab={openNewTab}
-            />
+            <RowMenu />
           </ListItem>
           <ListDivider />
         </List>

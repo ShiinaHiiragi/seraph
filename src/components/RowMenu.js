@@ -8,13 +8,7 @@ import IconButton from "@mui/joy/IconButton";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 import GlobalContext from "../interface/constants";
 
-export default function RowMenu(props) {
-  const {
-    type,
-    folderName,
-    filename,
-    openNewTab,
-  } = props;
+export default function RowMenu() {
   const context = React.useContext(GlobalContext);
 
   return (
@@ -26,9 +20,6 @@ export default function RowMenu(props) {
         <MoreHorizRoundedIcon />
       </MenuButton>
       <Menu size="sm" sx={{ minWidth: 140 }}>
-        <MenuItem onClick={() => openNewTab(type, folderName, filename)}>
-          {context.languagePicker("main.folder.rowMenu.open")}
-        </MenuItem>
         <MenuItem>
           {context.languagePicker("main.folder.rowMenu.rename")}
         </MenuItem>
