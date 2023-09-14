@@ -87,7 +87,7 @@ router.post('/login', (req, res, next) => {
 
 router.post('/logout', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
-    // -> abnormal request
+    // -> EF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }
