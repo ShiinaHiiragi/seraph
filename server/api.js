@@ -2,7 +2,6 @@ const fs = require('fs');
 const path = require('path');
 const dotenv = require('dotenv');
 const mime = require('mime');
-const isBinaryPath = require('is-binary-path');
 const CryptoJS = require('crypto-js');
 
 // copy .env in react directory
