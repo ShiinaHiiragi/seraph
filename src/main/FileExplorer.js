@@ -87,6 +87,12 @@ const FileExplorer = (props) => {
     formNewNameText
   ]);
 
+  const sortedFilesList = React.useMemo(() => {
+    return filesList.slice().sort((left, right) => {
+      return left.name > right.name ? 1 : -1;
+    });
+  }, [filesList]);
+
   return (
     <RouteField
       display={display}
@@ -122,14 +128,14 @@ const FileExplorer = (props) => {
           <FileTable
             type={type}
             folderName={folderName}
-            filesList={filesList}
+            sortedFilesList={sortedFilesList}
             setModalRenameOpen={setModalRenameOpen}
             setFormNewNameText={setFormNewNameText}
           />
           <FileList
             type={type}
             folderName={folderName}
-            filesList={filesList}
+            sortedFilesList={sortedFilesList}
             setModalRenameOpen={setModalRenameOpen}
             setFormNewNameText={setFormNewNameText}
           />

@@ -11,7 +11,7 @@ export default function FileTable(props) {
   const {
     type,
     folderName,
-    filesList,
+    sortedFilesList,
     setModalRenameOpen,
     setFormNewNameText
   } = props;
@@ -66,7 +66,7 @@ export default function FileTable(props) {
           </tr>
         </thead>
         <tbody>
-          {filesList.map((item, index) => (
+          {sortedFilesList.map((item, index) => (
             <tr key={index}>
               <td>
               </td>

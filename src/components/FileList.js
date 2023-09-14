@@ -14,7 +14,7 @@ export default function FileList(props) {
   const {
     type,
     folderName,
-    filesList,
+    sortedFilesList,
     setModalRenameOpen,
     setFormNewNameText
   } = props;
@@ -28,7 +28,7 @@ export default function FileList(props) {
       }}
     >
       <ListDivider sx={{ mb: 1 }} />
-      {filesList.map((item, index) => (
+      {sortedFilesList.map((item, index) => (
         <List
           key={index}
           size="sm"
