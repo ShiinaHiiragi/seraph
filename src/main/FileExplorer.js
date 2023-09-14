@@ -106,8 +106,8 @@ const FileExplorer = (props) => {
         disabled={false}
         handleClose={() => { }}
         handleClick={() => { }}
-        title={context.languagePicker("modal.form.login.title")}
-        caption={context.languagePicker("modal.form.login.caption")}
+        title={context.languagePicker("modal.form.rename.title")}
+        caption={context.languagePicker("modal.form.rename.caption")}
         button={context.languagePicker("universal.button.submit")}
       >
       </ModalForm>

@@ -34,7 +34,7 @@ const zhHans = {
       rowMenu: {
         open: "打开",
         rename: "重命名",
-        move: "移动",
+        move: "移动到",
         delete: "删除"
       },
       viewRegulate: {
@@ -73,6 +73,11 @@ const zhHans = {
         caption: "请输入密码以获得完全访问权限。",
         password: "密码"
       },
+      rename: {
+        title: "重命名",
+        caption: "命名限制取决于服务器所在平台，尽量不要修改扩展名。",
+        name: "新文件名"
+      }
     },
     reconfirm: {
       title: "二次确认",
