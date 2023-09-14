@@ -3,6 +3,13 @@ import axios from "axios";
 import { toast } from "sonner";
 
 // eslint-disable-next-line
+String.prototype.upperCaseFirst = function () {
+  let formatted = this;
+  return formatted[0].toUpperCase()
+    + formatted.slice(1);
+}
+
+// eslint-disable-next-line
 String.prototype.format = function () {
   let formatted = this;
   for (let i = 0; i < arguments.length; i++) {
@@ -131,8 +138,10 @@ const request = (query, params) => {
       method === "POST" ? params : { params: params }
     )
       .then((res) => {
+        // returning ES
         if (res.data.statusCode === Status.statusCode.ExecSuccess) {
           resolve(res.data)
+        // returning AF_IT, which is special
         } else if (res.data.statusCode === Status.statusCode.AuthFailed
           && res.data.errorCode === Status.authErrCode.InvalidToken
         ) {
@@ -144,11 +153,22 @@ const request = (query, params) => {
           setTimeout(() => {
             window.location.reload();
           }, 4000);
+        // returning EF
+        } else if (Object
+          .keys(ConstantContext.languagePicker("modal.toast.exception"))
+          .map((item) => Status.execErrCode[item.upperCaseFirst()])
+          .includes(res.data.errorCode)
+        ) {
+          toast.error(ConstantContext.languagePicker(
+            "modal.toast.exception." + Object
+              .keys(ConstantContext.languagePicker("modal.toast.exception"))
+              .filter((item) => Status.execErrCode[
+                item.upperCaseFirst()
+              ] === res.data.errorCode)[0]
+          ));
+        // returning others, such as AF_NI
         } else {
-          // Object.keys(ConstantContext.languagePicker("modal.toast.exception"))
-          //   .map((item) => Status.execErrCode[item])
-          //   .includes(res.data.errorCode)
-          reject(res.data)
+          reject(res.data);
         }
       }).catch((res) => console.log(res) ?? toast.error(
         ConstantContext
