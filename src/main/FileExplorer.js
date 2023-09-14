@@ -54,6 +54,9 @@ const FileExplorer = (props) => {
   // states and function for rename
   const [modalRenameOpen, setModalRenameOpen] = React.useState(false);
   const [formNewNameText, setFormNewNameText] = React.useState("");
+  const handleRename = React.useCallback(() => {
+    console.log(formNewNameText)
+  }, [formNewNameText]);
 
   return (
     <RouteField
@@ -91,11 +94,15 @@ const FileExplorer = (props) => {
             type={type}
             folderName={folderName}
             filesList={filesList}
+            setModalRenameOpen={setModalRenameOpen}
+            setFormNewNameText={setFormNewNameText}
           />
           <FileList
             type={type}
             folderName={folderName}
             filesList={filesList}
+            setModalRenameOpen={setModalRenameOpen}
+            setFormNewNameText={setFormNewNameText}
           />
         </React.Fragment>}
       {folderState < 0 &&
@@ -104,10 +111,10 @@ const FileExplorer = (props) => {
           caption={context.languagePicker("universal.placeholder.unexist.caption")}
         />}
       <ModalForm
-        open={true}
-        disabled={false}
-        handleClose={() => { }}
-        handleClick={() => { }}
+        open={Boolean(modalRenameOpen)}
+        disabled={formNewNameText.length === 0 || formNewNameText === modalRenameOpen}
+        handleClose={() => setModalRenameOpen(false)}
+        handleClick={handleRename}
         title={context.languagePicker("modal.form.rename.title")}
         caption={context.languagePicker("modal.form.rename.caption")}
         button={context.languagePicker("universal.button.submit")}

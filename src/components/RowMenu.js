@@ -8,8 +8,20 @@ import IconButton from "@mui/joy/IconButton";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 import GlobalContext from "../interface/constants";
 
-export default function RowMenu() {
+export default function RowMenu(props) {
+  const {
+    type,
+    folderName,
+    filename,
+    setModalRenameOpen,
+    setFormNewNameText
+  } = props;
   const context = React.useContext(GlobalContext);
+
+  const handleToggleRename = React.useCallback(() => {
+    setFormNewNameText(filename);
+    setModalRenameOpen(filename);
+  }, [setFormNewNameText, setModalRenameOpen, filename]);
 
   return (
     <Dropdown>
@@ -20,7 +32,7 @@ export default function RowMenu() {
         <MoreHorizRoundedIcon />
       </MenuButton>
       <Menu size="sm" sx={{ minWidth: 140 }}>
-        <MenuItem>
+        <MenuItem onClick={handleToggleRename}>
           {context.languagePicker("main.folder.rowMenu.rename")}
         </MenuItem>
         <MenuItem>

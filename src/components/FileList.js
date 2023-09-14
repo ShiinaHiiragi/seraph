@@ -14,7 +14,9 @@ export default function FileList(props) {
   const {
     type,
     folderName,
-    filesList
+    filesList,
+    setModalRenameOpen,
+    setFormNewNameText
   } = props;
   const context = React.useContext(GlobalContext);
 
@@ -86,7 +88,14 @@ export default function FileList(props) {
                 </Box>
               </div>
             </ListItemContent>
-            {context.isAuthority && <RowMenu />}
+            {context.isAuthority &&
+              <RowMenu
+                type={type}
+                folderName={folderName}
+                filename={item.name}
+                setModalRenameOpen={setModalRenameOpen}
+                setFormNewNameText={setFormNewNameText}
+              />}
           </ListItem>
           <ListDivider />
         </List>

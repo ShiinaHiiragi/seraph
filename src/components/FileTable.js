@@ -11,7 +11,9 @@ export default function FileTable(props) {
   const {
     type,
     folderName,
-    filesList
+    filesList,
+    setModalRenameOpen,
+    setFormNewNameText
   } = props;
   const context = React.useContext(GlobalContext);
 
@@ -99,7 +101,13 @@ export default function FileTable(props) {
               </td>
               {context.isAuthority && <td>
                 <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-                  <RowMenu />
+                  <RowMenu
+                    type={type}
+                    folderName={folderName}
+                    filename={item.name}
+                    setModalRenameOpen={setModalRenameOpen}
+                    setFormNewNameText={setFormNewNameText}
+                  />
                 </Box>
               </td>}
             </tr>
