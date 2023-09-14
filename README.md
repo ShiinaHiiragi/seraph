@@ -7,15 +7,12 @@
 ## Usage
 
 ## Memo
-### TODO
-1. move
-2. delete file
-
 ### Plan
 1. File Explorer
     - upload
     - edit in milkdown
     - create / edit attached markdown
+    - table sort
 2. Archive
     - arXiv
     - external link / save in folder
@@ -25,11 +22,7 @@
     - edit / read only
     - attach to file / save in folder
     - download
-5. TODO
+5. Subscription
+6. TODO
     - sync: clear when finish
     - async: 60 s
-
-### Plot
-
-1. Mail Server
-2. Table Sort
