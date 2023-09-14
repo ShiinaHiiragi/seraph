@@ -9,8 +9,7 @@
 ## Memo
 ### TODO
 1. init send folders / setting
-2. sort after
-3. move / delete file
+2. move / delete file
 
 ### Plan
 1. File Explorer
