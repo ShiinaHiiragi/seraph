@@ -31,6 +31,12 @@ const ja = {
         createTime: "{0} に作成",
         modifiedTime: "{0} に最後更新"
       },
+      rowMenu: {
+        open: "開ける",
+        rename: "名前を変更",
+        move: "移動",
+        delete: "削除"
+      },
       viewRegulate: {
         unknown: "未知"
       }

@@ -31,6 +31,12 @@ const zhHans = {
         createTime: "创建于 {0}",
         modifiedTime: "最后修改于 {0}"
       },
+      rowMenu: {
+        open: "打开",
+        rename: "重命名",
+        move: "移动",
+        delete: "删除"
+      },
       viewRegulate: {
         unknown: "未知"
       }

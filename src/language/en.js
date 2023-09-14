@@ -31,6 +31,12 @@ const en = {
         createTime: "Created at {0}",
         modifiedTime: "Last modified at {0}"
       },
+      rowMenu: {
+        open: "Open",
+        rename: "Rename",
+        move: "Move to",
+        delete: "Delete"
+      },
       viewRegulate: {
         unknown: "Unknown"
       }
@@ -67,7 +73,7 @@ const en = {
     },
     reconfirm: {
       title: "Reconfirmation",
-      captionSecondHalf: "Click 'Continue' to apply changes.",
+      captionSecondHalf: " Click 'Continue' to apply changes.",
       captionFirstHalf: {
         logout: "You are logging out Seraph."
       }

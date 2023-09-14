@@ -10,7 +10,6 @@
 
 1. File Explorer
     - upload
-    - view in new tab / rename / move / download / delete
     - edit in milkdown
     - attached markdown
     - preview markdown
