@@ -8,7 +8,10 @@ import RowMenu from "./RowMenu";
 
 export default function FileTable(props) {
   const {
-    filesList
+    type,
+    folderName,
+    filesList,
+    openNewTab
   } = props;
   const context = React.useContext(GlobalContext);
 
@@ -91,7 +94,12 @@ export default function FileTable(props) {
               </td>
               <td>
                 <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-                  <RowMenu />
+                  <RowMenu
+                    type={type}
+                    folderName={folderName}
+                    filename={item.name}
+                    openNewTab={openNewTab}
+                  />
                 </Box>
               </td>
             </tr>

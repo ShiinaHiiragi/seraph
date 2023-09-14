@@ -1,43 +1,20 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import * as React from 'react';
 import Box from '@mui/joy/Box';
-import Divider from '@mui/joy/Divider';
-import IconButton from '@mui/joy/IconButton';
 import Typography from '@mui/joy/Typography';
 import List from '@mui/joy/List';
 import ListItem from '@mui/joy/ListItem';
 import ListItemContent from '@mui/joy/ListItemContent';
 import ListDivider from '@mui/joy/ListDivider';
-import Menu from '@mui/joy/Menu';
-import MenuButton from '@mui/joy/MenuButton';
-import MenuItem from '@mui/joy/MenuItem';
-import Dropdown from '@mui/joy/Dropdown';
-import MoreHorizRoundedIcon from '@mui/icons-material/MoreHorizRounded';
 import GlobalContext from '../interface/constants';
-
-function RowMenu() {
-  return (
-    <Dropdown>
-      <MenuButton
-        slots={{ root: IconButton }}
-        slotProps={{ root: { variant: 'plain', color: 'neutral', size: 'sm' } }}
-      >
-        <MoreHorizRoundedIcon />
-      </MenuButton>
-      <Menu size="sm" sx={{ minWidth: 140 }}>
-        <MenuItem>Edit</MenuItem>
-        <MenuItem>Rename</MenuItem>
-        <MenuItem>Move</MenuItem>
-        <Divider />
-        <MenuItem color="danger">Delete</MenuItem>
-      </Menu>
-    </Dropdown>
-  );
-}
+import RowMenu from './RowMenu';
 
 export default function FileList(props) {
   const {
-    filesList
+    type,
+    folderName,
+    filesList,
+    openNewTab
   } = props;
   const context = React.useContext(GlobalContext);
 
@@ -104,7 +81,12 @@ export default function FileList(props) {
                 </Box>
               </div>
             </ListItemContent>
-            <RowMenu />
+            <RowMenu
+              type={type}
+              folderName={folderName}
+              filename={item.name}
+              openNewTab={openNewTab}
+            />
           </ListItem>
           <ListDivider />
         </List>

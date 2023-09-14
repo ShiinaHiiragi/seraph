@@ -1,7 +1,7 @@
 import React from "react";
 import { toast } from "sonner";
 import { useParams } from "react-router";
-import GlobalContext, { Status, request } from "../interface/constants";
+import GlobalContext, { Status, request, serverBaseURL } from "../interface/constants";
 import RouteField from "../interface/RouteField";
 import FileTable from "../components/FileTable";
 import FileList from "../components/FileList";
@@ -53,6 +53,11 @@ const FileExplorer = (props) => {
     type, folderName
   ]);
 
+  const openNewTab = React.useCallback((type, folderName, filename) => {
+    const href = new URL(`/${type}/${folderName}/${filename}`, serverBaseURL).href;
+    window.open(href, "_blank");
+  }, [ ])
+
   return (
     <RouteField
       display={display}
@@ -85,8 +90,18 @@ const FileExplorer = (props) => {
     >
       {folderState > 0 &&
         <React.Fragment>
-          <FileTable filesList={filesList} />
-          <FileList filesList={filesList} />
+          <FileTable
+            type={type}
+            folderName={folderName}
+            filesList={filesList}
+            openNewTab={openNewTab}
+          />
+          <FileList
+            type={type}
+            folderName={folderName}
+            filesList={filesList}
+            openNewTab={openNewTab}
+          />
         </React.Fragment>}
       {folderState < 0 &&
         <Caption
