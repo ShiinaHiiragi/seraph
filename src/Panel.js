@@ -185,6 +185,8 @@ const Panel = () => {
       value={{
         languagePicker: languagePicker,
         setModalReconfirm: setModalReconfirm,
+        publicFolders: publicFolders,
+        privateFolders: privateFolders,
         globalSwitch: globalSwitch,
         firstTick: firstTick,
         secondTick: secondTick,

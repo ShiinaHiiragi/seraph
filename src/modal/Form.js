@@ -15,7 +15,8 @@ export default function ModalForm(props) {
     title,
     caption,
     button,
-    children
+    children,
+    stackStyle
   } = props;
 
   return (
@@ -26,6 +27,22 @@ export default function ModalForm(props) {
         userSelect: "none",
         "& ::selection": {
           background: "rgb(173, 214, 255)"
+        },
+        "& ::-webkit-scrollbar": {
+          width: "6px",
+          height: "6px"
+        },
+        "& ::-webkit-scrollbar-track": {
+          borderRadius: 0,
+          backgroundColor: "rgb(250, 250, 250)"
+        },
+        "& ::-webkit-scrollbar-thumb": {
+          borderRadius: 0,
+          backgroundColor: "rgb(190, 190, 190)"
+        },
+        "& html": {
+          userSelect: "none",
+          "scrollbar-color": "rgb(190, 190, 190) rgb(250, 250, 250)"
         }
       }}
     >
@@ -42,13 +59,13 @@ export default function ModalForm(props) {
           {title}
         </Typography>
         <Divider />
-        <Typography
+        {caption && <Typography
           id="alert-dialog-modal-description"
           textColor="text.tertiary"
         >
           {caption}
-        </Typography>
-        <Stack spacing={2}>
+        </Typography>}
+        <Stack spacing={2} sx={stackStyle}>
           {children}
           <Button
             disabled={disabled}

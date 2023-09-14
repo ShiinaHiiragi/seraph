@@ -2,7 +2,14 @@ import React from "react";
 import { toast } from "sonner";
 import { useParams } from "react-router";
 import Input from "@mui/joy/Input";
+import List from "@mui/joy/List";
+import ListSubheader from "@mui/joy/ListSubheader";
+import ListItem from "@mui/joy/ListItem";
+import ListItemButton from "@mui/joy/ListItemButton";
+import ListItemDecorator from "@mui/joy/ListItemDecorator";
+import ListItemContent from "@mui/joy/ListItemContent";
 import isValidFilename from 'valid-filename';
+import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import GlobalContext, { Status, request } from "../interface/constants";
 import RouteField from "../interface/RouteField";
 import FileTable from "../components/FileTable";
@@ -173,7 +180,68 @@ const FileExplorer = (props) => {
         handleClick={() => { }}
         title={context.languagePicker("modal.form.move")}
         button={context.languagePicker("universal.button.continue")}
+        stackStyle={{ overflow: "auto" }}
       >
+        <List
+          size="sm"
+          sx={{
+            overflow: "auto",
+            "--ListItem-radius": "8px",
+            "--List-gap": "4px"
+          }}
+        >
+          <ListItem nested>
+            <ListSubheader>
+              {context.languagePicker("nav.public")}
+            </ListSubheader>
+            <List
+              aria-labelledby="nav-list-browse"
+              sx={{
+                "& .JoyListItemButton-root": { p: "8px" },
+              }}
+            >
+              {context.publicFolders.map((item, index) => (
+                <ListItem key={index}>
+                  <ListItemButton
+                    // selected={pathStartWith(`/public/${item}`)}
+                    // onClick={() => navigateTo(`/public/${item}`)}
+                  >
+                    <ListItemDecorator>
+                      <FolderOpenIcon fontSize="small" />
+                    </ListItemDecorator>
+                    <ListItemContent>{item}</ListItemContent>
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+          </ListItem>
+
+          <ListItem nested>
+            <ListSubheader>
+              {context.languagePicker("nav.private")}
+            </ListSubheader>
+            <List
+              aria-labelledby="nav-list-browse"
+              sx={{
+                "& .JoyListItemButton-root": { p: "8px" },
+              }}
+            >
+              {context.privateFolders.map((item, index) => (
+                <ListItem key={index}>
+                  <ListItemButton
+                    // selected={pathStartWith(`/private/${item}`)}
+                    // onClick={() => navigateTo(`/private/${item}`)}
+                  >
+                    <ListItemDecorator>
+                      <FolderOpenIcon fontSize="small" />
+                    </ListItemDecorator>
+                    <ListItemContent>{item}</ListItemContent>
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+          </ListItem>
+        </List>
       </ModalForm>
     </RouteField>
   )
