@@ -71,12 +71,12 @@ const ja = {
       login: {
         title: "ログイン",
         caption: "フルアクセスを取得するにはパスワードを入力してください。",
-        password: "パスワード"
+        placeholder: "パスワード"
       },
       rename: {
         title: "名前を変更する",
         caption: "ネーミング制限はサーバーが配置されているプラットフォームによって違いがある。そして拡張子はできる限りチェンジしないようにしてください。",
-        name: "新たなファイル名"
+        placeholder: "新たなファイル名"
       }
     },
     reconfirm: {

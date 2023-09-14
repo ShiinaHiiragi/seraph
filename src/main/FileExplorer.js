@@ -1,6 +1,7 @@
 import React from "react";
 import { toast } from "sonner";
 import { useParams } from "react-router";
+import Input from "@mui/joy/Input";
 import GlobalContext, { Status, request } from "../interface/constants";
 import RouteField from "../interface/RouteField";
 import FileTable from "../components/FileTable";
@@ -51,7 +52,8 @@ const FileExplorer = (props) => {
   ]);
 
   // states and function for rename
-  // const [modalRenameOpen, setModalRenameOpen] = React.useState(false);
+  const [modalRenameOpen, setModalRenameOpen] = React.useState(false);
+  const [formNewNameText, setFormNewNameText] = React.useState("");
 
   return (
     <RouteField
@@ -110,6 +112,12 @@ const FileExplorer = (props) => {
         caption={context.languagePicker("modal.form.rename.caption")}
         button={context.languagePicker("universal.button.submit")}
       >
+        <Input
+          autoComplete="off"
+          placeholder={context.languagePicker("modal.form.rename.placeholder")}
+          value={formNewNameText}
+          onChange={(event) => setFormNewNameText(event.target.value)}
+        />
       </ModalForm>
     </RouteField>
   )

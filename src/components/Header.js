@@ -3,8 +3,6 @@ import { toast } from "sonner";
 import Box from "@mui/joy/Box";
 import IconButton from "@mui/joy/IconButton";
 import Typography from "@mui/joy/Typography"
-import FormControl from "@mui/joy/FormControl";
-import FormLabel from "@mui/joy/FormLabel";
 import Input from "@mui/joy/Input";
 import MenuIcon from "@mui/icons-material/Menu";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
@@ -197,16 +195,14 @@ const Header = (props) => {
       >
         <form>
           <Input type="text" autoComplete="username" sx={{ display: "none" }} />
-          <FormControl>
-            <FormLabel>{context.languagePicker("modal.form.login.password")}</FormLabel>
-            <Input
-              value={formPasswordText}
-              autoComplete="current-password"
-              onChange={(event) => setFormPasswordText(event.target.value)}
-              slotProps={{ input: { type: "password" } }}
-              error={formPasswordError}
-            />
-          </FormControl>
+          <Input
+            placeholder={context.languagePicker("modal.form.login.placeholder")}
+            value={formPasswordText}
+            error={formPasswordError}
+            autoComplete="current-password"
+            onChange={(event) => setFormPasswordText(event.target.value)}
+            slotProps={{ input: { type: "password" } }}
+          />
         </form>
       </ModalForm>
     </HeaderLayout>

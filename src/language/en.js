@@ -71,12 +71,12 @@ const en = {
       login: {
         title: "Login",
         caption: "Please enter password to acquire full access.",
-        password: "Password"
+        placeholder: "Password"
       },
       rename: {
         title: "Renaming",
         caption: "Naming restrictions depend on platform on which server locates and try not to modify the extension name as much as possible.",
-        name: "New Filename"
+        placeholder: "New Filename"
       }
     },
     reconfirm: {
