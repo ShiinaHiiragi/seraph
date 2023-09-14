@@ -63,7 +63,7 @@ export default function Init(props) {
 
         setPublicFolders(data.public);
         setPrivateFolders(data.private);
-        setSetting(data.setSetting);
+        setSetting(data.setting);
         setGlobalSwitch(globalState.AUTHORITY);
         toast.success(context.languagePicker("modal.toast.success.init"));
       })

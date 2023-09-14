@@ -68,18 +68,14 @@ const FileExplorer = (props) => {
     })
       .then((data) => {
         setModalRenameOpen(null);
-        setFilesList((filesList) => {
-          const newFilesList = filesList.map((item) =>
-            item.name === originFilename
-              ? {
-                ...item,
-                name: formNewNameText,
-                type: data.type
-              } : item
-          );
-          newFilesList.sort((left, right) => left.name < right.time ? 1 : -1)
-          return newFilesList;
-        });
+        setFilesList((filesList) => filesList.map((item) =>
+          item.name === originFilename
+            ? {
+              ...item,
+              name: formNewNameText,
+              type: data.type
+            } : item
+        ));
         toast.success(context.languagePicker("modal.toast.success.rename"));
       })
       .catch(request.unparseableResponse);

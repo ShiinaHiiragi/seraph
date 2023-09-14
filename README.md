@@ -8,8 +8,8 @@
 
 ## Memo
 ### TODO
-1. init send folders / setting
-2. move / delete file
+1. move
+2. delete file
 
 ### Plan
 1. File Explorer
