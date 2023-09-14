@@ -71,7 +71,7 @@ const FileExplorer = (props) => {
     request("POST/file/rename", {
       type: type,
       folderName: folderName,
-      filename: modalRenameOpen,
+      filename: originFilename,
       newFilename: formNewNameText
     })
       .then((data) => {
@@ -98,6 +98,31 @@ const FileExplorer = (props) => {
   // states and function for move
   const [modalMoveOpen, setModalMoveOpen] = React.useState(null);
   const [formSelectedFolder, setFormSelectedFolder] = React.useState([null, null]);
+  const handleMove = React.useCallback(() => {
+    const filename = `${modalMoveOpen}`;
+
+    request("POST/file/move", {
+      type: type,
+      folderName: folderName,
+      filename: filename,
+      newType: formSelectedFolder[0],
+      newFolderName: formSelectedFolder[1]
+    })
+      .then(() => {
+        setModalMoveOpen(null);
+        setFilesList((filesList) => filesList.filter(
+          (item) => item.name !== filename
+        ));
+        toast.success(context.languagePicker("modal.toast.success.move"));
+      })
+      .catch(request.unparseableResponse);
+  }, [
+    context,
+    type,
+    folderName,
+    modalMoveOpen,
+    formSelectedFolder
+  ]);
 
   const sortedFilesList = React.useMemo(() => {
     return filesList.slice().sort((left, right) => {
@@ -186,7 +211,7 @@ const FileExplorer = (props) => {
           setModalMoveOpen(false);
           setFormSelectedFolder([null, null]);
         }}
-        handleClick={() => { }}
+        handleClick={handleMove}
         title={context.languagePicker("modal.form.move")}
         button={context.languagePicker("universal.button.continue")}
         stackStyle={{ overflow: "auto" }}
@@ -209,22 +234,24 @@ const FileExplorer = (props) => {
                 "& .JoyListItemButton-root": { p: "8px" },
               }}
             >
-              {context.publicFolders.map((item, index) => (
-                <ListItem key={index}>
-                  <ListItemButton
-                    selected={
-                      formSelectedFolder[0] === "public"
-                        && formSelectedFolder[1] === item
-                    }
-                    onClick={() => setFormSelectedFolder(["public", item])}
-                  >
-                    <ListItemDecorator>
-                      <FolderOpenIcon fontSize="small" />
-                    </ListItemDecorator>
-                    <ListItemContent>{item}</ListItemContent>
-                  </ListItemButton>
-                </ListItem>
-              ))}
+              {context.publicFolders
+                .filter((item) => type !== "public" || folderName !== item)
+                .map((item, index) => (
+                  <ListItem key={index}>
+                    <ListItemButton
+                      selected={
+                        formSelectedFolder[0] === "public"
+                          && formSelectedFolder[1] === item
+                      }
+                      onClick={() => setFormSelectedFolder(["public", item])}
+                    >
+                      <ListItemDecorator>
+                        <FolderOpenIcon fontSize="small" />
+                      </ListItemDecorator>
+                      <ListItemContent>{item}</ListItemContent>
+                    </ListItemButton>
+                  </ListItem>
+                ))}
             </List>
           </ListItem>
 
@@ -238,22 +265,24 @@ const FileExplorer = (props) => {
                 "& .JoyListItemButton-root": { p: "8px" },
               }}
             >
-              {context.privateFolders.map((item, index) => (
-                <ListItem key={index}>
-                  <ListItemButton
-                    selected={
-                      formSelectedFolder[0] === "private"
-                        && formSelectedFolder[1] === item
-                    }
-                    onClick={() => setFormSelectedFolder(["private", item])}
-                  >
-                    <ListItemDecorator>
-                      <FolderOpenIcon fontSize="small" />
-                    </ListItemDecorator>
-                    <ListItemContent>{item}</ListItemContent>
-                  </ListItemButton>
-                </ListItem>
-              ))}
+              {context.privateFolders
+                .filter((item) => type !== "private" || folderName !== item)
+                .map((item, index) => (
+                  <ListItem key={index}>
+                    <ListItemButton
+                      selected={
+                        formSelectedFolder[0] === "private"
+                          && formSelectedFolder[1] === item
+                      }
+                      onClick={() => setFormSelectedFolder(["private", item])}
+                    >
+                      <ListItemDecorator>
+                        <FolderOpenIcon fontSize="small" />
+                      </ListItemDecorator>
+                      <ListItemContent>{item}</ListItemContent>
+                    </ListItemButton>
+                  </ListItem>
+                ))}
             </List>
           </ListItem>
         </List>

@@ -49,6 +49,7 @@ const zhHans = {
         login: "欢迎回到 SERAPH。",
         logout: "退出成功。",
         rename: "文件名已更改。",
+        move: "文件已移动。",
         delete: "文件已删除。"
       },
       warning: {

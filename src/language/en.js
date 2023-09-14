@@ -49,6 +49,7 @@ const en = {
         login: "Welcome back to Seraph.",
         logout: "Logged out successfully.",
         rename: "File has been renamed.",
+        move: "File has been moved",
         delete: "File has been deleted."
       },
       warning: {
