@@ -125,6 +125,7 @@ const Status = {
   execErrCode: {
     IncorrectPassword: "IP",
     ResourcesUnexist: "RU",
+    FileModuleError: "FME",
     InternalServerError: "ISE"
   }
 }
