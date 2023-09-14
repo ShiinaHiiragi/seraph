@@ -95,6 +95,10 @@ const FileExplorer = (props) => {
     formNewNameText
   ]);
 
+  // states and function for move
+  const [modalMoveOpen, setModalMoveOpen] = React.useState(null);
+  const [formSelectedFolder, setFormSelectedFolder] = React.useState([null, null]);
+
   const sortedFilesList = React.useMemo(() => {
     return filesList.slice().sort((left, right) => {
       return left.name > right.name ? 1 : -1;
@@ -141,6 +145,7 @@ const FileExplorer = (props) => {
             setFormNewNameText={setFormNewNameText}
             setFilesList={setFilesList}
             folderCount={folderCount}
+            setModalMoveOpen={setModalMoveOpen}
           />
           <FileList
             type={type}
@@ -150,6 +155,7 @@ const FileExplorer = (props) => {
             setFormNewNameText={setFormNewNameText}
             setFilesList={setFilesList}
             folderCount={folderCount}
+            setModalMoveOpen={setModalMoveOpen}
           />
         </React.Fragment>}
       {folderState < 0 &&
@@ -174,9 +180,12 @@ const FileExplorer = (props) => {
         />
       </ModalForm>
       <ModalForm
-        open={true}
-        disabled={false}
-        handleClose={() => { }}
+        open={Boolean(modalMoveOpen)}
+        disabled={formSelectedFolder[1] === null}
+        handleClose={() => {
+          setModalMoveOpen(false);
+          setFormSelectedFolder([null, null]);
+        }}
         handleClick={() => { }}
         title={context.languagePicker("modal.form.move")}
         button={context.languagePicker("universal.button.continue")}
@@ -203,8 +212,11 @@ const FileExplorer = (props) => {
               {context.publicFolders.map((item, index) => (
                 <ListItem key={index}>
                   <ListItemButton
-                    // selected={pathStartWith(`/public/${item}`)}
-                    // onClick={() => navigateTo(`/public/${item}`)}
+                    selected={
+                      formSelectedFolder[0] === "public"
+                        && formSelectedFolder[1] === item
+                    }
+                    onClick={() => setFormSelectedFolder(["public", item])}
                   >
                     <ListItemDecorator>
                       <FolderOpenIcon fontSize="small" />
@@ -229,8 +241,11 @@ const FileExplorer = (props) => {
               {context.privateFolders.map((item, index) => (
                 <ListItem key={index}>
                   <ListItemButton
-                    // selected={pathStartWith(`/private/${item}`)}
-                    // onClick={() => navigateTo(`/private/${item}`)}
+                    selected={
+                      formSelectedFolder[0] === "private"
+                        && formSelectedFolder[1] === item
+                    }
+                    onClick={() => setFormSelectedFolder(["private", item])}
                   >
                     <ListItemDecorator>
                       <FolderOpenIcon fontSize="small" />

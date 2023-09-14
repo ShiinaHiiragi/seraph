@@ -17,7 +17,8 @@ export default function RowMenu(props) {
     setModalRenameOpen,
     setFormNewNameText,
     setFilesList,
-    folderCount
+    folderCount,
+    setModalMoveOpen
   } = props;
   const context = React.useContext(GlobalContext);
 
@@ -53,7 +54,7 @@ export default function RowMenu(props) {
         <MenuItem onClick={handleToggleRename}>
           {context.languagePicker("main.folder.rowMenu.rename")}
         </MenuItem>
-        <MenuItem disabled={folderCount < 2}>
+        <MenuItem onClick={() => setModalMoveOpen(filename)} disabled={folderCount < 2}>
           {context.languagePicker("main.folder.rowMenu.move")}
         </MenuItem>
         <Divider />

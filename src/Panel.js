@@ -55,7 +55,7 @@ const Root = styled('div')(({ theme }) => ({
   },
   "& html": {
     userSelect: "none",
-    "scrollbar-color": "rgb(190, 190, 190) rgb(250, 250, 250)"
+    scrollbarColor: "rgb(190, 190, 190) rgb(250, 250, 250)"
   }
 }));
 
