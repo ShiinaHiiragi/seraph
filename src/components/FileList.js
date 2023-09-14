@@ -86,7 +86,7 @@ export default function FileList(props) {
                 </Box>
               </div>
             </ListItemContent>
-            <RowMenu />
+            {context.isAuthority && <RowMenu />}
           </ListItem>
           <ListDivider />
         </List>

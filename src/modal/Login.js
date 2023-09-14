@@ -4,7 +4,6 @@ import Button from "@mui/joy/Button";
 import Divider from "@mui/joy/Divider";
 import Modal from "@mui/joy/Modal";
 import ModalDialog from "@mui/joy/ModalDialog";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import Typography from "@mui/joy/Typography";
 import FormControl from "@mui/joy/FormControl";
 import FormLabel from "@mui/joy/FormLabel";
@@ -92,7 +91,6 @@ export default function Login(props) {
         <Typography
           id="alert-dialog-modal-title"
           level="h2"
-          startDecorator={<InfoOutlinedIcon />}
         >
           {context.languagePicker("modal.login.title")}
         </Typography>

@@ -58,9 +58,9 @@ export default function FileTable(props) {
             <th style={{ width: 140, padding: "12px 6px" }}>
               {context.languagePicker("main.folder.tableColumn.time")}
             </th>
-            <th style={{ width: 140, padding: "12px 6px" }}>
+            {context.isAuthority && <th style={{ width: 140, padding: "12px 6px" }}>
               {context.languagePicker("main.folder.tableColumn.operation")}
-            </th>
+            </th>}
           </tr>
         </thead>
         <tbody>
@@ -97,11 +97,11 @@ export default function FileTable(props) {
                   )}
                 </Typography>
               </td>
-              <td>
+              {context.isAuthority && <td>
                 <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
                   <RowMenu />
                 </Box>
-              </td>
+              </td>}
             </tr>
           ))}
         </tbody>
