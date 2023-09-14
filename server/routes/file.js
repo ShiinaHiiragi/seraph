@@ -83,7 +83,14 @@ router.post('/move', (req, res, next) => {
     return;
   }
 
-  fs.renameSync(filePath, newFilePath);
+  try {
+    fs.renameSync(filePath, newFilePath);
+  } catch (_) {
+    // -> EF_FME: fs.renameSync error
+    req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
+    res.send(req.status.generateReport());
+    return;
+  }
 
   // -> ES: no extra info
   req.status.addExecStatus();
@@ -113,7 +120,14 @@ router.post('/delete', (req, res, next) => {
     return;
   }
 
-  fs.unlinkSync(filePath);
+  try {
+    fs.unlinkSync(filePath);
+  } catch (_) {
+    // -> EF_FME: fs.renameSync error
+    req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
+    res.send(req.status.generateReport());
+    return;
+  }
 
   // -> ES: no extra info
   req.status.addExecStatus();
