@@ -28,7 +28,7 @@ const FileExplorer = (props) => {
     if (context.secondTick && display) {
       request(
         `GET/${type}/${folderName}`,
-        { },
+        undefined,
         { [Status.execErrCode.ResourcesUnexist]: () => {
           setFolderState(-1);
         } }

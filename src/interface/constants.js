@@ -129,6 +129,25 @@ const Status = {
   }
 }
 
+/**
+ * request 使用须知（重要）
+ *   1. 工作原理：自动分析 GET/POST，填入不同参数。返回时分析返回结果，自动响应绝大部分错误
+ *       - ES：直接进入 then
+ *       - EF：如果能在 languagePicker 处找到错误，自动报出对应错误
+ *       - AF：IT 直接处理，NI 进入 catch
+ *       - 余下的进入 catch
+ *       - 返回 500：node 出错，进入 axios 的 catch
+ *   2. todo 是什么：EF 在 languagePicker 处找到错误后，不会进入返回的 Promise 流，因
+ *      此额外动作需要用 todo 指定，当第二项参数不需要指定的时候，填 undefined 即可
+ *   3. 注意一致性
+ *       - 服务器返回错误码中，只分为认证错误和执行错误
+ *       - 但在 languagePicker 中，错误分为警告、异常和错误三种
+ *       - 警告包括前端预检查发现的错误和认证错误的 IT（NI 进到 catch）
+ *       - 异常应该被包含在执行错误中，而且名字应保持一致（除了首字母）
+ *       - 错误只有两种，catch 中统一处理的 fallback 和服务器内部错误，后者包含在执行错误中
+ *      综上所述，前端异常 + 服务器内部错误 == 后端执行错误
+ *      须务必保持除了服务器内部错误 ISE 外其他所有错误名字相同（除了首字母）
+ */
 axios.defaults.withCredentials = true;
 const request = (query, params, todo) => {
   const [method, path] = query.match(/(GET|POST)(.+)/).slice(1);
