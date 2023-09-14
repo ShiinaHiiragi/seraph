@@ -1,11 +1,12 @@
 import React from "react";
 import { toast } from "sonner";
 import { useParams } from "react-router";
-import GlobalContext, { Status, request, serverBaseURL } from "../interface/constants";
+import GlobalContext, { Status, request } from "../interface/constants";
 import RouteField from "../interface/RouteField";
 import FileTable from "../components/FileTable";
 import FileList from "../components/FileList";
 import Caption from "../components/Caption";
+import ModalForm from "../modal/Form";
 
 const FileExplorer = (props) => {
   const {
@@ -16,7 +17,6 @@ const FileExplorer = (props) => {
 
   const [filesList, setFilesList] = React.useState([]);
   const [folderState, setFolderState] = React.useState(0);
-
   const display = React.useMemo(() => {
     return type === "public" || context.isAuthority;
   }, [type, context.isAuthority])
@@ -50,10 +50,8 @@ const FileExplorer = (props) => {
     type, folderName
   ]);
 
-  const openNewTab = React.useCallback((type, folderName, filename) => {
-    const href = new URL(`/${type}/${folderName}/${filename}`, serverBaseURL).href;
-    window.open(href, "_blank");
-  }, [ ])
+  // states and function for rename
+  // const [modalRenameOpen, setModalRenameOpen] = React.useState(false);
 
   return (
     <RouteField
@@ -91,13 +89,11 @@ const FileExplorer = (props) => {
             type={type}
             folderName={folderName}
             filesList={filesList}
-            openNewTab={openNewTab}
           />
           <FileList
             type={type}
             folderName={folderName}
             filesList={filesList}
-            openNewTab={openNewTab}
           />
         </React.Fragment>}
       {folderState < 0 &&

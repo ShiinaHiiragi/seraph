@@ -6,7 +6,7 @@ import ModalDialog from "@mui/joy/ModalDialog";
 import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
 
-export default function modalForm(props) {
+export default function ModalForm(props) {
   const {
     open,
     disabled,
