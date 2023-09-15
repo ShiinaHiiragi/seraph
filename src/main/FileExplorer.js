@@ -55,6 +55,11 @@ const FileExplorer = (props) => {
   const [modalRenameOpen, setModalRenameOpen] = React.useState(null);
   const [formNewNameText, setFormNewNameText] = React.useState("");
   const [modalRenameDisabled, setModalRenameDisabled] = React.useState(false);
+  const handleCloseRename = React.useCallback(() => {
+    setModalRenameOpen(false);
+    setModalRenameDisabled(false);
+  }, [ ]);
+
   const handleRename = React.useCallback(() => {
     if (!isValidFilename(formNewNameText)) {
       toast.error(context.languagePicker("modal.toast.warning.illegalRename"));
@@ -74,7 +79,6 @@ const FileExplorer = (props) => {
       { "": () => setModalRenameDisabled(false) }
     )
       .then((data) => {
-        setModalRenameOpen(null);
         setFilesList((filesList) => filesList.map((item) =>
           item.name === originFilename
             ? {
@@ -83,6 +87,7 @@ const FileExplorer = (props) => {
               type: data.type
             } : item
         ));
+        handleCloseRename();
         toast.success(context.languagePicker("modal.toast.success.rename"));
       })
       .finally(() => setModalRenameDisabled(false));
@@ -91,7 +96,8 @@ const FileExplorer = (props) => {
     type,
     folderName,
     modalRenameOpen,
-    formNewNameText
+    formNewNameText,
+    handleCloseRename
   ]);
 
   // states and function for move
@@ -201,7 +207,7 @@ const FileExplorer = (props) => {
           || formNewNameText.length === 0
           || formNewNameText === modalRenameOpen
         }
-        handleClose={() => setModalRenameOpen(null)}
+        handleClose={handleCloseRename}
         handleClick={handleRename}
         title={context.languagePicker("modal.form.rename.title")}
         caption={context.languagePicker("modal.form.rename.caption")}
