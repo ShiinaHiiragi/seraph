@@ -11,7 +11,6 @@ import SideDrawer from "./components/SideDrawer";
 
 import Welcome from "./main/Welcome";
 import FileExplorer from "./main/FileExplorer"
-import Archive from "./main/Archive";
 import Links from "./main/Links";
 import Milkdown from "./main/Milkdown";
 import Subscription from "./main/Subscription";
@@ -229,7 +228,6 @@ const Panel = () => {
                     path="/private/:folderName"
                     element={<FileExplorer folderCount={folderCount} type="private" />}
                   />
-                  <Route path="/archive" element={<Archive />} />
                   <Route path="/links" element={<Links />} />
                   <Route path="/milkdown" element={<Milkdown />} />
                   <Route path="/subscription" element={<Subscription />} />

@@ -7,7 +7,6 @@ const en = {
     private: "Private",
     utility: {
       title: "Utility",
-      archive: "Archive",
       links: "Links",
       subscription: "Subscription",
       milkdown: "Milkdown",

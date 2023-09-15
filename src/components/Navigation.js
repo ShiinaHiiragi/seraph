@@ -107,17 +107,6 @@ export default function Navigation(props) {
         >
           {context.isAuthority && <ListItem>
             <ListItemButton
-              selected={pathStartWith("/archive")}
-              onClick={() => navigateTo("/archive")}
-            >
-              <ListItemDecorator sx={{ color: "neutral.500" }}>
-                <CloudOutlinedIcon fontSize="small" />
-              </ListItemDecorator>
-              <ListItemContent>{context.languagePicker("nav.utility.archive")}</ListItemContent>
-            </ListItemButton>
-          </ListItem>}
-          {context.isAuthority && <ListItem>
-            <ListItemButton
               selected={pathStartWith("/links")}
               onClick={() => navigateTo("/links")}
             >

@@ -7,7 +7,6 @@ const zhHans = {
     private: "私有",
     utility: {
       title: "实用",
-      archive: "档案",
       links: "链接",
       subscription: "订阅",
       milkdown: "Milkdown",

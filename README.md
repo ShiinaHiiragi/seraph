@@ -17,27 +17,26 @@
     - new / delete folder
     - edit in milkdown
     - create / edit attached markdown
-2. Archive
-    - arXiv search
-    - save in folder / link
-3. Links
+2. Links
     - add / modify / delete links
-4. Milkdown
+    - download resources
+    - arXiv search
+3. Milkdown
     - edit / read only
     - save in folder / attach to file
     - download
-5. Subscription
+4. Subscription
     - cron (cron) & sync (ntp-time-sync)
     - snippet (return string / file)
     - mail server
     - multilanguage support
-6. Terminal
+5. Terminal
     - open powershell / bash
     - terminal: react-terminal
-7. TODO
+6. TODO
     - sync: clear automatically
     - async: clear after ticked 60 s
-8. Header
+7. Header
     - about
         - platform argument
         - info about seraph

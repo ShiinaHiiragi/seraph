@@ -7,7 +7,6 @@ const ja = {
     private: "プライベート",
     utility: {
       title: "ユーティリティ",
-      archive: "アーカイブ",
       links: "リンク",
       subscription: "サブスクリプション",
       milkdown: "ミルクダウン",
