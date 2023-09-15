@@ -11,6 +11,7 @@ const ja = {
       links: "リンク",
       subscription: "サブスクリプション",
       milkdown: "ミルクダウン",
+      terminal: "ターミナル",
       todo: "トゥードゥー"
     }
   },

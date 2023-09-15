@@ -11,6 +11,7 @@ const en = {
       links: "Links",
       subscription: "Subscription",
       milkdown: "Milkdown",
+      terminal: "Terminal",
       todo: "TODO"
     }
   },

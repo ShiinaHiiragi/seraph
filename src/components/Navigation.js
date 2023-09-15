@@ -9,11 +9,12 @@ import IconButton from "@mui/joy/IconButton";
 import Typography from "@mui/joy/Typography"
 import GreyLogo from "../logo-grey.svg";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
-// import CloudOutlinedIcon from "@mui/icons-material/CloudOutlined";
-// import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
-// import EventNoteOutlinedIcon from "@mui/icons-material/EventNoteOutlined";
-// import ForwardToInboxOutlinedIcon from "@mui/icons-material/ForwardToInboxOutlined";
-// import DoneIcon from "@mui/icons-material/Done";
+import CloudOutlinedIcon from "@mui/icons-material/CloudOutlined";
+import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
+import EventNoteOutlinedIcon from "@mui/icons-material/EventNoteOutlined";
+import ForwardToInboxOutlinedIcon from "@mui/icons-material/ForwardToInboxOutlined";
+import TerminalOutlinedIcon from "@mui/icons-material/TerminalOutlined";
+import DoneIcon from "@mui/icons-material/Done";
 import GlobalContext from "../interface/constants";
 import { pathStartWith } from "../interface/constants";
 import { useNavigate } from "react-router-dom";
@@ -94,7 +95,7 @@ export default function Navigation(props) {
         </List>
       </ListItem>}
 
-      {/* <ListItem nested>
+      <ListItem nested>
         <ListSubheader>
           {context.languagePicker("nav.utility.title")}
         </ListSubheader>
@@ -150,6 +151,17 @@ export default function Navigation(props) {
           </ListItem>}
           {context.isAuthority && <ListItem>
             <ListItemButton
+              selected={pathStartWith("/terminal")}
+              onClick={() => navigateTo("/terminal")}
+            >
+              <ListItemDecorator sx={{ color: "neutral.500" }}>
+                <TerminalOutlinedIcon fontSize="small" />
+              </ListItemDecorator>
+              <ListItemContent>{context.languagePicker("nav.utility.terminal")}</ListItemContent>
+            </ListItemButton>
+          </ListItem>}
+          {context.isAuthority && <ListItem>
+            <ListItemButton
               selected={pathStartWith("/todo")}
               onClick={() => navigateTo("/todo")}
             >
@@ -160,7 +172,7 @@ export default function Navigation(props) {
             </ListItemButton>
           </ListItem>}
         </List>
-      </ListItem> */}
+      </ListItem>
     </List>
   );
 }

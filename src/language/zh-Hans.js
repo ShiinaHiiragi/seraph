@@ -11,6 +11,7 @@ const zhHans = {
       links: "链接",
       subscription: "订阅",
       milkdown: "Milkdown",
+      terminal: "终端",
       todo: "待办"
     }
   },

@@ -15,6 +15,7 @@ import Archive from "./main/Archive";
 import Links from "./main/Links";
 import Milkdown from "./main/Milkdown";
 import Subscription from "./main/Subscription";
+import Terminal from "./main/Terminal";
 import TODO from "./main/TODO";
 import Error from "./main/Error";
 
@@ -232,6 +233,7 @@ const Panel = () => {
                   <Route path="/links" element={<Links />} />
                   <Route path="/milkdown" element={<Milkdown />} />
                   <Route path="/subscription" element={<Subscription />} />
+                  <Route path="/terminal" element={<Terminal />} />
                   <Route path="/todo" element={<TODO />} />
                   <Route path="*" element={<Error />} />
                 </Routes>
