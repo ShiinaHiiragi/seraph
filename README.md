@@ -7,24 +7,38 @@
 ## Usage
 
 ## Memo
-### Plan
+
 1. File Explorer
-    - table sort
-    - copy
-    - move / copy -> conflict & replace
-    - upload
+    - addition
+        - copy
+        - move / copy -> conflict & replace
+        - table sort
+    - upload file
+    - new / delete folder
     - edit in milkdown
     - create / edit attached markdown
 2. Archive
-    - arXiv
-    - external link / save in folder
+    - arXiv search
+    - save in folder / link
 3. Links
-    - add / delete links
+    - add / modify / delete links
 4. Milkdown
     - edit / read only
-    - attach to file / save in folder
+    - save in folder / attach to file
     - download
 5. Subscription
-6. TODO
-    - sync: clear when finish
-    - async: 60 s
+    - cron (cron) & sync (ntp-time-sync)
+    - snippet (return string / file)
+    - mail server
+    - multilanguage support
+6. Terminal
+    - open powershell / bash
+    - terminal: react-terminal
+7. TODO
+    - sync: clear automatically
+    - async: clear after ticked 60 s
+8. Header
+    - about
+        - platform argument
+        - info about seraph
+    - setting
