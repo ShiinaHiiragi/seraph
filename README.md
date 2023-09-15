@@ -11,7 +11,7 @@
 1. File Explorer
     - addition
         - copy
-        - move / copy -> conflict & replace
+        - rename / move / copy -> conflict & replace
         - table sort
     - upload file
     - new / delete folder
