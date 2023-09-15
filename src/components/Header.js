@@ -5,7 +5,7 @@ import IconButton from "@mui/joy/IconButton";
 import Typography from "@mui/joy/Typography"
 import Input from "@mui/joy/Input";
 import MenuIcon from "@mui/icons-material/Menu";
-import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
+import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
 import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import { useNavigate } from "react-router-dom";
@@ -154,7 +154,7 @@ const Header = (props) => {
               }
             }}
           >
-            <SettingsOutlinedIcon />
+            <LanguageOutlinedIcon />
           </IconButton>}
         {context.isAuthority
           ? <IconButton

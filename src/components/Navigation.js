@@ -34,7 +34,13 @@ export default function Navigation(props) {
   }, [navigate, setDrawerOpen]);
 
   return (
-    <List size="sm" sx={{ "--ListItem-radius": "8px", "--List-gap": "4px" }}>
+    <List
+      size="sm"
+      sx={{
+        "--ListItem-radius": "8px",
+        "--List-gap": "4px",
+      }}
+    >
       <ListItem sx={{ paddingLeft: 0, display: { xs: "inline-flex", sm: "inline-flex", md: "none" } }}>
         <IconButton disabled sx={{ paddingLeft: "0px" }}>
           <img src={GreyLogo} width={24} height={24} alt="" />
