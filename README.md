@@ -10,6 +10,7 @@
 
 1. File Explorer
     - addition
+        - rename focus
         - copy
         - rename / move / copy -> conflict & replace
         - table sort

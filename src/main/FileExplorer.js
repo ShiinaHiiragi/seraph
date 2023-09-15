@@ -2,20 +2,14 @@ import React from "react";
 import { toast } from "sonner";
 import { useParams } from "react-router";
 import Input from "@mui/joy/Input";
-import List from "@mui/joy/List";
-import ListSubheader from "@mui/joy/ListSubheader";
-import ListItem from "@mui/joy/ListItem";
-import ListItemButton from "@mui/joy/ListItemButton";
-import ListItemDecorator from "@mui/joy/ListItemDecorator";
-import ListItemContent from "@mui/joy/ListItemContent";
 import isValidFilename from 'valid-filename';
-import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import GlobalContext, { Status, request } from "../interface/constants";
 import RouteField from "../interface/RouteField";
 import FileTable from "../components/FileTable";
 import FileList from "../components/FileList";
 import Caption from "../components/Caption";
 import ModalForm from "../modal/Form";
+import FolderSelector from "../modal/FolderSelector";
 
 const FileExplorer = (props) => {
   const {
@@ -102,9 +96,11 @@ const FileExplorer = (props) => {
 
   // states and function for move
   const [modalMoveOpen, setModalMoveOpen] = React.useState(null);
-  const [formSelectedFolder, setFormSelectedFolder] = React.useState([null, null]);
   const [modalMoveDisabled, setModalMoveDisabled] = React.useState(false);
-  const handleMove = React.useCallback(() => {
+  const handleMove = React.useCallback((
+    formSelectedFolder,
+    setFormSelectedFolder
+  ) => {
     const filename = `${modalMoveOpen}`;
     setModalMoveDisabled(true);
     request(
@@ -131,8 +127,7 @@ const FileExplorer = (props) => {
     context,
     type,
     folderName,
-    modalMoveOpen,
-    formSelectedFolder
+    modalMoveOpen
   ]);
 
   const sortedFilesList = React.useMemo(() => {
@@ -219,92 +214,16 @@ const FileExplorer = (props) => {
           onChange={(event) => setFormNewNameText(event.target.value)}
         />
       </ModalForm>
-      <ModalForm
+      <FolderSelector
         open={Boolean(modalMoveOpen)}
-        disabled={
-          modalMoveDisabled
-          || formSelectedFolder[1] === null
-        }
-        handleClose={() => {
-          setModalMoveOpen(false);
-          setFormSelectedFolder([null, null]);
-        }}
+        disabled={modalMoveDisabled}
+        handleClose={() => setModalMoveOpen(false)}
         handleClick={handleMove}
         title={context.languagePicker("modal.form.move")}
         button={context.languagePicker("universal.button.continue")}
-        stackStyle={{ overflow: "auto" }}
-      >
-        <List
-          size="sm"
-          sx={{
-            overflow: "auto",
-            "--ListItem-radius": "8px",
-            "--List-gap": "4px"
-          }}
-        >
-          <ListItem nested>
-            <ListSubheader>
-              {context.languagePicker("nav.public")}
-            </ListSubheader>
-            <List
-              aria-labelledby="nav-list-browse"
-              sx={{
-                "& .JoyListItemButton-root": { p: "8px" },
-              }}
-            >
-              {context.publicFolders
-                .filter((item) => type !== "public" || folderName !== item)
-                .map((item, index) => (
-                  <ListItem key={index}>
-                    <ListItemButton
-                      selected={
-                        formSelectedFolder[0] === "public"
-                          && formSelectedFolder[1] === item
-                      }
-                      onClick={() => setFormSelectedFolder(["public", item])}
-                    >
-                      <ListItemDecorator>
-                        <FolderOpenIcon fontSize="small" />
-                      </ListItemDecorator>
-                      <ListItemContent>{item}</ListItemContent>
-                    </ListItemButton>
-                  </ListItem>
-                ))}
-            </List>
-          </ListItem>
-
-          <ListItem nested>
-            <ListSubheader>
-              {context.languagePicker("nav.private")}
-            </ListSubheader>
-            <List
-              aria-labelledby="nav-list-browse"
-              sx={{
-                "& .JoyListItemButton-root": { p: "8px" },
-              }}
-            >
-              {context.privateFolders
-                .filter((item) => type !== "private" || folderName !== item)
-                .map((item, index) => (
-                  <ListItem key={index}>
-                    <ListItemButton
-                      selected={
-                        formSelectedFolder[0] === "private"
-                          && formSelectedFolder[1] === item
-                      }
-                      onClick={() => setFormSelectedFolder(["private", item])}
-                    >
-                      <ListItemDecorator>
-                        <FolderOpenIcon fontSize="small" />
-                      </ListItemDecorator>
-                      <ListItemContent>{item}</ListItemContent>
-                    </ListItemButton>
-                  </ListItem>
-                ))}
-            </List>
-          </ListItem>
-        </List>
-      </ModalForm>
+        publicFolders={context.publicFolders}
+        privateFolders={context.privateFolders}
+      />
     </RouteField>
   )
 }
