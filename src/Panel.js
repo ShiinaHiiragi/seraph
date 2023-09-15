@@ -200,16 +200,16 @@ const Panel = () => {
                 setSettingPair={setSettingPair}
               />
             </HeaderField>
+            {drawerOpen && (
+              <SideDrawer onClose={() => setDrawerOpen(false)}>
+                <Navigation
+                  publicFolders={publicFolders}
+                  privateFolders={privateFolders}
+                  setDrawerOpen={setDrawerOpen}
+                />
+              </SideDrawer>
+            )}
             <ContentField className="ContentField">
-              {drawerOpen && (
-                <SideDrawer onClose={() => setDrawerOpen(false)}>
-                  <Navigation
-                    publicFolders={publicFolders}
-                    privateFolders={privateFolders}
-                    setDrawerOpen={setDrawerOpen}
-                  />
-                </SideDrawer>
-              )}
               <NavigationField className="NavigationField">
                 <Navigation
                   publicFolders={publicFolders}
