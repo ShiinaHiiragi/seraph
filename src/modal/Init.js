@@ -59,12 +59,12 @@ export default function Init(props) {
     })
       .then((data) => {
         setFirstTick(true);
-        setModalInitOpen(false);
-
         setPublicFolders(data.public);
         setPrivateFolders(data.private);
         setSetting(data.setting);
         setGlobalSwitch(globalState.AUTHORITY);
+
+        setModalInitOpen(false);
         toast.success(context.languagePicker("modal.toast.success.init"));
       })
       .finally(() => setFormPasswordDisabled(false));
