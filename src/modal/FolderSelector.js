@@ -29,13 +29,16 @@ export default function FolderSelector(props) {
   const context = React.useContext(GlobalContext);
   
   const [formSelectedFolder, setFormSelectedFolder] = React.useState([null, null]);
+  const clearInnerState = React.useCallback(() => {
+    setFormSelectedFolder([null, null]);
+  }, [ ]);
 
   return (
     <Modal
       open={open}
       onClose={() => {
         handleClose();
-        setFormSelectedFolder([null, null]);
+        clearInnerState();
       }}
       sx={{
         userSelect: "none",
@@ -153,7 +156,7 @@ export default function FolderSelector(props) {
           </List>
           <Button
             disabled={disabled || formSelectedFolder[1] === null}
-            onClick={() => handleClick(formSelectedFolder, setFormSelectedFolder)}
+            onClick={() => handleClick(clearInnerState, formSelectedFolder)}
           >
             {button}
           </Button>

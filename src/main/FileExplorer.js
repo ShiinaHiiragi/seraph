@@ -104,8 +104,8 @@ const FileExplorer = (props) => {
   const [modalMoveOpen, setModalMoveOpen] = React.useState(null);
   const [modalMoveDisabled, setModalMoveDisabled] = React.useState(false);
   const handleMove = React.useCallback((
-    formSelectedFolder,
-    setFormSelectedFolder
+    clearInnerState,
+    formSelectedFolder
   ) => {
     const filename = `${modalMoveOpen}`;
     setModalMoveDisabled(true);
@@ -121,14 +121,14 @@ const FileExplorer = (props) => {
       { "": () => setModalMoveDisabled(false) }
     )
       .then(() => {
-        setModalMoveOpen(null);
-        setFormSelectedFolder([null, null]);
         setFilesList((filesList) => filesList.filter(
           (item) => item.name !== filename
         ));
+        setModalMoveOpen(null);
+        clearInnerState();
         toast.success(context.languagePicker("modal.toast.success.move"));
       })
-      .finally(() => setModalMoveDisabled(true));
+      .finally(() => setModalMoveDisabled(false));
   }, [
     context,
     type,
@@ -223,7 +223,7 @@ const FileExplorer = (props) => {
       <FolderSelector
         open={Boolean(modalMoveOpen)}
         disabled={modalMoveDisabled}
-        handleClose={() => setModalMoveOpen(false)}
+        handleClose={() => setModalMoveOpen(null)}
         handleClick={handleMove}
         title={context.languagePicker("modal.form.move")}
         button={context.languagePicker("universal.button.continue")}
