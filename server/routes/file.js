@@ -32,6 +32,13 @@ router.post('/rename', (req, res, next) => {
     return;
   }
 
+  if (fs.existsSync(newFilePath)) {
+    // -> EF_IC: new filename already exists
+    req.status.addExecStatus(api.Status.execErrCode.IdentifierConflict);
+    res.send(req.status.generateReport());
+    return;
+  }
+
   try {
     fs.renameSync(filePath, newFilePath);
   } catch (_) {
@@ -83,6 +90,13 @@ router.post('/move', (req, res, next) => {
   ) {
     // -> EF_RU: folder don't exist
     req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  if (fs.existsSync(newFilePath)) {
+    // -> EF_IC: new filename already exists
+    req.status.addExecStatus(api.Status.execErrCode.IdentifierConflict);
     res.send(req.status.generateReport());
     return;
   }

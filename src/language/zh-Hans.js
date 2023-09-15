@@ -59,7 +59,8 @@ const zhHans = {
       exception: {
         incorrectPassword: "密码错误。",
         resourcesUnexist: "请求的资源不存在。",
-        fileModuleError: "文件操作模块发生错误。"
+        identifierConflict: "命名标识符冲突。",
+        fileModuleError: "文件操作模块产生异常。"
       },
       error: {
         unparseableResponse: "响应无法解析：请求失败，错误代码 {0}。",

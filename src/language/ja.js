@@ -59,7 +59,8 @@ const ja = {
       exception: {
         incorrectPassword: "パスワードが間違っています。",
         resourcesUnexist: "リクエストされたリソースは存在しません。",
-        fileModuleError: "ファイルオペレーションモジュールでエラーが発生しました。"
+        identifierConflict: "ネーミング識別子競合。",
+        fileModuleError: "ファイルオペレーションモジュールでエクセプションが発生しました。"
       },
       error: {
         unparseableResponse: "解析不能のレスポンス：リクエストはフェイルしましてエラーコードが {0} です。",

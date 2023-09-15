@@ -59,7 +59,8 @@ const en = {
       exception: {
         incorrectPassword: "Incorrect password.",
         resourcesUnexist: "Resources requested do not exist.",
-        fileModuleError: "Error occurred in file operation module."
+        identifierConflict: "Naming identifiers conflicts.",
+        fileModuleError: "Exception occurred in file operation module."
       },
       error: {
         unparseableResponse: "Unparseable Response: Request failed with error code {0}.",
