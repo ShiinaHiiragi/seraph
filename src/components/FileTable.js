@@ -22,7 +22,8 @@ export default function FileTable(props) {
     folderCount,
     setModalMoveOpen,
     setModalCopyOpen,
-    guard
+    guard,
+    searcher
   } = props;
   const context = React.useContext(GlobalContext);
 
@@ -135,7 +136,19 @@ export default function FileTable(props) {
           </tr>
         </thead>
         <tbody>
-          {sortedFilesList
+          {(guard[0] === ""
+            ? sortedFilesList
+            : searcher.search(guard[0]).map((item) => item.item)
+          )
+            .filter((item) => [
+              null,
+              context.languagePicker(
+                "main.folder.viewRegulate.all"
+              )
+            ].includes(guard[1])
+              ? true
+              : new RegExp(`^${guard[1].toLowerCase()}/`).test(item.type)
+            )
             .map((item, index) => (
               <tr key={index}>
                 <td>

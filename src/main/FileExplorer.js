@@ -1,6 +1,7 @@
 import React from "react";
 import { toast } from "sonner";
 import { useParams } from "react-router";
+import Fuse from "fuse.js";
 import isValidFilename from "valid-filename";
 import Input from "@mui/joy/Input";
 import Box from "@mui/joy/Box";
@@ -29,12 +30,15 @@ const FileExplorer = (props) => {
   const [filesList, setFilesList] = React.useState([]);
   const [filesSorting, setFilesSorting] = React.useState(["name", false]);
   const [folderState, setFolderState] = React.useState(0);
+
   const sortedFilesList = React.useMemo(() => {
     return filesList.sortBy(...filesSorting);
   }, [filesList, filesSorting]);
+
   const display = React.useMemo(() => {
     return type === "public" || context.isAuthority;
   }, [type, context.isAuthority]);
+
   const handleClickSort = React.useCallback((target) => {
     setFilesSorting((filesSorting) => {
       return filesSorting[0] === target
@@ -74,6 +78,12 @@ const FileExplorer = (props) => {
   const [filter, setFilter] = React.useState(null);
   const [guard, setGuard] = React.useState(["", null]);
   const [filterList, setFilterList] = React.useState([]);
+
+  const searcher = React.useMemo(() => new Fuse(
+    sortedFilesList,
+    { keys: ["name"] }
+  ), [sortedFilesList])
+
   React.useEffect(() => setFilterList([
     ...new Set(
       filesList.map(
@@ -83,6 +93,7 @@ const FileExplorer = (props) => {
       )
     )
   ].sortBy()), [context, filesList]);
+
   React.useEffect(() => {
     setFilter(null);
   }, [type, folderName]);
@@ -93,6 +104,7 @@ const FileExplorer = (props) => {
     ), 500);
     return () => clearTimeout(timeOutId);
   }, [search]);
+
   React.useEffect(() => setGuard((guard) => [
     guard[0],
     filter
@@ -277,6 +289,7 @@ const FileExplorer = (props) => {
             <Box sx={{ display: "flex", flexGrow: 1 }}>
               <FormControl sx={{ width: "100%" }} size="sm">
                 <Input
+                  autoComplete="off"
                   value={search}
                   onChange={(event) => setSearch(event.target.value)}
                   size="sm"
@@ -324,6 +337,7 @@ const FileExplorer = (props) => {
             setModalMoveOpen={setModalMoveOpen}
             setModalCopyOpen={setModalCopyOpen}
             guard={guard}
+            searcher={searcher}
           />
           <FileList
             type={type}
