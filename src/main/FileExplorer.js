@@ -112,17 +112,25 @@ const FileExplorer = (props) => {
 
   // uploading
   const handleUploadFile = React.useCallback((filename, filebase) => {
-    // TODO: fill this
-  }, []);
+    request("POST/file/upload", {
+      type: type,
+      folderName: folderName,
+      filename: filename,
+      base: filebase
+    })
+      .then((data) => {
+        toast.success("GOOD");
+      });
+  }, [type, folderName]);
 
   const handleProprocessFile = React.useCallback((event) => {
     const targetFile = event.target.files;
     const reader = new FileReader();
     reader.readAsDataURL(targetFile[0]);
-    reader.onload = (event) => handleUploadFile(
-      targetFile[0].name,
-      event.target.result
-    );
+    reader.onload = (event) => {
+      handleUploadFile(targetFile[0].name, event.target.result);
+      event.target.value = null;
+    };
   }, [handleUploadFile]);
 
   // states and function for rename
@@ -346,7 +354,11 @@ const FileExplorer = (props) => {
                   size="sm"
                 >
                   {context.languagePicker("main.folder.viewRegulate.upload")}
-                  <input type="file" onChange={handleProprocessFile} hidden />
+                  <input
+                    type="file"
+                    onChange={handleProprocessFile}
+                    hidden
+                  />
                 </Button>
               </FormControl>
             </Box>
