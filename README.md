@@ -9,7 +9,6 @@
 ## Memo
 
 1. File Explorer
-    - table sort
     - upload file
     - new / delete folder
     - edit in milkdown

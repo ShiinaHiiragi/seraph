@@ -1,8 +1,16 @@
 import React from "react";
 import { toast } from "sonner";
 import { useParams } from "react-router";
+import isValidFilename from "valid-filename";
 import Input from "@mui/joy/Input";
-import isValidFilename from 'valid-filename';
+import Box from "@mui/joy/Box";
+import Button from "@mui/joy/Button";
+import FormControl from "@mui/joy/FormControl";
+import FormLabel from "@mui/joy/FormLabel";
+import Select from "@mui/joy/Select";
+import Option from "@mui/joy/Option";
+import SearchIcon from "@mui/icons-material/Search";
+import UploadRoundedIcon from "@mui/icons-material/UploadRounded";
 import GlobalContext, { Status, request } from "../interface/constants";
 import RouteField from "../interface/RouteField";
 import FileTable from "../components/FileTable";
@@ -226,6 +234,47 @@ const FileExplorer = (props) => {
     >
       {folderState > 0 &&
         <React.Fragment>
+          <Box
+            className="SearchAndFilters"
+            sx={{
+              borderRadius: "sm",
+              pb: 2,
+              display: "flex",
+              flexWrap: "no-wrap",
+              flexDirection: { xs: "column", sm: "row" },
+              gap: { xs: 1.5, sm: 1.5 },
+              "& > *": { minWidth: { xs: "120px", md: "160px" } },
+            }}
+          >
+            <Box sx={{ display: "flex", flexGrow: 1 }}>
+              <FormControl sx={{ width: "100%" }} size="sm">
+                <Input size="sm" placeholder="Search" startDecorator={<SearchIcon />} />
+              </FormControl>
+            </Box>
+            <Box sx={{ display: "flex", gap: 1.5, width: { xs: "100%", sm: "auto" } }}>
+              <FormControl size="sm" sx={{ flexGrow: 1, minWidth: "200px" }}>
+                <Select
+                  size="sm"
+                  placeholder="Filter by status"
+                  slotProps={{ button: { sx: { whiteSpace: "nowrap" } } }}
+                >
+                  <Option value="paid">Paid</Option>
+                  <Option value="pending">Pending</Option>
+                  <Option value="refunded">Refunded</Option>
+                  <Option value="cancelled">Cancelled</Option>
+                </Select>
+              </FormControl>
+              <FormControl size="sm" sx={{ justifyContent: "flex-end" }}>
+                <Button
+                  color="primary"
+                  startDecorator={<UploadRoundedIcon />}
+                  size="sm"
+                >
+                  Upload
+                </Button>
+              </FormControl>
+            </Box>
+          </Box>
           <FileTable
             filesSorting={filesSorting}
             handleClickSort={handleClickSort}
