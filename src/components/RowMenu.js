@@ -7,6 +7,7 @@ import MenuItem from "@mui/joy/MenuItem";
 import Dropdown from "@mui/joy/Dropdown";
 import IconButton from "@mui/joy/IconButton";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
+import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
 import GlobalContext, { request } from "../interface/constants";
 
 export default function RowMenu(props) {
@@ -51,8 +52,16 @@ export default function RowMenu(props) {
       <MenuButton
         slots={{ root: IconButton }}
         slotProps={{ root: { variant: "plain", color: "neutral", size: "sm" } }}
+        sx={{ display: { xs: "none", sm: "inline-flex" } }}
       >
         <MoreHorizRoundedIcon />
+      </MenuButton>
+      <MenuButton
+        slots={{ root: IconButton }}
+        slotProps={{ root: { variant: "plain", color: "neutral", size: "sm" } }}
+        sx={{ display: { xs: "inline-flex", sm: "none" } }}
+      >
+        <MoreVertRoundedIcon />
       </MenuButton>
       <Menu size="sm" sx={{ minWidth: 140 }}>
         <MenuItem onClick={handleToggleRename}>

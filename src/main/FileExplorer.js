@@ -262,10 +262,10 @@ const FileExplorer = (props) => {
                   placeholder={context.languagePicker("main.folder.viewRegulate.filter")}
                   slotProps={{ button: { sx: { whiteSpace: "nowrap" } } }}
                 >
-                  <Option value="paid">Paid</Option>
-                  <Option value="pending">Pending</Option>
-                  <Option value="refunded">Refunded</Option>
-                  <Option value="cancelled">Cancelled</Option>
+                  <Option value="paid">audio</Option>
+                  <Option value="cancelled">application</Option>
+                  <Option value="refunded">text</Option>
+                  <Option value="pending">不明</Option>
                 </Select>
               </FormControl>
               <FormControl size="sm" sx={{ justifyContent: "flex-end" }}>
