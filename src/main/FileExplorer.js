@@ -104,6 +104,23 @@ const FileExplorer = (props) => {
     handleCloseRename
   ]);
 
+  // states and function for copy
+  const [modalCopyOpen, setModalCopyOpen] = React.useState(null);
+  const [modalCopyDisabled, setModalCopyDisabled] = React.useState(false);
+  const handleCopy = React.useCallback((
+    clearInnerState,
+    formSelectedFolder
+  ) => {
+    const filename = `${modalCopyOpen}`, newFolderName = `${formSelectedFolder[1]}`;
+    // TODO: fill this
+  }, [
+    type,
+    folderName,
+    modalCopyOpen
+  ]);
+
+  window.modalCopyOpen = modalCopyOpen;
+
   // states and function for move
   const [modalMoveOpen, setModalMoveOpen] = React.useState(null);
   const [modalMoveDisabled, setModalMoveDisabled] = React.useState(false);
@@ -191,6 +208,7 @@ const FileExplorer = (props) => {
             setFilesList={setFilesList}
             folderCount={folderCount}
             setModalMoveOpen={setModalMoveOpen}
+            setModalCopyOpen={setModalCopyOpen}
           />
           <FileList
             type={type}
@@ -201,6 +219,7 @@ const FileExplorer = (props) => {
             setFilesList={setFilesList}
             folderCount={folderCount}
             setModalMoveOpen={setModalMoveOpen}
+            setModalCopyOpen={setModalCopyOpen}
           />
         </React.Fragment>}
       {folderState < 0 &&
@@ -234,6 +253,24 @@ const FileExplorer = (props) => {
         handleClose={() => setModalMoveOpen(null)}
         handleClick={handleMove}
         title={context.languagePicker("modal.form.move")}
+        button={context.languagePicker("universal.button.continue")}
+        publicFolders={
+          context
+            .publicFolders
+            .filter((item) => type !== "public" || folderName !== item)
+        }
+        privateFolders={
+          context
+            .privateFolders
+            .filter((item) => type !== "private" || folderName !== item)
+        }
+      />
+      <FolderSelector
+        open={Boolean(modalCopyOpen)}
+        disabled={modalCopyDisabled}
+        handleClose={() => setModalCopyOpen(null)}
+        handleClick={handleCopy}
+        title={context.languagePicker("modal.form.copy")}
         button={context.languagePicker("universal.button.continue")}
         publicFolders={
           context

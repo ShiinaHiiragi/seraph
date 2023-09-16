@@ -18,7 +18,8 @@ export default function RowMenu(props) {
     setFormNewNameText,
     setFilesList,
     folderCount,
-    setModalMoveOpen
+    setModalMoveOpen,
+    setModalCopyOpen
   } = props;
   const context = React.useContext(GlobalContext);
 
@@ -56,6 +57,9 @@ export default function RowMenu(props) {
       <Menu size="sm" sx={{ minWidth: 140 }}>
         <MenuItem onClick={handleToggleRename}>
           {context.languagePicker("main.folder.rowMenu.rename")}
+        </MenuItem>
+        <MenuItem onClick={() => setModalCopyOpen(filename)} disabled={folderCount < 2}>
+          {context.languagePicker("main.folder.rowMenu.copy")}
         </MenuItem>
         <MenuItem onClick={() => setModalMoveOpen(filename)} disabled={folderCount < 2}>
           {context.languagePicker("main.folder.rowMenu.move")}

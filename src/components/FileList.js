@@ -19,7 +19,8 @@ export default function FileList(props) {
     setFormNewNameText,
     setFilesList,
     folderCount,
-    setModalMoveOpen
+    setModalMoveOpen,
+    setModalCopyOpen
   } = props;
   const context = React.useContext(GlobalContext);
 
@@ -101,6 +102,7 @@ export default function FileList(props) {
                 setFilesList={setFilesList}
                 folderCount={folderCount}
                 setModalMoveOpen={setModalMoveOpen}
+                setModalCopyOpen={setModalCopyOpen}
               />}
           </ListItem>
           <ListDivider />

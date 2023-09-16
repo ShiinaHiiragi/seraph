@@ -87,7 +87,8 @@ const en = {
         caption: "Naming restrictions depend on platform on which server locates and try not to modify the extension name as much as possible.",
         placeholder: "New Filename"
       },
-      move: "Move to ..."
+      move: "Move to ...",
+      copy: "Copy to ..."
     },
     reconfirm: {
       title: "Reconfirmation",
