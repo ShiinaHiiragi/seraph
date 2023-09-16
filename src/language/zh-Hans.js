@@ -50,6 +50,7 @@ const zhHans = {
         login: "欢迎回到 SERAPH。",
         logout: "退出成功。",
         rename: "{0} 已更名为 {1}。",
+        copy: "{0} 已复制到 {1}。",
         move: "{0} 已移动到 {1}。",
         delete: "{0} 已被删除。"
       },

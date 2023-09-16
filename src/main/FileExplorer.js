@@ -111,15 +111,39 @@ const FileExplorer = (props) => {
     clearInnerState,
     formSelectedFolder
   ) => {
-    const filename = `${modalCopyOpen}`, newFolderName = `${formSelectedFolder[1]}`;
-    // TODO: fill this
+    const filename = `${modalCopyOpen}`;
+    const [newType, newFolderName] = formSelectedFolder;
+    setModalCopyDisabled(true);
+    request(
+      "POST/file/copy",
+      {
+        type: type,
+        folderName: folderName,
+        filename: filename,
+        newType: formSelectedFolder[0],
+        newFolderName: formSelectedFolder[1]
+      },
+      { "": () => setModalCopyDisabled(false) }
+    )
+      .then(() => {
+        setFilesList((filesList) => filesList.filter(
+          (item) => item.name !== filename
+        ));
+        setModalCopyOpen(null);
+        clearInnerState();
+        toast.success(
+          context
+            .languagePicker("modal.toast.success.copy")
+            .format(filename, newType + "/" + newFolderName)
+        );
+      })
+      .finally(() => setModalCopyDisabled(false));
   }, [
+    context,
     type,
     folderName,
     modalCopyOpen
   ]);
-
-  window.modalCopyOpen = modalCopyOpen;
 
   // states and function for move
   const [modalMoveOpen, setModalMoveOpen] = React.useState(null);
@@ -128,7 +152,8 @@ const FileExplorer = (props) => {
     clearInnerState,
     formSelectedFolder
   ) => {
-    const filename = `${modalMoveOpen}`, newFolderName = `${formSelectedFolder[1]}`;
+    const filename = `${modalMoveOpen}`;
+    const [newType, newFolderName] = formSelectedFolder;
     setModalMoveDisabled(true);
     request(
       "POST/file/move",
@@ -150,7 +175,7 @@ const FileExplorer = (props) => {
         toast.success(
           context
             .languagePicker("modal.toast.success.move")
-            .format(filename, newFolderName)
+            .format(filename, newType + "/" + newFolderName)
         );
       })
       .finally(() => setModalMoveDisabled(false));

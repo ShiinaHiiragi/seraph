@@ -50,6 +50,7 @@ const en = {
         login: "Welcome back to Seraph.",
         logout: "Logged out successfully.",
         rename: "{0} has been renamed to {1}.",
+        copy: "{0} has been copied to {1}.",
         move: "{0} has been moved to {1}",
         delete: "{0} has been deleted."
       },
