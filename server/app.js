@@ -1,5 +1,6 @@
 let express = require('express');
 let cookieParser = require('cookie-parser');
+let bodyParser = require('body-parser');
 let logger = require('morgan');
 let cors = require('cors');
 
@@ -15,6 +16,10 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+// reinforce setting
+app.use(bodyParser.json({limit: '200mb'}));
+app.use(bodyParser.urlencoded({limit: '200mb', extended: true}));
 app.use(cors({
   origin: [api.reactBaseURL],
   methods: ["GET", "POST"],

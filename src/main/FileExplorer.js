@@ -124,13 +124,21 @@ const FileExplorer = (props) => {
   }, [type, folderName]);
 
   const handleProprocessFile = React.useCallback((event) => {
-    const targetFile = event.target.files;
+    console.log("TRIGGER");
+    const targetFile = event.target.files[0];
     const reader = new FileReader();
-    reader.readAsDataURL(targetFile[0]);
+    if (targetFile === undefined) {
+      return;
+    }
+
+    reader.readAsDataURL(targetFile);
     reader.onload = (event) => {
-      handleUploadFile(targetFile[0].name, event.target.result);
+      handleUploadFile(targetFile.name, event.target.result);
       event.target.value = null;
     };
+    reader.onerror = (event) => {
+      console.log(event);
+    }
   }, [handleUploadFile]);
 
   // states and function for rename

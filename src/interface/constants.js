@@ -232,10 +232,10 @@ const request = (query, params, todo, handleInit) => {
             );
           }
         }
-      }).catch((res) => console.log(res) ?? toast.error(
+      }).catch((res) => toast.error(
         ConstantContext
           .languagePicker("modal.toast.error.serverError")
-          .format(res.response.status)
+          .format(res.response?.status ?? res.code)
       ));
   });
 }

@@ -12,7 +12,7 @@ router.post('/upload', (req, res, next) => {
     return;
   }
 
-  const { type, folderName, filename, filebase } = req.body;
+  const { type, folderName, filename, base } = req.body;
   const folderPath = api.dataPath[
     type === "private"
       ? "privateDirFolderPath"
@@ -35,8 +35,7 @@ router.post('/upload', (req, res, next) => {
   }
 
   try {
-    console.log(filebase)
-    const fileBuffer = Buffer.from(filebase, 'base64');
+    const fileBuffer = Buffer.from(base, 'base64');
     fs.writeFileSync(filePath, fileBuffer);
   } catch (_) {
     // -> EF_FME: fs.renameSync error
