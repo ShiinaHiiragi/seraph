@@ -37,7 +37,11 @@ export default function RowMenu(props) {
         setFilesList((filesList) => filesList.filter(
           (item) => item.name !== filename
         ));
-        toast.success(context.languagePicker("modal.toast.success.delete"));
+        toast.success(
+          context
+            .languagePicker("modal.toast.success.delete")
+            .format(filename)
+        );
       })
   }, [context, setFilesList])
 

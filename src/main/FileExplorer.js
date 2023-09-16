@@ -66,7 +66,7 @@ const FileExplorer = (props) => {
       return;
     }
 
-    const originFilename = `${modalRenameOpen}`;
+    const originFilename = `${modalRenameOpen}`, newFilename = `${formNewNameText}`;
     setModalRenameDisabled(true);
     request(
       "POST/file/rename",
@@ -88,7 +88,10 @@ const FileExplorer = (props) => {
             } : item
         ));
         handleCloseRename();
-        toast.success(context.languagePicker("modal.toast.success.rename"));
+        toast.success(
+          context.languagePicker("modal.toast.success.rename")
+            .format(originFilename, newFilename)
+        );
       })
       .finally(() => setModalRenameDisabled(false));
   }, [
@@ -107,7 +110,7 @@ const FileExplorer = (props) => {
     clearInnerState,
     formSelectedFolder
   ) => {
-    const filename = `${modalMoveOpen}`;
+    const filename = `${modalMoveOpen}`, newFolderName = `${formSelectedFolder[1]}`;
     setModalMoveDisabled(true);
     request(
       "POST/file/move",
@@ -126,7 +129,10 @@ const FileExplorer = (props) => {
         ));
         setModalMoveOpen(null);
         clearInnerState();
-        toast.success(context.languagePicker("modal.toast.success.move"));
+        toast.success(
+          context.languagePicker("modal.toast.success.move")
+            .format(filename, newFolderName)
+        );
       })
       .finally(() => setModalMoveDisabled(false));
   }, [

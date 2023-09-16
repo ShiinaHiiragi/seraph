@@ -48,9 +48,9 @@ const en = {
         init: "Password is set successfully. Thanks for using Seraph.",
         login: "Welcome back to Seraph.",
         logout: "Logged out successfully.",
-        rename: "File has been renamed.",
-        move: "File has been moved",
-        delete: "File has been deleted."
+        rename: "{0} has been renamed to {1}.",
+        move: "{0} has been moved to {1}",
+        delete: "{0} has been deleted."
       },
       warning: {
         invalidToken: "Token is invalid or expired. The page will be refreshed automatically in seconds.",
