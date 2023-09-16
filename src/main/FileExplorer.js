@@ -305,9 +305,13 @@ const FileExplorer = (props) => {
                   placeholder={context.languagePicker("main.folder.viewRegulate.filter")}
                   slotProps={{ button: { sx: { whiteSpace: "nowrap" } } }}
                   value={filter}
-                  onChange={(event) => setFilter(event.target.innerText)}
+                  onChange={(event) => setFilter(
+                    event.target.innerText === context.languagePicker("main.folder.viewRegulate.all")
+                      ? "null"
+                      : event.target.innerText
+                  )}
                 >
-                  <Option value={context.languagePicker("main.folder.viewRegulate.all")}>
+                  <Option value="null">
                     {context.languagePicker("main.folder.viewRegulate.all")}
                   </Option>
                   {filterList.map((item) => (<Option key={item} value={item}>{item}</Option>))}

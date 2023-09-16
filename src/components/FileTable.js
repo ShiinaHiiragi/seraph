@@ -142,14 +142,11 @@ export default function FileTable(props) {
               .search(guard[0])
               .map((item) => item.item)
           )
-            .filter((item) => [
-              null,
-              context.languagePicker(
-                "main.folder.viewRegulate.all"
-              )
-            ].includes(guard[1])
-              ? true
-              : new RegExp(`^${guard[1].toLowerCase()}/`).test(item.type)
+            .filter((item) => 
+              [null,"null"]
+                .includes(guard[1])
+                  ? true
+                  : new RegExp(`^${guard[1].toLowerCase()}/`).test(item.type)
             )
             .map((item, index) => (
               <tr key={index}>
