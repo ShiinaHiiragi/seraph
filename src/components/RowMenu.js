@@ -52,7 +52,6 @@ export default function RowMenu(props) {
       <MenuButton
         slots={{ root: IconButton }}
         slotProps={{ root: { variant: "plain", color: "neutral", size: "sm" } }}
-        
       >
         <MoreHorizRoundedIcon sx={{ display: { xs: "none", sm: "inline-flex" } }} />
         <MoreVertRoundedIcon sx={{ display: { xs: "inline-flex", sm: "none" } }} />

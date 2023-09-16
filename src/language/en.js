@@ -42,7 +42,8 @@ const en = {
         unknown: "Unknown",
         search: "Search by Name",
         filter: "Filter by MIME Type",
-        upload: "Upload"
+        upload: "Upload",
+        all: "All Type"
       }
     }
   },

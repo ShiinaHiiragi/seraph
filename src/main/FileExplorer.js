@@ -70,6 +70,22 @@ const FileExplorer = (props) => {
     type, folderName
   ]);
 
+  // search and filter
+  const [filter, setFilter] = React.useState(null);
+  const [filterList, setFilterList] = React.useState([]);
+  React.useEffect(() => setFilterList([
+    ...new Set(
+      filesList.map(
+        (item) => item.type === null
+          ? context.languagePicker("main.folder.viewRegulate.unknown")
+          : item.type.split("/")[0].upperCaseFirst()
+      )
+    )
+  ].sortBy()), [context, filesList]);
+  React.useEffect(() => {
+    setFilter(null);
+  }, [type, folderName]);
+
   // states and function for rename
   const [modalRenameOpen, setModalRenameOpen] = React.useState(null);
   const [formNewNameText, setFormNewNameText] = React.useState("");
@@ -261,11 +277,13 @@ const FileExplorer = (props) => {
                   size="sm"
                   placeholder={context.languagePicker("main.folder.viewRegulate.filter")}
                   slotProps={{ button: { sx: { whiteSpace: "nowrap" } } }}
+                  value={filter}
+                  onChange={(event) => setFilter(event.target.innerText)}
                 >
-                  <Option value="paid">audio</Option>
-                  <Option value="cancelled">application</Option>
-                  <Option value="refunded">text</Option>
-                  <Option value="pending">不明</Option>
+                  <Option value={context.languagePicker("main.folder.viewRegulate.all")}>
+                    {context.languagePicker("main.folder.viewRegulate.all")}
+                  </Option>
+                  {filterList.map((item) => (<Option key={item} value={item}>{item}</Option>))}
                 </Select>
               </FormControl>
               <FormControl size="sm" sx={{ justifyContent: "flex-end" }}>

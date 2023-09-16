@@ -42,7 +42,8 @@ const ja = {
         unknown: "不明",
         search: "ファイル名で検索",
         filter: "タイプでフィルタ",
-        upload: "アップロード"
+        upload: "アップロード",
+        all: "全種類"
       }
     }
   },
