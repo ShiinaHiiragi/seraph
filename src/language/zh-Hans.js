@@ -35,6 +35,7 @@ const zhHans = {
         open: "打开",
         rename: "重命名",
         move: "移动到",
+        copy: "复制到",
         delete: "删除"
       },
       viewRegulate: {

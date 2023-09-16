@@ -35,6 +35,7 @@ const en = {
         open: "Open",
         rename: "Rename",
         move: "Move to",
+        copy: "Copy to",
         delete: "Delete"
       },
       viewRegulate: {

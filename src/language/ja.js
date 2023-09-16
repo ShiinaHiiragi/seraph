@@ -33,12 +33,13 @@ const ja = {
       },
       rowMenu: {
         open: "開ける",
-        rename: "名前を変更",
+        rename: "リネーム",
         move: "移動",
-        delete: "削除"
+        copy: "コピー",
+        delete: "デリート"
       },
       viewRegulate: {
-        unknown: "未知"
+        unknown: "不明"
       }
     }
   },
@@ -48,13 +49,13 @@ const ja = {
         init: "パスワードがセットされました。セラフのご利用いただき、ありがとうございます。",
         login: "セラフへようこそ。",
         logout: "ログアウトしました。",
-        rename: "{0} の名が {1} に変更されました。",
+        rename: "{0} が {1} にリネームされました。",
         move: "{0} が {1} に移動されました。",
         delete: "{0} がデリートされました。"
       },
       warning: {
         invalidToken: "トークンが無効又は期限切れになれ、ページは数秒内にリフレッシュされることになっています。",
-        illegalRename: "新たなファイル名の事前チェックはフェイル。"
+        illegalRename: "新たなファイル名の事前チェックは失敗。"
       },
       exception: {
         incorrectPassword: "パスワードが間違っています。",
@@ -63,8 +64,8 @@ const ja = {
         fileModuleError: "ファイルオペレーションモジュールでエクセプションが発生しました。"
       },
       error: {
-        unparseableResponse: "解析不能のレスポンス：リクエストはフェイルしましてエラーコードが {0} です。",
-        serverError: "サーバーエラー：リクエストはフェイルしましてステータスコードが {0} です。"
+        unparseableResponse: "解析不能のレスポンス：リクエストは失敗しましてエラーコードが {0} です。",
+        serverError: "サーバーエラー：リクエストは失敗しましてステータスコードが {0} です。"
       }
     },
     init: {
@@ -82,7 +83,7 @@ const ja = {
         placeholder: "パスワード"
       },
       rename: {
-        title: "名前を変更する",
+        title: "リネームする",
         caption: "ネーミング制限はサーバーが配置されているプラットフォームによって違いがある。そして拡張子はできる限り変更しないようにしてください。",
         placeholder: "新たなファイル名"
       },
