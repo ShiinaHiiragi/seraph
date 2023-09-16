@@ -49,16 +49,21 @@ const zhHans = {
   },
   modal: {
     toast: {
+      plain: {
+        login: "欢迎回到 SERAPH。",
+        uploading: "文件正在上传，请稍等。"
+      },
       success: {
         init: "密码设置成功，感谢使用 SERAPH。",
-        login: "欢迎回到 SERAPH。",
         logout: "退出成功。",
+        upload: "{0} 已上传至 {1}。",
         rename: "{0} 已更名为 {1}。",
         copy: "{0} 已复制到 {1}。",
         move: "{0} 已移动到 {1}。",
         delete: "{0} 已被删除。"
       },
       warning: {
+        generalPromise: "操作失败。",
         invalidToken: "令牌无效或已过期，页面将在若干秒内自动刷新。",
         illegalRename: "文件名预检查不通过。"
       },

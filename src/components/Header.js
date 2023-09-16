@@ -83,7 +83,7 @@ const Header = (props) => {
         setPrivateFolders(data.private);
         setGlobalSwitch(globalState.AUTHORITY);
         handleCloseLogin();
-        toast(context.languagePicker("modal.toast.success.login"));
+        toast(context.languagePicker("modal.toast.plain.login"));
       })
       .finally(() => setButtonDisabled(false));
   }, [

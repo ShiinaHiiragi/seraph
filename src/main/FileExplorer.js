@@ -133,9 +133,11 @@ const FileExplorer = (props) => {
           resolve();
         });
     }), {
-      loading: "loading",
-      success: "success",
-      error: "error"
+      loading: context.languagePicker("modal.toast.plain.uploading"),
+      success: context
+        .languagePicker("modal.toast.success.upload")
+        .format(filename, folderName),
+      error: context.languagePicker("modal.toast.warning.generalPromise")
     })
   }, [type, folderName]);
 

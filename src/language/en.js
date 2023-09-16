@@ -49,16 +49,21 @@ const en = {
   },
   modal: {
     toast: {
+      plain: {
+        login: "Welcome back to Seraph.",
+        uploading: "File is being uploaded, please wait for a second."
+      },
       success: {
         init: "Password is set successfully. Thanks for using Seraph.",
-        login: "Welcome back to Seraph.",
         logout: "Logged out successfully.",
+        upload: "{0} has been uploaded to {1}.",
         rename: "{0} has been renamed to {1}.",
         copy: "{0} has been copied to {1}.",
-        move: "{0} has been moved to {1}",
+        move: "{0} has been moved to {1}.",
         delete: "{0} has been deleted."
       },
       warning: {
+        generalPromise: "Operation failed.",
         invalidToken: "Token is invalid or expired. The page will be refreshed automatically in seconds.",
         illegalRename: "Filename pre-check failed."
       },
