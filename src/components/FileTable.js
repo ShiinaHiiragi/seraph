@@ -21,7 +21,8 @@ export default function FileTable(props) {
     setFilesList,
     folderCount,
     setModalMoveOpen,
-    setModalCopyOpen
+    setModalCopyOpen,
+    guard
   } = props;
   const context = React.useContext(GlobalContext);
 
@@ -134,56 +135,58 @@ export default function FileTable(props) {
           </tr>
         </thead>
         <tbody>
-          {sortedFilesList.map((item, index) => (
-            <tr key={index}>
-              <td>
-              </td>
-              <td>
-                <Typography level="body-xs">
-                  <Link
-                    target="_blank"
-                    href={new URL(`/${type}/${folderName}/${item.name}`, serverBaseURL).href}
-                  >
-                    {item.name}
-                  </Link>
-                </Typography>
-              </td>
-              <td>
-                <Typography level="body-xs">
-                  {item.size.sizeFormat()}
-                </Typography>
-              </td>
-              <td>
-                <Typography level="body-xs">
-                  {item.type || context.languagePicker("main.folder.viewRegulate.unknown")}
-                </Typography>
-              </td>
-              <td>
-                <Typography level="body-xs">
-                  {item.time.timeFormat(
-                    context.languagePicker("universal.time.dateFormat")
-                      + " "
-                      + context.languagePicker("universal.time.timeFormat")
-                  )}
-                </Typography>
-              </td>
-              {context.isAuthority && <td>
-                <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-                  <RowMenu
-                    type={type}
-                    folderName={folderName}
-                    filename={item.name}
-                    setModalRenameOpen={setModalRenameOpen}
-                    setFormNewNameText={setFormNewNameText}
-                    setFilesList={setFilesList}
-                    folderCount={folderCount}
-                    setModalMoveOpen={setModalMoveOpen}
-                    setModalCopyOpen={setModalCopyOpen}
-                  />
-                </Box>
-              </td>}
-            </tr>
-          ))}
+          {sortedFilesList
+            .map((item, index) => (
+              <tr key={index}>
+                <td>
+                </td>
+                <td>
+                  <Typography level="body-xs">
+                    <Link
+                      target="_blank"
+                      href={new URL(`/${type}/${folderName}/${item.name}`, serverBaseURL).href}
+                    >
+                      {item.name}
+                    </Link>
+                  </Typography>
+                </td>
+                <td>
+                  <Typography level="body-xs">
+                    {item.size.sizeFormat()}
+                  </Typography>
+                </td>
+                <td>
+                  <Typography level="body-xs">
+                    {item.type || context.languagePicker("main.folder.viewRegulate.unknown")}
+                  </Typography>
+                </td>
+                <td>
+                  <Typography level="body-xs">
+                    {item.time.timeFormat(
+                      context.languagePicker("universal.time.dateFormat")
+                        + " "
+                        + context.languagePicker("universal.time.timeFormat")
+                    )}
+                  </Typography>
+                </td>
+                {context.isAuthority && <td>
+                  <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+                    <RowMenu
+                      type={type}
+                      folderName={folderName}
+                      filename={item.name}
+                      setModalRenameOpen={setModalRenameOpen}
+                      setFormNewNameText={setFormNewNameText}
+                      setFilesList={setFilesList}
+                      folderCount={folderCount}
+                      setModalMoveOpen={setModalMoveOpen}
+                      setModalCopyOpen={setModalCopyOpen}
+                    />
+                  </Box>
+                </td>}
+              </tr>
+            ))
+          }
         </tbody>
       </Table>
     </Sheet>

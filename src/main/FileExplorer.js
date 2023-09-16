@@ -6,7 +6,6 @@ import Input from "@mui/joy/Input";
 import Box from "@mui/joy/Box";
 import Button from "@mui/joy/Button";
 import FormControl from "@mui/joy/FormControl";
-import FormLabel from "@mui/joy/FormLabel";
 import Select from "@mui/joy/Select";
 import Option from "@mui/joy/Option";
 import SearchIcon from "@mui/icons-material/Search";
@@ -71,7 +70,9 @@ const FileExplorer = (props) => {
   ]);
 
   // search and filter
+  const [search, setSearch] = React.useState("");
   const [filter, setFilter] = React.useState(null);
+  const [guard, setGuard] = React.useState(["", null]);
   const [filterList, setFilterList] = React.useState([]);
   React.useEffect(() => setFilterList([
     ...new Set(
@@ -85,6 +86,17 @@ const FileExplorer = (props) => {
   React.useEffect(() => {
     setFilter(null);
   }, [type, folderName]);
+
+  React.useEffect(() => {
+    const timeOutId = setTimeout(() =>
+      setGuard((guard) => [search, guard[1]]
+    ), 500);
+    return () => clearTimeout(timeOutId);
+  }, [search]);
+  React.useEffect(() => setGuard((guard) => [
+    guard[0],
+    filter
+  ]), [filter]);
 
   // states and function for rename
   const [modalRenameOpen, setModalRenameOpen] = React.useState(null);
@@ -265,6 +277,8 @@ const FileExplorer = (props) => {
             <Box sx={{ display: "flex", flexGrow: 1 }}>
               <FormControl sx={{ width: "100%" }} size="sm">
                 <Input
+                  value={search}
+                  onChange={(event) => setSearch(event.target.value)}
                   size="sm"
                   placeholder={context.languagePicker("main.folder.viewRegulate.search")}
                   startDecorator={<SearchIcon />}
@@ -309,6 +323,7 @@ const FileExplorer = (props) => {
             folderCount={folderCount}
             setModalMoveOpen={setModalMoveOpen}
             setModalCopyOpen={setModalCopyOpen}
+            guard={guard}
           />
           <FileList
             type={type}
@@ -320,6 +335,7 @@ const FileExplorer = (props) => {
             folderCount={folderCount}
             setModalMoveOpen={setModalMoveOpen}
             setModalCopyOpen={setModalCopyOpen}
+            guard={guard}
           />
         </React.Fragment>}
       {folderState < 0 &&
