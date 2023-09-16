@@ -232,11 +232,18 @@ const request = (query, params, todo, handleInit) => {
             );
           }
         }
-      }).catch((res) => toast.error(
-        ConstantContext
-          .languagePicker("modal.toast.error.serverError")
-          .format(res.response?.status ?? res.code)
-      ));
+      }).catch((res) => {
+        const universalPlanned = todo?.[""];
+        if (universalPlanned instanceof Function) {
+          universalPlanned(res.data);
+        }
+
+        toast.error(
+          ConstantContext
+            .languagePicker("modal.toast.error.serverError")
+            .format(res.response?.status ?? res.code)
+        );
+      });
   });
 }
 

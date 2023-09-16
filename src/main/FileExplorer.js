@@ -112,19 +112,24 @@ const FileExplorer = (props) => {
 
   // uploading
   const handleUploadFile = React.useCallback((filename, filebase) => {
-    request("POST/file/upload", {
-      type: type,
-      folderName: folderName,
-      filename: filename,
-      base: filebase
+    toast.promise(() => new Promise((resolve, reject) => {
+      request("POST/file/upload", {
+        type: type,
+        folderName: folderName,
+        filename: filename,
+        base: filebase
+      }, { "": reject })
+        .then((data) => {
+          resolve();
+        });
+    }), {
+      loading: "loading",
+      success: "success",
+      error: "error"
     })
-      .then((data) => {
-        toast.success("GOOD");
-      });
   }, [type, folderName]);
 
   const handleProprocessFile = React.useCallback((event) => {
-    console.log("TRIGGER");
     const targetFile = event.target.files[0];
     const reader = new FileReader();
     if (targetFile === undefined) {
@@ -134,9 +139,9 @@ const FileExplorer = (props) => {
     reader.readAsDataURL(targetFile);
     reader.onload = (event) => {
       handleUploadFile(targetFile.name, event.target.result);
-      event.target.value = null;
     };
     reader.onerror = (event) => {
+      // TODO: complete this
       console.log(event);
     }
   }, [handleUploadFile]);
@@ -364,7 +369,10 @@ const FileExplorer = (props) => {
                   {context.languagePicker("main.folder.viewRegulate.upload")}
                   <input
                     type="file"
-                    onChange={handleProprocessFile}
+                    onChange={(event) => {
+                      handleProprocessFile(event);
+                      event.target.value = null;
+                    }}
                     hidden
                   />
                 </Button>
