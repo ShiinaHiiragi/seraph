@@ -39,7 +39,10 @@ const ja = {
         delete: "デリート"
       },
       viewRegulate: {
-        unknown: "不明"
+        unknown: "不明",
+        search: "ファイル名で検索",
+        filter: "タイプでフィルタ",
+        upload: "アップロード"
       }
     }
   },

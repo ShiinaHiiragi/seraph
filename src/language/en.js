@@ -39,7 +39,10 @@ const en = {
         delete: "Delete"
       },
       viewRegulate: {
-        unknown: "Unknown"
+        unknown: "Unknown",
+        search: "Search by Name",
+        filter: "Filter by MIME Type",
+        upload: "Upload"
       }
     }
   },

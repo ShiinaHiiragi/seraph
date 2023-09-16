@@ -248,14 +248,18 @@ const FileExplorer = (props) => {
           >
             <Box sx={{ display: "flex", flexGrow: 1 }}>
               <FormControl sx={{ width: "100%" }} size="sm">
-                <Input size="sm" placeholder="Search" startDecorator={<SearchIcon />} />
+                <Input
+                  size="sm"
+                  placeholder={context.languagePicker("main.folder.viewRegulate.search")}
+                  startDecorator={<SearchIcon />}
+                />
               </FormControl>
             </Box>
             <Box sx={{ display: "flex", gap: 1.5, width: { xs: "100%", sm: "auto" } }}>
-              <FormControl size="sm" sx={{ flexGrow: 1, minWidth: "200px" }}>
+              <FormControl size="sm" sx={{ flexGrow: 1, minWidth: "160px" }}>
                 <Select
                   size="sm"
-                  placeholder="Filter by status"
+                  placeholder={context.languagePicker("main.folder.viewRegulate.filter")}
                   slotProps={{ button: { sx: { whiteSpace: "nowrap" } } }}
                 >
                   <Option value="paid">Paid</Option>
@@ -270,7 +274,7 @@ const FileExplorer = (props) => {
                   startDecorator={<UploadRoundedIcon />}
                   size="sm"
                 >
-                  Upload
+                  {context.languagePicker("main.folder.viewRegulate.upload")}
                 </Button>
               </FormControl>
             </Box>
