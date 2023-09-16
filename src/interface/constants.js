@@ -64,6 +64,20 @@ Date.prototype.timeFormat = function(formatString) {
 };
 
 // eslint-disable-next-line
+Array.prototype.sortBy = function(key, reverse = false) {
+  let formatted = this.slice();
+  reverse = reverse ? -1 : 1;
+  formatted.sort((left, right) => {
+    return left[key] > right[key]
+      ? reverse
+      : left[key] < right[key]
+      ? -reverse
+      : 0;
+  });
+  return formatted;
+};
+
+// eslint-disable-next-line
 String.prototype.timeFormat = function(formatString) {
   return new Date(this).timeFormat(formatString);
 }

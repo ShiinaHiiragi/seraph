@@ -21,6 +21,9 @@ const FileExplorer = (props) => {
 
   const [filesList, setFilesList] = React.useState([]);
   const [folderState, setFolderState] = React.useState(0);
+  const sortedFilesList = React.useMemo(() => {
+    return filesList.sortBy("name");
+  }, [filesList]);
   const display = React.useMemo(() => {
     return type === "public" || context.isAuthority;
   }, [type, context.isAuthority])
@@ -185,12 +188,6 @@ const FileExplorer = (props) => {
     folderName,
     modalMoveOpen
   ]);
-
-  const sortedFilesList = React.useMemo(() => {
-    return filesList.slice().sort((left, right) => {
-      return left.name > right.name ? 1 : -1;
-    });
-  }, [filesList]);
 
   return (
     <RouteField
