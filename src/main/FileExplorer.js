@@ -129,9 +129,6 @@ const FileExplorer = (props) => {
       { "": () => setModalCopyDisabled(false) }
     )
       .then(() => {
-        setFilesList((filesList) => filesList.filter(
-          (item) => item.name !== filename
-        ));
         setModalCopyOpen(null);
         clearInnerState();
         toast.success(
@@ -276,14 +273,14 @@ const FileExplorer = (props) => {
         handleClick={handleMove}
         title={context.languagePicker("modal.form.move")}
         button={context.languagePicker("universal.button.continue")}
-        publicFolders={
+        sortedPublicFolders={
           context
-            .publicFolders
+            .sortedPublicFolders
             .filter((item) => type !== "public" || folderName !== item)
         }
-        privateFolders={
+        sortedPrivateFolders={
           context
-            .privateFolders
+            .sortedPrivateFolders
             .filter((item) => type !== "private" || folderName !== item)
         }
       />
@@ -294,14 +291,14 @@ const FileExplorer = (props) => {
         handleClick={handleCopy}
         title={context.languagePicker("modal.form.copy")}
         button={context.languagePicker("universal.button.continue")}
-        publicFolders={
+        sortedPublicFolders={
           context
-            .publicFolders
+            .sortedPublicFolders
             .filter((item) => type !== "public" || folderName !== item)
         }
-        privateFolders={
+        sortedPrivateFolders={
           context
-            .privateFolders
+            .sortedPrivateFolders
             .filter((item) => type !== "private" || folderName !== item)
         }
       />

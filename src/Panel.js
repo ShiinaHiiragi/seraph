@@ -112,9 +112,11 @@ const Panel = () => {
   const [setting, setSetting] = React.useState(defaultSetting);
   const [publicFolders, setPublicFolders] = React.useState([]);
   const [privateFolders, setPrivateFolders] = React.useState([]);
+  const sortedPublicFolders = React.useMemo(() => publicFolders.sortBy(), [publicFolders]);
+  const sortedPrivateFolders = React.useMemo(() => privateFolders.sortBy(), [privateFolders]);
   const folderCount = React.useMemo(() => {
-    return publicFolders.length + privateFolders.length;
-  }, [publicFolders, privateFolders]);
+    return sortedPublicFolders.length + sortedPrivateFolders.length;
+  }, [sortedPublicFolders, sortedPrivateFolders]);
 
   // global clocks, explicit life cycles, only set once
   // when set to true, the corresponding tick ends
@@ -176,12 +178,12 @@ const Panel = () => {
       value={{
         languagePicker: languagePicker,
         setModalReconfirm: setModalReconfirm,
-        publicFolders: publicFolders,
-        privateFolders: privateFolders,
         globalSwitch: globalSwitch,
+        isAuthority: isAuthority,
         firstTick: firstTick,
         secondTick: secondTick,
-        isAuthority: isAuthority
+        sortedPublicFolders: sortedPublicFolders,
+        sortedPrivateFolders: sortedPrivateFolders
       }}
     >
       <GlobalStyles styles={toastTheme} />
@@ -203,8 +205,8 @@ const Panel = () => {
             {drawerOpen && (
               <SideDrawer onClose={() => setDrawerOpen(false)}>
                 <Navigation
-                  publicFolders={publicFolders}
-                  privateFolders={privateFolders}
+                  sortedPublicFolders={sortedPublicFolders}
+                  sortedPrivateFolders={sortedPrivateFolders}
                   setDrawerOpen={setDrawerOpen}
                 />
               </SideDrawer>
@@ -212,8 +214,8 @@ const Panel = () => {
             <ContentField className="ContentField">
               <NavigationField className="NavigationField">
                 <Navigation
-                  publicFolders={publicFolders}
-                  privateFolders={privateFolders}
+                  sortedPublicFolders={sortedPublicFolders}
+                  sortedPrivateFolders={sortedPrivateFolders}
                   setDrawerOpen={setDrawerOpen}
                 />
               </NavigationField>

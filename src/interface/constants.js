@@ -68,11 +68,9 @@ Array.prototype.sortBy = function(key, reverse = false) {
   let formatted = this.slice();
   reverse = reverse ? -1 : 1;
   formatted.sort((left, right) => {
-    return left[key] > right[key]
-      ? reverse
-      : left[key] < right[key]
-      ? -reverse
-      : 0;
+    left = key ? left[key] : left;
+    right = key ? right[key] : right;
+    return left > right ? reverse : left < right ? -reverse : 0;
   });
   return formatted;
 };

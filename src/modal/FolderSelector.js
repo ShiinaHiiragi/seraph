@@ -23,8 +23,8 @@ export default function FolderSelector(props) {
     title,
     caption,
     button,
-    publicFolders,
-    privateFolders
+    sortedPublicFolders,
+    sortedPrivateFolders
   } = props;
   const context = React.useContext(GlobalContext);
   
@@ -104,7 +104,7 @@ export default function FolderSelector(props) {
                   "& .JoyListItemButton-root": { p: "8px" },
                 }}
               >
-                {publicFolders
+                {sortedPublicFolders
                   .map((item, index) => (
                     <ListItem key={index}>
                       <ListItemButton
@@ -134,7 +134,7 @@ export default function FolderSelector(props) {
                   "& .JoyListItemButton-root": { p: "8px" },
                 }}
               >
-                {privateFolders
+                {sortedPrivateFolders
                   .map((item, index) => (
                     <ListItem key={index}>
                       <ListItemButton
