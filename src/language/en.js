@@ -75,7 +75,8 @@ const en = {
       },
       error: {
         unparseableResponse: "Unparseable Response: Request failed with error code {0}.",
-        serverError: "Server Error: Request failed with status code {0}."
+        serverError: "Server Error: Request failed with status code {0}.",
+        browserError: "Browser Error: Received {0} ({1})."
       }
     },
     init: {

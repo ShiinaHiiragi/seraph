@@ -139,7 +139,7 @@ const FileExplorer = (props) => {
         .format(filename, folderName),
       error: context.languagePicker("modal.toast.warning.generalPromise")
     })
-  }, [type, folderName]);
+  }, [type, folderName, context]);
 
   const handleProprocessFile = React.useCallback((event) => {
     const targetFile = event.target.files[0];
@@ -153,10 +153,13 @@ const FileExplorer = (props) => {
       handleUploadFile(targetFile.name, event.target.result);
     };
     reader.onerror = (event) => {
-      // TODO: complete this
-      console.log(event);
+      const error = event.target.error;
+      toast.error(
+        context.languagePicker("modal.toast.error.browserError")
+          .format(error.name, error.message)
+      );
     }
-  }, [handleUploadFile]);
+  }, [context, handleUploadFile]);
 
   // states and function for rename
   const [modalRenameOpen, setModalRenameOpen] = React.useState(null);

@@ -75,7 +75,8 @@ const zhHans = {
       },
       error: {
         unparseableResponse: "响应无法解析：请求失败，错误代码 {0}。",
-        serverError: "服务器错误：请求失败，状态码 {0}。"
+        serverError: "服务器错误：请求失败，状态码 {0}。",
+        browserError: "浏览器错误：收到 {0}（{1}）。"
       }
     },
     init: {
