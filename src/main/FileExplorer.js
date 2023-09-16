@@ -20,13 +20,21 @@ const FileExplorer = (props) => {
   const context = React.useContext(GlobalContext);
 
   const [filesList, setFilesList] = React.useState([]);
+  const [filesSorting, setFilesSorting] = React.useState(["name", false]);
   const [folderState, setFolderState] = React.useState(0);
   const sortedFilesList = React.useMemo(() => {
-    return filesList.sortBy("name");
-  }, [filesList]);
+    return filesList.sortBy(...filesSorting);
+  }, [filesList, filesSorting]);
   const display = React.useMemo(() => {
     return type === "public" || context.isAuthority;
-  }, [type, context.isAuthority])
+  }, [type, context.isAuthority]);
+  const handleClickSort = React.useCallback((target) => {
+    setFilesSorting((filesSorting) => {
+      return filesSorting[0] === target
+        ? [filesSorting[0], !filesSorting[1]]
+        : [target, false];
+    });
+  }, []);
 
   // after second tick, the globalSwitch were set properly
   React.useEffect(() => {
@@ -219,6 +227,8 @@ const FileExplorer = (props) => {
       {folderState > 0 &&
         <React.Fragment>
           <FileTable
+            filesSorting={filesSorting}
+            handleClickSort={handleClickSort}
             type={type}
             folderName={folderName}
             sortedFilesList={sortedFilesList}

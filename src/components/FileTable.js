@@ -4,11 +4,15 @@ import Table from "@mui/joy/Table";
 import Sheet from "@mui/joy/Sheet";
 import Link from "@mui/joy/Link";
 import Typography from "@mui/joy/Typography";
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import GlobalContext, { serverBaseURL } from "../interface/constants";
 import RowMenu from "./RowMenu";
 
 export default function FileTable(props) {
   const {
+    filesSorting,
+    handleClickSort,
     type,
     folderName,
     sortedFilesList,
@@ -53,16 +57,76 @@ export default function FileTable(props) {
             <th style={{ width: 24 }}>
             </th>
             <th style={{ width: 120, padding: "12px 6px" }}>
-              {context.languagePicker("main.folder.tableColumn.name")}
+              <Link
+                underline="none"
+                color="primary"
+                component="button"
+                onClick={() => handleClickSort("name")}
+                fontWeight="lg"
+                endDecorator={
+                  filesSorting[0] === "name"
+                    ? filesSorting[1]
+                    ? <ArrowDropDownIcon />
+                    : <ArrowDropUpIcon />
+                    : null
+                }
+              >
+                {context.languagePicker("main.folder.tableColumn.name")}
+              </Link>
             </th>
             <th style={{ width: 140, padding: "12px 6px" }}>
-              {context.languagePicker("main.folder.tableColumn.size")}
+              <Link
+                underline="none"
+                color="primary"
+                component="button"
+                onClick={() => handleClickSort("size")}
+                fontWeight="lg"
+                endDecorator={
+                  filesSorting[0] === "size"
+                    ? filesSorting[1]
+                    ? <ArrowDropDownIcon />
+                    : <ArrowDropUpIcon />
+                    : null
+                }
+              >
+                {context.languagePicker("main.folder.tableColumn.size")}
+              </Link>
             </th>
             <th style={{ width: 140, padding: "12px 6px" }}>
-              {context.languagePicker("main.folder.tableColumn.type")}
+              <Link
+                underline="none"
+                color="primary"
+                component="button"
+                onClick={() => handleClickSort("type")}
+                fontWeight="lg"
+                endDecorator={
+                  filesSorting[0] === "type"
+                    ? filesSorting[1]
+                    ? <ArrowDropDownIcon />
+                    : <ArrowDropUpIcon />
+                    : null
+                }
+              >
+                {context.languagePicker("main.folder.tableColumn.type")}
+              </Link>
             </th>
             <th style={{ width: 140, padding: "12px 6px" }}>
-              {context.languagePicker("main.folder.tableColumn.time")}
+              <Link
+                underline="none"
+                color="primary"
+                component="button"
+                onClick={() => handleClickSort("time")}
+                fontWeight="lg"
+                endDecorator={
+                  filesSorting[0] === "time"
+                    ? filesSorting[1]
+                    ? <ArrowDropDownIcon />
+                    : <ArrowDropUpIcon />
+                    : null
+                }
+              >
+                {context.languagePicker("main.folder.tableColumn.time")}
+              </Link>
             </th>
             {context.isAuthority && <th style={{ width: 140, padding: "12px 6px" }}>
               {context.languagePicker("main.folder.tableColumn.operation")}
