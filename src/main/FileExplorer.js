@@ -110,6 +110,21 @@ const FileExplorer = (props) => {
     filter
   ]), [filter]);
 
+  // uploading
+  const handleUploadFile = React.useCallback((filename, filebase) => {
+    // TODO: fill this
+  }, []);
+
+  const handleProprocessFile = React.useCallback((event) => {
+    const targetFile = event.target.files;
+    const reader = new FileReader();
+    reader.readAsDataURL(targetFile[0]);
+    reader.onload = (event) => handleUploadFile(
+      targetFile[0].name,
+      event.target.result
+    );
+  }, [handleUploadFile]);
+
   // states and function for rename
   const [modalRenameOpen, setModalRenameOpen] = React.useState(null);
   const [formNewNameText, setFormNewNameText] = React.useState("");
@@ -331,7 +346,7 @@ const FileExplorer = (props) => {
                   size="sm"
                 >
                   {context.languagePicker("main.folder.viewRegulate.upload")}
-                  <input type="file" hidden />
+                  <input type="file" onChange={handleProprocessFile} hidden />
                 </Button>
               </FormControl>
             </Box>
