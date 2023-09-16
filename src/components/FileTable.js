@@ -61,12 +61,12 @@ export default function FileTable(props) {
             <th style={{ width: 120, padding: "12px 6px" }}>
               <Link
                 underline="none"
-                color="primary"
+                color={guard[0].length ? "neutral" : "primary"}
                 component="button"
                 onClick={() => handleClickSort("name")}
                 fontWeight="lg"
                 endDecorator={
-                  filesSorting[0] === "name"
+                  guard[0] === "" && filesSorting[0] === "name"
                     ? filesSorting[1]
                     ? <ArrowDropDownIcon />
                     : <ArrowDropUpIcon />
@@ -79,12 +79,12 @@ export default function FileTable(props) {
             <th style={{ width: 140, padding: "12px 6px" }}>
               <Link
                 underline="none"
-                color="primary"
+                color={guard[0].length ? "neutral" : "primary"}
                 component="button"
                 onClick={() => handleClickSort("size")}
                 fontWeight="lg"
                 endDecorator={
-                  filesSorting[0] === "size"
+                  guard[0] === "" && filesSorting[0] === "size"
                     ? filesSorting[1]
                     ? <ArrowDropDownIcon />
                     : <ArrowDropUpIcon />
@@ -97,12 +97,12 @@ export default function FileTable(props) {
             <th style={{ width: 140, padding: "12px 6px" }}>
               <Link
                 underline="none"
-                color="primary"
+                color={guard[0].length ? "neutral" : "primary"}
                 component="button"
                 onClick={() => handleClickSort("type")}
                 fontWeight="lg"
                 endDecorator={
-                  filesSorting[0] === "type"
+                  guard[0] === "" && filesSorting[0] === "type"
                     ? filesSorting[1]
                     ? <ArrowDropDownIcon />
                     : <ArrowDropUpIcon />
@@ -115,12 +115,12 @@ export default function FileTable(props) {
             <th style={{ width: 140, padding: "12px 6px" }}>
               <Link
                 underline="none"
-                color="primary"
+                color={guard[0].length ? "neutral" : "primary"}
                 component="button"
                 onClick={() => handleClickSort("time")}
                 fontWeight="lg"
                 endDecorator={
-                  filesSorting[0] === "time"
+                  guard[0] === "" && filesSorting[0] === "time"
                     ? filesSorting[1]
                     ? <ArrowDropDownIcon />
                     : <ArrowDropUpIcon />
