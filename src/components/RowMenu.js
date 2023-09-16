@@ -52,16 +52,10 @@ export default function RowMenu(props) {
       <MenuButton
         slots={{ root: IconButton }}
         slotProps={{ root: { variant: "plain", color: "neutral", size: "sm" } }}
-        sx={{ display: { xs: "none", sm: "inline-flex" } }}
+        
       >
-        <MoreHorizRoundedIcon />
-      </MenuButton>
-      <MenuButton
-        slots={{ root: IconButton }}
-        slotProps={{ root: { variant: "plain", color: "neutral", size: "sm" } }}
-        sx={{ display: { xs: "inline-flex", sm: "none" } }}
-      >
-        <MoreVertRoundedIcon />
+        <MoreHorizRoundedIcon sx={{ display: { xs: "none", sm: "inline-flex" } }} />
+        <MoreVertRoundedIcon sx={{ display: { xs: "inline-flex", sm: "none" } }} />
       </MenuButton>
       <Menu size="sm" sx={{ minWidth: 140 }}>
         <MenuItem onClick={handleToggleRename}>
