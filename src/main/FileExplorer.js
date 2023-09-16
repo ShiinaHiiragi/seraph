@@ -88,7 +88,7 @@ const FileExplorer = (props) => {
     ...new Set(
       filesList.map(
         (item) => item.type === null
-          ? context.languagePicker("main.folder.viewRegulate.unknown")
+          ? "Unknown"
           : item.type.split("/")[0].upperCaseFirst()
       )
     )
@@ -308,13 +308,19 @@ const FileExplorer = (props) => {
                   onChange={(event) => setFilter(
                     event.target.innerText === context.languagePicker("main.folder.viewRegulate.all")
                       ? "null"
+                      : event.target.innerText === context.languagePicker("main.folder.viewRegulate.unknown")
+                      ? "Unknown"
                       : event.target.innerText
                   )}
                 >
                   <Option value="null">
                     {context.languagePicker("main.folder.viewRegulate.all")}
                   </Option>
-                  {filterList.map((item) => (<Option key={item} value={item}>{item}</Option>))}
+                  {filterList.map((item) => (<Option key={item} value={item}>
+                    {item === "Unknown"
+                      ? context.languagePicker("main.folder.viewRegulate.unknown")
+                      : item}
+                  </Option>))}
                 </Select>
               </FormControl>
               <FormControl size="sm" sx={{ justifyContent: "flex-end" }}>

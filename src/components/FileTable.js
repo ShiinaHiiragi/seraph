@@ -143,9 +143,11 @@ export default function FileTable(props) {
               .map((item) => item.item)
           )
             .filter((item) => 
-              [null,"null"]
+              [null, "null"]
                 .includes(guard[1])
                   ? true
+                  : guard[1] === "Unknown"
+                  ? item.type === null
                   : new RegExp(`^${guard[1].toLowerCase()}/`).test(item.type)
             )
             .map((item, index) => (
