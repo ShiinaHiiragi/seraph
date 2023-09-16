@@ -138,7 +138,9 @@ export default function FileTable(props) {
         <tbody>
           {(guard[0] === ""
             ? sortedFilesList
-            : searcher.search(guard[0]).map((item) => item.item)
+            : searcher
+              .search(guard[0])
+              .map((item) => item.item)
           )
             .filter((item) => [
               null,

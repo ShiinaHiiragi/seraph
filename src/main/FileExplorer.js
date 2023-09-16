@@ -325,7 +325,6 @@ const FileExplorer = (props) => {
             </Box>
           </Box>
           <FileTable
-            filesSorting={filesSorting}
             handleClickSort={handleClickSort}
             type={type}
             folderName={folderName}
@@ -338,6 +337,7 @@ const FileExplorer = (props) => {
             setModalCopyOpen={setModalCopyOpen}
             guard={guard}
             searcher={searcher}
+            filesSorting={filesSorting}
           />
           <FileList
             type={type}
@@ -350,6 +350,7 @@ const FileExplorer = (props) => {
             setModalMoveOpen={setModalMoveOpen}
             setModalCopyOpen={setModalCopyOpen}
             guard={guard}
+            searcher={searcher}
           />
         </React.Fragment>}
       {folderState < 0 &&

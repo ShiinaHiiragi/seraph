@@ -21,7 +21,8 @@ export default function FileList(props) {
     folderCount,
     setModalMoveOpen,
     setModalCopyOpen,
-    guard
+    guard,
+    searcher
   } = props;
   const context = React.useContext(GlobalContext);
 
@@ -33,7 +34,21 @@ export default function FileList(props) {
       }}
     >
       <ListDivider sx={{ mb: 1 }} />
-      {sortedFilesList
+      {(guard[0] === ""
+            ? sortedFilesList
+            : searcher
+              .search(guard[0])
+              .map((item) => item.item)
+          )
+            .filter((item) => [
+              null,
+              context.languagePicker(
+                "main.folder.viewRegulate.all"
+              )
+            ].includes(guard[1])
+              ? true
+              : new RegExp(`^${guard[1].toLowerCase()}/`).test(item.type)
+            )
         .map((item, index) => (
           <List
             key={index}
