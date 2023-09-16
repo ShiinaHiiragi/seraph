@@ -117,7 +117,7 @@ const FileExplorer = (props) => {
         type: type,
         folderName: folderName,
         filename: filename,
-        base: filebase
+        base: filebase.split(",")[1]
       }, { "": reject })
         .then((data) => {
           resolve();
