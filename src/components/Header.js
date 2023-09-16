@@ -192,6 +192,7 @@ const Header = (props) => {
         <form>
           <Input type="text" autoComplete="username" sx={{ display: "none" }} />
           <Input
+            autoFocus
             placeholder={context.languagePicker("modal.form.login.placeholder")}
             value={formPasswordText}
             error={formPasswordError}

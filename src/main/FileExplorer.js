@@ -260,6 +260,7 @@ const FileExplorer = (props) => {
         button={context.languagePicker("universal.button.submit")}
       >
         <Input
+          autoFocus
           autoComplete="off"
           placeholder={context.languagePicker("modal.form.rename.placeholder")}
           value={formNewNameText}

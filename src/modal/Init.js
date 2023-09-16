@@ -133,6 +133,7 @@ export default function Init(props) {
             <FormControl>
               <FormLabel>{context.languagePicker("modal.init.password.label")}</FormLabel>
               <Input
+                autoFocus
                 endDecorator={
                   <IconButton
                     onClick={() => {

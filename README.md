@@ -9,9 +9,7 @@
 ## Memo
 
 1. File Explorer
-    - addition
-        - rename focus
-        - table sort
+    - table sort
     - upload file
     - new / delete folder
     - edit in milkdown
