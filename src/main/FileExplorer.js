@@ -303,7 +303,7 @@ const FileExplorer = (props) => {
                 <Select
                   size="sm"
                   placeholder={context.languagePicker("main.folder.viewRegulate.filter")}
-                  slotProps={{ button: { sx: { whiteSpace: "nowrap" } } }}
+                  slotProps={{ button: { sx: { whiteSpace: "wrap" } } }}
                   value={filter}
                   onChange={(event) => setFilter(
                     event.target.innerText === context.languagePicker("main.folder.viewRegulate.all")
@@ -325,11 +325,13 @@ const FileExplorer = (props) => {
               </FormControl>
               <FormControl size="sm" sx={{ justifyContent: "flex-end" }}>
                 <Button
+                  component="label"
                   color="primary"
                   startDecorator={<UploadRoundedIcon />}
                   size="sm"
                 >
                   {context.languagePicker("main.folder.viewRegulate.upload")}
+                  <input type="file" hidden />
                 </Button>
               </FormControl>
             </Box>

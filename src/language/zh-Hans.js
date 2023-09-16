@@ -42,7 +42,7 @@ const zhHans = {
         unknown: "未知",
         search: "按名称搜索",
         filter: "按 MIME 类型过滤",
-        upload: "上传",
+        upload: "上传文件",
         all: "所有类型"
       }
     }

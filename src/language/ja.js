@@ -41,7 +41,7 @@ const ja = {
       viewRegulate: {
         unknown: "不明",
         search: "ファイル名で検索",
-        filter: "タイプでフィルタ",
+        filter: "フィルタ",
         upload: "アップロード",
         all: "全種類"
       }

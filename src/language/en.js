@@ -42,7 +42,7 @@ const en = {
         unknown: "Unknown",
         search: "Search by Name",
         filter: "Filter by MIME Type",
-        upload: "Upload",
+        upload: "Upload File",
         all: "All Type"
       }
     }
