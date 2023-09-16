@@ -37,6 +37,7 @@ router.post('/upload', (req, res, next) => {
   try {
     const fileBuffer = Buffer.from(base, 'base64');
     fs.writeFileSync(filePath, fileBuffer);
+    fs.chmodSync(filePath, 0o777);
   } catch (_) {
     // -> EF_FME: fs.renameSync error
     req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
@@ -82,6 +83,7 @@ router.post('/rename', (req, res, next) => {
 
   try {
     fs.renameSync(filePath, newFilePath);
+    fs.chmodSync(filePath, 0o777);
   } catch (_) {
     // -> EF_FME: fs.renameSync error
     req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
@@ -144,6 +146,7 @@ router.post('/move', (req, res, next) => {
 
   try {
     fs.renameSync(filePath, newFilePath);
+    fs.chmodSync(newFilePath, 0o777);
   } catch (_) {
     // -> EF_FME: fs.renameSync error
     req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
@@ -203,6 +206,7 @@ router.post('/copy', (req, res, next) => {
 
   try {
     fs.copyFileSync(filePath, newFilePath);
+    fs.chmodSync(newFilePath, 0o777);
   } catch (_) {
     // -> EF_FME: fs.renameSync error
     req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
