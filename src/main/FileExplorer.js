@@ -89,7 +89,8 @@ const FileExplorer = (props) => {
         ));
         handleCloseRename();
         toast.success(
-          context.languagePicker("modal.toast.success.rename")
+          context
+            .languagePicker("modal.toast.success.rename")
             .format(originFilename, newFilename)
         );
       })
@@ -130,7 +131,8 @@ const FileExplorer = (props) => {
         setModalMoveOpen(null);
         clearInnerState();
         toast.success(
-          context.languagePicker("modal.toast.success.move")
+          context
+            .languagePicker("modal.toast.success.move")
             .format(filename, newFolderName)
         );
       })
@@ -233,8 +235,16 @@ const FileExplorer = (props) => {
         handleClick={handleMove}
         title={context.languagePicker("modal.form.move")}
         button={context.languagePicker("universal.button.continue")}
-        publicFolders={context.publicFolders}
-        privateFolders={context.privateFolders}
+        publicFolders={
+          context
+            .publicFolders
+            .filter((item) => type !== "public" || folderName !== item)
+        }
+        privateFolders={
+          context
+            .privateFolders
+            .filter((item) => type !== "private" || folderName !== item)
+        }
       />
     </RouteField>
   )
