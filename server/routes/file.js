@@ -45,9 +45,20 @@ router.post('/upload', (req, res, next) => {
     return;
   }
 
+  const stat = fs.statSync(filePath);
+  const newStat = {
+    size: stat.size,
+    time: stat.birthtime,
+    mtime: stat.mtime,
+    type: mime.getType(filename)
+  };
+
   // -> ES: no extra info
   req.status.addExecStatus();
-  res.send(req.status.generateReport());
+  res.send({
+    ...req.status.generateReport(),
+    ...newStat
+  });
   return;
 });
 

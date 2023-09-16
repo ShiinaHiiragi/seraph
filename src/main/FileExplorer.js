@@ -120,6 +120,16 @@ const FileExplorer = (props) => {
         base: filebase.split(",")[1]
       }, { "": reject })
         .then((data) => {
+          setFilesList((filesList) => [
+            ...filesList,
+            {
+              name: filename,
+              size: data.size,
+              time: data.time,
+              mtime: data.mtime,
+              type: data.type
+            }
+          ])
           resolve();
         });
     }), {
