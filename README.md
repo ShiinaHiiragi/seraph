@@ -8,31 +8,31 @@
 
 ## Memo
 
-1. File Explorer
-    - upload file
+1. Intro
+2. File Explorer
     - new / delete folder
     - edit in milkdown
     - create / edit attached markdown
-2. Links
+3. Links
     - add / modify / delete links
     - download resources
     - arXiv search
-3. Milkdown
+4. Milkdown
     - edit / read only
     - save in folder / attach to file
     - download
-4. Subscription
+5. Subscription
     - cron (cron) & sync (ntp-time-sync)
     - snippet (return string / file)
     - mail server
     - multilanguage support
-5. Terminal
+6. Terminal
     - open powershell / bash
     - terminal: react-terminal
-6. TODO
+7. TODO
     - sync: clear automatically
     - async: clear after ticked 60 s
-7. Header
+8. Header
     - about
         - platform argument
         - info about seraph
