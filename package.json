@@ -25,19 +25,15 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "concurrently --raw 'npm:static' 'npm:server'",
-    "start:sudo": "concurrently --raw 'npm:static:sudo' 'npm:server:sudo'",
-    "build": "react-scripts build",
-    "deploy:win": "(rmdir /s /q .\\build || exit 0) && npm run build",
-    "deploy:linux": "(rm -rf ./build) && npm run build",
-    "dev": "concurrently --raw 'npm:react' 'npm:server'",
-    "dev:sudo": "concurrently --raw 'npm:react:sudo' 'npm:server:sudo'",
+    "start": "cd server/ && npm run server",
+    "start:sudo": "cd server/ && npm run server:sudo",
     "react": "react-scripts start",
     "react:sudo": "sudo node ./node_modules/.bin/react-scripts start",
-    "static": "cd server/ && npm run static",
-    "static:sudo": "cd server/ && npm run static:sudo",
-    "server": "cd server/ && npm run server",
-    "server:sudo": "cd server/ && npm run server:sudo"
+    "dev": "concurrently --raw 'npm:react' 'npm:start'",
+    "dev:sudo": "concurrently --raw 'npm:react:sudo' 'npm:start:sudo'",
+    "build": "react-scripts build",
+    "deploy:win": "(rmdir /s /q .\\build || exit 0) && npm run build",
+    "deploy:linux": "(rm -rf ./build) && npm run build"
   },
   "eslintConfig": {
     "extends": [

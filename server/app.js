@@ -20,13 +20,15 @@ app.use(express.static(api.dataPath.buildDirPath));
 app.use(cookieParser());
 
 // reinforce setting
-app.use(cors({
-  origin: [api.reactBaseURL],
-  methods: ["GET", "POST"],
-  alloweHeaders: ['Conten-Type', 'Authorization', 'Accept', 'Origin'],
-  exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
-  credentials: true,
-}));
+if (process.env.PORT !== undefined) {
+  app.use(cors({
+    origin: [api.reactBaseURL],
+    methods: ["GET", "POST"],
+    alloweHeaders: ['Conten-Type', 'Authorization', 'Accept', 'Origin'],
+    exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
+    credentials: true,
+  }));
+}
 
 // unified authenticator
 app.use((req, res, next) => {
@@ -52,7 +54,7 @@ app.use('/folder', folderRouter);
 
 // redirect all other pages to react-router
 app.use((req, res) => {
-  if (process.env.DEV === 'true') {
+  if (process.env.PORT !== undefined) {
     res.redirect(new URL(req.originalUrl, api.reactBaseURL).href);
   } else {
     res.sendFile(path.join(api.dataPath.buildDirPath, 'index.html'));

@@ -3,8 +3,6 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "static": "node-dev static.js",
-    "static:sudo": "sudo node ./node_modules/.bin/node-dev static.js",
     "server": "node-dev ./bin/www",
     "server:sudo": "sudo node ./node_modules/.bin/node-dev ./bin/www"
   },
