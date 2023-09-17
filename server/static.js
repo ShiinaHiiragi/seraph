@@ -30,13 +30,13 @@ if (disbableHTTPS) {
     cert: fs.readFileSync(
       path.join(
         __dirname,
-        `server/cert/${proces.env.REACT_APP_HOSTNAME}_bundle.crt`
+        `cert/${process.env.REACT_APP_HOSTNAME}.crt`
       )
     ),
     key: fs.readFileSync(
       path.join(
         __dirname,
-        `server/cert/${proces.env.REACT_APP_HOSTNAME}.key`
+        `cert/${process.env.REACT_APP_HOSTNAME}.key`
       )
     )
   };  

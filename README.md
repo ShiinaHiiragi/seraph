@@ -30,7 +30,7 @@
     ```
 
     - `PORT`: the port React uses
-    - `REACT_APP_PROTOCOL`: `http` or `https`. If `https` is applied, certificate `${HOSTNAME}_bundle.crt` and key `${HOSTNAME}.key` should be added under seraph/server/cert
+    - `REACT_APP_PROTOCOL`: `http` or `https`. If `https` is applied, certificate `${HOSTNAME}.crt` and key `${HOSTNAME}.key` should be added under seraph/server/cert
     - `REACT_APP_HOSTNAME`: can be changed to other host name
     - `REACT_APP_SPORT`: the port server uses
 
