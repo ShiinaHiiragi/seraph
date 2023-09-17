@@ -39,18 +39,20 @@ router.post('/upload', (req, res, next) => {
     fs.writeFileSync(filePath, fileBuffer);
     fs.chmodSync(filePath, 0o777);
   } catch (_) {
-    // -> EF_FME: fs.renameSync error
+    // -> EF_FME: fs.writeFileSync error
     req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
     res.send(req.status.generateReport());
     return;
   }
 
-  const stat = fs.statSync(filePath);
+  const stat = fs.lstatSync(filePath);
   const newStat = {
     size: stat.size,
     time: stat.birthtime,
     mtime: stat.mtime,
-    type: mime.getType(filename)
+    type: stat.isDirectory()
+      ? "directory"
+      : (mime.getType(item.name) ?? "unknown")
   };
 
   // -> ES: no extra info
@@ -78,7 +80,7 @@ router.post('/rename', (req, res, next) => {
   const filePath = path.join(folderPath, filename);
   const newFilePath = path.join(folderPath, newFilename);
 
-  if (!fs.existsSync(folderPath) || !fs.existsSync(filePath)) {
+  if (!fs.existsSync(filePath)) {
     // -> EF_RU: folder don't exist
     req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
     res.send(req.status.generateReport());
@@ -96,7 +98,6 @@ router.post('/rename', (req, res, next) => {
     fs.renameSync(filePath, newFilePath);
     fs.chmodSync(newFilePath, 0o777);
   } catch (_) {
-    console.log(_);
     // -> EF_FME: fs.renameSync error
     req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
     res.send(req.status.generateReport());
@@ -127,7 +128,7 @@ router.post('/delete', (req, res, next) => {
   ](folderName);
   const filePath = path.join(folderPath, filename);
 
-  if (!fs.existsSync(folderPath) || !fs.existsSync(filePath)) {
+  if (!fs.existsSync(filePath)) {
     // -> EF_RU: folder don't exist
     req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
     res.send(req.status.generateReport());
@@ -137,7 +138,7 @@ router.post('/delete', (req, res, next) => {
   try {
     fs.unlinkSync(filePath);
   } catch (_) {
-    // -> EF_FME: fs.renameSync error
+    // -> EF_FME: fs.unlinkSync error
     req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
     res.send(req.status.generateReport());
     return;
