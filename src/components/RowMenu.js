@@ -65,7 +65,7 @@ export default function RowMenu(props) {
               open: true,
               captionFirstHalf: context
                 .languagePicker("modal.reconfirm.captionFirstHalf.delete")
-                .format(folderName + "/" + filename),
+                .format(filename),
               handleAction: () => handleDelete(type, folderName, filename)
             })
           }}

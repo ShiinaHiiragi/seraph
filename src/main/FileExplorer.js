@@ -285,8 +285,20 @@ const FileExplorer = (props) => {
                 />
               </FormControl>
             </Box>
-            <Box sx={{ display: "flex", gap: 1.5, width: { xs: "100%", sm: "auto" } }}>
-              <FormControl size="sm" sx={{ flexGrow: 1, minWidth: "160px" }}>
+            <Box
+              sx={{
+                display: "flex",
+                gap: context.isAuthority ? 1.5 : 0,
+                width: { xs: "100%", sm: "auto" }
+              }}
+            >
+              <FormControl
+                size="sm"
+                sx={{
+                  flexGrow: 1,
+                  minWidth: context.isAuthority ? "160px" : "200px"
+                }}
+              >
                 <Select
                   size="sm"
                   placeholder={context.languagePicker("main.folder.viewRegulate.filter")}
