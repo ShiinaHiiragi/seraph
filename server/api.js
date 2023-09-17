@@ -10,6 +10,7 @@ fs.copyFileSync(
   path.join(__dirname, '../.env'),
   path.join(__dirname, '/.env')
 );
+fs.chmodSync(path.join(__dirname, '/.env'), 0o777);
 
 dotenv.config();
 const generateBaseURL = (protocol, hostname, port) => `${protocol}://${hostname}:${port}`;
@@ -24,6 +25,7 @@ exports.reactBaseURL = reactBaseURL;
 
 // intro __dirname
 const dataPath = {
+  certDirPath: path.join(__dirname, "./cert"),
   dataDirPath: path.join(__dirname, "./data"),
   publicDirPath: path.join(__dirname, "./data/public"),
   privateDirPath: path.join(__dirname, "./data/private"),
@@ -94,6 +96,22 @@ const fileOperator = {
       dataPath.tokenFilePath,
       JSON.stringify(token, null, 2)
     );
+  },
+
+  readCert: () => {
+    const privateCrt = fs.readFileSync(
+      dataPath.certDirPath,
+      `${process.env.REACT_APP_HOSTNAME}_bundle.crt`
+    );
+    const privateKey = fs.readFileSync(
+      dataPath.certDirPath,
+      `${process.env.REACT_APP_HOSTNAME}.key`
+    );
+
+    return {
+      key: privateKey,
+      cert: privateCrt
+    };
   },
 
   // folder means dir under public/ or private/

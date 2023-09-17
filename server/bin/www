@@ -5,6 +5,7 @@
  */
 
 let app = require('../app');
+let api = require('../api');
 let http = require('http');
 let https = require('https');
 
@@ -16,10 +17,15 @@ let port = normalizePort(process.env.REACT_APP_SPORT);
 app.set('port', port);
 
 /**
- * Create HTTP server.
+ * Create HTTP(S) server.
  */
 
-let server = http.createServer(app);
+let disableHTTPS = process.argv.includes('--http')
+  || process.env.REACT_APP_PROTOCOL === 'http';
+
+let server = disableHTTPS
+  ? http.createServer(app)
+  : https.createServer(api.fileOperator.readCert());
 
 /**
  * Listen on provided port, on all network interfaces.
