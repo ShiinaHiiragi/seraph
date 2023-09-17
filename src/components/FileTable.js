@@ -157,8 +157,13 @@ export default function FileTable(props) {
                 <td>
                   <Typography level="body-xs">
                     <Link
-                      target="_blank"
-                      href={new URL(`/${type}/${folderName}/${item.name}`, serverBaseURL).href}
+                      target={item.type === "directory" ? "_self" : "_blank"}
+                      href={
+                        new URL(
+                          `/${type}${folderName.length ? "/" : ""}${folderName}/${item.name}`,
+                          serverBaseURL
+                        ).href
+                      }
                     >
                       {item.name}
                     </Link>
