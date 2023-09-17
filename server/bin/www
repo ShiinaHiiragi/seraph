@@ -22,7 +22,7 @@ app.set('port', port);
 
 let server = process.env.REACT_APP_PROTOCOL === 'http'
   ? http.createServer(app)
-  : https.createServer(api.fileOperator.readCert());
+  : https.createServer(api.fileOperator.readCert(), app);
 
 /**
  * Listen on provided port, on all network interfaces.
