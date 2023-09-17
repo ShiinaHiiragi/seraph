@@ -25,12 +25,16 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "concurrently --raw 'npm:react' 'npm:dev'",
+    "start": "concurrently --raw 'npm:react' 'npm:deploy'",
+    "dev": "concurrently --raw 'npm:react' 'npm:server'",
     "react": "react-scripts start",
-    "dev": "cd server/ && npm run dev",
-    "start:sudo": "concurrently --raw 'npm:react:sudo' 'npm:dev:sudo'",
+    "server": "cd server/ && npm run server",
+    "deploy": "cd server/ && npm run deploy",
+    "start:sudo": "concurrently --raw 'npm:react:sudo' 'npm:deploy:sudo'",
+    "dev:sudo": "concurrently --raw 'npm:react:sudo' 'npm:server:sudo'",
     "react:sudo": "sudo node ./node_modules/.bin/react-scripts start",
-    "dev:sudo": "cd server/ && npm run dev:sudo"
+    "server:sudo": "cd server/ && npm run server:sudo",
+    "deploy:sudo": "cd server/ && npm run deploy:sudo"
   },
   "eslintConfig": {
     "extends": [

@@ -3,8 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "node-dev ./bin/www",
-    "dev:sudo": "sudo node ./node_modules/.bin/node-dev ./bin/www"
+    "deploy": "node-dev ./bin/www --https",
+    "server": "node-dev ./bin/www",
+    "deploy:sudo": "sudo node ./node_modules/.bin/node-dev ./bin/www --https",
+    "server:sudo": "sudo node ./node_modules/.bin/node-dev ./bin/www"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
