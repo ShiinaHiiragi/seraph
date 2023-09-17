@@ -131,7 +131,7 @@ const Panel = () => {
   // first tick starts on page loaded
   //            ends after receiving metadata
   React.useEffect(() => {
-    request("GET/auth/meta", undefined, undefined, setModalInitOpen)
+    request("GET/auth/meta", undefined, undefined, undefined, setModalInitOpen)
       .then((data) => {
         setSetting(data.setting);
         setPublicFolders(data.public);

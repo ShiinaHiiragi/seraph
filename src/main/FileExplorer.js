@@ -124,12 +124,17 @@ const FileExplorer = (props) => {
   // uploading
   const handleUploadFile = React.useCallback((filename, filebase) => {
     toast.promise(() => new Promise((resolve, reject) => {
-      request("POST/file/upload", {
-        type: type,
-        folderName: folderName,
-        filename: filename,
-        base: filebase.split(",")[1]
-      }, { "": reject })
+      request(
+        "POST/file/upload",
+        {
+          type: type,
+          folderName: folderName,
+          filename: filename,
+          base: filebase.split(",")[1]
+        },
+        undefined,
+        reject
+      )
         .then((data) => {
           setFilesList((filesList) => [
             ...filesList,
@@ -148,7 +153,7 @@ const FileExplorer = (props) => {
       success: context
         .languagePicker("modal.toast.success.upload")
         .format(filename, folderName),
-      error: context.languagePicker("modal.toast.warning.generalPromise")
+      error: (data) => data
     })
   }, [type, folderName, context]);
 

@@ -165,9 +165,13 @@ const Status = {
  *      须务必保持除了服务器内部错误 ISE 外其他所有错误名字相同（除了首字母）
  */
 axios.defaults.withCredentials = true;
-const request = (query, params, todo, handleInit) => {
+const request = (query, params, todo, handleReject, handleInit) => {
   const [method, path] = query.match(/(GET|POST)(.+)/).slice(1);
-  return new Promise((resolve, reject) => {
+  const universalPlanned = todo?.[""];
+
+  // no catch() in request()
+  // learn to use finally()
+  return new Promise((resolve) => {
     axios[method.toLowerCase()](
       new URL(path, serverBaseURL).href,
       method === "POST" ? params : { params: params }
@@ -188,6 +192,7 @@ const request = (query, params, todo, handleInit) => {
           setTimeout(() => {
             window.location.reload();
           }, 4000);
+        // returning AF_NI, which is rather special
         } else if (res.data.statusCode === Status.statusCode.AuthFailed
           && res.data.errorCode === Status.authErrCode.NotInit) {
             handleInit(true);
@@ -207,22 +212,24 @@ const request = (query, params, todo, handleInit) => {
             const matchedErrorCode = Status.execErrCode[
               mathcedErrorState.upperCaseFirst()
             ];
-            toast.error(ConstantContext.languagePicker(
+            (handleReject ?? toast.error)(ConstantContext.languagePicker(
               "modal.toast.exception." + mathcedErrorState
             ));
 
             const planned = todo?.[matchedErrorCode];
-            const universalPlanned = todo?.[""];
-
             if (planned instanceof Function) {
               planned(res.data);
             }
             if (universalPlanned instanceof Function) {
               universalPlanned(res.data);
             }
-          // returning others, such as AF_NI
+          // returning others
           } else {
-            toast.error(
+            if (universalPlanned instanceof Function) {
+              universalPlanned(res.data);
+            }
+
+            (handleReject ?? toast.error)(
               ConstantContext
                 .languagePicker("modal.toast.error.unparseableResponse")
                 .format(res.data.statusCode + (res.data.errorCode
@@ -232,13 +239,13 @@ const request = (query, params, todo, handleInit) => {
             );
           }
         }
-      }).catch((res) => {
-        const universalPlanned = todo?.[""];
+      })
+      .catch((res) => {
         if (universalPlanned instanceof Function) {
           universalPlanned(res.data);
         }
 
-        toast.error(
+        (handleReject ?? toast.error)(
           ConstantContext
             .languagePicker("modal.toast.error.serverError")
             .format(res.response?.status ?? res.code)
