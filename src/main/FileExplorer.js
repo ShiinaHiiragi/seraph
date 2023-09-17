@@ -175,10 +175,10 @@ const FileExplorer = (props) => {
   // states and function for rename
   const [modalRenameOpen, setModalRenameOpen] = React.useState(null);
   const [formNewNameText, setFormNewNameText] = React.useState("");
-  const [modalRenameDisabled, setModalRenameDisabled] = React.useState(false);
+  const [modalRenameLoading, setModalRenameLoading] = React.useState(false);
   const handleCloseRename = React.useCallback(() => {
     setModalRenameOpen(false);
-    setModalRenameDisabled(false);
+    setModalRenameLoading(false);
   }, [ ]);
 
   const handleRename = React.useCallback(() => {
@@ -188,7 +188,7 @@ const FileExplorer = (props) => {
     }
 
     const originFilename = `${modalRenameOpen}`, newFilename = `${formNewNameText}`;
-    setModalRenameDisabled(true);
+    setModalRenameLoading(true);
     request(
       "POST/file/rename",
       {
@@ -197,7 +197,7 @@ const FileExplorer = (props) => {
         filename: originFilename,
         newFilename: formNewNameText
       },
-      { "": () => setModalRenameDisabled(false) }
+      { "": () => setModalRenameLoading(false) }
     )
       .then((data) => {
         setFilesList((filesList) => filesList.map((item) =>
@@ -215,7 +215,7 @@ const FileExplorer = (props) => {
             .format(originFilename, newFilename)
         );
       })
-      .finally(() => setModalRenameDisabled(false));
+      .finally(() => setModalRenameLoading(false));
   }, [
     context,
     type,
@@ -369,9 +369,9 @@ const FileExplorer = (props) => {
         />}
       <ModalForm
         open={Boolean(modalRenameOpen)}
+        loading={modalRenameLoading}
         disabled={
-          modalRenameDisabled
-          || formNewNameText.length === 0
+          formNewNameText.length === 0
           || formNewNameText === modalRenameOpen
         }
         handleClose={handleCloseRename}
