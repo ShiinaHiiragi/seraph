@@ -91,15 +91,20 @@ const FileExplorer = (props) => {
     { keys: ["name"] }
   ), [sortedFilesList])
 
-  React.useEffect(() => setFilterList([
-    ...new Set(
-      filesList.map(
-        (item) => item.type === null
-          ? "Unknown"
-          : item.type.split("/")[0].upperCaseFirst()
+  React.useEffect(() => {
+    const newFilterList = [
+      ...new Set(
+        filesList
+          .filter((item) => item.type !== "directory")
+          .map((item) => item.type.split("/")[0].upperCaseFirst())
       )
-    )
-  ].sortBy()), [context, filesList]);
+    ].sortBy();
+
+    if (filesList.filter((item) => item.type === "directory").length) {
+      newFilterList.unshift("Directory")
+    }
+    setFilterList(newFilterList);
+  }, [context, filesList]);
 
   React.useEffect(() => {
     setFilter(null);
@@ -364,20 +369,16 @@ const FileExplorer = (props) => {
                   placeholder={context.languagePicker("main.folder.viewRegulate.filter")}
                   slotProps={{ button: { sx: { whiteSpace: "wrap" } } }}
                   value={filter}
-                  onChange={(event) => setFilter(
-                    event.target.innerText === context.languagePicker("main.folder.viewRegulate.all")
-                      ? "null"
-                      : event.target.innerText === context.languagePicker("main.folder.viewRegulate.unknown")
-                      ? "Unknown"
-                      : event.target.innerText
-                  )}
+                  onChange={(event) => setFilter(event.target.id)}
                 >
-                  <Option value="null">
+                  <Option id="All" value="All">
                     {context.languagePicker("main.folder.viewRegulate.all")}
                   </Option>
-                  {filterList.map((item) => (<Option key={item} value={item}>
+                  {filterList.map((item) => (<Option id={item} key={item} value={item}>
                     {item === "Unknown"
                       ? context.languagePicker("main.folder.viewRegulate.unknown")
+                      : item === "Directory"
+                      ? context.languagePicker("main.folder.viewRegulate.directory")
                       : item}
                   </Option>))}
                 </Select>

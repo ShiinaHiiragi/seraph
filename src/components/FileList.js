@@ -41,12 +41,12 @@ export default function FileList(props) {
               .map((item) => item.item)
           )
         .filter((item) => 
-          [null, "null"]
+          [null, "All"]
             .includes(guard[1])
               ? true
-              : guard[1] === "Unknown"
-              ? item.type === null
-              : new RegExp(`^${guard[1].toLowerCase()}/`).test(item.type)
+              : new RegExp(
+                `^(${guard[1].toLowerCase()}/|${guard[1].toLowerCase()}$)`
+              ).test(item.type)
         )
         .map((item, index) => (
           <List
@@ -103,7 +103,11 @@ export default function FileList(props) {
                     </Typography>
                     <Typography level="body-xs">&bull;</Typography>
                     <Typography level="body-xs">
-                      {item.type || context.languagePicker("main.folder.viewRegulate.unknown")}
+                      {item.type === "unknown"
+                        ? context.languagePicker("main.folder.viewRegulate.unknown")
+                        : item.type === "directory"
+                        ? context.languagePicker("main.folder.viewRegulate.directory")
+                        : item.type}
                     </Typography>
                   </Box>
                 </div>
