@@ -40,6 +40,7 @@ const en = {
       },
       viewRegulate: {
         unknown: "Unknown",
+        directory: "Directory",
         search: "Search by Name",
         filter: "Filter by Type",
         upload: "Upload File",

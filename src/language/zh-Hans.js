@@ -40,6 +40,7 @@ const zhHans = {
       },
       viewRegulate: {
         unknown: "未知",
+        directory: "目录",
         search: "按名称搜索",
         filter: "按类型过滤",
         upload: "上传文件",

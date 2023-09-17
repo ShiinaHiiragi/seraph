@@ -40,6 +40,7 @@ const ja = {
       },
       viewRegulate: {
         unknown: "不明",
+        directory: "ディレクトリ",
         search: "ファイル名で検索",
         filter: "フィルタ",
         upload: "アップロード",

@@ -137,13 +137,15 @@ const fileOperator = {
     folderInfo = fs.readdirSync(folderPath, { withFileTypes: true })
     folderInfo.filter((item) => !item.isDirectory())
     return folderInfo.map((item) => {
-      const stat = fs.statSync(path.join(folderPath, item.name));
+      const stat = fs.lstatSync(path.join(folderPath, item.name));
       return {
         name: item.name,
         size: stat.size,
         time: stat.birthtime,
         mtime: stat.mtime,
-        type: mime.getType(item.name)
+        type: stat.isDirectory()
+          ? "directory"
+          : (mime.getType(item.name) ?? "unknown")
       }
     });
   }

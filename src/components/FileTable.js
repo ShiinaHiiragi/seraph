@@ -171,7 +171,11 @@ export default function FileTable(props) {
                 </td>
                 <td>
                   <Typography level="body-xs">
-                    {item.type || context.languagePicker("main.folder.viewRegulate.unknown")}
+                    {item.type === "unknown"
+                      ? context.languagePicker("main.folder.viewRegulate.unknown")
+                      : item.type === "directory"
+                      ? context.languagePicker("main.folder.viewRegulate.directory")
+                      : item.type}
                   </Typography>
                 </td>
                 <td>
