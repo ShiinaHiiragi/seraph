@@ -9,6 +9,7 @@ import IconButton from "@mui/joy/IconButton";
 import Typography from "@mui/joy/Typography"
 import GreyLogo from "../logo-grey.svg";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
+import NavigateNextOutlinedIcon from "@mui/icons-material/NavigateNextOutlined";
 // import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 // import EventNoteOutlinedIcon from "@mui/icons-material/EventNoteOutlined";
 // import ForwardToInboxOutlinedIcon from "@mui/icons-material/ForwardToInboxOutlined";
@@ -51,6 +52,16 @@ export default function Navigation(props) {
       <ListItem nested>
         <ListSubheader>
           {context.languagePicker("nav.public")}
+          <IconButton
+            size="sm"
+            variant="plain"
+            color="primary"
+            sx={{ '--IconButton-size': '24px', ml: 'auto' }}
+            onClick={() => navigateTo("/public")}
+            disabled={/^\/public\/*$/.test(window.location.pathname)}
+          >
+            <NavigateNextOutlinedIcon fontSize="small" color="primary" />
+          </IconButton>
         </ListSubheader>
         <List
           aria-labelledby="nav-list-browse"
@@ -77,6 +88,16 @@ export default function Navigation(props) {
       {context.isAuthority && <ListItem nested>
         <ListSubheader>
           {context.languagePicker("nav.private")}
+          <IconButton
+            size="sm"
+            variant="plain"
+            color="primary"
+            sx={{ '--IconButton-size': '24px', ml: 'auto' }}
+            onClick={() => navigateTo("/private")}
+            disabled={/^\/private\/*$/.test(window.location.pathname)}
+          >
+            <NavigateNextOutlinedIcon fontSize="small" color="primary" />
+          </IconButton>
         </ListSubheader>
         <List
           aria-labelledby="nav-list-browse"
