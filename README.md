@@ -29,13 +29,13 @@
     ```
 
     - `PORT`: the port React uses
-    - `REACT_APP_PROTOCOL`: `http` or `https`. If https is applied, certificate (\*.crt) and keys (\*.key) should be added under seraph/server/cert
+    - `REACT_APP_PROTOCOL`: `http` or `https`. If `https` is applied, certificate `${HOSTNAME}_bundle.crt` and key `${HOSTNAME}.key` should be added under seraph/server/cert
     - `REACT_APP_HOSTNAME`: can be changed to other host name
     - `REACT_APP_SPORT`: the port server uses
 
 3. Start by `npm start`
     - for Linux user who receive error like 'Port xxx requires elevated privileges', try running `npm run start:sudo`
-    - for those who receive error like 'Can't resolve @mui/material/utils', try running following command
+    - for those who receive error like 'Can't resolve @mui/material/utils', try running the following command
 
         ```shell
         npm install @mui/material @emotion/react @emotion/styled
