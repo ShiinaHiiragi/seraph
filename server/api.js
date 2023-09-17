@@ -25,6 +25,7 @@ exports.reactBaseURL = reactBaseURL;
 
 // intro __dirname
 const dataPath = {
+  buildDirPath: path.join(__dirname, "../build"),
   certDirPath: path.join(__dirname, "./cert"),
   dataDirPath: path.join(__dirname, "./data"),
   publicDirPath: path.join(__dirname, "./data/public"),

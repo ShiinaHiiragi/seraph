@@ -2,6 +2,7 @@ let express = require('express');
 let cookieParser = require('cookie-parser');
 let logger = require('morgan');
 let cors = require('cors');
+let path = require('path');
 
 let authRouter = require('./routes/auth');
 let publicRouter = require('./routes/public');
@@ -15,6 +16,7 @@ let app = express();
 app.use(logger('dev'));
 app.use(express.json({ limit: '512mb' }));
 app.use(express.urlencoded({ limit: '512mb', extended: true }));
+app.use(express.static(api.dataPath.buildDirPath));
 app.use(cookieParser());
 
 // reinforce setting
@@ -50,7 +52,11 @@ app.use('/folder', folderRouter);
 
 // redirect all other pages to react-router
 app.use((req, res) => {
-  res.redirect(new URL(req.originalUrl, api.reactBaseURL).href);
+  if (process.env.DEV === 'true') {
+    res.redirect(new URL(req.originalUrl, api.reactBaseURL).href);
+  } else {
+    res.sendFile(path.join(api.dataPath.buildDirPath, 'index.html'));
+  }
 });
 
 // error handler must possess four parameters
