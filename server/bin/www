@@ -20,9 +20,7 @@ app.set('port', port);
  * Create HTTP(S) server.
  */
 
-let disableHTTPS = process.argv.includes('--http')
-  || process.env.REACT_APP_PROTOCOL === 'http';
-
+let disableHTTPS = process.env.REACT_APP_PROTOCOL === 'http';
 let server = disableHTTPS
   ? http.createServer(app)
   : https.createServer(api.fileOperator.readCert());
