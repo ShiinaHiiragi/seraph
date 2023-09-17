@@ -112,66 +112,6 @@ router.post('/rename', (req, res, next) => {
   return;
 });
 
-router.post('/move', (req, res, next) => {
-  if (req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
-    next(api.errorStreamControl);
-    return;
-  }
-
-  const {
-    type,
-    folderName,
-    filename,
-    newType,
-    newFolderName
-  } = req.body;
-  const folderPath = api.dataPath[
-    type === "private"
-      ? "privateDirFolderPath"
-      : "publicDirFolderPath"
-  ](folderName);
-  const filePath = path.join(folderPath, filename);
-  const newFolderPath = api.dataPath[
-    newType === "private"
-      ? "privateDirFolderPath"
-      : "publicDirFolderPath"
-  ](newFolderName);
-  const newFilePath = path.join(newFolderPath, filename);
-
-  if (!fs.existsSync(folderPath)
-    || !fs.existsSync(filePath)
-    || !fs.existsSync(newFolderPath)
-  ) {
-    // -> EF_RU: folder don't exist
-    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
-    res.send(req.status.generateReport());
-    return;
-  }
-
-  if (fs.existsSync(newFilePath)) {
-    // -> EF_IC: new filename already exists
-    req.status.addExecStatus(api.Status.execErrCode.IdentifierConflict);
-    res.send(req.status.generateReport());
-    return;
-  }
-
-  try {
-    fs.renameSync(filePath, newFilePath);
-    fs.chmodSync(newFilePath, 0o777);
-  } catch (_) {
-    // -> EF_FME: fs.renameSync error
-    req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
-    res.send(req.status.generateReport());
-    return;
-  }
-
-  // -> ES: no extra info
-  req.status.addExecStatus();
-  res.send(req.status.generateReport());
-  return;
-});
-
 router.post('/copy', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
     // -> EF_IT or abnormal request
