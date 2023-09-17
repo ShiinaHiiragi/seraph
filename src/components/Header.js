@@ -53,29 +53,29 @@ const Header = (props) => {
 
   // function and states for login
   const [modalLoginOpen, setModalLoginOpen] = React.useState(false);
-  const [buttonDisabled, setButtonDisabled] = React.useState(false);
+  const [buttonLoading, setButtonLoading] = React.useState(false);
   const [formPasswordError, setFormPasswordError] = React.useState(false);
   const [formPasswordText, setFormPasswordText] = React.useState("");
 
   const handleCloseLogin = React.useCallback(() => {
     setModalLoginOpen(false);
-    setButtonDisabled(false);
+    setButtonLoading(false);
     setFormPasswordError(false);
     setFormPasswordText("");
   }, [
     setModalLoginOpen,
-    setButtonDisabled,
+    setButtonLoading,
     setFormPasswordError,
     setFormPasswordText
   ]);
 
   const handleLogin = React.useCallback(() => {
-    setButtonDisabled(true);
+    setButtonLoading(true);
     request(
       "POST/auth/login",
       { password: formPasswordText },
       {
-        "": () => setButtonDisabled(false),
+        "": () => setButtonLoading(false),
         [Status.execErrCode.IncorrectPassword]: () => setFormPasswordError(true)
       }
     )
@@ -85,7 +85,7 @@ const Header = (props) => {
         handleCloseLogin();
         toast(context.languagePicker("modal.toast.plain.login"));
       })
-      .finally(() => setButtonDisabled(false));
+      .finally(() => setButtonLoading(false));
   }, [
     context,
     setGlobalSwitch,
@@ -182,7 +182,8 @@ const Header = (props) => {
       </Box>
       <ModalForm
         open={modalLoginOpen}
-        disabled={buttonDisabled || formPasswordText.length === 0}
+        loading={buttonLoading}
+        disabled={formPasswordText.length === 0}
         handleClose={handleCloseLogin}
         handleClick={handleLogin}
         title={context.languagePicker("modal.form.login.title")}

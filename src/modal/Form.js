@@ -9,6 +9,7 @@ import Stack from "@mui/joy/Stack";
 export default function ModalForm(props) {
   const {
     open,
+    loading,
     disabled,
     handleClose,
     handleClick,
@@ -68,6 +69,7 @@ export default function ModalForm(props) {
         <Stack spacing={2} sx={stackStyle}>
           {children}
           <Button
+            loading={loading}
             disabled={disabled}
             onClick={handleClick}
           >
