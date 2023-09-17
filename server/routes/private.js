@@ -25,6 +25,11 @@ router.get('/*/:filename', (req, res, next) => {
     return;
   }
 
+  if (fs.lstatSync(filePath).isDirectory()) {
+    // -> next: is a directory
+    next();
+  }
+
   // -> no code: return file directly
   res.sendFile(filePath);
   return;

@@ -7,7 +7,7 @@ import Link from "@mui/joy/Link";
 import Typography from "@mui/joy/Typography";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import GlobalContext from "../interface/constants";
+import GlobalContext, { serverBaseURL } from "../interface/constants";
 import RowMenu from "./RowMenu";
 
 export default function FileTable(props) {
@@ -158,14 +158,25 @@ export default function FileTable(props) {
                 </td>
                 <td>
                   <Typography level="body-xs">
-                    <Link
-                      target={item.type === "directory" ? "_self" : "_blank"}
+                    {item.type === "directory"
+                      ? <Link
                       onClick={() => navigate(
                         `/${type}${folderName.length ? "/" : ""}${folderName}/${item.name}`
                       )}
                     >
                       {item.name}
                     </Link>
+                    : <Link
+                      target="_blank"
+                      href={
+                        new URL(
+                          `/${type}${folderName.length ? "/" : ""}${folderName}/${item.name}`,
+                          serverBaseURL
+                        ).href
+                      }
+                    >
+                      {item.name}
+                    </Link>}
                   </Typography>
                 </td>
                 <td>

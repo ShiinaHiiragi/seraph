@@ -8,7 +8,7 @@ import ListItem from '@mui/joy/ListItem';
 import ListItemContent from '@mui/joy/ListItemContent';
 import ListDivider from '@mui/joy/ListDivider';
 import Link from "@mui/joy/Link";
-import GlobalContext from "../interface/constants";
+import GlobalContext, { serverBaseURL } from "../interface/constants";
 import RowMenu from './RowMenu';
 
 export default function FileList(props) {
@@ -66,14 +66,25 @@ export default function FileList(props) {
               <ListItemContent sx={{ display: 'flex', gap: 2, alignItems: 'start' }}>
                 <div>
                   <Typography fontWeight={600} gutterBottom>
-                    <Link
-                      target={item.type === "directory" ? "_self" : "_blank"}
+                    {item.type === "directory"
+                      ? <Link
                       onClick={() => navigate(
                         `/${type}${folderName.length ? "/" : ""}${folderName}/${item.name}`
                       )}
                     >
                       {item.name}
                     </Link>
+                    : <Link
+                      target="_blank"
+                      href={
+                        new URL(
+                          `/${type}${folderName.length ? "/" : ""}${folderName}/${item.name}`,
+                          serverBaseURL
+                        ).href
+                      }
+                    >
+                      {item.name}
+                    </Link>}
                   </Typography>
                   <Typography level="body-xs" gutterBottom>
                     {context
