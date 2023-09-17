@@ -25,10 +25,10 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "concurrently 'npm run react' 'npm run dev'",
+    "start": "concurrently --raw 'npm:react' 'npm:dev'",
     "react": "react-scripts start",
     "dev": "cd server/ && npm run dev",
-    "start:sudo": "concurrently 'npm run react:sudo' 'npm run dev:sudo'",
+    "start:sudo": "concurrently --raw 'npm:react:sudo' 'npm:dev:sudo'",
     "react:sudo": "sudo node ./node_modules/.bin/react-scripts start",
     "dev:sudo": "cd server/ && npm run dev:sudo"
   },
