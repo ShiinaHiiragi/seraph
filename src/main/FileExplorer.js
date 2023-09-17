@@ -233,7 +233,10 @@ const FileExplorer = (props) => {
         ...(folderName.length ? folderName.split("/") : [])
       ]}
       link={`/${type}${folderName.length ? "/" : ""}${folderName}`}
-      title={folderName.split("/").slice(-1)}
+      title={
+        folderName.split("/").slice(-1)[0]
+          || context.languagePicker(`nav.${type}`)
+      }
       sxRaw={{
         overflowY: {
           xs: "auto",
@@ -304,22 +307,23 @@ const FileExplorer = (props) => {
                 </Select>
               </FormControl>
               <FormControl size="sm" sx={{ justifyContent: "flex-end" }}>
-                <Button
-                  component="label"
-                  color="primary"
-                  startDecorator={<UploadRoundedIcon />}
-                  size="sm"
-                >
-                  {context.languagePicker("main.folder.viewRegulate.upload")}
-                  <input
-                    type="file"
-                    onChange={(event) => {
-                      handleProprocessFile(event);
-                      event.target.value = null;
-                    }}
-                    hidden
-                  />
-                </Button>
+                {context.isAuthority &&
+                  <Button
+                    component="label"
+                    color="primary"
+                    startDecorator={<UploadRoundedIcon />}
+                    size="sm"
+                  >
+                    {context.languagePicker("main.folder.viewRegulate.upload")}
+                    <input
+                      type="file"
+                      onChange={(event) => {
+                        handleProprocessFile(event);
+                        event.target.value = null;
+                      }}
+                      hidden
+                    />
+                  </Button>}
               </FormControl>
             </Box>
           </Box>
