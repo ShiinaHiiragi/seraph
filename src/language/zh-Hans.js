@@ -34,8 +34,6 @@ const zhHans = {
       rowMenu: {
         open: "打开",
         rename: "重命名",
-        move: "移动到",
-        copy: "复制到",
         delete: "删除"
       },
       viewRegulate: {
@@ -59,8 +57,6 @@ const zhHans = {
         logout: "退出成功。",
         upload: "{0} 已上传至 {1}。",
         rename: "{0} 已更名为 {1}。",
-        copy: "{0} 已复制到 {1}。",
-        move: "{0} 已移动到 {1}。",
         delete: "{0} 已被删除。"
       },
       warning: {
@@ -98,9 +94,7 @@ const zhHans = {
         title: "重命名",
         caption: "命名限制取决于服务器所在平台，尽量不要修改扩展名。",
         placeholder: "新文件名"
-      },
-      move: "移动到……",
-      copy: "复制到……"
+      }
     },
     reconfirm: {
       title: "二次确认",

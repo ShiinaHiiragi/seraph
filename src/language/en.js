@@ -34,8 +34,6 @@ const en = {
       rowMenu: {
         open: "Open",
         rename: "Rename",
-        move: "Move to",
-        copy: "Copy to",
         delete: "Delete"
       },
       viewRegulate: {
@@ -59,8 +57,6 @@ const en = {
         logout: "Logged out successfully.",
         upload: "{0} has been uploaded to {1}.",
         rename: "{0} has been renamed to {1}.",
-        copy: "{0} has been copied to {1}.",
-        move: "{0} has been moved to {1}.",
         delete: "{0} has been deleted."
       },
       warning: {
@@ -98,9 +94,7 @@ const en = {
         title: "Renaming",
         caption: "Naming restrictions depend on platform on which server locates and try not to modify the extension name as much as possible.",
         placeholder: "New Filename"
-      },
-      move: "Move to ...",
-      copy: "Copy to ..."
+      }
     },
     reconfirm: {
       title: "Reconfirmation",
