@@ -17,12 +17,10 @@ import FileTable from "../components/FileTable";
 import FileList from "../components/FileList";
 import Caption from "../components/Caption";
 import ModalForm from "../modal/Form";
-import FolderSelector from "../modal/FolderSelector";
 
 const FileExplorer = (props) => {
   const {
-    type,
-    folderCount
+    type
   } = props;
   const { "*": rawFolderName } = useParams();
   const context = React.useContext(GlobalContext);
@@ -227,85 +225,6 @@ const FileExplorer = (props) => {
     handleCloseRename
   ]);
 
-  // states and function for copy
-  const [modalCopyOpen, setModalCopyOpen] = React.useState(null);
-  const [modalCopyDisabled, setModalCopyDisabled] = React.useState(false);
-  const handleCopy = React.useCallback((
-    clearInnerState,
-    formSelectedFolder
-  ) => {
-    const filename = `${modalCopyOpen}`;
-    const [newType, newFolderName] = formSelectedFolder;
-    setModalCopyDisabled(true);
-    request(
-      "POST/file/copy",
-      {
-        type: type,
-        folderName: folderName,
-        filename: filename,
-        newType: formSelectedFolder[0],
-        newFolderName: formSelectedFolder[1]
-      },
-      { "": () => setModalCopyDisabled(false) }
-    )
-      .then(() => {
-        setModalCopyOpen(null);
-        clearInnerState();
-        toast.success(
-          context
-            .languagePicker("modal.toast.success.copy")
-            .format(filename, newType + "/" + newFolderName)
-        );
-      })
-      .finally(() => setModalCopyDisabled(false));
-  }, [
-    context,
-    type,
-    folderName,
-    modalCopyOpen
-  ]);
-
-  // states and function for move
-  const [modalMoveOpen, setModalMoveOpen] = React.useState(null);
-  const [modalMoveDisabled, setModalMoveDisabled] = React.useState(false);
-  const handleMove = React.useCallback((
-    clearInnerState,
-    formSelectedFolder
-  ) => {
-    const filename = `${modalMoveOpen}`;
-    const [newType, newFolderName] = formSelectedFolder;
-    setModalMoveDisabled(true);
-    request(
-      "POST/file/move",
-      {
-        type: type,
-        folderName: folderName,
-        filename: filename,
-        newType: formSelectedFolder[0],
-        newFolderName: formSelectedFolder[1]
-      },
-      { "": () => setModalMoveDisabled(false) }
-    )
-      .then(() => {
-        setFilesList((filesList) => filesList.filter(
-          (item) => item.name !== filename
-        ));
-        setModalMoveOpen(null);
-        clearInnerState();
-        toast.success(
-          context
-            .languagePicker("modal.toast.success.move")
-            .format(filename, newType + "/" + newFolderName)
-        );
-      })
-      .finally(() => setModalMoveDisabled(false));
-  }, [
-    context,
-    type,
-    folderName,
-    modalMoveOpen
-  ]);
-
   return (
     <RouteField
       display={display}
@@ -412,9 +331,6 @@ const FileExplorer = (props) => {
             setModalRenameOpen={setModalRenameOpen}
             setFormNewNameText={setFormNewNameText}
             setFilesList={setFilesList}
-            folderCount={folderCount}
-            setModalMoveOpen={setModalMoveOpen}
-            setModalCopyOpen={setModalCopyOpen}
             guard={guard}
             searcher={searcher}
             filesSorting={filesSorting}
@@ -426,9 +342,6 @@ const FileExplorer = (props) => {
             setModalRenameOpen={setModalRenameOpen}
             setFormNewNameText={setFormNewNameText}
             setFilesList={setFilesList}
-            folderCount={folderCount}
-            setModalMoveOpen={setModalMoveOpen}
-            setModalCopyOpen={setModalCopyOpen}
             guard={guard}
             searcher={searcher}
           />
@@ -459,42 +372,6 @@ const FileExplorer = (props) => {
           onChange={(event) => setFormNewNameText(event.target.value)}
         />
       </ModalForm>
-      <FolderSelector
-        open={Boolean(modalMoveOpen)}
-        disabled={modalMoveDisabled}
-        handleClose={() => setModalMoveOpen(null)}
-        handleClick={handleMove}
-        title={context.languagePicker("modal.form.move")}
-        button={context.languagePicker("universal.button.continue")}
-        sortedPublicFolders={
-          context
-            .sortedPublicFolders
-            .filter((item) => type !== "public" || folderName !== item)
-        }
-        sortedPrivateFolders={
-          context
-            .sortedPrivateFolders
-            .filter((item) => type !== "private" || folderName !== item)
-        }
-      />
-      <FolderSelector
-        open={Boolean(modalCopyOpen)}
-        disabled={modalCopyDisabled}
-        handleClose={() => setModalCopyOpen(null)}
-        handleClick={handleCopy}
-        title={context.languagePicker("modal.form.copy")}
-        button={context.languagePicker("universal.button.continue")}
-        sortedPublicFolders={
-          context
-            .sortedPublicFolders
-            .filter((item) => type !== "public" || folderName !== item)
-        }
-        sortedPrivateFolders={
-          context
-            .sortedPrivateFolders
-            .filter((item) => type !== "private" || folderName !== item)
-        }
-      />
     </RouteField>
   )
 }

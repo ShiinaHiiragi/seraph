@@ -19,9 +19,6 @@ export default function FileList(props) {
     setModalRenameOpen,
     setFormNewNameText,
     setFilesList,
-    folderCount,
-    setModalMoveOpen,
-    setModalCopyOpen,
     guard,
     searcher
   } = props;
@@ -135,9 +132,6 @@ export default function FileList(props) {
                   setModalRenameOpen={setModalRenameOpen}
                   setFormNewNameText={setFormNewNameText}
                   setFilesList={setFilesList}
-                  folderCount={folderCount}
-                  setModalMoveOpen={setModalMoveOpen}
-                  setModalCopyOpen={setModalCopyOpen}
                 />}
             </ListItem>
             <ListDivider />

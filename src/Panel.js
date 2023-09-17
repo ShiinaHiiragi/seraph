@@ -114,9 +114,6 @@ const Panel = () => {
   const [privateFolders, setPrivateFolders] = React.useState([]);
   const sortedPublicFolders = React.useMemo(() => publicFolders.sortBy(), [publicFolders]);
   const sortedPrivateFolders = React.useMemo(() => privateFolders.sortBy(), [privateFolders]);
-  const folderCount = React.useMemo(() => {
-    return sortedPublicFolders.length + sortedPrivateFolders.length;
-  }, [sortedPublicFolders, sortedPrivateFolders]);
 
   // global clocks, explicit life cycles, only set once
   // when set to true, the corresponding tick ends
@@ -224,11 +221,11 @@ const Panel = () => {
                   <Route exact path="/" element={<Welcome />} />
                   <Route
                     path="/public/*"
-                    element={<FileExplorer folderCount={folderCount} type="public" />}
+                    element={<FileExplorer type="public" />}
                   />
                   <Route
                     path="/private/*"
-                    element={<FileExplorer folderCount={folderCount} type="private" />}
+                    element={<FileExplorer type="private" />}
                   />
                   <Route path="/links" element={<Links />} />
                   <Route path="/milkdown" element={<Milkdown />} />

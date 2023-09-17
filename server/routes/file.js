@@ -136,7 +136,7 @@ router.post('/delete', (req, res, next) => {
   }
 
   try {
-    fs.unlinkSync(filePath);
+    fs.rmSync(filePath, { recursive: true, force: true });
   } catch (_) {
     // -> EF_FME: fs.unlinkSync error
     req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
