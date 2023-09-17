@@ -41,11 +41,12 @@ app.use((req, res, next) => {
 });
 
 // express-router
+app.use('/public', publicRouter);
+app.use('/private', privateRouter);
+
 app.use('/auth', authRouter);
 app.use('/file', fileRouter);
 app.use('/folder', folderRouter);
-app.use('/public', publicRouter);
-app.use('/private', privateRouter);
 
 // redirect all other pages to react-router
 app.use((req, res) => {

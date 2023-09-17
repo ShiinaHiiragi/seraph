@@ -15,7 +15,7 @@ router.get('/*/:filename', (req, res, next) => {
   const folderPath = api.dataPath.privateDirFolderPath(folderName);
   const filePath = path.join(folderPath, filename);
 
-  if (!fs.existsSync(folderPath) || !fs.existsSync(filePath)) {
+  if (!fs.existsSync(filePath)) {
     // -> EF_RU: folder don't exist
     req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
     res.send({
