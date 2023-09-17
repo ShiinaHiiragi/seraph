@@ -29,12 +29,10 @@
     "dev": "concurrently --raw 'npm:react' 'npm:server'",
     "react": "react-scripts start",
     "server": "cd server/ && npm run server",
-    "deploy": "cd server/ && npm run deploy",
     "start:sudo": "concurrently --raw 'npm:react:sudo' 'npm:deploy:sudo'",
     "dev:sudo": "concurrently --raw 'npm:react:sudo' 'npm:server:sudo'",
     "react:sudo": "sudo node ./node_modules/.bin/react-scripts start",
-    "server:sudo": "cd server/ && npm run server:sudo",
-    "deploy:sudo": "cd server/ && npm run deploy:sudo"
+    "server:sudo": "cd server/ && npm run server:sudo"
   },
   "eslintConfig": {
     "extends": [
