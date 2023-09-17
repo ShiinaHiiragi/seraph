@@ -24,7 +24,7 @@ const FileExplorer = (props) => {
     type,
     folderCount
   } = props;
-  const { folderName } = useParams();
+  const { "*": folderName } = useParams();
   const context = React.useContext(GlobalContext);
 
   const [filesList, setFilesList] = React.useState([]);
@@ -51,7 +51,7 @@ const FileExplorer = (props) => {
   React.useEffect(() => {
     if (context.secondTick && display) {
       request(
-        `GET/${type}/${folderName}`,
+        `GET/folder/${type}/${folderName}`,
         undefined,
         { [Status.execErrCode.ResourcesUnexist]: () => {
           setFolderState(-1);
@@ -298,9 +298,9 @@ const FileExplorer = (props) => {
       display={display}
       path={[
         context.languagePicker(`nav.${type}`),
-        folderName
+        ...folderName.split("/")
       ]}
-      title={folderName}
+      title={folderName.split("/").slice(-1)}
       sxRaw={{
         overflowY: {
           xs: "auto",

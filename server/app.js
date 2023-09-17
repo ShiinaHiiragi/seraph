@@ -7,6 +7,7 @@ let authRouter = require('./routes/auth');
 let publicRouter = require('./routes/public');
 let privateRouter = require('./routes/private');
 let fileRouter = require('./routes/file');
+let folderRouter = require('./routes/folder');
 let api = require('./api');
 let app = express();
 
@@ -41,9 +42,10 @@ app.use((req, res, next) => {
 
 // express-router
 app.use('/auth', authRouter);
+app.use('/file', fileRouter);
+app.use('/folder', folderRouter);
 app.use('/public', publicRouter);
 app.use('/private', privateRouter);
-app.use('/file', fileRouter);
 
 // redirect all other pages to react-router
 app.use((req, res) => {

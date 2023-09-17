@@ -223,11 +223,11 @@ const Panel = () => {
                 <Routes>
                   <Route exact path="/" element={<Welcome />} />
                   <Route
-                    path="/public/:folderName"
+                    path="/public/*"
                     element={<FileExplorer folderCount={folderCount} type="public" />}
                   />
                   <Route
-                    path="/private/:folderName"
+                    path="/private/*"
                     element={<FileExplorer folderCount={folderCount} type="private" />}
                   />
                   <Route path="/links" element={<Links />} />
