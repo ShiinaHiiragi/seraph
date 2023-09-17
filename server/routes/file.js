@@ -45,21 +45,11 @@ router.post('/upload', (req, res, next) => {
     return;
   }
 
-  const stat = fs.lstatSync(filePath);
-  const newStat = {
-    size: stat.size,
-    time: stat.birthtime,
-    mtime: stat.mtime,
-    type: stat.isDirectory()
-      ? "directory"
-      : (mime.getType(item.name) ?? "unknown")
-  };
-
   // -> ES: no extra info
   req.status.addExecStatus();
   res.send({
     ...req.status.generateReport(),
-    ...newStat
+    ...api.fileOperator.readFileInfo(folderPath, filename)
   });
   return;
 });
@@ -108,7 +98,7 @@ router.post('/rename', (req, res, next) => {
   req.status.addExecStatus();
   res.send({
     ...req.status.generateReport(),
-    type: mime.getType(newFilePath)
+    type: api.fileOperator.readFileInfo(folderPath, newFilename).type
   });
   return;
 });

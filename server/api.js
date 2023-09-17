@@ -130,6 +130,19 @@ const fileOperator = {
     return folderInfo.map((item) => item.name);
   },
 
+  readFileInfo: (folderPath, filename) => {
+    const stat = fs.lstatSync(path.join(folderPath, filename));
+    return {
+      name: filename,
+      size: stat.size,
+      time: stat.birthtime,
+      mtime: stat.mtime,
+      type: stat.isDirectory()
+        ? "directory"
+        : (mime.getType(filename) ?? "unknown")
+    }
+  },
+
   readFolderInfo: (folderPath) => {
     if (!fs.existsSync(folderPath)) {
       return null;
@@ -137,18 +150,7 @@ const fileOperator = {
 
     folderInfo = fs.readdirSync(folderPath, { withFileTypes: true })
     folderInfo.filter((item) => !item.isDirectory())
-    return folderInfo.map((item) => {
-      const stat = fs.lstatSync(path.join(folderPath, item.name));
-      return {
-        name: item.name,
-        size: stat.size,
-        time: stat.birthtime,
-        mtime: stat.mtime,
-        type: stat.isDirectory()
-          ? "directory"
-          : (mime.getType(item.name) ?? "unknown")
-      }
-    });
+    return folderInfo.map((item) => fileOperator.readFileInfo(folderPath, item.name));
   }
 };
 exports.fileOperator = fileOperator;
