@@ -94,8 +94,9 @@ router.post('/rename', (req, res, next) => {
 
   try {
     fs.renameSync(filePath, newFilePath);
-    fs.chmodSync(filePath, 0o777);
+    fs.chmodSync(newFilePath, 0o777);
   } catch (_) {
+    console.log(_);
     // -> EF_FME: fs.renameSync error
     req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
     res.send(req.status.generateReport());

@@ -107,6 +107,7 @@ const FileExplorer = (props) => {
   }, [context, filesList]);
 
   React.useEffect(() => {
+    setSearch("");
     setFilter(null);
   }, [type, folderName]);
 
