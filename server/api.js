@@ -101,7 +101,7 @@ const fileOperator = {
   readCert: () => {
     const privateCrt = fs.readFileSync(
       dataPath.certDirPath,
-      `${process.env.REACT_APP_HOSTNAME}.crt`
+      `${process.env.REACT_APP_HOSTNAME}_bundle.crt`
     );
     const privateKey = fs.readFileSync(
       dataPath.certDirPath,
