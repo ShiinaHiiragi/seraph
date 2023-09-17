@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useNavigate } from "react-router-dom";
 import Box from "@mui/joy/Box";
 import Table from "@mui/joy/Table";
 import Sheet from "@mui/joy/Sheet";
@@ -6,7 +7,7 @@ import Link from "@mui/joy/Link";
 import Typography from "@mui/joy/Typography";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import GlobalContext, { serverBaseURL } from "../interface/constants";
+import GlobalContext from "../interface/constants";
 import RowMenu from "./RowMenu";
 
 export default function FileTable(props) {
@@ -26,6 +27,7 @@ export default function FileTable(props) {
     searcher
   } = props;
   const context = React.useContext(GlobalContext);
+  const navigate = useNavigate();
 
   return (
     <Sheet
@@ -58,7 +60,7 @@ export default function FileTable(props) {
           <tr>
             <th style={{ width: 24 }}>
             </th>
-            <th style={{ width: 120, padding: "12px 6px" }}>
+            <th style={{ width: 140, padding: "12px 6px" }}>
               <Link
                 underline="none"
                 color={guard[0].length ? "neutral" : "primary"}
@@ -76,7 +78,7 @@ export default function FileTable(props) {
                 {context.languagePicker("main.folder.tableColumn.name")}
               </Link>
             </th>
-            <th style={{ width: 140, padding: "12px 6px" }}>
+            <th style={{ width: 80, padding: "12px 6px" }}>
               <Link
                 underline="none"
                 color={guard[0].length ? "neutral" : "primary"}
@@ -94,7 +96,7 @@ export default function FileTable(props) {
                 {context.languagePicker("main.folder.tableColumn.size")}
               </Link>
             </th>
-            <th style={{ width: 140, padding: "12px 6px" }}>
+            <th style={{ width: 80, padding: "12px 6px" }}>
               <Link
                 underline="none"
                 color={guard[0].length ? "neutral" : "primary"}
@@ -112,7 +114,7 @@ export default function FileTable(props) {
                 {context.languagePicker("main.folder.tableColumn.type")}
               </Link>
             </th>
-            <th style={{ width: 140, padding: "12px 6px" }}>
+            <th style={{ width: 100, padding: "12px 6px" }}>
               <Link
                 underline="none"
                 color={guard[0].length ? "neutral" : "primary"}
@@ -130,7 +132,7 @@ export default function FileTable(props) {
                 {context.languagePicker("main.folder.tableColumn.time")}
               </Link>
             </th>
-            {context.isAuthority && <th style={{ width: 140, padding: "12px 6px" }}>
+            {context.isAuthority && <th style={{ width: 100, padding: "12px 6px" }}>
               {context.languagePicker("main.folder.tableColumn.operation")}
             </th>}
           </tr>
@@ -158,12 +160,9 @@ export default function FileTable(props) {
                   <Typography level="body-xs">
                     <Link
                       target={item.type === "directory" ? "_self" : "_blank"}
-                      href={
-                        new URL(
-                          `/${type}${folderName.length ? "/" : ""}${folderName}/${item.name}`,
-                          serverBaseURL
-                        ).href
-                      }
+                      onClick={() => navigate(
+                        `/${type}${folderName.length ? "/" : ""}${folderName}/${item.name}`
+                      )}
                     >
                       {item.name}
                     </Link>

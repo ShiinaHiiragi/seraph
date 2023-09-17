@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import * as React from 'react';
+import { useNavigate } from "react-router-dom";
 import Box from '@mui/joy/Box';
 import Typography from '@mui/joy/Typography';
 import List from '@mui/joy/List';
@@ -7,7 +8,7 @@ import ListItem from '@mui/joy/ListItem';
 import ListItemContent from '@mui/joy/ListItemContent';
 import ListDivider from '@mui/joy/ListDivider';
 import Link from "@mui/joy/Link";
-import GlobalContext, { serverBaseURL } from "../interface/constants";
+import GlobalContext from "../interface/constants";
 import RowMenu from './RowMenu';
 
 export default function FileList(props) {
@@ -25,6 +26,7 @@ export default function FileList(props) {
     searcher
   } = props;
   const context = React.useContext(GlobalContext);
+  const navigate = useNavigate();
 
   return (
     <Box
@@ -66,12 +68,9 @@ export default function FileList(props) {
                   <Typography fontWeight={600} gutterBottom>
                     <Link
                       target={item.type === "directory" ? "_self" : "_blank"}
-                      href={
-                        new URL(
-                          `/${type}${folderName.length ? "/" : ""}${folderName}/${item.name}`,
-                          serverBaseURL
-                        ).href
-                      }
+                      onClick={() => navigate(
+                        `/${type}${folderName.length ? "/" : ""}${folderName}/${item.name}`
+                      )}
                     >
                       {item.name}
                     </Link>
