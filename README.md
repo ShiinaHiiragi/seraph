@@ -77,3 +77,10 @@
         - platform argument
         - info about seraph
     - setting
+
+## Next
+
+1. Intro - welcome and time
+2. File - create new file
+3. File - public & private special judge
+4. File - copy & move
