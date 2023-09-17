@@ -23,7 +23,7 @@ const ja = {
       tableColumn: {
         name: "ファイル名",
         size: "サイズ",
-        type: "MIME タイプ",
+        type: "タイプ",
         time: "作成日時",
         operation: "オペレーション"
       },

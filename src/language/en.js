@@ -23,7 +23,7 @@ const en = {
       tableColumn: {
         name: "Name",
         size: "Size",
-        type: "MIME Type",
+        type: "Type",
         time: "Created Time",
         operation: "Operations"
       },
@@ -41,7 +41,7 @@ const en = {
       viewRegulate: {
         unknown: "Unknown",
         search: "Search by Name",
-        filter: "Filter by MIME Type",
+        filter: "Filter by Type",
         upload: "Upload File",
         all: "All Type"
       }
