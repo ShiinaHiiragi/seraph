@@ -3,19 +3,14 @@ const fs = require('fs');
 const path = require('path')
 const http = require('http');
 const https = require('https');
-const handler = require('serve-handler');
 const express = require('express');
 
 dotenv.config();
 app = express();
-app.get('*', (req, res) => handler(
-  req,
-  res,
-  {
-    public: path.join(__dirname, '../build/'),
-    cleanUrls: true
-  }
-));
+app.use(express.static(path.join(__dirname, '../build')));
+app.get('/*', (_, res) => {
+  res.sendFile(path.join(__dirname, '../build/index.html'));
+});
 
 const disbableHTTPS = process.env.REACT_APP_PROTOCOL === 'http';
 if (disbableHTTPS) {
@@ -39,7 +34,7 @@ if (disbableHTTPS) {
         `cert/${process.env.REACT_APP_HOSTNAME}.key`
       )
     )
-  };  
+  };
   https
     .createServer(httpsOption, app)
     .listen(
