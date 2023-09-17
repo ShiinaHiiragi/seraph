@@ -27,3 +27,5 @@ yarn-error.log*
 /server/node_modules
 /server/data
 /server/.env
+/server/cert/*.crt
+/server/cert/*.key
