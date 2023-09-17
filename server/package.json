@@ -3,6 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "static": "node static.js",
+    "static:sudo": "sudo node static.js",
     "server": "node-dev ./bin/www",
     "server:sudo": "sudo node ./node_modules/.bin/node-dev ./bin/www"
   },
@@ -16,6 +18,7 @@
     "http-errors": "~1.6.3",
     "mime": "^3.0.0",
     "morgan": "~1.9.1",
-    "node-dev": "^8.0.0"
+    "node-dev": "^8.0.0",
+    "serve-handler": "^6.1.5"
   }
 }
