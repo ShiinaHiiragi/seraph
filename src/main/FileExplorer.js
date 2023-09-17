@@ -305,9 +305,9 @@ const FileExplorer = (props) => {
       display={display}
       path={[
         context.languagePicker(`nav.${type}`),
-        ...folderName.split("/")
+        ...(folderName.length ? folderName.split("/") : [])
       ]}
-      link={`/${type}/${folderName}`}
+      link={`/${type}${folderName.length ? "/" : ""}${folderName}`}
       title={folderName.split("/").slice(-1)}
       sxRaw={{
         overflowY: {
