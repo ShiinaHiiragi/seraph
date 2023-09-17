@@ -15,9 +15,13 @@ const RouteFieldRaw = styled("div")(({ theme }) => ({
 }));
 
 const RouteField = (props) => {
+  // Welcome, Error: display
+  // File Explorer: display, path, link, title, sxRaw, sx
+  // Utilities: display, path, title
   const {
     display,
     path,
+    link,
     title,
     sxRaw,
     children,
@@ -61,16 +65,25 @@ const RouteField = (props) => {
           >
             <HomeRoundedIcon />
           </Link>
-          {breadcrumb.map((item, index) => (
-            <Typography
+          {breadcrumb.slice(0, -1).map((item, index) => (
+            <Link
               key={index}
-              color={index + 1 === breadcrumb.length ? "primary" : "neutral"}
+              underline="none"
               fontWeight={500}
               fontSize={12}
+              href={link.split("/").slice(0, index + 2).join("/")}
+              color={"neutral"}
             >
               {item}
-            </Typography>
+            </Link>
           ))}
+          <Typography
+            color={"primary"}
+            fontWeight={500}
+            fontSize={12}
+          >
+            {breadcrumb.slice(-1)[0]}
+          </Typography>
         </Breadcrumbs>
       }
       {

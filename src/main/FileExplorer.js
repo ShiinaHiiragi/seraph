@@ -24,8 +24,15 @@ const FileExplorer = (props) => {
     type,
     folderCount
   } = props;
-  const { "*": folderName } = useParams();
+  const { "*": rawFolderName } = useParams();
   const context = React.useContext(GlobalContext);
+  const folderName = React.useMemo(
+    () => rawFolderName
+      .replace(/\/+/g, "/")
+      .replace(/^\//, '')
+      .replace(/\/$/, ''),
+    [rawFolderName]
+  );
 
   const [filesList, setFilesList] = React.useState([]);
   const [filesSorting, setFilesSorting] = React.useState(["name", false]);
@@ -300,6 +307,7 @@ const FileExplorer = (props) => {
         context.languagePicker(`nav.${type}`),
         ...folderName.split("/")
       ]}
+      link={`/${type}/${folderName}`}
       title={folderName.split("/").slice(-1)}
       sxRaw={{
         overflowY: {
