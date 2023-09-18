@@ -268,8 +268,26 @@ const FileExplorer = (props) => {
 
   // paste
   const handlePaste = React.useCallback(() => {
-    // TODO: fill this
-  }, [ ]);
+    toast.promise(new Promise((resolve, reject) => {
+      request("POST/file/paste", {
+        type: type,
+        folderName: folderName
+      }, undefined, reject)
+        .then(() => {
+          resolve();
+        })
+    }), {
+      loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
+      success: context.languagePicker("modal.toast.success.paste")
+        .format(clipboard.path[2], folderName),
+      error: (data) => data
+    })
+  }, [
+    clipboard.path,
+    context,
+    type,
+    folderName
+  ]);
 
   // states and function for rename
   const [modalRenameOpen, setModalRenameOpen] = React.useState(null);
