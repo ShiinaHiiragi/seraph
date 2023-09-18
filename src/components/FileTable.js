@@ -22,6 +22,7 @@ export default function FileTable(props) {
     setFilesList,
     guard,
     searcher,
+    setClipboard,
     setPublicFolders,
     setPrivateFolders
   } = props;
@@ -77,7 +78,7 @@ export default function FileTable(props) {
                 {context.languagePicker("main.folder.tableColumn.name")}
               </Link>
             </th>
-            <th style={{ width: 80, padding: "12px 6px" }}>
+            <th style={{ width: 60, padding: "12px 6px" }}>
               <Link
                 underline="none"
                 color={guard[0].length ? "neutral" : "primary"}
@@ -95,7 +96,7 @@ export default function FileTable(props) {
                 {context.languagePicker("main.folder.tableColumn.size")}
               </Link>
             </th>
-            <th style={{ width: 80, padding: "12px 6px" }}>
+            <th style={{ width: 100, padding: "12px 6px" }}>
               <Link
                 underline="none"
                 color={guard[0].length ? "neutral" : "primary"}
@@ -210,6 +211,7 @@ export default function FileTable(props) {
                       setModalRenameOpen={setModalRenameOpen}
                       setFormNewFilenameText={setFormNewFilenameText}
                       setFilesList={setFilesList}
+                      setClipboard={setClipboard}
                       setPublicFolders={setPublicFolders}
                       setPrivateFolders={setPrivateFolders}
                     />

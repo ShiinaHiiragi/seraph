@@ -25,6 +25,7 @@ import ModalForm from "../modal/Form";
 const FileExplorer = (props) => {
   const {
     type,
+    setClipboard,
     setPublicFolders,
     setPrivateFolders
   } = props;
@@ -476,6 +477,7 @@ const FileExplorer = (props) => {
             guard={guard}
             searcher={searcher}
             filesSorting={filesSorting}
+            setClipboard={setClipboard}
             setPublicFolders={setPublicFolders}
             setPrivateFolders={setPrivateFolders}
           />
@@ -488,6 +490,7 @@ const FileExplorer = (props) => {
             setFilesList={setFilesList}
             guard={guard}
             searcher={searcher}
+            setClipboard={setClipboard}
             setPublicFolders={setPublicFolders}
             setPrivateFolders={setPrivateFolders}
           />

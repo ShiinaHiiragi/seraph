@@ -18,6 +18,7 @@ export default function RowMenu(props) {
     setModalRenameOpen,
     setFormNewFilenameText,
     setFilesList,
+    setClipboard,
     setPublicFolders,
     setPrivateFolders
   } = props;
@@ -36,6 +37,11 @@ export default function RowMenu(props) {
         filename: filename
       }, undefined, reject)
         .then((data) => {
+          setClipboard({
+            permanant: true,
+            directory: data.directory,
+            path: [type, folderName, filename]
+          })
           resolve();
         })
     }), {
@@ -47,7 +53,8 @@ export default function RowMenu(props) {
     context,
     type,
     filename,
-    folderName
+    folderName,
+    setClipboard
   ]);
 
   const handleCut = React.useCallback(() => {
@@ -58,6 +65,11 @@ export default function RowMenu(props) {
         filename: filename
       }, undefined, reject)
         .then((data) => {
+          setClipboard({
+            permanant: false,
+            directory: data.directory,
+            path: [type, folderName, filename]
+          })
           resolve();
         })
     }), {
@@ -69,7 +81,8 @@ export default function RowMenu(props) {
     context,
     type,
     filename,
-    folderName
+    folderName,
+    setClipboard
   ]);
 
   const handleDelete = React.useCallback((type, folderName, filename) => {

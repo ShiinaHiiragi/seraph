@@ -74,11 +74,12 @@ router.post('/login', (req, res, next) => {
         api.tokenOperator.addNewSession(res);
         const privateFolder = api.fileOperator.readFoldersList(api.dataPath.privateDirPath);
 
-        // -> ES: return private folders list
+        // -> ES: return private folders list and clipboard
         req.status.addExecStatus();
         res.send({
           ...req.status.generateReport(),
           private: privateFolder,
+          clipboard: api.configOperator.config.clipboard
         });
         return;
       } else {

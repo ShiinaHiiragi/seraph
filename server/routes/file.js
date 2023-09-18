@@ -165,7 +165,7 @@ router.post('/copy', (req, res, next) => {
   req.status.addExecStatus();
   res.send({
     ...req.status.generateReport(),
-    ...api.configOperator.config.clipboard
+    directory: api.configOperator.config.clipboard.directory
   });
   return;
 });
@@ -193,7 +193,7 @@ router.post('/cut', (req, res, next) => {
   req.status.addExecStatus();
   res.send({
     ...req.status.generateReport(),
-    ...api.configOperator.config.clipboard
+    directory: api.configOperator.config.clipboard.directory
   });
   return;
 });

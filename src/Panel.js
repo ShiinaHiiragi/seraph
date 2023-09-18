@@ -116,6 +116,7 @@ const Panel = () => {
   const [privateFolders, setPrivateFolders] = React.useState([]);
   const sortedPublicFolders = React.useMemo(() => publicFolders.sortBy(), [publicFolders]);
   const sortedPrivateFolders = React.useMemo(() => privateFolders.sortBy(), [privateFolders]);
+  window.clipboard = clipboard;
 
   // global clocks, explicit life cycles, only set once
   // when set to true, the corresponding tick ends
@@ -141,6 +142,7 @@ const Panel = () => {
 
         if (data.private) {
           setPrivateFolders(data.private);
+          setClipboard(data.clipboard);
           setGlobalSwitch(globalState.AUTHORITY);
         } else {
           setGlobalSwitch(globalState.ANONYMOUS);
@@ -227,6 +229,7 @@ const Panel = () => {
                     element={
                       <FileExplorer
                         type="public"
+                        setClipboard={setClipboard}
                         setPublicFolders={setPublicFolders}
                         setPrivateFolders={setPrivateFolders}
                       />
@@ -237,6 +240,7 @@ const Panel = () => {
                     element={
                       <FileExplorer
                         type="private"
+                        setClipboard={setClipboard}
                         setPublicFolders={setPublicFolders}
                         setPrivateFolders={setPrivateFolders}
                       />

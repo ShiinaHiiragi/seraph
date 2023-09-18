@@ -21,6 +21,7 @@ export default function FileList(props) {
     setFilesList,
     guard,
     searcher,
+    setClipboard,
     setPublicFolders,
     setPrivateFolders
   } = props;
@@ -134,6 +135,7 @@ export default function FileList(props) {
                   setModalRenameOpen={setModalRenameOpen}
                   setFormNewFilenameText={setFormNewFilenameText}
                   setFilesList={setFilesList}
+                  setClipboard={setClipboard}
                   setPublicFolders={setPublicFolders}
                   setPrivateFolders={setPrivateFolders}
                 />}
