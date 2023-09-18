@@ -2,7 +2,6 @@ let express = require('express');
 let fs = require('fs');
 let path = require('path');
 let api = require('../api');
-const mime = require('mime');
 let router = express.Router();
 
 router.post('/upload', (req, res, next) => {
@@ -19,6 +18,12 @@ router.post('/upload', (req, res, next) => {
       : "publicDirFolderPath"
   ](folderName);
   const filePath = path.join(folderPath, filename);
+
+  if (!folderName.length) {
+    // -> abnormal request
+    next(api.errorStreamControl);
+    return;
+  }
 
   if (!fs.existsSync(folderPath)) {
     // -> EF_RU: folder don't exist
