@@ -68,7 +68,7 @@ router.post('/upload', (req, res, next) => {
   ](folderName);
   const filePath = path.join(folderPath, filename);
 
-  if (!folderName.length) {
+  if (folderName.length === 0) {
     // -> abnormal request
     next(api.errorStreamControl);
     return;

@@ -39,7 +39,7 @@ export default function RowMenu(props) {
           setFilesList((filesList) => filesList.filter(
             (item) => item.name !== filename
           ));
-          if (!folderName.length) {
+          if (folderName.length === 0) {
             (type === "private" ? setPrivateFolders : setPublicFolders)(
               (folders) => folders.filter((item) => item !== filename)
             )

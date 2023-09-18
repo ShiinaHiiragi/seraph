@@ -165,7 +165,7 @@ const FileExplorer = (props) => {
             type: data.type
           }
         ]);
-        if (!folderName.length) {
+        if (folderName.length === 0) {
           (type === "private" ? setPrivateFolders : setPublicFolders)(
             (folders) => [
               ...folders,
@@ -284,7 +284,7 @@ const FileExplorer = (props) => {
               type: data.type
             } : item
         ));
-        if (!folderName.length) {
+        if (folderName.length === 0) {
           (type === "private" ? setPrivateFolders : setPublicFolders)(
             (folders) => folders.map((item) =>
               item === originFilename ? newFilename : item
