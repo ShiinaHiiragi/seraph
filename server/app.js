@@ -4,11 +4,14 @@ let logger = require('morgan');
 let cors = require('cors');
 let path = require('path');
 
-let authRouter = require('./routes/auth');
 let publicRouter = require('./routes/public');
 let privateRouter = require('./routes/private');
+
+let infoRouter = require('./routes/info');
+let authRouter = require('./routes/auth');
 let fileRouter = require('./routes/file');
 let folderRouter = require('./routes/folder');
+
 let api = require('./api');
 let app = express();
 
@@ -48,6 +51,7 @@ app.use((req, res, next) => {
 app.use('/public', publicRouter);
 app.use('/private', privateRouter);
 
+app.use('/info', infoRouter);
 app.use('/auth', authRouter);
 app.use('/file', fileRouter);
 app.use('/folder', folderRouter);

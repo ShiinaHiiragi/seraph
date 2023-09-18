@@ -2,7 +2,7 @@ import React from "react";
 import { useTime } from "react-timer-hook";
 import { styled } from "@mui/joy/styles";
 import Typography from "@mui/joy/Typography";
-import GlobalContext from "../interface/constants";
+import GlobalContext, { request } from "../interface/constants";
 import RouteField from "../interface/RouteField";
 
 const Center = styled('div')(({ theme }) => ({
@@ -23,13 +23,26 @@ const Center = styled('div')(({ theme }) => ({
   }
 }));
 
+const InfoField = styled('div')(({ theme }) => ({
+
+}));
+
 const Welcome = () => {
   const context = React.useContext(GlobalContext);
   const { hours, minutes, seconds } = useTime();
 
+  const [version, setVersion] = React.useState("");
+  const [osInfo, setOSInfo] = React.useState({ });
+  const [memory, setMemory] = React.useState(1);
+
   React.useEffect(() => {
-    console.log(seconds);
-  }, [seconds])
+    request("GET/info/version").then((data) => setVersion(data.version));
+    request("GET/info/os").then((data) => setOSInfo(data.os));
+  }, [ ])
+
+  React.useEffect(() => {
+    request("GET/info/free").then((data) => setMemory(data.free));
+  }, [minutes])
 
   return (
     <RouteField display>
@@ -37,10 +50,18 @@ const Welcome = () => {
         <Typography
           level="h2"
           color="neutral"
-          fontWeight={400}
-          sx={{ pb: 1 }}
+          fontWeight={600}
+          sx={{ pb: 0.5, letterSpacing: "0.02em" }}
         >
           {context.languagePicker("nav.title")}
+          <Typography
+            component="span"
+            level="body-md"
+            color="neutral"
+            fontWeight={400}
+            children={"v" + version}
+            sx={{ pl: 1 }}
+          />
         </Typography>
         <Typography
           level="body-lg"
@@ -59,7 +80,30 @@ const Welcome = () => {
           color="neutral"
           fontWeight={400}
         >
-          INFO
+          {osInfo.userAtHostname}
+        </Typography>
+        <Typography
+          level="body-sm"
+          color="neutral"
+          fontWeight={400}
+        >
+          {osInfo.platform}
+        </Typography>
+        <Typography
+          level="body-sm"
+          color="neutral"
+          fontWeight={400}
+        >
+          {osInfo.kernelVersion}
+        </Typography>
+        <Typography
+          level="body-sm"
+          color="neutral"
+          fontWeight={400}
+        >
+          {Number(memory).sizeFormat()}
+          {" / "}
+          {Number(osInfo.memory).sizeFormat()}
         </Typography>
       </Center>
     </RouteField>

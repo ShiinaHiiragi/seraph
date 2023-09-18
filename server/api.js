@@ -331,7 +331,7 @@ const version = () => {
 
 const free = () => os.freemem();
 const osInfo = () => ({
-  hostname: os.hostname(),
+  userAtHostname: os.userInfo().username + '@' + os.hostname(),
   platform: os.platform() + ' ' + os.release() + ' ' + os.arch(),
   kernelVersion: os.version(),
   memory: os.totalmem(),
