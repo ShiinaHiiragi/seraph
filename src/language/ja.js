@@ -41,7 +41,7 @@ const ja = {
         directory: "ディレクトリ",
         search: "ファイル名で検索",
         filter: "フィルタ",
-        upload: "アップロード",
+        add: "追加",
         all: "全種類"
       }
     }

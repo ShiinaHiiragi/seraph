@@ -41,7 +41,7 @@ const en = {
         directory: "Directory",
         search: "Search by Name",
         filter: "Filter by Type",
-        upload: "Upload File",
+        add: "Add",
         all: "All Type"
       }
     }

@@ -41,7 +41,7 @@ const zhHans = {
         directory: "目录",
         search: "按名称搜索",
         filter: "按类型过滤",
-        upload: "上传文件",
+        add: "添加",
         all: "所有类型"
       }
     }

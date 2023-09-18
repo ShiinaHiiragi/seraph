@@ -5,12 +5,16 @@ import Fuse from "fuse.js";
 import isValidFilename from "valid-filename";
 import Input from "@mui/joy/Input";
 import Box from "@mui/joy/Box";
-import Button from "@mui/joy/Button";
 import FormControl from "@mui/joy/FormControl";
 import Select from "@mui/joy/Select";
 import Option from "@mui/joy/Option";
+import MenuButton from '@mui/joy/MenuButton';
+import Dropdown from '@mui/joy/Dropdown';
+import Menu from '@mui/joy/Menu';
+import MenuItem from '@mui/joy/MenuItem';
+import ListDivider from '@mui/joy/ListDivider';
 import SearchIcon from "@mui/icons-material/Search";
-import UploadRoundedIcon from "@mui/icons-material/UploadRounded";
+import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import GlobalContext, { Status, request } from "../interface/constants";
 import RouteField from "../interface/RouteField";
 import FileTable from "../components/FileTable";
@@ -335,23 +339,36 @@ const FileExplorer = (props) => {
                 </Select>
               </FormControl>
               <FormControl size="sm" sx={{ justifyContent: "flex-end" }}>
-                {context.isAuthority &&
-                  <Button
-                    component="label"
+                <Dropdown>
+                  <MenuButton
                     color="primary"
-                    startDecorator={<UploadRoundedIcon />}
+                    variant="solid"
+                    startDecorator={<AddOutlinedIcon />}
                     size="sm"
                   >
-                    {context.languagePicker("main.folder.viewRegulate.upload")}
-                    <input
-                      type="file"
-                      onChange={(event) => {
-                        handleProprocessFile(event);
-                        event.target.value = null;
-                      }}
-                      hidden
-                    />
-                  </Button>}
+                    {context.languagePicker("main.folder.viewRegulate.add")}
+                  </MenuButton>
+                  <Menu size="sm" placement="bottom-end">
+                    <MenuItem>
+                      Edit post
+                    </MenuItem>
+                    <MenuItem>
+                      Draft post
+                    </MenuItem>
+                    <ListDivider />
+                    <MenuItem>
+                      Delete
+                    </MenuItem>
+                  </Menu>
+                </Dropdown>
+                {/* <input
+                  type="file"
+                  onChange={(event) => {
+                    handleProprocessFile(event);
+                    event.target.value = null;
+                  }}
+                  hidden
+                /> */}
               </FormControl>
             </Box>
           </Box>
