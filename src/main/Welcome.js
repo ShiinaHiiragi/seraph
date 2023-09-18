@@ -76,14 +76,23 @@ const Welcome = () => {
   const [memory, setMemory] = React.useState(1);
 
   React.useEffect(() => {
+    if (context.secondTick && context.isAuthority) {
+      request("GET/info/os").then((data) => {
+        setOSInfo(data.os);
+        const stopwatchOffset = new Date();
+        stopwatchOffset.setSeconds(stopwatchOffset.getSeconds() + data.os.uptime);
+        upReset(stopwatchOffset);
+      });
+    }
     request("GET/info/version").then((data) => setVersion(data.version));
-    request("GET/info/os").then((data) => {
-      setOSInfo(data.os);
-      const stopwatchOffset = new Date();
-      stopwatchOffset.setSeconds(stopwatchOffset.getSeconds() + data.os.uptime);
-      upReset(stopwatchOffset);
-    });
-  }, [ ])
+  // eslint-disable-next-line
+  }, [
+    // check if
+    // load with auth naturally
+    context.secondTick,
+    // login in same page
+    context.isAuthority,
+  ])
 
   React.useEffect(() => {
     request("GET/info/free").then((data) => setMemory(data.free));
@@ -120,29 +129,30 @@ const Welcome = () => {
           {":"}
           {String(seconds).padStart(2, '0')}
         </Typography>
-        <InfoField>
-          <ItemField item="userAtHostname">
-            {osInfo.userAtHostname}
-          </ItemField>
-          <ItemField item="platform">
-            {osInfo.platform}
-          </ItemField>
-          <ItemField item="kernelVersion">
-            {osInfo.kernelVersion}
-          </ItemField>
-          <ItemField item="uptime">
-            {String(upHours).padStart(2, '0')}
-            {":"}
-            {String(upMinutes).padStart(2, '0')}
-            {":"}
-            {String(upSeconds).padStart(2, '0')}
-          </ItemField>
-          <ItemField item="memoryAvailable">
-            {Number(memory).sizeFormat(2)}
-            {" / "}
-            {Number(osInfo.memory).sizeFormat(2)}
-          </ItemField>
-        </InfoField>
+        {context.isAuthority &&
+          <InfoField>
+            <ItemField item="userAtHostname">
+              {osInfo.userAtHostname}
+            </ItemField>
+            <ItemField item="platform">
+              {osInfo.platform}
+            </ItemField>
+            <ItemField item="kernelVersion">
+              {osInfo.kernelVersion}
+            </ItemField>
+            <ItemField item="uptime">
+              {String(upHours).padStart(2, '0')}
+              {":"}
+              {String(upMinutes).padStart(2, '0')}
+              {":"}
+              {String(upSeconds).padStart(2, '0')}
+            </ItemField>
+            <ItemField item="memoryAvailable">
+              {Number(memory).sizeFormat(2)}
+              {" / "}
+              {Number(osInfo.memory).sizeFormat(2)}
+            </ItemField>
+          </InfoField>}
       </Center>
     </RouteField>
   )
