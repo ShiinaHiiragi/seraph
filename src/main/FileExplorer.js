@@ -215,11 +215,13 @@ const FileExplorer = (props) => {
               type: data.type
             } : item
         ));
-        (type === "private" ? setPrivateFolders : setPublicFolders)(
-          (folders) => folders.map((item) =>
-            item === originFilename ? newFilename : item
+        if (!folderName.length) {
+          (type === "private" ? setPrivateFolders : setPublicFolders)(
+            (folders) => folders.map((item) =>
+              item === originFilename ? newFilename : item
+            )
           )
-        )
+        }
         handleCloseRename();
         toast.success(
           context
