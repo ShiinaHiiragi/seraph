@@ -54,7 +54,6 @@
     - time
     - todo
 2. File Explorer
-    - folder size
     - edit in milkdown
     - create / edit attached markdown
 3. Links
