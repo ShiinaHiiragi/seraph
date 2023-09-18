@@ -127,6 +127,9 @@ const FileExplorer = (props) => {
     filter
   ]), [filter]);
 
+  // folder menu
+  const [menuOpen, setMenuOpen] = React.useState(false);
+
   // uploading
   const handleUploadFile = React.useCallback((filename, filebase) => {
     toast.promise(() => new Promise((resolve, reject) => {
@@ -345,15 +348,32 @@ const FileExplorer = (props) => {
                     variant="solid"
                     startDecorator={<AddOutlinedIcon />}
                     size="sm"
+                    onClick={() => setMenuOpen(true)}
                   >
                     {context.languagePicker("main.folder.viewRegulate.add")}
                   </MenuButton>
-                  <Menu size="sm" placement="bottom-end">
+                  <Menu
+                    open={menuOpen}
+                    onMouseLeave={() => setMenuOpen(false)}
+                    size="sm"
+                    placement="bottom-end"
+                    sx={{ userSelect: "none" }}
+                  >
                     <MenuItem>
                       {context.languagePicker("main.folder.addMenu.newFolder")}
                     </MenuItem>
-                    <MenuItem>
+                    <MenuItem component="label">
                       {context.languagePicker("main.folder.addMenu.newFile")}
+                      <input
+                        id="upload"
+                        hidden
+                        type="file"
+                        onChange={(event) => {
+                          console.log(event);
+                          handleProprocessFile(event);
+                          event.target.value = null;
+                        }}
+                      />
                     </MenuItem>
                     <ListDivider />
                     <MenuItem>
@@ -361,14 +381,6 @@ const FileExplorer = (props) => {
                     </MenuItem>
                   </Menu>
                 </Dropdown>
-                {/* <input
-                  type="file"
-                  onChange={(event) => {
-                    handleProprocessFile(event);
-                    event.target.value = null;
-                  }}
-                  hidden
-                /> */}
               </FormControl>
             </Box>
           </Box>
