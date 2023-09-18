@@ -56,7 +56,15 @@ export default function Navigation(props) {
             size="sm"
             variant="plain"
             color="primary"
-            sx={{ '--IconButton-size': '24px', ml: 'auto' }}
+            sx={{
+              ml: 'auto',
+              '--IconButton-size': '24px',
+              backgroundColor: (theme) => {
+                return /^\/public\/*$/.test(window.location.pathname)
+                  ? theme.palette.primary.plainActiveBg
+                  : "transparent"
+              }
+            }}
             onClick={() => navigateTo("/public")}
             disabled={/^\/public\/*$/.test(window.location.pathname)}
           >
@@ -92,7 +100,15 @@ export default function Navigation(props) {
             size="sm"
             variant="plain"
             color="primary"
-            sx={{ '--IconButton-size': '24px', ml: 'auto' }}
+            sx={{
+              ml: 'auto',
+              '--IconButton-size': '24px',
+              backgroundColor: (theme) => {
+                return /^\/private\/*$/.test(window.location.pathname)
+                  ? theme.palette.primary.plainActiveBg
+                  : "transparent"
+              }
+            }}
             onClick={() => navigateTo("/private")}
             disabled={/^\/private\/*$/.test(window.location.pathname)}
           >
