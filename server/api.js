@@ -217,6 +217,17 @@ const configOperator = {
     }));
   },
 
+  clearConfigClipboard: () => {
+    configOperator.setConfig((config) => ({
+      ...config,
+      clipboard: {
+        permanant: null,
+        directory: null,
+        path: null
+      }
+    }));
+  },
+
   setConfigSetting: (key, value) => {
     const [item, subItem] = key.split(".");
     configOperator.setConfig((config) => ({

@@ -89,11 +89,86 @@ router.post('/upload', (req, res, next) => {
     return;
   }
 
-  // -> ES: no extra info
+  // -> ES: return new file info
   req.status.addExecStatus();
   res.send({
     ...req.status.generateReport(),
     ...api.fileOperator.readFileInfo(folderPath, filename)
+  });
+  return;
+});
+
+router.post('/paste', (req, res, next) => {
+  if (req.status.notAuthSuccess()) {
+    // -> EF_IT or abnormal request
+    next(api.errorStreamControl);
+    return;
+  }
+
+  const { permanant, directory, path } = api.configOperator.config.clipboard;
+  if (permanant === null || directory === null || path === null) {
+    api.configOperator.clearConfigClipboard();
+
+    // -> abnormal request: clipboard is broken, expect to try again
+    next(api.errorStreamControl);
+    return;
+  }
+
+  const [type, folderName, filename] = path;
+  const { type: newType, folderName: newFolderName } = req.body;
+  const { filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
+  const {
+    folderPath: newFolderPath,
+    filePath: newFilePath
+  } = api.fileOperator.pathCombinator(newType, newFolderName, filename);
+
+  if (!fs.existsSync(filePath)) {
+    api.configOperator.clearConfigClipboard();
+
+    // -> EF_RU: origin file don't exist
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  if (!fs.existsSync(newFolderPath)) {
+    // -> EF_RU: target folder don't exist
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  if (fs.existsSync(newFilePath)) {
+    // -> EF_IC: new filename already exists
+    req.status.addExecStatus(api.Status.execErrCode.IdentifierConflict);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  if (!directory && newFolderName.length === 0) {
+    // -> abnormal request: try to move file to public/ or private/
+    next(api.errorStreamControl);
+    return;
+  }
+
+  try {
+    fs.cpSync(filePath, newFilePath);
+    if (!permanant) {
+      fs.rmSync(filePath, { recursive: true, force: true });
+      api.configOperator.clearConfigClipboard();
+    }
+  } catch (_) {
+    // -> EF_FME: fs.cpSync or fs.rmSync error
+    req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  // -> ES: return new file info
+  req.status.addExecStatus();
+  res.send({
+    ...req.status.generateReport(),
+    ...api.fileOperator.readFileInfo(newFolderPath, filename)
   });
   return;
 });
