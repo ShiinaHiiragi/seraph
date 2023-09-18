@@ -28,6 +28,14 @@ export default function RowMenu(props) {
     setModalRenameOpen(filename);
   }, [setFormNewFilenameText, setModalRenameOpen, filename]);
 
+  const handleCopy = React.useCallback(() => {
+    // TODO: fill this
+  }, [ ]);
+
+  const handleCut = React.useCallback(() => {
+    // TODO: fill this
+  }, [ ]);
+
   const handleDelete = React.useCallback((type, folderName, filename) => {
     toast.promise(new Promise((resolve, reject) => {
       request("POST/file/delete", {
@@ -72,6 +80,12 @@ export default function RowMenu(props) {
       <Menu size="sm" sx={{ minWidth: 140 }}>
         <MenuItem onClick={handleToggleRename}>
           {context.languagePicker("main.folder.rowMenu.rename")}
+        </MenuItem>
+        <MenuItem onClick={handleCopy}>
+          {context.languagePicker("main.folder.rowMenu.copy")}
+        </MenuItem>
+        <MenuItem onClick={handleCut}>
+          {context.languagePicker("main.folder.rowMenu.cut")}
         </MenuItem>
         <Divider />
         <MenuItem

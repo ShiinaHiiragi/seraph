@@ -34,6 +34,8 @@ const zhHans = {
       rowMenu: {
         open: "打开",
         rename: "重命名",
+        copy: "复制",
+        cut: "剪切",
         delete: "删除"
       },
       viewRegulate: {

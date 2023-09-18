@@ -34,6 +34,8 @@ const en = {
       rowMenu: {
         open: "Open",
         rename: "Rename",
+        copy: "Copy",
+        cut: "Cut",
         delete: "Delete"
       },
       viewRegulate: {

@@ -34,6 +34,8 @@ const ja = {
       rowMenu: {
         open: "開ける",
         rename: "リネーム",
+        copy: "コピー",
+        cut: "カット",
         delete: "デリート"
       },
       viewRegulate: {
