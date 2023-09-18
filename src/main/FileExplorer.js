@@ -273,11 +273,15 @@ const FileExplorer = (props) => {
 
   // paste
   const handlePaste = React.useCallback(() => {
+    const originType = `${clipboard.path[0]}`;
+    const originFolderName = `${clipboard.path[1]}`;
     toast.promise(new Promise((resolve, reject) => {
       request("POST/file/paste", {
         type: type,
         folderName: folderName
-      }, undefined, reject)
+      }, {
+        [Status.execErrCode.ResourcesUnexist]: () => setClipboard({ ...defaultClipboard })
+      }, reject)
         .then((data) => {
           setFilesList((filesList) => [
             ...filesList,
@@ -292,6 +296,18 @@ const FileExplorer = (props) => {
           setClipboard((clipboard) =>
             clipboard.permanant ? clipboard : { ...defaultClipboard }
           )
+
+          if (!clipboard.permanant && originFolderName.length === 0) {
+            (originType === "private" ? setPrivateFolders : setPublicFolders)(
+              (folders) => folders.filter((item) => item !== data.name)
+            )
+          }
+
+          if (!clipboard.permanant && folderName.length === 0) {
+            (type === "private" ? setPrivateFolders : setPublicFolders)(
+              (folders) => [...folders, data.name]
+            )
+          }
           resolve(data.name);
         })
     }), {
@@ -302,10 +318,14 @@ const FileExplorer = (props) => {
       error: (data) => data
     })
   }, [
+    clipboard.permanant,
+    clipboard.path,
     context,
     type,
     folderName,
-    setClipboard
+    setClipboard,
+    setPublicFolders,
+    setPrivateFolders
   ]);
 
   // states and function for rename
