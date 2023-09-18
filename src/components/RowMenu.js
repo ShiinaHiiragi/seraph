@@ -27,21 +27,25 @@ export default function RowMenu(props) {
   }, [setFormNewNameText, setModalRenameOpen, filename]);
 
   const handleDelete = React.useCallback((type, folderName, filename) => {
-    request("POST/file/delete", {
-      type: type,
-      folderName: folderName,
-      filename: filename
+    toast.promise(new Promise((resolve, reject) => {
+      request("POST/file/delete", {
+        type: type,
+        folderName: folderName,
+        filename: filename
+      }, undefined, reject)
+        .then(() => {
+          setFilesList((filesList) => filesList.filter(
+            (item) => item.name !== filename
+          ));
+          resolve();
+        })
+    }), {
+      loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
+      success: context
+        .languagePicker("modal.toast.success.delete")
+        .format(filename),
+      error: (data) => data
     })
-      .then(() => {
-        setFilesList((filesList) => filesList.filter(
-          (item) => item.name !== filename
-        ));
-        toast.success(
-          context
-            .languagePicker("modal.toast.success.delete")
-            .format(filename)
-        );
-      })
   }, [context, setFilesList])
 
   return (

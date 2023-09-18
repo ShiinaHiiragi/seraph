@@ -50,7 +50,8 @@ const en = {
     toast: {
       plain: {
         login: "Welcome back to Seraph.",
-        uploading: "File is being uploaded, please wait for a second."
+        generalReconfirm: "Operation is in progress, please wait for a second.",
+        uploading: "The file is being uploaded, please wait for a second."
       },
       success: {
         init: "Password is set successfully. Thanks for using Seraph.",
@@ -60,7 +61,6 @@ const en = {
         delete: "{0} has been deleted."
       },
       warning: {
-        generalPromise: "Operation failed.",
         invalidToken: "Token is invalid or expired. The page will be refreshed automatically in seconds.",
         illegalRename: "Filename pre-check failed."
       },

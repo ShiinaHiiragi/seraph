@@ -50,6 +50,7 @@ const ja = {
     toast: {
       plain: {
         login: "セラフへようこそ。",
+        generalReconfirm: "オペレーション中でしばらくお待ちください。",
         uploading: "アップロード中でしばらくお待ちください。"
       },
       success: {
@@ -60,7 +61,6 @@ const ja = {
         delete: "{0} がデリートされました。"
       },
       warning: {
-        generalPromise: "オペレーションが失敗しました。",
         invalidToken: "トークンが無効又は期限切れになれ、ページは数秒内にリフレッシュされることになっています。",
         illegalRename: "新たなファイル名の事前チェックは失敗。"
       },

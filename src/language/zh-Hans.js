@@ -50,6 +50,7 @@ const zhHans = {
     toast: {
       plain: {
         login: "欢迎回到 SERAPH。",
+        generalReconfirm: "操作正在进行，请稍等。",
         uploading: "文件正在上传，请稍等。"
       },
       success: {
@@ -60,7 +61,6 @@ const zhHans = {
         delete: "{0} 已被删除。"
       },
       warning: {
-        generalPromise: "操作失败。",
         invalidToken: "令牌无效或已过期，页面将在若干秒内自动刷新。",
         illegalRename: "文件名预检查不通过。"
       },

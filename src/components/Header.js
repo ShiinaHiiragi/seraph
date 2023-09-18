@@ -96,12 +96,18 @@ const Header = (props) => {
 
   // function for logout
   const handleLogout = React.useCallback(() => {
-    request("POST/auth/logout")
-      .then(() => {
-        setGlobalSwitch(globalState.ANONYMOUS);
-        toast.success(context.languagePicker("modal.toast.success.logout"));
-        navigate("/");
-      })
+    toast.promise(new Promise((resolve, reject) => {
+      request("POST/auth/logout", undefined, undefined, reject)
+        .then(() => {
+          setGlobalSwitch(globalState.ANONYMOUS);
+          resolve();
+          navigate("/");
+        })
+    }), {
+      loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
+      success: context.languagePicker("modal.toast.success.logout"),
+      error: (data) => data
+    })
   }, [context, setGlobalSwitch, navigate])
 
   return (

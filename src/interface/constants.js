@@ -155,7 +155,9 @@ const Status = {
  *      此额外动作需要用 todo 指定，这个函数被传入返回的响应体 data 部分
  *       - 当第二项参数不需要指定的时候，填 undefined 即可
  *       - key 为 "" 时，对应的函数一定会被执行，相当于 finally
- *   3. 注意一致性
+ *   3. handleReject 是什么：有些用了 toast.promise 的 request，希望将 loading 后的
+ *      错误状态归到 promise 的内部，此时可以传入这个参数
+ *   4. 注意一致性
  *       - 服务器返回错误码中，只分为认证错误和执行错误
  *       - 但在 languagePicker 中，错误分为警告、异常和错误三种
  *       - 警告包括前端预检查发现的错误和认证错误的 IT（NI 进到 catch）
