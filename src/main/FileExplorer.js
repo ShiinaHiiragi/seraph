@@ -129,12 +129,12 @@ const FileExplorer = (props) => {
 
   // new folder
   const [modalNewOpen, setModalNewOpen] = React.useState(null);
-  const [formNewFolderText, setFormNewFolderText] = React.useState("");
+  const [formNewFolderNameText, setFormNewFolderNameText] = React.useState("");
   const [modalNewLoading, setModalNewLoading] = React.useState(false);
   const handleCloseNew = React.useCallback(() => {
     setModalNewOpen(false);
     setModalNewLoading(false);
-    setFormNewFolderText("");
+    setFormNewFolderNameText("");
   }, [ ]);
 
   const handleNewFolder = React.useCallback(() => {
@@ -200,7 +200,7 @@ const FileExplorer = (props) => {
 
   // states and function for rename
   const [modalRenameOpen, setModalRenameOpen] = React.useState(null);
-  const [formNewNameText, setFormNewNameText] = React.useState("");
+  const [formNewFilenameText, setFormNewFilenameText] = React.useState("");
   const [modalRenameLoading, setModalRenameLoading] = React.useState(false);
   const handleCloseRename = React.useCallback(() => {
     setModalRenameOpen(false);
@@ -208,12 +208,12 @@ const FileExplorer = (props) => {
   }, [ ]);
 
   const handleRename = React.useCallback(() => {
-    if (!isValidFilename(formNewNameText)) {
+    if (!isValidFilename(formNewFilenameText)) {
       toast.error(context.languagePicker("modal.toast.warning.illegalRename"));
       return;
     }
 
-    const originFilename = `${modalRenameOpen}`, newFilename = `${formNewNameText}`;
+    const originFilename = `${modalRenameOpen}`, newFilename = `${formNewFilenameText}`;
     setModalRenameLoading(true);
     request(
       "POST/file/rename",
@@ -254,7 +254,7 @@ const FileExplorer = (props) => {
     type,
     folderName,
     modalRenameOpen,
-    formNewNameText,
+    formNewFilenameText,
     setPublicFolders,
     setPrivateFolders,
     handleCloseRename
@@ -389,7 +389,7 @@ const FileExplorer = (props) => {
             folderName={folderName}
             sortedFilesList={sortedFilesList}
             setModalRenameOpen={setModalRenameOpen}
-            setFormNewNameText={setFormNewNameText}
+            setFormNewFilenameText={setFormNewFilenameText}
             setFilesList={setFilesList}
             guard={guard}
             searcher={searcher}
@@ -402,7 +402,7 @@ const FileExplorer = (props) => {
             folderName={folderName}
             sortedFilesList={sortedFilesList}
             setModalRenameOpen={setModalRenameOpen}
-            setFormNewNameText={setFormNewNameText}
+            setFormNewFilenameText={setFormNewFilenameText}
             setFilesList={setFilesList}
             guard={guard}
             searcher={searcher}
@@ -419,8 +419,8 @@ const FileExplorer = (props) => {
         open={Boolean(modalRenameOpen)}
         loading={modalRenameLoading}
         disabled={
-          formNewNameText.length === 0
-          || formNewNameText === modalRenameOpen
+          formNewFilenameText.length === 0
+          || formNewFilenameText === modalRenameOpen
         }
         handleClose={handleCloseRename}
         handleClick={handleRename}
@@ -432,14 +432,14 @@ const FileExplorer = (props) => {
           autoFocus
           autoComplete="off"
           placeholder={context.languagePicker("modal.form.rename.placeholder")}
-          value={formNewNameText}
-          onChange={(event) => setFormNewNameText(event.target.value)}
+          value={formNewFilenameText}
+          onChange={(event) => setFormNewFilenameText(event.target.value)}
         />
       </ModalForm>
       <ModalForm
         open={modalNewOpen}
         loading={modalNewLoading}
-        disabled={formNewFolderText.length === 0}
+        disabled={formNewFolderNameText.length === 0}
         handleClose={handleCloseNew}
         handleClick={handleNewFolder}
         title={context.languagePicker("modal.form.new.title")}
@@ -450,8 +450,8 @@ const FileExplorer = (props) => {
           autoFocus
           autoComplete="off"
           placeholder={context.languagePicker("modal.form.new.placeholder")}
-          value={formNewFolderText}
-          onChange={(event) => setFormNewFolderText(event.target.value)}
+          value={formNewFolderNameText}
+          onChange={(event) => setFormNewFolderNameText(event.target.value)}
         />
       </ModalForm>
       <label role="button" ref={uploadRef}>

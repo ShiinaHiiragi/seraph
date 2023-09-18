@@ -16,7 +16,7 @@ export default function RowMenu(props) {
     folderName,
     filename,
     setModalRenameOpen,
-    setFormNewNameText,
+    setFormNewFilenameText,
     setFilesList,
     setPublicFolders,
     setPrivateFolders
@@ -24,9 +24,9 @@ export default function RowMenu(props) {
   const context = React.useContext(GlobalContext);
 
   const handleToggleRename = React.useCallback(() => {
-    setFormNewNameText(filename);
+    setFormNewFilenameText(filename);
     setModalRenameOpen(filename);
-  }, [setFormNewNameText, setModalRenameOpen, filename]);
+  }, [setFormNewFilenameText, setModalRenameOpen, filename]);
 
   const handleDelete = React.useCallback((type, folderName, filename) => {
     toast.promise(new Promise((resolve, reject) => {

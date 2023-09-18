@@ -18,7 +18,7 @@ export default function FileTable(props) {
     folderName,
     sortedFilesList,
     setModalRenameOpen,
-    setFormNewNameText,
+    setFormNewFilenameText,
     setFilesList,
     guard,
     searcher,
@@ -208,7 +208,7 @@ export default function FileTable(props) {
                       folderName={folderName}
                       filename={item.name}
                       setModalRenameOpen={setModalRenameOpen}
-                      setFormNewNameText={setFormNewNameText}
+                      setFormNewFilenameText={setFormNewFilenameText}
                       setFilesList={setFilesList}
                       setPublicFolders={setPublicFolders}
                       setPrivateFolders={setPrivateFolders}
