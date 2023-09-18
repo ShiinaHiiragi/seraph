@@ -1,17 +1,41 @@
 import React from "react";
-import RouteField from "../interface/RouteField";
+import { styled } from "@mui/joy/styles";
+import Typography from "@mui/joy/Typography";
 import GlobalContext from "../interface/constants";
-import Caption from "../components/Caption";
+import RouteField from "../interface/RouteField";
+
+const Center = styled('div')(({ theme }) => ({
+  width: "100%",
+  height: "100%",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "flex-start",
+  paddingBottom: theme.spacing(16)
+}));
 
 const Welcome = () => {
   const context = React.useContext(GlobalContext);
 
   return (
     <RouteField display>
-      <Caption
-        title={context.languagePicker("universal.placeholder.inDevelopment.title")}
-        caption={context.languagePicker("universal.placeholder.inDevelopment.caption")}
-      />
+      <Center className="CenterField">
+        <Typography
+          level="h2"
+          color="neutral"
+          fontWeight={400}
+          sx={{ paddingBottom: 1 }}
+        >
+          SERAPH
+        </Typography>
+        <Typography
+          level="body-sm"
+          color="neutral"
+          fontWeight={400}
+        >
+          {new Date(Date.now()).timeFormat("hh:mm")}
+        </Typography>
+      </Center>
     </RouteField>
   )
 }

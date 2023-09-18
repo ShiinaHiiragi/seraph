@@ -48,6 +48,10 @@
 
 5. Open page and initialize configuration via setting language and password
 
+## Log
+
+- 2023 9/18 ver 0.1.0: Complete folder page
+
 ## Memo
 
 1. Intro

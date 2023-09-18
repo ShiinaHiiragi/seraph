@@ -1,3 +1,4 @@
+const os = require('os');
 const fs = require('fs');
 const path = require('path');
 const dotenv = require('dotenv');
@@ -25,6 +26,7 @@ exports.reactBaseURL = reactBaseURL;
 
 // intro __dirname
 const dataPath = {
+  packageFilePath: path.join(__dirname, "../package.json"),
   buildDirPath: path.join(__dirname, "../build"),
   certDirPath: path.join(__dirname, "./cert"),
   dataDirPath: path.join(__dirname, "./data"),
@@ -319,6 +321,30 @@ const tokenOperator = {
 exports.expiredPeriod = expiredPeriod;
 exports.cookieOperator = cookieOperator;
 exports.tokenOperator = tokenOperator;
+
+
+// seraph and server info
+const version = () => {
+  const package = JSON.parse(fs.readFileSync(dataPath.packageFilePath));
+  return package.version;
+}
+
+const free = () => os.freemem();
+const osInfo = () => ({
+  hostname: os.hostname(),
+  platform: os.platform() + ' ' + os.release() + ' ' + os.arch(),
+  kernelVersion: os.version(),
+  memory: {
+    frees: os.freemem(),
+    total: os.totalmem()
+  },
+  uptime: os.uptime(),
+  userInfo: os.userInfo()
+});
+
+exports.version = version;
+exports.free = free;
+exports.osInfo = osInfo;
 
 
 function Status() { }
