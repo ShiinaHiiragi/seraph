@@ -143,7 +143,6 @@ router.post('/rename', (req, res, next) => {
 });
 
 router.post('/copy', (req, res, next) => {
-  console.log(req.body);
   if (req.status.notAuthSuccess()) {
     // -> EF_IT or abnormal request
     next(api.errorStreamControl);

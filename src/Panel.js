@@ -181,7 +181,6 @@ const Panel = () => {
         isAuthority: isAuthority,
         firstTick: firstTick,
         secondTick: secondTick,
-        clipboard: clipboard,
         sortedPublicFolders: sortedPublicFolders,
         sortedPrivateFolders: sortedPrivateFolders
       }}
