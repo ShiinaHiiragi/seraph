@@ -15,7 +15,12 @@ import MenuItem from '@mui/joy/MenuItem';
 import ListDivider from '@mui/joy/ListDivider';
 import SearchIcon from "@mui/icons-material/Search";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
-import GlobalContext, { Status, request, reactionInterval } from "../interface/constants";
+import GlobalContext, {
+  Status,
+  request,
+  reactionInterval,
+  defaultClipboard
+} from "../interface/constants";
 import RouteField from "../interface/RouteField";
 import FileTable from "../components/FileTable";
 import FileList from "../components/FileList";
@@ -224,7 +229,7 @@ const FileExplorer = (props) => {
           setFilesList((filesList) => [
             ...filesList,
             {
-              name: filename,
+              name: data.name,
               size: data.size,
               time: data.time,
               mtime: data.mtime,
@@ -273,20 +278,34 @@ const FileExplorer = (props) => {
         type: type,
         folderName: folderName
       }, undefined, reject)
-        .then(() => {
-          resolve();
+        .then((data) => {
+          setFilesList((filesList) => [
+            ...filesList,
+            {
+              name: data.name,
+              size: data.size,
+              time: data.time,
+              mtime: data.mtime,
+              type: data.type
+            }
+          ]);
+          setClipboard((clipboard) =>
+            clipboard.permanant ? clipboard : { ...defaultClipboard }
+          )
+          resolve(data.name);
         })
     }), {
       loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
-      success: context.languagePicker("modal.toast.success.paste")
-        .format(clipboard.path[2], folderName),
+      success: (filename) => 
+        context.languagePicker("modal.toast.success.paste")
+          .format(filename, folderName),
       error: (data) => data
     })
   }, [
-    clipboard.path,
     context,
     type,
-    folderName
+    folderName,
+    setClipboard
   ]);
 
   // states and function for rename

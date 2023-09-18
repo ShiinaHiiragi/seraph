@@ -152,7 +152,7 @@ router.post('/paste', (req, res, next) => {
   }
 
   try {
-    fs.cpSync(filePath, newFilePath);
+    fs.cpSync(filePath, newFilePath, { recursive: true });
     if (!permanant) {
       fs.rmSync(filePath, { recursive: true, force: true });
       api.configOperator.clearConfigClipboard();
