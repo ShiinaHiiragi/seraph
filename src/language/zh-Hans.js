@@ -37,12 +37,17 @@ const zhHans = {
         delete: "删除"
       },
       viewRegulate: {
+        all: "所有类型",
         unknown: "未知",
         directory: "目录",
         search: "按名称搜索",
         filter: "按类型过滤",
-        add: "添加",
-        all: "所有类型"
+        add: "添加"
+      },
+      addMenu: {
+        newFolder: "新目录",
+        newFile: "上传文件",
+        paste: "粘贴"
       }
     }
   },

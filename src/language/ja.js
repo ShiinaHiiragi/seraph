@@ -37,12 +37,17 @@ const ja = {
         delete: "デリート"
       },
       viewRegulate: {
+        all: "全種類",
         unknown: "不明",
         directory: "ディレクトリ",
         search: "ファイル名で検索",
         filter: "フィルタ",
-        add: "追加",
-        all: "全種類"
+        add: "追加"
+      },
+      addMenu: {
+        newFolder: "新規ディレクトリ",
+        newFile: "ファイルのアップロード",
+        paste: "ペースト"
       }
     }
   },

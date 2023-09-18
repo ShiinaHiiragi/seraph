@@ -37,12 +37,17 @@ const en = {
         delete: "Delete"
       },
       viewRegulate: {
+        all: "All Type",
         unknown: "Unknown",
         directory: "Directory",
         search: "Search by Name",
         filter: "Filter by Type",
-        add: "Add",
-        all: "All Type"
+        add: "Add"
+      },
+      addMenu: {
+        newFolder: "New Directory",
+        newFile: "Upload File",
+        paste: "Paste"
       }
     }
   },

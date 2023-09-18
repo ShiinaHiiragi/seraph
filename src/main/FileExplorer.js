@@ -350,14 +350,14 @@ const FileExplorer = (props) => {
                   </MenuButton>
                   <Menu size="sm" placement="bottom-end">
                     <MenuItem>
-                      Edit post
+                      {context.languagePicker("main.folder.addMenu.newFolder")}
                     </MenuItem>
                     <MenuItem>
-                      Draft post
+                      {context.languagePicker("main.folder.addMenu.newFile")}
                     </MenuItem>
                     <ListDivider />
                     <MenuItem>
-                      Delete
+                      {context.languagePicker("main.folder.addMenu.paste")}
                     </MenuItem>
                   </Menu>
                 </Dropdown>
