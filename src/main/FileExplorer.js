@@ -129,13 +129,25 @@ const FileExplorer = (props) => {
 
   // new folder
   const [modalNewOpen, setModalNewOpen] = React.useState(false);
-  const [formNewFolderNameText, setFormNewFolderNameText] = React.useState("");
+  const [modalNewDisabled, setModalNewDisabled] = React.useState(false);
   const [modalNewLoading, setModalNewLoading] = React.useState(false);
+  const [formNewFolderNameText, setFormNewFolderNameText] = React.useState("");
   const handleCloseNew = React.useCallback(() => {
     setModalNewOpen(false);
     setModalNewLoading(false);
     setFormNewFolderNameText("");
   }, [ ]);
+
+  React.useEffect(() => {
+    const timeOutId = setTimeout(() => setModalNewDisabled(() => {
+      if (filesList.filter((item) => item.name === formNewFolderNameText).length > 0) {
+        return true
+      } else {
+        return formNewFolderNameText.length === 0
+      }
+    }), reactionInterval.rapid);
+    return () => clearTimeout(timeOutId);
+  }, [filesList, formNewFolderNameText]);
 
   const handleNewFolder = React.useCallback(() => {
     if (!isValidFilename(formNewFolderNameText)) {
@@ -505,8 +517,8 @@ const FileExplorer = (props) => {
       </ModalForm>
       <ModalForm
         open={modalNewOpen}
+        disabled={modalNewDisabled}
         loading={modalNewLoading}
-        disabled={formNewFolderNameText.length === 0}
         handleClose={handleCloseNew}
         handleClick={handleNewFolder}
         title={context.languagePicker("modal.form.new.title")}
