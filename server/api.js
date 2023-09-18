@@ -130,7 +130,7 @@ const fileOperator = {
     }
 
     folderInfo = fs.readdirSync(dirPath, { withFileTypes: true })
-    folderInfo.filter((item) => item.isDirectory())
+    folderInfo = folderInfo.filter((item) => item.isDirectory())
     return folderInfo.map((item) => item.name);
   },
 
@@ -153,7 +153,6 @@ const fileOperator = {
     }
 
     folderInfo = fs.readdirSync(folderPath, { withFileTypes: true })
-    folderInfo.filter((item) => !item.isDirectory())
     return folderInfo.map((item) => fileOperator.readFileInfo(folderPath, item.name));
   }
 };

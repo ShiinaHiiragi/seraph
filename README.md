@@ -24,7 +24,7 @@
     ```shell
     REACT_APP_PROTOCOL=http
     REACT_APP_HOSTNAME=localhost
-    REACT_APP_SPORT=700
+    REACT_APP_SPORT=80
     ```
 
     - `REACT_APP_PROTOCOL`: `http` or `https`. If `https` is applied, certificate `${HOSTNAME}.crt` and key `${HOSTNAME}.key` MUST be added under seraph/server/cert
@@ -38,7 +38,7 @@
     npm start
     ```
 
-    - for Linux user who receive error like 'Port xxx requires elevated privileges', try running `npm run start:sudo`
+    - for Linux user who receive error like 'Port 80 requires elevated privileges', try running `npm run start:sudo`
     - for those who receive error like 'Can't resolve `@mui/material/utils`', try running the following command
 
         ```shell

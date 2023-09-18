@@ -16,18 +16,15 @@ router.get('/*/:filename', (req, res, next) => {
   const filePath = path.join(folderPath, filename);
 
   if (!fs.existsSync(filePath)) {
-    // -> EF_RU: folder don't exist
-    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
-    res.send({
-      ...req.status.generateReport(),
-      message: "Resources requested do not exist."
-    });
+    // -> next: folder don't exist
+    next();
     return;
   }
 
   if (fs.lstatSync(filePath).isDirectory()) {
     // -> next: is a directory
     next();
+    return;
   }
 
   // -> no code: return file directly
