@@ -15,7 +15,7 @@ import MenuItem from '@mui/joy/MenuItem';
 import ListDivider from '@mui/joy/ListDivider';
 import SearchIcon from "@mui/icons-material/Search";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
-import GlobalContext, { Status, request } from "../interface/constants";
+import GlobalContext, { Status, request, reactionInterval } from "../interface/constants";
 import RouteField from "../interface/RouteField";
 import FileTable from "../components/FileTable";
 import FileList from "../components/FileList";
@@ -118,7 +118,7 @@ const FileExplorer = (props) => {
   React.useEffect(() => {
     const timeOutId = setTimeout(() =>
       setGuard((guard) => [search, guard[1]]
-    ), 500);
+    ), reactionInterval.slow);
     return () => clearTimeout(timeOutId);
   }, [search]);
 
@@ -128,7 +128,7 @@ const FileExplorer = (props) => {
   ]), [filter]);
 
   // new folder
-  const [modalNewOpen, setModalNewOpen] = React.useState(null);
+  const [modalNewOpen, setModalNewOpen] = React.useState(false);
   const [formNewFolderNameText, setFormNewFolderNameText] = React.useState("");
   const [modalNewLoading, setModalNewLoading] = React.useState(false);
   const handleCloseNew = React.useCallback(() => {
@@ -250,12 +250,24 @@ const FileExplorer = (props) => {
 
   // states and function for rename
   const [modalRenameOpen, setModalRenameOpen] = React.useState(null);
-  const [formNewFilenameText, setFormNewFilenameText] = React.useState("");
   const [modalRenameLoading, setModalRenameLoading] = React.useState(false);
+  const [modalRenameDisabled, setModalRenameDisabled] = React.useState(false);
+  const [formNewFilenameText, setFormNewFilenameText] = React.useState("");
   const handleCloseRename = React.useCallback(() => {
     setModalRenameOpen(false);
     setModalRenameLoading(false);
   }, [ ]);
+
+  React.useEffect(() => {
+    const timeOutId = setTimeout(() => setModalRenameDisabled(() => {
+      if (filesList.filter((item) => item.name === formNewFilenameText).length > 0) {
+        return true
+      } else {
+        return formNewFilenameText.length === 0
+      }
+    }), reactionInterval.rapid);
+    return () => clearTimeout(timeOutId);
+  }, [filesList, modalRenameOpen, formNewFilenameText]);
 
   const handleRename = React.useCallback(() => {
     if (!isValidFilename(formNewFilenameText)) {
@@ -472,10 +484,7 @@ const FileExplorer = (props) => {
       <ModalForm
         open={Boolean(modalRenameOpen)}
         loading={modalRenameLoading}
-        disabled={
-          formNewFilenameText.length === 0
-          || formNewFilenameText === modalRenameOpen
-        }
+        disabled={modalRenameDisabled}
         handleClose={handleCloseRename}
         handleClick={handleRename}
         title={context.languagePicker("modal.form.rename.title")}

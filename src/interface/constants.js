@@ -83,6 +83,12 @@ String.prototype.timeFormat = function(formatString) {
 
 const GlobalContext = React.createContext({ });
 const ConstantContext = { };
+const reactionInterval = {
+  rapid: 150,
+  medium: 300,
+  slow: 450
+}
+
 const globalState = {
   INNOCENT: "innocent",
   ANONYMOUS: "anonymous",
@@ -103,6 +109,7 @@ const defaultSetting = {
 export default GlobalContext;
 export {
   ConstantContext,
+  reactionInterval,
   globalState,
   defaultClipboard,
   defaultSetting
