@@ -4,6 +4,55 @@ let path = require('path');
 let api = require('../api');
 let router = express.Router();
 
+router.post('/new', (req, res, next) => {
+  if (req.status.notAuthSuccess()) {
+    // -> EF_IT or abnormal request
+    next(api.errorStreamControl);
+    return;
+  }
+
+  // directory file is a special kind of file
+  const { type, folderName, filename } = req.body;
+  const folderPath = api.dataPath[
+    type === "private"
+      ? "privateDirFolderPath"
+      : "publicDirFolderPath"
+  ](folderName);
+  const filePath = path.join(folderPath, filename);
+
+  if (!fs.existsSync(folderPath)) {
+    // -> EF_RU: folder don't exist
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  if (fs.existsSync(filePath)) {
+    // -> EF_IC: new filename already exists
+    req.status.addExecStatus(api.Status.execErrCode.IdentifierConflict);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  try {
+    fs.mkdirSync(filePath);
+    fs.chmodSync(filePath, 0o777);
+  } catch (_) {
+    // -> EF_FME: fs.writeFileSync error
+    req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  // -> ES: no extra info
+  req.status.addExecStatus();
+  res.send({
+    ...req.status.generateReport(),
+    ...api.fileOperator.readFileInfo(folderPath, filename)
+  });
+  return;
+});
+
 router.post('/upload', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
     // -> EF_IT or abnormal request

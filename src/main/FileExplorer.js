@@ -138,8 +138,58 @@ const FileExplorer = (props) => {
   }, [ ]);
 
   const handleNewFolder = React.useCallback(() => {
-    // TODO: fill this
-  }, [ ]);
+    if (!isValidFilename(formNewFolderNameText)) {
+      toast.error(context.languagePicker("modal.toast.warning.illegalRename"));
+      return;
+    }
+
+    const newFolderName = `${formNewFolderNameText}`;
+    setModalNewLoading(true);
+    request(
+      "POST/file/new",
+      {
+        type: type,
+        folderName: folderName,
+        filename: newFolderName
+      },
+      { "": () => setModalNewLoading(false) }
+    )
+      .then((data) => {
+        setFilesList((filesList) => [
+          ...filesList,
+          {
+            name: newFolderName,
+            size: data.size,
+            time: data.time,
+            mtime: data.mtime,
+            type: data.type
+          }
+        ]);
+        if (!folderName.length) {
+          (type === "private" ? setPrivateFolders : setPublicFolders)(
+            (folders) => [
+              ...folders,
+              newFolderName
+            ]
+          )
+        };
+        handleCloseNew();
+        toast.success(
+          context
+            .languagePicker("modal.toast.success.new")
+            .format(newFolderName)
+        );
+      })
+      .finally(() => setModalNewLoading(false));
+  }, [
+    type,
+    context,
+    folderName,
+    formNewFolderNameText,
+    setPublicFolders,
+    setPrivateFolders,
+    handleCloseNew
+  ]);
 
   // uploading
   const uploadRef = React.useRef();
@@ -166,7 +216,7 @@ const FileExplorer = (props) => {
               mtime: data.mtime,
               type: data.type
             }
-          ])
+          ]);
           resolve();
         });
     }), {
@@ -371,7 +421,11 @@ const FileExplorer = (props) => {
                     <MenuItem onClick={() => setModalNewOpen(true)}>
                       {context.languagePicker("main.folder.addMenu.newFolder")}
                     </MenuItem>
-                    <MenuItem component="label" onClick={() => uploadRef.current.click()}>
+                    <MenuItem
+                      onClick={() => uploadRef.current.click()}
+                      component="label"
+                      disabled={folderName.length === 0}
+                    >
                       {context.languagePicker("main.folder.addMenu.newFile")}
                     </MenuItem>
                     <ListDivider />

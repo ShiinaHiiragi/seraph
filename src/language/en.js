@@ -61,6 +61,7 @@ const en = {
       success: {
         init: "Password is set successfully. Thanks for using Seraph.",
         logout: "Logged out successfully.",
+        new: "{0} has been created.",
         upload: "{0} has been uploaded to {1}.",
         rename: "{0} has been renamed to {1}.",
         delete: "{0} has been deleted."

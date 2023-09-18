@@ -61,6 +61,7 @@ const zhHans = {
       success: {
         init: "密码设置成功，感谢使用 SERAPH。",
         logout: "退出成功。",
+        new: "{0} 已创建。",
         upload: "{0} 已上传至 {1}。",
         rename: "{0} 已更名为 {1}。",
         delete: "{0} 已被删除。"
