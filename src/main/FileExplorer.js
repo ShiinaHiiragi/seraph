@@ -235,6 +235,10 @@ const FileExplorer = (props) => {
       return;
     }
 
+    if (filesList.filter((item) => item.name === targetFile.name).length) {
+      toast.error(context.languagePicker("modal.toast.exception.identifierConflict"))
+      return;
+    }
     reader.readAsDataURL(targetFile);
     reader.onload = (event) => {
       handleUploadFile(targetFile.name, event.target.result);
@@ -246,7 +250,7 @@ const FileExplorer = (props) => {
           .format(error.name, error.message)
       );
     }
-  }, [context, handleUploadFile]);
+  }, [context, filesList, handleUploadFile]);
 
   // states and function for rename
   const [modalRenameOpen, setModalRenameOpen] = React.useState(null);
