@@ -20,7 +20,8 @@ const en = {
         userAtHostname: "Username@Hostname",
         platform: "Platform",
         kernelVersion: "Kernel Version",
-        memoryAvailable: "Memory Available"
+        memoryAvailable: "Memory Available",
+        uptime: "Uptime"
       }
     },
     error: {

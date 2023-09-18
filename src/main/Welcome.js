@@ -1,5 +1,5 @@
 import React from "react";
-import { useTime } from "react-timer-hook";
+import { useTime, useStopwatch } from "react-timer-hook";
 import { styled } from "@mui/joy/styles";
 import Typography from "@mui/joy/Typography";
 import GlobalContext, { request } from "../interface/constants";
@@ -64,6 +64,12 @@ const ItemField = (props) => {
 const Welcome = () => {
   const context = React.useContext(GlobalContext);
   const { hours, minutes, seconds } = useTime();
+  const {
+    hours: upHours,
+    minutes: upMinutes,
+    seconds: upSeconds,
+    reset: upReset
+  } = useStopwatch();
 
   const [version, setVersion] = React.useState("");
   const [osInfo, setOSInfo] = React.useState({ });
@@ -71,7 +77,12 @@ const Welcome = () => {
 
   React.useEffect(() => {
     request("GET/info/version").then((data) => setVersion(data.version));
-    request("GET/info/os").then((data) => setOSInfo(data.os));
+    request("GET/info/os").then((data) => {
+      setOSInfo(data.os);
+      const stopwatchOffset = new Date();
+      stopwatchOffset.setSeconds(stopwatchOffset.getSeconds() + data.os.uptime);
+      upReset(stopwatchOffset);
+    });
   }, [ ])
 
   React.useEffect(() => {
@@ -118,6 +129,13 @@ const Welcome = () => {
           </ItemField>
           <ItemField item="kernelVersion">
             {osInfo.kernelVersion}
+          </ItemField>
+          <ItemField item="uptime">
+            {String(upHours).padStart(2, '0')}
+            {":"}
+            {String(upMinutes).padStart(2, '0')}
+            {":"}
+            {String(upSeconds).padStart(2, '0')}
           </ItemField>
           <ItemField item="memoryAvailable">
             {Number(memory).sizeFormat()}

@@ -20,7 +20,8 @@ const ja = {
         userAtHostname: "ユーザー@ホストネーム",
         platform: "プラットホーム",
         kernelVersion: "カーネルのバージョン",
-        memoryAvailable: "メモリ空き"
+        memoryAvailable: "メモリ空き",
+        uptime: "アップタイム"
       }
     },
     error: {

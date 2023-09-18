@@ -20,7 +20,8 @@ const zhHans = {
         userAtHostname: "用户名@主机名",
         platform: "平台",
         kernelVersion: "内核版本",
-        memoryAvailable: "可用内存"
+        memoryAvailable: "可用内存",
+        uptime: "正常运行时间"
       }
     },
     error: {
