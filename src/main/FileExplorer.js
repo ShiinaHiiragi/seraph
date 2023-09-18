@@ -366,6 +366,8 @@ const FileExplorer = (props) => {
             guard={guard}
             searcher={searcher}
             filesSorting={filesSorting}
+            setPublicFolders={setPublicFolders}
+            setPrivateFolders={setPrivateFolders}
           />
           <FileList
             type={type}
@@ -376,6 +378,8 @@ const FileExplorer = (props) => {
             setFilesList={setFilesList}
             guard={guard}
             searcher={searcher}
+            setPublicFolders={setPublicFolders}
+            setPrivateFolders={setPrivateFolders}
           />
         </React.Fragment>}
       {folderState < 0 &&

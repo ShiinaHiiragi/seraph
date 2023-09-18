@@ -17,7 +17,9 @@ export default function RowMenu(props) {
     filename,
     setModalRenameOpen,
     setFormNewNameText,
-    setFilesList
+    setFilesList,
+    setPublicFolders,
+    setPrivateFolders
   } = props;
   const context = React.useContext(GlobalContext);
 
@@ -37,6 +39,11 @@ export default function RowMenu(props) {
           setFilesList((filesList) => filesList.filter(
             (item) => item.name !== filename
           ));
+          if (!folderName.length) {
+            (type === "private" ? setPrivateFolders : setPublicFolders)(
+              (folders) => folders.filter((item) => item !== filename)
+            )
+          }
           resolve();
         })
     }), {
@@ -46,7 +53,12 @@ export default function RowMenu(props) {
         .format(filename),
       error: (data) => data
     })
-  }, [context, setFilesList])
+  }, [
+    context,
+    setFilesList,
+    setPublicFolders,
+    setPrivateFolders
+  ])
 
   return (
     <Dropdown>

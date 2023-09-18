@@ -21,7 +21,9 @@ export default function FileTable(props) {
     setFormNewNameText,
     setFilesList,
     guard,
-    searcher
+    searcher,
+    setPublicFolders,
+    setPrivateFolders
   } = props;
   const context = React.useContext(GlobalContext);
   const navigate = useNavigate();
@@ -208,6 +210,8 @@ export default function FileTable(props) {
                       setModalRenameOpen={setModalRenameOpen}
                       setFormNewNameText={setFormNewNameText}
                       setFilesList={setFilesList}
+                      setPublicFolders={setPublicFolders}
+                      setPrivateFolders={setPrivateFolders}
                     />
                   </Box>
                 </td>}

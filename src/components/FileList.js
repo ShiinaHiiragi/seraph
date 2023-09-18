@@ -20,7 +20,9 @@ export default function FileList(props) {
     setFormNewNameText,
     setFilesList,
     guard,
-    searcher
+    searcher,
+    setPublicFolders,
+    setPrivateFolders
   } = props;
   const context = React.useContext(GlobalContext);
   const navigate = useNavigate();
@@ -132,6 +134,8 @@ export default function FileList(props) {
                   setModalRenameOpen={setModalRenameOpen}
                   setFormNewNameText={setFormNewNameText}
                   setFilesList={setFilesList}
+                  setPublicFolders={setPublicFolders}
+                  setPrivateFolders={setPrivateFolders}
                 />}
             </ListItem>
             <ListDivider />
