@@ -60,6 +60,19 @@ const defaultConfig = {
 exports.defaultConfig = defaultConfig;
 
 const fileOperator = {
+  pathCombinator: (type, folderName, filename) => {
+    const folderPath = dataPath[
+      type === "private"
+        ? "privateDirFolderPath"
+        : "publicDirFolderPath"
+    ](folderName);
+    const filePath = path.join(folderPath, filename);
+    return {
+      folderPath: folderPath,
+      filePath: filePath
+    };
+  },
+
   probeDir: (dirPath) => {
     if (!fs.existsSync(dirPath)) {
       fs.mkdirSync(dirPath);
@@ -188,6 +201,18 @@ const configOperator = {
       metadata: {
         ...config.metadata,
         [key]: value
+      }
+    }));
+  },
+
+  setConfigClipboard: (path, permanant) => {
+    const { filePath } = fileOperator.pathCombinator(...path);
+    configOperator.setConfig((config) => ({
+      ...config,
+      clipboard: {
+        permanant: permanant,
+        directory: fs.lstatSync(filePath).isDirectory(),
+        path: path
       }
     }));
   },

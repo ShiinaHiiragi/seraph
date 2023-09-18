@@ -66,6 +66,8 @@ const en = {
         new: "{0} has been created.",
         upload: "{0} has been uploaded to {1}.",
         rename: "{0} has been renamed to {1}.",
+        copy: "{0} has been copied in clipboard.",
+        cut: "{0} has been cut to clipboard.",
         delete: "{0} has been deleted."
       },
       warning: {

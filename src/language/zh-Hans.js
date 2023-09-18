@@ -66,6 +66,8 @@ const zhHans = {
         new: "{0} 已创建。",
         upload: "{0} 已上传至 {1}。",
         rename: "{0} 已更名为 {1}。",
+        copy: "{0} 已复制到剪贴板。",
+        cut: "{0} 已剪切到剪贴板。",
         delete: "{0} 已被删除。"
       },
       warning: {

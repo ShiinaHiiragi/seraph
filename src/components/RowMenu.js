@@ -29,12 +29,48 @@ export default function RowMenu(props) {
   }, [setFormNewFilenameText, setModalRenameOpen, filename]);
 
   const handleCopy = React.useCallback(() => {
-    // TODO: fill this
-  }, [ ]);
+    toast.promise(new Promise((resolve, reject) => {
+      request("POST/file/copy", {
+        type: type,
+        folderName: folderName,
+        filename: filename
+      }, undefined, reject)
+        .then((data) => {
+          resolve();
+        })
+    }), {
+      loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
+      success: context.languagePicker("modal.toast.success.copy").format(filename),
+      error: (data) => data
+    })
+  }, [
+    context,
+    type,
+    filename,
+    folderName
+  ]);
 
   const handleCut = React.useCallback(() => {
-    // TODO: fill this
-  }, [ ]);
+    toast.promise(new Promise((resolve, reject) => {
+      request("POST/file/cut", {
+        type: type,
+        folderName: folderName,
+        filename: filename
+      }, undefined, reject)
+        .then((data) => {
+          resolve();
+        })
+    }), {
+      loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
+      success: context.languagePicker("modal.toast.success.cut").format(filename),
+      error: (data) => data
+    })
+  }, [
+    context,
+    type,
+    filename,
+    folderName
+  ]);
 
   const handleDelete = React.useCallback((type, folderName, filename) => {
     toast.promise(new Promise((resolve, reject) => {

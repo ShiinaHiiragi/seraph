@@ -13,12 +13,7 @@ router.post('/new', (req, res, next) => {
 
   // directory file is a special kind of file
   const { type, folderName, filename } = req.body;
-  const folderPath = api.dataPath[
-    type === "private"
-      ? "privateDirFolderPath"
-      : "publicDirFolderPath"
-  ](folderName);
-  const filePath = path.join(folderPath, filename);
+  const { folderPath, filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
 
   if (!fs.existsSync(folderPath)) {
     // -> EF_RU: folder don't exist
@@ -61,12 +56,7 @@ router.post('/upload', (req, res, next) => {
   }
 
   const { type, folderName, filename, base } = req.body;
-  const folderPath = api.dataPath[
-    type === "private"
-      ? "privateDirFolderPath"
-      : "publicDirFolderPath"
-  ](folderName);
-  const filePath = path.join(folderPath, filename);
+  const { folderPath, filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
 
   if (folderName.length === 0) {
     // -> abnormal request
@@ -116,12 +106,7 @@ router.post('/rename', (req, res, next) => {
   }
 
   const { type, folderName, filename, newFilename } = req.body;
-  const folderPath = api.dataPath[
-    type === "private"
-      ? "privateDirFolderPath"
-      : "publicDirFolderPath"
-  ](folderName);
-  const filePath = path.join(folderPath, filename);
+  const { folderPath, filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
   const newFilePath = path.join(folderPath, newFilename);
 
   if (!fs.existsSync(filePath)) {
@@ -158,11 +143,60 @@ router.post('/rename', (req, res, next) => {
 });
 
 router.post('/copy', (req, res, next) => {
-  // TODO: fill this
+  console.log(req.body);
+  if (req.status.notAuthSuccess()) {
+    // -> EF_IT or abnormal request
+    next(api.errorStreamControl);
+    return;
+  }
+
+  const { type, folderName, filename } = req.body;
+  const { filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
+
+  if (!fs.existsSync(filePath)) {
+    // -> EF_RU: folder don't exist
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  api.configOperator.setConfigClipboard([type, folderName, filename], true);
+
+  // -> ES: return clipboard info
+  req.status.addExecStatus();
+  res.send({
+    ...req.status.generateReport(),
+    ...api.configOperator.config.clipboard
+  });
+  return;
 });
 
 router.post('/cut', (req, res, next) => {
-  // TODO: fill this
+  if (req.status.notAuthSuccess()) {
+    // -> EF_IT or abnormal request
+    next(api.errorStreamControl);
+    return;
+  }
+
+  const { type, folderName, filename } = req.body;
+  const { filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
+
+  if (!fs.existsSync(filePath)) {
+    // -> EF_RU: folder don't exist
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  api.configOperator.setConfigClipboard([type, folderName, filename], false);
+
+  // -> ES: return clipboard info
+  req.status.addExecStatus();
+  res.send({
+    ...req.status.generateReport(),
+    ...api.configOperator.config.clipboard
+  });
+  return;
 });
 
 router.post('/delete', (req, res, next) => {
@@ -173,12 +207,7 @@ router.post('/delete', (req, res, next) => {
   }
 
   const { type, folderName, filename } = req.body;
-  const folderPath = api.dataPath[
-    type === "private"
-      ? "privateDirFolderPath"
-      : "publicDirFolderPath"
-  ](folderName);
-  const filePath = path.join(folderPath, filename);
+  const { filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
 
   if (!fs.existsSync(filePath)) {
     // -> EF_RU: folder don't exist
