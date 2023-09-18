@@ -15,6 +15,14 @@ const ja = {
     }
   },
   main: {
+    welcome: {
+      osInfo: {
+        userAtHostname: "ユーザー@ホストネーム",
+        platform: "プラットホーム",
+        kernelVersion: "カーネルのバージョン",
+        memoryAvailable: "メモリ空き"
+      }
+    },
     error: {
       title: "404",
       caption: "リクエストされたページが存在しません。"

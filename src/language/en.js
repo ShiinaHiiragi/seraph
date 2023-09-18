@@ -15,6 +15,14 @@ const en = {
     }
   },
   main: {
+    welcome: {
+      osInfo: {
+        userAtHostname: "Username@Hostname",
+        platform: "Platform",
+        kernelVersion: "Kernel Version",
+        memoryAvailable: "Memory Available"
+      }
+    },
     error: {
       title: "404",
       caption: "The requested page does not exist."

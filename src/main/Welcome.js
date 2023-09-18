@@ -13,19 +13,53 @@ const Center = styled('div')(({ theme }) => ({
   justifyContent: "center",
   alignItems: "flex-start",
   [theme.breakpoints.only("xs")]: {
-    padding: theme.spacing(0, 0, 8)
+    padding: theme.spacing(0, 0)
   },
   [theme.breakpoints.only("sm")]: {
-    padding: theme.spacing(0, 4, 8)
+    padding: theme.spacing(0, 4)
   },
   [theme.breakpoints.up("md")]: {
-    padding: theme.spacing(0, 8, 8)
+    padding: theme.spacing(0, 8)
   }
 }));
 
 const InfoField = styled('div')(({ theme }) => ({
-
+  display: "flex",
+  flexDirection: "column"
 }));
+
+const InfoItem = styled('div')(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "flex-start",
+  paddingBottom: theme.spacing(0.5)
+}));
+
+const ItemField = (props) => {
+  const { item, children } = props;
+  const context = React.useContext(GlobalContext);
+
+  return (
+    <InfoItem style={{ mb: 0.5 }}>
+      <Typography
+        level="body-sm"
+        color="neutral"
+        fontWeight={500}
+        sx={{ minWidth: "3rem" }}
+      >
+        {context.languagePicker(`main.welcome.osInfo.${item}`)}
+      </Typography>
+      <Typography
+        level="body-sm"
+        color="neutral"
+        fontWeight={400}
+        sx={{ flexGrow: 1 }}
+      >
+        {children}
+      </Typography>
+    </InfoItem>
+  )
+}
 
 const Welcome = () => {
   const context = React.useContext(GlobalContext);
@@ -49,7 +83,7 @@ const Welcome = () => {
       <Center className="CenterField">
         <Typography
           level="h2"
-          color="neutral"
+          color="secondary"
           fontWeight={600}
           sx={{ pb: 0.5, letterSpacing: "0.02em" }}
         >
@@ -66,7 +100,7 @@ const Welcome = () => {
         <Typography
           level="body-lg"
           color="neutral"
-          fontWeight={400}
+          fontWeight={500}
           sx={{ pb: 2 }}
         >
           {String(hours).padStart(2, '0')}
@@ -75,36 +109,22 @@ const Welcome = () => {
           {":"}
           {String(seconds).padStart(2, '0')}
         </Typography>
-        <Typography
-          level="body-sm"
-          color="neutral"
-          fontWeight={400}
-        >
-          {osInfo.userAtHostname}
-        </Typography>
-        <Typography
-          level="body-sm"
-          color="neutral"
-          fontWeight={400}
-        >
-          {osInfo.platform}
-        </Typography>
-        <Typography
-          level="body-sm"
-          color="neutral"
-          fontWeight={400}
-        >
-          {osInfo.kernelVersion}
-        </Typography>
-        <Typography
-          level="body-sm"
-          color="neutral"
-          fontWeight={400}
-        >
-          {Number(memory).sizeFormat()}
-          {" / "}
-          {Number(osInfo.memory).sizeFormat()}
-        </Typography>
+        <InfoField>
+          <ItemField item="userAtHostname">
+            {osInfo.userAtHostname}
+          </ItemField>
+          <ItemField item="platform">
+            {osInfo.platform}
+          </ItemField>
+          <ItemField item="kernelVersion">
+            {osInfo.kernelVersion}
+          </ItemField>
+          <ItemField item="memoryAvailable">
+            {Number(memory).sizeFormat()}
+            {" / "}
+            {Number(osInfo.memory).sizeFormat()}
+          </ItemField>
+        </InfoField>
       </Center>
     </RouteField>
   )

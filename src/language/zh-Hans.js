@@ -15,6 +15,14 @@ const zhHans = {
     }
   },
   main: {
+    welcome: {
+      osInfo: {
+        userAtHostname: "用户名@主机名",
+        platform: "平台",
+        kernelVersion: "内核版本",
+        memoryAvailable: "可用内存"
+      }
+    },
     error: {
       title: "404",
       caption: "请求的页面不存在。"
