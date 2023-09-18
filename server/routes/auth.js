@@ -30,6 +30,7 @@ router.get('/meta', (req, res, next) => {
       ...req.status.generateReport(),
       public: publicFolder,
       private: privateFolder,
+      clipboard: api.configOperator.config.clipboard,
       setting: api.configOperator.config.setting
     })
     return;
@@ -53,6 +54,7 @@ router.post('/init', (req, res, next) => {
         ...req.status.generateReport(),
         public: publicFolder,
         private: privateFolder,
+        clipboard: api.configOperator.config.clipboard,
         setting: api.configOperator.config.setting
       });
       return;

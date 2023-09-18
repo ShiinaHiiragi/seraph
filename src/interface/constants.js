@@ -88,6 +88,11 @@ const globalState = {
   ANONYMOUS: "anonymous",
   AUTHORITY: "authority"
 };
+
+const defaultClipboard = {
+  permanant: null,
+  path: null
+};
 const defaultSetting = {
   meta: {
     language: "en"
@@ -98,6 +103,7 @@ export default GlobalContext;
 export {
   ConstantContext,
   globalState,
+  defaultClipboard,
   defaultSetting
 };
 

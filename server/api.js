@@ -46,6 +46,10 @@ const defaultConfig = {
   metadata: {
     password: ""
   },
+  clipboard: {
+    permanant: null,
+    path: null
+  },
   setting: {
     meta: {
       language: "en",

@@ -46,6 +46,7 @@ const Header = (props) => {
     setGlobalSwitch,
     setDrawerOpen,
     setPrivateFolders,
+    setClipboard,
     setSettingPair
   } = props;
   const context = React.useContext(GlobalContext);
@@ -81,6 +82,7 @@ const Header = (props) => {
     )
       .then((data) => {
         setPrivateFolders(data.private);
+        setClipboard(data.clipboard);
         setGlobalSwitch(globalState.AUTHORITY);
         handleCloseLogin();
         toast(context.languagePicker("modal.toast.plain.login"));
@@ -90,6 +92,7 @@ const Header = (props) => {
     context,
     setGlobalSwitch,
     setPrivateFolders,
+    setClipboard,
     formPasswordText,
     handleCloseLogin
   ]);

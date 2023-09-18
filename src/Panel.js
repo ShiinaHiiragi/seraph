@@ -26,6 +26,7 @@ import GlobalTheme from "./interface/theme";
 import GlobalContext, {
   ConstantContext,
   globalState,
+  defaultClipboard,
   defaultSetting,
   request,
   toastTheme
@@ -109,6 +110,7 @@ const Panel = () => {
 
   // global states
   const [globalSwitch, setGlobalSwitch] = React.useState(globalState.INNOCENT);
+  const [clipboard, setClipboard] = React.useState(defaultClipboard);
   const [setting, setSetting] = React.useState(defaultSetting);
   const [publicFolders, setPublicFolders] = React.useState([]);
   const [privateFolders, setPrivateFolders] = React.useState([]);
@@ -196,6 +198,7 @@ const Panel = () => {
                 setGlobalSwitch={setGlobalSwitch}
                 setDrawerOpen={setDrawerOpen}
                 setPrivateFolders={setPrivateFolders}
+                setClipboard={setClipboard}
                 setSettingPair={setSettingPair}
               />
             </HeaderField>
@@ -253,6 +256,7 @@ const Panel = () => {
             setFirstTick={setFirstTick}
             setGlobalSwitch={setGlobalSwitch}
             setting={setting}
+            setClipboard={setClipboard}
             setSetting={setSetting}
             setPublicFolders={setPublicFolders}
             setPrivateFolders={setPrivateFolders}

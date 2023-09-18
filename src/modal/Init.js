@@ -40,6 +40,7 @@ export default function Init(props) {
     setFirstTick,
     setGlobalSwitch,
     setting,
+    setClipboard,
     setSetting,
     setPublicFolders,
     setPrivateFolders,
@@ -61,6 +62,7 @@ export default function Init(props) {
         setFirstTick(true);
         setPublicFolders(data.public);
         setPrivateFolders(data.private);
+        setClipboard(data.clipboard);
         setSetting(data.setting);
         setGlobalSwitch(globalState.AUTHORITY);
 
@@ -77,6 +79,7 @@ export default function Init(props) {
     setFirstTick,
     setPublicFolders,
     setPrivateFolders,
+    setClipboard,
     setSetting
   ]);
 
