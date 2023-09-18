@@ -20,7 +20,9 @@ import ModalForm from "../modal/Form";
 
 const FileExplorer = (props) => {
   const {
-    type
+    type,
+    setPublicFolders,
+    setPrivateFolders
   } = props;
   const { "*": rawFolderName } = useParams();
   const context = React.useContext(GlobalContext);
@@ -200,7 +202,7 @@ const FileExplorer = (props) => {
         type: type,
         folderName: folderName,
         filename: originFilename,
-        newFilename: formNewNameText
+        newFilename: newFilename
       },
       { "": () => setModalRenameLoading(false) }
     )
@@ -209,10 +211,15 @@ const FileExplorer = (props) => {
           item.name === originFilename
             ? {
               ...item,
-              name: formNewNameText,
+              name: newFilename,
               type: data.type
             } : item
         ));
+        (type === "private" ? setPrivateFolders : setPublicFolders)(
+          (folders) => folders.map((item) =>
+            item === originFilename ? newFilename : item
+          )
+        )
         handleCloseRename();
         toast.success(
           context
@@ -227,6 +234,8 @@ const FileExplorer = (props) => {
     folderName,
     modalRenameOpen,
     formNewNameText,
+    setPublicFolders,
+    setPrivateFolders,
     handleCloseRename
   ]);
 

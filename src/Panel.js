@@ -221,11 +221,23 @@ const Panel = () => {
                   <Route exact path="/" element={<Welcome />} />
                   <Route
                     path="/public/*"
-                    element={<FileExplorer type="public" />}
+                    element={
+                      <FileExplorer
+                        type="public"
+                        setPublicFolders={setPublicFolders}
+                        setPrivateFolders={setPrivateFolders}
+                      />
+                    }
                   />
                   <Route
                     path="/private/*"
-                    element={<FileExplorer type="private" />}
+                    element={
+                      <FileExplorer
+                        type="private"
+                        setPublicFolders={setPublicFolders}
+                        setPrivateFolders={setPrivateFolders}
+                      />
+                    }
                   />
                   <Route path="/links" element={<Links />} />
                   <Route path="/milkdown" element={<Milkdown />} />
