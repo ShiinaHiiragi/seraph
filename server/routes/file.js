@@ -157,6 +157,14 @@ router.post('/rename', (req, res, next) => {
   return;
 });
 
+router.post('/copy', (req, res, next) => {
+  // TODO: fill this
+});
+
+router.post('/cut', (req, res, next) => {
+  // TODO: fill this
+});
+
 router.post('/delete', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
     // -> EF_IT or abnormal request
