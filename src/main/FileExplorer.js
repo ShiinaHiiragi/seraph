@@ -8,6 +8,7 @@ import Box from "@mui/joy/Box";
 import FormControl from "@mui/joy/FormControl";
 import Select from "@mui/joy/Select";
 import Option from "@mui/joy/Option";
+import Button from '@mui/joy/Button';
 import MenuButton from '@mui/joy/MenuButton';
 import Dropdown from '@mui/joy/Dropdown';
 import Menu from '@mui/joy/Menu';
@@ -128,7 +129,7 @@ const FileExplorer = (props) => {
   ]), [filter]);
 
   // folder menu
-  const [menuOpen, setMenuOpen] = React.useState(false);
+  const uploadRef = React.useRef();
 
   // uploading
   const handleUploadFile = React.useCallback((filename, filebase) => {
@@ -348,13 +349,10 @@ const FileExplorer = (props) => {
                     variant="solid"
                     startDecorator={<AddOutlinedIcon />}
                     size="sm"
-                    onClick={() => setMenuOpen(true)}
                   >
                     {context.languagePicker("main.folder.viewRegulate.add")}
                   </MenuButton>
                   <Menu
-                    open={menuOpen}
-                    onMouseLeave={() => setMenuOpen(false)}
                     size="sm"
                     placement="bottom-end"
                     sx={{ userSelect: "none" }}
@@ -362,18 +360,8 @@ const FileExplorer = (props) => {
                     <MenuItem>
                       {context.languagePicker("main.folder.addMenu.newFolder")}
                     </MenuItem>
-                    <MenuItem component="label">
+                    <MenuItem component="label" onClick={() => uploadRef.current.click()}>
                       {context.languagePicker("main.folder.addMenu.newFile")}
-                      <input
-                        id="upload"
-                        hidden
-                        type="file"
-                        onChange={(event) => {
-                          console.log(event);
-                          handleProprocessFile(event);
-                          event.target.value = null;
-                        }}
-                      />
                     </MenuItem>
                     <ListDivider />
                     <MenuItem>
@@ -437,6 +425,17 @@ const FileExplorer = (props) => {
           onChange={(event) => setFormNewNameText(event.target.value)}
         />
       </ModalForm>
+      <label role="button" ref={uploadRef}>
+        <input
+          hidden
+          type="file"
+          onChange={(event) => {
+            console.log(event);
+            handleProprocessFile(event);
+            event.target.value = null;
+          }}
+        />
+      </label>
     </RouteField>
   )
 }
