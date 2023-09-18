@@ -181,7 +181,9 @@ export default function FileTable(props) {
                 </td>
                 <td>
                   <Typography level="body-xs">
-                    {item.size.sizeFormat()}
+                    {item.type === "directory"
+                      ? "—"
+                      : item.size.sizeFormat()}
                   </Typography>
                 </td>
                 <td>
