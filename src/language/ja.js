@@ -45,7 +45,7 @@ const ja = {
         add: "追加"
       },
       addMenu: {
-        newFolder: "新規ディレクトリ",
+        newFolder: "新たなディレクトリ",
         newFile: "ファイルのアップロード",
         paste: "ペースト"
       }
@@ -94,6 +94,11 @@ const ja = {
         title: "ログイン",
         caption: "フルアクセスを取得するにはパスワードを入力してください。",
         placeholder: "パスワード"
+      },
+      new:{
+        title: "新たなディレクトリを作成する",
+        caption: "ネーミング制限はサーバーが配置されているプラットフォームによって違いがある。",
+        placeholder: "新たなディレクトリ名"
       },
       rename: {
         title: "リネームする",

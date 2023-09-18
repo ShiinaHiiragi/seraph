@@ -95,6 +95,11 @@ const zhHans = {
         caption: "请输入密码以获得完全访问权限。",
         placeholder: "密码"
       },
+      new:{
+        title: "创建新目录",
+        caption: "命名限制取决于服务器所在平台。",
+        placeholder: "新目录名"
+      },
       rename: {
         title: "重命名",
         caption: "命名限制取决于服务器所在平台，尽量不要修改扩展名。",

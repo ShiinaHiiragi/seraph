@@ -8,7 +8,6 @@ import Box from "@mui/joy/Box";
 import FormControl from "@mui/joy/FormControl";
 import Select from "@mui/joy/Select";
 import Option from "@mui/joy/Option";
-import Button from '@mui/joy/Button';
 import MenuButton from '@mui/joy/MenuButton';
 import Dropdown from '@mui/joy/Dropdown';
 import Menu from '@mui/joy/Menu';
@@ -128,10 +127,22 @@ const FileExplorer = (props) => {
     filter
   ]), [filter]);
 
-  // folder menu
-  const uploadRef = React.useRef();
+  // new folder
+  const [modalNewOpen, setModalNewOpen] = React.useState(null);
+  const [formNewFolderText, setFormNewFolderText] = React.useState("");
+  const [modalNewLoading, setModalNewLoading] = React.useState(false);
+  const handleCloseNew = React.useCallback(() => {
+    setModalNewOpen(false);
+    setModalNewLoading(false);
+    setFormNewFolderText("");
+  }, [ ]);
+
+  const handleNewFolder = React.useCallback(() => {
+    // TODO: fill this
+  }, [ ]);
 
   // uploading
+  const uploadRef = React.useRef();
   const handleUploadFile = React.useCallback((filename, filebase) => {
     toast.promise(() => new Promise((resolve, reject) => {
       request(
@@ -357,7 +368,7 @@ const FileExplorer = (props) => {
                     placement="bottom-end"
                     sx={{ userSelect: "none" }}
                   >
-                    <MenuItem>
+                    <MenuItem onClick={() => setModalNewOpen(true)}>
                       {context.languagePicker("main.folder.addMenu.newFolder")}
                     </MenuItem>
                     <MenuItem component="label" onClick={() => uploadRef.current.click()}>
@@ -423,6 +434,24 @@ const FileExplorer = (props) => {
           placeholder={context.languagePicker("modal.form.rename.placeholder")}
           value={formNewNameText}
           onChange={(event) => setFormNewNameText(event.target.value)}
+        />
+      </ModalForm>
+      <ModalForm
+        open={modalNewOpen}
+        loading={modalNewLoading}
+        disabled={formNewFolderText.length === 0}
+        handleClose={handleCloseNew}
+        handleClick={handleNewFolder}
+        title={context.languagePicker("modal.form.new.title")}
+        caption={context.languagePicker("modal.form.new.caption")}
+        button={context.languagePicker("universal.button.submit")}
+      >
+        <Input
+          autoFocus
+          autoComplete="off"
+          placeholder={context.languagePicker("modal.form.new.placeholder")}
+          value={formNewFolderText}
+          onChange={(event) => setFormNewFolderText(event.target.value)}
         />
       </ModalForm>
       <label role="button" ref={uploadRef}>
