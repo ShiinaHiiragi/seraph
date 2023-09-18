@@ -138,9 +138,9 @@ const Welcome = () => {
             {String(upSeconds).padStart(2, '0')}
           </ItemField>
           <ItemField item="memoryAvailable">
-            {Number(memory).sizeFormat()}
+            {Number(memory).sizeFormat(2)}
             {" / "}
-            {Number(osInfo.memory).sizeFormat()}
+            {Number(osInfo.memory).sizeFormat(2)}
           </ItemField>
         </InfoField>
       </Center>

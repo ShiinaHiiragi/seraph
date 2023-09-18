@@ -20,7 +20,7 @@ String.prototype.format = function () {
 };
 
 // eslint-disable-next-line
-Number.prototype.sizeFormat = function() {
+Number.prototype.sizeFormat = function(precision=1) {
   let formatted = this;
   let index = 0;
   const suffix = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB'];
@@ -28,7 +28,11 @@ Number.prototype.sizeFormat = function() {
     index += 1;
     formatted /= 1024;
   }
-  return formatted.toFixed(1).replace(/\.0$/, '') + " " + suffix[index];
+  const numberPart = arguments.length === 0
+    ? formatted.toFixed(1).replace(/\.0$/, '')
+    : formatted.toFixed(precision);
+
+  return numberPart + " " + suffix[index]
 }
 
 // eslint-disable-next-line
