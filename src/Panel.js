@@ -229,6 +229,7 @@ const Panel = () => {
                     element={
                       <FileExplorer
                         type="public"
+                        clipboard={clipboard}
                         setClipboard={setClipboard}
                         setPublicFolders={setPublicFolders}
                         setPrivateFolders={setPrivateFolders}
@@ -240,6 +241,7 @@ const Panel = () => {
                     element={
                       <FileExplorer
                         type="private"
+                        clipboard={clipboard}
                         setClipboard={setClipboard}
                         setPublicFolders={setPublicFolders}
                         setPrivateFolders={setPrivateFolders}

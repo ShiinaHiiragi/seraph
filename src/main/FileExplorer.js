@@ -25,6 +25,7 @@ import ModalForm from "../modal/Form";
 const FileExplorer = (props) => {
   const {
     type,
+    clipboard,
     setClipboard,
     setPublicFolders,
     setPrivateFolders
@@ -265,6 +266,11 @@ const FileExplorer = (props) => {
     }
   }, [context, filesList, handleUploadFile]);
 
+  // paste
+  const handlePaste = React.useCallback(() => {
+    // TODO: fill this
+  }, [ ]);
+
   // states and function for rename
   const [modalRenameOpen, setModalRenameOpen] = React.useState(null);
   const [modalRenameLoading, setModalRenameLoading] = React.useState(false);
@@ -458,7 +464,13 @@ const FileExplorer = (props) => {
                       {context.languagePicker("main.folder.addMenu.newFile")}
                     </MenuItem>
                     <ListDivider />
-                    <MenuItem>
+                    <MenuItem
+                      onClick={handlePaste}
+                      disabled={
+                        (folderName.length === 0 && clipboard.directory === false)
+                        || clipboard.path === null
+                      }
+                    >
                       {context.languagePicker("main.folder.addMenu.paste")}
                     </MenuItem>
                   </Menu>
