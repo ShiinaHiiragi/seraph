@@ -334,12 +334,8 @@ const osInfo = () => ({
   hostname: os.hostname(),
   platform: os.platform() + ' ' + os.release() + ' ' + os.arch(),
   kernelVersion: os.version(),
-  memory: {
-    frees: os.freemem(),
-    total: os.totalmem()
-  },
-  uptime: os.uptime(),
-  userInfo: os.userInfo()
+  memory: os.totalmem(),
+  uptime: os.uptime()
 });
 
 exports.version = version;
