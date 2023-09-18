@@ -91,6 +91,7 @@ const globalState = {
 
 const defaultClipboard = {
   permanant: null,
+  directory: null,
   path: null
 };
 const defaultSetting = {

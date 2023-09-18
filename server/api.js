@@ -48,6 +48,7 @@ const defaultConfig = {
   },
   clipboard: {
     permanant: null,
+    directory: null,
     path: null
   },
   setting: {
