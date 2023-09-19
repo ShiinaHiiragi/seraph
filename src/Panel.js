@@ -191,7 +191,7 @@ const Panel = () => {
       <Root className="Root">
         <CssVarsProvider
           disableTransitionOnChange
-          theme={GlobalTheme}
+          theme={GlobalTheme(setting.meta.language)}
         >
           <CssBaseline />
           <BrowserRouter>

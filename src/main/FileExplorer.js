@@ -500,44 +500,45 @@ const FileExplorer = (props) => {
                   </Option>))}
                 </Select>
               </FormControl>
-              <FormControl size="sm" sx={{ justifyContent: "flex-end" }}>
-                <Dropdown>
-                  <MenuButton
-                    color="primary"
-                    variant="solid"
-                    startDecorator={<AddOutlinedIcon />}
-                    size="sm"
-                  >
-                    {context.languagePicker("main.folder.viewRegulate.add")}
-                  </MenuButton>
-                  <Menu
-                    size="sm"
-                    placement="bottom-end"
-                    sx={{ userSelect: "none" }}
-                  >
-                    <MenuItem onClick={() => setModalNewOpen(true)}>
-                      {context.languagePicker("main.folder.addMenu.newFolder")}
-                    </MenuItem>
-                    <MenuItem
-                      onClick={() => uploadRef.current.click()}
-                      component="label"
-                      disabled={folderName.length === 0}
+              {context.isAuthority &&
+                <FormControl size="sm" sx={{ justifyContent: "flex-end" }}>
+                  <Dropdown>
+                    <MenuButton
+                      color="primary"
+                      variant="solid"
+                      startDecorator={<AddOutlinedIcon />}
+                      size="sm"
                     >
-                      {context.languagePicker("main.folder.addMenu.newFile")}
-                    </MenuItem>
-                    <ListDivider />
-                    <MenuItem
-                      onClick={handlePaste}
-                      disabled={
-                        (folderName.length === 0 && clipboard.directory === false)
-                        || clipboard.path === null
-                      }
+                      {context.languagePicker("main.folder.viewRegulate.add")}
+                    </MenuButton>
+                    <Menu
+                      size="sm"
+                      placement="bottom-end"
+                      sx={{ userSelect: "none" }}
                     >
-                      {context.languagePicker("main.folder.addMenu.paste")}
-                    </MenuItem>
-                  </Menu>
-                </Dropdown>
-              </FormControl>
+                      <MenuItem onClick={() => setModalNewOpen(true)}>
+                        {context.languagePicker("main.folder.addMenu.newFolder")}
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => uploadRef.current.click()}
+                        component="label"
+                        disabled={folderName.length === 0}
+                      >
+                        {context.languagePicker("main.folder.addMenu.newFile")}
+                      </MenuItem>
+                      <ListDivider />
+                      <MenuItem
+                        onClick={handlePaste}
+                        disabled={
+                          (folderName.length === 0 && clipboard.directory === false)
+                          || clipboard.path === null
+                        }
+                      >
+                        {context.languagePicker("main.folder.addMenu.paste")}
+                      </MenuItem>
+                    </Menu>
+                  </Dropdown>
+                </FormControl>}
             </Box>
           </Box>
           <FileTable

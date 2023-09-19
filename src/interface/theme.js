@@ -1,6 +1,19 @@
 import { extendTheme } from "@mui/joy/styles";
 
-const GlobalTheme = extendTheme({
+const localeCombinator = (language) => {
+  const fontMap = {
+    "zh-Hans": ["'Noto Sans SC'"],
+    ja: ["'Noto Sans JP'"]
+  };
+  return [
+    "Inter",
+    ...(fontMap[language] ?? []),
+    "var(--joy-fontFamily-fallback)",
+    "sans-serif"
+  ].join(", ");
+};
+
+const GlobalTheme = (language) => extendTheme({
   breakpoints: {
     values: {
       xs: 0,
@@ -14,7 +27,11 @@ const GlobalTheme = extendTheme({
     h3: {
       letterSpacing: "0.02em"
     }
-  }
+  },
+  fontFamily: {
+    display: localeCombinator(language),
+    body: localeCombinator(language),
+  },
 });
 
 export default GlobalTheme;
