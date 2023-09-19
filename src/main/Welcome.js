@@ -73,12 +73,14 @@ const Welcome = () => {
 
   const [version, setVersion] = React.useState("");
   const [osInfo, setOSInfo] = React.useState({ });
-  const [memory, setMemory] = React.useState(1);
+  const [uptime, setUptime] = React.useState(0);
+  const [memory, setMemory] = React.useState(0);
 
   React.useEffect(() => {
     if (context.secondTick && context.isAuthority) {
       request("GET/info/os").then((data) => {
         setOSInfo(data.os);
+        setUptime(Math.trunc(data.os.uptime / (60 * 60)));
         const stopwatchOffset = new Date();
         stopwatchOffset.setSeconds(stopwatchOffset.getSeconds() + data.os.uptime);
         upReset(stopwatchOffset);
@@ -96,7 +98,8 @@ const Welcome = () => {
 
   React.useEffect(() => {
     request("GET/info/free").then((data) => setMemory(data.free));
-  }, [minutes])
+  }, [minutes]);
+  React.useEffect(() => setUptime((uptime) => uptime + 1), [upHours]);
 
   return (
     <RouteField display>
@@ -108,14 +111,15 @@ const Welcome = () => {
           sx={{ pb: 0.5, letterSpacing: "0.02em" }}
         >
           {context.languagePicker("nav.title")}
-          <Typography
-            component="span"
-            level="body-md"
-            color="neutral"
-            fontWeight={400}
-            children={"v" + version}
-            sx={{ pl: 1 }}
-          />
+          {version.length &&
+            <Typography
+              component="span"
+              level="body-md"
+              color="neutral"
+              fontWeight={400}
+              children={"v" + version}
+              sx={{ pl: 1 }}
+            />}
         </Typography>
         <Typography
           level="body-lg"
@@ -141,7 +145,7 @@ const Welcome = () => {
               {osInfo.kernelVersion}
             </ItemField>
             <ItemField item="uptime">
-              {String(upHours).padStart(2, '0')}
+              {String(uptime).padStart(2, '0')}
               {":"}
               {String(upMinutes).padStart(2, '0')}
               {":"}
