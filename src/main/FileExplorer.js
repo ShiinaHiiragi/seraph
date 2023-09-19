@@ -254,6 +254,11 @@ const FileExplorer = (props) => {
       return;
     }
 
+    if (!isValidFilename(targetFile.name)) {
+      toast.error(context.languagePicker("modal.toast.warning.illegalRename"));
+      return;
+    }
+
     if (filesList.filter((item) => item.name === targetFile.name).length) {
       toast.error(context.languagePicker("modal.toast.exception.identifierConflict"))
       return;

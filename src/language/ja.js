@@ -82,7 +82,7 @@ const ja = {
       },
       warning: {
         invalidToken: "トークンが無効又は期限切れになれ、ページは数秒内にリフレッシュされることになっています。",
-        illegalRename: "新たなファイル名の事前チェックは失敗。"
+        illegalRename: "ファイル名の事前チェックは失敗。"
       },
       exception: {
         incorrectPassword: "パスワードが間違っています。",
