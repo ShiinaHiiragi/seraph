@@ -3,7 +3,10 @@ import { extendTheme } from "@mui/joy/styles";
 const localeCombinator = (language) => {
   const fontMap = {
     "zh-Hans": ["'Noto Sans SC'"],
-    ja: ["'Noto Sans JP'"]
+    ja: [
+      "'Noto Sans JP'",
+      "'Noto Sans SC'"
+    ]
   };
   return [
     "Inter",
