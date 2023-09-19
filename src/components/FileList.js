@@ -114,7 +114,9 @@ export default function FileList(props) {
                     }}
                   >
                     <Typography level="body-xs" component="span">
-                      {item.size.sizeFormat()}
+                      {item.type === "directory"
+                        ? "—"
+                        : item.size.sizeFormat()}
                     </Typography>
                     <Typography level="body-xs">&bull;</Typography>
                     <Typography level="body-xs">

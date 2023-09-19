@@ -610,7 +610,6 @@ const FileExplorer = (props) => {
           hidden
           type="file"
           onChange={(event) => {
-            console.log(event);
             handleProprocessFile(event);
             event.target.value = null;
           }}
