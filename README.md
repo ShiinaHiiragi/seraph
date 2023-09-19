@@ -55,9 +55,9 @@
 ## Memo
 
 1. Intro
-    - time
     - todo
 2. File Explorer
+    - unzip
     - edit in milkdown
     - create / edit attached markdown
 3. Links
