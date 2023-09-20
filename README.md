@@ -57,7 +57,9 @@
 1. Intro
     - todo
 2. File Explorer
-    - unzip
+    - unzip compressed
+    - fse support
+    - limited release
     - edit in milkdown
     - create / edit attached markdown
 3. Links
@@ -80,7 +82,5 @@
     - sync: clear automatically
     - async: clear after ticked 60 s
 8. Header
-    - about
-        - platform argument
-        - info about seraph
+    - about seraph
     - setting
