@@ -65,7 +65,12 @@ export default function FileTable(props) {
                 underline="none"
                 color={guard[0].length ? "neutral" : "primary"}
                 component="button"
-                onClick={() => handleClickSort("name")}
+                onClick={() => {
+                  if (guard[0].length === 0) {
+                    handleClickSort("name")
+                  }
+                }}
+                sx={{ cursor: guard[0].length ? "default" : "pointer" }}
                 fontWeight="lg"
                 endDecorator={
                   guard[0] === "" && filesSorting[0] === "name"
@@ -83,7 +88,12 @@ export default function FileTable(props) {
                 underline="none"
                 color={guard[0].length ? "neutral" : "primary"}
                 component="button"
-                onClick={() => handleClickSort("size")}
+                onClick={() => {
+                  if (guard[0].length === 0) {
+                    handleClickSort("size")
+                  }
+                }}
+                sx={{ cursor: guard[0].length ? "default" : "pointer" }}
                 fontWeight="lg"
                 endDecorator={
                   guard[0] === "" && filesSorting[0] === "size"
@@ -101,7 +111,12 @@ export default function FileTable(props) {
                 underline="none"
                 color={guard[0].length ? "neutral" : "primary"}
                 component="button"
-                onClick={() => handleClickSort("type")}
+                onClick={() => {
+                  if (guard[0].length === 0) {
+                    handleClickSort("type")
+                  }
+                }}
+                sx={{ cursor: guard[0].length ? "default" : "pointer" }}
                 fontWeight="lg"
                 endDecorator={
                   guard[0] === "" && filesSorting[0] === "type"
@@ -119,7 +134,12 @@ export default function FileTable(props) {
                 underline="none"
                 color={guard[0].length ? "neutral" : "primary"}
                 component="button"
-                onClick={() => handleClickSort("time")}
+                onClick={() => {
+                  if (guard[0].length === 0) {
+                    handleClickSort("time")
+                  }
+                }}
+                sx={{ cursor: guard[0].length ? "default" : "pointer" }}
                 fontWeight="lg"
                 endDecorator={
                   guard[0] === "" && filesSorting[0] === "time"
