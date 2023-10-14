@@ -1,12 +1,7 @@
 import * as React from "react";
-import {
-  useTheme as useMaterialTheme,
-  useColorScheme as useMaterialColorScheme,
-  Experimental_CssVarsProvider as MaterialCssVarsProvider,
-} from "@mui/material/styles";
+import { Experimental_CssVarsProvider as MaterialCssVarsProvider } from "@mui/material/styles";
 import {
   extendTheme as extendJoyTheme,
-  useColorScheme,
   CssVarsProvider,
   THEME_ID,
 } from "@mui/joy/styles";
@@ -15,7 +10,7 @@ import FormControl from "@mui/joy/FormControl";
 import FormLabel from "@mui/joy/FormLabel";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { DateTimeField } from "@mui/x-date-pickers/DateTimeField";
 import { unstable_useDateField as useDateField } from "@mui/x-date-pickers/DateField";
 import { useClearableField } from "@mui/x-date-pickers/hooks";
 
@@ -111,7 +106,8 @@ const JoyDateField = React.forwardRef((props, ref) => {
 
 const JoyDatePicker = React.forwardRef((props, ref) => {
   return (
-    <DatePicker
+    <DateTimeField
+      className="PickerRoot"
       ref={ref}
       {...props}
       slots={{ field: JoyDateField, ...props.slots }}
@@ -122,32 +118,25 @@ const JoyDatePicker = React.forwardRef((props, ref) => {
           formControlSx: {
             flexDirection: "row",
           },
-        },
+        }
       }}
+      sx={(theme) => ({
+        "input": {
+          padding: theme.spacing(1, 1.5)
+        },
+        "& .MuiInputBase-root:hover": {
+          borderColor: "white !important"
+        }
+      })}
+      format="YYYY 年 MM-DD HH:mm:ss"
     />
   );
 });
 
-/**
- * This component is for syncing the MUI docs's mode with this demo.
- * You might not need this component in your project.
- */
-function SyncThemeMode({ mode }) {
-  const { setMode } = useColorScheme();
-  const { setMode: setMaterialMode } = useMaterialColorScheme();
-  React.useEffect(() => {
-    setMode(mode);
-    setMaterialMode(mode);
-  }, [mode, setMode, setMaterialMode]);
-  return null;
-}
-
 export default function Picker() {
-  const materialTheme = useMaterialTheme();
   return (
     <MaterialCssVarsProvider>
       <CssVarsProvider theme={{ [THEME_ID]: joyTheme }}>
-        <SyncThemeMode mode={materialTheme.palette.mode} />
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <JoyDatePicker slotProps={{ field: { clearable: true } }} />
         </LocalizationProvider>

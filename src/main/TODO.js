@@ -17,6 +17,8 @@ import FormControl from "@mui/joy/FormControl";
 import FormLabel from "@mui/joy/FormLabel";
 import Input from "@mui/joy/Input";
 import Textarea from "@mui/joy/Textarea";
+import Select from "@mui/joy/Select";
+import Option from "@mui/joy/Option";
 import CircularProgress from "@mui/joy/CircularProgress";
 import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
 import TodayOutlinedIcon from "@mui/icons-material/TodayOutlined";
@@ -150,6 +152,20 @@ const TODO = () => {
         <FormControl>
           <FormLabel>Description</FormLabel>
           <Textarea minRows={4} maxRows={4} placeholder="PLACEHOLDER" />
+        </FormControl>
+        <FormControl>
+          <FormLabel>Type</FormLabel>
+          <Select placeholder="PLACEHOLDER">
+            <Option>
+              Permanant
+            </Option>
+            <Option>
+              Async
+            </Option>
+            <Option>
+              Sync
+            </Option>
+          </Select>
         </FormControl>
         <FormControl>
           <FormLabel>Due</FormLabel>
