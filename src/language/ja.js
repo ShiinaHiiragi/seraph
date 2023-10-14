@@ -69,8 +69,9 @@ const ja = {
         dueTime: "締め切り"
       },
       form: {
-        sortBy: "ソート",
-        filter: "タイプでフィルタ"
+        search: "タスクの検索",
+        filter: "タイプでフィルタ",
+        add: "追加"
       },
       type: {
         all: "全種類",

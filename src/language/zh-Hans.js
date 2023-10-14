@@ -69,8 +69,9 @@ const zhHans = {
         dueTime: "截止时间"
       },
       form: {
-        sortBy: "排序",
-        filter: "按类型过滤"
+        search: "搜索任务",
+        filter: "按类型过滤",
+        add: "添加"
       },
       type: {
         all: "所有类型",

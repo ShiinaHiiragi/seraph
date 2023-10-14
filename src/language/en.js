@@ -69,8 +69,9 @@ const en = {
         dueTime: "Due Time"
       },
       form: {
-        sortBy: "Sort by",
-        filter: "Filter by Type"
+        search: "Search Task",
+        filter: "Filter by Type",
+        add: "Add"
       },
       type: {
         all: "All Type",

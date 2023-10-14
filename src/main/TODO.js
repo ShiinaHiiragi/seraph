@@ -21,6 +21,7 @@ import Select from "@mui/joy/Select";
 import Option from "@mui/joy/Option";
 import Button from "@mui/joy/Button";
 import CircularProgress from "@mui/joy/CircularProgress";
+import SearchIcon from "@mui/icons-material/Search";
 import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
 import TodayOutlinedIcon from "@mui/icons-material/TodayOutlined";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
@@ -60,66 +61,73 @@ const TODO = () => {
       }}
     >
       <Box
+        className="SearchAndFilters"
         sx={{
+          borderRadius: "sm",
+          pb: 1,
           display: "flex",
-          gap: 1.5
+          flexWrap: "no-wrap",
+          flexDirection: { xs: "column", sm: "row" },
+          gap: { xs: 1.5, sm: 1.5 },
+          "& > *": { minWidth: { xs: "120px", md: "160px" } },
         }}
       >
-        <FormControl
-          size="sm"
-          sx={{ flexGrow: 2 }}
+        <Box sx={{ display: "flex", flexGrow: 1 }}>
+          <FormControl sx={{ width: "100%" }} size="sm">
+            <Input
+              size="sm"
+              autoComplete="off"
+              placeholder={context.languagePicker("main.todo.form.search")}
+              startDecorator={<SearchIcon />}
+            />
+          </FormControl>
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            gap: 1.5,
+            width: { xs: "100%", sm: "auto" }
+          }}
         >
-          <Select
-            size="sm"
-            placeholder={context.languagePicker("main.todo.form.sortBy")}
-            slotProps={{ button: { sx: { whiteSpace: "wrap" } } }}
+          <FormControl
+            size="sm" 
+            sx={{
+              flexGrow: 1,
+              minWidth: "160px"
+            }}
           >
-            <Option value="name">
-              {context.languagePicker("main.todo.regulate.name")}
-            </Option>
-            <Option value="description">
-              {context.languagePicker("main.todo.regulate.description")}
-            </Option>
-            <Option value="dueTime">
-              {context.languagePicker("main.todo.regulate.dueTime")}
-            </Option>
-          </Select>
-        </FormControl>
-        <FormControl
-          size="sm"
-          sx={{ flexGrow: 1 }}
-        >
-          <Select
+            <Select
+              size="sm"
+              placeholder={context.languagePicker("main.todo.form.filter")}
+              slotProps={{ button: { sx: { whiteSpace: "wrap" } } }}
+            >
+              <Option value="all">
+                {context.languagePicker("main.todo.type.all")}
+              </Option>
+              <Option value="permanant">
+                {context.languagePicker("main.todo.type.permanant")}
+              </Option>
+              <Option value="async">
+                {context.languagePicker("main.todo.type.async")}
+              </Option>
+              <Option value="sync">
+                {context.languagePicker("main.todo.type.sync")}
+              </Option>
+            </Select>
+          </FormControl>
+          <FormControl
             size="sm"
-            placeholder={context.languagePicker("main.todo.form.filter")}
-            slotProps={{ button: { sx: { whiteSpace: "wrap" } } }}
           >
-            <Option value="all">
-              {context.languagePicker("main.todo.type.all")}
-            </Option>
-            <Option value="permanant">
-              {context.languagePicker("main.todo.type.permanant")}
-            </Option>
-            <Option value="async">
-              {context.languagePicker("main.todo.type.async")}
-            </Option>
-            <Option value="sync">
-              {context.languagePicker("main.todo.type.sync")}
-            </Option>
-          </Select>
-        </FormControl>
-        <FormControl
-          size="sm"
-        >
-          <Button
-            size="sm"
-            color="primary"
-            variant="solid"
-            startDecorator={<AddOutlinedIcon />}
-          >
-            ADD
-          </Button>
-        </FormControl>
+            <Button
+              size="sm"
+              color="primary"
+              variant="solid"
+              startDecorator={<AddOutlinedIcon />}
+            >
+              {context.languagePicker("main.todo.form.add")}
+            </Button>
+          </FormControl>
+        </Box>
       </Box>
       <List>
         <Item>
