@@ -74,8 +74,13 @@ const RouteField = (props) => {
               underline="none"
               fontWeight={500}
               fontSize={12}
-              onClick={() => navigate(link.split("/").slice(0, index + 2).join("/"))}
+              onClick={() => {
+                if (link !== undefined) {
+                  navigate(link.split("/").slice(0, index + 2).join("/"))
+                }
+              }}
               color={"neutral"}
+              sx={{ cursor: link ? "pointer" : "default" }}
             >
               {item}
             </Link>

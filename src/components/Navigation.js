@@ -14,7 +14,7 @@ import NavigateNextOutlinedIcon from "@mui/icons-material/NavigateNextOutlined";
 // import EventNoteOutlinedIcon from "@mui/icons-material/EventNoteOutlined";
 // import ForwardToInboxOutlinedIcon from "@mui/icons-material/ForwardToInboxOutlined";
 // import TerminalOutlinedIcon from "@mui/icons-material/TerminalOutlined";
-// import DoneIcon from "@mui/icons-material/Done";
+import DoneIcon from "@mui/icons-material/Done";
 import GlobalContext from "../interface/constants";
 import { pathStartWith } from "../interface/constants";
 import { useNavigate } from "react-router-dom";
@@ -137,7 +137,7 @@ export default function Navigation(props) {
         </List>
       </ListItem>}
 
-      {/* <ListItem nested>
+      <ListItem nested>
         <ListSubheader>
           {context.languagePicker("nav.utility.title")}
         </ListSubheader>
@@ -147,7 +147,7 @@ export default function Navigation(props) {
             "& .JoyListItemButton-root": { p: "8px" },
           }}
         >
-          {context.isAuthority && <ListItem>
+          {/* {context.isAuthority && <ListItem>
             <ListItemButton
               selected={pathStartWith("/links")}
               onClick={() => navigateTo("/links")}
@@ -190,7 +190,7 @@ export default function Navigation(props) {
               </ListItemDecorator>
               <ListItemContent>{context.languagePicker("nav.utility.terminal")}</ListItemContent>
             </ListItemButton>
-          </ListItem>}
+          </ListItem>} */}
           {context.isAuthority && <ListItem>
             <ListItemButton
               selected={pathStartWith("/todo")}
@@ -203,7 +203,7 @@ export default function Navigation(props) {
             </ListItemButton>
           </ListItem>}
         </List>
-      </ListItem> */}
+      </ListItem>
     </List>
   );
 }
