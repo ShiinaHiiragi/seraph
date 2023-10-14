@@ -357,10 +357,11 @@ const taskOperator = {
     ));
   },
 
-  __findTask: (id, createTime) => {
-    return Boolean(taskOperator.task.find(
+  findTask: (id, createTime) => {
+    taskOperator.__clearExpiredTask();
+    return taskOperator.task.findIndex(
       (item) => item.id === id && item.createTime === createTime
-    ))
+    )
   },
 
   accessTask: () => {
@@ -394,45 +395,39 @@ const taskOperator = {
     };
   },
 
-  tickTask: (id, createTime) => {
-    taskOperator.__clearExpiredTask();
-    taskOperator.setTask((task) => task.map((item) => ({
-      ...item,
-      deleteTime: item.id === id && item.createTime === createTime
-        ? Date.now() + configOperator.config.setting.task.delay + taskDeleteDelay
-        : item.deleteTime
-    })))
+  tickTask: (index) => {
+    taskOperator.setTask((task) => {
+      task[index].deleteTime = Date.now() +
+        configOperator.config.setting.task.delay +
+        taskDeleteDelay;
+      return task;
+    })
   },
 
-  untickTask: (id, createTime) => {
-    taskOperator.__clearExpiredTask();
-    taskOperator.setTask((task) => task.map((item) => ({
-      ...item,
-      deleteTime: item.id === id && item.createTime === createTime
-        ? null
-        : item.deleteTime
-    })))
+  untickTask: (index) => {
+    taskOperator.setTask((task) => {
+      task[index].deleteTime = null;
+      return task;
+    })
   },
 
-  editTask: (id, createTime, name, description, type, dueTime) => {
-    taskOperator.__clearExpiredTask();
-    taskOperator.setTask((task) => task.map((item) =>
-      item.id === id && item.createTime === createTime
-        ? {
-          ...item,
-          name: name,
-          description: description,
-          type: type,
-          dueTime: dueTime
-        } : item
-    ))
+  editTask: (index, name, description, type, dueTime) => {
+    taskOperator.setTask((task) => {
+      task[index] = {
+        ...task[index],
+        name: name,
+        description: description,
+        type: type,
+        dueTime: dueTime
+      };
+      return task;
+    })
   },
 
-  deleteTask: (id, createTime) => {
-    taskOperator.__clearExpiredTask();
+  deleteTask: (index) => {
     taskOperator.setTask((task) => task.filter(
-      (item) => item.id !== id || item.createTime !== createTime
-    ))
+      (item, task_index) => index !== task_index
+    ));
   }
 };
 

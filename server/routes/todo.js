@@ -29,21 +29,20 @@ router.post('/new', (req, res, next) => {
 
   const { name, description, type, dueTime } = req.body;
   permanantCheck = type === 'permanant' && dueTime === null;
-  timelinessCheck = ['async', 'sync'].includes(type) && typeof dueTime === 'number' && dueTime > Date.now();
+  timelinessCheck = ['async', 'sync'].includes(type) && typeof dueTime === 'number';
   if (!permanantCheck && !timelinessCheck) {
     // -> abnormal request
     next(api.errorStreamControl);
     return;
   }
 
-  const { id, createTime } = api.taskOperator.addTask(name, description, type, dueTime);
+  const info = api.taskOperator.addTask(name, description, type, dueTime);
 
   // -> ES: return new task info
   req.status.addExecStatus();
   res.send({
     ...req.status.generateReport(),
-    createTime: createTime,
-    id: id
+    ...info
   });
   return;
 });
@@ -56,13 +55,14 @@ router.post('/tick', (req, res, next) => {
   }
 
   const { id, createTime } = req.body;
-  if (!api.taskOperator.__findTask(id, createTime)) {
+  const target_index = api.taskOperator.findTask(id, createTime);
+  if (target_index === undefined) {
     // -> abnormal request
     next(api.errorStreamControl);
     return;
   }
 
-  api.taskOperator.tickTask(id, createTime);
+  api.taskOperator.tickTask(index);
 
   // -> ES: no extra info
   req.status.addExecStatus();
@@ -78,13 +78,14 @@ router.post('/untick', (req, res, next) => {
   }
 
   const { id, createTime } = req.body;
-  if (!api.taskOperator.__findTask(id, createTime)) {
+  const target_index = api.taskOperator.findTask(id, createTime);
+  if (target_index === undefined) {
     // -> abnormal request
     next(api.errorStreamControl);
     return;
   }
 
-  api.taskOperator.untickTask(id, createTime);
+  api.taskOperator.untickTask(index);
 
   // -> ES: no extra info
   req.status.addExecStatus();
@@ -100,7 +101,8 @@ router.post('/edit', (req, res, next) => {
   }
 
   const { id, createTime } = req.body;
-  if (!api.taskOperator.__findTask(id, createTime)) {
+  const target_index = api.taskOperator.findTask(id, createTime);
+  if (target_index === undefined) {
     // -> abnormal request
     next(api.errorStreamControl);
     return;
@@ -108,14 +110,14 @@ router.post('/edit', (req, res, next) => {
 
   const { name, description, type, dueTime } = req.body;
   permanantCheck = type === 'permanant' && dueTime === null;
-  timelinessCheck = ['async', 'sync'].includes(type) && typeof dueTime === 'number' && dueTime > Date.now();
+  timelinessCheck = ['async', 'sync'].includes(type) && typeof dueTime === 'number';
   if (!permanantCheck && !timelinessCheck) {
     // -> abnormal request
     next(api.errorStreamControl);
     return;
   }
 
-  api.taskOperator.editTask(id, createTime, name, description, type, dueTime);
+  api.taskOperator.editTask(index, name, description, type, dueTime);
 
   // -> ES: no extra info
   req.status.addExecStatus();
@@ -131,13 +133,14 @@ router.post('/delete', (req, res, next) => {
   }
 
   const { id, createTime } = req.body;
-  if (!api.taskOperator.__findTask(id, createTime)) {
+  const target_index = api.taskOperator.findTask(id, createTime);
+  if (target_index === undefined) {
     // -> abnormal request
     next(api.errorStreamControl);
     return;
   }
 
-  api.taskOperator.deleteTask(id, createTime);
+  api.taskOperator.deleteTask(index);
 
   // -> ES: no extra info
   req.status.addExecStatus();
