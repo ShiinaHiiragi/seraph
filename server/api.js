@@ -357,9 +357,15 @@ const taskOperator = {
     ));
   },
 
+  __findTask: (id, createTime) => {
+    return Boolean(taskOperator.task.find(
+      (item) => item.id === id && item.createTime === createTime
+    ))
+  },
+
   accessTask: () => {
     taskOperator.__clearExpiredTask();
-    return task;
+    return taskOperator.task;
   },
 
   addTask: (name, description, type, dueTime) => {
@@ -388,7 +394,7 @@ const taskOperator = {
     };
   },
 
-  completeTask: (id, createTime) => {
+  tickTask: (id, createTime) => {
     taskOperator.__clearExpiredTask();
     taskOperator.setTask((task) => task.map((item) => ({
       ...item,
@@ -398,7 +404,7 @@ const taskOperator = {
     })))
   },
 
-  cancelCompleteTask: (id, createTime) => {
+  untickTask: (id, createTime) => {
     taskOperator.__clearExpiredTask();
     taskOperator.setTask((task) => task.map((item) => ({
       ...item,

@@ -12,6 +12,8 @@ let authRouter = require('./routes/auth');
 let fileRouter = require('./routes/file');
 let folderRouter = require('./routes/folder');
 
+let todoRouter = require('./routes/todo');
+
 let api = require('./api');
 let app = express();
 
@@ -55,6 +57,11 @@ app.use('/info', infoRouter);
 app.use('/auth', authRouter);
 app.use('/file', fileRouter);
 app.use('/folder', folderRouter);
+
+let utilityRouter = express.Router();
+utilityRouter.use('/todo', todoRouter);
+
+app.use('/utility', utilityRouter);
 
 // redirect all other pages to react-router
 app.use((req, res) => {
