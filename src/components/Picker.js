@@ -123,9 +123,6 @@ const JoyDatePicker = React.forwardRef((props, ref) => {
       sx={(theme) => ({
         "input": {
           padding: theme.spacing(1, 1.5)
-        },
-        "& .MuiInputBase-root:hover": {
-          borderColor: "white !important"
         }
       })}
       format="YYYY 年 MM-DD HH:mm:ss"
