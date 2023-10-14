@@ -156,13 +156,13 @@ const TODO = () => {
         <FormControl>
           <FormLabel>Type</FormLabel>
           <Select placeholder="PLACEHOLDER">
-            <Option>
+            <Option value="permanant">
               Permanant
             </Option>
-            <Option>
+            <Option value="async">
               Async
             </Option>
-            <Option>
+            <Option value="sync">
               Sync
             </Option>
           </Select>

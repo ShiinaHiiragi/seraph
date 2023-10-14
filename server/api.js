@@ -34,6 +34,7 @@ const dataPath = {
   privateDirPath: path.join(__dirname, "./data/private"),
   configFilePath: path.join(__dirname, "./data/config.json"),
   tokenFilePath: path.join(__dirname, "./data/token.json"),
+  taskFilePath: path.join(__dirname, "./data/task.json"),
   markdownDirPath: path.join(__dirname, "./data/markdown"),
   publicMarkdownDirPath: path.join(__dirname, "./data/markdown/public"),
   privateMarkdownDirPath: path.join(__dirname, "./data/markdown/private"),
@@ -56,6 +57,9 @@ const defaultConfig = {
   setting: {
     meta: {
       language: "en",
+    },
+    task: {
+      delay: 60
     }
   }
 };
@@ -116,6 +120,24 @@ const fileOperator = {
     fs.writeFileSync(
       dataPath.tokenFilePath,
       JSON.stringify(token, null, 2)
+    );
+  },
+
+  readTask: () => {
+    if (!fs.existsSync(dataPath.taskFilePath)) {
+      fs.writeFileSync(
+        dataPath.taskFilePath,
+        JSON.stringify([ ], null, 2)
+      );
+      fs.chmodSync(dataPath.taskFilePath, 0o777);
+    }
+    return JSON.parse(fs.readFileSync(dataPath.taskFilePath));
+  },
+
+  saveTask: (task) => {
+    fs.writeFileSync(
+      dataPath.taskFilePath,
+      JSON.stringify(task, null, 2)
     );
   },
 
@@ -187,6 +209,7 @@ exports.fileOperator = fileOperator;
 
   fileOperator.readConfig();
   fileOperator.readToken();
+  fileOperator.readTask();
 })();
 
 const configOperator = {
@@ -318,9 +341,100 @@ const tokenOperator = {
   }
 };
 
+const taskDeleteDelay = 30 * 1000;
+const taskOperator = {
+  task: fileOperator.readTask(),
+  setTask: (handle) => {
+    const newTask = handle(taskOperator.task);
+    fileOperator.saveTask(newTask);
+    taskOperator.task = newTask;
+  },
+
+  __clearExpiredTask: () => {
+    const timeNow = Date.now();
+    taskOperator.setTask((task) => task.filter(
+      (item) => (item.deleteTime === null || item.deleteTime - timeNow > 0)
+    ));
+  },
+
+  accessTask: () => {
+    taskOperator.__clearExpiredTask();
+    return task;
+  },
+
+  addTask: (name, description, type, dueTime) => {
+    taskOperator.__clearExpiredTask();
+    const id = CryptoJS.MD5(
+      Array(16).fill().reduce(
+        (current) => current +
+          Math.random().toString(36).slice(2, 6),
+        ""
+      )
+    ).toString();
+
+    const newTask = {
+      id: id,
+      createTime: Date.now(),
+      name: name,
+      description: description,
+      type: type,
+      dueTime: dueTime,
+      deleteTime: null
+    };
+    taskOperator.setTask((task) => [ ...task, newTask ])
+    return {
+      id: newTask.id,
+      createTime: newTask.createTime
+    };
+  },
+
+  completeTask: (id, createTime) => {
+    taskOperator.__clearExpiredTask();
+    taskOperator.setTask((task) => task.map((item) => ({
+      ...item,
+      deleteTime: item.id === id && item.createTime === createTime
+        ? Date.now() + configOperator.config.setting.task.delay + taskDeleteDelay
+        : item.deleteTime
+    })))
+  },
+
+  cancelCompleteTask: (id, createTime) => {
+    taskOperator.__clearExpiredTask();
+    taskOperator.setTask((task) => task.map((item) => ({
+      ...item,
+      deleteTime: item.id === id && item.createTime === createTime
+        ? null
+        : item.deleteTime
+    })))
+  },
+
+  editTask: (id, createTime, name, description, type, dueTime) => {
+    taskOperator.__clearExpiredTask();
+    taskOperator.setTask((task) => task.map((item) =>
+      item.id === id && item.createTime === createTime
+        ? {
+          ...item,
+          name: name,
+          description: description,
+          type: type,
+          dueTime: dueTime
+        } : item
+    ))
+  },
+
+  deleteTask: (id, createTime) => {
+    taskOperator.__clearExpiredTask();
+    taskOperator.setTask((task) => task.filter(
+      (item) => item.id !== id || item.createTime !== createTime
+    ))
+  }
+};
+
 exports.expiredPeriod = expiredPeriod;
+exports.taskDeleteDelay = taskDeleteDelay;
 exports.cookieOperator = cookieOperator;
 exports.tokenOperator = tokenOperator;
+exports.taskOperator = taskOperator;
 
 
 // seraph and server info
