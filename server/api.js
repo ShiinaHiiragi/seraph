@@ -341,7 +341,6 @@ const tokenOperator = {
   }
 };
 
-const taskDeleteDelay = 30 * 1000;
 const taskOperator = {
   task: fileOperator.readTask(),
   setTask: (handle) => {
@@ -353,7 +352,8 @@ const taskOperator = {
   __clearExpiredTask: () => {
     const timeNow = Date.now();
     taskOperator.setTask((task) => task.filter(
-      (item) => (item.deleteTime === null || item.deleteTime - timeNow > 0)
+      (item) => (item.type === 'sync' && item.dueTime < timeNow) ||
+        (item.deleteTime !== null && item.deleteTime < timeNow)
     ));
   },
 
@@ -398,8 +398,7 @@ const taskOperator = {
   tickTask: (index) => {
     taskOperator.setTask((task) => {
       task[index].deleteTime = Date.now() +
-        configOperator.config.setting.task.delay +
-        taskDeleteDelay;
+        configOperator.config.setting.task.delay
       return task;
     })
   },
@@ -432,7 +431,6 @@ const taskOperator = {
 };
 
 exports.expiredPeriod = expiredPeriod;
-exports.taskDeleteDelay = taskDeleteDelay;
 exports.cookieOperator = cookieOperator;
 exports.tokenOperator = tokenOperator;
 exports.taskOperator = taskOperator;

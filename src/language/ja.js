@@ -60,6 +60,24 @@ const ja = {
         newFile: "ファイルのアップロード",
         paste: "ペースト"
       }
+    },
+    todo: {
+      regulate: {
+        name: "タスクネーム",
+        description: "ディスクリプション",
+        type: "タイプ",
+        dueTime: "締め切り"
+      },
+      form: {
+        sortBy: "ソート",
+        filter: "タイプでフィルタ"
+      },
+      type: {
+        all: "全種類",
+        permanant: "常設",
+        async: "非同期",
+        sync: "同期"
+      }
     }
   },
   modal: {

@@ -60,6 +60,24 @@ const en = {
         newFile: "Upload File",
         paste: "Paste"
       }
+    },
+    todo: {
+      regulate: {
+        name: "Task Name",
+        description: "Description",
+        type: "Type",
+        dueTime: "Due Time"
+      },
+      form: {
+        sortBy: "Sort by",
+        filter: "Filter by Type"
+      },
+      type: {
+        all: "All Type",
+        permanant: "Permanant",
+        async: "Async",
+        sync: "Sync"
+      }
     }
   },
   modal: {

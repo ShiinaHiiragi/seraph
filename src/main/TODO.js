@@ -19,9 +19,11 @@ import Input from "@mui/joy/Input";
 import Textarea from "@mui/joy/Textarea";
 import Select from "@mui/joy/Select";
 import Option from "@mui/joy/Option";
+import Button from "@mui/joy/Button";
 import CircularProgress from "@mui/joy/CircularProgress";
 import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
 import TodayOutlinedIcon from "@mui/icons-material/TodayOutlined";
+import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import AccessAlarmsOutlinedIcon from "@mui/icons-material/AccessAlarmsOutlined";
 import RouteField from "../interface/RouteField";
 import GlobalContext from "../interface/constants";
@@ -57,6 +59,68 @@ const TODO = () => {
         overflowY: "auto"
       }}
     >
+      <Box
+        sx={{
+          display: "flex",
+          gap: 1.5
+        }}
+      >
+        <FormControl
+          size="sm"
+          sx={{ flexGrow: 2 }}
+        >
+          <Select
+            size="sm"
+            placeholder={context.languagePicker("main.todo.form.sortBy")}
+            slotProps={{ button: { sx: { whiteSpace: "wrap" } } }}
+          >
+            <Option value="name">
+              {context.languagePicker("main.todo.regulate.name")}
+            </Option>
+            <Option value="description">
+              {context.languagePicker("main.todo.regulate.description")}
+            </Option>
+            <Option value="dueTime">
+              {context.languagePicker("main.todo.regulate.dueTime")}
+            </Option>
+          </Select>
+        </FormControl>
+        <FormControl
+          size="sm"
+          sx={{ flexGrow: 1 }}
+        >
+          <Select
+            size="sm"
+            placeholder={context.languagePicker("main.todo.form.filter")}
+            slotProps={{ button: { sx: { whiteSpace: "wrap" } } }}
+          >
+            <Option value="all">
+              {context.languagePicker("main.todo.type.all")}
+            </Option>
+            <Option value="permanant">
+              {context.languagePicker("main.todo.type.permanant")}
+            </Option>
+            <Option value="async">
+              {context.languagePicker("main.todo.type.async")}
+            </Option>
+            <Option value="sync">
+              {context.languagePicker("main.todo.type.sync")}
+            </Option>
+          </Select>
+        </FormControl>
+        <FormControl
+          size="sm"
+        >
+          <Button
+            size="sm"
+            color="primary"
+            variant="solid"
+            startDecorator={<AddOutlinedIcon />}
+          >
+            ADD
+          </Button>
+        </FormControl>
+      </Box>
       <List>
         <Item>
           <Box sx={{ pt: 0.5 }} >
@@ -136,7 +200,7 @@ const TODO = () => {
         renderer={(props) => <CircularProgress size="sm" determinate value={props.total / 600} />}
       /> */}
       <ModalForm
-        open={true}
+        open={false}
         loading={false}
         disabled={false}
         handleClose={() => { }}

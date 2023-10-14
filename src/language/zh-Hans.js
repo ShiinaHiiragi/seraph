@@ -60,6 +60,24 @@ const zhHans = {
         newFile: "上传文件",
         paste: "粘贴"
       }
+    },
+    todo: {
+      regulate: {
+        name: "任务名",
+        description: "描述",
+        type: "类型",
+        dueTime: "截止时间"
+      },
+      form: {
+        sortBy: "排序",
+        filter: "按类型过滤"
+      },
+      type: {
+        all: "所有类型",
+        permanant: "常驻",
+        async: "异步",
+        sync: "同步"
+      }
     }
   },
   modal: {
