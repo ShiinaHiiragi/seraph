@@ -108,7 +108,7 @@ export default function FileList(props) {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'flex-start',
-                      gap: 0.5,
+                      gap: 0.75,
                       mb: 1,
                     }}
                   >

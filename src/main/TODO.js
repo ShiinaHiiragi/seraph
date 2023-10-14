@@ -6,11 +6,17 @@ import ListItem from "@mui/joy/ListItem";
 import ListDivider from "@mui/joy/ListDivider";
 import Checkbox from "@mui/joy/Checkbox";
 import Box from "@mui/joy/Box";
-import Chip from "@mui/joy/Chip";
+import Divider from "@mui/joy/Divider";
 import Typography from "@mui/joy/Typography";
-import GlobalContext from "../interface/constants";
+import Menu from "@mui/joy/Menu";
+import MenuButton from "@mui/joy/MenuButton";
+import MenuItem from "@mui/joy/MenuItem";
+import Dropdown from "@mui/joy/Dropdown";
+import IconButton from "@mui/joy/IconButton";
+import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
 import TodayOutlinedIcon from "@mui/icons-material/TodayOutlined";
 import AccessAlarmsOutlinedIcon from "@mui/icons-material/AccessAlarmsOutlined";
+import GlobalContext from "../interface/constants";
 
 const Item = styled(ListItem)(({ theme }) => ({
   display: "flex",
@@ -47,6 +53,7 @@ const TODO = () => {
             <Checkbox
               variant="outlined"
               color="neutral"
+              checked
             />
           </Box>
           <Details>
@@ -63,18 +70,23 @@ const TODO = () => {
             <Box
               sx={{
                 pt: 0.5,
-                gap: 0.5,
+                gap: 0.75,
                 display: "flex",
-                flexDirection: "column"
+                flexDirection: { xs: "column", sm: "row" }
               }}
             >
               <Typography
                 startDecorator={<AccessAlarmsOutlinedIcon />}
                 level="body-xs"
                 color="neutral"
-                sx={{ display: { xs: "flex", sm: "none" } }}
               >
                 Async
+              </Typography>
+              <Typography
+                level="body-xs"
+                sx={{ display: { xs: "none", sm: "inline" } }}
+              >
+                &bull;
               </Typography>
               <Typography
                 startDecorator={<TodayOutlinedIcon />}
@@ -83,16 +95,26 @@ const TODO = () => {
               >
                 10/14/2022 23:59:59
               </Typography>
-
             </Box>
           </Details>
-          <Box sx={{ display: { xs: "none", sm: "flex" } }}>
-            <Chip
-              onClick={() => { }}
-              color="success"
-            >
-              Completed
-            </Chip>
+          <Box>
+            <Dropdown>
+              <MenuButton
+                slots={{ root: IconButton }}
+                slotProps={{ root: { variant: "plain", color: "neutral", size: "sm" } }}
+              >
+                <MoreVertRoundedIcon />
+              </MenuButton>
+              <Menu size="sm" sx={{ minWidth: 140 }}>
+                <MenuItem>
+                  234
+                </MenuItem>
+                <Divider />
+                <MenuItem>
+                  123
+                </MenuItem>
+              </Menu>
+            </Dropdown>
           </Box>
         </Item>
         <ListDivider inset="startDecorator" />
