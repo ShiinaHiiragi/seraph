@@ -36,7 +36,10 @@ const TODO = () => {
         context.languagePicker("nav.utility.todo")
       ]}
       title={context.languagePicker("nav.utility.todo")}
-      sx={{ flexDirection: "column" }}
+      sx={{
+        flexDirection: "column",
+        overflowY: "auto"
+      }}
     >
       <List>
         <Item>

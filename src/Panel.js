@@ -116,7 +116,6 @@ const Panel = () => {
   const [privateFolders, setPrivateFolders] = React.useState([]);
   const sortedPublicFolders = React.useMemo(() => publicFolders.sortBy(), [publicFolders]);
   const sortedPrivateFolders = React.useMemo(() => privateFolders.sortBy(), [privateFolders]);
-  window.clipboard = clipboard;
 
   // global clocks, explicit life cycles, only set once
   // when set to true, the corresponding tick ends

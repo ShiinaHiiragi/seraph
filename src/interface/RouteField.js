@@ -27,6 +27,7 @@ const RouteField = (props) => {
     title,
     sxRaw,
     children,
+    sx,
     ...otherProps
   } = props;
   const context = React.useContext(GlobalContext);
@@ -49,7 +50,7 @@ const RouteField = (props) => {
       className="RouteFieldRawOuter"
       sx={(theme) => ({
         flexDirection: "column",
-        padding: theme.spacing(2, 3),
+        paddingTop: theme.spacing(2),
         ...sxRaw
       })}
     >
@@ -58,7 +59,7 @@ const RouteField = (props) => {
         <Breadcrumbs
           size="md"
           separator={<ChevronRightRoundedIcon fontSize="sm" />}
-          sx={{ paddingLeft: 0 }}
+          sx={{ paddingLeft: 3, paddingRight: 3 }}
         >
           <Link
             underline="none"
@@ -99,11 +100,17 @@ const RouteField = (props) => {
         <Typography
           level="h3"
           children={title}
-          sx={(theme) => ({ paddingBottom: theme.spacing(2) })}
+          sx={{ paddingLeft: 3, paddingRight: 3, paddingBottom: 1.5 }}
         />
       }
       <RouteFieldRaw
         className="RouteFieldRawInner"
+        sx={{
+          paddingLeft: 3,
+          paddingRight: 3,
+          paddingBottom: 2,
+          ...sx
+        }}
         {...otherProps}
       >
         {display
