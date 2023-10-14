@@ -35,7 +35,6 @@ export default function FileList(props) {
         overflowY: "visible",
       }}
     >
-      <ListDivider sx={{ mb: 1 }} />
       {(guard[0] === ""
             ? sortedFilesList
             : searcher
@@ -50,7 +49,7 @@ export default function FileList(props) {
                 `^(${guard[1].toLowerCase()}/|${guard[1].toLowerCase()}$)`
               ).test(item.type)
         )
-        .map((item, index) => (
+        .map((item, index, self) => (
           <List
             key={index}
             size="sm"
@@ -142,7 +141,7 @@ export default function FileList(props) {
                   setPrivateFolders={setPrivateFolders}
                 />}
             </ListItem>
-            <ListDivider />
+            { index !== self.length - 1 && <ListDivider /> }
           </List>
         ))
       }
