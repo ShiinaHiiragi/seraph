@@ -54,13 +54,7 @@ const TODO = () => {
               do this
             </Typography>
             <Typography level="body-sm">
-              Esse esse magna dolore tempor laborum adipisicing ipsum voluptate ea ad dolore aliquip. Ex consequat mollit laboris culpa aliqua excepteur duis aliqua voluptate. Dolor magna voluptate amet fugiat. Dolor non dolor esse sint cupidatat dolore labore labore proident. Eu nostrud occaecat enim in dolor aliquip incididunt cillum dolor. Deserunt nulla proident sunt nostrud excepteur pariatur labore aliquip. Dolor cillum excepteur culpa ex anim commodo.
-            </Typography>
-            <Typography level="body-sm">
-              Cupidatat cupidatat laboris pariatur et esse esse elit ut aute tempor ad nulla cillum. Do esse nisi Lorem irure. Minim ex amet nisi non quis proident et cillum ad. Cupidatat dolore amet sit cupidatat officia deserunt fugiat.
-            </Typography>
-            <Typography level="body-sm">
-              Do est et pariatur amet Lorem cupidatat officia eiusmod cillum cillum esse tempor. Voluptate reprehenderit consectetur in pariatur sint veniam ex officia enim ad exercitation. Nulla aliquip ex id minim laboris nostrud proident irure est dolore eiusmod ut. Adipisicing cillum reprehenderit ut nostrud do culpa qui mollit duis esse. Magna sint deserunt ex labore cillum consequat quis irure do ex occaecat mollit mollit nulla. Labore incididunt officia quis deserunt qui proident pariatur.
+              In esse ullamco fugiat aliquip consectetur fugiat ex ad labore minim commodo quis commodo.
             </Typography>
           </Details>
         </Item>
@@ -77,82 +71,10 @@ const TODO = () => {
               do this
             </Typography>
             <Typography level="body-sm">
-              Esse esse magna dolore tempor laborum adipisicing ipsum voluptate ea ad dolore aliquip. Ex consequat mollit laboris culpa aliqua excepteur duis aliqua voluptate. Dolor magna voluptate amet fugiat. Dolor non dolor esse sint cupidatat dolore labore labore proident. Eu nostrud occaecat enim in dolor aliquip incididunt cillum dolor. Deserunt nulla proident sunt nostrud excepteur pariatur labore aliquip. Dolor cillum excepteur culpa ex anim commodo.
+              Esse esse magna dolore tempor laborum adipisicing ipsum voluptate ea ad dolore aliquip.
             </Typography>
             <Typography level="body-sm">
-              Cupidatat cupidatat laboris pariatur et esse esse elit ut aute tempor ad nulla cillum. Do esse nisi Lorem irure. Minim ex amet nisi non quis proident et cillum ad. Cupidatat dolore amet sit cupidatat officia deserunt fugiat.
-            </Typography>
-            <Typography level="body-sm">
-              Do est et pariatur amet Lorem cupidatat officia eiusmod cillum cillum esse tempor. Voluptate reprehenderit consectetur in pariatur sint veniam ex officia enim ad exercitation. Nulla aliquip ex id minim laboris nostrud proident irure est dolore eiusmod ut. Adipisicing cillum reprehenderit ut nostrud do culpa qui mollit duis esse. Magna sint deserunt ex labore cillum consequat quis irure do ex occaecat mollit mollit nulla. Labore incididunt officia quis deserunt qui proident pariatur.
-            </Typography>
-          </Details>
-        </Item>
-        <ListDivider inset="startDecorator" />
-        <Item>
-          <BoxContainer>
-            <Checkbox
-              variant="outlined"
-              color="neutral"
-            />
-          </BoxContainer>
-          <Details>
-            <Typography level="title-md">
-              do this
-            </Typography>
-            <Typography level="body-sm">
-              Esse esse magna dolore tempor laborum adipisicing ipsum voluptate ea ad dolore aliquip. Ex consequat mollit laboris culpa aliqua excepteur duis aliqua voluptate. Dolor magna voluptate amet fugiat. Dolor non dolor esse sint cupidatat dolore labore labore proident. Eu nostrud occaecat enim in dolor aliquip incididunt cillum dolor. Deserunt nulla proident sunt nostrud excepteur pariatur labore aliquip. Dolor cillum excepteur culpa ex anim commodo.
-            </Typography>
-            <Typography level="body-sm">
-              Cupidatat cupidatat laboris pariatur et esse esse elit ut aute tempor ad nulla cillum. Do esse nisi Lorem irure. Minim ex amet nisi non quis proident et cillum ad. Cupidatat dolore amet sit cupidatat officia deserunt fugiat.
-            </Typography>
-            <Typography level="body-sm">
-              Do est et pariatur amet Lorem cupidatat officia eiusmod cillum cillum esse tempor. Voluptate reprehenderit consectetur in pariatur sint veniam ex officia enim ad exercitation. Nulla aliquip ex id minim laboris nostrud proident irure est dolore eiusmod ut. Adipisicing cillum reprehenderit ut nostrud do culpa qui mollit duis esse. Magna sint deserunt ex labore cillum consequat quis irure do ex occaecat mollit mollit nulla. Labore incididunt officia quis deserunt qui proident pariatur.
-            </Typography>
-          </Details>
-        </Item>
-        <ListDivider inset="startDecorator" />
-        <Item>
-          <BoxContainer>
-            <Checkbox
-              variant="outlined"
-              color="neutral"
-            />
-          </BoxContainer>
-          <Details>
-            <Typography level="title-md">
-              do this
-            </Typography>
-            <Typography level="body-sm">
-              Esse esse magna dolore tempor laborum adipisicing ipsum voluptate ea ad dolore aliquip. Ex consequat mollit laboris culpa aliqua excepteur duis aliqua voluptate. Dolor magna voluptate amet fugiat. Dolor non dolor esse sint cupidatat dolore labore labore proident. Eu nostrud occaecat enim in dolor aliquip incididunt cillum dolor. Deserunt nulla proident sunt nostrud excepteur pariatur labore aliquip. Dolor cillum excepteur culpa ex anim commodo.
-            </Typography>
-            <Typography level="body-sm">
-              Cupidatat cupidatat laboris pariatur et esse esse elit ut aute tempor ad nulla cillum. Do esse nisi Lorem irure. Minim ex amet nisi non quis proident et cillum ad. Cupidatat dolore amet sit cupidatat officia deserunt fugiat.
-            </Typography>
-            <Typography level="body-sm">
-              Do est et pariatur amet Lorem cupidatat officia eiusmod cillum cillum esse tempor. Voluptate reprehenderit consectetur in pariatur sint veniam ex officia enim ad exercitation. Nulla aliquip ex id minim laboris nostrud proident irure est dolore eiusmod ut. Adipisicing cillum reprehenderit ut nostrud do culpa qui mollit duis esse. Magna sint deserunt ex labore cillum consequat quis irure do ex occaecat mollit mollit nulla. Labore incididunt officia quis deserunt qui proident pariatur.
-            </Typography>
-          </Details>
-        </Item>
-        <ListDivider inset="startDecorator" />
-        <Item>
-          <BoxContainer>
-            <Checkbox
-              variant="outlined"
-              color="neutral"
-            />
-          </BoxContainer>
-          <Details>
-            <Typography level="title-md">
-              do this
-            </Typography>
-            <Typography level="body-sm">
-              Esse esse magna dolore tempor laborum adipisicing ipsum voluptate ea ad dolore aliquip. Ex consequat mollit laboris culpa aliqua excepteur duis aliqua voluptate. Dolor magna voluptate amet fugiat. Dolor non dolor esse sint cupidatat dolore labore labore proident. Eu nostrud occaecat enim in dolor aliquip incididunt cillum dolor. Deserunt nulla proident sunt nostrud excepteur pariatur labore aliquip. Dolor cillum excepteur culpa ex anim commodo.
-            </Typography>
-            <Typography level="body-sm">
-              Cupidatat cupidatat laboris pariatur et esse esse elit ut aute tempor ad nulla cillum. Do esse nisi Lorem irure. Minim ex amet nisi non quis proident et cillum ad. Cupidatat dolore amet sit cupidatat officia deserunt fugiat.
-            </Typography>
-            <Typography level="body-sm">
-              Do est et pariatur amet Lorem cupidatat officia eiusmod cillum cillum esse tempor. Voluptate reprehenderit consectetur in pariatur sint veniam ex officia enim ad exercitation. Nulla aliquip ex id minim laboris nostrud proident irure est dolore eiusmod ut. Adipisicing cillum reprehenderit ut nostrud do culpa qui mollit duis esse. Magna sint deserunt ex labore cillum consequat quis irure do ex occaecat mollit mollit nulla. Labore incididunt officia quis deserunt qui proident pariatur.
+              Cupidatat cupidatat laboris pariatur et esse esse elit ut aute tempor ad nulla cillum. Do esse nisi Lorem irure. Minim ex amet nisi non quis proident et cillum dolore amet sit cupidatat officia deserunt fugiat.
             </Typography>
           </Details>
         </Item>

@@ -421,18 +421,18 @@ const FileExplorer = (props) => {
       }
       sxRaw={{
         overflowY: {
-          xs: "auto",
+          xs: "hidden",
           sm: "hidden"
         }
       }}
       sx={{
         flexDirection: "column",
         overflowY: {
-          xs: "visible",
+          xs: "auto",
           sm: "hidden"
         },
         overflowX: {
-          xs: "visible",
+          xs: "auto",
           sm: "hidden"
         },
         height: {
