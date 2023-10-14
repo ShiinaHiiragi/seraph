@@ -27,7 +27,7 @@ import TodayOutlinedIcon from "@mui/icons-material/TodayOutlined";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import AccessAlarmsOutlinedIcon from "@mui/icons-material/AccessAlarmsOutlined";
 import RouteField from "../interface/RouteField";
-import GlobalContext from "../interface/constants";
+import GlobalContext, { request } from "../interface/constants";
 import ModalForm from "../modal/Form";
 import Picker from "../components/Picker";
 
@@ -46,6 +46,27 @@ const Details = styled("div")(({ theme }) => ({
 
 const TODO = () => {
   const context = React.useContext(GlobalContext);
+  const [task, setTask] = React.useState([]);
+  const [search, setSearch] = React.useState("");
+  const [filter, setFilter] = React.useState(undefined);
+
+  // after second tick, the globalSwitch were set properly
+  React.useEffect(() => {
+    if (context.secondTick && context.isAuthority) {
+      request(
+        `GET/utility/todo/list`,
+        undefined
+      )
+        .then((data) => setTask(data.task) );
+    }
+  // eslint-disable-next-line
+  }, [
+    // check if
+    // load with auth naturally
+    context.secondTick,
+    // login in same page
+    context.isAuthority,
+  ]);
 
   return (
     <RouteField
@@ -75,8 +96,10 @@ const TODO = () => {
         <Box sx={{ display: "flex", flexGrow: 1 }}>
           <FormControl sx={{ width: "100%" }} size="sm">
             <Input
-              size="sm"
               autoComplete="off"
+              size="sm"
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
               placeholder={context.languagePicker("main.todo.form.search")}
               startDecorator={<SearchIcon />}
             />
@@ -98,19 +121,20 @@ const TODO = () => {
           >
             <Select
               size="sm"
+              value={filter}
               placeholder={context.languagePicker("main.todo.form.filter")}
               slotProps={{ button: { sx: { whiteSpace: "wrap" } } }}
             >
-              <Option value="all">
+              <Option value="all" onClick={(event) => setFilter("all")}>
                 {context.languagePicker("main.todo.type.all")}
               </Option>
-              <Option value="permanant">
+              <Option value="permanant" onClick={(event) => setFilter("permanant")}>
                 {context.languagePicker("main.todo.type.permanant")}
               </Option>
-              <Option value="async">
+              <Option value="async" onClick={(event) => setFilter("async")}>
                 {context.languagePicker("main.todo.type.async")}
               </Option>
-              <Option value="sync">
+              <Option value="sync" onClick={(event) => setFilter("sync")}>
                 {context.languagePicker("main.todo.type.sync")}
               </Option>
             </Select>
