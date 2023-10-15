@@ -2,7 +2,7 @@ let express = require('express');
 let path = require('path');
 let fs = require('fs');
 let fse = require('fs-extra')
-let decompress = require('decompress');
+let AdmZip = require('adm-zip');
 let api = require('../api');
 let router = express.Router();
 
@@ -325,24 +325,40 @@ router.post('/unzip', (req, res, next) => {
     return;
   }
 
-  decompress(filePath, folderPath)
-    .then(() => {
-      const folderInfo = api.fileOperator.readFolderInfo(folderPath);
+  const zip = new AdmZip(filePath);
+  const zipEntries = zip
+    .getEntries()
+    .map((item) => item.entryName)
+    .filter((item) => /^[^/]*\/?$/.test(item))
 
-      // -> ES: no extra info
-      req.status.addExecStatus();
-      res.send({
-        ...req.status.generateReport(),
-        info: folderInfo
-      });
-      return;
-    })
-    .catch(() => {
-      // -> EF_FME: decompress error
-      req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
-      res.send(req.status.generateReport());
-      return;
-    })
+  const pureFilename = filename.split(".").slice(0, -1).join(".");
+  const extractName = zipEntries.length === 1 ? "." : pureFilename;
+  const newDirName = zipEntries.length === 1 ? zipEntries[0].replace("/", "") : pureFilename;
+  const newDirPath = path.join(folderPath, newDirName);
+
+  if (fs.existsSync(newDirPath)) {
+    // -> EF_IC: filename already exists
+    req.status.addExecStatus(api.Status.execErrCode.IdentifierConflict);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  try {
+    zip.extractAllTo(path.join(folderPath, extractName));
+  } catch (_) {
+    // -> EF_FME: fs.unlinkSync error
+    req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  // -> ES: no extra info
+  req.status.addExecStatus();
+  res.send({
+    ...req.status.generateReport(),
+    info: api.fileOperator.readFileInfo(folderPath, newDirName)
+  });
+  return;
 });
 
 module.exports = router;

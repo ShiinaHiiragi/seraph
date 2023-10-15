@@ -132,9 +132,11 @@ export default function RowMenu(props) {
         filename: filename
       }, undefined, reject)
         .then((data) => {
-          console.log(data)
           if (pathStartWith(`/${type}/${folderName}`)) {
-            setFilesList(data.info);
+            setFilesList((filesList) => [
+              ...filesList,
+              data.info
+            ]);
           }
           resolve();
         })
