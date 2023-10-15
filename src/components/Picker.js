@@ -143,7 +143,6 @@ const JoyDateTimePicker = React.forwardRef((props, ref) => {
           display: "none"
         }
       })}
-      format="YYYY-MM-DD HH:mm"
       viewRenderers={{
         hours: null,
         minutes: null
@@ -152,13 +151,17 @@ const JoyDateTimePicker = React.forwardRef((props, ref) => {
   );
 });
 
-export default function Picker() {
-  console.log(materialTheme);
+export default function Picker(props) {
+  const { timeFormat } = props;
+
   return (
     <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
       <CssVarsProvider theme={{ [THEME_ID]: joyTheme }}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <JoyDateTimePicker slotProps={{ field: { clearable: true } }} sx={(theme) => console.log(theme) ?? {}} />
+          <JoyDateTimePicker
+            slotProps={{ field: { clearable: true } }}
+            format={timeFormat}
+          />
         </LocalizationProvider>
       </CssVarsProvider>
     </MaterialCssVarsProvider>

@@ -164,7 +164,8 @@ const en = {
   universal: {
     time: {
       dateFormat: "MM/dd/yyyy",
-      timeFormat: "hh:mm:ss"
+      timeFormat: "hh:mm:ss",
+      taskModalFormat: "MM/DD/YYYY HH:mm"
     },
     button: {
       submit: "Submit",
@@ -172,6 +173,10 @@ const en = {
       cancel: "Cancel"
     },
     placeholder: {
+      instruction: {
+        required: "Required",
+        optional: "Optional"
+      },
       deny: {
         title: "Permission Denied",
         caption: "Log in to acquire full access."

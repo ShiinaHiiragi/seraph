@@ -289,30 +289,36 @@ const TODO = () => {
         button={context.languagePicker("universal.button.submit")}
       >
         <FormControl>
-          <FormLabel>Task</FormLabel>
-          <Input placeholder="PLACEHOLDER" />
+          <FormLabel>{context.languagePicker("main.todo.regulate.name")}</FormLabel>
+          <Input placeholder={context.languagePicker("universal.placeholder.instruction.required")} />
         </FormControl>
         <FormControl>
-          <FormLabel>Description</FormLabel>
-          <Textarea minRows={4} maxRows={4} placeholder="PLACEHOLDER" />
+          <FormLabel>{context.languagePicker("main.todo.regulate.description")}</FormLabel>
+          <Textarea
+            minRows={4}
+            maxRows={4}
+            placeholder={context.languagePicker("universal.placeholder.instruction.optional")}
+          />
         </FormControl>
         <FormControl>
-          <FormLabel>Type</FormLabel>
-          <Select placeholder="PLACEHOLDER">
-            <Option value="permanant">
-              Permanant
+          <FormLabel>{context.languagePicker("main.todo.regulate.type")}</FormLabel>
+          <Select value={modalTaskType}>
+            <Option value="permanant" onChange={() => setModalTaskType("permanant")}>
+              {context.languagePicker("main.todo.type.permanant")}
             </Option>
-            <Option value="async">
-              Async
+            <Option value="async" onChange={() => setModalTaskType("async")}>
+              {context.languagePicker("main.todo.type.async")}
             </Option>
-            <Option value="sync">
-              Sync
+            <Option value="sync" onChange={() => setModalTaskType("sync")}>
+              {context.languagePicker("main.todo.type.sync")}
             </Option>
           </Select>
         </FormControl>
         <FormControl>
-          <FormLabel>Due</FormLabel>
-          <Picker />
+          <FormLabel>
+            {context.languagePicker("main.todo.regulate.dueTime")}
+          </FormLabel>
+          <Picker timeFormat={context.languagePicker("universal.time.taskModalFormat")} />
         </FormControl>
       </ModalForm>
     </RouteField>

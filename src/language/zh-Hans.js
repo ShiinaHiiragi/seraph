@@ -164,7 +164,8 @@ const zhHans = {
   universal: {
     time: {
       dateFormat: "yyyy-MM-dd",
-      timeFormat: "hh:mm:ss"
+      timeFormat: "hh:mm:ss",
+      taskModalFormat: "YYYY 年 MM 月 DD 日 HH:mm"
     },
     button: {
       submit: "提交",
@@ -172,6 +173,10 @@ const zhHans = {
       cancel: "取消"
     },
     placeholder: {
+      instruction: {
+        required: "必填",
+        optional: "选填"
+      },
       deny: {
         title: "没有权限",
         caption: "登录以获得完全访问权限。"

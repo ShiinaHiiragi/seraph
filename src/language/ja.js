@@ -164,7 +164,8 @@ const ja = {
   universal: {
     time: {
       dateFormat: "yyyy 年 M 月 d 日",
-      timeFormat: "hh:mm:ss"
+      timeFormat: "hh:mm:ss",
+      taskModalFormat: "YYYY 年 MM 月 DD 日 HH:mm"
     },
     button: {
       submit: "送信する",
@@ -172,6 +173,10 @@ const ja = {
       cancel: "キャンセル"
     },
     placeholder: {
+      instruction: {
+        required: "リクワイヤード",
+        optional: "オプショナル"
+      },
       deny: {
         title: "許可が拒否され",
         caption: "フルアクセスを取得するにはログインしてください。"
