@@ -14,7 +14,7 @@ import FormControl from "@mui/joy/FormControl";
 import FormLabel from "@mui/joy/FormLabel";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { unstable_useDateField as useDateField } from "@mui/x-date-pickers/DateField";
 import { useClearableField } from "@mui/x-date-pickers/hooks";
 
@@ -121,9 +121,9 @@ const JoyDateField = React.forwardRef((props, ref) => {
   );
 });
 
-const JoyDatePicker = React.forwardRef((props, ref) => {
+const JoyDateTimePicker = React.forwardRef((props, ref) => {
   return (
-    <DatePicker
+    <DateTimePicker
       className="PickerRoot"
       ref={ref}
       {...props}
@@ -143,7 +143,11 @@ const JoyDatePicker = React.forwardRef((props, ref) => {
           display: "none"
         }
       })}
-      format="YYYY-MM-DD"
+      format="YYYY-MM-DD HH:mm"
+      viewRenderers={{
+        hours: null,
+        minutes: null
+      }}
     />
   );
 });
@@ -154,7 +158,7 @@ export default function Picker() {
     <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
       <CssVarsProvider theme={{ [THEME_ID]: joyTheme }}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <JoyDatePicker slotProps={{ field: { clearable: true } }} sx={(theme) => console.log(theme) ?? {}} />
+          <JoyDateTimePicker slotProps={{ field: { clearable: true } }} sx={(theme) => console.log(theme) ?? {}} />
         </LocalizationProvider>
       </CssVarsProvider>
     </MaterialCssVarsProvider>
