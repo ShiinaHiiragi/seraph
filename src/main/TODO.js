@@ -104,9 +104,41 @@ const TODO = () => {
     setModalTaskName(name ?? "");
     setModalTaskDesciption(description ?? "");
     setModalTaskType(type ?? "permanent");
-    setModalTaskDueTime(dayjs(dueTime) ?? null);
+    setModalTaskDueTime(dueTime ? dayjs(dueTime) : null);
     setModalTaskOpen(true);
   }, [context]);
+
+  const handleTickTask = React.useCallback((id, createTime) => {
+    toast.promise(new Promise((resolve, reject) => {
+      request(
+        "POST/utility/todo/tick",
+        {
+          id: id,
+          createTime: createTime
+        },
+        undefined,
+        reject
+      )
+        .then((data) => {
+          setTask((task) => task.map((item) =>
+            item.id === id && item.createTime === createTime
+              ? {
+                ...item,
+                deleteTime: data.deleteTime
+              } : item
+          ))
+          resolve();
+        });
+    }), {
+      loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
+      success: context.languagePicker("modal.toast.success.tick"),
+      error: (data) => data
+    })
+  }, [context]);
+
+  const handleUntickTask = React.useCallback(() => {
+    // TODO
+  }, [ ])
 
   const handleModTask = React.useCallback((name, description, type, dueTime) => {
     setModalButtonLoading(true);
@@ -163,7 +195,7 @@ const TODO = () => {
           { "": () => setModalButtonLoading(false) },
           reject
         )
-          .then((data) => {
+          .then(() => {
             setTask((task) => task.map((item) =>
               item.id === id && item.createTime === createTime
                 ? {
@@ -310,6 +342,11 @@ const TODO = () => {
                   variant="outlined"
                   color="neutral"
                   checked={item.deleteTime !== null}
+                  onClick={
+                    () => item.deleteTime === null
+                      ? handleTickTask(item.id, item.createTime)
+                      : handleUntickTask(item.id, item.createTime)
+                  }
                 />
               </Box>
               <Details>

@@ -56,6 +56,7 @@
 
 1. Intro
     - todo
+    - space usage
 2. File Explorer
     - unzip compressed
     - fse support

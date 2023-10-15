@@ -100,7 +100,8 @@ const en = {
         copy: "{0} has been copied in clipboard.",
         cut: "{0} has been cut to clipboard.",
         delete: "{0} has been deleted.",
-        modTask: "The task has been modified."
+        modTask: "The task has been modified.",
+        tick: ""
       },
       warning: {
         invalidToken: "Token is invalid or expired. The page will be refreshed automatically in seconds.",

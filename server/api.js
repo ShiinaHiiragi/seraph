@@ -352,9 +352,8 @@ const taskOperator = {
   __clearExpiredTask: () => {
     const timeNow = Date.now();
     taskOperator.setTask((task) => task.filter(
-      (item) => (item.type === 'sync' && item.dueTime >= timeNow) ||
-        (item.deleteTime !== null && item.deleteTime >= timeNow) ||
-        (item.deleteTime === null)
+      (item) => (item.type !== 'sync' || item.dueTime >= timeNow)
+        && (item.deleteTime === null || item.deleteTime >= timeNow)
     ));
   },
 
@@ -389,7 +388,7 @@ const taskOperator = {
       dueTime: dueTime,
       deleteTime: null
     };
-    taskOperator.setTask((task) => [ ...task, newTask ])
+    taskOperator.setTask((task) => [ newTask, ...task ])
     return {
       id: newTask.id,
       createTime: newTask.createTime
@@ -399,9 +398,10 @@ const taskOperator = {
   tickTask: (index) => {
     taskOperator.setTask((task) => {
       task[index].deleteTime = Date.now() +
-        configOperator.config.setting.task.delay
+        configOperator.config.setting.task.delay * 1000
       return task;
     })
+    return taskOperator.task[index].deleteTime;
   },
 
   untickTask: (index) => {

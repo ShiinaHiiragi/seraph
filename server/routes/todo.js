@@ -63,11 +63,14 @@ router.post('/tick', (req, res, next) => {
     return;
   }
 
-  api.taskOperator.tickTask(target_index);
+  const deleteTime = api.taskOperator.tickTask(target_index);
 
-  // -> ES: no extra info
+  // -> ES: return deleteTime
   req.status.addExecStatus();
-  res.send(req.status.generateReport());
+  res.send({
+    ...req.status.generateReport(),
+    deleteTime: deleteTime
+  });
   return;
 });
 

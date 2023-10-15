@@ -100,7 +100,8 @@ const zhHans = {
         copy: "{0} 已复制到剪贴板。",
         cut: "{0} 已剪切到剪贴板。",
         delete: "{0} 已被删除。",
-        modTask: "任务已被修改。"
+        modTask: "任务已被修改。",
+        tick: ""
       },
       warning: {
         invalidToken: "令牌无效或已过期，页面将在若干秒内自动刷新。",
