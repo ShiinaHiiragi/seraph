@@ -90,6 +90,12 @@ const TODO = () => {
     context.isAuthority,
   ]);
 
+  const processedTask = React.useMemo(() => {
+    return ["permanent", "async", "sync"].includes(filter)
+      ? task.filter((item) => item.type === filter)
+      : task
+  }, [task, filter]);
+
   const modalTaskExpired = React.useMemo(() => {
     const dueTime = modalTaskDueTime?.valueOf();
     if (dueTime) {
@@ -395,7 +401,7 @@ const TODO = () => {
         </Box>
       </Box>
       <List>
-        {task.map((item, index, self) => (
+        {processedTask.map((item, index, self) => (
           <React.Fragment key={item.id}>
             <Item>
               <Box sx={{ pt: 0.5 }} >

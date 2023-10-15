@@ -60,7 +60,7 @@
 2. File Explorer
     - unzip compressed
     - fse support
-    - limited release
+    - auto delete cron
     - edit in milkdown
     - create / edit attached markdown
 3. Links
