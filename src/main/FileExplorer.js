@@ -19,7 +19,8 @@ import GlobalContext, {
   Status,
   request,
   reactionInterval,
-  defaultClipboard
+  defaultClipboard,
+  pathStartWith
 } from "../interface/constants";
 import RouteField from "../interface/RouteField";
 import FileTable from "../components/FileTable";
@@ -162,7 +163,6 @@ const FileExplorer = (props) => {
       return;
     }
 
-    const originType = type, originFolderName = folderName;
     const newFolderName = formNewFolderNameText;
     setModalNewLoading(true);
     toast.promise(new Promise((resolve, reject) => {
@@ -177,7 +177,7 @@ const FileExplorer = (props) => {
         reject
       )
         .then((data) => {
-          if (originType === type && originFolderName === folderName) {
+          if (pathStartWith(`/${type}/${folderName}`)) {
             setFilesList((filesList) => [
               ...filesList,
               {
@@ -222,7 +222,6 @@ const FileExplorer = (props) => {
   // uploading
   const uploadRef = React.useRef();
   const handleUploadFile = React.useCallback((filename, filebase) => {
-    const originType = type, originFolderName = folderName;
     toast.promise(() => new Promise((resolve, reject) => {
       request(
         "POST/file/upload",
@@ -236,7 +235,7 @@ const FileExplorer = (props) => {
         reject
       )
         .then((data) => {
-          if (originType === type && originFolderName === folderName) {
+          if (pathStartWith(`/${type}/${folderName}`)) {
             setFilesList((filesList) => [
               ...filesList,
               {
@@ -293,7 +292,6 @@ const FileExplorer = (props) => {
     const originType = clipboard.path[0];
     const originFolderName = clipboard.path[1];
     toast.promise(new Promise((resolve, reject) => {
-      const __originType = type, __originFolderName = folderName;
       request("POST/file/paste", {
         type: type,
         folderName: folderName
@@ -301,7 +299,7 @@ const FileExplorer = (props) => {
         [Status.execErrCode.ResourcesUnexist]: () => setClipboard({ ...defaultClipboard })
       }, reject)
         .then((data) => {
-          if (__originType === type && __originFolderName === folderName) {
+          if (pathStartWith(`/${type}/${folderName}`)) {
             setFilesList((filesList) => [
               ...filesList,
               {
@@ -376,7 +374,6 @@ const FileExplorer = (props) => {
     }
 
     const originFilename = modalRenameOpen, newFilename = formNewFilenameText;
-    const originType = type, originFolderName = folderName;
     setModalRenameLoading(true);
     toast.promise(new Promise((resolve, reject) => {
       request(
@@ -391,7 +388,7 @@ const FileExplorer = (props) => {
         reject
       )
         .then((data) => {
-          if (originType === type && originFolderName === folderName) {
+          if (pathStartWith(`/${type}/${folderName}`)) {
             setFilesList((filesList) => filesList.map((item) =>
               item.name === originFilename
                 ? {

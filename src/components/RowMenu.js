@@ -8,7 +8,7 @@ import Dropdown from "@mui/joy/Dropdown";
 import IconButton from "@mui/joy/IconButton";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
-import GlobalContext, { request } from "../interface/constants";
+import GlobalContext, { request, pathStartWith } from "../interface/constants";
 
 export default function RowMenu(props) {
   const {
@@ -90,7 +90,6 @@ export default function RowMenu(props) {
   ]);
 
   const handleDelete = React.useCallback((type, folderName, filename) => {
-    const originType = type, originFolderName = folderName;
     toast.promise(new Promise((resolve, reject) => {
       request("POST/file/delete", {
         type: type,
@@ -98,7 +97,7 @@ export default function RowMenu(props) {
         filename: filename
       }, undefined, reject)
         .then(() => {
-          if (originType === type && originFolderName === folderName) {
+          if (pathStartWith(`/${type}/${folderName}`)) {
             setFilesList((filesList) => filesList.filter(
               (item) => item.name !== filename
             ));
