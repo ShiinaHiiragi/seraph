@@ -131,7 +131,9 @@ const TODO = () => {
         });
     }), {
       loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
-      success: context.languagePicker("modal.toast.success.tick"),
+      success: context
+        .languagePicker("modal.toast.success.tick")
+        .format(context.setting.task.delay),
       error: (data) => data
     })
   }, [context]);
