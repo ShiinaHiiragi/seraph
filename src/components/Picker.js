@@ -1,7 +1,11 @@
 import * as React from "react";
-import { Experimental_CssVarsProvider as MaterialCssVarsProvider } from "@mui/material/styles";
 import {
-  extendTheme as extendJoyTheme,
+  experimental_extendTheme as materialExtendTheme,
+  Experimental_CssVarsProvider as MaterialCssVarsProvider,
+  THEME_ID as MATERIAL_THEME_ID
+} from "@mui/material/styles";
+import {
+  extendTheme,
   CssVarsProvider,
   THEME_ID,
 } from "@mui/joy/styles";
@@ -14,7 +18,20 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { unstable_useDateField as useDateField } from "@mui/x-date-pickers/DateField";
 import { useClearableField } from "@mui/x-date-pickers/hooks";
 
-const joyTheme = extendJoyTheme();
+const materialTheme = materialExtendTheme({
+  transitions: {
+    create: () => 'none',
+  },
+  components: {
+    MuiButtonBase: {
+      defaultProps: {
+        disableRipple: true,
+      },
+    },
+  },
+});
+
+const joyTheme = extendTheme();
 const JoyField = React.forwardRef((props, ref) => {
   const {
     disabled,
@@ -132,11 +149,12 @@ const JoyDatePicker = React.forwardRef((props, ref) => {
 });
 
 export default function Picker() {
+  console.log(materialTheme);
   return (
-    <MaterialCssVarsProvider>
+    <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
       <CssVarsProvider theme={{ [THEME_ID]: joyTheme }}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <JoyDatePicker slotProps={{ field: { clearable: true } }} />
+          <JoyDatePicker slotProps={{ field: { clearable: true } }} sx={(theme) => console.log(theme) ?? {}} />
         </LocalizationProvider>
       </CssVarsProvider>
     </MaterialCssVarsProvider>
