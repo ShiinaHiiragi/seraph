@@ -144,7 +144,7 @@ const Welcome = () => {
               {osInfo.userAtHostname}
             </ItemField>
             <ItemField item="platform">
-              {osInfo.platform.upperCaseFirst()}
+              {String(osInfo.platform ?? "").upperCaseFirst()}
             </ItemField>
             <ItemField item="kernelVersion">
               {osInfo.kernelVersion}

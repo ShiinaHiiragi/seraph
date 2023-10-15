@@ -5,8 +5,9 @@ import { toast } from "sonner";
 // eslint-disable-next-line
 String.prototype.upperCaseFirst = function () {
   let formatted = this;
-  return formatted[0].toUpperCase()
-    + formatted.slice(1);
+  return formatted.length
+    ? formatted[0].toUpperCase() + formatted.slice(1)
+    : "";
 }
 
 // eslint-disable-next-line
