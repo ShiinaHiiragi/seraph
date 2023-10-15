@@ -162,6 +162,7 @@ const FileExplorer = (props) => {
       return;
     }
 
+    const originType = type, originFolderName = folderName;
     const newFolderName = formNewFolderNameText;
     setModalNewLoading(true);
     toast.promise(new Promise((resolve, reject) => {
@@ -176,16 +177,19 @@ const FileExplorer = (props) => {
         reject
       )
         .then((data) => {
-          setFilesList((filesList) => [
-            ...filesList,
-            {
-              name: newFolderName,
-              size: data.size,
-              time: data.time,
-              mtime: data.mtime,
-              type: data.type
-            }
-          ]);
+          if (originType === type && originFolderName === folderName) {
+            setFilesList((filesList) => [
+              ...filesList,
+              {
+                name: newFolderName,
+                size: data.size,
+                time: data.time,
+                mtime: data.mtime,
+                type: data.type
+              }
+            ]);
+          }
+
           if (folderName.length === 0) {
             (type === "private" ? setPrivateFolders : setPublicFolders)(
               (folders) => [
@@ -218,6 +222,7 @@ const FileExplorer = (props) => {
   // uploading
   const uploadRef = React.useRef();
   const handleUploadFile = React.useCallback((filename, filebase) => {
+    const originType = type, originFolderName = folderName;
     toast.promise(() => new Promise((resolve, reject) => {
       request(
         "POST/file/upload",
@@ -231,16 +236,18 @@ const FileExplorer = (props) => {
         reject
       )
         .then((data) => {
-          setFilesList((filesList) => [
-            ...filesList,
-            {
-              name: data.name,
-              size: data.size,
-              time: data.time,
-              mtime: data.mtime,
-              type: data.type
-            }
-          ]);
+          if (originType === type && originFolderName === folderName) {
+            setFilesList((filesList) => [
+              ...filesList,
+              {
+                name: data.name,
+                size: data.size,
+                time: data.time,
+                mtime: data.mtime,
+                type: data.type
+              }
+            ]);
+          }
           resolve();
         });
     }), {
@@ -286,6 +293,7 @@ const FileExplorer = (props) => {
     const originType = clipboard.path[0];
     const originFolderName = clipboard.path[1];
     toast.promise(new Promise((resolve, reject) => {
+      const __originType = type, __originFolderName = folderName;
       request("POST/file/paste", {
         type: type,
         folderName: folderName
@@ -293,20 +301,22 @@ const FileExplorer = (props) => {
         [Status.execErrCode.ResourcesUnexist]: () => setClipboard({ ...defaultClipboard })
       }, reject)
         .then((data) => {
-          setFilesList((filesList) => [
-            ...filesList,
-            {
-              name: data.name,
-              size: data.size,
-              time: data.time,
-              mtime: data.mtime,
-              type: data.type
-            }
-          ]);
+          if (__originType === type && __originFolderName === folderName) {
+            setFilesList((filesList) => [
+              ...filesList,
+              {
+                name: data.name,
+                size: data.size,
+                time: data.time,
+                mtime: data.mtime,
+                type: data.type
+              }
+            ]);
+          }
+
           setClipboard((clipboard) =>
             clipboard.permanent ? clipboard : { ...defaultClipboard }
           )
-
           if (!clipboard.permanent && originFolderName.length === 0) {
             (originType === "private" ? setPrivateFolders : setPublicFolders)(
               (folders) => folders.filter((item) => item !== data.name)
@@ -366,6 +376,7 @@ const FileExplorer = (props) => {
     }
 
     const originFilename = modalRenameOpen, newFilename = formNewFilenameText;
+    const originType = type, originFolderName = folderName;
     setModalRenameLoading(true);
     toast.promise(new Promise((resolve, reject) => {
       request(
@@ -380,14 +391,16 @@ const FileExplorer = (props) => {
         reject
       )
         .then((data) => {
-          setFilesList((filesList) => filesList.map((item) =>
-            item.name === originFilename
-              ? {
-                ...item,
-                name: newFilename,
-                type: data.type
-              } : item
-          ));
+          if (originType === type && originFolderName === folderName) {
+            setFilesList((filesList) => filesList.map((item) =>
+              item.name === originFilename
+                ? {
+                  ...item,
+                  name: newFilename,
+                  type: data.type
+                } : item
+            ));
+          }
           if (folderName.length === 0) {
             (type === "private" ? setPrivateFolders : setPublicFolders)(
               (folders) => folders.map((item) =>

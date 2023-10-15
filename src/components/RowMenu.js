@@ -90,6 +90,7 @@ export default function RowMenu(props) {
   ]);
 
   const handleDelete = React.useCallback((type, folderName, filename) => {
+    const originType = type, originFolderName = folderName;
     toast.promise(new Promise((resolve, reject) => {
       request("POST/file/delete", {
         type: type,
@@ -97,9 +98,11 @@ export default function RowMenu(props) {
         filename: filename
       }, undefined, reject)
         .then(() => {
-          setFilesList((filesList) => filesList.filter(
-            (item) => item.name !== filename
-          ));
+          if (originType === type && originFolderName === folderName) {
+            setFilesList((filesList) => filesList.filter(
+              (item) => item.name !== filename
+            ));
+          }
           if (folderName.length === 0) {
             (type === "private" ? setPrivateFolders : setPublicFolders)(
               (folders) => folders.filter((item) => item !== filename)
