@@ -123,27 +123,32 @@ const JoyDateField = React.forwardRef((props, ref) => {
 });
 
 const JoyDateTimePicker = React.forwardRef((props, ref) => {
+  const {
+    slotProps,
+    format
+  } = props
+
   return (
     <DateTimePicker
       className="PickerRoot"
       ref={ref}
+      format={format}
+      ampm={false}
+      viewRenderers={{
+        hours: renderTimeViewClock,
+        minutes: renderTimeViewClock
+      }}
       sx={(theme) => ({
         width: "100%",
         "& .MuiInput-startDecorator": {
           display: "none"
         }
       })}
-      viewRenderers={{
-        hours: renderTimeViewClock,
-        minutes: renderTimeViewClock
-      }}
-      ampm={false}
-      {...props}
-      slots={{ field: JoyDateField, ...props.slots }}
+      slots={{ field: JoyDateField }}
       slotProps={{
-        ...props.slotProps,
+        ...slotProps,
         field: {
-          ...props.slotProps?.field,
+          ...slotProps?.field,
           formControlSx: {
             flexDirection: "row",
           },
