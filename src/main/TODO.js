@@ -138,9 +138,33 @@ const TODO = () => {
     })
   }, [context]);
 
-  const handleUntickTask = React.useCallback(() => {
-    // TODO
-  }, [ ])
+  const handleUntickTask = React.useCallback((id, createTime) => {
+    toast.promise(new Promise((resolve, reject) => {
+      request(
+        "POST/utility/todo/untick",
+        {
+          id: id,
+          createTime: createTime
+        },
+        undefined,
+        reject
+      )
+        .then((data) => {
+          setTask((task) => task.map((item) =>
+            item.id === id && item.createTime === createTime
+              ? {
+                ...item,
+                deleteTime: null
+              } : item
+          ))
+          resolve();
+        });
+    }), {
+      loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
+      success: context.languagePicker("modal.toast.success.untick"),
+      error: (data) => data
+    })
+  }, [context]);
 
   const handleModTask = React.useCallback((name, description, type, dueTime) => {
     setModalButtonLoading(true);
@@ -355,7 +379,7 @@ const TODO = () => {
                 <Typography
                   level="title-md"
                   sx={{ textDecoration: item.deleteTime ? "line-through" : "unset" }}
-                  color="neutral"
+                  color={item.deleteTime ? "neutral" : "secondary"}
                 >
                   {item.name}
                 </Typography>

@@ -101,7 +101,8 @@ const en = {
         cut: "{0} has been cut to clipboard.",
         delete: "{0} has been deleted.",
         modTask: "The task has been modified.",
-        tick: "The task will be deleted in {0} seconds, which can be cancelled by re-ticking the checkbox before the end of its countdown."
+        tick: "The task will be deleted in {0} seconds, which can be cancelled by re-ticking the checkbox before the end of its countdown.",
+        untick: "Changing has been rolled back."
       },
       warning: {
         invalidToken: "Token is invalid or expired. The page will be refreshed automatically in seconds.",
