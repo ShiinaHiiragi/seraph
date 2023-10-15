@@ -2,6 +2,7 @@ import React from "react";
 import dayjs from "dayjs";
 import { toast } from "sonner";
 import { styled } from "@mui/joy/styles";
+import { useTime } from "react-timer-hook";
 import Countdown from "react-countdown";
 import List from "@mui/joy/List";
 import ListItem from "@mui/joy/ListItem";
@@ -49,6 +50,8 @@ const Details = styled("div")(({ theme }) => ({
 
 const TODO = () => {
   const context = React.useContext(GlobalContext);
+  const { seconds } = useTime();
+
   const [task, setTask] = React.useState([]);
   const [search, setSearch] = React.useState("");
   const [filter, setFilter] = React.useState(undefined);
@@ -67,7 +70,15 @@ const TODO = () => {
   React.useEffect(() => {
     if (context.secondTick && context.isAuthority) {
       request(`GET/utility/todo/list`, undefined)
-        .then((data) => setTask(data.task));
+        .then((data) => {
+          const timeNow = Date.now()
+          setTask(
+            data.task.map((item) => ({
+              ...item,
+              expired: item.dueTime <= timeNow
+            }))
+          );
+        });
     }
   // eslint-disable-next-line
   }, [
@@ -85,7 +96,7 @@ const TODO = () => {
     } else {
       setTaskDueTime(null);
     }
-  }, [modalTaskDueTime])
+  }, [modalTaskDueTime]);
 
   const modalTaskExpired = React.useMemo(() => {
     if (taskDueTime) {
@@ -93,7 +104,21 @@ const TODO = () => {
     } else {
       return false
     }
-  }, [taskDueTime])
+  }, [taskDueTime]);
+
+  React.useEffect(() => {
+    const timeNow = Date.now();
+    setTask((task) => task
+      .filter((item) => 
+        (item.type !== 'sync' || item.dueTime >= timeNow) &&
+          (item.deleteTime === null || item.deleteTime >= timeNow)
+      )
+      .map((item) => ({
+        ...item,
+        expired: item.dueTime <= timeNow
+      }))
+    );
+  }, [seconds]);
 
   const handleToggleModalTask = React.useCallback((name, description, type, dueTime) => {
     setModalTaskTitle(
@@ -268,7 +293,7 @@ const TODO = () => {
         .format(name),
       error: (data) => data
     })
-  }
+  };
 
   return (
     <RouteField
@@ -414,7 +439,7 @@ const TODO = () => {
                       <Typography
                         startDecorator={<TodayOutlinedIcon />}
                         level="body-xs"
-                        color="neutral"
+                        color={item.expired ? "danger" : "neutral"}
                       >
                         {new Date(item.dueTime).timeFormat(
                           context.languagePicker("universal.time.taskListFormat")

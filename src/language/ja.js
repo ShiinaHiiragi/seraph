@@ -112,7 +112,8 @@ const ja = {
         incorrectPassword: "パスワードが間違っています。",
         resourcesUnexist: "リクエストされたリソースは存在しません。",
         identifierConflict: "ネーミング識別子競合。",
-        fileModuleError: "ファイルオペレーションモジュールでエクセプションが発生しました。"
+        fileModuleError: "ファイルオペレーションモジュールでエクセプションが発生しました。",
+        duplicateRequest: "デュープリケイトしたリクエスト: オペレーションフリークエンシーを減らしてください。"
       },
       error: {
         unparseableResponse: "解析不能のレスポンス：リクエストは失敗しましてエラーコードが {0} です。",

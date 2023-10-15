@@ -478,6 +478,7 @@ Status.execErrCode = {
   ResourcesUnexist: "RU",
   IdentifierConflict: "IC",
   FileModuleError: "FME",
+  DuplicateRequest: "DR",
   InternalServerError: "ISE"
 }
 

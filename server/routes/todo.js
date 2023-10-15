@@ -63,6 +63,13 @@ router.post('/tick', (req, res, next) => {
     return;
   }
 
+  if (api.taskOperator.task[target_index].deleteTime !== null) {
+    // -> EF_DR: too many clicks
+    req.status.addExecStatus(api.Status.execErrCode.DuplicateRequest);
+    res.send(req.status.generateReport());
+    return;
+  }
+
   const deleteTime = api.taskOperator.tickTask(target_index);
 
   // -> ES: return deleteTime
@@ -86,6 +93,13 @@ router.post('/untick', (req, res, next) => {
   if (target_index === -1) {
     // -> EF_RU: task don't exist
     req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  if (api.taskOperator.task[target_index].deleteTime === null) {
+    // -> EF_DR: too many clicks
+    req.status.addExecStatus(api.Status.execErrCode.DuplicateRequest);
     res.send(req.status.generateReport());
     return;
   }
