@@ -38,7 +38,7 @@ export default function RowMenu(props) {
       }, undefined, reject)
         .then((data) => {
           setClipboard({
-            permanant: true,
+            permanent: true,
             directory: data.directory,
             path: [type, folderName, filename]
           })
@@ -66,7 +66,7 @@ export default function RowMenu(props) {
       }, undefined, reject)
         .then((data) => {
           setClipboard({
-            permanant: false,
+            permanent: false,
             directory: data.directory,
             path: [type, folderName, filename]
           })

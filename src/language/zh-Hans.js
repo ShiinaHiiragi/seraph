@@ -77,7 +77,7 @@ const zhHans = {
       },
       type: {
         all: "所有类型",
-        permanant: "常驻",
+        permanent: "常驻",
         async: "异步",
         sync: "同步"
       }

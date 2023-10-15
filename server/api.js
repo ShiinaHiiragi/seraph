@@ -50,7 +50,7 @@ const defaultConfig = {
     password: ""
   },
   clipboard: {
-    permanant: null,
+    permanent: null,
     directory: null,
     path: null
   },
@@ -230,12 +230,12 @@ const configOperator = {
     }));
   },
 
-  setConfigClipboard: (path, permanant) => {
+  setConfigClipboard: (path, permanent) => {
     const { filePath } = fileOperator.pathCombinator(...path);
     configOperator.setConfig((config) => ({
       ...config,
       clipboard: {
-        permanant: permanant,
+        permanent: permanent,
         directory: fs.lstatSync(filePath).isDirectory(),
         path: path
       }
@@ -246,7 +246,7 @@ const configOperator = {
     configOperator.setConfig((config) => ({
       ...config,
       clipboard: {
-        permanant: null,
+        permanent: null,
         directory: null,
         path: null
       }

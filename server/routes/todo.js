@@ -28,9 +28,9 @@ router.post('/new', (req, res, next) => {
   }
 
   const { name, description, type, dueTime } = req.body;
-  permanantCheck = type === 'permanant' && dueTime === null;
+  permanentCheck = type === 'permanent' && dueTime === null;
   timelinessCheck = ['async', 'sync'].includes(type) && typeof dueTime === 'number';
-  if (!permanantCheck && !timelinessCheck) {
+  if (!permanentCheck && !timelinessCheck) {
     // -> abnormal request
     next(api.errorStreamControl);
     return;
@@ -109,9 +109,9 @@ router.post('/edit', (req, res, next) => {
   }
 
   const { name, description, type, dueTime } = req.body;
-  permanantCheck = type === 'permanant' && dueTime === null;
+  permanentCheck = type === 'permanent' && dueTime === null;
   timelinessCheck = ['async', 'sync'].includes(type) && typeof dueTime === 'number';
-  if (!permanantCheck && !timelinessCheck) {
+  if (!permanentCheck && !timelinessCheck) {
     // -> abnormal request
     next(api.errorStreamControl);
     return;

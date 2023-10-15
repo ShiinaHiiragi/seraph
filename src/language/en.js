@@ -77,7 +77,7 @@ const en = {
       },
       type: {
         all: "All Type",
-        permanant: "Permanant",
+        permanent: "Permanent",
         async: "Async",
         sync: "Sync"
       }

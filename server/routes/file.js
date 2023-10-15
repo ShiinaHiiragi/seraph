@@ -105,8 +105,8 @@ router.post('/paste', (req, res, next) => {
     return;
   }
 
-  const { permanant, directory, path } = api.configOperator.config.clipboard;
-  if (permanant === null || directory === null || path === null) {
+  const { permanent, directory, path } = api.configOperator.config.clipboard;
+  if (permanent === null || directory === null || path === null) {
     api.configOperator.clearConfigClipboard();
 
     // -> abnormal request: clipboard is broken, expect to try again
@@ -153,7 +153,7 @@ router.post('/paste', (req, res, next) => {
 
   try {
     fs.cpSync(filePath, newFilePath, { recursive: true });
-    if (!permanant) {
+    if (!permanent) {
       fs.rmSync(filePath, { recursive: true, force: true });
       api.configOperator.clearConfigClipboard();
     }

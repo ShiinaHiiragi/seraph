@@ -56,7 +56,7 @@ const TODO = () => {
   const [buttonLoading, setButtonLoading] = React.useState(false);
   const [modalTaskName, setModalTaskName] = React.useState("");
   const [modalTaskDesciption, setModalTaskDesciption] = React.useState("");
-  const [modalTaskType, setModalTaskType] = React.useState("permanant");
+  const [modalTaskType, setModalTaskType] = React.useState("permanent");
   const [modalTaskDueTime, setModalTaskDueTime] = React.useState(null);
   const [taskDueTime, setTaskDueTime] = React.useState(null);
 
@@ -85,7 +85,7 @@ const TODO = () => {
     );
     setModalTaskName(name ?? "");
     setModalTaskDesciption(description ?? "");
-    setModalTaskType(type ?? "permanant");
+    setModalTaskType(type ?? "permanent");
     setModalTaskDueTime(dueTime ?? null);
     setModalTaskOpen(true);
   }, [context]);
@@ -168,8 +168,8 @@ const TODO = () => {
               <Option value="all" onClick={(event) => setFilter("all")}>
                 {context.languagePicker("main.todo.type.all")}
               </Option>
-              <Option value="permanant" onClick={(event) => setFilter("permanant")}>
-                {context.languagePicker("main.todo.type.permanant")}
+              <Option value="permanent" onClick={(event) => setFilter("permanent")}>
+                {context.languagePicker("main.todo.type.permanent")}
               </Option>
               <Option value="async" onClick={(event) => setFilter("async")}>
                 {context.languagePicker("main.todo.type.async")}
@@ -300,7 +300,7 @@ const TODO = () => {
       <ModalForm
         open={modalTaskOpen}
         loading={buttonLoading}
-        disabled={modalTaskName.length === 0 || (modalTaskType !== "permanant" && modalTaskDueTime?.$ms !== 0)}
+        disabled={modalTaskName.length === 0 || (modalTaskType !== "permanent" && modalTaskDueTime?.$ms !== 0)}
         handleClose={() => setModalTaskOpen(false)}
         handleClick={() => { }}
         title={modalTaskTitle}
@@ -328,8 +328,8 @@ const TODO = () => {
         <FormControl>
           <FormLabel>{context.languagePicker("main.todo.regulate.type")}</FormLabel>
           <Select value={modalTaskType}>
-            <Option value="permanant" onClick={() => setModalTaskType("permanant")}>
-              {context.languagePicker("main.todo.type.permanant")}
+            <Option value="permanent" onClick={() => setModalTaskType("permanent")}>
+              {context.languagePicker("main.todo.type.permanent")}
             </Option>
             <Option value="async" onClick={() => setModalTaskType("async")}>
               {context.languagePicker("main.todo.type.async")}
@@ -339,7 +339,7 @@ const TODO = () => {
             </Option>
           </Select>
         </FormControl>
-        {modalTaskType !== "permanant" &&
+        {modalTaskType !== "permanent" &&
           <FormControl error={modalTaskExpired}>
             <FormLabel>
               {context.languagePicker("main.todo.regulate.dueTime")}

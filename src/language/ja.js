@@ -77,7 +77,7 @@ const ja = {
       },
       type: {
         all: "全種類",
-        permanant: "常設",
+        permanent: "常設",
         async: "非同期",
         sync: "同期"
       }

@@ -299,16 +299,16 @@ const FileExplorer = (props) => {
             }
           ]);
           setClipboard((clipboard) =>
-            clipboard.permanant ? clipboard : { ...defaultClipboard }
+            clipboard.permanent ? clipboard : { ...defaultClipboard }
           )
 
-          if (!clipboard.permanant && originFolderName.length === 0) {
+          if (!clipboard.permanent && originFolderName.length === 0) {
             (originType === "private" ? setPrivateFolders : setPublicFolders)(
               (folders) => folders.filter((item) => item !== data.name)
             )
           }
 
-          if (!clipboard.permanant && folderName.length === 0) {
+          if (!clipboard.permanent && folderName.length === 0) {
             (type === "private" ? setPrivateFolders : setPublicFolders)(
               (folders) => [...folders, data.name]
             )
@@ -323,7 +323,7 @@ const FileExplorer = (props) => {
       error: (data) => data
     })
   }, [
-    clipboard.permanant,
+    clipboard.permanent,
     clipboard.path,
     context,
     type,
