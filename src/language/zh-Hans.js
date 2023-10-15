@@ -18,8 +18,8 @@ const zhHans = {
     welcome: {
       osInfo: {
         userAtHostname: "用户名@主机名",
-        platform: "平台",
-        kernelVersion: "内核版本",
+        platform: "内核与平台",
+        kernelVersion: "操作系统版本",
         memoryAvailable: "可用内存",
         storageAvailable: "可用外存",
         uptime: "正常运行时间"

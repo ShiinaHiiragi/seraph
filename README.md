@@ -51,33 +51,32 @@
 ## Log
 
 - 2023 9/18 ver 0.1.0: Complete folder page
+- 2023 9/19 ver 0.1.1: Fix several bugs
+- 2023 10/16 ver 0.2.0 Add TODO list
 
 ## Memo
 
-1. Intro
-    - todo
-    - space usage
-2. File Explorer
+1. File Explorer
     - unzip compressed
     - auto delete cron
     - edit in milkdown
     - create / edit attached markdown
-3. Links
+2. Links
     - add / modify / delete links
     - download resources
     - arXiv search
-4. Milkdown
+3. Milkdown
     - edit / read only
     - save in folder / attach to file
     - download
-5. Subscription
+4. Subscription
     - cron (cron) & sync (ntp-time-sync)
     - snippet (return string / file)
     - mail server
     - multilanguage support
-6. Terminal
+5. Terminal
     - open powershell / bash
     - terminal: react-terminal
-7. Header
+6. Header
     - about seraph
     - setting

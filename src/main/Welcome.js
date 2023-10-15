@@ -12,6 +12,7 @@ const Center = styled('div')(({ theme }) => ({
   flexDirection: "column",
   justifyContent: "center",
   alignItems: "flex-start",
+  marginTop: 32,
   [theme.breakpoints.only("xs")]: {
     padding: theme.spacing(0, 0)
   },

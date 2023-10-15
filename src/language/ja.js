@@ -18,8 +18,8 @@ const ja = {
     welcome: {
       osInfo: {
         userAtHostname: "ユーザー@ホストネーム",
-        platform: "プラットホーム",
-        kernelVersion: "カーネルのバージョン",
+        platform: "カーネルとプラットホーム",
+        kernelVersion: "オーエスのバージョン",
         memoryAvailable: "メモリ空き",
         storageAvailable: "ストレージ空き",
         uptime: "アップタイム"

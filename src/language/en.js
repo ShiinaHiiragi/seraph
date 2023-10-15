@@ -18,8 +18,8 @@ const en = {
     welcome: {
       osInfo: {
         userAtHostname: "Username@Hostname",
-        platform: "Platform",
-        kernelVersion: "Kernel Version",
+        platform: "Kernel and Platform",
+        kernelVersion: "OS Version",
         memoryAvailable: "Memory Available",
         storageAvailable: "Storage Available",
         uptime: "Uptime"
