@@ -365,40 +365,43 @@ const FileExplorer = (props) => {
 
     const originFilename = `${modalRenameOpen}`, newFilename = `${formNewFilenameText}`;
     setModalRenameLoading(true);
-    request(
-      "POST/file/rename",
-      {
-        type: type,
-        folderName: folderName,
-        filename: originFilename,
-        newFilename: newFilename
-      },
-      { "": () => setModalRenameLoading(false) }
-    )
-      .then((data) => {
-        setFilesList((filesList) => filesList.map((item) =>
-          item.name === originFilename
-            ? {
-              ...item,
-              name: newFilename,
-              type: data.type
-            } : item
-        ));
-        if (folderName.length === 0) {
-          (type === "private" ? setPrivateFolders : setPublicFolders)(
-            (folders) => folders.map((item) =>
-              item === originFilename ? newFilename : item
+    toast.promise(new Promise((resolve, reject) => {
+      request(
+        "POST/file/rename",
+        {
+          type: type,
+          folderName: folderName,
+          filename: originFilename,
+          newFilename: newFilename
+        },
+        { "": () => setModalRenameLoading(false) },
+        reject
+      )
+        .then((data) => {
+          setFilesList((filesList) => filesList.map((item) =>
+            item.name === originFilename
+              ? {
+                ...item,
+                name: newFilename,
+                type: data.type
+              } : item
+          ));
+          if (folderName.length === 0) {
+            (type === "private" ? setPrivateFolders : setPublicFolders)(
+              (folders) => folders.map((item) =>
+                item === originFilename ? newFilename : item
+              )
             )
-          )
-        }
-        handleCloseRename();
-        toast.success(
-          context
-            .languagePicker("modal.toast.success.rename")
-            .format(originFilename, newFilename)
-        );
-      })
-      .finally(() => setModalRenameLoading(false));
+          }
+          handleCloseRename();
+          resolve();
+        })
+        .finally(() => setModalRenameLoading(false));
+    }), {
+      loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
+      success: context.languagePicker("modal.toast.success.rename").format(originFilename, newFilename),
+      error: (data) => data
+    })
   }, [
     context,
     type,
