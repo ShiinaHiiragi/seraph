@@ -241,7 +241,7 @@ const TODO = () => {
         error: (data) => data
       })
     } else {
-      const id = `${taskInfo.id}`, createTime = taskInfo.createTime, deleteTime = taskInfo.deleteTime
+      const id = taskInfo.id, createTime = taskInfo.createTime, deleteTime = taskInfo.deleteTime
       toast.promise(new Promise((resolve, reject) => {
         request(
           "POST/utility/todo/edit",

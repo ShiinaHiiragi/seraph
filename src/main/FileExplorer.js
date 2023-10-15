@@ -162,7 +162,7 @@ const FileExplorer = (props) => {
       return;
     }
 
-    const newFolderName = `${formNewFolderNameText}`;
+    const newFolderName = formNewFolderNameText;
     setModalNewLoading(true);
     toast.promise(new Promise((resolve, reject) => {
       request(
@@ -283,8 +283,8 @@ const FileExplorer = (props) => {
 
   // paste
   const handlePaste = React.useCallback(() => {
-    const originType = `${clipboard.path[0]}`;
-    const originFolderName = `${clipboard.path[1]}`;
+    const originType = clipboard.path[0];
+    const originFolderName = clipboard.path[1];
     toast.promise(new Promise((resolve, reject) => {
       request("POST/file/paste", {
         type: type,
@@ -365,7 +365,7 @@ const FileExplorer = (props) => {
       return;
     }
 
-    const originFilename = `${modalRenameOpen}`, newFilename = `${formNewFilenameText}`;
+    const originFilename = modalRenameOpen, newFilename = formNewFilenameText;
     setModalRenameLoading(true);
     toast.promise(new Promise((resolve, reject) => {
       request(
