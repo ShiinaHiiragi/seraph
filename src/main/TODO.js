@@ -94,13 +94,21 @@ const TODO = () => {
 
   const processedTask = React.useMemo(() => {
     return task
+      .map((item) => ({
+        ...item,
+        dueTime: item.dueTime === null ? Infinity : item.dueTime
+      }))
       .sortBy("dueTime", reverse)
       .sortBy(sort ?? "dueTime", reverse)
       .filter((item) =>
         ["permanent", "async", "sync"].includes(filter)
           ? item.type === filter
           : item
-      );
+      )
+      .map((item) => ({
+        ...item,
+        dueTime: item.dueTime === Infinity ? null : item.dueTime
+      }))
   }, [task, filter, sort, reverse]);
 
   const modalTaskExpired = React.useMemo(() => {
