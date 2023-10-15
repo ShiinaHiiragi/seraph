@@ -46,6 +46,7 @@ const zhHans = {
         rename: "重命名",
         copy: "复制",
         cut: "剪切",
+        extract: "解压",
         delete: "删除"
       },
       viewRegulate: {
@@ -101,6 +102,7 @@ const zhHans = {
         rename: "{0} 已更名为 {1}。",
         copy: "{0} 已复制到剪贴板。",
         cut: "{0} 已剪切到剪贴板。",
+        extract: "{0} 已解压到当前目录。",
         delete: "{0} 已被删除。",
         modTask: "任务已被修改。",
         tick: "该任务将在 {0} 秒后被删除，可通过在倒计时结束前重新勾选复选框来取消该任务。",

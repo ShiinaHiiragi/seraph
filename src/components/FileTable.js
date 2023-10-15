@@ -236,6 +236,7 @@ export default function FileTable(props) {
                       setClipboard={setClipboard}
                       setPublicFolders={setPublicFolders}
                       setPrivateFolders={setPrivateFolders}
+                      fileType={item.type}
                     />
                   </Box>
                 </td>}

@@ -327,9 +327,14 @@ router.post('/unzip', (req, res, next) => {
 
   decompress(filePath, folderPath)
     .then(() => {
+      const folderInfo = api.fileOperator.readFolderInfo(folderPath);
+
       // -> ES: no extra info
       req.status.addExecStatus();
-      res.send(req.status.generateReport());
+      res.send({
+        ...req.status.generateReport(),
+        info: folderInfo
+      });
       return;
     })
     .catch(() => {

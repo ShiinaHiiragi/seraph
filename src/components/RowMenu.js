@@ -20,7 +20,8 @@ export default function RowMenu(props) {
     setFilesList,
     setClipboard,
     setPublicFolders,
-    setPrivateFolders
+    setPrivateFolders,
+    fileType
   } = props;
   const context = React.useContext(GlobalContext);
 
@@ -123,6 +124,35 @@ export default function RowMenu(props) {
     setPrivateFolders
   ])
 
+  const handleExtract = React.useCallback(() => {
+    toast.promise(new Promise((resolve, reject) => {
+      request("POST/file/unzip", {
+        type: type,
+        folderName: folderName,
+        filename: filename
+      }, undefined, reject)
+        .then((data) => {
+          console.log(data)
+          if (pathStartWith(`/${type}/${folderName}`)) {
+            setFilesList(data.info);
+          }
+          resolve();
+        })
+    }), {
+      loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
+      success: context
+        .languagePicker("modal.toast.success.extract")
+        .format(filename),
+      error: (data) => data
+    })
+  }, [
+    context,
+    type,
+    filename,
+    folderName,
+    setFilesList
+  ])
+
   return (
     <Dropdown>
       <MenuButton
@@ -142,6 +172,10 @@ export default function RowMenu(props) {
         <MenuItem onClick={handleCut}>
           {context.languagePicker("main.folder.rowMenu.cut")}
         </MenuItem>
+        {fileType === "application/zip" &&
+          <MenuItem onClick={handleExtract}>
+            {context.languagePicker("main.folder.rowMenu.extract")}
+          </MenuItem>}
         <Divider />
         <MenuItem
           color="danger"

@@ -139,6 +139,7 @@ export default function FileList(props) {
                   setClipboard={setClipboard}
                   setPublicFolders={setPublicFolders}
                   setPrivateFolders={setPrivateFolders}
+                  fileType={item.type}
                 />}
             </ListItem>
             {index !== self.length - 1 && <ListDivider />}

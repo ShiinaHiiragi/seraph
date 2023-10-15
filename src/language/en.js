@@ -46,6 +46,7 @@ const en = {
         rename: "Rename",
         copy: "Copy",
         cut: "Cut",
+        extract: "Extract",
         delete: "Delete"
       },
       viewRegulate: {
@@ -101,6 +102,7 @@ const en = {
         rename: "{0} has been renamed to {1}.",
         copy: "{0} has been copied in clipboard.",
         cut: "{0} has been cut to clipboard.",
+        extract: "{0} has been extracted to current directory.",
         delete: "{0} has been deleted.",
         modTask: "The task has been modified.",
         tick: "The task will be deleted in {0} seconds, which can be cancelled by re-ticking the checkbox before the end of its countdown.",
