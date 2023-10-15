@@ -58,6 +58,7 @@
     - skeleton
     - setting
 2. File Explorer
+    - zip file
     - auto delete cron
     - edit in milkdown
     - create / edit attached markdown
