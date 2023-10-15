@@ -55,11 +55,9 @@
 
 ## Memo
 1. General
-    - layout
     - skeleton
     - setting
 2. File Explorer
-    - unzip compressed
     - auto delete cron
     - edit in milkdown
     - create / edit attached markdown
