@@ -1,4 +1,5 @@
 import React from "react";
+import { toast } from "sonner";
 import Countdown from "react-countdown";
 import { styled } from "@mui/joy/styles";
 import List from "@mui/joy/List";
@@ -92,33 +93,41 @@ const TODO = () => {
 
   const handleCreateTask = React.useCallback((name, description, type, dueTime) => {
     setModalButtonLoading(true);
-    request(
-      "POST/utility/todo/new",
-      {
-        name: name,
-        description: description,
-        type: type,
-        dueTime: dueTime
-      },
-      { "": () => setModalButtonLoading(false) }
-    )
-      .then((data) => {
-        setTask((task) => [
-          ...task,
-          {
-            id: data.id,
-            createTime: data.createTime,
-            name: name,
-            description: description,
-            type: type,
-            dueTime: dueTime,
-            deleteTime: null
-          }
-        ])
-        setModalTaskOpen(false);
-      })
-      .finally(() => setModalButtonLoading(false));
-  }, [ ]);
+    toast.promise(new Promise((resolve, reject) => {
+      request(
+        "POST/utility/todo/new",
+        {
+          name: name,
+          description: description,
+          type: type,
+          dueTime: dueTime
+        },
+        { "": () => setModalButtonLoading(false) },
+        reject
+      )
+        .then((data) => {
+          setTask((task) => [
+            ...task,
+            {
+              id: data.id,
+              createTime: data.createTime,
+              name: name,
+              description: description,
+              type: type,
+              dueTime: dueTime,
+              deleteTime: null
+            }
+          ])
+          setModalTaskOpen(false);
+          resolve();
+        })
+        .finally(() => setModalButtonLoading(false));
+    }), {
+      loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
+      success: context.languagePicker("modal.toast.success.logout"),
+      error: (data) => data
+    })
+  }, [context]);
 
   // after second tick, the globalSwitch were set properly
   React.useEffect(() => {

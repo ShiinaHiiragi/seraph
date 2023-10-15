@@ -99,7 +99,8 @@ const en = {
         rename: "{0} has been renamed to {1}.",
         copy: "{0} has been copied in clipboard.",
         cut: "{0} has been cut to clipboard.",
-        delete: "{0} has been deleted."
+        delete: "{0} has been deleted.",
+        newTask: "New task has been created."
       },
       warning: {
         invalidToken: "Token is invalid or expired. The page will be refreshed automatically in seconds.",
