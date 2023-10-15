@@ -1,7 +1,8 @@
 import React from "react";
+import dayjs from "dayjs";
 import { toast } from "sonner";
-import Countdown from "react-countdown";
 import { styled } from "@mui/joy/styles";
+import Countdown from "react-countdown";
 import List from "@mui/joy/List";
 import ListItem from "@mui/joy/ListItem";
 import ListDivider from "@mui/joy/ListDivider";
@@ -60,6 +61,7 @@ const TODO = () => {
   const [modalTaskType, setModalTaskType] = React.useState("permanent");
   const [modalTaskDueTime, setModalTaskDueTime] = React.useState(null);
   const [taskDueTime, setTaskDueTime] = React.useState(null);
+  const [taskInfo, setTaskInfo] = React.useState(null);
 
   // after second tick, the globalSwitch were set properly
   React.useEffect(() => {
@@ -102,47 +104,89 @@ const TODO = () => {
     setModalTaskName(name ?? "");
     setModalTaskDesciption(description ?? "");
     setModalTaskType(type ?? "permanent");
-    setModalTaskDueTime(dueTime ?? null);
+    setModalTaskDueTime(dayjs(dueTime) ?? null);
     setModalTaskOpen(true);
   }, [context]);
 
-  const handleCreateTask = React.useCallback((name, description, type, dueTime) => {
+  const handleModTask = React.useCallback((name, description, type, dueTime) => {
     setModalButtonLoading(true);
-    toast.promise(new Promise((resolve, reject) => {
-      request(
-        "POST/utility/todo/new",
-        {
-          name: name,
-          description: description,
-          type: type,
-          dueTime: dueTime
-        },
-        { "": () => setModalButtonLoading(false) },
-        reject
-      )
-        .then((data) => {
-          setTask((task) => [
-            ...task,
-            {
-              id: data.id,
-              createTime: data.createTime,
-              name: name,
-              description: description,
-              type: type,
-              dueTime: dueTime,
-              deleteTime: null
-            }
-          ])
-          setModalTaskOpen(false);
-          resolve();
-        })
-        .finally(() => setModalButtonLoading(false));
-    }), {
-      loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
-      success: context.languagePicker("modal.toast.success.newTask"),
-      error: (data) => data
-    })
-  }, [context]);
+    if (taskInfo === null) {
+      toast.promise(new Promise((resolve, reject) => {
+        request(
+          "POST/utility/todo/new",
+          {
+            name: name,
+            description: description,
+            type: type,
+            dueTime: dueTime
+          },
+          { "": () => setModalButtonLoading(false) },
+          reject
+        )
+          .then((data) => {
+            setTask((task) => [
+              {
+                id: data.id,
+                createTime: data.createTime,
+                name: name,
+                description: description,
+                type: type,
+                dueTime: dueTime,
+                deleteTime: null
+              },
+              ...task
+            ])
+            setModalTaskOpen(false);
+            resolve();
+          })
+          .finally(() => setModalButtonLoading(false));
+      }), {
+        loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
+        success: context
+          .languagePicker("modal.toast.success.new")
+          .format(name),
+        error: (data) => data
+      })
+    } else {
+      const id = `${taskInfo.id}`, createTime = taskInfo.createTime, deleteTime = taskInfo.deleteTime
+      toast.promise(new Promise((resolve, reject) => {
+        request(
+          "POST/utility/todo/edit",
+          {
+            id: id,
+            createTime: createTime,
+            name: name,
+            description: description,
+            type: type,
+            dueTime: dueTime
+          },
+          { "": () => setModalButtonLoading(false) },
+          reject
+        )
+          .then((data) => {
+            setTask((task) => task.map((item) =>
+              item.id === id && item.createTime === createTime
+                ? {
+                  id: id,
+                  createTime: createTime,
+                  name: name,
+                  description: description,
+                  type: type,
+                  dueTime: dueTime,
+                  deleteTime: deleteTime
+                } : item
+            ))
+            setModalTaskOpen(false);
+            resolve();
+          })
+          .finally(() => setModalButtonLoading(false));
+      }), {
+        loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
+        success: context.languagePicker("modal.toast.success.modTask"),
+        error: (data) => data
+      })
+    }
+  }, [context, taskInfo]);
 
   const handleDeleteTask = (id, createTime, name) => {
     toast.promise(new Promise((resolve, reject) => {
@@ -247,7 +291,10 @@ const TODO = () => {
               color="primary"
               variant="solid"
               startDecorator={<AddOutlinedIcon />}
-              onClick={() => handleToggleModalTask()}
+              onClick={() => {
+                setTaskInfo(null);
+                handleToggleModalTask();
+              }}
             >
               {context.languagePicker("main.todo.form.add")}
             </Button>
@@ -329,7 +376,21 @@ const TODO = () => {
                     <MoreVertRoundedIcon />
                   </MenuButton>
                   <Menu size="sm" sx={{ minWidth: 140 }}>
-                    <MenuItem>
+                    <MenuItem
+                      onClick={() => {
+                        setTaskInfo({
+                          id: item.id,
+                          createTime: item.createTime,
+                          deleteTime: item.deleteTime
+                        });
+                        handleToggleModalTask(
+                          item.name,
+                          item.description,
+                          item.type,
+                          item.dueTime
+                        );
+                      }}
+                    >
                       {context.languagePicker("main.todo.form.edit")}
                     </MenuItem>
                     <Divider />
@@ -374,7 +435,7 @@ const TODO = () => {
         loading={modalButtonLoading}
         disabled={modalTaskName.length === 0 || (modalTaskType !== "permanent" && modalTaskDueTime?.$ms !== 0)}
         handleClose={() => setModalTaskOpen(false)}
-        handleClick={() => handleCreateTask(
+        handleClick={() => handleModTask(
           modalTaskName,
           modalTaskDesciption,
           modalTaskType,

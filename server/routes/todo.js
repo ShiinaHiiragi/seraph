@@ -56,7 +56,7 @@ router.post('/tick', (req, res, next) => {
 
   const { id, createTime } = req.body;
   const target_index = api.taskOperator.findTask(id, createTime);
-  if (target_index === undefined) {
+  if (target_index === -1) {
     // -> EF_RU: task don't exist
     req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
     res.send(req.status.generateReport());
@@ -80,7 +80,7 @@ router.post('/untick', (req, res, next) => {
 
   const { id, createTime } = req.body;
   const target_index = api.taskOperator.findTask(id, createTime);
-  if (target_index === undefined) {
+  if (target_index === -1) {
     // -> EF_RU: task don't exist
     req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
     res.send(req.status.generateReport());
@@ -101,10 +101,9 @@ router.post('/edit', (req, res, next) => {
     next(api.errorStreamControl);
     return;
   }
-
   const { id, createTime } = req.body;
   const target_index = api.taskOperator.findTask(id, createTime);
-  if (target_index === undefined) {
+  if (target_index === -1) {
     // -> EF_RU: task don't exist
     req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
     res.send(req.status.generateReport());
@@ -137,7 +136,7 @@ router.post('/delete', (req, res, next) => {
 
   const { id, createTime } = req.body;
   const target_index = api.taskOperator.findTask(id, createTime);
-  if (target_index === undefined) {
+  if (target_index === -1) {
     // -> EF_RU: task don't exist
     req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
     res.send(req.status.generateReport());
