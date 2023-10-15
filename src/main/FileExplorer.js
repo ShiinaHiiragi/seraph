@@ -164,42 +164,45 @@ const FileExplorer = (props) => {
 
     const newFolderName = `${formNewFolderNameText}`;
     setModalNewLoading(true);
-    request(
-      "POST/file/new",
-      {
-        type: type,
-        folderName: folderName,
-        filename: newFolderName
-      },
-      { "": () => setModalNewLoading(false) }
-    )
-      .then((data) => {
-        setFilesList((filesList) => [
-          ...filesList,
-          {
-            name: newFolderName,
-            size: data.size,
-            time: data.time,
-            mtime: data.mtime,
-            type: data.type
-          }
-        ]);
-        if (folderName.length === 0) {
-          (type === "private" ? setPrivateFolders : setPublicFolders)(
-            (folders) => [
-              ...folders,
-              newFolderName
-            ]
-          )
-        };
-        handleCloseNew();
-        toast.success(
-          context
-            .languagePicker("modal.toast.success.new")
-            .format(newFolderName)
-        );
-      })
-      .finally(() => setModalNewLoading(false));
+    toast.promise(new Promise((resolve, reject) => {
+      request(
+        "POST/file/new",
+        {
+          type: type,
+          folderName: folderName,
+          filename: newFolderName
+        },
+        { "": () => setModalNewLoading(false) },
+        reject
+      )
+        .then((data) => {
+          setFilesList((filesList) => [
+            ...filesList,
+            {
+              name: newFolderName,
+              size: data.size,
+              time: data.time,
+              mtime: data.mtime,
+              type: data.type
+            }
+          ]);
+          if (folderName.length === 0) {
+            (type === "private" ? setPrivateFolders : setPublicFolders)(
+              (folders) => [
+                ...folders,
+                newFolderName
+              ]
+            )
+          };
+          handleCloseNew();
+          resolve();
+        })
+        .finally(() => setModalNewLoading(false));
+    }), {
+      loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
+      success: context.languagePicker("modal.toast.success.new").format(newFolderName),
+      error: (data) => data
+    })
   }, [
     type,
     context,
