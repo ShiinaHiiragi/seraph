@@ -1,5 +1,6 @@
 let express = require('express');
 let fs = require('fs');
+let fse = require('fs-extra')
 let path = require('path');
 let api = require('../api');
 let router = express.Router();
@@ -152,9 +153,10 @@ router.post('/paste', (req, res, next) => {
   }
 
   try {
-    fs.cpSync(filePath, newFilePath, { recursive: true });
-    if (!permanent) {
-      fs.rmSync(filePath, { recursive: true, force: true });
+    if (permanent) {
+      fs.cpSync(filePath, newFilePath, { recursive: true });
+    } else {
+      fse.moveSync(filePath, newFilePath);
       api.configOperator.clearConfigClipboard();
     }
   } catch (_) {

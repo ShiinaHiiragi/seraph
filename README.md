@@ -59,7 +59,6 @@
     - space usage
 2. File Explorer
     - unzip compressed
-    - fse support
     - auto delete cron
     - edit in milkdown
     - create / edit attached markdown
@@ -79,9 +78,6 @@
 6. Terminal
     - open powershell / bash
     - terminal: react-terminal
-7. TODO
-    - sync: clear automatically
-    - async: clear after ticked 60 s
-8. Header
+7. Header
     - about seraph
     - setting
