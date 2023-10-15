@@ -140,6 +140,11 @@ const zhHans = {
         title: "重命名",
         caption: "命名限制取决于服务器所在平台，尽量不要修改扩展名。",
         placeholder: "新文件名"
+      },
+      todo: {
+        new: "创建新任务",
+        edit: "编辑任务",
+        caption: "Eu ex sit ea occaecat ipsum eu velit commodo sit amet ullamco eu."
       }
     },
     reconfirm: {

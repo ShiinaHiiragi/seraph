@@ -140,6 +140,11 @@ const en = {
         title: "Renaming",
         caption: "Naming restrictions depend on platform on which server locates and try not to modify the extension name as much as possible.",
         placeholder: "New Filename"
+      },
+      todo: {
+        new: "Create New Task",
+        edit: "Edit Task",
+        caption: "Eu ex sit ea occaecat ipsum eu velit commodo sit amet ullamco eu."
       }
     },
     reconfirm: {

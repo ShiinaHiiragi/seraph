@@ -50,6 +50,27 @@ const TODO = () => {
   const [search, setSearch] = React.useState("");
   const [filter, setFilter] = React.useState(undefined);
 
+  const [modalTaskTitle, setModalTaskTitle] = React.useState("");
+  const [modalTaskOpen, setModalTaskOpen] = React.useState(false);
+  const [buttonLoading, setButtonLoading] = React.useState(false);
+  const [modalTaskName, setModalTaskName] = React.useState("");
+  const [modalTaskDesciption, setModalTaskDesciption] = React.useState("");
+  const [modalTaskType, setModalTaskType] = React.useState("permanant");
+  const [modalTaskDueTime, setModalTaskDueTime] = React.useState(null);
+
+  const handleOpenModalTask = React.useCallback((name, description, type, dueTime) => {
+    setModalTaskTitle(
+      context.languagePicker(
+        `modal.form.todo.${dueTime ? "edit" : "new"}`
+      )
+    );
+    setModalTaskName(name ?? "");
+    setModalTaskDesciption(description ?? "");
+    setModalTaskType(type ?? "permanant");
+    setModalTaskDueTime(dueTime ?? null);
+    setModalTaskOpen(true);
+  }, [context]);
+
   // after second tick, the globalSwitch were set properly
   React.useEffect(() => {
     if (context.secondTick && context.isAuthority) {
@@ -147,6 +168,7 @@ const TODO = () => {
               color="primary"
               variant="solid"
               startDecorator={<AddOutlinedIcon />}
+              onClick={handleOpenModalTask}
             >
               {context.languagePicker("main.todo.form.add")}
             </Button>
@@ -257,13 +279,13 @@ const TODO = () => {
         ))}
       </List>
       <ModalForm
-        open={false}
-        loading={false}
-        disabled={false}
-        handleClose={() => { }}
+        open={modalTaskOpen}
+        loading={buttonLoading}
+        disabled={modalTaskName.length === 0}
+        handleClose={() => setModalTaskOpen(false)}
         handleClick={() => { }}
-        title={"123"}
-        caption={"234"}
+        title={modalTaskTitle}
+        caption={context.languagePicker("modal.form.todo.caption")}
         button={context.languagePicker("universal.button.submit")}
       >
         <FormControl>

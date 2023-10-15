@@ -140,6 +140,11 @@ const ja = {
         title: "リネームする",
         caption: "ネーミング制限はサーバーが配置されているプラットフォームによって違いがある。そして拡張子はできる限り変更しないようにしてください。",
         placeholder: "新たなファイル名"
+      },
+      todo: {
+        new: "新たなタスクを作成する",
+        edit: "タスクをエディットする",
+        caption: "Eu ex sit ea occaecat ipsum eu velit commodo sit amet ullamco eu."
       }
     },
     reconfirm: {
