@@ -125,7 +125,9 @@ const JoyDateField = React.forwardRef((props, ref) => {
 const JoyDateTimePicker = React.forwardRef((props, ref) => {
   const {
     slotProps,
-    format
+    format,
+    value,
+    onChange
   } = props
 
   return (
@@ -133,6 +135,8 @@ const JoyDateTimePicker = React.forwardRef((props, ref) => {
       className="PickerRoot"
       ref={ref}
       format={format}
+      value={value}
+      onChange={onChange}
       ampm={false}
       viewRenderers={{
         hours: renderTimeViewClock,
@@ -159,7 +163,11 @@ const JoyDateTimePicker = React.forwardRef((props, ref) => {
 });
 
 export default function Picker(props) {
-  const { timeFormat } = props;
+  const {
+    timeFormat,
+    value,
+    onChange
+  } = props;
 
   return (
     <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
@@ -168,6 +176,8 @@ export default function Picker(props) {
           <JoyDateTimePicker
             slotProps={{ field: { clearable: true } }}
             format={timeFormat}
+            value={value}
+            onChange={onChange}
           />
         </LocalizationProvider>
       </CssVarsProvider>

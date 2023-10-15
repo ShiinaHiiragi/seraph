@@ -15,6 +15,7 @@ import Dropdown from "@mui/joy/Dropdown";
 import IconButton from "@mui/joy/IconButton";
 import FormControl from "@mui/joy/FormControl";
 import FormLabel from "@mui/joy/FormLabel";
+import FormHelperText from "@mui/joy/FormHelperText";
 import Input from "@mui/joy/Input";
 import Textarea from "@mui/joy/Textarea";
 import Select from "@mui/joy/Select";
@@ -57,6 +58,15 @@ const TODO = () => {
   const [modalTaskDesciption, setModalTaskDesciption] = React.useState("");
   const [modalTaskType, setModalTaskType] = React.useState("permanant");
   const [modalTaskDueTime, setModalTaskDueTime] = React.useState(null);
+
+  const modalTaskExpired = React.useMemo(() => {
+    if (modalTaskDueTime?.$ms === 0) {
+      const { $y, $M, $D, $H, $m } = modalTaskDueTime;
+      return new Date($y, $M, $D, $H, $m).getTime() < Date.now()
+    } else {
+      return false;
+    }
+  }, [modalTaskDueTime])
 
   const handleToggleModalTask = React.useCallback((name, description, type, dueTime) => {
     setModalTaskTitle(
@@ -281,7 +291,7 @@ const TODO = () => {
       <ModalForm
         open={modalTaskOpen}
         loading={buttonLoading}
-        disabled={modalTaskName.length === 0}
+        disabled={modalTaskName.length === 0 || (modalTaskType !== "permanant" && modalTaskDueTime?.$ms !== 0)}
         handleClose={() => setModalTaskOpen(false)}
         handleClick={() => { }}
         title={modalTaskTitle}
@@ -321,13 +331,18 @@ const TODO = () => {
           </Select>
         </FormControl>
         {modalTaskType !== "permanant" &&
-          <FormControl>
+          <FormControl error={modalTaskExpired}>
             <FormLabel>
               {context.languagePicker("main.todo.regulate.dueTime")}
             </FormLabel>
             <Picker
               timeFormat={context.languagePicker("universal.time.taskModalFormat")}
+              value={modalTaskDueTime}
+              onChange={(newValue) => setModalTaskDueTime(newValue)}
             />
+            {modalTaskExpired && <FormHelperText>
+              {context.languagePicker("modal.form.todo.helper")}
+            </FormHelperText>}
           </FormControl>}
       </ModalForm>
     </RouteField>
