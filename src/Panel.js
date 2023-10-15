@@ -183,7 +183,8 @@ const Panel = () => {
         firstTick: firstTick,
         secondTick: secondTick,
         sortedPublicFolders: sortedPublicFolders,
-        sortedPrivateFolders: sortedPrivateFolders
+        sortedPrivateFolders: sortedPrivateFolders,
+        setting: setting,
       }}
     >
       <GlobalStyles styles={toastTheme} />

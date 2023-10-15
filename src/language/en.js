@@ -71,7 +71,9 @@ const en = {
       form: {
         search: "Search Task",
         filter: "Filter by Type",
-        add: "Add"
+        add: "Add",
+        edit: "Edit",
+        delete: "Delete"
       },
       type: {
         all: "All Type",

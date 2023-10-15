@@ -154,83 +154,108 @@ const TODO = () => {
         </Box>
       </Box>
       <List>
-        <Item>
-          <Box sx={{ pt: 0.5 }} >
-            <Checkbox
-              variant="outlined"
-              color="neutral"
-              checked
-            />
-          </Box>
-          <Details>
-            <Typography
-              level="title-md"
-              sx={{ textDecoration: "line-through" }}
-              color="neutral"
-            >
-              Homework
-            </Typography>
-            <Typography level="body-sm">
-              In esse ullamco fugiat aliquip consectetur fugiat ex ad labore minim commodo quis commodo.
-            </Typography>
-            <Box
-              sx={{
-                pt: 0.5,
-                gap: 0.75,
-                display: "flex",
-                flexDirection: { xs: "column", sm: "row" }
-              }}
-            >
-              <Typography
-                startDecorator={<AccessAlarmsOutlinedIcon />}
-                level="body-xs"
-                color="neutral"
+        {task.map((item, index) => (
+          <React.Fragment>
+            <Item>
+              <Box sx={{ pt: 0.5 }} >
+                <Checkbox
+                  variant="outlined"
+                  color="neutral"
+                  checked
+                />
+              </Box>
+              <Details>
+                <Typography
+                  level="title-md"
+                  sx={{ textDecoration: "line-through" }}
+                  color="neutral"
+                >
+                  {item.name}
+                </Typography>
+                {item.description.split("\n").map((paragraph) => (
+                  <Typography level="body-sm">
+                    {paragraph}
+                  </Typography>
+                ))}
+                <Box
+                  sx={{
+                    pt: 0.5,
+                    gap: 0.75,
+                    display: "flex",
+                    flexDirection: { xs: "column", sm: "row" }
+                  }}
+                >
+                  <Typography
+                    startDecorator={<AccessAlarmsOutlinedIcon />}
+                    level="body-xs"
+                    color="neutral"
+                  >
+                    {context.languagePicker(`main.todo.type.${item.type}`)}
+                  </Typography>
+                  <Typography
+                    level="body-xs"
+                    sx={{ display: { xs: "none", sm: "inline" } }}
+                  >
+                    &bull;
+                  </Typography>
+                  <Typography
+                    startDecorator={<TodayOutlinedIcon />}
+                    level="body-xs"
+                    color="neutral"
+                  >
+                    {item.dueTime.timeFormat(
+                      context.languagePicker("universal.time.dateFormat")
+                        + " "
+                        + context.languagePicker("universal.time.timeFormat")
+                    )}
+                  </Typography>
+                </Box>
+              </Details>
+              <Box
+                sx={{
+                  height: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center"
+                }}
               >
-                Async
-              </Typography>
-              <Typography
-                level="body-xs"
-                sx={{ display: { xs: "none", sm: "inline" } }}
-              >
-                &bull;
-              </Typography>
-              <Typography
-                startDecorator={<TodayOutlinedIcon />}
-                level="body-xs"
-                color="neutral"
-              >
-                10/14/2022 23:59:59
-              </Typography>
-            </Box>
-          </Details>
-          <Box>
-            <Dropdown>
-              <MenuButton
-                slots={{ root: IconButton }}
-                slotProps={{ root: { variant: "plain", color: "neutral", size: "sm" } }}
-              >
-                <MoreVertRoundedIcon />
-              </MenuButton>
-              <Menu size="sm" sx={{ minWidth: 140 }}>
-                <MenuItem>
-                  234
-                </MenuItem>
-                <Divider />
-                <MenuItem>
-                  123
-                </MenuItem>
-              </Menu>
-            </Dropdown>
-          </Box>
-        </Item>
-        <ListDivider inset="startDecorator" />
+                <Dropdown>
+                  <MenuButton
+                    slots={{ root: IconButton }}
+                    slotProps={{ root: { variant: "plain", color: "neutral", size: "sm" } }}
+                  >
+                    <MoreVertRoundedIcon />
+                  </MenuButton>
+                  <Menu size="sm" sx={{ minWidth: 140 }}>
+                    <MenuItem>
+                      {context.languagePicker("main.todo.form.edit")}
+                    </MenuItem>
+                    <Divider />
+                    <MenuItem>
+                      {context.languagePicker("main.todo.form.delete")}
+                    </MenuItem>
+                  </Menu>
+                </Dropdown>
+                <Box sx={{ flexGrow: 1 }} />
+                {item.deleteTime && <Countdown
+                  date={item.deleteTime ?? 0}
+                  intervalDelay={0}
+                  precision={1}
+                  renderer={(props) => (
+                    <CircularProgress
+                      size="sm"
+                      variant="soft"
+                      determinate
+                      value={props.total / (context.setting.task.delay * 10)}
+                    />
+                  )}
+                />}
+              </Box>
+            </Item>
+            <ListDivider inset="startDecorator" />
+          </React.Fragment>
+        ))}
       </List>
-      {/* <Countdown
-        date={Date.now() + 60000}
-        intervalDelay={0}
-        precision={2}
-        renderer={(props) => <CircularProgress size="sm" determinate value={props.total / 600} />}
-      /> */}
       <ModalForm
         open={false}
         loading={false}

@@ -71,7 +71,9 @@ const zhHans = {
       form: {
         search: "搜索任务",
         filter: "按类型过滤",
-        add: "添加"
+        add: "添加",
+        edit: "编辑",
+        delete: "删除"
       },
       type: {
         all: "所有类型",

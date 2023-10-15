@@ -71,7 +71,9 @@ const ja = {
       form: {
         search: "タスクの検索",
         filter: "タイプでフィルタ",
-        add: "追加"
+        add: "追加",
+        edit: "エディット",
+        delete: "デリート"
       },
       type: {
         all: "全種類",

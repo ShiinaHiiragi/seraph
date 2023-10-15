@@ -107,6 +107,9 @@ const defaultClipboard = {
 const defaultSetting = {
   meta: {
     language: "en"
+  },
+  task: {
+    delay: 60
   }
 };
 
