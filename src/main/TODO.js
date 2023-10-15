@@ -52,10 +52,11 @@ const TODO = () => {
   const context = React.useContext(GlobalContext);
   const { seconds } = useTime();
 
-  const [task, setTask] = React.useState([]);
+  const [task, setTask] = React.useState([ ]);
   const [search, setSearch] = React.useState("");
   const [filter, setFilter] = React.useState(undefined);
   const [checkboxDisabled, setCheckboxDisabled] = React.useState(false);
+  const [history, setHistory] = React.useState({ });
 
   const [modalTaskTitle, setModalTaskTitle] = React.useState("");
   const [modalTaskOpen, setModalTaskOpen] = React.useState(false);
@@ -64,7 +65,6 @@ const TODO = () => {
   const [modalTaskDesciption, setModalTaskDesciption] = React.useState("");
   const [modalTaskType, setModalTaskType] = React.useState("permanent");
   const [modalTaskDueTime, setModalTaskDueTime] = React.useState(null);
-  const [taskDueTime, setTaskDueTime] = React.useState(null);
   const [taskInfo, setTaskInfo] = React.useState(null);
 
   // after second tick, the globalSwitch were set properly
@@ -90,22 +90,14 @@ const TODO = () => {
     context.isAuthority,
   ]);
 
-  React.useEffect(() => {
-    if (modalTaskDueTime?.$ms === 0) {
-      const { $y, $M, $D, $H, $m } = modalTaskDueTime;
-      setTaskDueTime(new Date($y, $M, $D, $H, $m).getTime());
-    } else {
-      setTaskDueTime(null);
-    }
-  }, [modalTaskDueTime]);
-
   const modalTaskExpired = React.useMemo(() => {
-    if (taskDueTime) {
-      return taskDueTime < Date.now()
+    const dueTime = modalTaskDueTime?.valueOf();
+    if (dueTime) {
+      return dueTime < Date.now()
     } else {
       return false
     }
-  }, [taskDueTime]);
+  }, [modalTaskDueTime]);
 
   React.useEffect(() => {
     const timeNow = Date.now();
@@ -121,7 +113,20 @@ const TODO = () => {
     );
   }, [seconds]);
 
+  const matchHistory = React.useCallback((name, description, type, dueTime) => {
+    return history.name === name &&
+      history.description === description &&
+      history.type === type &&
+      history.dueTime === dueTime?.valueOf()
+  }, [history]);
+
   const handleToggleModalTask = React.useCallback((name, description, type, dueTime) => {
+    setHistory({
+      name: name,
+      description: description,
+      type: type,
+      dueTime: dueTime
+    });
     setModalTaskTitle(
       context.languagePicker(
         `modal.form.todo.${dueTime ? "edit" : "new"}`
@@ -529,13 +534,18 @@ const TODO = () => {
       <ModalForm
         open={modalTaskOpen}
         loading={modalButtonLoading}
-        disabled={modalTaskName.length === 0 || (modalTaskType !== "permanent" && modalTaskDueTime?.$ms !== 0)}
+        disabled={
+          matchHistory(modalTaskName, modalTaskDesciption, modalTaskType, modalTaskDueTime) ||
+          modalTaskName.length === 0 ||
+          (modalTaskType !== "permanent" && modalTaskDueTime?.$ms !== 0) ||
+          (modalTaskType === "sync" && modalTaskExpired)
+        }
         handleClose={() => setModalTaskOpen(false)}
         handleClick={() => handleModTask(
           modalTaskName,
           modalTaskDesciption,
           modalTaskType,
-          taskDueTime
+          modalTaskDueTime?.valueOf() ?? null
         )}
         title={modalTaskTitle}
         caption={context.languagePicker("modal.form.todo.caption")}
@@ -584,7 +594,12 @@ const TODO = () => {
               onChange={(newValue) => setModalTaskDueTime(newValue)}
             />
             {modalTaskExpired && <FormHelperText>
-              {context.languagePicker("modal.form.todo.helper")}
+              {context
+                .languagePicker("modal.form.todo.helperFirstHalf")
+                .format(
+                  modalTaskType !== "sync"
+                    ? context.languagePicker("modal.form.todo.helperSecondHalf")
+                    : "")}
             </FormHelperText>}
           </FormControl>}
       </ModalForm>
