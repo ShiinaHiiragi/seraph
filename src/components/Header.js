@@ -8,7 +8,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
 import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import GreyLogo from "../logo-grey.svg";
 import GlobalContext, { globalState, request, Status } from "../interface/constants";
 import ModalForm from "../modal/Form";
@@ -131,12 +131,14 @@ const Header = (props) => {
         >
           <MenuIcon />
         </IconButton>
-        <IconButton
-          disabled
-          sx={{ display: { xs: "none", sm: "none", md: "inline-flex" } }}
-        >
-          <img src={GreyLogo} width={24} height={24} alt=""/>
-        </IconButton>
+        <Link to="/">
+          <IconButton
+            disabled
+            sx={{ display: { xs: "none", sm: "none", md: "inline-flex" } }}
+          >
+            <img src={GreyLogo} width={24} height={24} alt=""/>
+          </IconButton>
+        </Link>
         <Typography component="h1" fontWeight="lg" sx={{ letterSpacing: "0.06em" }}>
           {context.languagePicker("nav.title")}
         </Typography>
