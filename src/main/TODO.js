@@ -55,6 +55,7 @@ const TODO = () => {
   const [task, setTask] = React.useState([]);
   const [search, setSearch] = React.useState("");
   const [filter, setFilter] = React.useState(undefined);
+  const [checkboxDisabled, setCheckboxDisabled] = React.useState(false);
 
   const [modalTaskTitle, setModalTaskTitle] = React.useState("");
   const [modalTaskOpen, setModalTaskOpen] = React.useState(false);
@@ -134,6 +135,7 @@ const TODO = () => {
   }, [context]);
 
   const handleTickTask = React.useCallback((id, createTime) => {
+    setCheckboxDisabled(true);
     toast.promise(new Promise((resolve, reject) => {
       request(
         "POST/utility/todo/tick",
@@ -141,7 +143,7 @@ const TODO = () => {
           id: id,
           createTime: createTime
         },
-        undefined,
+        { "": () => setCheckboxDisabled(false) },
         reject
       )
         .then((data) => {
@@ -153,7 +155,8 @@ const TODO = () => {
               } : item
           ))
           resolve();
-        });
+        })
+        .finally(() => setCheckboxDisabled(false));
     }), {
       loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
       success: context
@@ -164,6 +167,7 @@ const TODO = () => {
   }, [context]);
 
   const handleUntickTask = React.useCallback((id, createTime) => {
+    setCheckboxDisabled(true);
     toast.promise(new Promise((resolve, reject) => {
       request(
         "POST/utility/todo/untick",
@@ -171,10 +175,10 @@ const TODO = () => {
           id: id,
           createTime: createTime
         },
-        undefined,
+        { "": () => setCheckboxDisabled(false) },
         reject
       )
-        .then((data) => {
+        .then(() => {
           setTask((task) => task.map((item) =>
             item.id === id && item.createTime === createTime
               ? {
@@ -183,7 +187,8 @@ const TODO = () => {
               } : item
           ))
           resolve();
-        });
+        })
+        .finally(() => setCheckboxDisabled(false));
     }), {
       loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
       success: context.languagePicker("modal.toast.success.untick"),
@@ -393,8 +398,11 @@ const TODO = () => {
                   variant="outlined"
                   color="neutral"
                   checked={item.deleteTime !== null}
+                  disabled={checkboxDisabled}
                   onClick={
-                    () => item.deleteTime === null
+                    () => checkboxDisabled
+                      ? null
+                      : item.deleteTime === null
                       ? handleTickTask(item.id, item.createTime)
                       : handleUntickTask(item.id, item.createTime)
                   }
