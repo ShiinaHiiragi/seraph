@@ -63,13 +63,14 @@ const ja = {
     },
     todo: {
       regulate: {
+        createTime: "作成日時",
         name: "タスクネーム",
         description: "ディスクリプション",
         type: "タイプ",
         dueTime: "締め切り"
       },
       form: {
-        search: "タスクの検索",
+        sort: "ソート",
         filter: "タイプでフィルタ",
         add: "追加",
         edit: "エディット",

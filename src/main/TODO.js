@@ -25,7 +25,8 @@ import Select from "@mui/joy/Select";
 import Option from "@mui/joy/Option";
 import Button from "@mui/joy/Button";
 import CircularProgress from "@mui/joy/CircularProgress";
-import SearchIcon from "@mui/icons-material/Search";
+import KeyboardArrowUpOutlinedIcon from "@mui/icons-material/KeyboardArrowUpOutlined";
+import KeyboardArrowDownOutlinedIcon from "@mui/icons-material/KeyboardArrowDownOutlined";
 import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
 import TodayOutlinedIcon from "@mui/icons-material/TodayOutlined";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
@@ -53,7 +54,8 @@ const TODO = () => {
   const { seconds } = useTime();
 
   const [task, setTask] = React.useState([ ]);
-  const [search, setSearch] = React.useState("");
+  const [sort, setSort] = React.useState(undefined);
+  const [reverse, setReverse] = React.useState(false);
   const [filter, setFilter] = React.useState(undefined);
   const [checkboxDisabled, setCheckboxDisabled] = React.useState(false);
   const [history, setHistory] = React.useState({ });
@@ -91,10 +93,15 @@ const TODO = () => {
   ]);
 
   const processedTask = React.useMemo(() => {
-    return ["permanent", "async", "sync"].includes(filter)
-      ? task.filter((item) => item.type === filter)
-      : task
-  }, [task, filter]);
+    return task
+      .sortBy("dueTime", reverse)
+      .sortBy(sort ?? "dueTime", reverse)
+      .filter((item) =>
+        ["permanent", "async", "sync"].includes(filter)
+          ? item.type === filter
+          : item
+      );
+  }, [task, filter, sort, reverse]);
 
   const modalTaskExpired = React.useMemo(() => {
     const dueTime = modalTaskDueTime?.valueOf();
@@ -109,7 +116,7 @@ const TODO = () => {
     const timeNow = Date.now();
     setTask((task) => task
       .filter((item) => 
-        (item.type !== 'sync' || item.dueTime >= timeNow) &&
+        (item.type !== "sync" || item.dueTime >= timeNow) &&
           (item.deleteTime === null || item.deleteTime >= timeNow)
       )
       .map((item) => ({
@@ -336,23 +343,38 @@ const TODO = () => {
           "& > *": { minWidth: { xs: "120px", md: "160px" } },
         }}
       >
-        <Box sx={{ display: "flex", flexGrow: 1 }}>
-          <FormControl sx={{ width: "100%" }} size="sm">
-            <Input
-              autoComplete="off"
+        <Box sx={{ display: "flex", flexGrow: 2, gap: 1.5 }}>
+          <IconButton size="sm" variant="outlined" onClick={() => setReverse((reverse) => !reverse)}>
+            {reverse ? <KeyboardArrowDownOutlinedIcon /> : <KeyboardArrowUpOutlinedIcon />}
+          </IconButton>
+          <FormControl sx={{ flexGrow: 1 }} size="sm">
+            <Select
               size="sm"
-              value={search}
-              onChange={(event) => setSearch(event.target.value)}
-              placeholder={context.languagePicker("main.todo.form.search")}
-              startDecorator={<SearchIcon />}
-            />
+              value={sort}
+              placeholder={context.languagePicker("main.todo.form.sort")}
+              slotProps={{ button: { sx: { whiteSpace: "wrap" } } }}
+            >
+              <Option value="dueTime" onClick={() => setSort("dueTime")}>
+                {context.languagePicker("main.todo.regulate.dueTime")}
+              </Option>
+              <Option value="createTime" onClick={() => setSort("createTime")}>
+                {context.languagePicker("main.todo.regulate.createTime")}
+              </Option>
+              <Option value="name" onClick={() => setSort("name")}>
+                {context.languagePicker("main.todo.regulate.name")}
+              </Option>
+              <Option value="description" onClick={() => setSort("description")}>
+                {context.languagePicker("main.todo.regulate.description")}
+              </Option>
+            </Select>
           </FormControl>
         </Box>
         <Box
           sx={{
             display: "flex",
             gap: 1.5,
-            width: { xs: "100%", sm: "auto" }
+            width: { xs: "100%", sm: "auto" },
+            flexGrow: 1
           }}
         >
           <FormControl

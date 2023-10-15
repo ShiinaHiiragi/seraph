@@ -63,13 +63,14 @@ const zhHans = {
     },
     todo: {
       regulate: {
+        createTime: "创建时间",
         name: "任务名",
         description: "描述",
         type: "类型",
         dueTime: "截止时间"
       },
       form: {
-        search: "搜索任务",
+        sort: "排序",
         filter: "按类型过滤",
         add: "添加",
         edit: "编辑",

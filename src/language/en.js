@@ -63,13 +63,14 @@ const en = {
     },
     todo: {
       regulate: {
+        createTime: "Time Created",
         name: "Task Name",
         description: "Description",
         type: "Type",
         dueTime: "Due Time"
       },
       form: {
-        search: "Search Task",
+        sort: "Sort by",
         filter: "Filter by Type",
         add: "Add",
         edit: "Edit",
