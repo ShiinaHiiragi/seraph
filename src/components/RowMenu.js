@@ -46,7 +46,9 @@ export default function RowMenu(props) {
         })
     }), {
       loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
-      success: context.languagePicker("modal.toast.success.copy").format(filename),
+      success: context
+        .languagePicker("modal.toast.success.copy")
+        .format(filename),
       error: (data) => data
     })
   }, [
@@ -74,7 +76,9 @@ export default function RowMenu(props) {
         })
     }), {
       loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
-      success: context.languagePicker("modal.toast.success.cut").format(filename),
+      success: context
+        .languagePicker("modal.toast.success.cut")
+        .format(filename),
       error: (data) => data
     })
   }, [
@@ -143,7 +147,7 @@ export default function RowMenu(props) {
             context.setModalReconfirm({
               open: true,
               captionFirstHalf: context
-                .languagePicker("modal.reconfirm.captionFirstHalf.delete")
+                .languagePicker("modal.reconfirm.captionFirstHalf.deleteFile")
                 .format(filename),
               handleAction: () => handleDelete(type, folderName, filename)
             })

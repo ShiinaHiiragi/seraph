@@ -154,7 +154,8 @@ const zhHans = {
       captionSecondHalf: "点击「继续」以应用更改。",
       captionFirstHalf: {
         logout: "即将退出 SERAPH。",
-        delete: "正在删除文件 {0}。"
+        deleteFile: "正在删除文件 {0}。",
+        deleteTask: "正在删除任务 {0}。"
       }
     }
   },

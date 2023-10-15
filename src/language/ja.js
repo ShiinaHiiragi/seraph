@@ -154,7 +154,8 @@ const ja = {
       captionSecondHalf: "「進む」を押すと変更を適用できる。",
       captionFirstHalf: {
         logout: "セラフからログアウトしようとしています。",
-        delete: "ファイル {0} をデリートしようとしています。"
+        deleteFile: "ファイル {0} をデリートしようとしています。",
+        deleteTask: "タスク {0} をデリートしようとしています。"
       }
     }
   },

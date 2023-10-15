@@ -61,6 +61,21 @@ const TODO = () => {
   const [modalTaskDueTime, setModalTaskDueTime] = React.useState(null);
   const [taskDueTime, setTaskDueTime] = React.useState(null);
 
+  // after second tick, the globalSwitch were set properly
+  React.useEffect(() => {
+    if (context.secondTick && context.isAuthority) {
+      request(`GET/utility/todo/list`, undefined)
+        .then((data) => setTask(data.task));
+    }
+  // eslint-disable-next-line
+  }, [
+    // check if
+    // load with auth naturally
+    context.secondTick,
+    // login in same page
+    context.isAuthority,
+  ]);
+
   React.useEffect(() => {
     if (modalTaskDueTime?.$ms === 0) {
       const { $y, $M, $D, $H, $m } = modalTaskDueTime;
@@ -124,25 +139,28 @@ const TODO = () => {
         .finally(() => setModalButtonLoading(false));
     }), {
       loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
-      success: context.languagePicker("modal.toast.success.logout"),
+      success: context.languagePicker("modal.toast.success.newTask"),
       error: (data) => data
     })
   }, [context]);
 
-  // after second tick, the globalSwitch were set properly
-  React.useEffect(() => {
-    if (context.secondTick && context.isAuthority) {
-      request(`GET/utility/todo/list`, undefined)
-        .then((data) => setTask(data.task));
-    }
-  // eslint-disable-next-line
-  }, [
-    // check if
-    // load with auth naturally
-    context.secondTick,
-    // login in same page
-    context.isAuthority,
-  ]);
+  const handleDeleteTask = (id, createTime, name) => {
+    toast.promise(new Promise((resolve, reject) => {
+      request(
+        "POST/utility/todo/delete",
+        { id: id, createTime: createTime },
+        undefined,
+        reject
+      )
+        .then(() => resolve());
+    }), {
+      loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
+      success: context
+        .languagePicker("modal.toast.success.delete")
+        .format(name),
+      error: (data) => data
+    })
+  }
 
   return (
     <RouteField
@@ -311,7 +329,18 @@ const TODO = () => {
                       {context.languagePicker("main.todo.form.edit")}
                     </MenuItem>
                     <Divider />
-                    <MenuItem>
+                    <MenuItem
+                      color="danger"
+                      onClick={() => {
+                        context.setModalReconfirm({
+                          open: true,
+                          captionFirstHalf: context
+                            .languagePicker("modal.reconfirm.captionFirstHalf.deleteTask")
+                            .format(item.name),
+                          handleAction: () => handleDeleteTask(item.id, item.createTime, item.name)
+                        })
+                      }}
+                    >
                       {context.languagePicker("main.todo.form.delete")}
                     </MenuItem>
                   </Menu>

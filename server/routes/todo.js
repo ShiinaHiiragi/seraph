@@ -57,12 +57,13 @@ router.post('/tick', (req, res, next) => {
   const { id, createTime } = req.body;
   const target_index = api.taskOperator.findTask(id, createTime);
   if (target_index === undefined) {
-    // -> abnormal request
-    next(api.errorStreamControl);
+    // -> EF_RU: task don't exist
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
     return;
   }
 
-  api.taskOperator.tickTask(index);
+  api.taskOperator.tickTask(target_index);
 
   // -> ES: no extra info
   req.status.addExecStatus();
@@ -80,12 +81,13 @@ router.post('/untick', (req, res, next) => {
   const { id, createTime } = req.body;
   const target_index = api.taskOperator.findTask(id, createTime);
   if (target_index === undefined) {
-    // -> abnormal request
-    next(api.errorStreamControl);
+    // -> EF_RU: task don't exist
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
     return;
   }
 
-  api.taskOperator.untickTask(index);
+  api.taskOperator.untickTask(target_index);
 
   // -> ES: no extra info
   req.status.addExecStatus();
@@ -103,8 +105,9 @@ router.post('/edit', (req, res, next) => {
   const { id, createTime } = req.body;
   const target_index = api.taskOperator.findTask(id, createTime);
   if (target_index === undefined) {
-    // -> abnormal request
-    next(api.errorStreamControl);
+    // -> EF_RU: task don't exist
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
     return;
   }
 
@@ -117,7 +120,7 @@ router.post('/edit', (req, res, next) => {
     return;
   }
 
-  api.taskOperator.editTask(index, name, description, type, dueTime);
+  api.taskOperator.editTask(target_index, name, description, type, dueTime);
 
   // -> ES: no extra info
   req.status.addExecStatus();
@@ -135,12 +138,13 @@ router.post('/delete', (req, res, next) => {
   const { id, createTime } = req.body;
   const target_index = api.taskOperator.findTask(id, createTime);
   if (target_index === undefined) {
-    // -> abnormal request
-    next(api.errorStreamControl);
+    // -> EF_RU: task don't exist
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
     return;
   }
 
-  api.taskOperator.deleteTask(index);
+  api.taskOperator.deleteTask(target_index);
 
   // -> ES: no extra info
   req.status.addExecStatus();

@@ -100,7 +100,7 @@ const en = {
         copy: "{0} has been copied in clipboard.",
         cut: "{0} has been cut to clipboard.",
         delete: "{0} has been deleted.",
-        newTask: "New task has been created."
+        newTask: "New task has been created.",
       },
       warning: {
         invalidToken: "Token is invalid or expired. The page will be refreshed automatically in seconds.",
@@ -154,7 +154,8 @@ const en = {
       captionSecondHalf: "Click 'Continue' to apply changes.",
       captionFirstHalf: {
         logout: "You are logging out Seraph. ",
-        delete: "You are deleting file {0}. "
+        deleteFile: "You are deleting file {0}. ",
+        deleteTask: "You are deleting task {0}. "
       }
     }
   },

@@ -200,7 +200,9 @@ const FileExplorer = (props) => {
         .finally(() => setModalNewLoading(false));
     }), {
       loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
-      success: context.languagePicker("modal.toast.success.new").format(newFolderName),
+      success: context
+        .languagePicker("modal.toast.success.new")
+        .format(newFolderName),
       error: (data) => data
     })
   }, [
@@ -399,7 +401,9 @@ const FileExplorer = (props) => {
         .finally(() => setModalRenameLoading(false));
     }), {
       loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
-      success: context.languagePicker("modal.toast.success.rename").format(originFilename, newFilename),
+      success: context
+        .languagePicker("modal.toast.success.rename")
+        .format(originFilename, newFilename),
       error: (data) => data
     })
   }, [
