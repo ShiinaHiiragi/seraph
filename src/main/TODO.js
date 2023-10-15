@@ -152,7 +152,13 @@ const TODO = () => {
         undefined,
         reject
       )
-        .then(() => resolve());
+        .then(() => {
+          setTask((task) => task.filter(
+            (item) => item.id !== id ||
+              item.createTime !== createTime
+          ))
+          resolve();
+        });
     }), {
       loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
       success: context
@@ -250,7 +256,7 @@ const TODO = () => {
       </Box>
       <List>
         {task.map((item, index, self) => (
-          <React.Fragment>
+          <React.Fragment key={item.id}>
             <Item>
               <Box sx={{ pt: 0.5 }} >
                 <Checkbox
@@ -267,8 +273,8 @@ const TODO = () => {
                 >
                   {item.name}
                 </Typography>
-                {item.description.split("\n").map((paragraph) => (
-                  <Typography level="body-sm">
+                {item.description.split("\n").map((paragraph, index) => (
+                  <Typography level="body-sm" key={index}>
                     {paragraph}
                   </Typography>
                 ))}
@@ -301,9 +307,7 @@ const TODO = () => {
                         color="neutral"
                       >
                         {new Date(item.dueTime).timeFormat(
-                          context.languagePicker("universal.time.dateFormat")
-                            + " "
-                            + context.languagePicker("universal.time.timeFormat")
+                          context.languagePicker("universal.time.taskListFormat")
                         )}
                       </Typography>
                     </React.Fragment>}

@@ -168,7 +168,8 @@ const zhHans = {
     time: {
       dateFormat: "yyyy-MM-dd",
       timeFormat: "hh:mm:ss",
-      taskModalFormat: "YYYY 年 MM 月 DD 日 HH:mm"
+      taskModalFormat: "YYYY 年 MM 月 DD 日 HH:mm",
+      taskListFormat: "yyyy-MM-dd hh:mm"
     },
     button: {
       submit: "提交",

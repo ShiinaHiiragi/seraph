@@ -168,7 +168,8 @@ const en = {
     time: {
       dateFormat: "MM/dd/yyyy",
       timeFormat: "hh:mm:ss",
-      taskModalFormat: "MM/DD/YYYY HH:mm"
+      taskModalFormat: "MM/DD/YYYY HH:mm",
+      taskListFormat: "MM/dd/yyyy hh:mm"
     },
     button: {
       submit: "Submit",

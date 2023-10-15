@@ -168,7 +168,8 @@ const ja = {
     time: {
       dateFormat: "yyyy 年 M 月 d 日",
       timeFormat: "hh:mm:ss",
-      taskModalFormat: "YYYY 年 MM 月 DD 日 HH:mm"
+      taskModalFormat: "YYYY 年 MM 月 DD 日 HH:mm",
+      taskListFormat: "yyyy 年 M 月 d 日 hh:mm"
     },
     button: {
       submit: "送信する",
