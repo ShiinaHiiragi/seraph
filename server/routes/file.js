@@ -1,7 +1,8 @@
 let express = require('express');
+let path = require('path');
 let fs = require('fs');
 let fse = require('fs-extra')
-let path = require('path');
+let decompress = require('decompress');
 let api = require('../api');
 let router = express.Router();
 
@@ -305,6 +306,38 @@ router.post('/delete', (req, res, next) => {
   req.status.addExecStatus();
   res.send(req.status.generateReport());
   return;
+});
+
+router.post('/unzip', (req, res, next) => {
+  if (req.status.notAuthSuccess()) {
+    // -> EF_IT or abnormal request
+    next(api.errorStreamControl);
+    return;
+  }
+
+  const { type, folderName, filename } = req.body;
+  const { folderPath, filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
+
+  if (!fs.existsSync(filePath)) {
+    // -> EF_RU: folder don't exist
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  decompress(filePath, folderPath)
+    .then(() => {
+      // -> ES: no extra info
+      req.status.addExecStatus();
+      res.send(req.status.generateReport());
+      return;
+    })
+    .catch(() => {
+      // -> EF_FME: decompress error
+      req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
+      res.send(req.status.generateReport());
+      return;
+    })
 });
 
 module.exports = router;

@@ -49,34 +49,33 @@
 5. Open page and initialize configuration via setting language and password
 
 ## Log
-
 - 2023 9/18 ver 0.1.0: Complete folder page
 - 2023 9/19 ver 0.1.1: Fix several bugs
 - 2023 10/16 ver 0.2.0 Add TODO list
 
 ## Memo
-
-1. File Explorer
+1. General
+    - layout
+    - skeleton
+    - setting
+2. File Explorer
     - unzip compressed
     - auto delete cron
     - edit in milkdown
     - create / edit attached markdown
-2. Links
+3. Links
     - add / modify / delete links
     - download resources
     - arXiv search
-3. Milkdown
+4. Milkdown
     - edit / read only
     - save in folder / attach to file
     - download
-4. Subscription
+5. Subscription
     - cron (cron) & sync (ntp-time-sync)
     - snippet (return string / file)
     - mail server
     - multilanguage support
-5. Terminal
+6. Terminal
     - open powershell / bash
     - terminal: react-terminal
-6. Header
-    - about seraph
-    - setting
