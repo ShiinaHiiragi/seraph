@@ -141,7 +141,7 @@ export default function FileList(props) {
                   setPrivateFolders={setPrivateFolders}
                 />}
             </ListItem>
-            { index !== self.length - 1 && <ListDivider /> }
+            {index !== self.length - 1 && <ListDivider />}
           </List>
         ))
       }

@@ -53,7 +53,7 @@ const TODO = () => {
 
   const [modalTaskTitle, setModalTaskTitle] = React.useState("");
   const [modalTaskOpen, setModalTaskOpen] = React.useState(false);
-  const [buttonLoading, setButtonLoading] = React.useState(false);
+  const [modalButtonLoading, setModalButtonLoading] = React.useState(false);
   const [modalTaskName, setModalTaskName] = React.useState("");
   const [modalTaskDesciption, setModalTaskDesciption] = React.useState("");
   const [modalTaskType, setModalTaskType] = React.useState("permanent");
@@ -90,14 +90,41 @@ const TODO = () => {
     setModalTaskOpen(true);
   }, [context]);
 
+  const handleCreateTask = React.useCallback((name, description, type, dueTime) => {
+    setModalButtonLoading(true);
+    request(
+      "POST/utility/todo/new",
+      {
+        name: name,
+        description: description,
+        type: type,
+        dueTime: dueTime
+      },
+      { "": () => setModalButtonLoading(false) }
+    )
+      .then((data) => {
+        setTask((task) => [
+          ...task,
+          {
+            id: data.id,
+            createTime: data.createTime,
+            name: name,
+            description: description,
+            type: type,
+            dueTime: dueTime,
+            deleteTime: null
+          }
+        ])
+        setModalTaskOpen(false);
+      })
+      .finally(() => setModalButtonLoading(false));
+  }, [ ]);
+
   // after second tick, the globalSwitch were set properly
   React.useEffect(() => {
     if (context.secondTick && context.isAuthority) {
-      request(
-        `GET/utility/todo/list`,
-        undefined
-      )
-        .then((data) => setTask(data.task) );
+      request(`GET/utility/todo/list`, undefined)
+        .then((data) => setTask(data.task));
     }
   // eslint-disable-next-line
   }, [
@@ -165,16 +192,16 @@ const TODO = () => {
               placeholder={context.languagePicker("main.todo.form.filter")}
               slotProps={{ button: { sx: { whiteSpace: "wrap" } } }}
             >
-              <Option value="all" onClick={(event) => setFilter("all")}>
+              <Option value="all" onClick={() => setFilter("all")}>
                 {context.languagePicker("main.todo.type.all")}
               </Option>
-              <Option value="permanent" onClick={(event) => setFilter("permanent")}>
+              <Option value="permanent" onClick={() => setFilter("permanent")}>
                 {context.languagePicker("main.todo.type.permanent")}
               </Option>
-              <Option value="async" onClick={(event) => setFilter("async")}>
+              <Option value="async" onClick={() => setFilter("async")}>
                 {context.languagePicker("main.todo.type.async")}
               </Option>
-              <Option value="sync" onClick={(event) => setFilter("sync")}>
+              <Option value="sync" onClick={() => setFilter("sync")}>
                 {context.languagePicker("main.todo.type.sync")}
               </Option>
             </Select>
@@ -195,20 +222,20 @@ const TODO = () => {
         </Box>
       </Box>
       <List>
-        {task.map((item, index) => (
+        {task.map((item, index, self) => (
           <React.Fragment>
             <Item>
               <Box sx={{ pt: 0.5 }} >
                 <Checkbox
                   variant="outlined"
                   color="neutral"
-                  checked
+                  checked={item.deleteTime !== null}
                 />
               </Box>
               <Details>
                 <Typography
                   level="title-md"
-                  sx={{ textDecoration: "line-through" }}
+                  sx={{ textDecoration: item.deleteTime ? "line-through" : "unset" }}
                   color="neutral"
                 >
                   {item.name}
@@ -233,23 +260,26 @@ const TODO = () => {
                   >
                     {context.languagePicker(`main.todo.type.${item.type}`)}
                   </Typography>
-                  <Typography
-                    level="body-xs"
-                    sx={{ display: { xs: "none", sm: "inline" } }}
-                  >
-                    &bull;
-                  </Typography>
-                  <Typography
-                    startDecorator={<TodayOutlinedIcon />}
-                    level="body-xs"
-                    color="neutral"
-                  >
-                    {item.dueTime.timeFormat(
-                      context.languagePicker("universal.time.dateFormat")
-                        + " "
-                        + context.languagePicker("universal.time.timeFormat")
-                    )}
-                  </Typography>
+                  {item.type !== "permanent" &&
+                    <React.Fragment>
+                      <Typography
+                        level="body-xs"
+                        sx={{ display: { xs: "none", sm: "inline" } }}
+                      >
+                        &bull;
+                      </Typography>
+                      <Typography
+                        startDecorator={<TodayOutlinedIcon />}
+                        level="body-xs"
+                        color="neutral"
+                      >
+                        {new Date(item.dueTime).timeFormat(
+                          context.languagePicker("universal.time.dateFormat")
+                            + " "
+                            + context.languagePicker("universal.time.timeFormat")
+                        )}
+                      </Typography>
+                    </React.Fragment>}
                 </Box>
               </Details>
               <Box
@@ -293,16 +323,21 @@ const TODO = () => {
                 />}
               </Box>
             </Item>
-            <ListDivider inset="startDecorator" />
+            {index !== self.length - 1 && <ListDivider inset="startDecorator" />}
           </React.Fragment>
         ))}
       </List>
       <ModalForm
         open={modalTaskOpen}
-        loading={buttonLoading}
+        loading={modalButtonLoading}
         disabled={modalTaskName.length === 0 || (modalTaskType !== "permanent" && modalTaskDueTime?.$ms !== 0)}
         handleClose={() => setModalTaskOpen(false)}
-        handleClick={() => { }}
+        handleClick={() => handleCreateTask(
+          modalTaskName,
+          modalTaskDesciption,
+          modalTaskType,
+          taskDueTime
+        )}
         title={modalTaskTitle}
         caption={context.languagePicker("modal.form.todo.caption")}
         button={context.languagePicker("universal.button.submit")}

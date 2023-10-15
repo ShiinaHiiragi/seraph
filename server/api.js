@@ -352,8 +352,9 @@ const taskOperator = {
   __clearExpiredTask: () => {
     const timeNow = Date.now();
     taskOperator.setTask((task) => task.filter(
-      (item) => (item.type === 'sync' && item.dueTime < timeNow) ||
-        (item.deleteTime !== null && item.deleteTime < timeNow)
+      (item) => (item.type === 'sync' && item.dueTime >= timeNow) ||
+        (item.deleteTime !== null && item.deleteTime >= timeNow) ||
+        (item.deleteTime === null)
     ));
   },
 
