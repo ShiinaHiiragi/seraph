@@ -10,7 +10,7 @@ import FormControl from "@mui/joy/FormControl";
 import FormLabel from "@mui/joy/FormLabel";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DateTimeField } from "@mui/x-date-pickers/DateTimeField";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { unstable_useDateField as useDateField } from "@mui/x-date-pickers/DateField";
 import { useClearableField } from "@mui/x-date-pickers/hooks";
 
@@ -106,7 +106,7 @@ const JoyDateField = React.forwardRef((props, ref) => {
 
 const JoyDatePicker = React.forwardRef((props, ref) => {
   return (
-    <DateTimeField
+    <DatePicker
       className="PickerRoot"
       ref={ref}
       {...props}
@@ -121,11 +121,12 @@ const JoyDatePicker = React.forwardRef((props, ref) => {
         }
       }}
       sx={(theme) => ({
-        "input": {
-          padding: theme.spacing(1, 1.5)
+        width: "100%",
+        "& .MuiInput-startDecorator": {
+          display: "none"
         }
       })}
-      format="YYYY 年 MM-DD HH:mm:ss"
+      format="YYYY-MM-DD"
     />
   );
 });

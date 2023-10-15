@@ -144,7 +144,7 @@ const zhHans = {
       todo: {
         new: "创建新任务",
         edit: "编辑任务",
-        caption: "Eu ex sit ea occaecat ipsum eu velit commodo sit amet ullamco eu."
+        caption: "「常驻」类型的任务没有截止时间；「异步」或「同步」类型的任务有截止时间且前者可以提前完成，后者必须在指定时间点完成任务。"
       }
     },
     reconfirm: {

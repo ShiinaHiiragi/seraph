@@ -144,7 +144,7 @@ const en = {
       todo: {
         new: "Create New Task",
         edit: "Edit Task",
-        caption: "Eu ex sit ea occaecat ipsum eu velit commodo sit amet ullamco eu."
+        caption: "Tasks of permanent type have no due time specified. Due time is attached to tasks of async or sync type, and the former can be completed in advance, while the latter must be completed at that very time exactly."
       }
     },
     reconfirm: {

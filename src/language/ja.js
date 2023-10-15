@@ -144,7 +144,7 @@ const ja = {
       todo: {
         new: "新たなタスクを作成する",
         edit: "タスクをエディットする",
-        caption: "Eu ex sit ea occaecat ipsum eu velit commodo sit amet ullamco eu."
+        caption: "「常設」のタスクには締め切りが指定されていません。非同期または同期のタスクには締め切りが設定されており、前者は事前にティクすることができて、後者はその予定時間そのものに成し遂げる必要があります。"
       }
     },
     reconfirm: {
