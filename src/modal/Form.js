@@ -66,16 +66,23 @@ export default function ModalForm(props) {
         >
           {caption}
         </Typography>}
-        <Stack spacing={2} sx={stackStyle}>
+        <Stack
+          spacing={2}
+          sx={{
+            overflow: "auto",
+            ...stackStyle
+          }}
+        >
           {children}
-          <Button
-            loading={loading}
-            disabled={disabled}
-            onClick={handleClick}
-          >
-            {button}
-          </Button>
         </Stack>
+        <Button
+          sx={{ mt: 2 }}
+          loading={loading}
+          disabled={disabled}
+          onClick={handleClick}
+        >
+          {button}
+        </Button>
       </ModalDialog>
     </Modal>
   );

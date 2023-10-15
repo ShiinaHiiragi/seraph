@@ -58,15 +58,24 @@ const TODO = () => {
   const [modalTaskDesciption, setModalTaskDesciption] = React.useState("");
   const [modalTaskType, setModalTaskType] = React.useState("permanant");
   const [modalTaskDueTime, setModalTaskDueTime] = React.useState(null);
+  const [taskDueTime, setTaskDueTime] = React.useState(null);
 
-  const modalTaskExpired = React.useMemo(() => {
+  React.useEffect(() => {
     if (modalTaskDueTime?.$ms === 0) {
       const { $y, $M, $D, $H, $m } = modalTaskDueTime;
-      return new Date($y, $M, $D, $H, $m).getTime() < Date.now()
+      setTaskDueTime(new Date($y, $M, $D, $H, $m).getTime());
     } else {
-      return false;
+      setTaskDueTime(null);
     }
   }, [modalTaskDueTime])
+
+  const modalTaskExpired = React.useMemo(() => {
+    if (taskDueTime) {
+      return taskDueTime < Date.now()
+    } else {
+      return false
+    }
+  }, [taskDueTime])
 
   const handleToggleModalTask = React.useCallback((name, description, type, dueTime) => {
     setModalTaskTitle(
