@@ -58,7 +58,7 @@ const TODO = () => {
   const [modalTaskType, setModalTaskType] = React.useState("permanant");
   const [modalTaskDueTime, setModalTaskDueTime] = React.useState(null);
 
-  const handleOpenModalTask = React.useCallback((name, description, type, dueTime) => {
+  const handleToggleModalTask = React.useCallback((name, description, type, dueTime) => {
     setModalTaskTitle(
       context.languagePicker(
         `modal.form.todo.${dueTime ? "edit" : "new"}`
@@ -168,7 +168,7 @@ const TODO = () => {
               color="primary"
               variant="solid"
               startDecorator={<AddOutlinedIcon />}
-              onClick={handleOpenModalTask}
+              onClick={() => handleToggleModalTask()}
             >
               {context.languagePicker("main.todo.form.add")}
             </Button>
@@ -290,7 +290,11 @@ const TODO = () => {
       >
         <FormControl>
           <FormLabel>{context.languagePicker("main.todo.regulate.name")}</FormLabel>
-          <Input placeholder={context.languagePicker("universal.placeholder.instruction.required")} />
+          <Input
+            value={modalTaskName}
+            onChange={(event) => setModalTaskName(event.target.value)}
+            placeholder={context.languagePicker("universal.placeholder.instruction.required")}
+          />
         </FormControl>
         <FormControl>
           <FormLabel>{context.languagePicker("main.todo.regulate.description")}</FormLabel>
@@ -298,28 +302,33 @@ const TODO = () => {
             minRows={4}
             maxRows={4}
             placeholder={context.languagePicker("universal.placeholder.instruction.optional")}
+            value={modalTaskDesciption}
+            onChange={(event) => setModalTaskDesciption(event.target.value)}
           />
         </FormControl>
         <FormControl>
           <FormLabel>{context.languagePicker("main.todo.regulate.type")}</FormLabel>
           <Select value={modalTaskType}>
-            <Option value="permanant" onChange={() => setModalTaskType("permanant")}>
+            <Option value="permanant" onClick={() => setModalTaskType("permanant")}>
               {context.languagePicker("main.todo.type.permanant")}
             </Option>
-            <Option value="async" onChange={() => setModalTaskType("async")}>
+            <Option value="async" onClick={() => setModalTaskType("async")}>
               {context.languagePicker("main.todo.type.async")}
             </Option>
-            <Option value="sync" onChange={() => setModalTaskType("sync")}>
+            <Option value="sync" onClick={() => setModalTaskType("sync")}>
               {context.languagePicker("main.todo.type.sync")}
             </Option>
           </Select>
         </FormControl>
-        <FormControl>
-          <FormLabel>
-            {context.languagePicker("main.todo.regulate.dueTime")}
-          </FormLabel>
-          <Picker timeFormat={context.languagePicker("universal.time.taskModalFormat")} />
-        </FormControl>
+        {modalTaskType !== "permanant" &&
+          <FormControl>
+            <FormLabel>
+              {context.languagePicker("main.todo.regulate.dueTime")}
+            </FormLabel>
+            <Picker
+              timeFormat={context.languagePicker("universal.time.taskModalFormat")}
+            />
+          </FormControl>}
       </ModalForm>
     </RouteField>
   )

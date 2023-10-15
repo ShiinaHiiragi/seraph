@@ -15,12 +15,13 @@ import FormLabel from "@mui/joy/FormLabel";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers';
 import { unstable_useDateField as useDateField } from "@mui/x-date-pickers/DateField";
 import { useClearableField } from "@mui/x-date-pickers/hooks";
 
 const materialTheme = materialExtendTheme({
   transitions: {
-    create: () => 'none',
+    create: () => "none",
   },
   components: {
     MuiButtonBase: {
@@ -126,6 +127,17 @@ const JoyDateTimePicker = React.forwardRef((props, ref) => {
     <DateTimePicker
       className="PickerRoot"
       ref={ref}
+      sx={(theme) => ({
+        width: "100%",
+        "& .MuiInput-startDecorator": {
+          display: "none"
+        }
+      })}
+      viewRenderers={{
+        hours: renderTimeViewClock,
+        minutes: renderTimeViewClock
+      }}
+      ampm={false}
       {...props}
       slots={{ field: JoyDateField, ...props.slots }}
       slotProps={{
@@ -136,16 +148,6 @@ const JoyDateTimePicker = React.forwardRef((props, ref) => {
             flexDirection: "row",
           },
         }
-      }}
-      sx={(theme) => ({
-        width: "100%",
-        "& .MuiInput-startDecorator": {
-          display: "none"
-        }
-      })}
-      viewRenderers={{
-        hours: null,
-        minutes: null
       }}
     />
   );
