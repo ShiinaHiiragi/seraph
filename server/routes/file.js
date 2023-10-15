@@ -343,8 +343,25 @@ router.post('/unzip', (req, res, next) => {
     return;
   }
 
+  const chmodSyncR = (dirPath, mode) => {
+    fs.chmodSync(dirPath, mode);
+    const files = fs.readdirSync(dirPath);
+
+    for (const file of files) {
+      const filePath = path.join(dirPath, file);
+      const stats = fs.statSync(filePath);
+  
+      if (stats.isDirectory()) {
+        chmodSyncR(filePath, mode);
+      } else {
+        fs.chmodSync(filePath, mode);
+      }
+    }
+  }
+
   try {
     zip.extractAllTo(path.join(folderPath, extractName));
+    chmodSyncR(newDirPath, 0o777);
   } catch (_) {
     // -> EF_FME: fs.unlinkSync error
     req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
