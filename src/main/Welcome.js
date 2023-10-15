@@ -75,6 +75,7 @@ const Welcome = () => {
   const [osInfo, setOSInfo] = React.useState({ });
   const [uptime, setUptime] = React.useState(0);
   const [memory, setMemory] = React.useState(0);
+  const [storage, setStorage] = React.useState(0);
 
   React.useEffect(() => {
     if (context.secondTick && context.isAuthority) {
@@ -97,7 +98,10 @@ const Welcome = () => {
   ])
 
   React.useEffect(() => {
-    request("GET/info/free").then((data) => setMemory(data.free));
+    request("GET/info/free").then((data) => {
+      setMemory(data.memory);
+      setStorage(data.storage);
+    });
   }, [minutes]);
   React.useEffect(() => setUptime((uptime) => uptime + 1), [upHours]);
 
@@ -139,7 +143,7 @@ const Welcome = () => {
               {osInfo.userAtHostname}
             </ItemField>
             <ItemField item="platform">
-              {osInfo.platform}
+              {osInfo.platform.upperCaseFirst()}
             </ItemField>
             <ItemField item="kernelVersion">
               {osInfo.kernelVersion}
@@ -155,6 +159,11 @@ const Welcome = () => {
               {Number(memory).sizeFormat(2)}
               {" / "}
               {Number(osInfo.memory).sizeFormat(2)}
+            </ItemField>
+            <ItemField item="storageAvailable">
+              {Number(storage).sizeFormat(2)}
+              {" / "}
+              {Number(osInfo.storage).sizeFormat(2)}
             </ItemField>
           </InfoField>}
       </Center>

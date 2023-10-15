@@ -4,6 +4,7 @@ const path = require('path');
 const dotenv = require('dotenv');
 const mime = require('mime');
 const CryptoJS = require('crypto-js');
+const checkDiskSpace = require('check-disk-space').default
 
 // copy .env in react directory
 // use .env to build base URL
@@ -438,12 +439,14 @@ exports.taskOperator = taskOperator;
 
 
 // seraph and server info
+const free = () => os.freemem();
+const diskUsageAsync = () => checkDiskSpace(dataPath.dataDirPath);
+
 const version = () => {
   const package = JSON.parse(fs.readFileSync(dataPath.packageFilePath));
   return package.version;
 }
 
-const free = () => os.freemem();
 const osInfo = () => ({
   userAtHostname: os.userInfo().username + '@' + os.hostname(),
   platform: os.platform() + ' ' + os.release() + ' ' + os.arch(),
@@ -452,8 +455,9 @@ const osInfo = () => ({
   uptime: os.uptime()
 });
 
-exports.version = version;
 exports.free = free;
+exports.diskUsageAsync = diskUsageAsync;
+exports.version = version;
 exports.osInfo = osInfo;
 
 

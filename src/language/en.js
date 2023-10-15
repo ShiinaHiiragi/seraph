@@ -21,6 +21,7 @@ const en = {
         platform: "Platform",
         kernelVersion: "Kernel Version",
         memoryAvailable: "Memory Available",
+        storageAvailable: "Storage Available",
         uptime: "Uptime"
       }
     },

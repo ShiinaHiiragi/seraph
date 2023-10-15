@@ -7,6 +7,7 @@
     "server:sudo": "sudo node ./node_modules/.bin/node-dev ./bin/www"
   },
   "dependencies": {
+    "check-disk-space": "^3.4.0",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
     "crypto-js": "^4.1.1",

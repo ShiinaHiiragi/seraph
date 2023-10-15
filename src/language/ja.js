@@ -21,6 +21,7 @@ const ja = {
         platform: "プラットホーム",
         kernelVersion: "カーネルのバージョン",
         memoryAvailable: "メモリ空き",
+        storageAvailable: "ストレージ空き",
         uptime: "アップタイム"
       }
     },
