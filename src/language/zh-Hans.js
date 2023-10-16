@@ -103,6 +103,7 @@ const zhHans = {
         rename: "{0} 已更名为 {1}。",
         copy: "{0} 已复制到剪贴板。",
         cut: "{0} 已剪切到剪贴板。",
+        compress: "{0} 已压缩到当前目录。",
         extract: "{0} 已解压到当前目录。",
         delete: "{0} 已被删除。",
         modTask: "任务已被修改。",

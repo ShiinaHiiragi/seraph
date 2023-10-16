@@ -308,6 +308,54 @@ router.post('/delete', (req, res, next) => {
   return;
 });
 
+router.post('/zip', (req, res, next) => {
+  if (req.status.notAuthSuccess()) {
+    // -> EF_IT or abnormal request
+    next(api.errorStreamControl);
+    return;
+  }
+
+  const { type, folderName, filename } = req.body;
+  const { folderPath, filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
+
+  const newFilename = filename + ".zip"
+  const { filePath: newFilePath } = api.fileOperator.pathCombinator(type, folderName, newFilename);
+
+  if (!fs.existsSync(filePath)) {
+    // -> EF_RU: folder don't exist
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  if (fs.existsSync(newFilePath)) {
+    // -> EF_IC: filename already exists
+    req.status.addExecStatus(api.Status.execErrCode.IdentifierConflict);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  const zip = new AdmZip();
+  try {
+    zip.addLocalFolder(filePath);
+    zip.writeZip(newFilePath);
+    fs.chmodSync(newFilePath, 0o777);
+  } catch (_) {
+    // -> EF_FME: fs.unlinkSync error
+    req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  // -> ES: no extra info
+  req.status.addExecStatus();
+  res.send({
+    ...req.status.generateReport(),
+    info: api.fileOperator.readFileInfo(folderPath, newFilename)
+  });
+  return;
+});
+
 router.post('/unzip', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
     // -> EF_IT or abnormal request

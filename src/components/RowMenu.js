@@ -124,6 +124,37 @@ export default function RowMenu(props) {
     setPrivateFolders
   ])
 
+  const handleCompress = React.useCallback(() => {
+    toast.promise(new Promise((resolve, reject) => {
+      request("POST/file/zip", {
+        type: type,
+        folderName: folderName,
+        filename: filename
+      }, undefined, reject)
+        .then((data) => {
+          if (pathStartWith(`/${type}/${folderName}`)) {
+            setFilesList((filesList) => [
+              ...filesList,
+              data.info
+            ]);
+          }
+          resolve();
+        })
+    }), {
+      loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
+      success: context
+        .languagePicker("modal.toast.success.compress")
+        .format(filename),
+      error: (data) => data
+    })
+  }, [
+    context,
+    type,
+    filename,
+    folderName,
+    setFilesList
+  ]);
+
   const handleExtract = React.useCallback(() => {
     toast.promise(new Promise((resolve, reject) => {
       request("POST/file/unzip", {
@@ -175,7 +206,7 @@ export default function RowMenu(props) {
           {context.languagePicker("main.folder.rowMenu.cut")}
         </MenuItem>
         {fileType === "directory" && folderName.length > 0 &&
-          <MenuItem>
+          <MenuItem onClick={handleCompress}>
             {context.languagePicker("main.folder.rowMenu.compress")}
           </MenuItem>}
         {fileType === "application/zip" && folderName.length > 0 &&

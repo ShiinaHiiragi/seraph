@@ -103,6 +103,7 @@ const en = {
         rename: "{0} has been renamed to {1}.",
         copy: "{0} has been copied in clipboard.",
         cut: "{0} has been cut to clipboard.",
+        compress: "{0} has been compressed to current directory.",
         extract: "{0} has been extracted to current directory.",
         delete: "{0} has been deleted.",
         modTask: "The task has been modified.",
