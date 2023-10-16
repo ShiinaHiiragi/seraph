@@ -46,6 +46,7 @@ const ja = {
         rename: "リネーム",
         copy: "コピー",
         cut: "カット",
+        compress: "コンプレス",
         extract: "エクストラクト",
         delete: "デリート"
       },

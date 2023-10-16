@@ -46,6 +46,7 @@ const zhHans = {
         rename: "重命名",
         copy: "复制",
         cut: "剪切",
+        compress: "压缩",
         extract: "解压",
         delete: "删除"
       },

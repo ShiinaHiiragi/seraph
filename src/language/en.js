@@ -46,6 +46,7 @@ const en = {
         rename: "Rename",
         copy: "Copy",
         cut: "Cut",
+        compress: "Compress",
         extract: "Extract",
         delete: "Delete"
       },

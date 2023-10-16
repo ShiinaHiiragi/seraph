@@ -174,7 +174,11 @@ export default function RowMenu(props) {
         <MenuItem onClick={handleCut}>
           {context.languagePicker("main.folder.rowMenu.cut")}
         </MenuItem>
-        {fileType === "application/zip" &&
+        {fileType === "directory" && folderName.length > 0 &&
+          <MenuItem>
+            {context.languagePicker("main.folder.rowMenu.compress")}
+          </MenuItem>}
+        {fileType === "application/zip" && folderName.length > 0 &&
           <MenuItem onClick={handleExtract}>
             {context.languagePicker("main.folder.rowMenu.extract")}
           </MenuItem>}
