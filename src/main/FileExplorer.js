@@ -462,7 +462,7 @@ const FileExplorer = (props) => {
         }
       }}
     >
-      {folderState > 0 &&
+      {folderState === 1 &&
         <React.Fragment>
           <Box
             className="SearchAndFilters"
@@ -591,7 +591,7 @@ const FileExplorer = (props) => {
             setPrivateFolders={setPrivateFolders}
           />
         </React.Fragment>}
-      {folderState < 0 &&
+      {folderState === -1 &&
         <Caption
           title={context.languagePicker("universal.placeholder.unexist.title")}
           caption={context.languagePicker("universal.placeholder.unexist.caption")}

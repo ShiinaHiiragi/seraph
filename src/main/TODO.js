@@ -53,6 +53,7 @@ const TODO = () => {
   const context = React.useContext(GlobalContext);
   const { seconds } = useTime();
 
+  const [taskState, setTaskState] = React.useState(0);
   const [task, setTask] = React.useState([ ]);
   const [sort, setSort] = React.useState(undefined);
   const [reverse, setReverse] = React.useState(false);
@@ -71,9 +72,11 @@ const TODO = () => {
 
   // after second tick, the globalSwitch were set properly
   React.useEffect(() => {
+    setTaskState(0);
     if (context.secondTick && context.isAuthority) {
       request(`GET/utility/todo/list`, undefined)
         .then((data) => {
+          setTaskState(1);
           const timeNow = Date.now()
           setTask(
             data.task.map((item) => ({
@@ -339,226 +342,229 @@ const TODO = () => {
         overflowY: "auto"
       }}
     >
-      <Box
-        className="SearchAndFilters"
-        sx={{
-          borderRadius: "sm",
-          pb: 1,
-          display: "flex",
-          flexWrap: "no-wrap",
-          flexDirection: { xs: "column", sm: "row" },
-          gap: { xs: 1.5, sm: 1.5 },
-          "& > *": { minWidth: { xs: "120px", md: "160px" } },
-        }}
-      >
-        <Box sx={{ display: "flex", flexGrow: 2, gap: 1.5 }}>
-          <IconButton size="sm" variant="outlined" onClick={() => setReverse((reverse) => !reverse)}>
-            {reverse ? <KeyboardArrowDownOutlinedIcon /> : <KeyboardArrowUpOutlinedIcon />}
-          </IconButton>
-          <FormControl sx={{ flexGrow: 1 }} size="sm">
-            <Select
-              size="sm"
-              value={sort}
-              placeholder={context.languagePicker("main.todo.form.sort")}
-              slotProps={{ button: { sx: { whiteSpace: "wrap" } } }}
-            >
-              <Option value="dueTime" onClick={() => setSort("dueTime")}>
-                {context.languagePicker("main.todo.regulate.dueTime")}
-              </Option>
-              <Option value="createTime" onClick={() => setSort("createTime")}>
-                {context.languagePicker("main.todo.regulate.createTime")}
-              </Option>
-              <Option value="name" onClick={() => setSort("name")}>
-                {context.languagePicker("main.todo.regulate.name")}
-              </Option>
-              <Option value="description" onClick={() => setSort("description")}>
-                {context.languagePicker("main.todo.regulate.description")}
-              </Option>
-            </Select>
-          </FormControl>
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            gap: 1.5,
-            width: { xs: "100%", sm: "auto" },
-            flexGrow: 1
-          }}
-        >
-          <FormControl
-            size="sm" 
+      {taskState === 1 &&
+        <React.Fragment>
+          <Box
+            className="SearchAndFilters"
             sx={{
-              flexGrow: 1,
-              minWidth: "160px"
+              borderRadius: "sm",
+              pb: 1,
+              display: "flex",
+              flexWrap: "no-wrap",
+              flexDirection: { xs: "column", sm: "row" },
+              gap: { xs: 1.5, sm: 1.5 },
+              "& > *": { minWidth: { xs: "120px", md: "160px" } },
             }}
           >
-            <Select
-              size="sm"
-              value={filter}
-              placeholder={context.languagePicker("main.todo.form.filter")}
-              slotProps={{ button: { sx: { whiteSpace: "wrap" } } }}
-            >
-              <Option value="all" onClick={() => setFilter("all")}>
-                {context.languagePicker("main.todo.type.all")}
-              </Option>
-              <Option value="permanent" onClick={() => setFilter("permanent")}>
-                {context.languagePicker("main.todo.type.permanent")}
-              </Option>
-              <Option value="async" onClick={() => setFilter("async")}>
-                {context.languagePicker("main.todo.type.async")}
-              </Option>
-              <Option value="sync" onClick={() => setFilter("sync")}>
-                {context.languagePicker("main.todo.type.sync")}
-              </Option>
-            </Select>
-          </FormControl>
-          <FormControl
-            size="sm"
-          >
-            <Button
-              size="sm"
-              color="primary"
-              variant="solid"
-              startDecorator={<AddOutlinedIcon />}
-              onClick={() => {
-                setTaskInfo(null);
-                handleToggleModalTask();
+            <Box sx={{ display: "flex", flexGrow: 2, gap: 1.5 }}>
+              <IconButton size="sm" variant="outlined" onClick={() => setReverse((reverse) => !reverse)}>
+                {reverse ? <KeyboardArrowDownOutlinedIcon /> : <KeyboardArrowUpOutlinedIcon />}
+              </IconButton>
+              <FormControl sx={{ flexGrow: 1 }} size="sm">
+                <Select
+                  size="sm"
+                  value={sort}
+                  placeholder={context.languagePicker("main.todo.form.sort")}
+                  slotProps={{ button: { sx: { whiteSpace: "wrap" } } }}
+                >
+                  <Option value="dueTime" onClick={() => setSort("dueTime")}>
+                    {context.languagePicker("main.todo.regulate.dueTime")}
+                  </Option>
+                  <Option value="createTime" onClick={() => setSort("createTime")}>
+                    {context.languagePicker("main.todo.regulate.createTime")}
+                  </Option>
+                  <Option value="name" onClick={() => setSort("name")}>
+                    {context.languagePicker("main.todo.regulate.name")}
+                  </Option>
+                  <Option value="description" onClick={() => setSort("description")}>
+                    {context.languagePicker("main.todo.regulate.description")}
+                  </Option>
+                </Select>
+              </FormControl>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                gap: 1.5,
+                width: { xs: "100%", sm: "auto" },
+                flexGrow: 1
               }}
             >
-              {context.languagePicker("main.todo.form.add")}
-            </Button>
-          </FormControl>
-        </Box>
-      </Box>
-      <List>
-        {processedTask.map((item, index, self) => (
-          <React.Fragment key={item.id}>
-            <Item>
-              <Box sx={{ pt: 0.5 }} >
-                <Checkbox
-                  variant="outlined"
-                  color="neutral"
-                  checked={item.deleteTime !== null}
-                  disabled={checkboxDisabled}
-                  onClick={
-                    () => checkboxDisabled
-                      ? null
-                      : item.deleteTime === null
-                      ? handleTickTask(item.id, item.createTime)
-                      : handleUntickTask(item.id, item.createTime)
-                  }
-                />
-              </Box>
-              <Details>
-                <Typography
-                  level="title-md"
-                  sx={{ textDecoration: item.deleteTime ? "line-through" : "unset" }}
-                  color={item.deleteTime ? "neutral" : "secondary"}
-                >
-                  {item.name}
-                </Typography>
-                {item.description.split("\n").map((paragraph, index) => (
-                  <Typography level="body-sm" key={index}>
-                    {paragraph}
-                  </Typography>
-                ))}
-                <Box
-                  sx={{
-                    pt: 0.5,
-                    gap: 0.75,
-                    display: "flex",
-                    flexDirection: "column"
-                  }}
-                >
-                  <Typography
-                    startDecorator={<AccessAlarmsOutlinedIcon />}
-                    level="body-xs"
-                    color="neutral"
-                  >
-                    {context.languagePicker(`main.todo.type.${item.type}`)}
-                  </Typography>
-                  {item.type !== "permanent" &&
-                    <Typography
-                      startDecorator={<TodayOutlinedIcon />}
-                      level="body-xs"
-                      color={item.expired ? "danger" : "neutral"}
-                    >
-                      {new Date(item.dueTime).timeFormat(
-                        context.languagePicker("universal.time.taskListFormat")
-                      )}
-                    </Typography>}
-                </Box>
-              </Details>
-              <Box
+              <FormControl
+                size="sm" 
                 sx={{
-                  height: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center"
+                  flexGrow: 1,
+                  minWidth: "160px"
                 }}
               >
-                <Dropdown>
-                  <MenuButton
-                    slots={{ root: IconButton }}
-                    slotProps={{ root: { variant: "plain", color: "neutral", size: "sm" } }}
-                  >
-                    <MoreVertRoundedIcon />
-                  </MenuButton>
-                  <Menu size="sm" sx={{ minWidth: 140 }}>
-                    <MenuItem
-                      onClick={() => {
-                        setTaskInfo({
-                          id: item.id,
-                          createTime: item.createTime,
-                          deleteTime: item.deleteTime
-                        });
-                        handleToggleModalTask(
-                          item.name,
-                          item.description,
-                          item.type,
-                          item.dueTime
-                        );
-                      }}
-                    >
-                      {context.languagePicker("main.todo.form.edit")}
-                    </MenuItem>
-                    <Divider />
-                    <MenuItem
-                      color="danger"
-                      onClick={() => {
-                        context.setModalReconfirm({
-                          open: true,
-                          captionFirstHalf: context
-                            .languagePicker("modal.reconfirm.captionFirstHalf.deleteTask")
-                            .format(item.name),
-                          handleAction: () => handleDeleteTask(item.id, item.createTime, item.name)
-                        })
-                      }}
-                    >
-                      {context.languagePicker("main.todo.form.delete")}
-                    </MenuItem>
-                  </Menu>
-                </Dropdown>
-                <Box sx={{ flexGrow: 1 }} />
-                {item.deleteTime && <Countdown
-                  date={item.deleteTime ?? 0}
-                  intervalDelay={0}
-                  precision={1}
-                  renderer={(props) => (
-                    <CircularProgress
-                      size="sm"
-                      variant="soft"
-                      determinate
-                      value={props.total / (context.setting.task.delay * 10)}
+                <Select
+                  size="sm"
+                  value={filter}
+                  placeholder={context.languagePicker("main.todo.form.filter")}
+                  slotProps={{ button: { sx: { whiteSpace: "wrap" } } }}
+                >
+                  <Option value="all" onClick={() => setFilter("all")}>
+                    {context.languagePicker("main.todo.type.all")}
+                  </Option>
+                  <Option value="permanent" onClick={() => setFilter("permanent")}>
+                    {context.languagePicker("main.todo.type.permanent")}
+                  </Option>
+                  <Option value="async" onClick={() => setFilter("async")}>
+                    {context.languagePicker("main.todo.type.async")}
+                  </Option>
+                  <Option value="sync" onClick={() => setFilter("sync")}>
+                    {context.languagePicker("main.todo.type.sync")}
+                  </Option>
+                </Select>
+              </FormControl>
+              <FormControl
+                size="sm"
+              >
+                <Button
+                  size="sm"
+                  color="primary"
+                  variant="solid"
+                  startDecorator={<AddOutlinedIcon />}
+                  onClick={() => {
+                    setTaskInfo(null);
+                    handleToggleModalTask();
+                  }}
+                >
+                  {context.languagePicker("main.todo.form.add")}
+                </Button>
+              </FormControl>
+            </Box>
+          </Box>
+          <List>
+            {processedTask.map((item, index, self) => (
+              <React.Fragment key={item.id}>
+                <Item>
+                  <Box sx={{ pt: 0.5 }} >
+                    <Checkbox
+                      variant="outlined"
+                      color="neutral"
+                      checked={item.deleteTime !== null}
+                      disabled={checkboxDisabled}
+                      onClick={
+                        () => checkboxDisabled
+                          ? null
+                          : item.deleteTime === null
+                          ? handleTickTask(item.id, item.createTime)
+                          : handleUntickTask(item.id, item.createTime)
+                      }
                     />
-                  )}
-                />}
-              </Box>
-            </Item>
-            {index !== self.length - 1 && <ListDivider inset="startDecorator" />}
-          </React.Fragment>
-        ))}
-      </List>
+                  </Box>
+                  <Details>
+                    <Typography
+                      level="title-md"
+                      sx={{ textDecoration: item.deleteTime ? "line-through" : "unset" }}
+                      color={item.deleteTime ? "neutral" : "secondary"}
+                    >
+                      {item.name}
+                    </Typography>
+                    {item.description.split("\n").map((paragraph, index) => (
+                      <Typography level="body-sm" key={index}>
+                        {paragraph}
+                      </Typography>
+                    ))}
+                    <Box
+                      sx={{
+                        pt: 0.5,
+                        gap: 0.75,
+                        display: "flex",
+                        flexDirection: "column"
+                      }}
+                    >
+                      <Typography
+                        startDecorator={<AccessAlarmsOutlinedIcon />}
+                        level="body-xs"
+                        color="neutral"
+                      >
+                        {context.languagePicker(`main.todo.type.${item.type}`)}
+                      </Typography>
+                      {item.type !== "permanent" &&
+                        <Typography
+                          startDecorator={<TodayOutlinedIcon />}
+                          level="body-xs"
+                          color={item.expired ? "danger" : "neutral"}
+                        >
+                          {new Date(item.dueTime).timeFormat(
+                            context.languagePicker("universal.time.taskListFormat")
+                          )}
+                        </Typography>}
+                    </Box>
+                  </Details>
+                  <Box
+                    sx={{
+                      height: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center"
+                    }}
+                  >
+                    <Dropdown>
+                      <MenuButton
+                        slots={{ root: IconButton }}
+                        slotProps={{ root: { variant: "plain", color: "neutral", size: "sm" } }}
+                      >
+                        <MoreVertRoundedIcon />
+                      </MenuButton>
+                      <Menu size="sm" sx={{ minWidth: 140 }}>
+                        <MenuItem
+                          onClick={() => {
+                            setTaskInfo({
+                              id: item.id,
+                              createTime: item.createTime,
+                              deleteTime: item.deleteTime
+                            });
+                            handleToggleModalTask(
+                              item.name,
+                              item.description,
+                              item.type,
+                              item.dueTime
+                            );
+                          }}
+                        >
+                          {context.languagePicker("main.todo.form.edit")}
+                        </MenuItem>
+                        <Divider />
+                        <MenuItem
+                          color="danger"
+                          onClick={() => {
+                            context.setModalReconfirm({
+                              open: true,
+                              captionFirstHalf: context
+                                .languagePicker("modal.reconfirm.captionFirstHalf.deleteTask")
+                                .format(item.name),
+                              handleAction: () => handleDeleteTask(item.id, item.createTime, item.name)
+                            })
+                          }}
+                        >
+                          {context.languagePicker("main.todo.form.delete")}
+                        </MenuItem>
+                      </Menu>
+                    </Dropdown>
+                    <Box sx={{ flexGrow: 1 }} />
+                    {item.deleteTime && <Countdown
+                      date={item.deleteTime ?? 0}
+                      intervalDelay={0}
+                      precision={1}
+                      renderer={(props) => (
+                        <CircularProgress
+                          size="sm"
+                          variant="soft"
+                          determinate
+                          value={props.total / (context.setting.task.delay * 10)}
+                        />
+                      )}
+                    />}
+                  </Box>
+                </Item>
+                {index !== self.length - 1 && <ListDivider inset="startDecorator" />}
+              </React.Fragment>
+            ))}
+          </List>
+        </React.Fragment>}
       <ModalForm
         open={modalTaskOpen}
         loading={modalButtonLoading}
