@@ -467,7 +467,7 @@ const TODO = () => {
                     pt: 0.5,
                     gap: 0.75,
                     display: "flex",
-                    flexDirection: { xs: "column", sm: "row" }
+                    flexDirection: "column"
                   }}
                 >
                   <Typography
@@ -478,23 +478,15 @@ const TODO = () => {
                     {context.languagePicker(`main.todo.type.${item.type}`)}
                   </Typography>
                   {item.type !== "permanent" &&
-                    <React.Fragment>
-                      <Typography
-                        level="body-xs"
-                        sx={{ display: { xs: "none", sm: "inline" } }}
-                      >
-                        &bull;
-                      </Typography>
-                      <Typography
-                        startDecorator={<TodayOutlinedIcon />}
-                        level="body-xs"
-                        color={item.expired ? "danger" : "neutral"}
-                      >
-                        {new Date(item.dueTime).timeFormat(
-                          context.languagePicker("universal.time.taskListFormat")
-                        )}
-                      </Typography>
-                    </React.Fragment>}
+                    <Typography
+                      startDecorator={<TodayOutlinedIcon />}
+                      level="body-xs"
+                      color={item.expired ? "danger" : "neutral"}
+                    >
+                      {new Date(item.dueTime).timeFormat(
+                        context.languagePicker("universal.time.taskListFormat")
+                      )}
+                    </Typography>}
                 </Box>
               </Details>
               <Box
