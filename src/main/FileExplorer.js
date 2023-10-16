@@ -68,6 +68,7 @@ const FileExplorer = (props) => {
 
   // after second tick, the globalSwitch were set properly
   React.useEffect(() => {
+    setFolderState(0);
     if (context.secondTick && display) {
       request(
         `GET/folder/${type}/${folderName}`,
