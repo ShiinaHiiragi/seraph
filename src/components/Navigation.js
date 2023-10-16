@@ -34,178 +34,181 @@ export default function Navigation(props) {
   }, [navigate, setDrawerOpen]);
 
   return (
-    <List
-      size="sm"
-      sx={{
-        "--ListItem-radius": "8px",
-        "--List-gap": "4px",
-      }}
-    >
-      <ListItem sx={{ paddingLeft: 0, display: { xs: "inline-flex", sm: "inline-flex", md: "none" } }}>
-        <Link to="/" onClick={() => setDrawerOpen(false)} >
-          <IconButton disabled sx={{ paddingLeft: "0px" }}>
-            <img src={GreyLogo} width={24} height={24} alt="" />
-          </IconButton>
-        </Link>
-        <Typography component="h1" fontWeight="lg" sx={{ letterSpacing: "0.06em" }}>
-          {context.languagePicker("nav.title")}
-        </Typography>
-      </ListItem>
-      <ListItem nested>
-        <ListSubheader>
-          {context.languagePicker("nav.public")}
-          <IconButton
-            size="sm"
-            variant="plain"
-            color="primary"
-            sx={{
-              ml: 'auto',
-              '--IconButton-size': '24px',
-              backgroundColor: (theme) => {
-                return /^\/public\/*$/.test(window.location.pathname)
-                  ? theme.palette.primary.plainActiveBg
-                  : "transparent"
-              }
-            }}
-            onClick={() => navigateTo("/public")}
-            disabled={/^\/public\/*$/.test(window.location.pathname)}
-          >
-            <NavigateNextOutlinedIcon fontSize="small" color="primary" />
-          </IconButton>
-        </ListSubheader>
+    <React.Fragment>
+      {context.firstTick &&
         <List
-          aria-labelledby="nav-list-browse"
+          size="sm"
           sx={{
-            "& .JoyListItemButton-root": { p: "8px" },
+            "--ListItem-radius": "8px",
+            "--List-gap": "4px",
           }}
         >
-          {sortedPublicFolders.map((item, index) => (
-            <ListItem key={index}>
-              <ListItemButton
-                selected={pathStartWith(`/public/${item}`)}
-                onClick={() => navigateTo(`/public/${item}`)}
-              >
-                <ListItemDecorator>
-                  <FolderOpenIcon fontSize="small" />
-                </ListItemDecorator>
-                <ListItemContent>{item}</ListItemContent>
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-      </ListItem>
-
-      {context.isAuthority && <ListItem nested>
-        <ListSubheader>
-          {context.languagePicker("nav.private")}
-          <IconButton
-            size="sm"
-            variant="plain"
-            color="primary"
-            sx={{
-              ml: 'auto',
-              '--IconButton-size': '24px',
-              backgroundColor: (theme) => {
-                return /^\/private\/*$/.test(window.location.pathname)
-                  ? theme.palette.primary.plainActiveBg
-                  : "transparent"
-              }
-            }}
-            onClick={() => navigateTo("/private")}
-            disabled={/^\/private\/*$/.test(window.location.pathname)}
-          >
-            <NavigateNextOutlinedIcon fontSize="small" color="primary" />
-          </IconButton>
-        </ListSubheader>
-        <List
-          aria-labelledby="nav-list-browse"
-          sx={{
-            "& .JoyListItemButton-root": { p: "8px" },
-          }}
-        >
-          {sortedPrivateFolders.map((item, index) => (
-            <ListItem key={index}>
-              <ListItemButton
-                selected={pathStartWith(`/private/${item}`)}
-                onClick={() => navigateTo(`/private/${item}`)}
-              >
-                <ListItemDecorator>
-                  <FolderOpenIcon fontSize="small" />
-                </ListItemDecorator>
-                <ListItemContent>{item}</ListItemContent>
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-      </ListItem>}
-
-      {context.isAuthority && <ListItem nested>
-        <ListSubheader>
-          {context.languagePicker("nav.utility.title")}
-        </ListSubheader>
-        <List
-          aria-labelledby="nav-list-browse"
-          sx={{
-            "& .JoyListItemButton-root": { p: "8px" },
-          }}
-        >
-          {/* {context.isAuthority && <ListItem>
-            <ListItemButton
-              selected={pathStartWith("/links")}
-              onClick={() => navigateTo("/links")}
-            >
-              <ListItemDecorator sx={{ color: "neutral.500" }}>
-                <ShareOutlinedIcon fontSize="small" />
-              </ListItemDecorator>
-              <ListItemContent>{context.languagePicker("nav.utility.links")}</ListItemContent>
-            </ListItemButton>
-          </ListItem>}
-          <ListItem>
-            <ListItemButton
-              selected={pathStartWith("/milkdown")}
-              onClick={() => navigateTo("/milkdown")}
-            >
-              <ListItemDecorator sx={{ color: "neutral.500" }}>
-                <EventNoteOutlinedIcon fontSize="small" />
-              </ListItemDecorator>
-              <ListItemContent>{context.languagePicker("nav.utility.milkdown")}</ListItemContent>
-            </ListItemButton>
+          <ListItem sx={{ paddingLeft: 0, display: { xs: "inline-flex", sm: "inline-flex", md: "none" } }}>
+            <Link to="/" onClick={() => setDrawerOpen(false)} >
+              <IconButton disabled sx={{ paddingLeft: "0px" }}>
+                <img src={GreyLogo} width={24} height={24} alt="" />
+              </IconButton>
+            </Link>
+            <Typography component="h1" fontWeight="lg" sx={{ letterSpacing: "0.06em" }}>
+              {context.languagePicker("nav.title")}
+            </Typography>
           </ListItem>
-          {context.isAuthority && <ListItem>
-            <ListItemButton
-              selected={pathStartWith("/subscription")}
-              onClick={() => navigateTo("/subscription")}
+          <ListItem nested>
+            <ListSubheader>
+              {context.languagePicker("nav.public")}
+              <IconButton
+                size="sm"
+                variant="plain"
+                color="primary"
+                sx={{
+                  ml: 'auto',
+                  '--IconButton-size': '24px',
+                  backgroundColor: (theme) => {
+                    return /^\/public\/*$/.test(window.location.pathname)
+                      ? theme.palette.primary.plainActiveBg
+                      : "transparent"
+                  }
+                }}
+                onClick={() => navigateTo("/public")}
+                disabled={/^\/public\/*$/.test(window.location.pathname)}
+              >
+                <NavigateNextOutlinedIcon fontSize="small" color="primary" />
+              </IconButton>
+            </ListSubheader>
+            <List
+              aria-labelledby="nav-list-browse"
+              sx={{
+                "& .JoyListItemButton-root": { p: "8px" },
+              }}
             >
-              <ListItemDecorator sx={{ color: "neutral.500" }}>
-                <ForwardToInboxOutlinedIcon fontSize="small" />
-              </ListItemDecorator>
-              <ListItemContent>{context.languagePicker("nav.utility.subscription")}</ListItemContent>
-            </ListItemButton>
+              {sortedPublicFolders.map((item, index) => (
+                <ListItem key={index}>
+                  <ListItemButton
+                    selected={pathStartWith(`/public/${item}`)}
+                    onClick={() => navigateTo(`/public/${item}`)}
+                  >
+                    <ListItemDecorator>
+                      <FolderOpenIcon fontSize="small" />
+                    </ListItemDecorator>
+                    <ListItemContent>{item}</ListItemContent>
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+          </ListItem>
+
+          {context.isAuthority && <ListItem nested>
+            <ListSubheader>
+              {context.languagePicker("nav.private")}
+              <IconButton
+                size="sm"
+                variant="plain"
+                color="primary"
+                sx={{
+                  ml: 'auto',
+                  '--IconButton-size': '24px',
+                  backgroundColor: (theme) => {
+                    return /^\/private\/*$/.test(window.location.pathname)
+                      ? theme.palette.primary.plainActiveBg
+                      : "transparent"
+                  }
+                }}
+                onClick={() => navigateTo("/private")}
+                disabled={/^\/private\/*$/.test(window.location.pathname)}
+              >
+                <NavigateNextOutlinedIcon fontSize="small" color="primary" />
+              </IconButton>
+            </ListSubheader>
+            <List
+              aria-labelledby="nav-list-browse"
+              sx={{
+                "& .JoyListItemButton-root": { p: "8px" },
+              }}
+            >
+              {sortedPrivateFolders.map((item, index) => (
+                <ListItem key={index}>
+                  <ListItemButton
+                    selected={pathStartWith(`/private/${item}`)}
+                    onClick={() => navigateTo(`/private/${item}`)}
+                  >
+                    <ListItemDecorator>
+                      <FolderOpenIcon fontSize="small" />
+                    </ListItemDecorator>
+                    <ListItemContent>{item}</ListItemContent>
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
           </ListItem>}
-          {context.isAuthority && <ListItem>
-            <ListItemButton
-              selected={pathStartWith("/terminal")}
-              onClick={() => navigateTo("/terminal")}
+
+          {context.isAuthority && <ListItem nested>
+            <ListSubheader>
+              {context.languagePicker("nav.utility.title")}
+            </ListSubheader>
+            <List
+              aria-labelledby="nav-list-browse"
+              sx={{
+                "& .JoyListItemButton-root": { p: "8px" },
+              }}
             >
-              <ListItemDecorator sx={{ color: "neutral.500" }}>
-                <TerminalOutlinedIcon fontSize="small" />
-              </ListItemDecorator>
-              <ListItemContent>{context.languagePicker("nav.utility.terminal")}</ListItemContent>
-            </ListItemButton>
-          </ListItem>} */}
-          {context.isAuthority && <ListItem>
-            <ListItemButton
-              selected={pathStartWith("/todo")}
-              onClick={() => navigateTo("/todo")}
-            >
-              <ListItemDecorator sx={{ color: "neutral.500" }}>
-                <DoneIcon fontSize="small" />
-              </ListItemDecorator>
-              <ListItemContent>{context.languagePicker("nav.utility.todo")}</ListItemContent>
-            </ListItemButton>
+              {/* {context.isAuthority && <ListItem>
+                <ListItemButton
+                  selected={pathStartWith("/links")}
+                  onClick={() => navigateTo("/links")}
+                >
+                  <ListItemDecorator sx={{ color: "neutral.500" }}>
+                    <ShareOutlinedIcon fontSize="small" />
+                  </ListItemDecorator>
+                  <ListItemContent>{context.languagePicker("nav.utility.links")}</ListItemContent>
+                </ListItemButton>
+              </ListItem>}
+              <ListItem>
+                <ListItemButton
+                  selected={pathStartWith("/milkdown")}
+                  onClick={() => navigateTo("/milkdown")}
+                >
+                  <ListItemDecorator sx={{ color: "neutral.500" }}>
+                    <EventNoteOutlinedIcon fontSize="small" />
+                  </ListItemDecorator>
+                  <ListItemContent>{context.languagePicker("nav.utility.milkdown")}</ListItemContent>
+                </ListItemButton>
+              </ListItem>
+              {context.isAuthority && <ListItem>
+                <ListItemButton
+                  selected={pathStartWith("/subscription")}
+                  onClick={() => navigateTo("/subscription")}
+                >
+                  <ListItemDecorator sx={{ color: "neutral.500" }}>
+                    <ForwardToInboxOutlinedIcon fontSize="small" />
+                  </ListItemDecorator>
+                  <ListItemContent>{context.languagePicker("nav.utility.subscription")}</ListItemContent>
+                </ListItemButton>
+              </ListItem>}
+              {context.isAuthority && <ListItem>
+                <ListItemButton
+                  selected={pathStartWith("/terminal")}
+                  onClick={() => navigateTo("/terminal")}
+                >
+                  <ListItemDecorator sx={{ color: "neutral.500" }}>
+                    <TerminalOutlinedIcon fontSize="small" />
+                  </ListItemDecorator>
+                  <ListItemContent>{context.languagePicker("nav.utility.terminal")}</ListItemContent>
+                </ListItemButton>
+              </ListItem>} */}
+              {context.isAuthority && <ListItem>
+                <ListItemButton
+                  selected={pathStartWith("/todo")}
+                  onClick={() => navigateTo("/todo")}
+                >
+                  <ListItemDecorator sx={{ color: "neutral.500" }}>
+                    <DoneIcon fontSize="small" />
+                  </ListItemDecorator>
+                  <ListItemContent>{context.languagePicker("nav.utility.todo")}</ListItemContent>
+                </ListItemButton>
+              </ListItem>}
+            </List>
           </ListItem>}
-        </List>
-      </ListItem>}
-    </List>
+        </List>}
+    </React.Fragment>
   );
 }
