@@ -3,6 +3,10 @@ html {
   user-select: none;
 }
 
+body {
+  overflow: hidden;
+}
+
 ::selection {
   background: rgb(173, 214, 255);
 }
