@@ -74,9 +74,9 @@ const Welcome = () => {
 
   const [version, setVersion] = React.useState("");
   const [osInfo, setOSInfo] = React.useState({ });
-  const [uptime, setUptime] = React.useState(0);
-  const [memory, setMemory] = React.useState(0);
-  const [storage, setStorage] = React.useState(0);
+  const [uptime, setUptime] = React.useState(-1);
+  const [memory, setMemory] = React.useState(-1);
+  const [storage, setStorage] = React.useState(-1);
 
   React.useEffect(() => {
     if (context.secondTick && context.isAuthority) {
@@ -116,7 +116,7 @@ const Welcome = () => {
           sx={{ pb: 0.5, letterSpacing: "0.02em" }}
         >
           {context.languagePicker("nav.title")}
-          {version.length &&
+          {version.length > 0 &&
             <Typography
               component="span"
               level="body-md"
@@ -139,6 +139,10 @@ const Welcome = () => {
           {String(seconds).padStart(2, '0')}
         </Typography>
         {context.isAuthority &&
+          upHours >= 0 &&
+          memory >= 0 &&
+          storage >= 0 &&
+          Object.keys(osInfo).length > 0 &&
           <InfoField>
             <ItemField item="userAtHostname">
               {osInfo.userAtHostname}
