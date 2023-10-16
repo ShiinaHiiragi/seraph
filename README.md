@@ -54,11 +54,8 @@
 - 2023 10/16 ver 0.2.0 Add TODO list
 
 ## Memo
-1. General
-    - skeleton
-    - setting
+1. Setting
 2. File Explorer
-    - zip file
     - auto delete cron
     - edit in milkdown
     - create / edit attached markdown
