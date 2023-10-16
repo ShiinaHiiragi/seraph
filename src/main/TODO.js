@@ -150,7 +150,7 @@ const TODO = () => {
     });
     setModalTaskTitle(
       context.languagePicker(
-        `modal.form.todo.${dueTime ? "edit" : "new"}`
+        `modal.form.todo.${name ? "edit" : "new"}`
       )
     );
     setModalTaskName(name ?? "");
