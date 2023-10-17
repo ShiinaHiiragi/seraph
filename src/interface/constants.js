@@ -294,7 +294,14 @@ String.prototype.annotateLink = function() {
       result.push(formatted.slice(0, matched.index));
     }
     result.push(
-      <Link target="_blank" href={matched[0]}>{matched[0]}</Link>
+      <Link
+        target="_blank"
+        rel="noopener"
+        href={matched[0]}
+        underline="none"
+      >
+        {matched[0]}
+      </Link>
     );
     formatted = formatted.slice(matched.index + matched[0].length);
   }
