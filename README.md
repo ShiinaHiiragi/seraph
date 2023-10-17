@@ -52,6 +52,7 @@
 - 2023 9/18 ver 0.1.0: Complete folder page
 - 2023 9/19 ver 0.1.1: Fix several bugs
 - 2023 10/16 ver 0.2.0 Add TODO list
+- 2023 10/17 ver 0.2.1 Fix several bugs and add extraction
 
 ## Memo
 1. Setting

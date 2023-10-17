@@ -464,7 +464,7 @@ const TODO = () => {
                     </Typography>
                     {item.description.split("\n").map((paragraph, index) => (
                       <Typography level="body-sm" key={index}>
-                        {paragraph}
+                        {paragraph.annotateLink()}
                       </Typography>
                     ))}
                     <Box
