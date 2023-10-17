@@ -298,7 +298,6 @@ String.prototype.annotateLink = function() {
         target="_blank"
         rel="noopener"
         href={matched[0]}
-        underline="none"
       >
         {matched[0]}
       </Link>
