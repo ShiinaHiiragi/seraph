@@ -68,6 +68,7 @@ const TODO = () => {
   const [modalTaskDesciption, setModalTaskDesciption] = React.useState("");
   const [modalTaskType, setModalTaskType] = React.useState("permanent");
   const [modalTaskDueTime, setModalTaskDueTime] = React.useState(null);
+  const [modalTaskExpired, setModalTaskExpired] = React.useState(false);
   const [taskInfo, setTaskInfo] = React.useState(null);
 
   // after second tick, the globalSwitch were set properly
@@ -114,14 +115,13 @@ const TODO = () => {
       }))
   }, [task, filter, sort, reverse]);
 
-  const modalTaskExpired = React.useMemo(() => {
+  const checkExpired = React.useCallback(() => {
     const dueTime = modalTaskDueTime?.valueOf();
-    if (dueTime) {
-      return dueTime < Date.now()
-    } else {
-      return false
-    }
+    return dueTime !== null && dueTime < Date.now();
   }, [modalTaskDueTime]);
+  React.useEffect(() => {
+    setModalTaskExpired(checkExpired());
+  }, [checkExpired]);
 
   React.useEffect(() => {
     const timeNow = Date.now();
@@ -578,12 +578,19 @@ const TODO = () => {
           (modalTaskType === "sync" && modalTaskExpired)
         }
         handleClose={() => setModalTaskOpen(false)}
-        handleClick={() => handleModTask(
-          modalTaskName,
-          modalTaskDesciption,
-          modalTaskType,
-          modalTaskDueTime?.valueOf() ?? null
-        )}
+        handleClick={() => {
+          const expired = checkExpired();
+          if (expired) {
+            setModalTaskExpired(expired);
+            return;
+          }
+          handleModTask(
+            modalTaskName,
+            modalTaskDesciption,
+            modalTaskType,
+            modalTaskDueTime?.valueOf() ?? null
+          );
+        }}
         title={modalTaskTitle}
         caption={context.languagePicker("modal.form.todo.caption")}
         button={context.languagePicker("universal.button.submit")}
