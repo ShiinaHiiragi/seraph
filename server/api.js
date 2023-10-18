@@ -262,7 +262,7 @@ const configOperator = {
       setting: {
         ...config.setting,
         [item]: {
-          ...config.setting["item"],
+          ...config.setting[item],
           [subItem]: value
         }
       }
