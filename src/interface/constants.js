@@ -108,7 +108,8 @@ const defaultClipboard = {
 };
 const defaultSetting = {
   meta: {
-    language: "en"
+    language: "en",
+    token: 120
   },
   task: {
     delay: 60

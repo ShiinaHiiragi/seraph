@@ -58,6 +58,7 @@ const defaultConfig = {
   setting: {
     meta: {
       language: "en",
+      token: 120,
     },
     task: {
       delay: 60
@@ -270,7 +271,7 @@ const configOperator = {
 }
 exports.configOperator = configOperator;
 
-const expiredPeriod = 2 * 60 * 60 * 1000;
+const expiredPeriod = configOperator.config.setting.meta.token * 60 * 1000;
 const cookieOperator = {
   sessionName: "seraphSession",
   setSessionCookie: (res, session) => res.cookie(

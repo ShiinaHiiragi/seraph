@@ -609,7 +609,13 @@ const TODO = () => {
         <FormControl>
           <FormLabel>{context.languagePicker("main.todo.regulate.type")}</FormLabel>
           <Select value={modalTaskType}>
-            <Option value="permanent" onClick={() => setModalTaskType("permanent")}>
+            <Option
+              value="permanent"
+              onClick={() => {
+                setModalTaskType("permanent");
+                setModalTaskDueTime(null);
+              }}
+            >
               {context.languagePicker("main.todo.type.permanent")}
             </Option>
             <Option value="async" onClick={() => setModalTaskType("async")}>
