@@ -58,7 +58,7 @@ const defaultConfig = {
   setting: {
     meta: {
       language: "en",
-      token: 120,
+      token: 120
     },
     task: {
       delay: 60
@@ -269,7 +269,31 @@ const configOperator = {
     }));
   }
 }
+
+
+const checkConfig = (config, defaultConfig) => {
+  const default_config_keys = Object.keys(defaultConfig)
+  const config_keys = Object.keys(config)
+
+  default_config_keys.forEach((key) => {
+    if (config[key] === undefined) {
+      config[key] = defaultConfig[key]
+    }
+    if (typeof defaultConfig[key] === 'object' && defaultConfig[key] !== null) {
+      checkConfig(config[key], defaultConfig[key]);
+    }
+  });
+  config_keys.forEach((key) => {
+    if (!default_config_keys.includes(key)) {
+      delete config[key];
+    }
+  });
+  return config;
+};
+configOperator.setConfig((config) => checkConfig(config, defaultConfig));
+
 exports.configOperator = configOperator;
+exports.checkConfig = checkConfig;
 
 const expiredPeriod = configOperator.config.setting.meta.token * 60 * 1000;
 const cookieOperator = {
