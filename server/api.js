@@ -353,8 +353,7 @@ const taskOperator = {
   __clearExpiredTask: () => {
     const timeNow = Date.now();
     taskOperator.setTask((task) => task.filter(
-      (item) => (item.type !== 'sync' || item.dueTime >= timeNow)
-        && (item.deleteTime === null || item.deleteTime >= timeNow)
+      (item) => (item.deleteTime === null || item.deleteTime >= timeNow)
     ));
   },
 
@@ -398,11 +397,12 @@ const taskOperator = {
 
   tickTask: (index) => {
     taskOperator.setTask((task) => {
-      task[index].deleteTime = Date.now() +
-        configOperator.config.setting.task.delay * 1000
+      task[index].deleteTime = task[index].type === 'sync'
+        ? task[index].dueTime
+        : Date.now() + configOperator.config.setting.task.delay * 1000;
       return task;
     })
-    return taskOperator.task[index].deleteTime;
+    return taskOperator.task[index];
   },
 
   untickTask: (index) => {
@@ -414,6 +414,12 @@ const taskOperator = {
 
   editTask: (index, name, description, type, dueTime) => {
     taskOperator.setTask((task) => {
+      if (type !== 'sync' && task[index].deleteTime !== null) {
+        task[index].deleteTime = Date.now() + configOperator.config.setting.task.delay * 1000;
+      }
+      if (type === 'sync' && task[index].deleteTime !== null) {
+        task[index].deleteTime = dueTime;
+      }
       task[index] = {
         ...task[index],
         name: name,
@@ -423,11 +429,12 @@ const taskOperator = {
       };
       return task;
     })
+    return taskOperator.task[index];
   },
 
   deleteTask: (index) => {
     taskOperator.setTask((task) => task.filter(
-      (item, task_index) => index !== task_index
+      (_, task_index) => index !== task_index
     ));
   }
 };

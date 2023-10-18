@@ -107,7 +107,9 @@ const zhHans = {
         extract: "{0} 已解压到当前目录。",
         delete: "{0} 已被删除。",
         modTask: "任务已被修改。",
+        modTime: "任务删除时间已更新。",
         tick: "该任务将在 {0} 秒后被删除，可通过在倒计时结束前重新勾选复选框来取消该任务。",
+        tickSync: "该任务将在截止时间后被删除",
         untick: "变更已回滚。"
       },
       warning: {
@@ -156,7 +158,7 @@ const zhHans = {
         edit: "编辑任务",
         caption: "「常驻」类型的任务没有截止时间；「异步」或「同步」类型的任务有截止时间且前者可以提前完成，后者必须在指定时间点完成任务。",
         helperFirstHalf: "截止时间早于现在时间{0}。",
-        helperSecondHalf: "，但该任务仍能被创建"
+        helperSecondHalf: "，但该任务仍能被创建或编辑"
       }
     },
     reconfirm: {

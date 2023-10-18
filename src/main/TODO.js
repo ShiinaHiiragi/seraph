@@ -126,9 +126,7 @@ const TODO = () => {
   React.useEffect(() => {
     const timeNow = Date.now();
     setTask((task) => task
-      .filter((item) => 
-        (item.type !== "sync" || item.dueTime >= timeNow) &&
-          (item.deleteTime === null || item.deleteTime >= timeNow)
+      .filter((item) => (item.deleteTime === null || item.deleteTime >= timeNow)
       )
       .map((item) => ({
         ...item,
@@ -183,14 +181,15 @@ const TODO = () => {
                 deleteTime: data.deleteTime
               } : item
           ))
-          resolve();
+          resolve(data.type);
         })
         .finally(() => setCheckboxDisabled(false));
     }), {
       loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
-      success: context
-        .languagePicker("modal.toast.success.tick")
-        .format(context.setting.task.delay),
+      success: (type) => type === "sync"
+        ? context.languagePicker("modal.toast.success.tickSync")
+        : context.languagePicker("modal.toast.success.tick")
+          .format(context.setting.task.delay),
       error: (data) => data
     })
   }, [context]);
@@ -280,7 +279,7 @@ const TODO = () => {
           { "": () => setModalButtonLoading(false) },
           reject
         )
-          .then(() => {
+          .then((data) => {
             setTask((task) => task.map((item) =>
               item.id === id && item.createTime === createTime
                 ? {
@@ -290,10 +289,13 @@ const TODO = () => {
                   description: description,
                   type: type,
                   dueTime: dueTime,
-                  deleteTime: deleteTime
+                  deleteTime: data.deleteTime
                 } : item
             ))
             setModalTaskOpen(false);
+            if (deleteTime !== data.deleteTime) {
+              toast.success(context.languagePicker("modal.toast.success.modTime"));
+            }
             resolve();
           })
           .finally(() => setModalButtonLoading(false));
@@ -545,19 +547,20 @@ const TODO = () => {
                       </Menu>
                     </Dropdown>
                     <Box sx={{ flexGrow: 1 }} />
-                    {item.deleteTime && <Countdown
-                      date={item.deleteTime ?? 0}
-                      intervalDelay={0}
-                      precision={1}
-                      renderer={(props) => (
-                        <CircularProgress
-                          size="sm"
-                          variant="soft"
-                          determinate
-                          value={props.total / (context.setting.task.delay * 10)}
-                        />
-                      )}
-                    />}
+                    {item.type !== "sync" && item.deleteTime &&
+                      <Countdown
+                        date={item.deleteTime ?? 0}
+                        intervalDelay={0}
+                        precision={1}
+                        renderer={(props) => (
+                          <CircularProgress
+                            size="sm"
+                            variant="soft"
+                            determinate
+                            value={props.total / (context.setting.task.delay * 10)}
+                          />
+                        )}
+                      />}
                   </Box>
                 </Item>
                 {index !== self.length - 1 && <ListDivider inset="startDecorator" />}

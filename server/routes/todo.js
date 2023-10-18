@@ -70,13 +70,14 @@ router.post('/tick', (req, res, next) => {
     return;
   }
 
-  const deleteTime = api.taskOperator.tickTask(target_index);
+  const task = api.taskOperator.tickTask(target_index);
 
   // -> ES: return deleteTime
   req.status.addExecStatus();
   res.send({
     ...req.status.generateReport(),
-    deleteTime: deleteTime
+    type: task.type,
+    deleteTime: task.deleteTime,
   });
   return;
 });
@@ -136,11 +137,14 @@ router.post('/edit', (req, res, next) => {
     return;
   }
 
-  api.taskOperator.editTask(target_index, name, description, type, dueTime);
+  const task = api.taskOperator.editTask(target_index, name, description, type, dueTime);
 
   // -> ES: no extra info
   req.status.addExecStatus();
-  res.send(req.status.generateReport());
+  res.send({
+    ...req.status.generateReport(),
+    deleteTime: task.deleteTime
+  });
   return;
 });
 

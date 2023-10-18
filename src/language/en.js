@@ -107,7 +107,9 @@ const en = {
         extract: "{0} has been extracted to current directory.",
         delete: "{0} has been deleted.",
         modTask: "The task has been modified.",
+        modTime: "Delete time of the task has been updated.",
         tick: "The task will be deleted in {0} seconds, which can be cancelled by re-ticking the checkbox before the end of its countdown.",
+        tickSync: "The task will be deleted after due time.",
         untick: "Changing has been rolled back."
       },
       warning: {
@@ -156,7 +158,7 @@ const en = {
         edit: "Edit Task",
         caption: "Tasks of permanent type have no due time specified. Due time is attached to tasks of async or sync type, and the former can be completed in advance, while the latter must be completed at that very time exactly.",
         helperFirstHalf: "The due time is earlier than now{0}.",
-        helperSecondHalf: ", but the task can still be created"
+        helperSecondHalf: ", but the task can still be created or edited"
       }
     },
     reconfirm: {
