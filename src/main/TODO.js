@@ -51,7 +51,7 @@ const Details = styled("div")(({ theme }) => ({
 
 const TODO = () => {
   const context = React.useContext(GlobalContext);
-  const { seconds } = useTime();
+  const { minutes, seconds } = useTime();
 
   const [taskState, setTaskState] = React.useState(0);
   const [task, setTask] = React.useState([ ]);
@@ -117,11 +117,12 @@ const TODO = () => {
 
   const checkExpired = React.useCallback(() => {
     const dueTime = modalTaskDueTime?.valueOf();
-    return dueTime !== null && dueTime < Date.now();
+    // useEffect triggered by minutes was called about 780ms ahead of real time
+    return dueTime !== null && dueTime < Date.now() + 1000;
   }, [modalTaskDueTime]);
   React.useEffect(() => {
     setModalTaskExpired(checkExpired());
-  }, [checkExpired]);
+  }, [checkExpired, minutes]);
 
   React.useEffect(() => {
     const timeNow = Date.now();
