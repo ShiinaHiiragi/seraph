@@ -305,6 +305,7 @@ String.prototype.annotateLink = function() {
     );
     formatted = formatted.slice(matched.index + matched[0].length);
   }
+  result.push(formatted);
   return result;
 }
 
