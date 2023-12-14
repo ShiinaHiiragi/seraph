@@ -60,19 +60,15 @@
     - auto delete cron
     - edit in milkdown
     - create / edit attached markdown
-3. Links
-    - add / modify / delete links
-    - download resources
-    - arXiv search
+    - shortcut supports
 4. Milkdown
     - edit / read only
     - save in folder / attach to file
     - download
-5. Subscription
-    - cron (cron) & sync (ntp-time-sync)
-    - snippet (return string / file)
-    - mail server
-    - multilanguage support
+5. Subscription: receive message from
+    - cron(`cron`)'s & sync(`ntp-time-sync`)'s snippet
+    - local mail sever
+    - listening server
 6. Terminal
     - open powershell / bash
     - terminal: react-terminal
