@@ -25,11 +25,13 @@
     ```shell
     REACT_APP_PROTOCOL=http
     REACT_APP_HOSTNAME=localhost
+    REACT_APP_PORT=3000
     REACT_APP_SPORT=80
     ```
 
     - `REACT_APP_PROTOCOL`: `http` or `https`. If `https` is applied, certificate `${HOSTNAME}.crt` and key `${HOSTNAME}.key` MUST be added under seraph/server/cert
     - `REACT_APP_HOSTNAME`: changed to host name of your certificate, or just use `localhost` for HTTP
+    - `REACT_APP_PORT`: the port react uses
     - `REACT_APP_SPORT`: the port server uses
 
 4. Start the server (make sure `.env` is created before executing following command)
@@ -39,7 +41,7 @@
     npm start
     ```
 
-    - for Linux user who receive error like 'Port 80 requires elevated privileges', try running `npm run start:sudo`
+    - for Linux user who receive error like 'Port 80 requires elevated privileges', try running with sudo
     - for those who receive error like 'Can't resolve `@mui/material/utils`', try running the following command
 
         ```shell
