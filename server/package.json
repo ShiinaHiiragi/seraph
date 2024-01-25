@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "server": "node-dev ./bin/www",
-    "server:sudo": "sudo node ./node_modules/.bin/node-dev ./bin/www"
+    "server": "run-script-os",
+    "server:win32": "node-dev ./bin/www",
+    "server:linux": "sudo node ./node_modules/.bin/node-dev ./bin/www"
   },
   "dependencies": {
     "adm-zip": "^0.5.10",
@@ -21,5 +22,8 @@
     "morgan": "~1.9.1",
     "node-dev": "^8.0.0",
     "serve-handler": "^6.1.5"
+  },
+  "devDependencies": {
+    "run-script-os": "^1.1.6"
   }
 }

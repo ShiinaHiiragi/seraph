@@ -25,7 +25,7 @@ app.use(express.static(api.dataPath.buildDirPath));
 app.use(cookieParser());
 
 // reinforce setting
-if (process.env.PORT !== undefined) {
+if (process.env.REACT_APP_PORT !== undefined) {
   app.use(cors({
     origin: [api.reactBaseURL],
     methods: ["GET", "POST"],
@@ -65,7 +65,7 @@ app.use('/utility', utilityRouter);
 
 // redirect all other pages to react-router
 app.use((req, res) => {
-  if (process.env.PORT !== undefined) {
+  if (process.env.REACT_APP_PORT !== undefined) {
     res.redirect(new URL(req.originalUrl, api.reactBaseURL).href);
   } else {
     res.sendFile(path.join(api.dataPath.buildDirPath, 'index.html'));

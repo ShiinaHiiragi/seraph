@@ -19,7 +19,7 @@ const generateBaseURL = (protocol, hostname, port) => `${protocol}://${hostname}
 const reactBaseURL = generateBaseURL(
   process.env.REACT_APP_PROTOCOL,
   process.env.REACT_APP_HOSTNAME,
-  process.env.PORT
+  process.env.REACT_APP_PORT
 );
 exports.generateBaseURL = generateBaseURL;
 exports.reactBaseURL = reactBaseURL;

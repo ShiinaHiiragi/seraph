@@ -30,13 +30,13 @@
   },
   "scripts": {
     "start": "cd server/ && npm run server",
-    "start:sudo": "cd server/ && npm run server:sudo",
-    "react": "react-scripts start",
-    "react:sudo": "sudo node ./node_modules/.bin/react-scripts start",
+    "react": "run-script-os",
     "dev": "concurrently --raw 'npm:react' 'npm:start'",
-    "dev:sudo": "concurrently --raw 'npm:react:sudo' 'npm:start:sudo'",
+    "deploy": "run-script-os",
     "build": "react-scripts build",
-    "deploy:win": "(rmdir /s /q .\\build || exit 0) && npm run build",
+    "react:win32": "react-scripts start",
+    "react:linux": "sudo node ./node_modules/.bin/react-scripts start",
+    "deploy:win32": "(rmdir /s /q .\\build || exit 0) && npm run build",
     "deploy:linux": "(rm -rf ./build) && npm run build"
   },
   "eslintConfig": {
@@ -58,6 +58,7 @@
     ]
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "run-script-os": "^1.1.6"
   }
 }
