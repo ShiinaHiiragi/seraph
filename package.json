@@ -1,13 +1,13 @@
 {
   "name": "seraph",
-  "version": "0.2.2",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@fontsource/inter": "^5.0.8",
     "@mui/icons-material": "^5.14.8",
-    "@mui/joy": "^5.0.0-beta.5",
+    "@mui/joy": "^5.0.0-beta.24",
     "@mui/material": "^5.14.13",
     "@mui/x-date-pickers": "^6.16.2",
     "@testing-library/jest-dom": "^5.17.0",
@@ -30,13 +30,13 @@
   },
   "scripts": {
     "start": "cd server/ && npm run server",
-    "start:sudo": "cd server/ && npm run server:sudo",
-    "react": "react-scripts start",
-    "react:sudo": "sudo node ./node_modules/.bin/react-scripts start",
+    "react": "run-script-os",
     "dev": "concurrently --raw 'npm:react' 'npm:start'",
-    "dev:sudo": "concurrently --raw 'npm:react:sudo' 'npm:start:sudo'",
     "build": "react-scripts build",
-    "deploy:win": "(rmdir /s /q .\\build || exit 0) && npm run build",
+    "deploy": "run-script-os",
+    "react:win32": "react-scripts start",
+    "react:linux": "sudo node ./node_modules/.bin/react-scripts start",
+    "deploy:win32": "(rmdir /s /q .\\build || exit 0) && npm run build",
     "deploy:linux": "(rm -rf ./build) && npm run build"
   },
   "eslintConfig": {
@@ -58,6 +58,7 @@
     ]
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "run-script-os": "^1.1.6"
   }
 }
