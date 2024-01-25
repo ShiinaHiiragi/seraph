@@ -34,7 +34,7 @@ const GlobalTheme = (language) => extendTheme({
   fontFamily: {
     display: localeCombinator(language),
     body: localeCombinator(language),
-  },
+  }
 });
 
 export default GlobalTheme;

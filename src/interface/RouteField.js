@@ -13,7 +13,10 @@ const RouteFieldRaw = styled("div")(({ theme }) => ({
   width: "100%",
   height: "100%",
   display: "flex",
-  flexGrow: 1
+  flexGrow: 1,
+  // this color remain from @mui/joy@5.0.0-beta.5 to @mui/joy@5.0.0-beta.24
+  // due to the change of theme palette just for being used to it
+  backgroundColor: "#F5F7FA"
 }));
 
 const RouteField = (props) => {
