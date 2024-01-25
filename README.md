@@ -3,7 +3,7 @@
 <p align="right"> Ichinoe </p>
 
 ## Introduction
-**Seraph** is a cloud server assistant aiming to make full advantage of host's potential.
+**Seraph** is a cloud server assistant aiming to make advantage of hosts' potential.
 
 ## Usage
 1. Install `Node.js` no earlier than v16.7.0 (on which `fs.cpSync` was added) and `npm.js`
@@ -58,6 +58,7 @@
 - 2023 9/18 ver 0.1.0: Complete folder page
 
 ## TODO
+- [ ] hash tag problem
 - [ ] shortcut supports
 - [ ] auto delete cron
 - [ ] setting popup
