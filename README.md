@@ -41,7 +41,7 @@
     npm start
     ```
 
-    - for Linux user who receive error like 'Port 80 requires elevated privileges', try running with sudo
+    - for Linux user who receive error like 'Port 80 requires elevated privileges', try running with other server ports
     - for those who receive error like 'Can't resolve `@mui/material/utils`', try running the following command
 
         ```shell
@@ -51,26 +51,29 @@
 5. Open page and initialize configuration via setting language and password
 
 ## Log
-- 2023 9/18 ver 0.1.0: Complete folder page
-- 2023 9/19 ver 0.1.1: Fix several bugs
-- 2023 10/16 ver 0.2.0 Add TODO list
+- 2024 1/25 ver 1.0.0 Update dependencies of @mui/joy
 - 2023 10/17 ver 0.2.1 Fix several bugs and add extraction
+- 2023 10/16 ver 0.2.0 Add TODO list
+- 2023 9/19 ver 0.1.1: Fix several bugs
+- 2023 9/18 ver 0.1.0: Complete folder page
+
+## TODO
+- [ ] shortcut supports
+- [ ] auto delete cron
+- [ ] setting popup
 
 ## Memo
-1. Setting
-2. File Explorer
-    - auto delete cron
+1. File Explorer
     - edit in milkdown
     - create / edit attached markdown
-    - shortcut supports
-4. Milkdown
+2. Milkdown
     - edit / read only
     - save in folder / attach to file
     - download
-5. Subscription: receive message from
+3. Subscription: receive message from
     - cron(`cron`)'s & sync(`ntp-time-sync`)'s snippet
     - local mail sever
     - listening server
-6. Terminal
+4. Terminal
     - open powershell / bash
     - terminal: react-terminal
