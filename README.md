@@ -42,7 +42,18 @@
     npm start
     ```
 
-    - for Linux user who receive error like 'Port 80 requires elevated privileges', try running with other server ports
+    - for Linux user who receive error like 'Port 80 requires elevated privileges', try running
+
+        ```shell
+        sudo setcap 'cap_net_bind_service=+ep' $(which node)
+        ```
+
+    - for Linux usesr who receive error like 'sudo: node: command not found', add path of node to visudo
+
+        ```shell
+        sudo visudo
+        ```
+
     - for those who receive error like 'Can't resolve `@mui/material/utils`', try running the following command
 
         ```shell
