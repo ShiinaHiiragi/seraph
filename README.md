@@ -32,7 +32,7 @@
 
     - `REACT_APP_PROTOCOL`: `http` or `https`. If `https` is applied, certificate `${HOSTNAME}.crt` and key `${HOSTNAME}.key` MUST be added under seraph/server/cert
     - `REACT_APP_HOSTNAME`: changed to host name of your certificate, or just use `localhost` for HTTP
-    - `REACT_APP_PORT`: the port react uses
+    - `REACT_APP_PORT`: the port react uses; **DO NOT DEFINE IT IF REACT IS NOT USED**
     - `REACT_APP_SPORT`: the port server uses
 
 4. Start the server (make sure `.env` is created before executing following command)
