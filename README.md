@@ -39,8 +39,10 @@
 
     ```shell
     npm run build
-    npm start
+    nohup npm start > .log 2>&1 &
     ```
+
+    and stop this process via `sudo kill -9 $(sudo lsof -t -iTCP:400 -sTCP:LISTEN)`
 
     - for Linux user who receive error like 'Port 80 requires elevated privileges', try running
 
