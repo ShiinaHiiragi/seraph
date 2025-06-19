@@ -3,9 +3,12 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "dev": "run-script-os",
     "server": "run-script-os",
-    "server:win32": "node-dev ./bin/www",
-    "server:linux": "sudo node ./node_modules/.bin/node-dev ./bin/www"
+    "dev:win32": "node-dev ./bin/www",
+    "dev:linux": "sudo node ./node_modules/.bin/node-dev ./bin/www",
+    "server:win32": "node ./bin/www",
+    "server:linux": "sudo node ./bin/www"
   },
   "dependencies": {
     "adm-zip": "^0.5.10",

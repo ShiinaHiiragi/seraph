@@ -29,3 +29,7 @@ yarn-error.log*
 /server/.env
 /server/cert/*.crt
 /server/cert/*.key
+
+# nohup-related
+/.log
+/.pid
