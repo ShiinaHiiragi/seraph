@@ -39,10 +39,17 @@
 
     ```shell
     npm run build
-    nohup npm start > .log 2>&1 &
+    # tmux new -t seraph
+    npm start
+    # detach from session via Ctrl+B D
     ```
 
-    and stop this process via `sudo kill -9 $(sudo lsof -t -iTCP:400 -sTCP:LISTEN)`
+    stop this process using Ctrl+C
+
+    ```shell
+    tmux attach -t seraph
+    tmux kill-session -t seraph
+    ```
 
     - for Linux user who receive error like 'Port 80 requires elevated privileges', try running
 
