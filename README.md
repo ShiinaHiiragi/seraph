@@ -44,7 +44,7 @@
     # detach from session via Ctrl+B D
     ```
 
-    stop this process using Ctrl+C
+    stop this process using Ctrl+C; or just use `tmux new -d -s seraph 'npm start' && tmux detach -s seraph`
 
     ```shell
     tmux attach -t seraph
@@ -69,7 +69,7 @@
         npm install @mui/material @emotion/react @emotion/styled
         ```
 
-5. Open page and initialize configuration via setting language and password
+1. Open page and initialize configuration via setting language and password
 
 ## Log
 - 2023 10/17 ver 0.2.1 Fix several bugs and add extraction
@@ -78,6 +78,7 @@
 - 2023 9/18 ver 0.1.0: Complete folder page
 
 ## TODO
+- [ ] hide dot files
 - [ ] hash tag problem
 - [ ] shortcut supports
 - [ ] auto delete cron
