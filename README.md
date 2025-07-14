@@ -23,17 +23,33 @@
 
     **OPEN `.env` AND ADD FOLLOWING CONFIGURATION:**
 
-    ```shell
-    REACT_APP_PROTOCOL=http
-    REACT_APP_HOSTNAME=localhost
-    REACT_APP_SPORT=8000
-    # REACT_APP_PORT=3000
-    ```
+    - development with react on 80 and express on 8000:
 
-    - `REACT_APP_PROTOCOL`: `http` or `https`. If `https` is applied, certificate `${HOSTNAME}.crt` and key `${HOSTNAME}.key` MUST be added under seraph/server/cert
-    - `REACT_APP_HOSTNAME`: changed to host name of your certificate, or just use `localhost` for HTTP
-    - `REACT_APP_PORT`: the port react uses; **DO NOT DEFINE IT IF REACT IS NOT USED**
-    - `REACT_APP_SPORT`: the port server uses
+        ```shell
+        REACT_APP_PROTOCOL=http
+        REACT_APP_HOSTNAME=localhost
+        REACT_APP_PORT=80
+        REACT_APP_SPORT=8000
+        ```
+
+    - deployment with express on 443 (DO NOT DEFINE `REACT_APP_PORT`):
+
+        ```shell
+        REACT_APP_PROTOCOL=https
+        REACT_APP_HOSTNAME={YOUR_HOSTNAME}
+        REACT_APP_SPORT=443
+        ```
+
+        and certificate `${HOSTNAME}.crt` and key `${HOSTNAME}.key` MUST be added under seraph/server/cert
+
+    - deployment with nginx proxy from 443 to express on 8000:
+
+        ```shell
+        REACT_APP_PROTOCOL=http
+        REACT_APP_HOSTNAME={YOUR_HOSTNAME}
+        REACT_APP_PORT=443
+        REACT_APP_SPORT=8000
+        ```
 
 4. Start the server (make sure `.env` is created before executing following command)
 
@@ -69,7 +85,7 @@
         npm install @mui/material @emotion/react @emotion/styled
         ```
 
-1. Open page and initialize configuration via setting language and password
+5. Open page and initialize configuration via setting language and password
 
 ## Log
 - 2023 10/17 ver 0.2.1 Fix several bugs and add extraction

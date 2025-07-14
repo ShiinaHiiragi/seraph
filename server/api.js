@@ -15,6 +15,10 @@ fs.copyFileSync(
 fs.chmodSync(path.join(__dirname, '/.env'), 0o777);
 
 dotenv.config();
+const isLoopback = (hostname) => {
+  const h = hostname.toLowerCase();
+  return h === "localhost" || h === "::1" || /^127(\.\d{1,3}){3}$/.test(h);
+}
 const generateBaseURL = (protocol, hostname, port) => `${protocol}://${hostname}:${port}`;
 const reactBaseURL = generateBaseURL(
   process.env.REACT_APP_PROTOCOL,
@@ -22,6 +26,7 @@ const reactBaseURL = generateBaseURL(
   process.env.REACT_APP_PORT
 );
 
+exports.isLoopback = isLoopback;
 exports.generateBaseURL = generateBaseURL;
 exports.reactBaseURL = reactBaseURL;
 
