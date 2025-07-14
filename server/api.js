@@ -21,6 +21,7 @@ const reactBaseURL = generateBaseURL(
   process.env.REACT_APP_HOSTNAME,
   process.env.REACT_APP_PORT
 );
+
 exports.generateBaseURL = generateBaseURL;
 exports.reactBaseURL = reactBaseURL;
 

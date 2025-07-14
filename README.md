@@ -26,8 +26,8 @@
     ```shell
     REACT_APP_PROTOCOL=http
     REACT_APP_HOSTNAME=localhost
-    REACT_APP_PORT=3000
-    REACT_APP_SPORT=80
+    REACT_APP_SPORT=8000
+    # REACT_APP_PORT=3000
     ```
 
     - `REACT_APP_PROTOCOL`: `http` or `https`. If `https` is applied, certificate `${HOSTNAME}.crt` and key `${HOSTNAME}.key` MUST be added under seraph/server/cert

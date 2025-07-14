@@ -27,7 +27,7 @@ app.use(cookieParser());
 // reinforce setting
 if (process.env.REACT_APP_PORT !== undefined) {
   app.use(cors({
-    origin: [api.reactBaseURL],
+    origin: [RegExp(`https?://${process.env.REACT_APP_HOSTNAME}(:\\d+)?`)],
     methods: ["GET", "POST"],
     alloweHeaders: ['Conten-Type', 'Authorization', 'Accept', 'Origin'],
     exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],

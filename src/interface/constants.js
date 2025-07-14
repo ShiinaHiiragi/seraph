@@ -131,10 +131,14 @@ const pathStartWith = (prefix) => {
   return new RegExp(`^${prefix}$`).test(pathname) ||
     new RegExp(`^${prefix}/`).test(pathname)
 }
+const isLoopback = (hostname) => {
+  const h = hostname.toLowerCase();
+  return h === "localhost" || h === "::1" || /^127(\.\d{1,3}){3}$/.test(h);
+}
 const generateBaseURL = (protocol, hostname, port) => 
   `${protocol}://${hostname}:${port}`;
 const serverBaseURL = generateBaseURL(
-  process.env.REACT_APP_PROTOCOL,
+  !isLoopback(process.env.REACT_APP_HOSTNAME) ? "https" : process.env.REACT_APP_PROTOCOL,
   process.env.REACT_APP_HOSTNAME,
   process.env.REACT_APP_SPORT
 );
