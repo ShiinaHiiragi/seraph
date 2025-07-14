@@ -23,7 +23,7 @@
 
     **OPEN `.env` AND ADD FOLLOWING CONFIGURATION:**
 
-    - development with react on 80 and express on 8000:
+    - development (`npm run dev`) with react on 80 and express on 8000:
 
         ```shell
         REACT_APP_PROTOCOL=http
@@ -32,23 +32,41 @@
         REACT_APP_SPORT=8000
         ```
 
-    - deployment with express on 443 (DO NOT DEFINE `REACT_APP_PORT`):
+    - deployment (`npm start`) with express on 443 (DO NOT DEFINE `REACT_APP_PORT`):
 
         ```shell
         REACT_APP_PROTOCOL=https
-        REACT_APP_HOSTNAME={YOUR_HOSTNAME}
+        REACT_APP_HOSTNAME=${YOUR_HOSTNAME}
         REACT_APP_SPORT=443
         ```
 
         and certificate `${HOSTNAME}.crt` and key `${HOSTNAME}.key` MUST be added under seraph/server/cert
 
-    - deployment with nginx proxy from 443 to express on 8000:
+    - deployment (`npm start`) with nginx proxy from 443 to express on 8000:
 
         ```shell
         REACT_APP_PROTOCOL=http
-        REACT_APP_HOSTNAME={YOUR_HOSTNAME}
+        REACT_APP_HOSTNAME=${YOUR_HOSTNAME}
         REACT_APP_PORT=443
         REACT_APP_SPORT=8000
+        ```
+
+        and configure your nginx with `sudo nginx -t && sudo systemctl reload nginx`
+
+        ```
+        server {
+            listen 443 ssl;
+            server_name ${YOUR_HOSTNAME};
+
+            ssl_certificate     /etc/nginx/ssl/${YOUR_HOSTNAME}_bundle.crt;
+            ssl_certificate_key /etc/nginx/ssl/${YOUR_HOSTNAME}.key;
+
+            location / {
+                proxy_pass http://localhost:8000;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+            }
+        }
         ```
 
 4. Start the server (make sure `.env` is created before executing following command)
@@ -60,7 +78,7 @@
     # detach from session via Ctrl+B D
     ```
 
-    stop this process using Ctrl+C; or just use `tmux new -d -s seraph 'npm start' && tmux detach -s seraph`
+    stop this process using Ctrl+C; or just use `tmux new -d -s seraph 'npm start'`
 
     ```shell
     tmux attach -t seraph
