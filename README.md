@@ -51,7 +51,7 @@
         REACT_APP_SPORT=8000
         ```
 
-        and configure your nginx with `sudo nginx -t && sudo systemctl reload nginx`
+        and configure your nginx config (located at /etc/nginx/sites-available/default) with `sudo nginx -t && sudo systemctl reload nginx`
 
         ```
         server {
@@ -68,6 +68,8 @@
             }
         }
         ```
+
+        a reload is needed after updation of certificates
 
 4. Start the server (make sure `.env` is created before executing following command)
 
