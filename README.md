@@ -23,30 +23,29 @@
 
     **OPEN `.env` AND ADD FOLLOWING CONFIGURATION:**
 
-    - development (`npm run dev`) with react on 80 and express on 8000:
+    - development http (`npm run dev`) with react on 80 and express on 8000:
 
         ```shell
-        REACT_APP_PROTOCOL=http
         REACT_APP_HOSTNAME=localhost
         REACT_APP_PORT=80
         REACT_APP_SPORT=8000
         ```
 
-    - deployment (`npm start`) with express on 443 (DO NOT DEFINE `REACT_APP_PORT`):
+    - deployment https (`npm start`) with express on 443:
 
         ```shell
-        REACT_APP_PROTOCOL=https
         REACT_APP_HOSTNAME=${YOUR_HOSTNAME}
+        REACT_APP_SSLCERT=local
         REACT_APP_SPORT=443
         ```
 
         and certificate `${HOSTNAME}.crt` and key `${HOSTNAME}.key` MUST be added under seraph/server/cert
 
-    - deployment (`npm start`) with nginx proxy from 443 to express on 8000:
+    - deployment https (`npm start`) with nginx proxy from 443 to express on 8000:
 
         ```shell
-        REACT_APP_PROTOCOL=http
         REACT_APP_HOSTNAME=${YOUR_HOSTNAME}
+        REACT_APP_SSLCERT=nginx
         REACT_APP_PORT=443
         REACT_APP_SPORT=8000
         ```

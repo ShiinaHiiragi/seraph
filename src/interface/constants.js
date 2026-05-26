@@ -138,8 +138,18 @@ const isLoopback = (hostname) => {
 const generateBaseURL = (protocol, hostname, port) => 
   `${protocol}://${hostname}:${port}`;
 const serverBaseURL = isLoopback(process.env.REACT_APP_HOSTNAME)
-  ? generateBaseURL(process.env.REACT_APP_PROTOCOL, process.env.REACT_APP_HOSTNAME, process.env.REACT_APP_SPORT)
-  : generateBaseURL("https", process.env.REACT_APP_HOSTNAME, process.env.REACT_APP_PORT ?? process.env.REACT_APP_SPORT)
+  ? generateBaseURL(
+    "http",
+    process.env.REACT_APP_HOSTNAME,
+    process.env.REACT_APP_SPORT
+  )
+  : generateBaseURL(
+    "https",
+    process.env.REACT_APP_HOSTNAME,
+    process.env.REACT_APP_SSLCERT === "nginx"
+      ? process.env.REACT_APP_PORT
+      : process.env.REACT_APP_SPORT
+  )
 
 export {
   pathStartWith,

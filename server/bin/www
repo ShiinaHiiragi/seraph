@@ -20,9 +20,9 @@ app.set('port', port);
  * Create HTTP(S) server.
  */
 
-let server = process.env.REACT_APP_PROTOCOL === 'http'
-  ? http.createServer(app)
-  : https.createServer(api.fileOperator.readCert(), app);
+let server = process.env.REACT_APP_SSLCERT === 'local'
+  ? https.createServer(api.fileOperator.readCert(), app)
+  : http.createServer(app);
 
 /**
  * Listen on provided port, on all network interfaces.

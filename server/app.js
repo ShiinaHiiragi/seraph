@@ -66,7 +66,12 @@ app.use('/utility', utilityRouter);
 // redirect all other pages to react-router
 app.use((req, res) => {
   if (api.isLoopback(process.env.REACT_APP_HOSTNAME)) {
-    res.redirect(new URL(req.originalUrl, api.reactBaseURL).href);
+    const reactBaseURL = api.generateBaseURL(
+      "http",
+      process.env.REACT_APP_HOSTNAME,
+      process.env.REACT_APP_PORT
+    );
+    res.redirect(new URL(req.originalUrl, reactBaseURL).href);
   } else {
     res.sendFile(path.join(api.dataPath.buildDirPath, 'index.html'));
   }

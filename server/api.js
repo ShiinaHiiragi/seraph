@@ -20,16 +20,9 @@ const isLoopback = (hostname) => {
   return h === "localhost" || h === "::1" || /^127(\.\d{1,3}){3}$/.test(h);
 }
 const generateBaseURL = (protocol, hostname, port) => `${protocol}://${hostname}:${port}`;
-const reactBaseURL = generateBaseURL(
-  process.env.REACT_APP_PROTOCOL,
-  process.env.REACT_APP_HOSTNAME,
-  process.env.REACT_APP_PORT
-);
 
 exports.isLoopback = isLoopback;
 exports.generateBaseURL = generateBaseURL;
-exports.reactBaseURL = reactBaseURL;
-
 
 // intro __dirname
 const dataPath = {
