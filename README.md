@@ -26,8 +26,8 @@
     - development http (`npm run dev`) with react on 80 and express on 8000:
 
         ```shell
+        PORT=80
         REACT_APP_HOSTNAME=localhost
-        REACT_APP_PORT=80
         REACT_APP_SPORT=8000
         ```
 
@@ -74,17 +74,12 @@
 
     ```shell
     npm run build
-    # tmux new -t seraph
+    # tmux new -As seraph
     npm start
     # detach from session via Ctrl+B D
     ```
 
-    stop this process using Ctrl+C; or just use `tmux new -d -s seraph 'npm start'`
-
-    ```shell
-    tmux attach -t seraph
-    tmux kill-session -t seraph
-    ```
+    stop this process using Ctrl+C; or just use `tmux new -ds seraph 'npm start'`
 
     - for Linux user who receive error like 'Port 80 requires elevated privileges', try running
 

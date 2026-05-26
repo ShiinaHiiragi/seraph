@@ -25,7 +25,7 @@ app.use(express.static(api.dataPath.buildDirPath));
 app.use(cookieParser());
 
 // reinforce setting
-const originURL = [process.env.REACT_APP_PORT, process.env.REACT_APP_NPORT]
+const originURL = [process.env.PORT, process.env.REACT_APP_NPORT]
   .filter((item) => item !== undefined)
   .map((item) => RegExp(`https?://${process.env.REACT_APP_HOSTNAME}:${item}`))
 
@@ -73,7 +73,7 @@ app.use((req, res) => {
     const reactBaseURL = api.generateBaseURL(
       "http",
       process.env.REACT_APP_HOSTNAME,
-      process.env.REACT_APP_PORT
+      process.env.PORT
     );
     res.redirect(new URL(req.originalUrl, reactBaseURL).href);
   } else {
