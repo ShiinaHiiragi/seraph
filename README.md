@@ -46,7 +46,7 @@
         ```shell
         REACT_APP_HOSTNAME=${YOUR_HOSTNAME}
         REACT_APP_SSLCERT=nginx
-        REACT_APP_PORT=443
+        REACT_APP_NPORT=443
         REACT_APP_SPORT=8000
         ```
 

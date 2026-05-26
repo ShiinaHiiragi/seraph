@@ -25,9 +25,13 @@ app.use(express.static(api.dataPath.buildDirPath));
 app.use(cookieParser());
 
 // reinforce setting
-if (process.env.REACT_APP_PORT !== undefined) {
+const originURL = [process.env.REACT_APP_PORT, process.env.REACT_APP_NPORT]
+  .filter((item) => item !== undefined)
+  .map((item) => RegExp(`https?://${process.env.REACT_APP_HOSTNAME}:${item}`))
+
+if (originURL.length > 0) {
   app.use(cors({
-    origin: [RegExp(`https?://${process.env.REACT_APP_HOSTNAME}:${process.env.REACT_APP_PORT}`)],
+    origin: originURL,
     methods: ["GET", "POST"],
     alloweHeaders: ['Conten-Type', 'Authorization', 'Accept', 'Origin'],
     exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],

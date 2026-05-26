@@ -147,7 +147,7 @@ const serverBaseURL = isLoopback(process.env.REACT_APP_HOSTNAME)
     "https",
     process.env.REACT_APP_HOSTNAME,
     process.env.REACT_APP_SSLCERT === "nginx"
-      ? process.env.REACT_APP_PORT
+      ? process.env.REACT_APP_NPORT
       : process.env.REACT_APP_SPORT
   )
 
