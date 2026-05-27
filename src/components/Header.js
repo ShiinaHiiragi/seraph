@@ -45,6 +45,7 @@ const Header = (props) => {
   const {
     setGlobalSwitch,
     setDrawerOpen,
+    setPublicFolders,
     setPrivateFolders,
     setClipboard,
     setSettingPair
@@ -81,6 +82,7 @@ const Header = (props) => {
       }
     )
       .then((data) => {
+        setPublicFolders(data.public);
         setPrivateFolders(data.private);
         setClipboard(data.clipboard);
         setGlobalSwitch(globalState.AUTHORITY);
@@ -91,6 +93,7 @@ const Header = (props) => {
   }, [
     context,
     setGlobalSwitch,
+    setPublicFolders,
     setPrivateFolders,
     setClipboard,
     formPasswordText,
@@ -102,6 +105,9 @@ const Header = (props) => {
     toast.promise(new Promise((resolve, reject) => {
       request("POST/auth/logout", undefined, undefined, reject)
         .then(() => {
+          setPublicFolders((publicFolders) => 
+            publicFolders.filter((folder) => folder[0] !== ".")
+          )
           setGlobalSwitch(globalState.ANONYMOUS);
           resolve();
           navigate("/");

@@ -5,13 +5,19 @@ let router = express.Router();
 router.get('/public/*', (req, res) => {
   const { '0': folderName } = req.params;
   const folderPath = api.dataPath.publicDirFolderPath(folderName);
-  const folderInfo = api.fileOperator.readFolderInfo(folderPath);
+  let folderInfo = api.fileOperator.readFolderInfo(folderPath);
 
   if (folderInfo === null) {
     // -> EF_RU: folder don't exist
     req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
     res.send(req.status.generateReport());
     return;
+  }
+
+  if (req.status.notAuthSuccess()) {
+    // CONTINUE ANYWAY: hide some files for guests
+    // still accessible via direct url
+    folderInfo = folderInfo.filter((item) => item.name[0] !== '.')
   }
 
   // -> ES: return folder info even if it's empty

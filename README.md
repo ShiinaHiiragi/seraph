@@ -102,16 +102,14 @@
 5. Open page and initialize configuration via setting language and password
 
 ## Log
-- 2023 10/17 ver 0.2.1 Fix several bugs and add extraction
-- 2023 10/16 ver 0.2.0 Add TODO list
-- 2023 9/19 ver 0.1.1: Fix several bugs
-- 2023 9/18 ver 0.1.0: Complete folder page
+- 05/26/2026 ver 0.2.2: Fix some bugs and add supports for dot files
+- 10/17/2023 ver 0.2.1: Fix several bugs and add extraction
+- 10/16/2023 ver 0.2.0: Add TODO list
+- 09/19/2023 ver 0.1.1: Fix several bugs
+- 09/18/2023 ver 0.1.0: Complete folder page
 
 ## TODO
-- [ ] hide dot files
-- [ ] hash tag problem
 - [ ] shortcut supports
-- [ ] auto delete cron
 - [ ] setting popup
 
 ## Memo
@@ -125,7 +123,7 @@
 3. Subscription: receive message from
     - cron(`cron`)'s & sync(`ntp-time-sync`)'s snippet
     - local mail sever
-    - listening server
+    - webhook server
 4. Terminal
     - open powershell / bash
     - terminal: react-terminal

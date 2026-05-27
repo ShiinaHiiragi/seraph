@@ -22,7 +22,7 @@ router.get('/*/:filename', (req, res, next) => {
   }
 
   // -> no code: return file directly
-  res.sendFile(filePath);
+  res.sendFile(filePath, { dotfiles: 'allow' });
   return;
 });
 

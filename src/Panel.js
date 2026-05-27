@@ -199,6 +199,7 @@ const Panel = () => {
               <Header
                 setGlobalSwitch={setGlobalSwitch}
                 setDrawerOpen={setDrawerOpen}
+                setPublicFolders={setPublicFolders}
                 setPrivateFolders={setPrivateFolders}
                 setClipboard={setClipboard}
                 setSettingPair={setSettingPair}

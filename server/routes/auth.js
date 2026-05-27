@@ -9,7 +9,9 @@ router.get('/meta', (req, res, next) => {
       next(api.errorStreamControl);
       return;
     } else {
-      const publicFolder = api.fileOperator.readFoldersList(api.dataPath.publicDirPath);
+      const publicFolder = api.fileOperator
+        .readFoldersList(api.dataPath.publicDirPath)
+        .filter((item) => item[0] !== '.');
 
       // -> ES: return publicly available metadata
       req.status.addExecStatus();
@@ -71,13 +73,16 @@ router.post('/login', (req, res, next) => {
     if (req.status.err === api.Status.authErrCode.InvalidToken) {
       const { password } = req.body;
       if (password === api.configOperator.config.metadata.password) {
-        api.tokenOperator.addNewSession(res);
+        // public is neccesarry because files starts with dot are hidden
+        const publicFolder = api.fileOperator.readFoldersList(api.dataPath.publicDirPath);
         const privateFolder = api.fileOperator.readFoldersList(api.dataPath.privateDirPath);
+        api.tokenOperator.addNewSession(res);
 
         // -> ES: return private folders list and clipboard
         req.status.addExecStatus();
         res.send({
           ...req.status.generateReport(),
+          public: publicFolder,
           private: privateFolder,
           clipboard: api.configOperator.config.clipboard
         });
