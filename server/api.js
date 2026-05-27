@@ -3,8 +3,24 @@ const fs = require('fs');
 const path = require('path');
 const dotenv = require('dotenv');
 const mime = require('mime');
+const child = require('child_process');
+const assert = require('assert');
 const CryptoJS = require('crypto-js');
 const checkDiskSpace = require('check-disk-space').default
+
+String.prototype.versionGE = function (min) {
+  const left = this.split('.').map(Number);
+  const right = min.split('.').map(Number);
+  const len = Math.max(left.length, right.length);
+  for (let i = 0; i < len; i++) {
+    const padLeft = left[i] ?? 0;
+    const padRight = right[i] ?? 0;
+    if (padLeft !== padRight) {
+      return padLeft > padRight;
+    }
+  }
+  return true;
+};
 
 // copy .env in react directory
 // use .env to build base URL
@@ -372,6 +388,90 @@ const tokenOperator = {
   }
 };
 
+const checkerOperator = {
+  pass: (miss) => {
+    const notPassed = miss instanceof Array && miss.length > 0
+    return {
+      pass: !notPassed,
+      miss: notPassed ? miss : []
+    }
+  },
+
+  checkFiles: (files) => () => {
+    return checkerOperator.pass(
+      files
+        .filter((file) => !fs.existsSync(file) || fs.lstatSync(file).isDirectory())
+        .map((item) => ({ id: path.normalize(item), cat: "Files" }))
+    )
+  },
+
+  checkPandoc: () => {
+    try {
+      child.execFileSync('pandoc', ['--version']);
+      return checkerOperator.pass()
+    } catch (_) {
+      return checkerOperator.pass([{ id: "pandoc", cat: "Packages" }]);
+    }
+  },
+
+  checkPython: (minVersion) => () => {
+    try {
+      const stdout = child.execFileSync('python3', ['--version'], { encoding: 'utf8' });
+      const version = stdout.match(/Python ([.0-9]+)/)[1];
+      assert(version.versionGE(minVersion))
+      return checkerOperator.pass()
+    } catch (_) {
+      return checkerOperator.pass([{ id: `python (>=${minVersion})`, cat: "Packages" }]);
+    }
+  },
+
+  checkPip: (packages) => () => {
+    const script = `
+      import json
+      import importlib
+      missing = [p for p in ${JSON.stringify(packages)} if importlib.util.find_spec(p) is None]
+      print(json.dumps(missing))
+    `.replaceAll("\n      ", "\n");
+
+    try {
+      const stdout = child.execFileSync('python3', ['-c', script], { encoding: 'utf8' });
+      const miss = JSON.parse(stdout.trim());
+      return checkerOperator.pass(
+        miss.map((pkg) => ({ id: pkg, cat: "Pip packages" }))
+      );
+    } catch (_) {
+      return checkerOperator.pass(
+        packages.map((pkg) => ({ id: pkg, cat: "Pip packages" }))
+      );
+    }
+  },
+
+  check: (handles) => {
+    let results = {}
+    const rawMiss = handles.reduce(
+      (prev, curr) => [...prev, ...curr().miss],
+      []
+    );
+    rawMiss.forEach((item) => {
+      if (results.hasOwnProperty(item.cat)) {
+        results[item.cat].push(item.id)
+      } else {
+        results[item.cat] = [item.id]
+      }
+    });
+    return results
+  }
+}
+
+const checkerParam = {
+  epubConverter: [
+    checkerOperator.checkFiles([extentPath.epubConverterFilePath]),
+    checkerOperator.checkPandoc,
+    checkerOperator.checkPython('3.8'),
+    checkerOperator.checkPip(['numpy', 'PIL', 'bs4', 'markdown_it'])
+  ]
+}
+
 const taskOperator = {
   task: fileOperator.readTask(),
   setTask: (handle) => {
@@ -472,6 +572,8 @@ const taskOperator = {
 exports.expiredPeriod = expiredPeriod;
 exports.cookieOperator = cookieOperator;
 exports.tokenOperator = tokenOperator;
+exports.checkerOperator = checkerOperator;
+exports.checkerParam = checkerParam;
 exports.taskOperator = taskOperator;
 
 
@@ -519,6 +621,7 @@ Status.execErrCode = {
   ResourcesUnexist: "RU",
   IdentifierConflict: "IC",
   FileModuleError: "FME",
+  EnvironmentMissing: "EM",
   ExtensionError: "EE",
   DuplicateRequest: "DR",
   InternalServerError: "ISE"

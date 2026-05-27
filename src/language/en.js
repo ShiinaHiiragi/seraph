@@ -123,6 +123,7 @@ const en = {
         resourcesUnexist: "Resources requested do not exist.",
         identifierConflict: "Naming identifiers conflicts.",
         fileModuleError: "Exception occurred in file operation module.",
+        environmentMissing: "Pre-check for extension module environment failed. Please check console for more details.",
         extensionError: "Exception occurred in inner extension module. Please check console for more details.",
         duplicateRequest: "Duplicate Request: Please decrease operation frequency."
       },
@@ -178,6 +179,9 @@ const en = {
     general: {
       language: "Language"
     }
+  },
+  console: {
+    dependencies: "Missing dependencies:"
   },
   universal: {
     time: {

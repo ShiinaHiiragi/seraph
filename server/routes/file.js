@@ -454,6 +454,16 @@ router.post('/epub', (req, res, next) => {
     return;
   }
 
+  const missing = api.checkerOperator.check(api.checkerParam.epubConverter);
+  if (Object.keys(missing).length > 0) {
+    req.status.addExecStatus(api.Status.execErrCode.EnvironmentMissing);
+    res.send({
+      ...req.status.generateReport(),
+      missing: missing
+    });
+    return;
+  }
+
   try {
     child.execFileSync('python3', [
       api.extentPath.epubConverterFilePath,

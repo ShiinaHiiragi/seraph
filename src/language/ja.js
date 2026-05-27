@@ -123,6 +123,7 @@ const ja = {
         resourcesUnexist: "リクエストされたリソースは存在しません。",
         identifierConflict: "ネーミング識別子競合。",
         fileModuleError: "ファイルオペレーションモジュールでエクセプションが発生しました。",
+        environmentMissing: "エクステンションモジュールのエンヴァイロメントゥッの事前チェックにがフェイルしました。詳細はコンソールで確認してください。",
         extensionError: "内部エクステンションモジュールでエクセプションが発生しました。詳細はコンソールで確認してください。",
         duplicateRequest: "デュープリケイト・リクエスト: オペレーションのフリークエンシーを下げてください。"
       },
@@ -178,6 +179,9 @@ const ja = {
     general: {
       language: "ランゲージ"
     }
+  },
+  console: {
+    dependencies: "不足している依存関係："
   },
   universal: {
     time: {

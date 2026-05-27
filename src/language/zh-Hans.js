@@ -123,6 +123,7 @@ const zhHans = {
         resourcesUnexist: "请求的资源不存在。",
         identifierConflict: "命名标识符冲突。",
         fileModuleError: "文件操作模块产生异常。",
+        environmentMissing: "拓展模块环境事前检查不通过：请查阅控制台获得更多细节。",
         extensionError: "拓展模块内部错误：请查阅控制台获得更多细节。",
         duplicateRequest: "重复请求：请降低操作频率。"
       },
@@ -178,6 +179,9 @@ const zhHans = {
     general: {
       language: "语言"
     }
+  },
+  console: {
+    dependencies: "缺失的依赖项："
   },
   universal: {
     time: {
