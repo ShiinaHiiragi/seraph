@@ -122,7 +122,6 @@
     - download
 3. Subscription: receive message from
     - cron(`cron`)'s & sync(`ntp-time-sync`)'s snippet
-    - local mail sever
     - webhook server
 4. Terminal
     - open powershell / bash
