@@ -8,7 +8,11 @@ import Dropdown from "@mui/joy/Dropdown";
 import IconButton from "@mui/joy/IconButton";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
-import GlobalContext, { request, pathStartWith } from "../interface/constants";
+import GlobalContext, {
+  request,
+  Status,
+  pathStartWith
+} from "../interface/constants";
 
 export default function RowMenu(props) {
   const {
@@ -192,7 +196,10 @@ export default function RowMenu(props) {
         type: type,
         folderName: folderName,
         filename: filename
-      }, undefined, reject)
+      }, { [Status.execErrCode.ExtensionError]: (data) => {
+        console.log(data);
+        console.log(data.stderr);
+      } }, reject)
         .then((data) => {
           if (pathStartWith(`/${type}/${folderName}`)) {
             setFilesList((filesList) => [

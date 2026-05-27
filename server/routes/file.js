@@ -465,13 +465,14 @@ router.post('/epub', (req, res, next) => {
       "path.dst": folderPath
     })]);
   } catch (err) {
-    // -> EF_
-    const retCode = err.status;
-    const stderr = err.stderr.toString();
-    const stdout = err.stdout.toString();
-
+    // -> EF_EE: error when executing epub.py
     req.status.addExecStatus(api.Status.execErrCode.ExtensionError);
-    res.send(req.status.generateReport());
+    res.send({
+      ...req.status.generateReport(),
+      code: err.status,
+      stdout: err.stdout.toString(),
+      stderr: err.stderr.toString()
+    });
     return;
   }
 

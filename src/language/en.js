@@ -123,7 +123,7 @@ const en = {
         resourcesUnexist: "Resources requested do not exist.",
         identifierConflict: "Naming identifiers conflicts.",
         fileModuleError: "Exception occurred in file operation module.",
-        extensionError: "Exception occurred in inner extension module.",
+        extensionError: "Exception occurred in inner extension module. Please check console for more details.",
         duplicateRequest: "Duplicate Request: Please decrease operation frequency."
       },
       error: {

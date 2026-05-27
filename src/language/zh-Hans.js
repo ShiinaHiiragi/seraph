@@ -123,7 +123,7 @@ const zhHans = {
         resourcesUnexist: "请求的资源不存在。",
         identifierConflict: "命名标识符冲突。",
         fileModuleError: "文件操作模块产生异常。",
-        extensionError: "拓展模块内部错误",
+        extensionError: "拓展模块内部错误：请查阅控制台获得更多细节。",
         duplicateRequest: "重复请求：请降低操作频率。"
       },
       error: {
