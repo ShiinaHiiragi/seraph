@@ -39,10 +39,16 @@ const dataPath = {
   publicMarkdownDirPath: path.join(__dirname, "./data/markdown/public"),
   privateMarkdownDirPath: path.join(__dirname, "./data/markdown/private"),
   independentMarkdownDirPath: path.join(__dirname, "./data/markdown/independent"),
+  extensionDirPath: path.join(__dirname, "../extensions"),
   publicDirFolderPath: (folderName) => path.join(__dirname, "./data/public", folderName),
   privateDirFolderPath: (folderName) => path.join(__dirname, "./data/private", folderName),
 };
+
+const extentPath = {
+  epubConverterFilePath: path.join(dataPath.extensionDirPath, "./ranobe-tools/single/epub.py")
+}
 exports.dataPath = dataPath;
+exports.extentPath = extentPath;
 
 // setting should be consistent with defaultSetting in react
 const defaultConfig = {

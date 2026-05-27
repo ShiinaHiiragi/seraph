@@ -454,16 +454,15 @@ router.post('/epub', (req, res, next) => {
     return;
   }
 
-  const scriptPath = path.join(
-    __dirname,
-    '../../extensions/ranobe-tools/single/epub.py'
-  );
-
   try {
-    child.execFileSync('python3', [scriptPath, '-c', JSON.stringify({
-      "path.src": filePath,
-      "path.dst": folderPath
-    })]);
+    child.execFileSync('python3', [
+      api.extentPath.epubConverterFilePath,
+      '-c',
+      JSON.stringify({
+        "path.src": filePath,
+        "path.dst": folderPath
+      })
+    ]);
   } catch (err) {
     // -> EF_EE: error when executing epub.py
     req.status.addExecStatus(api.Status.execErrCode.ExtensionError);
