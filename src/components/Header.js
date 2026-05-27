@@ -117,7 +117,7 @@ const Header = (props) => {
       success: context.languagePicker("modal.toast.success.logout"),
       error: (data) => data
     })
-  }, [context, setGlobalSwitch, navigate])
+  }, [context, setGlobalSwitch, setPublicFolders, navigate])
 
   return (
     <HeaderLayout>

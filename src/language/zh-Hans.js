@@ -48,6 +48,7 @@ const zhHans = {
         cut: "剪切",
         compress: "压缩",
         extract: "解压",
+        epub: "转换",
         delete: "删除"
       },
       viewRegulate: {
@@ -105,6 +106,7 @@ const zhHans = {
         cut: "{0} 已剪切到剪贴板。",
         compress: "{0} 已压缩到当前目录。",
         extract: "{0} 已解压到当前目录。",
+        epub: "{0} 已转换到当前目录。",
         delete: "{0} 已被删除。",
         modTask: "任务已被修改。",
         modTime: "任务删除时间已更新。",
@@ -121,6 +123,7 @@ const zhHans = {
         resourcesUnexist: "请求的资源不存在。",
         identifierConflict: "命名标识符冲突。",
         fileModuleError: "文件操作模块产生异常。",
+        extensionError: "拓展模块内部错误",
         duplicateRequest: "重复请求：请降低操作频率。"
       },
       error: {

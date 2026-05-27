@@ -2,6 +2,7 @@ let express = require('express');
 let path = require('path');
 let fs = require('fs');
 let fse = require('fs-extra')
+let child = require('child_process');
 let AdmZip = require('adm-zip');
 let api = require('../api');
 let router = express.Router();
@@ -413,6 +414,63 @@ router.post('/unzip', (req, res, next) => {
   } catch (_) {
     // -> EF_FME: fs.unlinkSync error
     req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  // -> ES: no extra info
+  req.status.addExecStatus();
+  res.send({
+    ...req.status.generateReport(),
+    info: api.fileOperator.readFileInfo(folderPath, newDirName)
+  });
+  return;
+});
+
+router.post('/epub', (req, res, next) => {
+  if (req.status.notAuthSuccess()) {
+    // -> EF_IT or abnormal request
+    next(api.errorStreamControl);
+    return;
+  }
+
+  const { type, folderName, filename } = req.body;
+  const { folderPath, filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
+
+  if (!fs.existsSync(filePath)) {
+    // -> EF_RU: folder don't exist
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  const newDirName = filename.split(".").slice(0, -1).join(".");
+  const newDirPath = path.join(folderPath, newDirName);
+
+  if (fs.existsSync(newDirPath)) {
+    // -> EF_IC: filename already exists
+    req.status.addExecStatus(api.Status.execErrCode.IdentifierConflict);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  const scriptPath = path.join(
+    __dirname,
+    '../../extensions/ranobe-tools/single/epub.py'
+  );
+
+  try {
+    child.execFileSync('python3', [scriptPath, '-c', JSON.stringify({
+      "path.src": filePath,
+      "path.dst": folderPath
+    })]);
+  } catch (err) {
+    // -> EF_
+    const retCode = err.status;
+    const stderr = err.stderr.toString();
+    const stdout = err.stdout.toString();
+
+    req.status.addExecStatus(api.Status.execErrCode.ExtensionError);
     res.send(req.status.generateReport());
     return;
   }

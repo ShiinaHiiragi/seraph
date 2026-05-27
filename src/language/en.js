@@ -48,6 +48,7 @@ const en = {
         cut: "Cut",
         compress: "Compress",
         extract: "Extract",
+        epub: "Convert",
         delete: "Delete"
       },
       viewRegulate: {
@@ -91,8 +92,8 @@ const en = {
     toast: {
       plain: {
         login: "Welcome back to Seraph.",
-        generalReconfirm: "Operation is in progress, please wait for a second.",
-        uploading: "The file is being uploaded, please wait for a second."
+        generalReconfirm: "Operation is in progress. Please wait for a second.",
+        uploading: "The file is being uploaded. Please wait for a second."
       },
       success: {
         init: "Password is set successfully. Thanks for using Seraph.",
@@ -105,6 +106,7 @@ const en = {
         cut: "{0} has been cut to clipboard.",
         compress: "{0} has been compressed to current directory.",
         extract: "{0} has been extracted to current directory.",
+        epub: "{0} has been converted to current directory.",
         delete: "{0} has been deleted.",
         modTask: "The task has been modified.",
         modTime: "Delete time of the task has been updated.",
@@ -121,6 +123,7 @@ const en = {
         resourcesUnexist: "Resources requested do not exist.",
         identifierConflict: "Naming identifiers conflicts.",
         fileModuleError: "Exception occurred in file operation module.",
+        extensionError: "Exception occurred in inner extension module.",
         duplicateRequest: "Duplicate Request: Please decrease operation frequency."
       },
       error: {

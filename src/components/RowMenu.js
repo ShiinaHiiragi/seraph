@@ -186,6 +186,37 @@ export default function RowMenu(props) {
     setFilesList
   ])
 
+  const handleEpub = React.useCallback(() => {
+    toast.promise(new Promise((resolve, reject) => {
+      request("POST/file/epub", {
+        type: type,
+        folderName: folderName,
+        filename: filename
+      }, undefined, reject)
+        .then((data) => {
+          if (pathStartWith(`/${type}/${folderName}`)) {
+            setFilesList((filesList) => [
+              ...filesList,
+              data.info
+            ]);
+          }
+          resolve();
+        })
+    }), {
+      loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
+      success: context
+        .languagePicker("modal.toast.success.epub")
+        .format(filename),
+      error: (data) => data
+    })
+  }, [
+    context,
+    type,
+    filename,
+    folderName,
+    setFilesList
+  ])
+
   return (
     <Dropdown>
       <MenuButton
@@ -212,6 +243,10 @@ export default function RowMenu(props) {
         {fileType === "application/zip" && folderName.length > 0 &&
           <MenuItem onClick={handleExtract}>
             {context.languagePicker("main.folder.rowMenu.extract")}
+          </MenuItem>}
+        {fileType === "application/epub+zip" && folderName.length > 0 &&
+          <MenuItem onClick={handleEpub}>
+            {context.languagePicker("main.folder.rowMenu.epub")}
           </MenuItem>}
         <Divider />
         <MenuItem
