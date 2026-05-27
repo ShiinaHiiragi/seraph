@@ -17,6 +17,8 @@
     npm install
     ```
 
+    use　`git clone --recurse-submodules` to enable extensions
+
 3. **IMPORTANT:** Create an `.env` file under `seraph/`
     - on Linux: `touch .env` for Bash
     - on Windows: `type nul >.env` for CMD or `New-Item .env` for Powershell

@@ -1,0 +1,3 @@
+[submodule "extensions/ranobe-tools"]
+	path = extensions/ranobe-tools
+	url = https://github.com/ShiinaHiiragi/ranobe-tools
