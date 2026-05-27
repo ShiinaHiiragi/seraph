@@ -104,14 +104,15 @@
 5. Open page and initialize configuration via setting language and password
 
 ## Log
+- 05/27/2026 ver 0.2.3: Fix i18n and add converter for epub files
 - 05/26/2026 ver 0.2.2: Fix some bugs and add supports for dot files
-- 10/17/2023 ver 0.2.1: Fix several bugs and add extraction
+- 10/17/2023 ver 0.2.1: Fix several bugs and add extractor for zip files
 - 10/16/2023 ver 0.2.0: Add TODO list
 - 09/19/2023 ver 0.1.1: Fix several bugs
 - 09/18/2023 ver 0.1.0: Complete folder page
 
 ## TODO
-- [ ] shortcut supports
+- [ ] upload multiple files
 - [ ] setting popup
 
 ## Memo
