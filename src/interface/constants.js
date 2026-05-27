@@ -125,6 +125,7 @@ export {
   defaultSetting
 };
 
+const encodePath = (path) => path.split("/").map(encodeURIComponent).join("/");
 const pathStartWith = (prefix) => {
   prefix = prefix.slice(-1) === "/" ? prefix.slice(0, -1) : prefix;
   const pathname = decodeURIComponent(window.location.pathname);
@@ -152,6 +153,7 @@ const serverBaseURL = isLoopback(process.env.REACT_APP_HOSTNAME)
   )
 
 export {
+  encodePath,
   pathStartWith,
   generateBaseURL,
   serverBaseURL

@@ -7,7 +7,7 @@ import Link from "@mui/joy/Link";
 import Typography from "@mui/joy/Typography";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import GlobalContext, { serverBaseURL } from "../interface/constants";
+import GlobalContext, { serverBaseURL, encodePath } from "../interface/constants";
 import RowMenu from "./RowMenu";
 
 export default function FileTable(props) {
@@ -181,7 +181,7 @@ export default function FileTable(props) {
                     {item.type === "directory"
                       ? <Link
                       onClick={() => navigate(
-                        `/${type}${folderName.length ? "/" : ""}${folderName}/${item.name}`
+                        `/${type}${folderName.length ? "/" : ""}${encodePath(folderName)}/${encodeURIComponent(item.name)}`
                       )}
                     >
                       {item.name}
@@ -190,7 +190,7 @@ export default function FileTable(props) {
                       target="_blank"
                       href={
                         new URL(
-                          `/${type}${folderName.length ? "/" : ""}${folderName}/${item.name}`,
+                          `/${type}${folderName.length ? "/" : ""}${encodePath(folderName)}/${encodeURIComponent(item.name)}`,
                           serverBaseURL
                         ).href
                       }
