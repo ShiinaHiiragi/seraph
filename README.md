@@ -3,10 +3,13 @@
 <p align="right"> Ichinoe </p>
 
 ## Introduction
+
 **Seraph** is a cloud server assistant aiming to make advantage of hosts' potential.
 
 ## Usage
+
 1. Install `Node.js` no earlier than v16.7.0 (on which `fs.cpSync` was added) and `npm.js`
+
 2. Clone this repository to your cloud server and install dependencies in `package.json`
 
     ```shell
@@ -104,6 +107,7 @@
 5. Open page and initialize configuration via setting language and password
 
 ## Log
+
 - 05/27/2026 ver 0.2.3: Fix i18n and add converter for epub files
 - 05/26/2026 ver 0.2.2: Fix some bugs and add supports for dot files
 - 10/17/2023 ver 0.2.1: Fix several bugs and add extractor for zip files
@@ -112,10 +116,12 @@
 - 09/18/2023 ver 0.1.0: Complete folder page
 
 ## TODO
+
 - [ ] upload multiple files
 - [ ] setting popup
 
 ## Memo
+
 1. File Explorer
     - edit in milkdown
     - create / edit attached markdown
