@@ -190,7 +190,7 @@ const fileOperator = {
       return null;
     }
 
-    folderInfo = fs.readdirSync(dirPath, { withFileTypes: true })
+    let folderInfo = fs.readdirSync(dirPath, { withFileTypes: true })
     folderInfo = folderInfo.filter((item) => item.isDirectory())
     return folderInfo.map((item) => item.name);
   },
@@ -213,7 +213,7 @@ const fileOperator = {
       return null;
     }
 
-    folderInfo = fs.readdirSync(folderPath, { withFileTypes: true })
+    let folderInfo = fs.readdirSync(folderPath, { withFileTypes: true })
     return folderInfo.map((item) => fileOperator.readFileInfo(folderPath, item.name));
   }
 };
@@ -374,7 +374,7 @@ const tokenOperator = {
     };
     __clearExpiredSessions();
 
-    sessionIndex = tokenOperator.token.findIndex((item) => item.session === session)
+    let sessionIndex = tokenOperator.token.findIndex((item) => item.session === session)
     if (sessionIndex >= 0) {
       cookieOperator.setSessionCookie(res, session);
       tokenOperator.setToken((token) => {

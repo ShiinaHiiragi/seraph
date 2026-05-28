@@ -33,7 +33,7 @@ if (originURL.length > 0) {
   app.use(cors({
     origin: originURL,
     methods: ["GET", "POST"],
-    alloweHeaders: ['Conten-Type', 'Authorization', 'Accept', 'Origin'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin'],
     exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
     credentials: true,
   }));

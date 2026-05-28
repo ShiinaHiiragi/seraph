@@ -11,14 +11,15 @@
 1. Install `Node.js` no earlier than v16.7.0 (on which `fs.cpSync` was added) and `npm.js`
 
     ```shell
-    curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
-    sudo apt install -y --no-install-recommends nodejs
+    wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash
+    nvm install 16
+    nvm use 16
     ```
 
 2. Clone this repository to your cloud server and install dependencies in `package.json`
 
     ```shell
-    # use　`git clone --recurse-submodules` to fetch extent submodules
+    # use　`git clone --recurse-submodules` to fetch submodules
     git clone https://github.com/ShiinaHiiragi/seraph
     cd seraph/
     npm install
@@ -47,7 +48,7 @@
         EOF
         ```
 
-        and certificate `${HOSTNAME}.crt` and key `${HOSTNAME}.key` MUST be added under seraph/server/cert
+        and certificate `${HOSTNAME}.crt` and key `${HOSTNAME}.key` MUST be added under `seraph/server/cert`
 
     - deployment https (`npm start`) with nginx proxy from 443 to express on 8000:
 
@@ -64,7 +65,7 @@
 
         ```
         sudo apt install -y nginx
-        cat > /etc/nginx/sites-available/default <<EOF
+        sudo tee > /etc/nginx/sites-available/default <<'EOF'
         server {
             listen 443 ssl;
             server_name ${YOUR_HOSTNAME};
@@ -87,12 +88,13 @@
         > 
         >     ```shell
         >     sudo su
-        >     curl https://get.acme.sh | sh -s email=$YOUR_EMAIL
+        >     curl https://get.acme.sh | sh -s email=${YOUR_EMAIL}
         >     ```
         > 
         > 2. Issue and install certificate via dns provider api (e.g. Tencent Cloud)
         > 
         >     ```shell
+        >     sudo mkdir -p /etc/nginx/ssl
         >     Tencent_SecretId="..." Tencent_SecretKey="..." /root/.acme.sh/acme.sh --issue \
         >       -d ${YOUR_HOSTNAME} \
         >       --dns dns_tencent \
@@ -103,12 +105,12 @@
         >       --reloadcmd "systemctl reload nginx"
         >     ```
 
-4. (OPTIONAL) If you have cloned extent submodules, more dependencies are needed
+4. (OPTIONAL) If you have fetched submodules, more dependencies are needed
 
     ```shell
-    sudo apt install -y pandoc python3.11
-    curl -sS https://bootstrap.pypa.io/get-pip.py | python3.11 \
-    python3.11 -m pip install tqdm beautifulsoup4 markdown-it-py pillow numpy
+    sudo apt install -y pandoc python3
+    curl -sS https://bootstrap.pypa.io/get-pip.py | python3
+    python3 -m pip install tqdm beautifulsoup4 markdown-it-py pillow numpy
     ```
 
 5. Start the server (make sure `.env` is created before executing following command)
