@@ -13,35 +13,33 @@
 2. Clone this repository to your cloud server and install dependencies in `package.json`
 
     ```shell
+    # use　`git clone --recurse-submodules` to fetch extent modules
     git clone https://github.com/ShiinaHiiragi/seraph
     cd seraph/
     npm install
-    cd server/
-    npm install
+    cd server/ && npm install && cd ..
     ```
 
-    use　`git clone --recurse-submodules` to enable extensions
-
-3. **IMPORTANT:** Create an `.env` file under `seraph/`
-    - on Linux: `touch .env` for Bash
-    - on Windows: `type nul >.env` for CMD or `New-Item .env` for Powershell
-
-    **OPEN `.env` AND ADD FOLLOWING CONFIGURATION:**
+3. **IMPORTANT:** Create an `.env` file under `seraph/` and add following configuration:
 
     - development http (`npm run dev`) with react on 80 and express on 8000:
 
         ```shell
+        cat > .env <<EOF
         PORT=80
         REACT_APP_HOSTNAME=localhost
         REACT_APP_SPORT=8000
+        EOF
         ```
 
     - deployment https (`npm start`) with express on 443:
 
         ```shell
-        REACT_APP_HOSTNAME=${YOUR_HOSTNAME}
+        cat > .env <<EOF
+        REACT_APP_HOSTNAME=$YOUR_HOSTNAME
         REACT_APP_SSLCERT=local
         REACT_APP_SPORT=443
+        EOF
         ```
 
         and certificate `${HOSTNAME}.crt` and key `${HOSTNAME}.key` MUST be added under seraph/server/cert
@@ -49,28 +47,32 @@
     - deployment https (`npm start`) with nginx proxy from 443 to express on 8000:
 
         ```shell
-        REACT_APP_HOSTNAME=${YOUR_HOSTNAME}
+        cat > .env <<EOF
+        REACT_APP_HOSTNAME=$YOUR_HOSTNAME
         REACT_APP_SSLCERT=nginx
         REACT_APP_NPORT=443
         REACT_APP_SPORT=8000
+        EOF
         ```
 
-        and configure your nginx config (located at /etc/nginx/sites-available/default) with `sudo nginx -t && sudo systemctl reload nginx`
+        and configure nginx
 
         ```
+        cat > /etc/nginx/sites-available/default <<EOF
         server {
             listen 443 ssl;
-            server_name ${YOUR_HOSTNAME};
-
-            ssl_certificate     /etc/nginx/ssl/${YOUR_HOSTNAME}_bundle.crt;
-            ssl_certificate_key /etc/nginx/ssl/${YOUR_HOSTNAME}.key;
+            server_name $YOUR_HOSTNAME;
+            ssl_certificate     /etc/nginx/ssl/$YOUR_HOSTNAME_bundle.crt;
+            ssl_certificate_key /etc/nginx/ssl/$YOUR_HOSTNAME.key;
 
             location / {
                 proxy_pass http://localhost:8000;
-                proxy_set_header Host $host;
-                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header Host \$host;
+                proxy_set_header X-Real-IP \$remote_addr;
             }
         }
+        EOF
+        sudo nginx -t && sudo systemctl reload nginx
         ```
 
         a reload is needed after updation of certificates
@@ -79,12 +81,9 @@
 
     ```shell
     npm run build
-    # tmux new -As seraph
+    tmux new -As seraph
     npm start
-    # detach from session via Ctrl+B D
     ```
-
-    stop this process using Ctrl+C; or just use `tmux new -ds seraph 'npm start'`
 
     - for Linux user who receive error like 'Port 80 requires elevated privileges', try running
 
@@ -92,7 +91,7 @@
         sudo setcap 'cap_net_bind_service=+ep' $(which node)
         ```
 
-    - for Linux usesr who receive error like 'sudo: node: command not found', add path of node to visudo
+    - for Linux user who receive error like 'sudo: node: command not found', add path of node to visudo
 
         ```shell
         sudo visudo
