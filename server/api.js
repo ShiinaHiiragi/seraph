@@ -405,7 +405,7 @@ const checkerOperator = {
     )
   },
 
-  checkPandoc: () => {
+  checkPandoc: () => () => {
     try {
       child.execFileSync('pandoc', ['--version']);
       return checkerOperator.pass()
@@ -466,7 +466,7 @@ const checkerOperator = {
 const checkerParam = {
   epubConverter: [
     checkerOperator.checkFiles([extentPath.epubConverterFilePath]),
-    checkerOperator.checkPandoc,
+    checkerOperator.checkPandoc(),
     checkerOperator.checkPython('3.8'),
     checkerOperator.checkPip(['numpy', 'PIL', 'bs4', 'markdown_it'])
   ]
