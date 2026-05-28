@@ -10,17 +10,22 @@
 
 1. Install `Node.js` no earlier than v16.7.0 (on which `fs.cpSync` was added) and `npm.js`
 
+    ```shell
+    curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+    sudo apt install -y --no-install-recommends nodejs
+    ```
+
 2. Clone this repository to your cloud server and install dependencies in `package.json`
 
     ```shell
-    # use　`git clone --recurse-submodules` to fetch extent modules
+    # use　`git clone --recurse-submodules` to fetch extent submodules
     git clone https://github.com/ShiinaHiiragi/seraph
     cd seraph/
     npm install
     cd server/ && npm install && cd ..
     ```
 
-3. **IMPORTANT:** Create an `.env` file under `seraph/` and add following configuration:
+3. (**IMPORTANT**) Create an `.env` file under `seraph/` and add following configuration
 
     - development http (`npm run dev`) with react on 80 and express on 8000:
 
@@ -36,7 +41,7 @@
 
         ```shell
         cat > .env <<EOF
-        REACT_APP_HOSTNAME=$YOUR_HOSTNAME
+        REACT_APP_HOSTNAME=${YOUR_HOSTNAME}
         REACT_APP_SSLCERT=local
         REACT_APP_SPORT=443
         EOF
@@ -48,22 +53,23 @@
 
         ```shell
         cat > .env <<EOF
-        REACT_APP_HOSTNAME=$YOUR_HOSTNAME
+        REACT_APP_HOSTNAME=${YOUR_HOSTNAME}
         REACT_APP_SSLCERT=nginx
         REACT_APP_NPORT=443
         REACT_APP_SPORT=8000
         EOF
         ```
 
-        and configure nginx
+        and configure nginx; attention, a reload is needed after updation of certificates
 
         ```
+        sudo apt install -y nginx
         cat > /etc/nginx/sites-available/default <<EOF
         server {
             listen 443 ssl;
-            server_name $YOUR_HOSTNAME;
-            ssl_certificate     /etc/nginx/ssl/$YOUR_HOSTNAME_bundle.crt;
-            ssl_certificate_key /etc/nginx/ssl/$YOUR_HOSTNAME.key;
+            server_name ${YOUR_HOSTNAME};
+            ssl_certificate     /etc/nginx/ssl/${YOUR_HOSTNAME}_bundle.crt;
+            ssl_certificate_key /etc/nginx/ssl/${YOUR_HOSTNAME}.key;
 
             location / {
                 proxy_pass http://localhost:8000;
@@ -75,9 +81,37 @@
         sudo nginx -t && sudo systemctl reload nginx
         ```
 
-        a reload is needed after updation of certificates
+        > Configure auto certificate deployment
+        > 
+        > 1. Install `acme.sh` under `root`
+        > 
+        >     ```shell
+        >     sudo su
+        >     curl https://get.acme.sh | sh -s email=$YOUR_EMAIL
+        >     ```
+        > 
+        > 2. Issue and install certificate via dns provider api (e.g. Tencent Cloud)
+        > 
+        >     ```shell
+        >     Tencent_SecretId="..." Tencent_SecretKey="..." /root/.acme.sh/acme.sh --issue \
+        >       -d ${YOUR_HOSTNAME} \
+        >       --dns dns_tencent \
+        >       --server letsencrypt
+        >     /root/.acme.sh/acme.sh --install-cert -d ${YOUR_HOSTNAME} \
+        >       --fullchain-file /etc/nginx/ssl/${YOUR_HOSTNAME}_bundle.crt \
+        >       --key-file /etc/nginx/ssl/${YOUR_HOSTNAME}.key \
+        >       --reloadcmd "systemctl reload nginx"
+        >     ```
 
-4. Start the server (make sure `.env` is created before executing following command)
+4. (OPTIONAL) If you have cloned extent submodules, more dependencies are needed
+
+    ```shell
+    sudo apt install -y pandoc python3.11
+    curl -sS https://bootstrap.pypa.io/get-pip.py | python3.11 \
+    python3.11 -m pip install tqdm beautifulsoup4 markdown-it-py pillow numpy
+    ```
+
+5. Start the server (make sure `.env` is created before executing following command)
 
     ```shell
     npm run build
@@ -103,7 +137,7 @@
         npm install @mui/material @emotion/react @emotion/styled
         ```
 
-5. Open page and initialize configuration via setting language and password
+6. Open page and initialize configuration via setting language and password
 
 ## Log
 
