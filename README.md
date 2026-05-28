@@ -78,6 +78,7 @@
                 proxy_pass http://localhost:8000;
                 proxy_set_header Host \$host;
                 proxy_set_header X-Real-IP \$remote_addr;
+                client_max_body_size 512M;
             }
         }
         EOF
@@ -110,9 +111,9 @@
 4. (OPTIONAL) If you have fetched submodules, more dependencies are needed
 
     ```shell
-    sudo apt install -y pandoc python3
-    curl -sS https://bootstrap.pypa.io/get-pip.py | python3
-    python3 -m pip install tqdm beautifulsoup4 markdown-it-py pillow numpy
+    git submodule update --init --recursive
+    sudo apt install -y pandoc python3 python3-pip
+    sudo pip3 install tqdm beautifulsoup4 lxml markdown-it-py pillow numpy
     ```
 
 5. Start the server (make sure `.env` is created before executing following command)
