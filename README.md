@@ -8,6 +8,8 @@
 
 ## Usage
 
+### Installation
+
 1. Install `Node.js` no earlier than v16.7.0 (on which `fs.cpSync` was added) and `npm.js`
 
     ```shell
@@ -140,6 +142,14 @@
         ```
 
 6. Open page and initialize configuration via setting language and password
+
+### Backup
+
+- All data are stored in `server/data/`
+
+    ```shell
+    zip -r backup.zip server/data/
+    ```
 
 ## Log
 
