@@ -464,34 +464,34 @@ router.post('/epub', (req, res, next) => {
     return;
   }
 
-  try {
-    child.execFileSync('python3', [
-      api.extentPath.epubConverterFilePath,
-      '-c',
-      JSON.stringify({
-        "path.src": filePath,
-        "path.dst": folderPath
-      })
-    ]);
-  } catch (err) {
-    // -> EF_EE: error when executing epub.py
-    req.status.addExecStatus(api.Status.execErrCode.ExtensionError);
-    res.send({
-      ...req.status.generateReport(),
-      code: err.status,
-      stdout: err.stdout.toString(),
-      stderr: err.stderr.toString()
-    });
-    return;
-  }
-
-  // -> ES: no extra info
-  req.status.addExecStatus();
-  res.send({
-    ...req.status.generateReport(),
-    info: api.fileOperator.readFileInfo(folderPath, newDirName)
+  // use async function to avoid blocking
+  child.execFile('python3', [
+    api.extentPath.epubConverterFilePath,
+    '-c',
+    JSON.stringify({
+      "path.src": filePath,
+      "path.dst": folderPath
+    })
+  ], (err, stdout, stderr) => {
+    if (err) {
+      req.status.addExecStatus(api.Status.execErrCode.ExtensionError);
+      res.send({
+        ...req.status.generateReport(),
+        code: err.code,
+        stdout: stdout,
+        stderr: stderr
+      });
+      return;
+    } else {
+      // -> ES: no extra info
+      req.status.addExecStatus();
+      res.send({
+        ...req.status.generateReport(),
+        info: api.fileOperator.readFileInfo(folderPath, newDirName)
+      });
+      return;
+    }
   });
-  return;
 });
 
 module.exports = router;

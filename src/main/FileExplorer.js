@@ -50,9 +50,13 @@ const FileExplorer = (props) => {
   const [filesSorting, setFilesSorting] = React.useState(["name", false]);
   const [folderState, setFolderState] = React.useState(0);
 
-  const sortedFilesList = React.useMemo(() => {
-    return filesList.sortBy(...filesSorting);
-  }, [filesList, filesSorting]);
+  // remove duplicate file entries
+  const sortedFilesList = React.useMemo(() => 
+    Object
+      .values(Object.fromEntries(filesList.map(item => [item.name, item])))
+      .sortBy(...filesSorting),
+    [filesList, filesSorting]
+  );
 
   const display = React.useMemo(() => {
     return type === "public" || context.isAuthority;
