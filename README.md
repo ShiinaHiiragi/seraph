@@ -111,8 +111,14 @@
 4. (OPTIONAL) If you have fetched submodules, more dependencies are needed
 
     ```shell
+    # if submodules have not been fetched
     git submodule update --init --recursive
-    sudo apt install -y pandoc python3 python3-pip
+    # install pandoc
+    sudo apt install -y pandoc
+    # install python3
+    sudo apt install -y python3 python3-pip
+    # install pip packages
+    # sudo is needed because express is executed under sudo
     sudo pip3 install tqdm beautifulsoup4 lxml markdown-it-py pillow numpy
     ```
 
