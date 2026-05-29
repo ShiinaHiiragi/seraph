@@ -19,6 +19,7 @@ import GlobalContext, {
   Status,
   request,
   reactionInterval,
+  toastDuration,
   defaultClipboard,
   pathStartWith
 } from "../interface/constants";
@@ -226,71 +227,107 @@ const FileExplorer = (props) => {
 
   // uploading
   const uploadRef = React.useRef();
-  const handleUploadFile = React.useCallback((filename, filebase) => {
-    toast.promise(() => new Promise((resolve, reject) => {
-      request(
-        "POST/file/upload",
-        {
-          type: type,
-          folderName: folderName,
-          filename: filename,
-          base: filebase.split(",")[1]
-        },
-        undefined,
-        reject
-      )
-        .then((data) => {
-          if (pathStartWith(`/${type}/${folderName}`)) {
-            setFilesList((filesList) => [
-              ...filesList,
-              {
-                name: data.name,
-                size: data.size,
-                time: data.time,
-                mtime: data.mtime,
-                type: data.type
+  const handleUploadFiles = React.useCallback((files) => {
+    const total = files.length;
+    const toastId = toast.loading(
+      context.languagePicker("modal.toast.plain.uploading") + ` (0/${total})`,
+      { duration: Infinity }
+    );
+
+    files.reduce((chain, { filename, filebase }, index) =>
+      chain.then(() => {
+        if (index > 0) {
+          toast.loading(
+            `${context.languagePicker("modal.toast.plain.uploading")} (${index}/${total})`,
+            { id: toastId }
+          );
+        }
+
+        return new Promise((resolve, reject) => {
+          request(
+            "POST/file/upload",
+            {
+              type: type,
+              folderName: folderName,
+              filename: filename,
+              base: filebase.split(",")[1]
+            },
+            undefined,
+            reject
+          )
+            .then((data) => {
+              if (pathStartWith(`/${type}/${folderName}`)) {
+                setFilesList((filesList) => [
+                  ...filesList,
+                  {
+                    name: data.name,
+                    size: data.size,
+                    time: data.time,
+                    mtime: data.mtime,
+                    type: data.type
+                  }
+                ]);
               }
-            ]);
-          }
-          resolve();
+              resolve();
+            });
         });
-    }), {
-      loading: context.languagePicker("modal.toast.plain.uploading"),
-      success: context
-        .languagePicker("modal.toast.success.upload")
-        .format(filename, folderName),
-      error: (data) => data
-    })
+      }),
+      Promise.resolve()
+    )
+      .then(() => {
+        toast.success(
+          context.languagePicker("modal.toast.success.upload")
+            .format(
+              total > 1
+                ? context.languagePicker("modal.toast.success.files")
+                : files[0].filename,
+              folderName
+            ) + ` (${total}/${total})`,
+          { id: toastId }
+        );
+        setTimeout(() => toast.dismiss(toastId), toastDuration)
+      })
+      .catch((error) => {
+        toast.error(error, { id: toastId });
+        setTimeout(() => toast.dismiss(toastId), toastDuration)
+      });
   }, [type, folderName, context]);
 
   const handleProprocessFile = React.useCallback((event) => {
-    const targetFile = event.target.files[0];
-    const reader = new FileReader();
-    if (targetFile === undefined) {
-      return;
-    }
+    Promise.all([...event.target.files].map((targetFile) => new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      if (!isValidFilename(targetFile.name)) {
+        return reject(() =>
+          toast.error(context.languagePicker("modal.toast.warning.illegalRename"))
+        );
+      }
 
-    if (!isValidFilename(targetFile.name)) {
-      toast.error(context.languagePicker("modal.toast.warning.illegalRename"));
-      return;
-    }
+      if (filesList.some((item) => item.name === targetFile.name)) {
+        return reject(() =>
+          toast.error(context.languagePicker("modal.toast.exception.identifierConflict"))
+        );
+      }
 
-    if (filesList.filter((item) => item.name === targetFile.name).length) {
-      toast.error(context.languagePicker("modal.toast.exception.identifierConflict"))
-      return;
-    }
-    reader.readAsDataURL(targetFile);
-    reader.onload = (event) => {
-      handleUploadFile(targetFile.name, event.target.result);
-    };
-    reader.onerror = (event) => {
-      const error = event.target.error;
-      toast.error(
-        context.languagePicker("modal.toast.error.browserError")
-          .format(error.name, error.message)
-      );
-    }
-  }, [context, filesList, handleUploadFile]);
+      reader.readAsDataURL(targetFile);
+      reader.onload = (event) => {
+        resolve({
+          filename: targetFile.name,
+          filebase: event.target.result
+        });
+      };
+      reader.onerror = (event) => {
+        reject(() => {
+          const error = event.target.error;
+          toast.error(
+            context.languagePicker("modal.toast.error.browserError")
+              .format(error.name, error.message)
+          );
+        })
+      }
+    })))
+      .then(handleUploadFiles)
+      .catch((handleReport) => handleReport())
+  }, [context, filesList, handleUploadFiles]);
 
   // paste
   const handlePaste = React.useCallback(() => {
@@ -639,6 +676,7 @@ const FileExplorer = (props) => {
       <label role="button" ref={uploadRef}>
         <input
           hidden
+          multiple
           type="file"
           onChange={(event) => {
             handleProprocessFile(event);

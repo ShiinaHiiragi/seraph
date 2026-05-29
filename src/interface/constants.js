@@ -94,6 +94,7 @@ const reactionInterval = {
   medium: 300,
   slow: 450
 }
+const toastDuration = 4000
 
 const globalState = {
   INNOCENT: "innocent",
@@ -120,6 +121,7 @@ export default GlobalContext;
 export {
   ConstantContext,
   reactionInterval,
+  toastDuration,
   globalState,
   defaultClipboard,
   defaultSetting
