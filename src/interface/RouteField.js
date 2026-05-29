@@ -65,7 +65,6 @@ const RouteField = (props) => {
             underline="none"
             color="neutral"
             onClick={() => navigate("/")}
-            aria-label="Home"
           >
             <HomeRoundedIcon />
           </Link>
