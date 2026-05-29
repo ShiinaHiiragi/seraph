@@ -389,6 +389,7 @@ const tokenOperator = {
 };
 
 const checkerOperator = {
+  python: os.platform() === 'win32' ? 'python' : 'python3',
   pass: (miss) => {
     const notPassed = miss instanceof Array && miss.length > 0
     return {
@@ -416,7 +417,11 @@ const checkerOperator = {
 
   checkPython: (minVersion) => () => {
     try {
-      const stdout = child.execFileSync('python3', ['--version'], { encoding: 'utf8' });
+      const stdout = child.execFileSync(
+        checkerOperator.python,
+        ['--version'],
+        { encoding: 'utf8' }
+      );
       const version = stdout.match(/Python ([.0-9]+)/)[1];
       assert(version.versionGE(minVersion))
       return checkerOperator.pass()
@@ -428,13 +433,17 @@ const checkerOperator = {
   checkPip: (packages) => () => {
     const script = `
       import json
-      import importlib
+      import importlib.util
       missing = [p for p in ${JSON.stringify(packages)} if importlib.util.find_spec(p) is None]
       print(json.dumps(missing))
     `.replaceAll("\n      ", "\n");
 
     try {
-      const stdout = child.execFileSync('python3', ['-c', script], { encoding: 'utf8' });
+      const stdout = child.execFileSync(
+        checkerOperator.python,
+        ['-c', script],
+        { encoding: 'utf8' }
+      );
       const miss = JSON.parse(stdout.trim());
       return checkerOperator.pass(
         miss.map((pkg) => ({ id: pkg, cat: "Pip packages" }))

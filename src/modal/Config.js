@@ -423,7 +423,7 @@ export default function Config(props) {
               overflowY: "auto",
               px: { xs: 2.5, sm: 4 },
               pt: 3,
-              pb: 5,
+              pb: 0,
             }}
           >
             {SECTIONS.map((section) => (

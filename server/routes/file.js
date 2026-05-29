@@ -465,14 +465,14 @@ router.post('/epub', (req, res, next) => {
   }
 
   // use async function to avoid blocking
-  child.execFile('python3', [
+  child.execFile(api.checkerOperator.python, [
     api.extentPath.epubConverterFilePath,
     '-c',
     JSON.stringify({
       "path.src": filePath,
       "path.dst": folderPath
     })
-  ], (err, stdout, stderr) => {
+  ], { env: { ...process.env, PYTHONUTF8: '1' } }, (err, stdout, stderr) => {
     if (err) {
       req.status.addExecStatus(api.Status.execErrCode.ExtensionError);
       res.send({
