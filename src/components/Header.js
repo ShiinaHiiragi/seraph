@@ -11,7 +11,12 @@ import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import { Link, useNavigate } from "react-router-dom";
 import GreyLogo from "../logo-grey.svg";
-import GlobalContext, { globalState, request, Status } from "../interface/constants";
+import GlobalContext, {
+  globalState,
+  request,
+  Status,
+  settingField
+} from "../interface/constants";
 import ModalForm from "../modal/Form";
 import Config from "../modal/Config";
 
@@ -57,6 +62,14 @@ const Header = (props) => {
 
   // state for config
   const [modalConfigOpen, setModalConfigOpen] = React.useState(false);
+  const [mobileNavOpen, setMobileNavOpen] = React.useState(false);
+  const [activeSection, setActiveSection] = React.useState(settingField.general);
+
+  const handleCloseConfig = React.useCallback(() => {
+    setModalConfigOpen(false);
+    setMobileNavOpen(false);
+    setActiveSection(settingField.general);
+  }, [])
 
   // function and states for login
   const [modalLoginOpen, setModalLoginOpen] = React.useState(false);
@@ -213,7 +226,11 @@ const Header = (props) => {
       </Box>
       <Config
         open={modalConfigOpen}
-        handleClose={() => setModalConfigOpen(false)}
+        handleClose={handleCloseConfig}
+        mobileNavOpen={mobileNavOpen}
+        setMobileNavOpen={setMobileNavOpen}
+        activeSection={activeSection}
+        setActiveSection={setActiveSection}
       />
       <ModalForm
         open={modalLoginOpen}

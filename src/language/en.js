@@ -174,6 +174,9 @@ const en = {
         deleteFile: "You are deleting file {0}. ",
         deleteTask: "You are deleting task {0}. "
       }
+    },
+    config: {
+      title: "Setting"
     }
   },
   setting: {

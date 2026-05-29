@@ -174,6 +174,9 @@ const ja = {
         deleteFile: "ファイル {0} をデリートしようとしています。",
         deleteTask: "タスク {0} をデリートしようとしています。"
       }
+    },
+    config: {
+      title: "セッティング"
     }
   },
   setting: {

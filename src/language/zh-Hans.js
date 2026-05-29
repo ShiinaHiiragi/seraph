@@ -174,6 +174,9 @@ const zhHans = {
         deleteFile: "正在删除文件 {0}。",
         deleteTask: "正在删除任务 {0}。"
       }
+    },
+    config: {
+      title: "设置"
     }
   },
   setting: {

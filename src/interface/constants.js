@@ -94,6 +94,8 @@ const reactionInterval = {
   medium: 300,
   slow: 450
 }
+
+const animeDuration = 750
 const toastDuration = 4000
 
 const globalState = {
@@ -116,15 +118,20 @@ const defaultSetting = {
     delay: 60
   }
 };
+const settingField = {
+  general: "general"
+}
 
 export default GlobalContext;
 export {
   ConstantContext,
   reactionInterval,
+  animeDuration,
   toastDuration,
   globalState,
   defaultClipboard,
-  defaultSetting
+  defaultSetting,
+  settingField
 };
 
 const encodePath = (path) => path.split("/").map(encodeURIComponent).join("/");
