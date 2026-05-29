@@ -6,12 +6,14 @@ import Typography from "@mui/joy/Typography"
 import Input from "@mui/joy/Input";
 import MenuIcon from "@mui/icons-material/Menu";
 import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
+import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import { Link, useNavigate } from "react-router-dom";
 import GreyLogo from "../logo-grey.svg";
 import GlobalContext, { globalState, request, Status } from "../interface/constants";
 import ModalForm from "../modal/Form";
+import Config from "../modal/Config";
 
 const HeaderLayout = (props) => {
   return (
@@ -52,6 +54,9 @@ const Header = (props) => {
   } = props;
   const context = React.useContext(GlobalContext);
   const navigate = useNavigate();
+
+  // state for config
+  const [modalConfigOpen, setModalConfigOpen] = React.useState(false);
 
   // function and states for login
   const [modalLoginOpen, setModalLoginOpen] = React.useState(false);
@@ -173,6 +178,15 @@ const Header = (props) => {
           >
             <LanguageOutlinedIcon />
           </IconButton>}
+        {context.isAuthority &&
+          <IconButton
+            size="sm"
+            variant="outlined"
+            color="neutral"
+            onClick={() => setModalConfigOpen(true)}
+          >
+            <SettingsOutlinedIcon />
+          </IconButton>}
         {context.isAuthority
           ? <IconButton
             size="sm"
@@ -197,6 +211,10 @@ const Header = (props) => {
           </IconButton>
         }
       </Box>
+      <Config
+        open={modalConfigOpen}
+        handleClose={() => setModalConfigOpen(false)}
+      />
       <ModalForm
         open={modalLoginOpen}
         loading={buttonLoading}
