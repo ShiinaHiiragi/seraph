@@ -36,8 +36,8 @@ const SECTIONS = [
         key: "Save & Recover",
         value: (
           <Stack spacing={1}>
-            <Checkbox label="Auto Save" />
-            <Checkbox label="Save without asking when switch files on side panel" />
+            <Checkbox size="sm" label="Auto Save" />
+            <Checkbox size="sm" label="Save without asking when switch files on side panel" />
             <Button variant="outlined" color="neutral" size="sm" sx={{ alignSelf: "flex-start" }}>
               Recover Unsaved Drafts
             </Button>
@@ -63,7 +63,7 @@ const SECTIONS = [
             <Button variant="outlined" color="neutral" size="sm" sx={{ alignSelf: "flex-start" }}>
               Check Updates
             </Button>
-            <Checkbox label="Check updates automatically" />
+            <Checkbox size="sm" label="Check updates automatically" />
           </Stack>
         ),
       },
@@ -87,8 +87,8 @@ const SECTIONS = [
         key: "Advanced Settings",
         value: (
           <Stack spacing={1}>
-            <Checkbox label="Enable Debug" />
-            <Checkbox label="Send Anonymous Usage Info" defaultChecked />
+            <Checkbox size="sm" label="Enable Debug" />
+            <Checkbox size="sm" label="Send Anonymous Usage Info" defaultChecked />
             <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
               <Button variant="outlined" color="neutral" size="sm">
                 Open Advanced Settings
@@ -109,7 +109,7 @@ const SECTIONS = [
       {
         key: "Theme",
         value: (
-          <RadioGroup defaultValue="light" sx={{ gap: 1 }}>
+          <RadioGroup size="sm" defaultValue="light">
             <Radio value="light" label="Light" />
             <Radio value="dark" label="Dark" />
             <Radio value="system" label="Follow System" />
@@ -139,9 +139,9 @@ const SECTIONS = [
         key: "Code Block",
         value: (
           <Stack spacing={1}>
-            <Checkbox label="Syntax highlight" defaultChecked />
-            <Checkbox label="Show line numbers" />
-            <Checkbox label="Auto wrap" />
+            <Checkbox size="sm" label="Syntax highlight" defaultChecked />
+            <Checkbox size="sm" label="Show line numbers" />
+            <Checkbox size="sm" label="Auto wrap" />
           </Stack>
         ),
       },
@@ -154,7 +154,7 @@ const SECTIONS = [
       {
         key: "Default Edit Mode",
         value: (
-          <RadioGroup defaultValue="wysiwyg" sx={{ gap: 1 }}>
+          <RadioGroup size="sm" defaultValue="wysiwyg">
             <Radio value="wysiwyg" label="WYSIWYG" />
             <Radio value="source" label="Source Code Mode" />
             <Radio value="outline" label="Outline Mode" />
@@ -175,10 +175,10 @@ const SECTIONS = [
         key: "Features",
         value: (
           <Stack spacing={1}>
-            <Checkbox label="Live preview" defaultChecked />
-            <Checkbox label="Spell check" />
-            <Checkbox label="Auto pair brackets / quotes" defaultChecked />
-            <Checkbox label="Smart punctuation" defaultChecked />
+            <Checkbox size="sm" label="Live preview" defaultChecked />
+            <Checkbox size="sm" label="Spell check" />
+            <Checkbox size="sm" label="Auto pair brackets / quotes" defaultChecked />
+            <Checkbox size="sm" label="Smart punctuation" defaultChecked />
           </Stack>
         ),
       },
@@ -186,8 +186,8 @@ const SECTIONS = [
         key: "Table",
         value: (
           <Stack spacing={1}>
-            <Checkbox label="Format table on save" defaultChecked />
-            <Checkbox label="Drag to reorder rows and columns" />
+            <Checkbox size="sm" label="Format table on save" defaultChecked />
+            <Checkbox size="sm" label="Drag to reorder rows and columns" />
           </Stack>
         ),
       },
@@ -210,7 +210,7 @@ const SECTIONS = [
       },
       {
         key: "Prefer Relative Path",
-        value: <Checkbox label="Use relative path where possible" defaultChecked />,
+        value: <Checkbox size="sm" label="Use relative path where possible" defaultChecked />,
       },
     ],
   },
@@ -235,7 +235,7 @@ const SECTIONS = [
       },
       {
         key: "Include Front Matter",
-        value: <Checkbox label="Add YAML front matter to export" />,
+        value: <Checkbox size="sm" label="Add YAML front matter to export" />,
       },
     ],
   },
@@ -279,7 +279,7 @@ export default function Config(props) {
       let current = SECTIONS[0].id;
       for (const section of SECTIONS) {
         const el = sectionRefs.current[section.id];
-        if (el && el.getBoundingClientRect().top < containerTop) {
+        if (el && el.getBoundingClientRect().top - containerTop < 25) {
           current = section.id;
         }
       }
@@ -330,7 +330,11 @@ export default function Config(props) {
             minHeight: 48,
           }}
         >
-          <Typography sx={{mb: 0}} id="config-modal-title" level="title-md">
+          <Typography
+            sx={{mb: 0}}
+            id="config-modal-title"
+            level="h2"
+          >
             {context.languagePicker("modal.config.title")}
           </Typography>
           <Box sx={{ display: { sm: "none" } }}>
@@ -373,7 +377,7 @@ export default function Config(props) {
                 }}
               >
                 <Typography
-                  level="body-sm"
+                  level="title-sm"
                   sx={{ fontWeight: activeSection === s.id ? 600 : 400 }}
                 >
                   {s.label}
@@ -405,7 +409,9 @@ export default function Config(props) {
                     "&:hover": { bgcolor: "neutral.50" },
                   }}
                 >
-                  <Typography level="body-md">{s.label}</Typography>
+                  <Typography level="title-md" sx={{ fontWeight: 400 }}>
+                    {s.label}
+                  </Typography>
                 </Box>
               ))}
             </Box>
@@ -427,8 +433,8 @@ export default function Config(props) {
                 sx={{ mb: 2 }}
               >
                 <Typography
-                  level="h3"
-                  sx={{ mb: 2.5, fontWeight: 600 }}
+                  level="title-lg"
+                  sx={{ mb: 1, fontWeight: 500 }}
                 >
                   {section.label}
                 </Typography>

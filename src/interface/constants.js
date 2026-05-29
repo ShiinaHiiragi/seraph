@@ -95,7 +95,7 @@ const reactionInterval = {
   slow: 450
 }
 
-const animeDuration = 750
+const animeDuration = 1500
 const toastDuration = 4000
 
 const globalState = {
