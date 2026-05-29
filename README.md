@@ -160,6 +160,7 @@
 
 ## Log
 
+- 05/29/2026 ver 0.2.4: Add multiple files uploading
 - 05/27/2026 ver 0.2.3: Fix i18n and add converter for epub files
 - 05/26/2026 ver 0.2.2: Fix some bugs and add supports for dot files
 - 10/17/2023 ver 0.2.1: Fix several bugs and add extractor for zip files
@@ -167,23 +168,19 @@
 - 09/19/2023 ver 0.1.1: Fix several bugs
 - 09/18/2023 ver 0.1.0: Complete folder page
 
-## TODO
-
-- [ ] upload multiple files
-- [ ] setting popup
-
 ## Memo
 
-1. File Explorer
+1. Setting Popup
+2. File Explorer
     - edit in milkdown
     - create / edit attached markdown
-2. Milkdown
+3. Milkdown
     - edit / read only
     - save in folder / attach to file
     - download
-3. Subscription: receive message from
+4. Subscription: receive message from
     - cron(`cron`)'s & sync(`ntp-time-sync`)'s snippet
     - webhook server
-4. Terminal
+5. Terminal
     - open powershell / bash
     - terminal: react-terminal
