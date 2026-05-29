@@ -45,6 +45,7 @@ export default function FileTable(props) {
       }}
     >
       <Table
+        aria-labelledby="tableTitle"
         stickyHeader
         hoverRow
         sx={{

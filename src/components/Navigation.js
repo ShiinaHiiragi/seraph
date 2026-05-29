@@ -76,6 +76,7 @@ export default function Navigation(props) {
               </IconButton>
             </ListSubheader>
             <List
+              aria-labelledby="nav-list-browse"
               sx={{
                 "& .JoyListItemButton-root": { p: "8px" },
               }}
@@ -119,6 +120,7 @@ export default function Navigation(props) {
               </IconButton>
             </ListSubheader>
             <List
+              aria-labelledby="nav-list-browse"
               sx={{
                 "& .JoyListItemButton-root": { p: "8px" },
               }}
@@ -144,6 +146,7 @@ export default function Navigation(props) {
               {context.languagePicker("nav.utility.title")}
             </ListSubheader>
             <List
+              aria-labelledby="nav-list-browse"
               sx={{
                 "& .JoyListItemButton-root": { p: "8px" },
               }}

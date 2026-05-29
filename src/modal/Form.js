@@ -50,6 +50,8 @@ export default function ModalForm(props) {
       <ModalDialog
         variant="outlined"
         role="alertdialog"
+        aria-labelledby="alert-dialog-modal-title"
+        aria-describedby="alert-dialog-modal-description"
       >
         <Typography
           id="alert-dialog-modal-title"
