@@ -236,6 +236,28 @@ exports.fileOperator = fileOperator;
 })();
 
 const configOperator = {
+  hasKey: (obj, key) => key.split(".").reduce(
+    (current, nextKey) => current?.[nextKey],
+    obj
+  ) !== undefined,
+
+  setValue: (obj, key, value) => {
+    const parts = key.split(".");
+    if (parts.length > 1) {
+      const outerKey = parts[0];
+      const innerKeys = parts.slice(1).join(".");
+      return {
+        ...obj,
+        [outerKey]: configOperator.setValue(obj[outerKey], innerKeys, value)
+      }
+    } else {
+      return {
+        ...obj,
+        [key]: value
+      }
+    }
+  },
+
   config: fileOperator.readConfig(),
   setConfig: (handle) => {
     const newConfig = handle(configOperator.config);
@@ -277,17 +299,11 @@ const configOperator = {
   },
 
   setConfigSetting: (key, value) => {
-    const [item, subItem] = key.split(".");
     configOperator.setConfig((config) => ({
       ...config,
-      setting: {
-        ...config.setting,
-        [item]: {
-          ...config.setting[item],
-          [subItem]: value
-        }
-      }
-    }));
+      setting: configOperator.setValue(config.setting, key, value)
+    })
+    );
   }
 }
 

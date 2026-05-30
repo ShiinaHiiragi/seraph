@@ -122,6 +122,23 @@ const settingField = {
   general: "general"
 }
 
+const setValue = (obj, key, value) => {
+  const parts = key.split(".");
+  if (parts.length > 1) {
+    const outerKey = parts[0];
+    const innerKeys = parts.slice(1).join(".");
+    return {
+      ...obj,
+      [outerKey]: setValue(obj[outerKey], innerKeys, value)
+    }
+  } else {
+    return {
+      ...obj,
+      [key]: value
+    }
+  }
+}
+
 export default GlobalContext;
 export {
   ConstantContext,
@@ -131,7 +148,8 @@ export {
   globalState,
   defaultClipboard,
   defaultSetting,
-  settingField
+  settingField,
+  setValue
 };
 
 const encodePath = (path) => path.split("/").map(encodeURIComponent).join("/");

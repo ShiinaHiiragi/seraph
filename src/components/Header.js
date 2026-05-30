@@ -17,6 +17,7 @@ import GlobalContext, {
   Status,
   settingField
 } from "../interface/constants";
+import { languagePickerSpawner } from "../interface/languagePicker";
 import ModalForm from "../modal/Form";
 import Config from "../modal/Config";
 
@@ -69,7 +70,25 @@ const Header = (props) => {
     setModalConfigOpen(false);
     setMobileNavOpen(false);
     setActiveSection(settingField.general);
-  }, [])
+  }, []);
+
+  const handleApplySetting = React.useCallback((key, value) => {
+    toast.promise(new Promise((resolve, reject) => {
+      request("POST/config/set", { key: key, value: value })
+        .then(() => {
+          setSettingPair(key, value)
+          resolve()
+        })
+    }), {
+      loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
+      success: () => (
+        key === "meta.language"
+          ? languagePickerSpawner(value)
+          : context.languagePicker
+        )("modal.toast.plain.generalReconfirm"),
+      error: (data) => data
+    })
+  }, [context, setSettingPair]);
 
   // function and states for login
   const [modalLoginOpen, setModalLoginOpen] = React.useState(false);
@@ -176,16 +195,16 @@ const Header = (props) => {
             onClick={() => {
               switch (document.documentElement.lang) {
                 case "en":
-                  setSettingPair("meta.language", "zh-Hans");
+                  handleApplySetting("meta.language", "zh-Hans");
                   break;
                 case "zh-Hans":
-                  setSettingPair("meta.language", "ja");
+                  handleApplySetting("meta.language", "ja");
                   break;
                 case "ja":
-                  setSettingPair("meta.language", "en");
+                  handleApplySetting("meta.language", "en");
                   break;
                 default:
-                  setSettingPair("meta.language", "en");
+                  handleApplySetting("meta.language", "en");
               }
             }}
           >
