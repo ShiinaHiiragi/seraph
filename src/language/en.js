@@ -1,5 +1,8 @@
 const en = {
   header: {
+    config: {
+      title: "Setting"
+    }
   },
   nav: {
     title: "Seraph",
@@ -98,6 +101,7 @@ const en = {
       success: {
         init: "Password is set successfully. Thanks for using Seraph.",
         logout: "Logged out successfully.",
+        setting: "New setting has been saved.",
         new: "{0} has been created.",
         upload: "{0} has been uploaded to {1}.",
         files: "All files",
@@ -174,9 +178,6 @@ const en = {
         deleteFile: "You are deleting file {0}. ",
         deleteTask: "You are deleting task {0}. "
       }
-    },
-    config: {
-      title: "Setting"
     }
   },
   setting: {

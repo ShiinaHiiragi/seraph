@@ -1,5 +1,8 @@
 const ja = {
   header: {
+    config: {
+      title: "セッティング"
+    }
   },
   nav: {
     title: "セラフ",
@@ -98,6 +101,7 @@ const ja = {
       success: {
         init: "パスワードがセットされました。セラフをご利用いただき、ありがとうございます。",
         logout: "ログアウトしました。",
+        setting: "セッティングがセーブされました。",
         new: "{0} が作成されました。",
         upload: "{0} が {1} にアップロードされました。",
         files: "すべてのファイル",
@@ -174,9 +178,6 @@ const ja = {
         deleteFile: "ファイル {0} をデリートしようとしています。",
         deleteTask: "タスク {0} をデリートしようとしています。"
       }
-    },
-    config: {
-      title: "セッティング"
     }
   },
   setting: {

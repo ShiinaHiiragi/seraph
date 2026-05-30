@@ -85,7 +85,7 @@ const Header = (props) => {
         key === "meta.language"
           ? languagePickerSpawner(value)
           : context.languagePicker
-        )("modal.toast.plain.generalReconfirm"),
+        )("modal.toast.success.setting"),
       error: (data) => data
     })
   }, [context, setSettingPair]);

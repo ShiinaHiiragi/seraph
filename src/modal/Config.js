@@ -335,7 +335,7 @@ export default function Config(props) {
             id="config-modal-title"
             level="h2"
           >
-            {context.languagePicker("modal.config.title")}
+            {context.languagePicker("header.config.title")}
           </Typography>
           <Box sx={{ display: { sm: "none" } }}>
             <IconButton

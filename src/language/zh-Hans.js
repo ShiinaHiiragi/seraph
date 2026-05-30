@@ -1,5 +1,8 @@
 const zhHans = {
   header: {
+    config: {
+      title: "设置"
+    }
   },
   nav: {
     title: "SERAPH",
@@ -98,6 +101,7 @@ const zhHans = {
       success: {
         init: "密码设置成功，感谢使用 SERAPH。",
         logout: "退出成功。",
+        setting: "设置已保存。",
         new: "{0} 已创建。",
         upload: "{0} 已上传至 {1}。",
         files: "所有文件",
@@ -174,9 +178,6 @@ const zhHans = {
         deleteFile: "正在删除文件 {0}。",
         deleteTask: "正在删除任务 {0}。"
       }
-    },
-    config: {
-      title: "设置"
     }
   },
   setting: {
