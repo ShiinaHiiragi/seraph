@@ -4,8 +4,7 @@ const zhHans = {
       title: "设置",
       general: {
         title: "通用",
-        language: "显示语言",
-        languageHint: "立即生效"
+        language: "显示语言"
       }
     }
   },

@@ -4,8 +4,7 @@ const ja = {
       title: "セッティング",
       general: {
         title: "ゼネラル",
-        language: "言語",
-        languageHint: "即時発効‌"
+        language: "言語"
       }
     }
   },

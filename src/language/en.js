@@ -4,8 +4,7 @@ const en = {
       title: "Setting",
       general: {
         title: "General",
-        language: "Display Language",
-        languageHint: "Take effect immediately‌"
+        language: "Display Language"
       }
     }
   },
