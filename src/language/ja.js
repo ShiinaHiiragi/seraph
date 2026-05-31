@@ -4,7 +4,16 @@ const ja = {
       title: "セッティング",
       general: {
         title: "ゼネラル",
-        language: "言語"
+        language: "言語",
+        token: "トークンの有効期間",
+        tokenHint: "最終アクセスから",
+        tokenOption: {
+          15: "15 分",
+          60: "1 時間",
+          720: "12 時間",
+          1440: "1 日",
+          2880: "2 日"
+        }
       }
     }
   },

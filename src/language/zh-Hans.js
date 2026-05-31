@@ -4,7 +4,16 @@ const zhHans = {
       title: "设置",
       general: {
         title: "通用",
-        language: "显示语言"
+        language: "显示语言",
+        token: "令牌有效期限",
+        tokenHint: "自最后访问",
+        tokenOption: {
+          15: "15 分钟",
+          60: "1 小时",
+          720: "12 小时",
+          1440: "1 天",
+          2880: "2 天"
+        }
       }
     }
   },

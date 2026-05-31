@@ -4,7 +4,16 @@ const en = {
       title: "Setting",
       general: {
         title: "General",
-        language: "Display Language"
+        language: "Display Language",
+        token: "Token Expiry",
+        tokenHint: "Since last access",
+        tokenOption: {
+          15: "15 minutes",
+          60: "1 hour",
+          720: "12 hours",
+          1440: "1 day",
+          2880: "2 day"
+        }
       }
     }
   },

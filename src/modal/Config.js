@@ -18,7 +18,7 @@ import { languageMap } from "../interface/languagePicker";
 
 const SECTIONS = (context, handleApply) => {
   const Selection = (value, itemsMap, handleClick) => (
-    <Select size="sm" value={value} sx={{ maxWidth: 300 }}>
+    <Select size="sm" value={value} sx={{ maxWidth: 250 }}>
       {itemsMap.map(({value, label}) => (
         <Option
           key={value}
@@ -46,6 +46,17 @@ const SECTIONS = (context, handleApply) => {
             })),
             (value) => handleApply("meta.language", value)
           ),
+        },
+        {
+          key: context.languagePicker("header.config.general.token"),
+          hint: context.languagePicker("header.config.general.tokenHint"),
+          value: Selection(context.setting.meta.token, [
+            { value: 15, label: context.languagePicker("header.config.general.tokenOption.15") },
+            { value: 60, label: context.languagePicker("header.config.general.tokenOption.60") }, 
+            { value: 720, label: context.languagePicker("header.config.general.tokenOption.720") }, 
+            { value: 1440, label: context.languagePicker("header.config.general.tokenOption.1440") },
+            { value: 2880, label: context.languagePicker("header.config.general.tokenOption.2880") },
+          ], (value) => handleApply("meta.token", value)),
         }
       ]
     }
