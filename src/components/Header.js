@@ -5,7 +5,6 @@ import IconButton from "@mui/joy/IconButton";
 import Typography from "@mui/joy/Typography"
 import Input from "@mui/joy/Input";
 import MenuIcon from "@mui/icons-material/Menu";
-import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
@@ -192,29 +191,6 @@ const Header = (props) => {
             size="sm"
             variant="outlined"
             color="neutral"
-            onClick={() => {
-              switch (document.documentElement.lang) {
-                case "en":
-                  handleApplySetting("meta.language", "zh-Hans");
-                  break;
-                case "zh-Hans":
-                  handleApplySetting("meta.language", "ja");
-                  break;
-                case "ja":
-                  handleApplySetting("meta.language", "en");
-                  break;
-                default:
-                  handleApplySetting("meta.language", "en");
-              }
-            }}
-          >
-            <LanguageOutlinedIcon />
-          </IconButton>}
-        {context.isAuthority &&
-          <IconButton
-            size="sm"
-            variant="outlined"
-            color="neutral"
             onClick={() => setModalConfigOpen(true)}
           >
             <SettingsOutlinedIcon />
@@ -246,6 +222,7 @@ const Header = (props) => {
       <Config
         open={modalConfigOpen}
         handleClose={handleCloseConfig}
+        handleApplySetting={handleApplySetting}
         mobileNavOpen={mobileNavOpen}
         setMobileNavOpen={setMobileNavOpen}
         activeSection={activeSection}

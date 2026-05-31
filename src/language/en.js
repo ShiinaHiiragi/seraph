@@ -1,7 +1,12 @@
 const en = {
   header: {
     config: {
-      title: "Setting"
+      title: "Setting",
+      general: {
+        title: "General",
+        language: "Display Language",
+        languageHint: "Take effect immediately‌"
+      }
     }
   },
   nav: {

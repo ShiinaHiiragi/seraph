@@ -1,7 +1,12 @@
 const ja = {
   header: {
     config: {
-      title: "セッティング"
+      title: "セッティング",
+      general: {
+        title: "ゼネラル",
+        language: "言語",
+        languageHint: "即時発効‌"
+      }
     }
   },
   nav: {

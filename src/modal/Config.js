@@ -15,236 +15,258 @@ import Button from "@mui/joy/Button";
 import Typography from "@mui/joy/Typography";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
-import GlobalContext, { animeDuration, settingField } from "../interface/constants";
+import GlobalContext, {
+  animeDuration,
+  settingField
+} from "../interface/constants";
+import { languageMap } from "../interface/languagePicker";
 
-const SECTIONS = [
-  {
-    id: settingField.general,
-    label: "General",
-    items: [
-      {
-        key: "On Launch",
-        value: (
-          <Select size="sm" defaultValue="new" sx={{ maxWidth: 300 }}>
-            <Option value="new">Open new file</Option>
-            <Option value="last">Open last file</Option>
-            <Option value="folder">Open last folder</Option>
-          </Select>
-        ),
-      },
-      {
-        key: "Save & Recover",
-        value: (
-          <Stack spacing={1}>
-            <Checkbox size="sm" label="Auto Save" />
-            <Checkbox size="sm" label="Save without asking when switch files on side panel" />
-            <Button variant="outlined" color="neutral" size="sm" sx={{ alignSelf: "flex-start" }}>
-              Recover Unsaved Drafts
-            </Button>
-          </Stack>
-        ),
-      },
-      {
-        key: "Language",
-        hint: "(applied after restart)",
-        value: (
-          <Select size="sm" defaultValue="system" sx={{ maxWidth: 300 }}>
-            <Option value="system">System Language</Option>
-            <Option value="en">English</Option>
-            <Option value="zh">Chinese (Simplified)</Option>
-            <Option value="ja">Japanese</Option>
-          </Select>
-        ),
-      },
-      {
-        key: "Update",
-        value: (
-          <Stack spacing={1}>
-            <Button variant="outlined" color="neutral" size="sm" sx={{ alignSelf: "flex-start" }}>
-              Check Updates
-            </Button>
-            <Checkbox size="sm" label="Check updates automatically" />
-          </Stack>
-        ),
-      },
-      {
-        key: "Shortcut Keys",
-        value: (
-          <Button variant="outlined" color="neutral" size="sm" sx={{ alignSelf: "flex-start" }}>
-            Custom Shortcut Keys
-          </Button>
-        ),
-      },
-      {
-        key: "Dialogs",
-        value: (
-          <Button variant="outlined" color="neutral" size="sm" sx={{ alignSelf: "flex-start" }}>
-            Reset All Dialog Warnings
-          </Button>
-        ),
-      },
-      {
-        key: "Advanced Settings",
-        value: (
-          <Stack spacing={1}>
-            <Checkbox size="sm" label="Enable Debug" />
-            <Checkbox size="sm" label="Send Anonymous Usage Info" defaultChecked />
-            <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
-              <Button variant="outlined" color="neutral" size="sm">
-                Open Advanced Settings
+const SECTIONS = (context, handleApply) => {
+  const Selection = (value, itemsMap, handleClick) => (
+    <Select size="sm" value={value} sx={{ maxWidth: 300 }}>
+      {itemsMap.map(({value, label}) => (
+        <Option
+          key={value}
+          value={value}
+          onClick={() => handleClick(value)}
+        >
+          {label}
+        </Option>
+      ))}
+    </Select>
+  )
+
+  return [
+    {
+      id: settingField.general,
+      label: context.languagePicker("header.config.general.title"),
+      items: [
+        {
+          key: context.languagePicker("header.config.general.language"),
+          hint: context.languagePicker("header.config.general.languageHint"),
+          value: Selection(
+            context.setting.meta.language,
+            Object.entries(languageMap).map((item) => ({
+              value: item[0],
+              label: item[1].displayName
+            })),
+            (value) => handleApply("meta.language", value)
+          ),
+        },
+        {
+          key: "On Launch",
+          hint: "(applied after restart)",
+          value: (
+            <Select size="sm" defaultValue="new" sx={{ maxWidth: 300 }}>
+              <Option value="new">Open new file</Option>
+              <Option value="last">Open last file</Option>
+              <Option value="folder">Open last folder</Option>
+            </Select>
+          ),
+        },
+        {
+          key: "Save & Recover",
+          value: (
+            <Stack spacing={1}>
+              <Checkbox size="sm" label="Auto Save" />
+              <Checkbox size="sm" label="Save without asking when switch files on side panel" />
+              <Button variant="outlined" color="neutral" size="sm" sx={{ alignSelf: "flex-start" }}>
+                Recover Unsaved Drafts
               </Button>
-              <Button variant="outlined" color="neutral" size="sm">
-                Reset Advanced Settings
+            </Stack>
+          ),
+        },
+        {
+          key: "Update",
+          value: (
+            <Stack spacing={1}>
+              <Button variant="outlined" color="neutral" size="sm" sx={{ alignSelf: "flex-start" }}>
+                Check Updates
               </Button>
-            </Box>
-          </Stack>
-        ),
-      },
-    ],
-  },
-  {
-    id: "appearance",
-    label: "Appearance",
-    items: [
-      {
-        key: "Theme",
-        value: (
-          <RadioGroup size="sm" defaultValue="light">
-            <Radio value="light" label="Light" />
-            <Radio value="dark" label="Dark" />
-            <Radio value="system" label="Follow System" />
-          </RadioGroup>
-        ),
-      },
-      {
-        key: "Font Family",
-        value: (
-          <Select size="sm" defaultValue="default" sx={{ maxWidth: 300 }}>
-            <Option value="default">Default</Option>
-            <Option value="serif">Serif</Option>
-            <Option value="sans-serif">Sans Serif</Option>
-            <Option value="monospace">Monospace</Option>
-          </Select>
-        ),
-      },
-      {
-        key: "Font Size",
-        value: <Input size="sm" type="number" defaultValue={16} sx={{ width: 120 }} endDecorator="px" />,
-      },
-      {
-        key: "Line Spacing",
-        value: <Input size="sm" type="number" defaultValue={1.6} sx={{ width: 120 }} />,
-      },
-      {
-        key: "Code Block",
-        value: (
-          <Stack spacing={1}>
-            <Checkbox size="sm" label="Syntax highlight" defaultChecked />
-            <Checkbox size="sm" label="Show line numbers" />
-            <Checkbox size="sm" label="Auto wrap" />
-          </Stack>
-        ),
-      },
-    ],
-  },
-  {
-    id: "editor",
-    label: "Editor",
-    items: [
-      {
-        key: "Default Edit Mode",
-        value: (
-          <RadioGroup size="sm" defaultValue="wysiwyg">
-            <Radio value="wysiwyg" label="WYSIWYG" />
-            <Radio value="source" label="Source Code Mode" />
-            <Radio value="outline" label="Outline Mode" />
-          </RadioGroup>
-        ),
-      },
-      {
-        key: "Indent",
-        value: (
-          <Select size="sm" defaultValue="4" sx={{ maxWidth: 200 }}>
-            <Option value="2">2 Spaces</Option>
-            <Option value="4">4 Spaces</Option>
-            <Option value="tab">Tab</Option>
-          </Select>
-        ),
-      },
-      {
-        key: "Features",
-        value: (
-          <Stack spacing={1}>
-            <Checkbox size="sm" label="Live preview" defaultChecked />
-            <Checkbox size="sm" label="Spell check" />
-            <Checkbox size="sm" label="Auto pair brackets / quotes" defaultChecked />
-            <Checkbox size="sm" label="Smart punctuation" defaultChecked />
-          </Stack>
-        ),
-      },
-      {
-        key: "Table",
-        value: (
-          <Stack spacing={1}>
-            <Checkbox size="sm" label="Format table on save" defaultChecked />
-            <Checkbox size="sm" label="Drag to reorder rows and columns" />
-          </Stack>
-        ),
-      },
-    ],
-  },
-  {
-    id: "image",
-    label: "Image",
-    items: [
-      {
-        key: "Image Insert",
-        value: (
-          <Select size="sm" defaultValue="copy" sx={{ maxWidth: 300 }}>
-            <Option value="none">No action</Option>
-            <Option value="copy">Copy to assets folder</Option>
-            <Option value="move">Move to assets folder</Option>
-            <Option value="upload">Upload image</Option>
-          </Select>
-        ),
-      },
-      {
-        key: "Prefer Relative Path",
-        value: <Checkbox size="sm" label="Use relative path where possible" defaultChecked />,
-      },
-    ],
-  },
-  {
-    id: "export",
-    label: "Export",
-    items: [
-      {
-        key: "Export Format",
-        value: (
-          <Select size="sm" defaultValue="pdf" sx={{ maxWidth: 200 }}>
-            <Option value="pdf">PDF</Option>
-            <Option value="html">HTML</Option>
-            <Option value="docx">Word (.docx)</Option>
-            <Option value="md">Markdown</Option>
-          </Select>
-        ),
-      },
-      {
-        key: "PDF Margin",
-        value: <Input size="sm" defaultValue="1in" sx={{ width: 120 }} />,
-      },
-      {
-        key: "Include Front Matter",
-        value: <Checkbox size="sm" label="Add YAML front matter to export" />,
-      },
-    ],
-  },
-];
+              <Checkbox size="sm" label="Check updates automatically" />
+            </Stack>
+          ),
+        },
+        {
+          key: "Shortcut Keys",
+          value: (
+            <Button variant="outlined" color="neutral" size="sm" sx={{ alignSelf: "flex-start" }}>
+              Custom Shortcut Keys
+            </Button>
+          ),
+        },
+        {
+          key: "Dialogs",
+          value: (
+            <Button variant="outlined" color="neutral" size="sm" sx={{ alignSelf: "flex-start" }}>
+              Reset All Dialog Warnings
+            </Button>
+          ),
+        },
+        {
+          key: "Advanced Settings",
+          value: (
+            <Stack spacing={1}>
+              <Checkbox size="sm" label="Enable Debug" />
+              <Checkbox size="sm" label="Send Anonymous Usage Info" defaultChecked />
+              <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+                <Button variant="outlined" color="neutral" size="sm">
+                  Open Advanced Settings
+                </Button>
+                <Button variant="outlined" color="neutral" size="sm">
+                  Reset Advanced Settings
+                </Button>
+              </Box>
+            </Stack>
+          ),
+        },
+      ],
+    },
+    {
+      id: "appearance",
+      label: "Appearance",
+      items: [
+        {
+          key: "Theme",
+          value: (
+            <RadioGroup size="sm" defaultValue="light">
+              <Radio value="light" label="Light" />
+              <Radio value="dark" label="Dark" />
+              <Radio value="system" label="Follow System" />
+            </RadioGroup>
+          ),
+        },
+        {
+          key: "Font Family",
+          value: (
+            <Select size="sm" defaultValue="default" sx={{ maxWidth: 300 }}>
+              <Option value="default">Default</Option>
+              <Option value="serif">Serif</Option>
+              <Option value="sans-serif">Sans Serif</Option>
+              <Option value="monospace">Monospace</Option>
+            </Select>
+          ),
+        },
+        {
+          key: "Font Size",
+          value: <Input size="sm" type="number" defaultValue={16} sx={{ width: 120 }} endDecorator="px" />,
+        },
+        {
+          key: "Line Spacing",
+          value: <Input size="sm" type="number" defaultValue={1.6} sx={{ width: 120 }} />,
+        },
+        {
+          key: "Code Block",
+          value: (
+            <Stack spacing={1}>
+              <Checkbox size="sm" label="Syntax highlight" defaultChecked />
+              <Checkbox size="sm" label="Show line numbers" />
+              <Checkbox size="sm" label="Auto wrap" />
+            </Stack>
+          ),
+        },
+      ],
+    },
+    {
+      id: "editor",
+      label: "Editor",
+      items: [
+        {
+          key: "Default Edit Mode",
+          value: (
+            <RadioGroup size="sm" defaultValue="wysiwyg">
+              <Radio value="wysiwyg" label="WYSIWYG" />
+              <Radio value="source" label="Source Code Mode" />
+              <Radio value="outline" label="Outline Mode" />
+            </RadioGroup>
+          ),
+        },
+        {
+          key: "Indent",
+          value: (
+            <Select size="sm" defaultValue="4" sx={{ maxWidth: 200 }}>
+              <Option value="2">2 Spaces</Option>
+              <Option value="4">4 Spaces</Option>
+              <Option value="tab">Tab</Option>
+            </Select>
+          ),
+        },
+        {
+          key: "Features",
+          value: (
+            <Stack spacing={1}>
+              <Checkbox size="sm" label="Live preview" defaultChecked />
+              <Checkbox size="sm" label="Spell check" />
+              <Checkbox size="sm" label="Auto pair brackets / quotes" defaultChecked />
+              <Checkbox size="sm" label="Smart punctuation" defaultChecked />
+            </Stack>
+          ),
+        },
+        {
+          key: "Table",
+          value: (
+            <Stack spacing={1}>
+              <Checkbox size="sm" label="Format table on save" defaultChecked />
+              <Checkbox size="sm" label="Drag to reorder rows and columns" />
+            </Stack>
+          ),
+        },
+      ],
+    },
+    {
+      id: "image",
+      label: "Image",
+      items: [
+        {
+          key: "Image Insert",
+          value: (
+            <Select size="sm" defaultValue="copy" sx={{ maxWidth: 300 }}>
+              <Option value="none">No action</Option>
+              <Option value="copy">Copy to assets folder</Option>
+              <Option value="move">Move to assets folder</Option>
+              <Option value="upload">Upload image</Option>
+            </Select>
+          ),
+        },
+        {
+          key: "Prefer Relative Path",
+          value: <Checkbox size="sm" label="Use relative path where possible" defaultChecked />,
+        },
+      ],
+    },
+    {
+      id: "export",
+      label: "Export",
+      items: [
+        {
+          key: "Export Format",
+          value: (
+            <Select size="sm" defaultValue="pdf" sx={{ maxWidth: 200 }}>
+              <Option value="pdf">PDF</Option>
+              <Option value="html">HTML</Option>
+              <Option value="docx">Word (.docx)</Option>
+              <Option value="md">Markdown</Option>
+            </Select>
+          ),
+        },
+        {
+          key: "PDF Margin",
+          value: <Input size="sm" defaultValue="1in" sx={{ width: 120 }} />,
+        },
+        {
+          key: "Include Front Matter",
+          value: <Checkbox size="sm" label="Add YAML front matter to export" />,
+        },
+      ],
+    },
+  ]
+};
 
 export default function Config(props) {
   const {
     open,
     handleClose,
+    handleApplySetting,
     mobileNavOpen,
     setMobileNavOpen,
     activeSection,
@@ -276,8 +298,8 @@ export default function Config(props) {
     const handleScroll = () => {
       if (isSystemScrolling.current) return;
       const containerTop = containerElement.getBoundingClientRect().top;
-      let current = SECTIONS[0].id;
-      for (const section of SECTIONS) {
+      let current = SECTIONS(context, handleApplySetting)[0].id;
+      for (const section of SECTIONS(context, handleApplySetting)) {
         const el = sectionRefs.current[section.id];
         if (el && el.getBoundingClientRect().top - containerTop < 25) {
           current = section.id;
@@ -287,7 +309,7 @@ export default function Config(props) {
     };
     containerElement.addEventListener("scroll", handleScroll, { passive: true });
     return () => containerElement.removeEventListener("scroll", handleScroll);
-  }, [containerElement, setActiveSection]);
+  }, [containerElement, setActiveSection, context, handleApplySetting]);
 
   return (
     <Modal
@@ -361,7 +383,7 @@ export default function Config(props) {
               display: { xs: "none", sm: "block" },
             }}
           >
-            {SECTIONS.map((s) => (
+            {SECTIONS(context, handleApplySetting).map((s) => (
               <Box
                 key={s.id}
                 onClick={() => scrollToSection(s.id)}
@@ -396,7 +418,7 @@ export default function Config(props) {
                 display: { sm: "none" },
               }}
             >
-              {SECTIONS.map((s) => (
+              {SECTIONS(context, handleApplySetting).map((s) => (
                 <Box
                   key={s.id}
                   onClick={() => scrollToSection(s.id)}
@@ -426,7 +448,7 @@ export default function Config(props) {
               pb: 0,
             }}
           >
-            {SECTIONS.map((section) => (
+            {SECTIONS(context, handleApplySetting).map((section) => (
               <Box
                 key={section.id}
                 ref={(el) => { sectionRefs.current[section.id] = el; }}
