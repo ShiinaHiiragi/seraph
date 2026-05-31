@@ -14,6 +14,17 @@ const zhHans = {
           1440: "1 天",
           2880: "2 天"
         }
+      },
+      todo: {
+        title: "待办",
+        deleteTime: "删除延迟",
+        deleteTimeHint: "任务完成后",
+        deleteTimeOption: {
+          0: "立即",
+          60: "1 分钟",
+          3600: "1 小时",
+          86400: "1 天"
+        }
       }
     }
   },

@@ -119,7 +119,8 @@ const defaultSetting = {
   }
 };
 const settingField = {
-  general: "general"
+  general: "general",
+  todo: "todo"
 }
 
 const setValue = (obj, key, value) => {

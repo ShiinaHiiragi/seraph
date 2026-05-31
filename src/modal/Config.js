@@ -55,8 +55,24 @@ const SECTIONS = (context, handleApply) => {
             { value: 60, label: context.languagePicker("header.config.general.tokenOption.60") }, 
             { value: 720, label: context.languagePicker("header.config.general.tokenOption.720") }, 
             { value: 1440, label: context.languagePicker("header.config.general.tokenOption.1440") },
-            { value: 2880, label: context.languagePicker("header.config.general.tokenOption.2880") },
+            { value: 2880, label: context.languagePicker("header.config.general.tokenOption.2880") }
           ], (value) => handleApply("meta.token", value)),
+        }
+      ]
+    },
+    {
+      id: settingField.todo,
+      label: context.languagePicker("header.config.todo.title"),
+      items: [
+        {
+          key: context.languagePicker("header.config.todo.deleteTime"),
+          hint: context.languagePicker("header.config.todo.deleteTimeHint"),
+          value: Selection(context.setting.task.delay, [
+            { value: 0, label: context.languagePicker("header.config.todo.deleteTimeOption.0") },
+            { value: 60, label: context.languagePicker("header.config.todo.deleteTimeOption.60") }, 
+            { value: 3600, label: context.languagePicker("header.config.todo.deleteTimeOption.3600") }, 
+            { value: 86400, label: context.languagePicker("header.config.todo.deleteTimeOption.86400") }
+          ], (value) => handleApply("task.delay", value)),
         }
       ]
     }

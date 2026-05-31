@@ -14,6 +14,17 @@ const ja = {
           1440: "1 日",
           2880: "2 日"
         }
+      },
+      todo: {
+        title: "トゥードゥー",
+        deleteTime: "デリートのディレイ",
+        deleteTimeHint: "タスク遂行の後",
+        deleteTimeOption: {
+          0: "すぐ",
+          60: "1 分",
+          3600: "1 時間",
+          86400: "1 日"
+        }
       }
     }
   },

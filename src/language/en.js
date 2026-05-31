@@ -6,13 +6,24 @@ const en = {
         title: "General",
         language: "Display Language",
         token: "Token Expiry",
-        tokenHint: "Since last access",
+        tokenHint: "since last access",
         tokenOption: {
           15: "15 minutes",
           60: "1 hour",
           720: "12 hours",
           1440: "1 day",
           2880: "2 day"
+        }
+      },
+      todo: {
+        title: "TODO",
+        deleteTime: "Delete Delay",
+        deleteTimeHint: "of completed tasks",
+        deleteTimeOption: {
+          0: "Immediately",
+          60: "1 minute",
+          3600: "1 hour",
+          86400: "1 day"
         }
       }
     }
