@@ -25,6 +25,16 @@ const en = {
           3600: "1 hour",
           86400: "1 day"
         }
+      },
+      epub: {
+        title: "Epub Converter",
+        page: "Pages",
+        pageSplit: "Split pages by chapters",
+        pageFront: "Include front pages",
+        nav: "Navigation",
+        navLink: "Show navigation links at the end",
+        navPrev: "Link text for previous page",
+        navNext: "Link text for next page"
       }
     }
   },

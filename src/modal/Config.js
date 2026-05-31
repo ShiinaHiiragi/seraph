@@ -7,30 +7,99 @@ import ModalDialog from "@mui/joy/ModalDialog";
 import Option from "@mui/joy/Option";
 import Select from "@mui/joy/Select";
 import Stack from "@mui/joy/Stack";
+import FormControl from "@mui/joy/FormControl";
+import FormLabel from "@mui/joy/FormLabel";
+import Checkbox from "@mui/joy/Checkbox";
+import Input from "@mui/joy/Input";
 import Typography from "@mui/joy/Typography";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import GlobalContext, {
   animeDuration,
-  settingField
+  settingField,
+  reactionInterval
 } from "../interface/constants";
 import { languageMap } from "../interface/languagePicker";
 
-const SECTIONS = (context, handleApply) => {
-  const Selection = (value, itemsMap, handleClick) => (
-    <Select size="sm" value={value} sx={{ maxWidth: 250 }}>
-      {itemsMap.map(({value, label}) => (
-        <Option
-          key={value}
-          value={value}
-          onClick={() => handleClick(value)}
-        >
-          {label}
-        </Option>
-      ))}
-    </Select>
-  )
+const Literal = (value, itemsMap, field, handleApply) => (
+  <Select size="sm" value={value} sx={{ maxWidth: 250 }}>
+    {itemsMap.map(({value, label}) => (
+      <Option
+        key={value}
+        value={value}
+        onClick={() => handleApply(field, value)}
+      >
+        {label}
+      </Option>
+    ))}
+  </Select>
+)
 
+const Bool = (label, checked, field, handleApply) => (
+  <Checkbox
+    size="sm"
+    label={label}
+    checked={checked}
+    onChange={(event) => handleApply(field, event.target.checked)}
+  />
+)
+
+const String = (props) => {
+  const {
+    disabled,
+    caption,
+    value,
+    width,
+    type,
+    field,
+    handleCheck,
+    handleApply,
+    start,
+    end
+  } = props;
+
+  const [localValue, setLocalValue] = React.useState(value);
+  const [localLastValid, setLocalLastValid] = React.useState(value);
+  const [localError, setLocalError] = React.useState(false);
+  const isMounted = React.useRef(false);
+
+  React.useEffect(() => {
+    if (!isMounted.current) {
+      isMounted.current = true;
+      return;
+    }
+    const id = setTimeout(() => {
+      const checkError = handleCheck(localValue)
+      setLocalError(!checkError)
+      if (checkError && localValue !== localLastValid) {
+        handleApply(field, localValue);
+        setLocalLastValid(localValue);
+      }
+    }, reactionInterval.slow);
+    return () => clearTimeout(id);
+  }, [localValue]);
+
+  return (
+    <FormControl>
+      <FormLabel sx={{ mb: 0 }}>
+        {caption}
+      </FormLabel>
+      <Input
+        disabled={disabled}
+        size="sm"
+        type={type}
+        sx={{ maxWidth: width }}
+        value={localValue}
+        startDecorator={start}
+        endDecorator={end}
+        onChange={(e) => setLocalValue(e.target.value)}
+        error={localError}
+      />
+    </FormControl>
+  );
+};
+
+const SECTIONS = (context, handleApply) => {
   return [
     {
       id: settingField.general,
@@ -38,25 +107,26 @@ const SECTIONS = (context, handleApply) => {
       items: [
         {
           key: context.languagePicker("header.config.general.language"),
-          value: Selection(
+          value: Literal(
             context.setting.meta.language,
             Object.entries(languageMap).map((item) => ({
               value: item[0],
               label: item[1].displayName
             })),
-            (value) => handleApply("meta.language", value)
+            "meta.language",
+            handleApply
           ),
         },
         {
           key: context.languagePicker("header.config.general.token"),
           hint: context.languagePicker("header.config.general.tokenHint"),
-          value: Selection(context.setting.meta.token, [
+          value: Literal(context.setting.meta.token, [
             { value: 15, label: context.languagePicker("header.config.general.tokenOption.15") },
             { value: 60, label: context.languagePicker("header.config.general.tokenOption.60") }, 
             { value: 720, label: context.languagePicker("header.config.general.tokenOption.720") }, 
             { value: 1440, label: context.languagePicker("header.config.general.tokenOption.1440") },
             { value: 2880, label: context.languagePicker("header.config.general.tokenOption.2880") }
-          ], (value) => handleApply("meta.token", value)),
+          ], "meta.token", handleApply)
         }
       ]
     },
@@ -67,12 +137,70 @@ const SECTIONS = (context, handleApply) => {
         {
           key: context.languagePicker("header.config.todo.deleteTime"),
           hint: context.languagePicker("header.config.todo.deleteTimeHint"),
-          value: Selection(context.setting.task.delay, [
+          value: Literal(context.setting.task.delay, [
             { value: 0, label: context.languagePicker("header.config.todo.deleteTimeOption.0") },
             { value: 60, label: context.languagePicker("header.config.todo.deleteTimeOption.60") }, 
             { value: 3600, label: context.languagePicker("header.config.todo.deleteTimeOption.3600") }, 
             { value: 86400, label: context.languagePicker("header.config.todo.deleteTimeOption.86400") }
           ], (value) => handleApply("task.delay", value)),
+        }
+      ]
+    },
+    {
+      id: settingField.epub,
+      label: context.languagePicker("header.config.epub.title"),
+      items: [
+        {
+          key: context.languagePicker("header.config.epub.page"),
+          value: (
+            <Stack spacing={1}>
+              {Bool(
+                context.languagePicker("header.config.epub.pageSplit"),
+                context.setting.epub.page.split,
+                "epub.page.split",
+                handleApply
+              )}
+              {Bool(
+                context.languagePicker("header.config.epub.pageFront"),
+                context.setting.epub.page.front,
+                "epub.page.front",
+                handleApply
+              )}
+            </Stack>
+          )
+        },
+        {
+          key: context.languagePicker("header.config.epub.nav"),
+          value: (
+            <Stack spacing={1}>
+              {Bool(
+                context.languagePicker("header.config.epub.navLink"),
+                context.setting.epub.nav.link,
+                "epub.nav.link",
+                handleApply
+              )}
+              <String
+                disabled={!context.setting.epub.nav.link}
+                caption={context.languagePicker("header.config.epub.navPrev")}
+                value={context.setting.epub.nav.prev}
+                width={200}
+                type="text"
+                field="epub.nav.prev"
+                handleCheck={(value) => value.length > 0}
+                handleApply={handleApply}
+              />
+              <String
+                disabled={!context.setting.epub.nav.link}
+                caption={context.languagePicker("header.config.epub.navNext")}
+                value={context.setting.epub.nav.next}
+                width={200}
+                type="text"
+                field="epub.nav.next"
+                handleCheck={(value) => value.length > 0}
+                handleApply={handleApply}
+              />
+            </Stack>
+          )
         }
       ]
     }

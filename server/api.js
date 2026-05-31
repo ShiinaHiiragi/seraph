@@ -83,6 +83,42 @@ const defaultConfig = {
     },
     task: {
       delay: 60
+    },
+    epub: {
+      page: {
+        split: true,
+        front: true
+      },
+      nav: {
+        link: true,
+        prev: "← 前へ",
+        next: "次へ →"
+      },
+      fade: {
+        kana: true,
+        opaque: 72,
+        size: 84,
+        top: -6
+      },
+      image: {
+        show: true,
+        width: null,
+        alt: true,
+        spec: true,
+        specPixel: 32768,
+        specSize: 8192,
+        specHue: 4.0
+      },
+      text: {
+        clearLine: true,
+        showRuby: true,
+        breakLine: ""
+      },
+      out: {
+        html: true,
+        vert: false,
+        keep: false
+      }
     }
   }
 };
