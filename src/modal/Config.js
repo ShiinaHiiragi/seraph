@@ -301,7 +301,9 @@ export default function Config(props) {
                             </Typography>
                           )}
                         </Box>
-                        <Box>{item.value}</Box>
+                        <Box sx={{ width: { xs: "100%" } }}>
+                          {item.value}
+                        </Box>
                       </Box>
                     </React.Fragment>
                   ))}
