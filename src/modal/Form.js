@@ -52,6 +52,7 @@ export default function ModalForm(props) {
         role="alertdialog"
         aria-labelledby="alert-dialog-modal-title"
         aria-describedby="alert-dialog-modal-description"
+        sx={{ maxHeight: "90vh", display: "flex", flexDirection: "column" }}
       >
         <Typography
           id="alert-dialog-modal-title"
@@ -69,7 +70,12 @@ export default function ModalForm(props) {
         <Stack
           spacing={2}
           sx={{
-            overflow: "auto",
+            flex: 1,
+            minHeight: 0,
+            overflowX: "hidden",
+            overflowY: "auto",
+            scrollbarWidth: "none",
+            "&::-webkit-scrollbar": { display: "none" },
             ...stackStyle
           }}
         >
