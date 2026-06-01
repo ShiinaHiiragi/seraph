@@ -1,5 +1,63 @@
 const ja = {
   header: {
+    config: {
+      title: "セッティング",
+      general: {
+        title: "ゼネラル",
+        language: "言語",
+        token: "トークンの有効期間",
+        tokenHint: "最終アクセスから",
+        tokenOption: {
+          15: "15 分",
+          60: "1 時間",
+          720: "12 時間",
+          1440: "1 日",
+          2880: "2 日"
+        }
+      },
+      todo: {
+        title: "トゥードゥー",
+        deleteTime: "デリートのディレイ",
+        deleteTimeHint: "タスク遂行の後",
+        deleteTimeOption: {
+          0: "すぐ",
+          60: "1 分",
+          3600: "1 時間",
+          86400: "1 日"
+        }
+      },
+      epub: {
+        title: "EPUB コンバーター",
+        page: "ページ",
+        pageSplit: "チャプターごとにページをスプリットする",
+        pageFront: "フロントページをインクルードする",
+        nav: "ナビゲーション",
+        navLink: "エンドにナビゲーションリンクを表示する",
+        navPrev: "前ページのリンクテキスト",
+        navNext: "次ページのリンクテキスト",
+        fade: "フェード",
+        fadeNull: "フェードを実行しない",
+        fadeTrue: "かなを含むパラグラフをフェードする",
+        fadeFalse: "かなを含まないパラグラフをフェードする",
+        fadeOpaque: "フェードテキストのオパシティ",
+        fadeSize: "フェードテキストのフォントサイズ",
+        fadeTop: "フェードテキストのトップオフセット",
+        image: "イメージ",
+        imageSpec: "インラインイメージをヒューリスティックで識別する",
+        imageShow: "ブロックレベルイメージを表示する",
+        imageAltInline: "インラインイメージの代替テキストを表示する",
+        imageAltBlock: "ブロックレベルイメージの代替テキストを表示する",
+        imageWidth: "ブロックレベルイメージの幅（空欄でヌル）",
+        text: "テキスト",
+        textClearLine: "空行をクリアする",
+        textShowRuby: "ルビが存在する場合は表示する",
+        textBreakLine: "<br> を置換するテキスト（エスケープ対応）",
+        out: "アウトプット",
+        outHTML: "Markdown を HTML にコンバートする",
+        outVert: "HTML テキストをバーティカルにする",
+        outKeep: "中間 Markdown ファイルをキープする"
+      }
+    }
   },
   nav: {
     title: "セラフ",
@@ -98,6 +156,7 @@ const ja = {
       success: {
         init: "パスワードがセットされました。セラフをご利用いただき、ありがとうございます。",
         logout: "ログアウトしました。",
+        setting: "セッティングがセーブされました。",
         new: "{0} が作成されました。",
         upload: "{0} が {1} にアップロードされました。",
         files: "すべてのファイル",

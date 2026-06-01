@@ -1,5 +1,63 @@
 const zhHans = {
   header: {
+    config: {
+      title: "设置",
+      general: {
+        title: "通用",
+        language: "显示语言",
+        token: "令牌有效期限",
+        tokenHint: "自最后访问",
+        tokenOption: {
+          15: "15 分钟",
+          60: "1 小时",
+          720: "12 小时",
+          1440: "1 天",
+          2880: "2 天"
+        }
+      },
+      todo: {
+        title: "待办",
+        deleteTime: "删除延迟",
+        deleteTimeHint: "任务完成后",
+        deleteTimeOption: {
+          0: "立即",
+          60: "1 分钟",
+          3600: "1 小时",
+          86400: "1 天"
+        }
+      },
+      epub: {
+        title: "EPUB 转换",
+        page: "分页",
+        pageSplit: "按章节分页",
+        pageFront: "包含正文前页面",
+        nav: "导航",
+        navLink: "在末尾显示链接",
+        navPrev: "上一页链接文本",
+        navNext: "下一页链接文本",
+        fade: "淡化",
+        fadeNull: "不淡化所有段落",
+        fadeTrue: "淡化包含假名的段落",
+        fadeFalse: "淡化不包含假名的段落",
+        fadeOpaque: "淡化文本的不透明度",
+        fadeSize: "淡化文本的字体大小",
+        fadeTop: "淡化文本的顶部偏移",
+        image: "图片",
+        imageSpec: "自动识别行内图片",
+        imageShow: "显示块级图片",
+        imageAltInline: "显示行内图片的替代文本",
+        imageAltBlock: "显示块级图片的替代文本",
+        imageWidth: "块级图片宽度（留空表示不设置）",
+        text: "文本",
+        textClearLine: "清除空行",
+        textShowRuby: "显示 Ruby",
+        textBreakLine: "替换 <br> 的文本（支持转义）",
+        out: "输出",
+        outHTML: "将 Markdown 转换为 HTML",
+        outVert: "将 HTML 版式设为竖排",
+        outKeep: "保留转换前的 Markdown 文件"
+      }
+    }
   },
   nav: {
     title: "SERAPH",
@@ -98,6 +156,7 @@ const zhHans = {
       success: {
         init: "密码设置成功，感谢使用 SERAPH。",
         logout: "退出成功。",
+        setting: "设置已保存。",
         new: "{0} 已创建。",
         upload: "{0} 已上传至 {1}。",
         files: "所有文件",

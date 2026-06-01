@@ -1,5 +1,65 @@
 const en = {
   header: {
+    config: {
+      title: "Setting",
+      general: {
+        title: "General",
+        language: "Display Language",
+        token: "Token Expiry",
+        tokenHint: "since last access",
+        tokenOption: {
+          15: "15 minutes",
+          60: "1 hour",
+          720: "12 hours",
+          1440: "1 day",
+          2880: "2 day"
+        },
+        reset: "Reset to default",
+        resetButton: "Reset"
+      },
+      todo: {
+        title: "TODO",
+        deleteTime: "Delete Delay",
+        deleteTimeHint: "of completed tasks",
+        deleteTimeOption: {
+          0: "Immediately",
+          60: "1 minute",
+          3600: "1 hour",
+          86400: "1 day"
+        }
+      },
+      epub: {
+        title: "Epub Converter",
+        page: "Pages",
+        pageSplit: "Split pages by chapters",
+        pageFront: "Include front pages",
+        nav: "Navigation",
+        navLink: "Show navigation links at the end",
+        navPrev: "Link text for previous page",
+        navNext: "Link text for next page",
+        fade: "Fading",
+        fadeNull: "Do not perform fading",
+        fadeTrue: "Fade paragraphs containing kana",
+        fadeFalse: "Fade paragraphs not containing kana",
+        fadeOpaque: "Opacity level of faded text",
+        fadeSize: "Font size of faded text",
+        fadeTop: "Top offset of faded text",
+        image: "Image",
+        imageSpec: "Identify inline images heuristically",
+        imageShow: "Display block level images",
+        imageAltInline: "Show alt text for inline images",
+        imageAltBlock: "Show alt text for block images",
+        imageWidth: "Width of block images (empty for null)",
+        text: "Text",
+        textClearLine: "Clear empty lines",
+        textShowRuby: "Show ruby if exists",
+        textBreakLine: "Text to replace <br> (escapes supported)",
+        out: "Output",
+        outHTML: "Convert markdown to HTML",
+        outVert: "Make HTML text vertical",
+        outKeep: "Keep intermediate markdown files"
+      }
+    }
   },
   nav: {
     title: "Seraph",
@@ -98,6 +158,7 @@ const en = {
       success: {
         init: "Password is set successfully. Thanks for using Seraph.",
         logout: "Logged out successfully.",
+        setting: "New setting has been saved.",
         new: "{0} has been created.",
         upload: "{0} has been uploaded to {1}.",
         files: "All files",

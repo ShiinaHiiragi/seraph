@@ -94,6 +94,8 @@ const reactionInterval = {
   medium: 300,
   slow: 450
 }
+
+const animeDuration = 1500
 const toastDuration = 4000
 
 const globalState = {
@@ -110,21 +112,79 @@ const defaultClipboard = {
 const defaultSetting = {
   meta: {
     language: "en",
-    token: 120
+    token: 60
   },
   task: {
     delay: 60
+  },
+  epub: {
+    page: {
+      split: true,
+      front: true
+    },
+    nav: {
+      link: true,
+      prev: "← 前へ",
+      next: "次へ →"
+    },
+    fade: {
+      kana: true,
+      opaque: "72",
+      size: "84",
+      top: "-6"
+    },
+    image: {
+      show: true,
+      width: null,
+      altInline: true,
+      altBlock: false,
+      spec: true
+    },
+    text: {
+      clearLine: true,
+      showRuby: true,
+      breakLine: ""
+    },
+    out: {
+      html: true,
+      vert: false,
+      keep: false
+    }
   }
 };
+const settingField = {
+  general: "general",
+  todo: "todo",
+  epub: "epub"
+}
+const setValue = (obj, key, value) => {
+  const parts = key.split(".");
+  if (parts.length > 1) {
+    const outerKey = parts[0];
+    const innerKeys = parts.slice(1).join(".");
+    return {
+      ...obj,
+      [outerKey]: setValue(obj[outerKey], innerKeys, value)
+    }
+  } else {
+    return {
+      ...obj,
+      [key]: value
+    }
+  }
+}
 
 export default GlobalContext;
 export {
   ConstantContext,
   reactionInterval,
+  animeDuration,
   toastDuration,
   globalState,
   defaultClipboard,
-  defaultSetting
+  defaultSetting,
+  settingField,
+  setValue
 };
 
 const encodePath = (path) => path.split("/").map(encodeURIComponent).join("/");

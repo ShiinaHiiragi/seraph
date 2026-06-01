@@ -11,6 +11,7 @@ let infoRouter = require('./routes/info');
 let authRouter = require('./routes/auth');
 let fileRouter = require('./routes/file');
 let folderRouter = require('./routes/folder');
+let configRouter = require('./routes/config');
 
 let todoRouter = require('./routes/todo');
 
@@ -61,6 +62,7 @@ app.use('/info', infoRouter);
 app.use('/auth', authRouter);
 app.use('/file', fileRouter);
 app.use('/folder', folderRouter);
+app.use('/config', configRouter)
 
 let utilityRouter = express.Router();
 utilityRouter.use('/todo', todoRouter);

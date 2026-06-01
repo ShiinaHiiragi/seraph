@@ -28,6 +28,7 @@ import GlobalContext, {
   globalState,
   defaultClipboard,
   defaultSetting,
+  setValue,
   request,
   toastTheme
 } from "./interface/constants";
@@ -163,14 +164,7 @@ const Panel = () => {
   }, [globalSwitch]);
 
   const setSettingPair = React.useCallback((key, value) => {
-    const [item, subItem] = key.split(".");
-    setSetting((setting) => ({
-      ...setting,
-      [item]: {
-        ...setting["item"],
-        [subItem]: value
-      }
-    }));
+    setSetting((setting) => setValue(setting, key, value))
   }, [ ]);
 
   return (
@@ -202,6 +196,7 @@ const Panel = () => {
                 setPublicFolders={setPublicFolders}
                 setPrivateFolders={setPrivateFolders}
                 setClipboard={setClipboard}
+                setSetting={setSetting}
                 setSettingPair={setSettingPair}
               />
             </HeaderField>

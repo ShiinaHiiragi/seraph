@@ -79,10 +79,44 @@ const defaultConfig = {
   setting: {
     meta: {
       language: "en",
-      token: 120
+      token: 60
     },
     task: {
       delay: 60
+    },
+    epub: {
+      page: {
+        split: true,
+        front: true
+      },
+      nav: {
+        link: true,
+        prev: "← 前へ",
+        next: "次へ →"
+      },
+      fade: {
+        kana: true,
+        opaque: "72",
+        size: "84",
+        top: "-6"
+      },
+      image: {
+        show: true,
+        width: null,
+        altInline: true,
+        altBlock: false,
+        spec: true
+      },
+      text: {
+        clearLine: true,
+        showRuby: true,
+        breakLine: ""
+      },
+      out: {
+        html: true,
+        vert: false,
+        keep: false
+      }
     }
   }
 };
@@ -236,6 +270,28 @@ exports.fileOperator = fileOperator;
 })();
 
 const configOperator = {
+  hasKey: (obj, key) => key.split(".").reduce(
+    (current, nextKey) => current?.[nextKey],
+    obj
+  ) !== undefined,
+
+  setValue: (obj, key, value) => {
+    const parts = key.split(".");
+    if (parts.length > 1) {
+      const outerKey = parts[0];
+      const innerKeys = parts.slice(1).join(".");
+      return {
+        ...obj,
+        [outerKey]: configOperator.setValue(obj[outerKey], innerKeys, value)
+      }
+    } else {
+      return {
+        ...obj,
+        [key]: value
+      }
+    }
+  },
+
   config: fileOperator.readConfig(),
   setConfig: (handle) => {
     const newConfig = handle(configOperator.config);
@@ -277,17 +333,11 @@ const configOperator = {
   },
 
   setConfigSetting: (key, value) => {
-    const [item, subItem] = key.split(".");
     configOperator.setConfig((config) => ({
       ...config,
-      setting: {
-        ...config.setting,
-        [item]: {
-          ...config.setting[item],
-          [subItem]: value
-        }
-      }
-    }));
+      setting: configOperator.setValue(config.setting, key, value)
+    })
+    );
   }
 }
 
@@ -389,6 +439,7 @@ const tokenOperator = {
 };
 
 const checkerOperator = {
+  python: os.platform() === 'win32' ? 'python' : 'python3',
   pass: (miss) => {
     const notPassed = miss instanceof Array && miss.length > 0
     return {
@@ -416,7 +467,11 @@ const checkerOperator = {
 
   checkPython: (minVersion) => () => {
     try {
-      const stdout = child.execFileSync('python3', ['--version'], { encoding: 'utf8' });
+      const stdout = child.execFileSync(
+        checkerOperator.python,
+        ['--version'],
+        { encoding: 'utf8' }
+      );
       const version = stdout.match(/Python ([.0-9]+)/)[1];
       assert(version.versionGE(minVersion))
       return checkerOperator.pass()
@@ -428,13 +483,17 @@ const checkerOperator = {
   checkPip: (packages) => () => {
     const script = `
       import json
-      import importlib
+      import importlib.util
       missing = [p for p in ${JSON.stringify(packages)} if importlib.util.find_spec(p) is None]
       print(json.dumps(missing))
     `.replaceAll("\n      ", "\n");
 
     try {
-      const stdout = child.execFileSync('python3', ['-c', script], { encoding: 'utf8' });
+      const stdout = child.execFileSync(
+        checkerOperator.python,
+        ['-c', script],
+        { encoding: 'utf8' }
+      );
       const miss = JSON.parse(stdout.trim());
       return checkerOperator.pass(
         miss.map((pkg) => ({ id: pkg, cat: "Pip packages" }))

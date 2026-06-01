@@ -5,13 +5,21 @@ import IconButton from "@mui/joy/IconButton";
 import Typography from "@mui/joy/Typography"
 import Input from "@mui/joy/Input";
 import MenuIcon from "@mui/icons-material/Menu";
-import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
+import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import { Link, useNavigate } from "react-router-dom";
 import GreyLogo from "../logo-grey.svg";
-import GlobalContext, { globalState, request, Status } from "../interface/constants";
+import GlobalContext, {
+  globalState,
+  request,
+  Status,
+  defaultSetting,
+  settingField
+} from "../interface/constants";
+import { languagePickerSpawner } from "../interface/languagePicker";
 import ModalForm from "../modal/Form";
+import Config from "../modal/Config";
 
 const HeaderLayout = (props) => {
   return (
@@ -48,10 +56,62 @@ const Header = (props) => {
     setPublicFolders,
     setPrivateFolders,
     setClipboard,
+    setSetting,
     setSettingPair
   } = props;
   const context = React.useContext(GlobalContext);
   const navigate = useNavigate();
+
+  // state for config
+  const [modalConfigOpen, setModalConfigOpen] = React.useState(false);
+  const [mobileNavOpen, setMobileNavOpen] = React.useState(false);
+  const [activeSection, setActiveSection] = React.useState(settingField.general);
+  const [resetButtonLoading, setResetButtonLoading] = React.useState(false);
+
+  const handleCloseConfig = React.useCallback(() => {
+    setModalConfigOpen(false);
+    setMobileNavOpen(false);
+    setActiveSection(settingField.general);
+  }, []);
+
+  const handleApplySetting = React.useCallback((key, value) => {
+    toast.promise(new Promise((resolve, reject) => {
+      request("POST/config/set", { key: key, value: value })
+        .then(() => {
+          setSettingPair(key, value)
+          resolve()
+        })
+    }), {
+      loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
+      success: () => (
+        key === "meta.language"
+          ? languagePickerSpawner(value)
+          : context.languagePicker
+        )("modal.toast.success.setting"),
+      error: (data) => data
+    })
+  }, [context, setSettingPair]);
+
+  const handleResetSetting = React.useCallback(() => {
+    setResetButtonLoading(true)
+    toast.promise(new Promise((resolve, reject) => {
+      request(
+        "POST/config/reset",
+        undefined,
+        { "": () => setResetButtonLoading(false) },
+        reject
+      )
+        .then(() => {
+          setResetButtonLoading(false)
+          setSetting(defaultSetting)
+          resolve()
+        })
+    }), {
+      loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
+      success: () => languagePickerSpawner(defaultSetting.meta.language)("modal.toast.success.setting"),
+      error: (data) => data
+    })
+  }, [context, setSetting])
 
   // function and states for login
   const [modalLoginOpen, setModalLoginOpen] = React.useState(false);
@@ -155,23 +215,9 @@ const Header = (props) => {
             size="sm"
             variant="outlined"
             color="neutral"
-            onClick={() => {
-              switch (document.documentElement.lang) {
-                case "en":
-                  setSettingPair("meta.language", "zh-Hans");
-                  break;
-                case "zh-Hans":
-                  setSettingPair("meta.language", "ja");
-                  break;
-                case "ja":
-                  setSettingPair("meta.language", "en");
-                  break;
-                default:
-                  setSettingPair("meta.language", "en");
-              }
-            }}
+            onClick={() => setModalConfigOpen(true)}
           >
-            <LanguageOutlinedIcon />
+            <SettingsOutlinedIcon />
           </IconButton>}
         {context.isAuthority
           ? <IconButton
@@ -197,6 +243,17 @@ const Header = (props) => {
           </IconButton>
         }
       </Box>
+      <Config
+        open={modalConfigOpen}
+        handleClose={handleCloseConfig}
+        handleApplySetting={handleApplySetting}
+        handleResetSetting={handleResetSetting}
+        mobileNavOpen={mobileNavOpen}
+        setMobileNavOpen={setMobileNavOpen}
+        activeSection={activeSection}
+        setActiveSection={setActiveSection}
+        resetButtonLoading={resetButtonLoading}
+      />
       <ModalForm
         open={modalLoginOpen}
         loading={buttonLoading}

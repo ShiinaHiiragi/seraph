@@ -465,14 +465,35 @@ router.post('/epub', (req, res, next) => {
   }
 
   // use async function to avoid blocking
-  child.execFile('python3', [
+  const config = api.configOperator.config.setting.epub;
+  child.execFile(api.checkerOperator.python, [
     api.extentPath.epubConverterFilePath,
     '-c',
     JSON.stringify({
       "path.src": filePath,
-      "path.dst": folderPath
+      "path.dst": folderPath,
+      "page.split": config.page.split,
+      "page.front": config.page.front,
+      "nav.link": config.nav.link,
+      "nav.prev": config.nav.prev,
+      "nav.next": config.nav.next,
+      "fade.kana": config.fade.kana,
+      "fade.opaque": `0.${config.fade.opaque}`,
+      "fade.size": `0.${config.fade.size}em`,
+      "fade.top": `${config.fade.top}px`,
+      "image.show": config.image.show,
+      "image.width": config.image.width,
+      "image.ialt": config.image.altInline,
+      "image.balt": config.image.altBlock,
+      "image.spec": config.image.spec,
+      "page.clear": config.text.clearLine,
+      "ruby.show": config.text.showRuby,
+      "break.text": config.text.breakLine,
+      "out.html": config.out.html,
+      "out.keep": config.out.keep,
+      "out.vert": config.out.vert
     })
-  ], (err, stdout, stderr) => {
+  ], { env: { ...process.env, PYTHONUTF8: '1' } }, (err, stdout, stderr) => {
     if (err) {
       req.status.addExecStatus(api.Status.execErrCode.ExtensionError);
       res.send({
