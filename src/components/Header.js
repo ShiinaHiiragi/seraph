@@ -66,6 +66,7 @@ const Header = (props) => {
   const [modalConfigOpen, setModalConfigOpen] = React.useState(false);
   const [mobileNavOpen, setMobileNavOpen] = React.useState(false);
   const [activeSection, setActiveSection] = React.useState(settingField.general);
+  const [resetButtonLoading, setResetButtonLoading] = React.useState(false);
 
   const handleCloseConfig = React.useCallback(() => {
     setModalConfigOpen(false);
@@ -92,9 +93,16 @@ const Header = (props) => {
   }, [context, setSettingPair]);
 
   const handleResetSetting = React.useCallback(() => {
+    setResetButtonLoading(true)
     toast.promise(new Promise((resolve, reject) => {
-      request("POST/config/reset")
+      request(
+        "POST/config/reset",
+        undefined,
+        { "": () => setResetButtonLoading(false) },
+        reject
+      )
         .then(() => {
+          setResetButtonLoading(false)
           setSetting(defaultSetting)
           resolve()
         })
@@ -244,6 +252,7 @@ const Header = (props) => {
         setMobileNavOpen={setMobileNavOpen}
         activeSection={activeSection}
         setActiveSection={setActiveSection}
+        resetButtonLoading={resetButtonLoading}
       />
       <ModalForm
         open={modalLoginOpen}

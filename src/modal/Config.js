@@ -78,7 +78,18 @@ const String = (props) => {
   const [localValue, setLocalValue] = React.useState(value);
   const [localLastValid, setLocalLastValid] = React.useState(value);
   const [localError, setLocalError] = React.useState(false);
+
   const isMounted = React.useRef(false);
+  const pendingApply = React.useRef(false);
+
+  React.useEffect(() => {
+    if (pendingApply.current) {
+      pendingApply.current = false;
+      return;
+    }
+    setLocalValue(value);
+    setLocalLastValid(value);
+  }, [value]);
 
   React.useEffect(() => {
     if (!isMounted.current) {
@@ -92,6 +103,7 @@ const String = (props) => {
         const sendValue = typeof translate === "function"
           ? translate(localValue)
           : localValue;
+        pendingApply.current = true;
         handleApply(field, sendValue);
         setLocalLastValid(localValue);
       }
@@ -120,7 +132,7 @@ const String = (props) => {
   );
 };
 
-const SECTIONS = (context, handleApply, handleReset) => {
+const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
   return [
     {
       id: settingField.general,
@@ -158,6 +170,7 @@ const SECTIONS = (context, handleApply, handleReset) => {
               variant="outlined"
               sx={{ minWidth: 80 }}
               onClick={handleReset}
+              loading={resetButtonLoading}
             >
               {context.languagePicker("header.config.general.resetButton")}
             </Button>
@@ -414,16 +427,20 @@ export default function Config(props) {
     mobileNavOpen,
     setMobileNavOpen,
     activeSection,
-    setActiveSection
+    setActiveSection,
+    resetButtonLoading
   } = props;
   const context = React.useContext(GlobalContext);
 
   const [containerElement, setContainerElement] = React.useState(null);
   const sectionRefs = React.useRef({});
   const isSystemScrolling = React.useRef(false);
-  const sectionUncurry = React.useMemo(() => {
-    return SECTIONS(context, handleApplySetting, handleResetSetting)
-  }, [context, handleApplySetting, handleResetSetting])
+  const sectionUncurry = React.useMemo(() => SECTIONS(
+    context,
+    resetButtonLoading,
+    handleApplySetting,
+    handleResetSetting
+  ), [context, resetButtonLoading, handleApplySetting, handleResetSetting])
 
   const scrollToSection = React.useCallback((id) => {
     setActiveSection(id);
