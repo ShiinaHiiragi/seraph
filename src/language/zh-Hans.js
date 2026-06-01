@@ -13,7 +13,9 @@ const zhHans = {
           720: "12 小时",
           1440: "1 天",
           2880: "2 天"
-        }
+        },
+        reset: "重置为默认值",
+        resetButton: "重置"
       },
       todo: {
         title: "待办",
