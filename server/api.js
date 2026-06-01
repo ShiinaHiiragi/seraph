@@ -103,7 +103,8 @@ const defaultConfig = {
       image: {
         show: true,
         width: null,
-        alt: true,
+        altInline: true,
+        altBlock: false,
         spec: true
       },
       text: {

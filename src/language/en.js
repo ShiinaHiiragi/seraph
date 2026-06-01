@@ -42,6 +42,20 @@ const en = {
         fadeOpaque: "Opacity level of faded text",
         fadeSize: "Font size of faded text",
         fadeTop: "Top offset of faded text",
+        image: "Image",
+        imageSpec: "Identify inline images heuristically",
+        imageShow: "Display block level images",
+        imageAltInline: "Show alt text for inline images",
+        imageAltBlock: "Show alt text for block images",
+        imageWidth: "Width of block images (empty for null)",
+        text: "Text",
+        textClearLine: "Clear empty lines",
+        textShowRuby: "Show ruby if exists",
+        textBreakLine: "Text to replace <br> (escapes supported)",
+        out: "Output",
+        outHTML: "Convert markdown to HTML",
+        outVert: "Make HTML text vertical",
+        outKeep: "Keep intermediate markdown files"
       }
     }
   },

@@ -69,7 +69,8 @@ const String = (props) => {
     handleCheck,
     handleApply,
     start,
-    end
+    end,
+    translate
   } = props;
 
   const [localValue, setLocalValue] = React.useState(value);
@@ -86,12 +87,15 @@ const String = (props) => {
       const checkError = handleCheck(localValue)
       setLocalError(!checkError)
       if (checkError && localValue !== localLastValid) {
-        handleApply(field, localValue);
+        const sendValue = typeof translate === "function"
+          ? translate(localValue)
+          : localValue;
+        handleApply(field, sendValue);
         setLocalLastValid(localValue);
       }
     }, reactionInterval.slow);
     return () => clearTimeout(id);
-  }, [localValue, localLastValid, field, handleApply, handleCheck]);
+  }, [localValue, localLastValid, field, handleApply, handleCheck, translate]);
 
   return (
     <FormControl>
@@ -199,7 +203,7 @@ const SECTIONS = (context, handleApply) => {
                   disabled={!context.setting.epub.nav.link}
                   caption={context.languagePicker("header.config.epub.navPrev")}
                   value={context.setting.epub.nav.prev}
-                  width={200}
+                  width={160}
                   type="text"
                   field="epub.nav.prev"
                   handleCheck={(value) => value.length > 0}
@@ -209,7 +213,7 @@ const SECTIONS = (context, handleApply) => {
                   disabled={!context.setting.epub.nav.link}
                   caption={context.languagePicker("header.config.epub.navNext")}
                   value={context.setting.epub.nav.next}
-                  width={200}
+                  width={160}
                   type="text"
                   field="epub.nav.next"
                   handleCheck={(value) => value.length > 0}
@@ -275,6 +279,107 @@ const SECTIONS = (context, handleApply) => {
                   end="px"
                 />
               </Stack>
+            </Stack>
+          )
+        },
+        {
+          key: context.languagePicker("header.config.epub.image"),
+          value: (
+            <Stack spacing={2}>
+              <Stack spacing={1}>
+                {Bool(
+                  context.languagePicker("header.config.epub.imageSpec"),
+                  context.setting.epub.image.spec,
+                  "epub.image.spec",
+                  handleApply
+                )}
+                {Bool(
+                  context.languagePicker("header.config.epub.imageAltInline"),
+                  context.setting.epub.image.altInline,
+                  "epub.image.altInline",
+                  handleApply
+                )}
+                {Bool(
+                  context.languagePicker("header.config.epub.imageAltBlock"),
+                  context.setting.epub.image.altBlock,
+                  "epub.image.altBlock",
+                  handleApply
+                )}
+                {Bool(
+                  context.languagePicker("header.config.epub.imageShow"),
+                  context.setting.epub.image.show,
+                  "epub.image.show",
+                  handleApply
+                )}
+              </Stack>
+              <String
+                disabled={!context.setting.epub.image.show}
+                caption={context.languagePicker("header.config.epub.imageWidth")}
+                value={context.setting.epub.image.width ?? ""}
+                width={100}
+                type="number"
+                field="epub.image.width"
+                handleCheck={(value) => value === null || /^\d{0,3}$/.test(value)}
+                handleApply={handleApply}
+                end="%"
+                translate={(value) => value === "" ? null : value}
+              />
+            </Stack>
+          )
+        },
+        {
+          key: context.languagePicker("header.config.epub.text"),
+          value: (
+            <Stack spacing={2}>
+              <Stack spacing={1}>
+                {Bool(
+                  context.languagePicker("header.config.epub.textClearLine"),
+                  context.setting.epub.text.clearLine,
+                  "epub.text.clearLine",
+                  handleApply
+                )}
+                {Bool(
+                  context.languagePicker("header.config.epub.textShowRuby"),
+                  context.setting.epub.text.showRuby,
+                  "epub.text.showRuby",
+                  handleApply
+                )}
+              </Stack>
+              <String
+                caption={context.languagePicker("header.config.epub.textBreakLine")}
+                value={JSON.stringify(context.setting.epub.text.breakLine).slice(1, -1)}
+                width={160}
+                type="text"
+                field="epub.text.breakLine"
+                handleCheck={(_) => true}
+                handleApply={handleApply}
+                translate={(value) => JSON.parse('"' + value.replace(/"/g, '\\"') + '"')}
+              />
+            </Stack>
+          )
+        },
+        {
+          key: context.languagePicker("header.config.epub.out"),
+          value: (
+            <Stack spacing={1}>
+              {Bool(
+                context.languagePicker("header.config.epub.outHTML"),
+                context.setting.epub.out.html,
+                "epub.out.html",
+                handleApply
+              )}
+              {Bool(
+                context.languagePicker("header.config.epub.outVert"),
+                context.setting.epub.out.vert,
+                "epub.out.vert",
+                handleApply
+              )}
+              {Bool(
+                context.languagePicker("header.config.epub.outKeep"),
+                context.setting.epub.out.keep,
+                "epub.out.keep",
+                handleApply
+              )}
             </Stack>
           )
         }
