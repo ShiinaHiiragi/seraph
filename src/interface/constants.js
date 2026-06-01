@@ -137,10 +137,7 @@ const defaultSetting = {
       show: true,
       width: null,
       alt: true,
-      spec: true,
-      specPixel: 32768,
-      specSize: 8192,
-      specHue: 4.0
+      spec: true
     },
     text: {
       clearLine: true,
