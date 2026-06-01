@@ -160,6 +160,7 @@
 
 ## Log
 
+- 06/01/2026 ver 0.3.0: Add setting popup
 - 05/29/2026 ver 0.2.4: Add multiple files uploading
 - 05/27/2026 ver 0.2.3: Add converter for epub files fix i18n text
 - 05/26/2026 ver 0.2.2: Add supports for dot files and fix several bugs
@@ -170,16 +171,15 @@
 
 ## Memo
 
-1. Setting Popup
-2. File Explorer
+1. File Explorer
     - create markdown
     - edit in milkdown
-3. Milkdown
+2. Milkdown
     - edit / read only
     - save to folder
     - download
-4. Subscription: receive message from
+3. Subscription: receive message from
     - webhook server
-5. Terminal
+4. Terminal
     - open powershell / bash
     - terminal: react-terminal
