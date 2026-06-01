@@ -16,6 +16,7 @@ import Button from "@mui/joy/Button";
 import Input from "@mui/joy/Input";
 import Typography from "@mui/joy/Typography";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import KeyboardArrowLeftOutlinedIcon from "@mui/icons-material/KeyboardArrowLeftOutlined";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import GlobalContext, {
   animeDuration,
@@ -530,9 +531,9 @@ export default function Config(props) {
               size="sm"
               onClick={() => setMobileNavOpen((v) => !v)}
             >
-              {mobileNavOpen ? <CloseRoundedIcon /> : <MenuRoundedIcon />}
+              {mobileNavOpen ? <KeyboardArrowLeftOutlinedIcon /> : <MenuRoundedIcon />}
             </IconButton>
-            {!mobileNavOpen && <IconButton
+            <IconButton
               variant="plain"
               color="neutral"
               size="sm"
@@ -540,7 +541,7 @@ export default function Config(props) {
               sx={{ ml: 1 }}
             >
               <CloseRoundedIcon />
-            </IconButton>}
+            </IconButton>
           </Box>
         </Box>
         <Box sx={{ display: "flex", flex: 1, overflow: "hidden", position: "relative" }}>
