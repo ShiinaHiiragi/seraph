@@ -25,6 +25,37 @@ const ja = {
           3600: "1 時間",
           86400: "1 日"
         }
+      },
+      epub: {
+        title: "EPUB コンバーター",
+        page: "ページ",
+        pageSplit: "チャプターごとにページをスプリットする",
+        pageFront: "フロントページをインクルードする",
+        nav: "ナビゲーション",
+        navLink: "エンドにナビゲーションリンクを表示する",
+        navPrev: "前ページのリンクテキスト",
+        navNext: "次ページのリンクテキスト",
+        fade: "フェード",
+        fadeNull: "フェードを実行しない",
+        fadeTrue: "かなを含むパラグラフをフェードする",
+        fadeFalse: "かなを含まないパラグラフをフェードする",
+        fadeOpaque: "フェードテキストのオパシティ",
+        fadeSize: "フェードテキストのフォントサイズ",
+        fadeTop: "フェードテキストのトップオフセット",
+        image: "イメージ",
+        imageSpec: "インラインイメージをヒューリスティックで識別する",
+        imageShow: "ブロックレベルイメージを表示する",
+        imageAltInline: "インラインイメージの代替テキストを表示する",
+        imageAltBlock: "ブロックレベルイメージの代替テキストを表示する",
+        imageWidth: "ブロックレベルイメージの幅（空欄でヌル）",
+        text: "テキスト",
+        textClearLine: "空行をクリアする",
+        textShowRuby: "ルビが存在する場合は表示する",
+        textBreakLine: "<br> を置換するテキスト（エスケープ対応）",
+        out: "アウトプット",
+        outHTML: "Markdown を HTML にコンバートする",
+        outVert: "HTML テキストをバーティカルにする",
+        outKeep: "中間 Markdown ファイルをキープする"
       }
     }
   },

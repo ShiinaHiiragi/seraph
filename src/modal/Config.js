@@ -224,65 +224,6 @@ const SECTIONS = (context, handleApply) => {
           )
         },
         {
-          key: context.languagePicker("header.config.epub.fade"),
-          value: (
-            <Stack spacing={2}>
-              <RadioGroup
-                size="sm"
-                value={context.setting.epub.fade.kana}
-                onChange={(event) => handleApply(
-                  "epub.fade.kana",
-                  event.target.value === "true"
-                    ? true
-                    : event.target.value === "false"
-                    ? false
-                    : null
-                )}
-              >
-                <Radio value="null" label={context.languagePicker("header.config.epub.fadeNull")} />
-                <Radio value="true" label={context.languagePicker("header.config.epub.fadeTrue")} />
-                <Radio value="false" label={context.languagePicker("header.config.epub.fadeFalse")} />
-              </RadioGroup>
-              <Stack spacing={1}>
-                <String
-                  disabled={context.setting.epub.fade.kana === null}
-                  caption={context.languagePicker("header.config.epub.fadeOpaque")}
-                  value={context.setting.epub.fade.opaque}
-                  width={100}
-                  type="number"
-                  field="epub.fade.opaque"
-                  handleCheck={(value) => /^\d{1,3}$/.test(value)}
-                  handleApply={handleApply}
-                  start="0."
-                />
-                <String
-                  disabled={context.setting.epub.fade.kana === null}
-                  caption={context.languagePicker("header.config.epub.fadeSize")}
-                  value={context.setting.epub.fade.size}
-                  width={100}
-                  type="number"
-                  field="epub.fade.size"
-                  handleCheck={(value) => /^\d{1,3}$/.test(value)}
-                  handleApply={handleApply}
-                  start="0."
-                  end="em"
-                />
-                <String
-                  disabled={context.setting.epub.fade.kana === null}
-                  caption={context.languagePicker("header.config.epub.fadeTop")}
-                  value={context.setting.epub.fade.top}
-                  width={100}
-                  type="number"
-                  field="epub.fade.top"
-                  handleCheck={(value) => /^-?\d+$/.test(value)}
-                  handleApply={handleApply}
-                  end="px"
-                />
-              </Stack>
-            </Stack>
-          )
-        },
-        {
           key: context.languagePicker("header.config.epub.image"),
           value: (
             <Stack spacing={2}>
@@ -355,6 +296,65 @@ const SECTIONS = (context, handleApply) => {
                 handleApply={handleApply}
                 translate={(value) => JSON.parse('"' + value.replace(/"/g, '\\"') + '"')}
               />
+            </Stack>
+          )
+        },
+        {
+          key: context.languagePicker("header.config.epub.fade"),
+          value: (
+            <Stack spacing={2}>
+              <RadioGroup
+                size="sm"
+                value={context.setting.epub.fade.kana}
+                onChange={(event) => handleApply(
+                  "epub.fade.kana",
+                  event.target.value === "true"
+                    ? true
+                    : event.target.value === "false"
+                    ? false
+                    : null
+                )}
+              >
+                <Radio value="null" label={context.languagePicker("header.config.epub.fadeNull")} />
+                <Radio value="true" label={context.languagePicker("header.config.epub.fadeTrue")} />
+                <Radio value="false" label={context.languagePicker("header.config.epub.fadeFalse")} />
+              </RadioGroup>
+              <Stack spacing={1}>
+                <String
+                  disabled={context.setting.epub.fade.kana === null}
+                  caption={context.languagePicker("header.config.epub.fadeOpaque")}
+                  value={context.setting.epub.fade.opaque}
+                  width={100}
+                  type="number"
+                  field="epub.fade.opaque"
+                  handleCheck={(value) => /^\d{1,3}$/.test(value)}
+                  handleApply={handleApply}
+                  start="0."
+                />
+                <String
+                  disabled={context.setting.epub.fade.kana === null}
+                  caption={context.languagePicker("header.config.epub.fadeSize")}
+                  value={context.setting.epub.fade.size}
+                  width={100}
+                  type="number"
+                  field="epub.fade.size"
+                  handleCheck={(value) => /^\d{1,3}$/.test(value)}
+                  handleApply={handleApply}
+                  start="0."
+                  end="em"
+                />
+                <String
+                  disabled={context.setting.epub.fade.kana === null}
+                  caption={context.languagePicker("header.config.epub.fadeTop")}
+                  value={context.setting.epub.fade.top}
+                  width={100}
+                  type="number"
+                  field="epub.fade.top"
+                  handleCheck={(value) => /^-?\d+$/.test(value)}
+                  handleApply={handleApply}
+                  end="px"
+                />
+              </Stack>
             </Stack>
           )
         },
