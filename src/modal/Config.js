@@ -10,6 +10,8 @@ import Stack from "@mui/joy/Stack";
 import FormControl from "@mui/joy/FormControl";
 import FormLabel from "@mui/joy/FormLabel";
 import Checkbox from "@mui/joy/Checkbox";
+import Radio from "@mui/joy/Radio";
+import RadioGroup from "@mui/joy/RadioGroup";
 import Input from "@mui/joy/Input";
 import Typography from "@mui/joy/Typography";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
@@ -34,6 +36,18 @@ const Literal = (value, itemsMap, field, handleApply) => (
     ))}
   </Select>
 )
+
+// const Trifid = (value, itemsMap, field, handleApply) => (
+//   <RadioGroup
+//     size="sm"
+//     value={value}
+//     onChange={(event) => handleApply(field, event.target.value)}
+//   >
+//     {itemsMap.map(({ value, label }) => (
+//       <Radio key={label} value={value} label={label} />
+//     ))}
+//   </RadioGroup>
+// )
 
 const Bool = (label, checked, field, handleApply) => (
   <Checkbox
@@ -77,11 +91,11 @@ const String = (props) => {
       }
     }, reactionInterval.slow);
     return () => clearTimeout(id);
-  }, [localValue]);
+  }, [localValue, localLastValid, field, handleApply, handleCheck]);
 
   return (
     <FormControl>
-      <FormLabel sx={{ mb: 0 }}>
+      <FormLabel sx={{ mb: 0, color: "neutral.500" }}>
         {caption}
       </FormLabel>
       <Input
@@ -94,6 +108,7 @@ const String = (props) => {
         endDecorator={end}
         onChange={(e) => setLocalValue(e.target.value)}
         error={localError}
+        slotProps={{ startDecorator: { sx: { mr: 0.5 } } }}
       />
     </FormControl>
   );
@@ -172,33 +187,94 @@ const SECTIONS = (context, handleApply) => {
         {
           key: context.languagePicker("header.config.epub.nav"),
           value: (
-            <Stack spacing={1}>
+            <Stack spacing={2}>
               {Bool(
                 context.languagePicker("header.config.epub.navLink"),
                 context.setting.epub.nav.link,
                 "epub.nav.link",
                 handleApply
               )}
-              <String
-                disabled={!context.setting.epub.nav.link}
-                caption={context.languagePicker("header.config.epub.navPrev")}
-                value={context.setting.epub.nav.prev}
-                width={200}
-                type="text"
-                field="epub.nav.prev"
-                handleCheck={(value) => value.length > 0}
-                handleApply={handleApply}
-              />
-              <String
-                disabled={!context.setting.epub.nav.link}
-                caption={context.languagePicker("header.config.epub.navNext")}
-                value={context.setting.epub.nav.next}
-                width={200}
-                type="text"
-                field="epub.nav.next"
-                handleCheck={(value) => value.length > 0}
-                handleApply={handleApply}
-              />
+              <Stack spacing={1}>
+                <String
+                  disabled={!context.setting.epub.nav.link}
+                  caption={context.languagePicker("header.config.epub.navPrev")}
+                  value={context.setting.epub.nav.prev}
+                  width={200}
+                  type="text"
+                  field="epub.nav.prev"
+                  handleCheck={(value) => value.length > 0}
+                  handleApply={handleApply}
+                />
+                <String
+                  disabled={!context.setting.epub.nav.link}
+                  caption={context.languagePicker("header.config.epub.navNext")}
+                  value={context.setting.epub.nav.next}
+                  width={200}
+                  type="text"
+                  field="epub.nav.next"
+                  handleCheck={(value) => value.length > 0}
+                  handleApply={handleApply}
+                />
+              </Stack>
+            </Stack>
+          )
+        },
+        {
+          key: context.languagePicker("header.config.epub.fade"),
+          value: (
+            <Stack spacing={2}>
+              <RadioGroup
+                size="sm"
+                value={context.setting.epub.fade.kana}
+                onChange={(event) => handleApply(
+                  "epub.fade.kana",
+                  event.target.value === "true"
+                    ? true
+                    : event.target.value === "false"
+                    ? false
+                    : null
+                )}
+              >
+                <Radio value="null" label={context.languagePicker("header.config.epub.fadeNull")} />
+                <Radio value="true" label={context.languagePicker("header.config.epub.fadeTrue")} />
+                <Radio value="false" label={context.languagePicker("header.config.epub.fadeFalse")} />
+              </RadioGroup>
+              <Stack spacing={1}>
+                <String
+                  disabled={context.setting.epub.fade.kana === null}
+                  caption={context.languagePicker("header.config.epub.fadeOpaque")}
+                  value={context.setting.epub.fade.opaque}
+                  width={100}
+                  type="number"
+                  field="epub.fade.opaque"
+                  handleCheck={(value) => /^\d{1,3}$/.test(value)}
+                  handleApply={handleApply}
+                  start="0."
+                />
+                <String
+                  disabled={context.setting.epub.fade.kana === null}
+                  caption={context.languagePicker("header.config.epub.fadeSize")}
+                  value={context.setting.epub.fade.size}
+                  width={100}
+                  type="number"
+                  field="epub.fade.size"
+                  handleCheck={(value) => /^\d{1,3}$/.test(value)}
+                  handleApply={handleApply}
+                  start="0."
+                  end="em"
+                />
+                <String
+                  disabled={context.setting.epub.fade.kana === null}
+                  caption={context.languagePicker("header.config.epub.fadeTop")}
+                  value={context.setting.epub.fade.top}
+                  width={100}
+                  type="number"
+                  field="epub.fade.top"
+                  handleCheck={(value) => /^-?\d+$/.test(value)}
+                  handleApply={handleApply}
+                  end="px"
+                />
+              </Stack>
             </Stack>
           )
         }

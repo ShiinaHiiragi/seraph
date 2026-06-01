@@ -129,9 +129,9 @@ const defaultSetting = {
     },
     fade: {
       kana: true,
-      opaque: 72,
-      size: 84,
-      top: -6
+      opaque: "72",
+      size: "84",
+      top: "-6"
     },
     image: {
       show: true,

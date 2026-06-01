@@ -34,7 +34,14 @@ const en = {
         nav: "Navigation",
         navLink: "Show navigation links at the end",
         navPrev: "Link text for previous page",
-        navNext: "Link text for next page"
+        navNext: "Link text for next page",
+        fade: "Fading",
+        fadeNull: "Do not perform fading",
+        fadeTrue: "Fade paragraphs containing kana",
+        fadeFalse: "Fade paragraphs not containing kana",
+        fadeOpaque: "Opacity level of faded text",
+        fadeSize: "Font size of faded text",
+        fadeTop: "Top offset of faded text",
       }
     }
   },
