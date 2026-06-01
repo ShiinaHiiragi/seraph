@@ -12,6 +12,7 @@ import FormLabel from "@mui/joy/FormLabel";
 import Checkbox from "@mui/joy/Checkbox";
 import Radio from "@mui/joy/Radio";
 import RadioGroup from "@mui/joy/RadioGroup";
+import Button from "@mui/joy/Button";
 import Input from "@mui/joy/Input";
 import Typography from "@mui/joy/Typography";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
@@ -49,8 +50,9 @@ const Literal = (value, itemsMap, field, handleApply) => (
 //   </RadioGroup>
 // )
 
-const Bool = (label, checked, field, handleApply) => (
+const Bool = (label, checked, field, handleApply, disabled) => (
   <Checkbox
+    disabled={disabled}
     size="sm"
     label={label}
     checked={checked}
@@ -118,7 +120,7 @@ const String = (props) => {
   );
 };
 
-const SECTIONS = (context, handleApply) => {
+const SECTIONS = (context, handleApply, handleReset) => {
   return [
     {
       id: settingField.general,
@@ -146,6 +148,20 @@ const SECTIONS = (context, handleApply) => {
             { value: 1440, label: context.languagePicker("header.config.general.tokenOption.1440") },
             { value: 2880, label: context.languagePicker("header.config.general.tokenOption.2880") }
           ], "meta.token", handleApply)
+        },
+        {
+          key: context.languagePicker("header.config.general.reset"),
+          value: (
+            <Button
+              size="sm"
+              color="neutral"
+              variant="outlined"
+              sx={{ minWidth: 80 }}
+              onClick={handleReset}
+            >
+              {context.languagePicker("header.config.general.resetButton")}
+            </Button>
+          )
         }
       ]
     },
@@ -161,7 +177,7 @@ const SECTIONS = (context, handleApply) => {
             { value: 60, label: context.languagePicker("header.config.todo.deleteTimeOption.60") }, 
             { value: 3600, label: context.languagePicker("header.config.todo.deleteTimeOption.3600") }, 
             { value: 86400, label: context.languagePicker("header.config.todo.deleteTimeOption.86400") }
-          ], (value) => handleApply("task.delay", value)),
+          ], "task.delay", handleApply),
         }
       ]
     },
@@ -372,7 +388,8 @@ const SECTIONS = (context, handleApply) => {
                 context.languagePicker("header.config.epub.outVert"),
                 context.setting.epub.out.vert,
                 "epub.out.vert",
-                handleApply
+                handleApply,
+                !context.setting.epub.out.html
               )}
               {Bool(
                 context.languagePicker("header.config.epub.outKeep"),
@@ -393,6 +410,7 @@ export default function Config(props) {
     open,
     handleClose,
     handleApplySetting,
+    handleResetSetting,
     mobileNavOpen,
     setMobileNavOpen,
     activeSection,
@@ -403,6 +421,9 @@ export default function Config(props) {
   const [containerElement, setContainerElement] = React.useState(null);
   const sectionRefs = React.useRef({});
   const isSystemScrolling = React.useRef(false);
+  const sectionUncurry = React.useMemo(() => {
+    return SECTIONS(context, handleApplySetting, handleResetSetting)
+  }, [context, handleApplySetting, handleResetSetting])
 
   const scrollToSection = React.useCallback((id) => {
     setActiveSection(id);
@@ -424,8 +445,8 @@ export default function Config(props) {
     const handleScroll = () => {
       if (isSystemScrolling.current) return;
       const containerTop = containerElement.getBoundingClientRect().top;
-      let current = SECTIONS(context, handleApplySetting)[0].id;
-      for (const section of SECTIONS(context, handleApplySetting)) {
+      let current = sectionUncurry[0].id;
+      for (const section of sectionUncurry) {
         const el = sectionRefs.current[section.id];
         if (el && el.getBoundingClientRect().top - containerTop < 25) {
           current = section.id;
@@ -435,7 +456,7 @@ export default function Config(props) {
     };
     containerElement.addEventListener("scroll", handleScroll, { passive: true });
     return () => containerElement.removeEventListener("scroll", handleScroll);
-  }, [containerElement, setActiveSection, context, handleApplySetting]);
+  }, [containerElement, setActiveSection, sectionUncurry]);
 
   return (
     <Modal
@@ -509,7 +530,7 @@ export default function Config(props) {
               display: { xs: "none", sm: "block" },
             }}
           >
-            {SECTIONS(context, handleApplySetting).map((s) => (
+            {sectionUncurry.map((s) => (
               <Box
                 key={s.id}
                 onClick={() => scrollToSection(s.id)}
@@ -544,7 +565,7 @@ export default function Config(props) {
                 display: { sm: "none" },
               }}
             >
-              {SECTIONS(context, handleApplySetting).map((s) => (
+              {sectionUncurry.map((s) => (
                 <Box
                   key={s.id}
                   onClick={() => scrollToSection(s.id)}
@@ -574,7 +595,7 @@ export default function Config(props) {
               pb: 0,
             }}
           >
-            {SECTIONS(context, handleApplySetting).map((section) => (
+            {sectionUncurry.map((section) => (
               <Box
                 key={section.id}
                 ref={(el) => { sectionRefs.current[section.id] = el; }}

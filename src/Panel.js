@@ -196,6 +196,7 @@ const Panel = () => {
                 setPublicFolders={setPublicFolders}
                 setPrivateFolders={setPrivateFolders}
                 setClipboard={setClipboard}
+                setSetting={setSetting}
                 setSettingPair={setSettingPair}
               />
             </HeaderField>

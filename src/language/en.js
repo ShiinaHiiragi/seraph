@@ -13,7 +13,9 @@ const en = {
           720: "12 hours",
           1440: "1 day",
           2880: "2 day"
-        }
+        },
+        reset: "Reset to default",
+        resetButton: "Reset"
       },
       todo: {
         title: "TODO",

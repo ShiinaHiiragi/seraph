@@ -14,6 +14,7 @@ import GlobalContext, {
   globalState,
   request,
   Status,
+  defaultSetting,
   settingField
 } from "../interface/constants";
 import { languagePickerSpawner } from "../interface/languagePicker";
@@ -55,6 +56,7 @@ const Header = (props) => {
     setPublicFolders,
     setPrivateFolders,
     setClipboard,
+    setSetting,
     setSettingPair
   } = props;
   const context = React.useContext(GlobalContext);
@@ -88,6 +90,20 @@ const Header = (props) => {
       error: (data) => data
     })
   }, [context, setSettingPair]);
+
+  const handleResetSetting = React.useCallback(() => {
+    toast.promise(new Promise((resolve, reject) => {
+      request("POST/config/reset")
+        .then(() => {
+          setSetting(defaultSetting)
+          resolve()
+        })
+    }), {
+      loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
+      success: () => languagePickerSpawner(defaultSetting.meta.language)("modal.toast.success.setting"),
+      error: (data) => data
+    })
+  }, [context, setSetting])
 
   // function and states for login
   const [modalLoginOpen, setModalLoginOpen] = React.useState(false);
@@ -223,6 +239,7 @@ const Header = (props) => {
         open={modalConfigOpen}
         handleClose={handleCloseConfig}
         handleApplySetting={handleApplySetting}
+        handleResetSetting={handleResetSetting}
         mobileNavOpen={mobileNavOpen}
         setMobileNavOpen={setMobileNavOpen}
         activeSection={activeSection}
