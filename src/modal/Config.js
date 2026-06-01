@@ -532,6 +532,15 @@ export default function Config(props) {
             >
               {mobileNavOpen ? <CloseRoundedIcon /> : <MenuRoundedIcon />}
             </IconButton>
+            {!mobileNavOpen && <IconButton
+              variant="plain"
+              color="neutral"
+              size="sm"
+              onClick={handleClose}
+              sx={{ ml: 1 }}
+            >
+              <CloseRoundedIcon />
+            </IconButton>}
           </Box>
         </Box>
         <Box sx={{ display: "flex", flex: 1, overflow: "hidden", position: "relative" }}>
