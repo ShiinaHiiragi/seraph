@@ -38,7 +38,8 @@ const attachTerminal = (server, api) => {
       cwd: process.env.HOME,
       env: {
         ...process.env,
-        SERAPH: path.join(__dirname, '..')
+        SERAPH_PATH: path.join(__dirname, '..'),
+        SERAPH_DATA: path.join(__dirname, './data'),
       },
     });
 

@@ -1,9 +1,9 @@
 import React from "react";
+import "@xterm/xterm/css/xterm.css";
 import { Terminal as XTerminal } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
-import "react-xtermjs";
 import RouteField from "../interface/RouteField";
-import GlobalContext from "../interface/constants";
+import GlobalContext, { serverWebSocketURL } from "../interface/constants";
 
 const LIGHT_THEME = {
   background: "#fafafa",
@@ -33,57 +33,79 @@ const Terminal = () => {
   const context = React.useContext(GlobalContext);
   const containerRef = React.useRef(null);
 
+  // after second tick, the globalSwitch were set properly
   React.useEffect(() => {
-    if (!context.isAuthority || !containerRef.current) return;
+    if (context.secondTick && context.isAuthority && containerRef.current) {
+      const fitAddon = new FitAddon();
+      const xterm = new XTerminal({
+        theme: LIGHT_THEME,
+        fontFamily: 'Ubuntu Mono, Monaco, Consolas, Courier New, monospace',
+        fontSize: 16,
+        cursorBlink: false,
+        convertEol: true
+      });
 
-    const fitAddon = new FitAddon();
-    const xterm = new XTerminal({
-      theme: LIGHT_THEME,
-      fontFamily: 'Ubuntu Mono, Menlo, Monaco, Consolas, "Courier New", monospace',
-      fontSize: 16,
-      cursorBlink: true,
-      convertEol: true,
-    });
+      xterm.loadAddon(fitAddon);
+      xterm.open(containerRef.current);
+      xterm.focus();
+      fitAddon.fit();
 
-    xterm.loadAddon(fitAddon);
-    xterm.open(containerRef.current);
-    xterm.focus();
-    fitAddon.fit();
+      const webSocket = new WebSocket(new URL("/pty", serverWebSocketURL).href);
+      webSocket.onopen = () => {
+        webSocket.send(JSON.stringify({
+          type: "resize",
+          cols: xterm.cols,
+          rows: xterm.rows
+        }));
+      };
 
-    const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-    const ws = new WebSocket(
-      `${protocol}//localhost:8000/pty`
-    );
+      webSocket.onmessage = (e) => {
+        xterm.write(e.data);
+      };
 
-    ws.onopen = () => {
-      ws.send(JSON.stringify({ type: "resize", cols: xterm.cols, rows: xterm.rows }));
-    };
-    ws.onmessage = (e) => xterm.write(e.data);
-    ws.onclose = () =>
-      xterm.write("\r\n\x1b[31m[connection closed]\x1b[0m\r\n");
+      webSocket.onclose = (e) => {
+        // TODO: add reason
+        xterm.write("\r\n\x1b[31m[Connection Closed]\x1b[0m\r\n");
+      }
 
-    const d1 = xterm.onData((data) => {
-      if (ws.readyState === WebSocket.OPEN)
-        ws.send(JSON.stringify({ type: "input", data }));
-    });
+      const d1 = xterm.onData((data) => {
+        if (webSocket.readyState === WebSocket.OPEN) {
+          webSocket.send(JSON.stringify({
+            type: "input",
+            data: data
+          }));
+        }
+      });
 
-    const d2 = xterm.onResize(({ cols, rows }) => {
-      if (ws.readyState === WebSocket.OPEN)
-        ws.send(JSON.stringify({ type: "resize", cols, rows }));
-    });
+      const d2 = xterm.onResize(({ cols, rows }) => {
+        if (webSocket.readyState === WebSocket.OPEN) {
+          webSocket.send(JSON.stringify({
+            type: "resize",
+            cols: cols,
+            rows: rows
+          }));
+        }
+      });
 
-    const observer = new ResizeObserver(() => fitAddon.fit());
-    observer.observe(containerRef.current);
+      const observer = new ResizeObserver(() => fitAddon.fit());
+      observer.observe(containerRef.current);
 
-    return () => {
-      ws.close();
-      observer.disconnect();
-      d1.dispose();
-      d2.dispose();
-      xterm.dispose();
-    };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [context.isAuthority]);
+      return () => {
+        webSocket.close();
+        observer.disconnect();
+        d1.dispose();
+        d2.dispose();
+        xterm.dispose();
+      };
+    }
+  // eslint-disable-next-line
+  }, [
+    // check if
+    // load with auth naturally
+    context.secondTick,
+    // login in same page
+    context.isAuthority,
+  ]);
 
   return (
     <RouteField
@@ -101,8 +123,11 @@ const Terminal = () => {
           width: "100%",
           height: "100%",
           backgroundColor: LIGHT_THEME.background,
-          padding: "8px",
-          boxSizing: "border-box",
+          padding: "8px 16px",
+          borderWidth: "1px",
+          borderStyle: "solid",
+          borderColor: "rgb(240, 240, 240)",
+          boxSizing: "border-box"
         }}
       />
     </RouteField>

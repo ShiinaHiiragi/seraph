@@ -212,13 +212,15 @@ const serverBaseURL = isLoopback(process.env.REACT_APP_HOSTNAME)
     process.env.REACT_APP_SSLCERT === "nginx"
       ? process.env.REACT_APP_NPORT
       : process.env.REACT_APP_SPORT
-  )
+  );
+const serverWebSocketURL = serverBaseURL.replace("http", "ws");
 
 export {
   encodePath,
   pathStartWith,
   generateBaseURL,
-  serverBaseURL
+  serverBaseURL,
+  serverWebSocketURL
 }
 
 
