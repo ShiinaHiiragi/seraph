@@ -32,6 +32,15 @@ const LIGHT_THEME = {
 const Terminal = () => {
   const context = React.useContext(GlobalContext);
   const containerRef = React.useRef(null);
+  const xtermRef = React.useRef(null);
+  const fitAddonRef = React.useRef(null);
+
+  const sendCtrl = React.useCallback((letter) => {
+    const code = letter.toUpperCase().charCodeAt(0) - 64;
+    if (code >= 1 && code <= 26) {
+      xtermRef.current?.paste(String.fromCharCode(code));
+    }
+  }, []);
 
   // after second tick, the globalSwitch were set properly
   React.useEffect(() => {
@@ -48,7 +57,10 @@ const Terminal = () => {
       xterm.loadAddon(fitAddon);
       xterm.open(containerRef.current);
       xterm.focus();
+      xtermRef.current = xterm;
+
       fitAddon.fit();
+      fitAddonRef.current = fitAddon;
 
       const webSocket = new WebSocket(new URL("/pty", serverWebSocketURL).href);
       webSocket.onopen = () => {
@@ -120,6 +132,7 @@ const Terminal = () => {
       observer.observe(containerRef.current);
 
       return () => {
+        xtermRef.current = null;
         webSocket.close();
         observer.disconnect();
         xtermOnData.dispose();
