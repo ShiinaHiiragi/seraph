@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "postinstall": "patch-package",
     "dev": "run-script-os",
     "server": "run-script-os",
     "dev:win32": "node-dev ./bin/www",
@@ -29,6 +30,7 @@
     "ws": "^8.21.0"
   },
   "devDependencies": {
+    "patch-package": "^8.0.1",
     "run-script-os": "^1.1.6"
   }
 }

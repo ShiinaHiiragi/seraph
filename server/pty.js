@@ -31,7 +31,7 @@ const attachTerminal = (server, api) => {
       return;
     }
 
-    const pty = spawn('bash', [], {
+    const pty = spawn('powershell.exe', [], {
       name: 'xterm-color',
       cols: 80,
       rows: 24,
