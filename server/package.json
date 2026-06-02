@@ -24,7 +24,9 @@
     "mime": "^3.0.0",
     "morgan": "~1.9.1",
     "node-dev": "^8.0.0",
-    "serve-handler": "^6.1.5"
+    "node-pty": "^1.1.0",
+    "serve-handler": "^6.1.5",
+    "ws": "^8.21.0"
   },
   "devDependencies": {
     "run-script-os": "^1.1.6"

@@ -426,7 +426,10 @@ const tokenOperator = {
 
     let sessionIndex = tokenOperator.token.findIndex((item) => item.session === session)
     if (sessionIndex >= 0) {
-      cookieOperator.setSessionCookie(res, session);
+      // res is undefined when wssAuth() called
+      if (res !== undefined) {
+        cookieOperator.setSessionCookie(res, session);
+      }
       tokenOperator.setToken((token) => {
         token[sessionIndex].timestamp = Date.now() + expiredPeriod;
         return token;
