@@ -114,6 +114,7 @@ const Terminal = () => {
         }
 
         if (event.shiftKey && event.key === "V") {
+          event.preventDefault();
           navigator.clipboard
             .readText()
             .then((text) => xterm.paste(text));
