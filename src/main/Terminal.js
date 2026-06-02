@@ -1,5 +1,6 @@
 import React from "react";
 import "@xterm/xterm/css/xterm.css";
+import Box from '@mui/joy/Box';
 import { Terminal as XTerminal } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
 import RouteField from "../interface/RouteField";
@@ -158,22 +159,42 @@ const Terminal = () => {
         context.languagePicker("nav.utility.terminal"),
       ]}
       title={context.languagePicker("nav.utility.terminal")}
-      sx={{ overflow: "hidden" }}
+      sx={{
+        overflow: "hidden",
+        '& div.xterm-scrollable-element > div.scrollbar': {
+          width: "6px !important"
+        },
+        "& .slider": {
+          width: "6px !important",
+          right: "0px !important"
+        }
+      }}
     >
       <div
-        ref={containerRef}
         style={{
           width: "100%",
           height: "100%",
+          position: "relative",
           backgroundColor: LIGHT_THEME.background,
-          padding: "8px 16px",
           borderWidth: "1px",
           borderStyle: "solid",
           borderColor: "rgba(var(--joy-palette-neutral-mainChannel, 99 107 116) / 0.15)",
           borderRadius: "var(--joy-radius-sm)",
-          boxSizing: "border-box"
+          boxSizing: "border-box",
+          overflow: "hidden",
         }}
-      />
+      >
+        <Box
+          ref={containerRef}
+          sx={{
+            position: "absolute",
+            top: { xs: "6px", sm: "8px" },
+            right: { xs: "0px", sm: "4px" },
+            bottom: { xs: "0px", sm: "4px" },
+            left: { xs: "12px", sm: "16px" }
+          }}
+        />
+      </div>
     </RouteField>
   );
 };
