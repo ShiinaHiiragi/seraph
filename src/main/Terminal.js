@@ -64,8 +64,8 @@ const Terminal = () => {
       };
 
       webSocket.onclose = (event) => {
-        // TODO: add reason
-        xterm.write("\r\n\x1b[31m[Connection Closed]\x1b[0m\r\n");
+        const reason = event.reason ? `: ${event.reason}` : ""
+        xterm.write(`\r\n\x1b[31m[Connection closed${reason}]\x1b[0m\r\n`);
       }
 
       const xtermOnData = xterm.onData((data) => {

@@ -27,7 +27,7 @@ const attachTerminal = (server, api) => {
   wss.on('connection', (ws, req) => {
     if (!wssAuth(api, req)) {
       ptyLog('REJECT', 'unauthorized');
-      ws.close(1008, 'Unauthorized');
+      ws.close(1008, 'authentication failed');
       return;
     }
 
@@ -50,7 +50,7 @@ const attachTerminal = (server, api) => {
       clearTimeout(idleTimer);
       idleTimer = setTimeout(() => {
         ptyLog('CLOSE', pty.pid, `timeout`);
-        ws.close(1000, 'Timeout');
+        ws.close(1000, 'timeout');
       }, IDLE_TIMEOUT_MS);
     };
     resetIdleTimer();
