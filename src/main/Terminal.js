@@ -50,6 +50,34 @@ const Terminal = () => {
       xterm.focus();
       fitAddon.fit();
 
+      xterm.attachCustomKeyEventHandler((event) => {
+        if (event.type !== "keydown" || !event.ctrlKey) {
+          return true;
+        }
+
+        if (event.shiftKey && event.key === "C") {
+          event.preventDefault();
+          const selection = xterm.getSelection();
+          if (selection) {
+            navigator.clipboard.writeText(selection)
+          };
+          return false;
+        }
+
+        if (event.shiftKey && event.key === "V") {
+          navigator.clipboard
+            .readText()
+            .then((text) => xterm.paste(text));
+          return false;
+        }
+
+        if (event.key === "Backspace") {
+          xterm.paste("\x17");
+          return false;
+        }
+        return true;
+      });
+
       const webSocket = new WebSocket(new URL("/pty", serverWebSocketURL).href);
       webSocket.onopen = () => {
         webSocket.send(JSON.stringify({
@@ -59,16 +87,16 @@ const Terminal = () => {
         }));
       };
 
-      webSocket.onmessage = (e) => {
-        xterm.write(e.data);
+      webSocket.onmessage = (event) => {
+        xterm.write(event.data);
       };
 
-      webSocket.onclose = (e) => {
+      webSocket.onclose = (event) => {
         // TODO: add reason
         xterm.write("\r\n\x1b[31m[Connection Closed]\x1b[0m\r\n");
       }
 
-      const d1 = xterm.onData((data) => {
+      const xtermOnData = xterm.onData((data) => {
         if (webSocket.readyState === WebSocket.OPEN) {
           webSocket.send(JSON.stringify({
             type: "input",
@@ -77,7 +105,7 @@ const Terminal = () => {
         }
       });
 
-      const d2 = xterm.onResize(({ cols, rows }) => {
+      const xtermOnResize = xterm.onResize(({ cols, rows }) => {
         if (webSocket.readyState === WebSocket.OPEN) {
           webSocket.send(JSON.stringify({
             type: "resize",
@@ -87,14 +115,15 @@ const Terminal = () => {
         }
       });
 
+      // resize listener of browser
       const observer = new ResizeObserver(() => fitAddon.fit());
       observer.observe(containerRef.current);
 
       return () => {
         webSocket.close();
         observer.disconnect();
-        d1.dispose();
-        d2.dispose();
+        xtermOnData.dispose();
+        xtermOnResize.dispose();
         xterm.dispose();
       };
     }
