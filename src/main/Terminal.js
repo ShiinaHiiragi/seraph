@@ -50,34 +50,6 @@ const Terminal = () => {
       xterm.focus();
       fitAddon.fit();
 
-      xterm.attachCustomKeyEventHandler((event) => {
-        if (event.type !== "keydown" || !event.ctrlKey) {
-          return true;
-        }
-
-        if (event.shiftKey && event.key === "C") {
-          event.preventDefault();
-          const selection = xterm.getSelection();
-          if (selection) {
-            navigator.clipboard.writeText(selection)
-          };
-          return false;
-        }
-
-        if (event.shiftKey && event.key === "V") {
-          navigator.clipboard
-            .readText()
-            .then((text) => xterm.paste(text));
-          return false;
-        }
-
-        if (event.key === "Backspace") {
-          xterm.paste("\x17");
-          return false;
-        }
-        return true;
-      });
-
       const webSocket = new WebSocket(new URL("/pty", serverWebSocketURL).href);
       webSocket.onopen = () => {
         webSocket.send(JSON.stringify({
@@ -113,6 +85,34 @@ const Terminal = () => {
             rows: rows
           }));
         }
+      });
+
+      xterm.attachCustomKeyEventHandler((event) => {
+        if (event.type !== "keydown" || !event.ctrlKey) {
+          return true;
+        }
+
+        if (event.shiftKey && event.key === "C") {
+          event.preventDefault();
+          const selection = xterm.getSelection();
+          if (selection) {
+            navigator.clipboard.writeText(selection)
+          };
+          return false;
+        }
+
+        if (event.shiftKey && event.key === "V") {
+          navigator.clipboard
+            .readText()
+            .then((text) => xterm.paste(text));
+          return false;
+        }
+
+        if (event.key === "Backspace") {
+          xterm.paste("\x17");
+          return false;
+        }
+        return true;
       });
 
       // resize listener of browser
@@ -155,7 +155,8 @@ const Terminal = () => {
           padding: "8px 16px",
           borderWidth: "1px",
           borderStyle: "solid",
-          borderColor: "rgb(240, 240, 240)",
+          borderColor: "rgba(var(--joy-palette-neutral-mainChannel, 99 107 116) / 0.15)",
+          borderRadius: "var(--joy-radius-sm)",
           boxSizing: "border-box"
         }}
       />
