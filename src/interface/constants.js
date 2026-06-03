@@ -114,8 +114,32 @@ const defaultSetting = {
     language: "en",
     token: 60
   },
+  terminal: {
+    enable: true,
+    shell: {
+      linux: "bash",
+      win32: "powershell.exe"
+    },
+    timeout: 60,
+    style: {
+      fontSize: 16,
+      fontFamily: "Ubuntu Mono",
+      cursorBlink: false
+    },
+    theme: "Default Light"
+  },
   task: {
     delay: 60
+  },
+  extension: {
+    python: {
+      linux: "python3",
+      win32: "python"
+    },
+    pandoc: {
+      linux: "pandoc",
+      win32: "pandoc"
+    }
   },
   epub: {
     page: {

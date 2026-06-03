@@ -81,8 +81,32 @@ const defaultConfig = {
       language: "en",
       token: 60
     },
+    terminal: {
+      enable: true,
+      shell: {
+        linux: "bash",
+        win32: "powershell.exe"
+      },
+      timeout: 60,
+      style: {
+        fontSize: 16,
+        fontFamily: "Ubuntu Mono",
+        cursorBlink: false
+      },
+      theme: "Default Light"
+    },
     task: {
       delay: 60
+    },
+    extension: {
+      python: {
+        linux: "python3",
+        win32: "python"
+      },
+      pandoc: {
+        linux: "pandoc",
+        win32: "pandoc"
+      }
     },
     epub: {
       page: {
@@ -442,7 +466,6 @@ const tokenOperator = {
 };
 
 const checkerOperator = {
-  python: os.platform() === 'win32' ? 'python' : 'python3',
   pass: (miss) => {
     const notPassed = miss instanceof Array && miss.length > 0
     return {
@@ -461,7 +484,10 @@ const checkerOperator = {
 
   checkPandoc: () => () => {
     try {
-      child.execFileSync('pandoc', ['--version']);
+      child.execFileSync(
+        configOperator.config.setting.extension.pandoc[process.platform],
+        ['--version']
+      );
       return checkerOperator.pass()
     } catch (_) {
       return checkerOperator.pass([{ id: "pandoc", cat: "Packages" }]);
@@ -471,7 +497,7 @@ const checkerOperator = {
   checkPython: (minVersion) => () => {
     try {
       const stdout = child.execFileSync(
-        checkerOperator.python,
+        configOperator.config.setting.extension.python[process.platform],
         ['--version'],
         { encoding: 'utf8' }
       );
@@ -493,7 +519,7 @@ const checkerOperator = {
 
     try {
       const stdout = child.execFileSync(
-        checkerOperator.python,
+        configOperator.config.setting.extension.python[process.platform],
         ['-c', script],
         { encoding: 'utf8' }
       );

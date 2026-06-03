@@ -7,27 +7,27 @@ import RouteField from "../interface/RouteField";
 import GlobalContext, { serverWebSocketURL } from "../interface/constants";
 
 const LIGHT_THEME = {
-  background: "#fafafa",
-  foreground: "#383a42",
-  cursor: "#526fff",
-  cursorAccent: "#fafafa",
-  selectionBackground: "#c8d3e6",
-  black: "#383a42",
-  red: "#e45649",
-  green: "#50a14f",
-  yellow: "#c18401",
-  blue: "#4078f2",
-  magenta: "#a626a4",
-  cyan: "#0184bc",
-  white: "#a0a1a7",
-  brightBlack: "#4f525e",
-  brightRed: "#e45649",
-  brightGreen: "#50a14f",
-  brightYellow: "#c18401",
-  brightBlue: "#4078f2",
-  brightMagenta: "#a626a4",
-  brightCyan: "#0184bc",
-  brightWhite: "#383a42",
+  background: "#F8F8F8",
+  foreground: "#383838",
+  cursor: "#383838",
+  cursorAccent: "#383838",
+  black: "#383A42",
+  blue: "#4078F2",
+  cyan: "#0184BC",
+  green: "#50A14F",
+  magenta: "#A626A4",
+  red: "#E45649",
+  white: "#A0A1A7",
+  yellow: "#C18401",
+  brightBlack: "#4F525E",
+  brightBlue: "#4078F2",
+  brightCyan: "#0184BC",
+  brightGreen: "#50A14F",
+  brightMagenta: "#A626A4",
+  brightRed: "#E45649",
+  brightWhite: "#383A42",
+  brightYellow: "#C18401",
+  selectionBackground: "#C8D2E6"
 };
 
 const Terminal = () => {
@@ -35,6 +35,15 @@ const Terminal = () => {
   const containerRef = React.useRef(null);
   const xtermRef = React.useRef(null);
   const fitAddonRef = React.useRef(null);
+
+  // const [fs, setFS] = React.useState(14)
+  // window.setFS = setFS
+  // React.useEffect(() => {
+  //   if (xtermRef.current) {
+  //     Object.assign(xtermRef.current.options, { cursorBlink: true, fontSize: fs });
+  //     fitAddonRef.current?.fit();
+  //   }
+  // }, [fs])
 
   const sendCtrl = React.useCallback((letter) => {
     const code = letter.toUpperCase().charCodeAt(0) - 64;

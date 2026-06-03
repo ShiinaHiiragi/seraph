@@ -1,3 +1,4 @@
+const process = require('process');
 const path = require('path');
 const cookie = require('cookie');
 
@@ -31,17 +32,21 @@ const attachTerminal = (server, api) => {
       return;
     }
 
-    const pty = spawn('powershell.exe', [], {
-      name: 'xterm-color',
-      cols: 80,
-      rows: 24,
-      cwd: process.env.HOME,
-      env: {
-        ...process.env,
-        SERAPH_PATH: path.join(__dirname, '..'),
-        SERAPH_DATA: path.join(__dirname, './data'),
-      },
-    });
+    const pty = spawn(
+      api.configOperator.config.setting.terminal.shell[process.platform],
+      [],
+      {
+        name: 'xterm-color',
+        cols: 80,
+        rows: 24,
+        cwd: process.env.HOME,
+        env: {
+          ...process.env,
+          SERAPH_PATH: path.join(__dirname, '..'),
+          SERAPH_DATA: path.join(__dirname, './data'),
+        },
+      }
+    );
 
     let idleTimer;
     ptyLog('CONNECT', pty.pid);
