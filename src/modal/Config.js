@@ -146,7 +146,7 @@ const String = (props) => {
         disabled={disabled}
         size="sm"
         type={type}
-        sx={{ maxWidth: width, fontFamily: code ? "monospace" : undefined }}
+        sx={{ maxWidth: width, fontFamily: code ? "'Noto Sans Mono', monospace" : undefined }}
         value={localValue}
         startDecorator={start}
         endDecorator={end}
@@ -467,7 +467,8 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
                 context.languagePicker("header.config.terminal.themeTransparency"),
                 context.setting.terminal.theme.transparency,
                 "terminal.theme.transparency",
-                handleApply
+                handleApply,
+                !context.setting.terminal.enable
               )}
               <Stack spacing={1}>
                 <String
