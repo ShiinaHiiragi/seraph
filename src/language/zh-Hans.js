@@ -23,14 +23,27 @@ const zhHans = {
         shell: "Shell",
         shellLinux: "Linux 的 Shell 路径",
         shellWin32: "Windows 的 Shell 路径",
-        timeout: "超时时间",
-        timeoutOption: {
+        lifecycle: "生命周期",
+        lifecycleTimeout: "超时时间",
+        lifecycleTimeoutOption: {
           15: "15 分钟",
           30: "30 分钟",
           60: "1 小时",
           120: "2 小时",
           240: "4 小时",
           360: "6 小时"
+        },
+        lifecyclePing: "Ping 间隔",
+        lifecyclePingOption: {
+          0: "从不",
+          15: "15 秒",
+          30: "30 秒",
+          45: "45 秒",
+          60: "1 分钟",
+          120: "2 分钟",
+          180: "3 分钟",
+          240: "4 分钟",
+          300: "5 分钟"
         },
         "cursor": "光标",
         "cursorBlink": "光标闪烁",

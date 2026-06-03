@@ -55,11 +55,13 @@ const attachTerminal = (server, api) => {
     );
 
     let idleTimer;
-    let pingInterval = setInterval(() => {
-      if (ws.readyState === ws.OPEN) {
-        ws.ping();
-      }
-    }, terminalSetting.lifecycle.ping * 1000);
+    let pingInterval = terminalSetting.lifecycle.ping > 0
+      ? setInterval(() => {
+        if (ws.readyState === ws.OPEN) {
+          ws.ping();
+        }
+      }, terminalSetting.lifecycle.ping * 1000) : undefined;
+
     console.log(`using ${terminalSetting.lifecycle.ping}`)
     ptyLog('CONNECT', pty.pid);
 

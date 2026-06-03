@@ -23,14 +23,27 @@ const ja = {
         shell: "シェル",
         shellLinux: "Linux でのシェルパス",
         shellWin32: "Windows でのシェルパス",
-        timeout: "コネクションタイムアウト",
-        timeoutOption: {
+        lifecycle: "ライフサイクル",
+        lifecycleTimeout: "コネクションタイムアウト",
+        lifecycleTimeoutOption: {
           15: "15 分",
           30: "30 分",
           60: "1 時間",
           120: "2 時間",
           240: "4 時間",
           360: "6 時間"
+        },
+        lifecyclePing: "ピングの間隔",
+        lifecyclePingOption: {
+          0: "なし",
+          15: "15 秒",
+          30: "30 秒",
+          45: "45 秒",
+          60: "1 分",
+          120: "2 分",
+          180: "3 分",
+          240: "4 分",
+          300: "5 分"
         },
         "cursor": "カーソル",
         "cursorBlink": "カーソルをブリンク",

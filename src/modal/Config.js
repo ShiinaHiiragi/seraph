@@ -249,15 +249,44 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
           )
         },
         {
-          key: context.languagePicker("header.config.terminal.timeout"),
-          value: Literal(context.setting.terminal.lifecycle.timeout, [
-            { value: 15, label: context.languagePicker("header.config.terminal.timeoutOption.15") },
-            { value: 30, label: context.languagePicker("header.config.terminal.timeoutOption.30") },
-            { value: 60, label: context.languagePicker("header.config.terminal.timeoutOption.60") },
-            { value: 120, label: context.languagePicker("header.config.terminal.timeoutOption.120") },
-            { value: 240, label: context.languagePicker("header.config.terminal.timeoutOption.240") },
-            { value: 360, label: context.languagePicker("header.config.terminal.timeoutOption.360") },
-          ], "terminal.lifecycle.timeout", handleApply, !context.setting.terminal.enable)
+          key: context.languagePicker("header.config.terminal.lifecycle"),
+          value: (
+            <Stack spacing={1}>
+              {LabeledLiteral(
+                context.languagePicker("header.config.terminal.lifecycleTimeout"),
+                context.setting.terminal.lifecycle.timeout,
+                [
+                  { value: 15, label: context.languagePicker("header.config.terminal.lifecycleTimeoutOption.15") },
+                  { value: 30, label: context.languagePicker("header.config.terminal.lifecycleTimeoutOption.30") },
+                  { value: 60, label: context.languagePicker("header.config.terminal.lifecycleTimeoutOption.60") },
+                  { value: 120, label: context.languagePicker("header.config.terminal.lifecycleTimeoutOption.120") },
+                  { value: 240, label: context.languagePicker("header.config.terminal.lifecycleTimeoutOption.240") },
+                  { value: 360, label: context.languagePicker("header.config.terminal.lifecycleTimeoutOption.360") }
+                ],
+                "terminal.lifecycle.timeout",
+                handleApply,
+                !context.setting.terminal.enable
+              )}
+              {LabeledLiteral(
+                context.languagePicker("header.config.terminal.lifecyclePing"),
+                context.setting.terminal.lifecycle.ping,
+                [
+                  { value: 0, label: context.languagePicker("header.config.terminal.lifecyclePingOption.0") },
+                  { value: 15, label: context.languagePicker("header.config.terminal.lifecyclePingOption.15") },
+                  { value: 30, label: context.languagePicker("header.config.terminal.lifecyclePingOption.30") },
+                  { value: 45, label: context.languagePicker("header.config.terminal.lifecyclePingOption.45") },
+                  { value: 60, label: context.languagePicker("header.config.terminal.lifecyclePingOption.60") },
+                  { value: 120, label: context.languagePicker("header.config.terminal.lifecyclePingOption.120") },
+                  { value: 180, label: context.languagePicker("header.config.terminal.lifecyclePingOption.180") },
+                  { value: 240, label: context.languagePicker("header.config.terminal.lifecyclePingOption.240") },
+                  { value: 300, label: context.languagePicker("header.config.terminal.lifecyclePingOption.300") }
+                ],
+                "terminal.lifecycle.ping",
+                handleApply,
+                !context.setting.terminal.enable
+              )}
+            </Stack>
+          )
         },
         {
           key: context.languagePicker("header.config.terminal.cursor"),

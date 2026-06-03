@@ -23,14 +23,27 @@ const en = {
         shell: "Shell",
         shellLinux: "Shell path on Linux",
         shellWin32: "Shell path on Windows",
-        timeout: "Connection Timeout",
-        timeoutOption: {
+        lifecycle: "Lifecycle",
+        lifecycleTimeout: "Connection Timeout",
+        lifecycleTimeoutOption: {
           15: "15 minutes",
           30: "30 minutes",
           60: "1 hour",
           120: "2 hours",
           240: "4 hours",
           360: "6 hours"
+        },
+        lifecyclePing: "Ping interval",
+        lifecyclePingOption: {
+          0: "Never",
+          15: "15 seconds",
+          30: "30 seconds",
+          45: "45 seconds",
+          60: "1 minute",
+          120: "2 minutes",
+          180: "3 minutes",
+          240: "4 minutes",
+          300: "5 minutes"
         },
         cursor: "Cursor",
         cursorBlink: "Cursor blinks",
