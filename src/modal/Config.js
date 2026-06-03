@@ -250,14 +250,14 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
         },
         {
           key: context.languagePicker("header.config.terminal.timeout"),
-          value: Literal(context.setting.terminal.timeout, [
+          value: Literal(context.setting.terminal.lifecycle.timeout, [
             { value: 15, label: context.languagePicker("header.config.terminal.timeoutOption.15") },
             { value: 30, label: context.languagePicker("header.config.terminal.timeoutOption.30") },
             { value: 60, label: context.languagePicker("header.config.terminal.timeoutOption.60") },
             { value: 120, label: context.languagePicker("header.config.terminal.timeoutOption.120") },
             { value: 240, label: context.languagePicker("header.config.terminal.timeoutOption.240") },
             { value: 360, label: context.languagePicker("header.config.terminal.timeoutOption.360") },
-          ], "terminal.timeout", handleApply, !context.setting.terminal.enable)
+          ], "terminal.lifecycle.timeout", handleApply, !context.setting.terminal.enable)
         },
         {
           key: context.languagePicker("header.config.terminal.cursor"),

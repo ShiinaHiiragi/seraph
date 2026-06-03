@@ -67,6 +67,12 @@ exports.dataPath = dataPath;
 exports.extentPath = extentPath;
 
 // setting should be consistent with defaultSetting in react
+// minutes:
+//   meta.token
+//   lifecycle.timeout
+// seconds
+//   terminal.lifecycle.ping
+//   task.delay
 const defaultConfig = {
   metadata: {
     password: ""
@@ -87,7 +93,10 @@ const defaultConfig = {
         linux: "bash",
         win32: "powershell.exe"
       },
-      timeout: 30,
+      lifecycle: {
+        ping: 60,
+        timeout: 30,
+      },
       cursor: {
         blink: false,
         reflow: false,

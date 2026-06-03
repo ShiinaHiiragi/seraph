@@ -20,13 +20,13 @@ const wssAuth = (api, req) => {
     );
 }
 
-const IDLE_TIMEOUT_MS = 60 * 60 * 1000;
-
 const attachTerminal = (server, api) => {
   const wss = new ws.WebSocketServer({ server, path: '/pty' });
 
   wss.on('connection', (ws, req) => {
-    if (!api.configOperator.config.setting.terminal.enable) {
+    const terminalSetting = api.configOperator.config.setting.terminal;
+
+    if (!terminalSetting.enable) {
       ptyLog('REJECT', 'disabled');
       ws.close(1008, 'feature disabled');
       return;
@@ -39,7 +39,7 @@ const attachTerminal = (server, api) => {
     }
 
     const pty = spawn(
-      api.configOperator.config.setting.terminal.shell[process.platform],
+      terminalSetting.shell[process.platform],
       [],
       {
         name: 'xterm-color',
@@ -55,6 +55,12 @@ const attachTerminal = (server, api) => {
     );
 
     let idleTimer;
+    let pingInterval = setInterval(() => {
+      if (ws.readyState === ws.OPEN) {
+        ws.ping();
+      }
+    }, terminalSetting.lifecycle.ping * 1000);
+    console.log(`using ${terminalSetting.lifecycle.ping}`)
     ptyLog('CONNECT', pty.pid);
 
     const resetIdleTimer = () => {
@@ -62,7 +68,7 @@ const attachTerminal = (server, api) => {
       idleTimer = setTimeout(() => {
         ptyLog('CLOSE', pty.pid, `timeout`);
         ws.close(1000, 'timeout');
-      }, IDLE_TIMEOUT_MS);
+      }, terminalSetting.lifecycle.timeout * 60 * 1000);
     };
     resetIdleTimer();
 
@@ -91,6 +97,7 @@ const attachTerminal = (server, api) => {
 
     const cleanup = (reason) => {
       clearTimeout(idleTimer);
+      clearInterval(pingInterval);
       ptyLog('CLOSE', pty.pid, `${reason}`);
       pty.kill();
     };

@@ -123,7 +123,10 @@ const defaultSetting = {
       linux: "bash",
       win32: "powershell.exe"
     },
-    timeout: 30,
+    lifecycle: {
+      ping: 60,
+      timeout: 30,
+    },
     cursor: {
       blink: false,
       reflow: false,
