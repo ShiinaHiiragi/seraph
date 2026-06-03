@@ -457,13 +457,13 @@ configOperator.setConfig((config) => checkConfig(config, defaultConfig));
 exports.configOperator = configOperator;
 exports.checkConfig = checkConfig;
 
-const expiredPeriod = configOperator.config.setting.meta.token * 60 * 1000;
+const expiredPeriod = () => configOperator.config.setting.meta.token * 60 * 1000;
 const cookieOperator = {
   sessionName: "seraphSession",
   setSessionCookie: (res, session) => res.cookie(
     cookieOperator.sessionName,
     session,
-    { expires: new Date(Date.now() + expiredPeriod) }
+    { expires: new Date(Date.now() + expiredPeriod()) }
   ),
 
   deleteSessionCookie: (res) => res.clearCookie(
@@ -486,7 +486,7 @@ const tokenOperator = {
       ...token,
       {
         session: session,
-        timestamp: Date.now() + expiredPeriod
+        timestamp: Date.now() + expiredPeriod()
       }
     ]);
     return session;
@@ -515,7 +515,7 @@ const tokenOperator = {
         cookieOperator.setSessionCookie(res, session);
       }
       tokenOperator.setToken((token) => {
-        token[sessionIndex].timestamp = Date.now() + expiredPeriod;
+        token[sessionIndex].timestamp = Date.now() + expiredPeriod();
         return token;
       });
       return true;
@@ -620,6 +620,7 @@ const checkerParam = {
   ]
 }
 
+const taskDelay = () => configOperator.config.setting.task.delay * 1000;
 const taskOperator = {
   task: fileOperator.readTask(),
   setTask: (handle) => {
@@ -671,7 +672,7 @@ const taskOperator = {
     taskOperator.setTask((task) => {
       task[index].deleteTime = task[index].type === 'sync'
         ? task[index].dueTime
-        : Date.now() + configOperator.config.setting.task.delay * 1000;
+        : Date.now() + taskDelay();
       return task;
     })
     return taskOperator.task[index];
@@ -687,7 +688,7 @@ const taskOperator = {
   editTask: (index, name, description, type, dueTime) => {
     taskOperator.setTask((task) => {
       if (type !== 'sync' && task[index].deleteTime !== null) {
-        task[index].deleteTime = Date.now() + configOperator.config.setting.task.delay * 1000;
+        task[index].deleteTime = Date.now() + taskDelay();
       }
       if (type === 'sync' && task[index].deleteTime !== null) {
         task[index].deleteTime = dueTime;
@@ -713,6 +714,7 @@ const taskOperator = {
 
 exports.expiredPeriod = expiredPeriod;
 exports.cookieOperator = cookieOperator;
+exports.taskDelay = taskDelay;
 exports.tokenOperator = tokenOperator;
 exports.checkerOperator = checkerOperator;
 exports.checkerParam = checkerParam;
