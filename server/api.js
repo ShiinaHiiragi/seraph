@@ -6,7 +6,6 @@ const mime = require('mime');
 const child = require('child_process');
 const assert = require('assert');
 const crypto = require('crypto');
-const CryptoJS = require('crypto-js');
 const checkDiskSpace = require('check-disk-space').default
 
 String.prototype.versionGE = function (min) {
@@ -472,14 +471,7 @@ const tokenOperator = {
   },
 
   addNewSession: (res) => {
-    const session = CryptoJS.SHA256(
-      Array(16).fill().reduce(
-        (current) => current +
-          Math.random().toString(36).slice(2, 6),
-        ""
-      )
-    ).toString();
-
+    const session = crypto.randomBytes(32).toString('hex');
     cookieOperator.setSessionCookie(res, session);
     tokenOperator.setToken((token) => [
       ...token,
@@ -648,13 +640,7 @@ const taskOperator = {
 
   addTask: (name, description, type, dueTime) => {
     taskOperator.__clearExpiredTask();
-    const id = CryptoJS.MD5(
-      Array(16).fill().reduce(
-        (current) => current +
-          Math.random().toString(36).slice(2, 6),
-        ""
-      )
-    ).toString();
+    const id = crypto.randomBytes(16).toString('hex');
 
     const newTask = {
       id: id,
