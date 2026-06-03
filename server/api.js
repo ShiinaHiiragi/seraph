@@ -95,8 +95,8 @@ const defaultConfig = {
         inactive: "outline"
       },
       font: {
-        size: 16,
-        family: "Ubuntu Mono",
+        size: 14,
+        family: "Noto Sans Mono",
         weight: "normal",
         weightBold: "bold"
       },

@@ -317,7 +317,7 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
               {LabeledLiteral(
                 context.languagePicker("header.config.terminal.fontFamily"),
                 context.setting.terminal.font.family,
-                monospaceFonts.map((item) => ({ value: item, label: item })),
+                monospaceFonts.map(({ name }) => ({ value: name, label: name })),
                 "terminal.font.family",
                 handleApply,
                 !context.setting.terminal.enable
@@ -493,7 +493,7 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
                   ["white", "brightWhite"],
                   ["yellow", "brightYellow"]
                 ].map(([color, brightColor]) =>
-                  <Stack key={color} spacing={{ md: 1, lg: 4 }} direction={{ md: "column", lg: "row" }}>
+                  <Stack key={color} spacing={{ xs: 1, lg: 4 }} direction={{ xs: "column", lg: "row" }}>
                     <String
                       disabled={!context.setting.terminal.enable}
                       caption={context.languagePicker(`header.config.terminal.themeOption.${color}`)}

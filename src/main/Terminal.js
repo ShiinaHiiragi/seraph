@@ -3,7 +3,7 @@ import "@xterm/xterm/css/xterm.css";
 import Box from '@mui/joy/Box';
 import { Terminal as XTerminal } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
-import GlobalContext, { serverWebSocketURL } from "../interface/constants";
+import GlobalContext, { serverWebSocketURL, monospaceFonts } from "../interface/constants";
 import RouteField from "../interface/RouteField";
 import Caption from "../components/Caption";
 
@@ -12,6 +12,25 @@ const Terminal = () => {
   const containerRef = React.useRef(null);
   const xtermRef = React.useRef(null);
   const fitAddonRef = React.useRef(null);
+
+  React.useEffect(() => {
+    const id = "terminal-monospace";
+    let link = document.getElementById(id);
+
+    if (!link) {
+      link = document.createElement("link");
+      link.id = id;
+      link.rel = "stylesheet";
+      document.head.appendChild(link);
+    }
+    link.href = monospaceFonts
+      .filter((item) => item.name === context.setting.terminal.font.family)
+      ?.[0]
+      ?.url;
+    return () => {
+      document.getElementById(id)?.remove();
+    };
+  }, [context.setting.terminal.font.family]);
 
   React.useEffect(() => {
     if (xtermRef.current) {
@@ -77,7 +96,6 @@ const Terminal = () => {
         && context.setting.terminal.enable
     ) {
       // TODO: ask for agreements
-      // TODO: import fonts automatically
       const fitAddon = new FitAddon();
       const xterm = new XTerminal({
         windowsPty: context.platform === "win32"
