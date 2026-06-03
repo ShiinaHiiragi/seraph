@@ -3,8 +3,9 @@ import "@xterm/xterm/css/xterm.css";
 import Box from '@mui/joy/Box';
 import { Terminal as XTerminal } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
-import RouteField from "../interface/RouteField";
 import GlobalContext, { serverWebSocketURL } from "../interface/constants";
+import RouteField from "../interface/RouteField";
+import Caption from "../components/Caption";
 
 const Terminal = () => {
   const context = React.useContext(GlobalContext);
@@ -30,7 +31,12 @@ const Terminal = () => {
 
   // after second tick, the globalSwitch were set properly
   React.useEffect(() => {
-    if (context.secondTick && context.isAuthority && containerRef.current) {
+    if (
+      context.secondTick
+        && context.isAuthority
+        && containerRef.current
+        && context.setting.terminal.enable
+    ) {
       console.log(context.setting)
       const fitAddon = new FitAddon();
       const xterm = new XTerminal({
@@ -179,6 +185,8 @@ const Terminal = () => {
     context.secondTick,
     // login in same page
     context.isAuthority,
+    // terminal is enabled
+    context.setting.terminal.enable
   ]);
 
   return (
@@ -200,31 +208,36 @@ const Terminal = () => {
         }
       }}
     >
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          position: "relative",
-          backgroundColor: context.setting.terminal.theme.background,
-          borderWidth: "1px",
-          borderStyle: "solid",
-          borderColor: "rgba(var(--joy-palette-neutral-mainChannel, 99 107 116) / 0.15)",
-          borderRadius: "var(--joy-radius-sm)",
-          boxSizing: "border-box",
-          overflow: "hidden",
-        }}
-      >
-        <Box
-          ref={containerRef}
-          sx={{
-            position: "absolute",
-            top: { xs: "6px", sm: "8px" },
-            right: { xs: "0px", sm: "4px" },
-            bottom: { xs: "0px", sm: "4px" },
-            left: { xs: "12px", sm: "16px" }
+      {context.setting.terminal.enable
+      ? <div
+          style={{
+            width: "100%",
+            height: "100%",
+            position: "relative",
+            backgroundColor: context.setting.terminal.theme.background,
+            borderWidth: "1px",
+            borderStyle: "solid",
+            borderColor: "rgba(var(--joy-palette-neutral-mainChannel, 99 107 116) / 0.15)",
+            borderRadius: "var(--joy-radius-sm)",
+            boxSizing: "border-box",
+            overflow: "hidden",
           }}
-        />
-      </div>
+        >
+          <Box
+            ref={containerRef}
+            sx={{
+              position: "absolute",
+              top: { xs: "6px", sm: "8px" },
+              right: { xs: "0px", sm: "4px" },
+              bottom: { xs: "0px", sm: "4px" },
+              left: { xs: "12px", sm: "16px" }
+            }}
+          />
+        </div>
+      : <Caption
+        title={context.languagePicker("universal.placeholder.disabled.title")}
+        caption={context.languagePicker("universal.placeholder.disabled.caption")}
+      />}
     </RouteField>
   );
 };

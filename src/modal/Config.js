@@ -26,13 +26,14 @@ import GlobalContext, {
 } from "../interface/constants";
 import { languageMap } from "../interface/languagePicker";
 
-const Literal = (value, itemsMap, field, handleApply) => (
+const Literal = (value, itemsMap, field, handleApply, disabled) => (
   <Select size="sm" value={value} sx={{ maxWidth: 240 }}>
     {itemsMap.map(({value, label}) => (
       <Option
         key={value}
         value={value}
         onClick={() => handleApply(field, value)}
+        disabled={disabled}
       >
         {label}
       </Option>
@@ -172,8 +173,8 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
           hint: context.languagePicker("header.config.general.tokenHint"),
           value: Literal(context.setting.meta.token, [
             { value: 15, label: context.languagePicker("header.config.general.tokenOption.15") },
-            { value: 60, label: context.languagePicker("header.config.general.tokenOption.60") }, 
-            { value: 720, label: context.languagePicker("header.config.general.tokenOption.720") }, 
+            { value: 60, label: context.languagePicker("header.config.general.tokenOption.60") },
+            { value: 720, label: context.languagePicker("header.config.general.tokenOption.720") },
             { value: 1440, label: context.languagePicker("header.config.general.tokenOption.1440") },
             { value: 2880, label: context.languagePicker("header.config.general.tokenOption.2880") }
           ], "meta.token", handleApply)
@@ -208,6 +209,46 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
               handleApply
             )
           )
+        },
+        {
+          key: context.languagePicker("header.config.terminal.shell"),
+          value: (
+            <Stack spacing={1}>
+              <String
+                disabled={!context.setting.terminal.enable}
+                caption={context.languagePicker("header.config.terminal.shellLinux")}
+                value={context.setting.terminal.shell.linux}
+                width={240}
+                type="text"
+                field="terminal.shell.linux"
+                handleCheck={(_) => true}
+                handleApply={handleApply}
+                code={true}
+              />
+              <String
+                disabled={!context.setting.terminal.enable}
+                caption={context.languagePicker("header.config.terminal.shellWin32")}
+                value={context.setting.terminal.shell.win32}
+                width={240}
+                type="text"
+                field="terminal.shell.win32"
+                handleCheck={(_) => true}
+                handleApply={handleApply}
+                code={true}
+              />
+            </Stack>
+          )
+        },
+        {
+          key: context.languagePicker("header.config.terminal.timeout"),
+          value: Literal(context.setting.terminal.timeout, [
+            { value: 15, label: context.languagePicker("header.config.terminal.timeoutOption.15") },
+            { value: 30, label: context.languagePicker("header.config.terminal.timeoutOption.30") },
+            { value: 60, label: context.languagePicker("header.config.terminal.timeoutOption.60") },
+            { value: 120, label: context.languagePicker("header.config.terminal.timeoutOption.120") },
+            { value: 240, label: context.languagePicker("header.config.terminal.timeoutOption.240") },
+            { value: 360, label: context.languagePicker("header.config.terminal.timeoutOption.360") },
+          ], "terminal.timeout", handleApply, !context.setting.terminal.enable)
         }
       ]
     },
@@ -220,8 +261,8 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
           hint: context.languagePicker("header.config.todo.deleteTimeHint"),
           value: Literal(context.setting.task.delay, [
             { value: 0, label: context.languagePicker("header.config.todo.deleteTimeOption.0") },
-            { value: 60, label: context.languagePicker("header.config.todo.deleteTimeOption.60") }, 
-            { value: 3600, label: context.languagePicker("header.config.todo.deleteTimeOption.3600") }, 
+            { value: 60, label: context.languagePicker("header.config.todo.deleteTimeOption.60") },
+            { value: 3600, label: context.languagePicker("header.config.todo.deleteTimeOption.3600") },
             { value: 86400, label: context.languagePicker("header.config.todo.deleteTimeOption.86400") }
           ], "task.delay", handleApply),
         }

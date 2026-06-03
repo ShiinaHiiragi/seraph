@@ -121,7 +121,7 @@ const defaultSetting = {
       linux: "bash",
       win32: "powershell.exe"
     },
-    timeout: 60,
+    timeout: 30,
     cursor: {
       blink: false,
       reflow: false,
@@ -141,8 +141,8 @@ const defaultSetting = {
     },
     text: {
       space: 0,
-      height: 0,
-      contrast: 4.5,
+      height: 1,
+      contrast: 1,
       separator: " ()[]{}',\"`─‘’|"
     },
     theme: {

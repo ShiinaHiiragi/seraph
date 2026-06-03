@@ -18,7 +18,20 @@ const zhHans = {
         resetButton: "重置"
       },
       terminal: {
-        title: "终端"
+        title: "终端",
+        enable: "启用终端",
+        shell: "Shell",
+        shellLinux: "Linux 的 Shell 路径",
+        shellWin32: "Windows 的 Shell 路径",
+        timeout: "超时时间",
+        timeoutOption: {
+          15: "15 分钟",
+          30: "30 分钟",
+          60: "1 小时",
+          120: "2 小时",
+          240: "4 小时",
+          360: "6 小时"
+        }
       },
       todo: {
         title: "待办",
@@ -285,6 +298,10 @@ const zhHans = {
       inDevelopment: {
         title: "开发中",
         caption: "如有需要，请在 GitHub 上提交新 Issue。"
+      },
+      disabled: {
+        title: "功能已禁用",
+        caption: "请在设置中启用"
       }
     }
   }

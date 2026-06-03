@@ -23,7 +23,15 @@ const en = {
         shell: "Shell",
         shellLinux: "Shell path on Linux",
         shellWin32: "Shell path on Windows",
-        timeout: "Connection Timeout"
+        timeout: "Connection Timeout",
+        timeoutOption: {
+          15: "15 minutes",
+          30: "30 minutes",
+          60: "1 hour",
+          120: "2 hours",
+          240: "4 hours",
+          360: "6 hours"
+        }
       },
       todo: {
         title: "TODO",
@@ -291,6 +299,10 @@ const en = {
         title: "In Development",
         caption: "Please submit a new issue on GitHub if you are in need of it."
       },
+      disabled: {
+        title: "Feature Disabled",
+        caption: "Enable it in setting to access the feature."
+      }
     }
   }
 }

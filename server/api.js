@@ -87,7 +87,7 @@ const defaultConfig = {
         linux: "bash",
         win32: "powershell.exe"
       },
-      timeout: 60,
+      timeout: 30,
       cursor: {
         blink: false,
         reflow: false,

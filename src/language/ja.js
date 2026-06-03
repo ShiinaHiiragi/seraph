@@ -18,7 +18,20 @@ const ja = {
         resetButton: "リセット"
       },
       terminal: {
-        title: "ターミナル"
+        title: "ターミナル",
+        enable: "ターミナルを有効",
+        shell: "シェル",
+        shellLinux: "Linux でのシェルパス",
+        shellWin32: "Windows でのシェルパス",
+        timeout: "コネクションタイムアウト",
+        timeoutOption: {
+          15: "15 分",
+          30: "30 分",
+          60: "1 時間",
+          120: "2 時間",
+          240: "4 時間",
+          360: "6 時間"
+        }
       },
       todo: {
         title: "トゥードゥー",
@@ -285,6 +298,10 @@ const ja = {
       inDevelopment: {
         title: "イン・ディベロップメント",
         caption: "必要であればギットハブでニューイシューをサブミットしてください。"
+      },
+      disabled: {
+        "title": "フィーチャーが無効",
+        "caption": "このフィーチャーをアクセスするには、セッティングで有効にしてください。"
       }
     }
   }
