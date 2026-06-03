@@ -352,7 +352,7 @@ router.post('/zip', (req, res, next) => {
   req.status.addExecStatus();
   res.send({
     ...req.status.generateReport(),
-    info: api.fileOperator.readFileInfo(folderPath, newFilename)
+    ...api.fileOperator.readFileInfo(folderPath, newFilename)
   });
   return;
 });
@@ -422,7 +422,7 @@ router.post('/unzip', (req, res, next) => {
   req.status.addExecStatus();
   res.send({
     ...req.status.generateReport(),
-    info: api.fileOperator.readFileInfo(folderPath, newDirName)
+    ...api.fileOperator.readFileInfo(folderPath, newDirName)
   });
   return;
 });
@@ -466,7 +466,7 @@ router.post('/epub', (req, res, next) => {
 
   // use async function to avoid blocking
   const config = api.configOperator.config.setting.epub;
-  child.execFile(api.checkerOperator.python, [
+  child.execFile(api.configOperator.config.setting.extension.python[process.platform], [
     api.extentPath.epubConverterFilePath,
     '-c',
     JSON.stringify({
@@ -508,7 +508,7 @@ router.post('/epub', (req, res, next) => {
       req.status.addExecStatus();
       res.send({
         ...req.status.generateReport(),
-        info: api.fileOperator.readFileInfo(folderPath, newDirName)
+        ...api.fileOperator.readFileInfo(folderPath, newDirName)
       });
       return;
     }
