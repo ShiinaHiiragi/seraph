@@ -105,11 +105,13 @@ const globalState = {
 };
 
 const defaultPlatform = "linux";
+
 const defaultClipboard = {
   permanent: null,
   directory: null,
   path: null
 };
+
 const defaultSetting = {
   meta: {
     language: "en",
@@ -143,10 +145,11 @@ const defaultSetting = {
       space: 0,
       height: 1,
       contrast: 1,
-      separator: " ()[]{}',\"`─‘’|"
+      separator: "()[]{} ',\"`─‘’|"
     },
     theme: {
       transparency: false,
+      selectionBackground: "#C8D2E6",
       background: "#F8F8F8",
       foreground: "#383838",
       cursor: "#383838",
@@ -166,8 +169,7 @@ const defaultSetting = {
       brightMagenta: "#A626A4",
       brightRed: "#E45649",
       brightWhite: "#383A42",
-      brightYellow: "#C18401",
-      selectionBackground: "#C8D2E6"
+      brightYellow: "#C18401"
     }
   },
   task: {
@@ -218,6 +220,7 @@ const defaultSetting = {
     }
   }
 };
+
 const settingField = {
   general: "general",
   terminal: "terminal",
@@ -225,6 +228,12 @@ const settingField = {
   extension: "extension",
   epub: "epub"
 }
+
+const monospaceFonts = [
+  "Ubuntu Mono",
+  "Consolas"
+]
+
 const setValue = (obj, key, value) => {
   const parts = key.split(".");
   if (parts.length > 1) {
@@ -253,6 +262,7 @@ export {
   defaultClipboard,
   defaultSetting,
   settingField,
+  monospaceFonts,
   setValue
 };
 

@@ -22,18 +22,18 @@ import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import GlobalContext, {
   animeDuration,
   settingField,
-  reactionInterval
+  reactionInterval,
+  monospaceFonts
 } from "../interface/constants";
 import { languageMap } from "../interface/languagePicker";
 
 const Literal = (value, itemsMap, field, handleApply, disabled) => (
-  <Select size="sm" value={value} sx={{ maxWidth: 240 }}>
+  <Select size="sm" value={value} sx={{ maxWidth: 240 }} disabled={disabled}>
     {itemsMap.map(({value, label}) => (
       <Option
         key={value}
         value={value}
         onClick={() => handleApply(field, value)}
-        disabled={disabled}
       >
         {label}
       </Option>
@@ -41,41 +41,49 @@ const Literal = (value, itemsMap, field, handleApply, disabled) => (
   </Select>
 );
 
-// const Trifid = (value, itemsMap, field, handleApply) => (
-//   <RadioGroup
-//     size="sm"
-//     value={value}
-//     onChange={(event) => handleApply(field, event.target.value)}
-//   >
-//     {itemsMap.map(({ value, label }) => (
-//       <Radio key={label} value={value} label={label} />
-//     ))}
-//   </RadioGroup>
-// );
+const LabeledLiteral = (caption, value, itemsMap, field, handleApply, disabled) => (
+  <FormControl>
+    <FormLabel sx={{ mb: 0, color: "neutral.500" }}>
+      {caption}
+    </FormLabel>
+    <Select size="sm" value={value} sx={{ maxWidth: 240 }} disabled={disabled}>
+      {itemsMap.map(({value, label}) => (
+        <Option
+          key={value}
+          value={value}
+          onClick={() => handleApply(field, value)}
+        >
+          {label}
+        </Option>
+      ))}
+    </Select>
+  </FormControl>
+);
 
 const Bool = (label, checked, field, handleApply, disabled) => (
   <Checkbox
-    disabled={disabled}
     size="sm"
     label={label}
     checked={checked}
     onChange={(event) => handleApply(field, event.target.checked)}
+    disabled={disabled}
   />
 );
 
-const InstantBool = (checked, field, handleApply, label, disabled) => (
+const InstantBool = (label, checked, field, handleApply, disabled) => (
   <Switch
-    disabled={disabled}
     size="sm"
     variant="outlined"
     label={label}
     checked={checked}
     onChange={(event) => handleApply(field, event.target.checked)}
+    disabled={disabled}
   />
 )
 
 // Turkey -> Istanbul -> InstantBool
-const Turkey = InstantBool;
+const Turkey = (checked, field, handleApply, disabled) =>
+  InstantBool(undefined, checked, field, handleApply, disabled);
 
 const String = (props) => {
   const {
@@ -221,7 +229,7 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
                 width={240}
                 type="text"
                 field="terminal.shell.linux"
-                handleCheck={(_) => true}
+                handleCheck={(value) => value.length > 0}
                 handleApply={handleApply}
                 code={true}
               />
@@ -232,7 +240,7 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
                 width={240}
                 type="text"
                 field="terminal.shell.win32"
-                handleCheck={(_) => true}
+                handleCheck={(value) => value.length > 0}
                 handleApply={handleApply}
                 code={true}
               />
@@ -249,6 +257,240 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
             { value: 240, label: context.languagePicker("header.config.terminal.timeoutOption.240") },
             { value: 360, label: context.languagePicker("header.config.terminal.timeoutOption.360") },
           ], "terminal.timeout", handleApply, !context.setting.terminal.enable)
+        },
+        {
+          key: context.languagePicker("header.config.terminal.cursor"),
+          value: (
+            <Stack spacing={2}>
+              <Stack spacing={1}>
+                {Bool(
+                  context.languagePicker("header.config.terminal.cursorBlink"),
+                  context.setting.terminal.cursor.blink,
+                  "terminal.cursor.blink",
+                  handleApply,
+                  !context.setting.terminal.enable
+                )}
+                {Bool(
+                  context.languagePicker("header.config.terminal.reflowCursorLine"),
+                  context.setting.terminal.cursor.reflow,
+                  "terminal.cursor.reflow",
+                  handleApply,
+                  !context.setting.terminal.enable
+                )}
+              </Stack>
+              <Stack spacing={1}>
+                {[
+                  LabeledLiteral(
+                    context.languagePicker("header.config.terminal.cursorStyle"),
+                    context.setting.terminal.cursor.active,
+                    [
+                      { value: "block", label: context.languagePicker("header.config.terminal.activeStyleOption.block") },
+                      { value: "underline", label: context.languagePicker("header.config.terminal.activeStyleOption.underline") },
+                      { value: "bar", label: context.languagePicker("header.config.terminal.activeStyleOption.bar") },
+                    ],
+                    "terminal.cursor.active",
+                    handleApply,
+                    !context.setting.terminal.enable
+                  ),
+                  LabeledLiteral(
+                    context.languagePicker("header.config.terminal.cursorInactiveStyle"),
+                    context.setting.terminal.cursor.inactive,
+                    [
+                      { value: "outline", label: context.languagePicker("header.config.terminal.inactiveStyleOption.outline") },
+                      { value: "block", label: context.languagePicker("header.config.terminal.inactiveStyleOption.block") },
+                      { value: "underline", label: context.languagePicker("header.config.terminal.inactiveStyleOption.underline") },
+                      { value: "bar", label: context.languagePicker("header.config.terminal.inactiveStyleOption.bar") },
+                      { value: "none", label: context.languagePicker("header.config.terminal.inactiveStyleOption.none") },
+                    ],
+                    "terminal.cursor.inactive",
+                    handleApply,
+                    !context.setting.terminal.enable
+                  )
+                ]}
+              </Stack>
+            </Stack>
+          )
+        },
+        {
+          key: context.languagePicker("header.config.terminal.font"),
+          value: (
+            <Stack spacing={2}>
+              {LabeledLiteral(
+                context.languagePicker("header.config.terminal.fontFamily"),
+                context.setting.terminal.font.family,
+                monospaceFonts.map((item) => ({ value: item, label: item })),
+                "terminal.font.family",
+                handleApply,
+                !context.setting.terminal.enable
+              )}
+              <Stack spacing={1}>
+                <String
+                  disabled={!context.setting.terminal.enable}
+                  caption={context.languagePicker("header.config.terminal.fontSize")}
+                  value={context.setting.terminal.font.size}
+                  width={100}
+                  type="number"
+                  field="terminal.font.size"
+                  handleCheck={(value) => !isNaN(value) && Number(value) > 0}
+                  handleApply={handleApply}
+                  end="px"
+                  translate={(value) => Number(value)}
+                />
+                <String
+                  disabled={!context.setting.terminal.enable}
+                  caption={context.languagePicker("header.config.terminal.fontWeight")}
+                  value={context.setting.terminal.font.weight}
+                  width={160}
+                  type="text"
+                  field="terminal.font.weight"
+                  handleCheck={(_) => true}
+                  handleApply={handleApply}
+                  code={true}
+                />
+                <String
+                  disabled={!context.setting.terminal.enable}
+                  caption={context.languagePicker("header.config.terminal.fontWeightBold")}
+                  value={context.setting.terminal.font.weightBold}
+                  width={160}
+                  type="text"
+                  field="terminal.font.weightBold"
+                  handleCheck={(_) => true}
+                  handleApply={handleApply}
+                  code={true}
+                />
+              </Stack>
+            </Stack>
+          )
+        },
+        {
+          key: context.languagePicker("header.config.terminal.text"),
+          value: (
+            <Stack spacing={2}>
+              <Stack spacing={1}>
+                <String
+                  disabled={!context.setting.terminal.enable}
+                  caption={context.languagePicker("header.config.terminal.letterSpacing")}
+                  value={context.setting.terminal.text.space}
+                  width={100}
+                  type="number"
+                  field="terminal.text.space"
+                  handleCheck={(value) => !isNaN(value) && Number(value) >= 0}
+                  handleApply={handleApply}
+                  translate={(value) => Number(value)}
+                />
+                <String
+                  disabled={!context.setting.terminal.enable}
+                  caption={context.languagePicker("header.config.terminal.lineHeight")}
+                  value={context.setting.terminal.text.height}
+                  width={100}
+                  type="number"
+                  field="terminal.text.height"
+                  handleCheck={(value) => !isNaN(value) && Number(value) >= 0}
+                  handleApply={handleApply}
+                  translate={(value) => Number(value)}
+                />
+                <String
+                  disabled={!context.setting.terminal.enable}
+                  caption={context.languagePicker("header.config.terminal.contrastRatio")}
+                  value={context.setting.terminal.text.contrast}
+                  width={100}
+                  type="number"
+                  field="terminal.text.contrast"
+                  handleCheck={(value) => !isNaN(value) && Number(value) >= 0}
+                  handleApply={handleApply}
+                  translate={(value) => Number(value)}
+                />
+              </Stack>
+              <String
+                disabled={!context.setting.terminal.enable}
+                caption={context.languagePicker("header.config.terminal.wordSeparator")}
+                value={context.setting.terminal.text.separator}
+                width={240}
+                type="text"
+                field="terminal.text.separator"
+                handleCheck={(_) => true}
+                handleApply={handleApply}
+                code={true}
+              />
+            </Stack>
+          )
+        },
+        {
+          key: context.languagePicker("header.config.terminal.scroll"),
+          value: (
+            <Stack spacing={2}>
+              {LabeledLiteral(
+                context.languagePicker("header.config.terminal.scrollback"),
+                context.setting.terminal.scroll.back,
+                [
+                  { value: 1000, label: "1000" },
+                  { value: 2500, label: "2500" },
+                  { value: 5000, label: "5000" },
+                  { value: 7500, label: "7500" },
+                  { value: 10000, label: "10000" },
+                ],
+                "terminal.scroll.back",
+                handleApply,
+                !context.setting.terminal.enable
+              )}
+              <Stack spacing={1}>
+                <String
+                  disabled={!context.setting.terminal.enable}
+                  caption={context.languagePicker("header.config.terminal.scrollNormal")}
+                  value={context.setting.terminal.scroll.normal}
+                  width={100}
+                  type="number"
+                  field="terminal.scroll.normal"
+                  handleCheck={(value) => !isNaN(value) && Number(value) > 0}
+                  handleApply={handleApply}
+                  translate={(value) => Number(value)}
+                />
+                <String
+                  disabled={!context.setting.terminal.enable}
+                  caption={context.languagePicker("header.config.terminal.scrollFast")}
+                  value={context.setting.terminal.scroll.fast}
+                  width={100}
+                  type="number"
+                  field="terminal.scroll.fast"
+                  handleCheck={(value) => !isNaN(value) && Number(value) > 0}
+                  handleApply={handleApply}
+                  translate={(value) => Number(value)}
+                />
+              </Stack>
+            </Stack>
+          )
+        },
+        {
+          key: context.languagePicker("header.config.terminal.theme"),
+          value: (
+            <Stack spacing={2}>
+              {Bool(
+                context.languagePicker("header.config.terminal.themeTransparency"),
+                context.setting.terminal.theme.transparency,
+                "terminal.theme.transparency",
+                handleApply
+              )}
+              <Stack spacing={1}>
+                {Object.keys(context.setting.terminal.theme)
+                  .filter((item) => item !== "transparency")
+                  .map((key) => (
+                    <String
+                      key={key}
+                      disabled={!context.setting.terminal.enable}
+                      caption={context.languagePicker(`header.config.terminal.themeOption.${key}`)}
+                      value={context.setting.terminal.theme[key]}
+                      width={160}
+                      type="text"
+                      field={`terminal.theme.${key}`}
+                      handleCheck={(value) => value.trim() !== '' && CSS.supports("color", value.trim())}
+                      handleApply={handleApply}
+                      code={true}
+                    />
+                ))}
+              </Stack>
+            </Stack>
+
+          )
         }
       ]
     },
@@ -282,7 +524,7 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
                 width={240}
                 type="text"
                 field="extension.python.linux"
-                handleCheck={(_) => true}
+                handleCheck={(value) => value.length > 0}
                 handleApply={handleApply}
                 code={true}
               />
@@ -292,7 +534,7 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
                 width={240}
                 type="text"
                 field="extension.python.win32"
-                handleCheck={(_) => true}
+                handleCheck={(value) => value.length > 0}
                 handleApply={handleApply}
                 code={true}
               />
@@ -309,7 +551,7 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
                 width={240}
                 type="text"
                 field="extension.pandoc.linux"
-                handleCheck={(_) => true}
+                handleCheck={(value) => value.length > 0}
                 handleApply={handleApply}
                 code={true}
               />
@@ -319,7 +561,7 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
                 width={240}
                 type="text"
                 field="extension.pandoc.win32"
-                handleCheck={(_) => true}
+                handleCheck={(value) => value.length > 0}
                 handleApply={handleApply}
                 code={true}
               />

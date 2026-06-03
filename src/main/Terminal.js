@@ -13,21 +13,58 @@ const Terminal = () => {
   const xtermRef = React.useRef(null);
   const fitAddonRef = React.useRef(null);
 
-  // const [fs, setFS] = React.useState(14)
-  // window.setFS = setFS
-  // React.useEffect(() => {
-  //   if (xtermRef.current) {
-  //     Object.assign(xtermRef.current.options, { cursorBlink: true, fontSize: fs });
-  //     fitAddonRef.current?.fit();
-  //   }
-  // }, [fs])
-
-  const sendCtrl = React.useCallback((letter) => {
-    const code = letter.toUpperCase().charCodeAt(0) - 64;
-    if (code >= 1 && code <= 26) {
-      xtermRef.current?.paste(String.fromCharCode(code));
+  React.useEffect(() => {
+    if (xtermRef.current) {
+      Object.assign(xtermRef.current.options, {
+        fontSize: context.setting.terminal.font.size,
+        fontFamily: `"${context.setting.terminal.font.family}", monospace`,
+        fontWeight: context.setting.terminal.font.weight,
+        fontWeightBold: context.setting.terminal.font.weightBold,
+        letterSpacing: context.setting.terminal.text.space,
+        lineHeight: context.setting.terminal.text.height,
+      });
+      fitAddonRef.current?.fit();
     }
-  }, []);
+  }, [
+    context.setting.terminal.font.size,
+    context.setting.terminal.font.family,
+    context.setting.terminal.font.weight,
+    context.setting.terminal.font.weightBold,
+    context.setting.terminal.text.space,
+    context.setting.terminal.text.height
+  ]);
+
+  React.useEffect(() => {
+    if (xtermRef.current) {
+      const { transparency, ...themeColors } = context.setting.terminal.theme;
+      Object.assign(xtermRef.current.options, {
+        cursorBlink: context.setting.terminal.cursor.blink,
+        cursorStyle: context.setting.terminal.cursor.active,
+        cursorInactiveStyle: context.setting.terminal.cursor.inactive,
+        reflowCursorLine: context.setting.terminal.cursor.reflow,
+        scrollback: context.setting.terminal.scroll.back,
+        scrollSensitivity: context.setting.terminal.scroll.normal,
+        fastScrollSensitivity: context.setting.terminal.scroll.fast,
+        minimumContrastRatio: context.setting.terminal.text.contrast,
+        wordSeparator: context.setting.terminal.text.separator,
+        allowTransparency: context.setting.terminal.theme.transparency,
+        theme: themeColors
+      });
+    }
+  }, [
+    context.setting.terminal.cursor,
+    context.setting.terminal.scroll,
+    context.setting.terminal.text.contrast,
+    context.setting.terminal.text.separator,
+    context.setting.terminal.theme,
+  ]);
+
+  // const sendCtrl = React.useCallback((letter) => {
+  //   const code = letter.toUpperCase().charCodeAt(0) - 64;
+  //   if (code >= 1 && code <= 26) {
+  //     xtermRef.current?.paste(String.fromCharCode(code));
+  //   }
+  // }, []);
 
   // after second tick, the globalSwitch were set properly
   React.useEffect(() => {

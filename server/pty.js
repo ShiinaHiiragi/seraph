@@ -26,6 +26,12 @@ const attachTerminal = (server, api) => {
   const wss = new ws.WebSocketServer({ server, path: '/pty' });
 
   wss.on('connection', (ws, req) => {
+    if (!api.configOperator.config.setting.terminal.enable) {
+      ptyLog('REJECT', 'disabled');
+      ws.close(1008, 'feature disabled');
+      return;
+    }
+
     if (!wssAuth(api, req)) {
       ptyLog('REJECT', 'unauthorized');
       ws.close(1008, 'authentication failed');

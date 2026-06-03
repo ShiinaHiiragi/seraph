@@ -109,10 +109,11 @@ const defaultConfig = {
         space: 0,
         height: 1,
         contrast: 1,
-        separator: " ()[]{}',\"`─‘’|"
+        separator: "()[]{} ',\"`─‘’|"
       },
       theme: {
         transparency: false,
+        selectionBackground: "#C8D2E6",
         background: "#F8F8F8",
         foreground: "#383838",
         cursor: "#383838",
@@ -132,8 +133,7 @@ const defaultConfig = {
         brightMagenta: "#A626A4",
         brightRed: "#E45649",
         brightWhite: "#383A42",
-        brightYellow: "#C18401",
-        selectionBackground: "#C8D2E6"
+        brightYellow: "#C18401"
       }
     },
     task: {
