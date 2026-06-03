@@ -182,6 +182,7 @@ const en = {
         createTime: "Created at {0}",
         modifiedTime: "Last modified at {0}"
       },
+      items: "{0} Items",
       rowMenu: {
         open: "Open",
         rename: "Rename",

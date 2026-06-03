@@ -182,6 +182,7 @@ const zhHans = {
         createTime: "创建于 {0}",
         modifiedTime: "最后修改于 {0}"
       },
+      items: "{0} 项",
       rowMenu: {
         open: "打开",
         rename: "重命名",

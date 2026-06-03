@@ -295,13 +295,18 @@ const fileOperator = {
   },
 
   readFileInfo: (folderPath, filename) => {
-    const stat = fs.lstatSync(path.join(folderPath, filename));
+    const filePath = path.join(folderPath, filename)
+    const stat = fs.lstatSync(filePath);
+    const isDir = stat.isDirectory();
+
     return {
       name: filename,
-      size: stat.size,
+      size: isDir
+        ? fs.readdirSync(filePath).length
+        : stat.size,
       time: stat.birthtime,
       mtime: stat.mtime,
-      type: stat.isDirectory()
+      type: isDir
         ? "directory"
         : (mime.getType(filename) ?? "unknown")
     }

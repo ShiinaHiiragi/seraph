@@ -1,8 +1,7 @@
 // 导入 monospace 字体
 // control lists
-// 初始化 shell 同意
 // xs 增加 sendCtrl("C") 等
-// dir 返回 sub items 数量
+// 初始化 shell 同意
 // reset password
 // 密码加密
 const crypto = require('crypto');

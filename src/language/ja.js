@@ -182,6 +182,7 @@ const ja = {
         createTime: "{0} に作成",
         modifiedTime: "{0} に最終更新"
       },
+      items: "{0} 件",
       rowMenu: {
         open: "オープン",
         rename: "リネーム",
