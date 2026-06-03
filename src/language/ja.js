@@ -77,7 +77,7 @@ const ja = {
         "scrollNormal": "ノーマルスクロール感度",
         "scrollFast": "ファストスクロール感度",
         "theme": "テーマ",
-        "themeTransparency": "トランスペアレントを有効にする（リロードが必要）",
+        "themeTransparency": "トランスペアレントを有効にする",
         "themeOption": {
           "selectionBackground": "選択範囲のバックグラウンドカラー",
           "background": "バックグラウンドカラー",
@@ -152,6 +152,9 @@ const ja = {
         outHTML: "Markdown を HTML にコンバートする",
         outVert: "HTML テキストをバーティカルにする",
         outKeep: "中間 Markdown ファイルをキープする"
+      },
+      appendix: {
+        reload: "（リロードが必要）"
       }
     }
   },

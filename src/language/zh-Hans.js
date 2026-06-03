@@ -77,7 +77,7 @@ const zhHans = {
         "scrollNormal": "普通滚动灵敏度",
         "scrollFast": "快速滚动灵敏度",
         "theme": "主题",
-        "themeTransparency": "允许透明背景（需要重新加载）",
+        "themeTransparency": "允许透明背景",
         "themeOption": {
           "selectionBackground": "选区背景色",
           "background": "背景颜色",
@@ -152,6 +152,9 @@ const zhHans = {
         outHTML: "将 Markdown 转换为 HTML",
         outVert: "将 HTML 版式设为竖排",
         outKeep: "保留转换前的 Markdown 文件"
+      },
+      appendix: {
+        reload: "（需要重新加载）"
       }
     }
   },

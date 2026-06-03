@@ -77,7 +77,7 @@ const en = {
         scrollNormal: "Normal scrolling sensitivity",
         scrollFast: "Fast scrolling sensitivity",
         theme: "Theme",
-        themeTransparency: "Allow transparent background (reload required)",
+        themeTransparency: "Allow transparent background",
         themeOption: {
           selectionBackground: "Background selection color",
           background: "Background color",
@@ -152,6 +152,9 @@ const en = {
         outHTML: "Convert markdown to HTML",
         outVert: "Make HTML text vertical",
         outKeep: "Keep intermediate markdown files"
+      },
+      appendix: {
+        reload: " (reload required)"
       }
     }
   },

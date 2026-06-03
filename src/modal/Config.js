@@ -268,7 +268,8 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
                 !context.setting.terminal.enable
               )}
               {LabeledLiteral(
-                context.languagePicker("header.config.terminal.lifecyclePing"),
+                context.languagePicker("header.config.terminal.lifecyclePing")
+                  + context.languagePicker("header.config.appendix.reload"),
                 context.setting.terminal.lifecycle.ping,
                 [
                   { value: 0, label: context.languagePicker("header.config.terminal.lifecyclePingOption.0") },
@@ -493,7 +494,8 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
           value: (
             <Stack spacing={2}>
               {Bool(
-                context.languagePicker("header.config.terminal.themeTransparency"),
+                context.languagePicker("header.config.terminal.themeTransparency")
+                  + context.languagePicker("header.config.appendix.reload"),
                 context.setting.terminal.theme.transparency,
                 "terminal.theme.transparency",
                 handleApply,
