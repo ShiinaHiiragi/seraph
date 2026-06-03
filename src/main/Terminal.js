@@ -231,17 +231,21 @@ const Terminal = () => {
 
       // touch scroll for mobile
       let touchStartY = 0;
+      let remainder = 0;
       const onTouchStart = (e) => {
         touchStartY = e.touches[0].clientY;
+        remainder = 0;
       };
       const onTouchMove = (e) => {
         const deltaY = touchStartY - e.touches[0].clientY;
         touchStartY = e.touches[0].clientY;
+        remainder += deltaY;
         const pixelsPerLine = xterm.options.fontSize * xterm.options.lineHeight;
-        const lines = Math.round(deltaY / pixelsPerLine);
+        const lines = Math.trunc(remainder / pixelsPerLine);
         if (lines !== 0) {
+          remainder -= lines * pixelsPerLine;
           xterm.scrollLines(lines);
-        };
+        }
       };
       containerRef.current.addEventListener("touchstart", onTouchStart, { passive: true });
       containerRef.current.addEventListener("touchmove", onTouchMove, { passive: true });
