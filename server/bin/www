@@ -8,6 +8,7 @@ let app = require('../app');
 let api = require('../api');
 let http = require('http');
 let https = require('https');
+let pty = require('../pty');
 
 /**
  * Get port from environment and store in Express.
@@ -29,6 +30,8 @@ let server = process.env.REACT_APP_SSLCERT === 'local'
  */
 
 server.listen(port);
+pty.attachTerminal(server, api);
+
 server.on('error', onError);
 server.on('listening', onListening);
 

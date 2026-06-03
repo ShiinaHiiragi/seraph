@@ -136,10 +136,11 @@ export default function RowMenu(props) {
         filename: filename
       }, undefined, reject)
         .then((data) => {
+          const { statusCode, errorCode, ...newInfo } = data;
           if (pathStartWith(`/${type}/${folderName}`)) {
             setFilesList((filesList) => [
               ...filesList,
-              data.info
+              newInfo
             ]);
           }
           resolve();
@@ -167,10 +168,11 @@ export default function RowMenu(props) {
         filename: filename
       }, undefined, reject)
         .then((data) => {
+          const { statusCode, errorCode, ...newInfo } = data;
           if (pathStartWith(`/${type}/${folderName}`)) {
             setFilesList((filesList) => [
               ...filesList,
-              data.info
+              newInfo
             ]);
           }
           resolve();
@@ -214,10 +216,11 @@ export default function RowMenu(props) {
         },
       }, reject)
         .then((data) => {
+          const { statusCode, errorCode, ...newInfo } = data;
           if (pathStartWith(`/${type}/${folderName}`)) {
             setFilesList((filesList) => [
               ...filesList,
-              data.info
+              newInfo
             ]);
           }
           resolve();

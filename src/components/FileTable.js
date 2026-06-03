@@ -202,7 +202,7 @@ export default function FileTable(props) {
                 <td>
                   <Typography level="body-xs">
                     {item.type === "directory"
-                      ? "—"
+                      ? context.languagePicker("main.folder.items").format(item.size)
                       : item.size.sizeFormat()}
                   </Typography>
                 </td>

@@ -2,6 +2,7 @@ import * as React from "react";
 import Box from "@mui/joy/Box";
 import Divider from "@mui/joy/Divider";
 import IconButton from "@mui/joy/IconButton";
+import Switch from "@mui/joy/Switch";
 import Modal from "@mui/joy/Modal";
 import ModalDialog from "@mui/joy/ModalDialog";
 import Option from "@mui/joy/Option";
@@ -21,12 +22,13 @@ import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import GlobalContext, {
   animeDuration,
   settingField,
-  reactionInterval
+  reactionInterval,
+  monospaceFonts
 } from "../interface/constants";
 import { languageMap } from "../interface/languagePicker";
 
-const Literal = (value, itemsMap, field, handleApply) => (
-  <Select size="sm" value={value} sx={{ maxWidth: 250 }}>
+const Literal = (value, itemsMap, field, handleApply, disabled) => (
+  <Select size="sm" value={value} sx={{ maxWidth: 240 }} disabled={disabled}>
     {itemsMap.map(({value, label}) => (
       <Option
         key={value}
@@ -37,29 +39,51 @@ const Literal = (value, itemsMap, field, handleApply) => (
       </Option>
     ))}
   </Select>
-)
+);
 
-// const Trifid = (value, itemsMap, field, handleApply) => (
-//   <RadioGroup
-//     size="sm"
-//     value={value}
-//     onChange={(event) => handleApply(field, event.target.value)}
-//   >
-//     {itemsMap.map(({ value, label }) => (
-//       <Radio key={label} value={value} label={label} />
-//     ))}
-//   </RadioGroup>
-// )
+const LabeledLiteral = (caption, value, itemsMap, field, handleApply, disabled) => (
+  <FormControl>
+    <FormLabel sx={{ mb: 0, color: "neutral.500" }}>
+      {caption}
+    </FormLabel>
+    <Select size="sm" value={value} sx={{ maxWidth: 240 }} disabled={disabled}>
+      {itemsMap.map(({value, label}) => (
+        <Option
+          key={value}
+          value={value}
+          onClick={() => handleApply(field, value)}
+        >
+          {label}
+        </Option>
+      ))}
+    </Select>
+  </FormControl>
+);
 
 const Bool = (label, checked, field, handleApply, disabled) => (
   <Checkbox
-    disabled={disabled}
     size="sm"
     label={label}
     checked={checked}
     onChange={(event) => handleApply(field, event.target.checked)}
+    disabled={disabled}
+  />
+);
+
+const InstantBool = (label, checked, field, handleApply, disabled) => (
+  <Switch
+    size="sm"
+    variant="outlined"
+    label={label}
+    checked={checked}
+    onChange={(event) => handleApply(field, event.target.checked)}
+    disabled={disabled}
   />
 )
+
+// Turkey -> Istanbul -> InstantBool
+const Turkey = (checked, field, handleApply, disabled) =>
+  InstantBool(undefined, checked, field, handleApply, disabled);
 
 const String = (props) => {
   const {
@@ -73,7 +97,8 @@ const String = (props) => {
     handleApply,
     start,
     end,
-    translate
+    translate,
+    code
   } = props;
 
   const [localValue, setLocalValue] = React.useState(value);
@@ -121,7 +146,7 @@ const String = (props) => {
         disabled={disabled}
         size="sm"
         type={type}
-        sx={{ maxWidth: width }}
+        sx={{ maxWidth: width, fontFamily: code ? "monospace" : undefined }}
         value={localValue}
         startDecorator={start}
         endDecorator={end}
@@ -134,6 +159,7 @@ const String = (props) => {
 };
 
 const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
+  // TODO: reset password
   return [
     {
       id: settingField.general,
@@ -156,8 +182,8 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
           hint: context.languagePicker("header.config.general.tokenHint"),
           value: Literal(context.setting.meta.token, [
             { value: 15, label: context.languagePicker("header.config.general.tokenOption.15") },
-            { value: 60, label: context.languagePicker("header.config.general.tokenOption.60") }, 
-            { value: 720, label: context.languagePicker("header.config.general.tokenOption.720") }, 
+            { value: 60, label: context.languagePicker("header.config.general.tokenOption.60") },
+            { value: 720, label: context.languagePicker("header.config.general.tokenOption.720") },
             { value: 1440, label: context.languagePicker("header.config.general.tokenOption.1440") },
             { value: 2880, label: context.languagePicker("header.config.general.tokenOption.2880") }
           ], "meta.token", handleApply)
@@ -180,6 +206,325 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
       ]
     },
     {
+      id: settingField.terminal,
+      label: context.languagePicker("header.config.terminal.title"),
+      items: [
+        {
+          key: context.languagePicker("header.config.terminal.enable"),
+          value: (
+            Turkey(
+              context.setting.terminal.enable,
+              "terminal.enable",
+              handleApply
+            )
+          )
+        },
+        {
+          key: context.languagePicker("header.config.terminal.shell"),
+          value: (
+            <Stack spacing={1}>
+              <String
+                disabled={!context.setting.terminal.enable}
+                caption={context.languagePicker("header.config.terminal.shellLinux")}
+                value={context.setting.terminal.shell.linux}
+                width={240}
+                type="text"
+                field="terminal.shell.linux"
+                handleCheck={(value) => value.length > 0}
+                handleApply={handleApply}
+                code={true}
+              />
+              <String
+                disabled={!context.setting.terminal.enable}
+                caption={context.languagePicker("header.config.terminal.shellWin32")}
+                value={context.setting.terminal.shell.win32}
+                width={240}
+                type="text"
+                field="terminal.shell.win32"
+                handleCheck={(value) => value.length > 0}
+                handleApply={handleApply}
+                code={true}
+              />
+            </Stack>
+          )
+        },
+        {
+          key: context.languagePicker("header.config.terminal.timeout"),
+          value: Literal(context.setting.terminal.timeout, [
+            { value: 15, label: context.languagePicker("header.config.terminal.timeoutOption.15") },
+            { value: 30, label: context.languagePicker("header.config.terminal.timeoutOption.30") },
+            { value: 60, label: context.languagePicker("header.config.terminal.timeoutOption.60") },
+            { value: 120, label: context.languagePicker("header.config.terminal.timeoutOption.120") },
+            { value: 240, label: context.languagePicker("header.config.terminal.timeoutOption.240") },
+            { value: 360, label: context.languagePicker("header.config.terminal.timeoutOption.360") },
+          ], "terminal.timeout", handleApply, !context.setting.terminal.enable)
+        },
+        {
+          key: context.languagePicker("header.config.terminal.cursor"),
+          value: (
+            <Stack spacing={2}>
+              <Stack spacing={1}>
+                {Bool(
+                  context.languagePicker("header.config.terminal.cursorBlink"),
+                  context.setting.terminal.cursor.blink,
+                  "terminal.cursor.blink",
+                  handleApply,
+                  !context.setting.terminal.enable
+                )}
+                {Bool(
+                  context.languagePicker("header.config.terminal.reflowCursorLine"),
+                  context.setting.terminal.cursor.reflow,
+                  "terminal.cursor.reflow",
+                  handleApply,
+                  !context.setting.terminal.enable
+                )}
+              </Stack>
+              <Stack spacing={1}>
+                {LabeledLiteral(
+                  context.languagePicker("header.config.terminal.cursorStyle"),
+                  context.setting.terminal.cursor.active,
+                  [
+                    { value: "block", label: context.languagePicker("header.config.terminal.activeStyleOption.block") },
+                    { value: "underline", label: context.languagePicker("header.config.terminal.activeStyleOption.underline") },
+                    { value: "bar", label: context.languagePicker("header.config.terminal.activeStyleOption.bar") },
+                  ],
+                  "terminal.cursor.active",
+                  handleApply,
+                  !context.setting.terminal.enable
+                )}
+                {LabeledLiteral(
+                  context.languagePicker("header.config.terminal.cursorInactiveStyle"),
+                  context.setting.terminal.cursor.inactive,
+                  [
+                    { value: "outline", label: context.languagePicker("header.config.terminal.inactiveStyleOption.outline") },
+                    { value: "block", label: context.languagePicker("header.config.terminal.inactiveStyleOption.block") },
+                    { value: "underline", label: context.languagePicker("header.config.terminal.inactiveStyleOption.underline") },
+                    { value: "bar", label: context.languagePicker("header.config.terminal.inactiveStyleOption.bar") },
+                    { value: "none", label: context.languagePicker("header.config.terminal.inactiveStyleOption.none") },
+                  ],
+                  "terminal.cursor.inactive",
+                  handleApply,
+                  !context.setting.terminal.enable
+                )}
+              </Stack>
+            </Stack>
+          )
+        },
+        {
+          key: context.languagePicker("header.config.terminal.font"),
+          value: (
+            <Stack spacing={2}>
+              {LabeledLiteral(
+                context.languagePicker("header.config.terminal.fontFamily"),
+                context.setting.terminal.font.family,
+                monospaceFonts.map(({ name }) => ({ value: name, label: name })),
+                "terminal.font.family",
+                handleApply,
+                !context.setting.terminal.enable
+              )}
+              <Stack spacing={1}>
+                <String
+                  disabled={!context.setting.terminal.enable}
+                  caption={context.languagePicker("header.config.terminal.fontSize")}
+                  value={context.setting.terminal.font.size}
+                  width={100}
+                  type="number"
+                  field="terminal.font.size"
+                  handleCheck={(value) => !isNaN(value) && Number(value) > 0}
+                  handleApply={handleApply}
+                  end="px"
+                  translate={(value) => Number(value)}
+                />
+                <String
+                  disabled={!context.setting.terminal.enable}
+                  caption={context.languagePicker("header.config.terminal.fontWeight")}
+                  value={context.setting.terminal.font.weight}
+                  width={160}
+                  type="text"
+                  field="terminal.font.weight"
+                  handleCheck={(_) => true}
+                  handleApply={handleApply}
+                  code={true}
+                />
+                <String
+                  disabled={!context.setting.terminal.enable}
+                  caption={context.languagePicker("header.config.terminal.fontWeightBold")}
+                  value={context.setting.terminal.font.weightBold}
+                  width={160}
+                  type="text"
+                  field="terminal.font.weightBold"
+                  handleCheck={(_) => true}
+                  handleApply={handleApply}
+                  code={true}
+                />
+              </Stack>
+            </Stack>
+          )
+        },
+        {
+          key: context.languagePicker("header.config.terminal.text"),
+          value: (
+            <Stack spacing={2}>
+              <Stack spacing={1}>
+                <String
+                  disabled={!context.setting.terminal.enable}
+                  caption={context.languagePicker("header.config.terminal.letterSpacing")}
+                  value={context.setting.terminal.text.space}
+                  width={100}
+                  type="number"
+                  field="terminal.text.space"
+                  handleCheck={(value) => !isNaN(value) && Number(value) >= 0}
+                  handleApply={handleApply}
+                  translate={(value) => Number(value)}
+                />
+                <String
+                  disabled={!context.setting.terminal.enable}
+                  caption={context.languagePicker("header.config.terminal.lineHeight")}
+                  value={context.setting.terminal.text.height}
+                  width={100}
+                  type="number"
+                  field="terminal.text.height"
+                  handleCheck={(value) => !isNaN(value) && Number(value) >= 0}
+                  handleApply={handleApply}
+                  translate={(value) => Number(value)}
+                />
+                <String
+                  disabled={!context.setting.terminal.enable}
+                  caption={context.languagePicker("header.config.terminal.contrastRatio")}
+                  value={context.setting.terminal.text.contrast}
+                  width={100}
+                  type="number"
+                  field="terminal.text.contrast"
+                  handleCheck={(value) => !isNaN(value) && Number(value) >= 0}
+                  handleApply={handleApply}
+                  translate={(value) => Number(value)}
+                />
+              </Stack>
+              <String
+                disabled={!context.setting.terminal.enable}
+                caption={context.languagePicker("header.config.terminal.wordSeparator")}
+                value={context.setting.terminal.text.separator}
+                width={240}
+                type="text"
+                field="terminal.text.separator"
+                handleCheck={(_) => true}
+                handleApply={handleApply}
+                code={true}
+              />
+            </Stack>
+          )
+        },
+        {
+          key: context.languagePicker("header.config.terminal.scroll"),
+          value: (
+            <Stack spacing={2}>
+              {LabeledLiteral(
+                context.languagePicker("header.config.terminal.scrollback"),
+                context.setting.terminal.scroll.back,
+                [
+                  { value: 1000, label: "1000" },
+                  { value: 2500, label: "2500" },
+                  { value: 5000, label: "5000" },
+                  { value: 7500, label: "7500" },
+                  { value: 10000, label: "10000" },
+                ],
+                "terminal.scroll.back",
+                handleApply,
+                !context.setting.terminal.enable
+              )}
+              <Stack spacing={1}>
+                <String
+                  disabled={!context.setting.terminal.enable}
+                  caption={context.languagePicker("header.config.terminal.scrollNormal")}
+                  value={context.setting.terminal.scroll.normal}
+                  width={100}
+                  type="number"
+                  field="terminal.scroll.normal"
+                  handleCheck={(value) => !isNaN(value) && Number(value) > 0}
+                  handleApply={handleApply}
+                  translate={(value) => Number(value)}
+                />
+                <String
+                  disabled={!context.setting.terminal.enable}
+                  caption={context.languagePicker("header.config.terminal.scrollFast")}
+                  value={context.setting.terminal.scroll.fast}
+                  width={100}
+                  type="number"
+                  field="terminal.scroll.fast"
+                  handleCheck={(value) => !isNaN(value) && Number(value) > 0}
+                  handleApply={handleApply}
+                  translate={(value) => Number(value)}
+                />
+              </Stack>
+            </Stack>
+          )
+        },
+        {
+          key: context.languagePicker("header.config.terminal.theme"),
+          value: (
+            <Stack spacing={2}>
+              {Bool(
+                context.languagePicker("header.config.terminal.themeTransparency"),
+                context.setting.terminal.theme.transparency,
+                "terminal.theme.transparency",
+                handleApply
+              )}
+              <Stack spacing={1}>
+                <String
+                  disabled={!context.setting.terminal.enable}
+                  caption={context.languagePicker("header.config.terminal.themeOption.selectionBackground")}
+                  value={context.setting.terminal.theme.selectionBackground}
+                  width={160}
+                  type="text"
+                  field="terminal.theme.selectionBackground"
+                  handleCheck={(value) => value.trim() !== '' && CSS.supports("color", value.trim())}
+                  handleApply={handleApply}
+                  code={true}
+                />
+                {[
+                  ["background", "foreground"],
+                  ["cursor", "cursorAccent"],
+                  ["black", "brightBlack"],
+                  ["blue", "brightBlue"],
+                  ["cyan", "brightCyan"],
+                  ["green", "brightGreen"],
+                  ["magenta", "brightMagenta"],
+                  ["red", "brightRed"],
+                  ["white", "brightWhite"],
+                  ["yellow", "brightYellow"]
+                ].map(([color, brightColor]) =>
+                  <Stack key={color} spacing={{ xs: 1, lg: 4 }} direction={{ xs: "column", lg: "row" }}>
+                    <String
+                      disabled={!context.setting.terminal.enable}
+                      caption={context.languagePicker(`header.config.terminal.themeOption.${color}`)}
+                      value={context.setting.terminal.theme[color]}
+                      width={160}
+                      type="text"
+                      field={`terminal.theme.${color}`}
+                      handleCheck={(value) => value.trim() !== '' && CSS.supports("color", value.trim())}
+                      handleApply={handleApply}
+                      code={true}
+                    />
+                    <String
+                      disabled={!context.setting.terminal.enable}
+                      caption={context.languagePicker(`header.config.terminal.themeOption.${brightColor}`)}
+                      value={context.setting.terminal.theme[brightColor]}
+                      width={160}
+                      type="text"
+                      field={`terminal.theme.${brightColor}`}
+                      handleCheck={(value) => value.trim() !== '' && CSS.supports("color", value.trim())}
+                      handleApply={handleApply}
+                      code={true}
+                    />
+                  </Stack>
+                )}
+              </Stack>
+            </Stack>
+          )
+        }
+      ]
+    },
+    {
       id: settingField.todo,
       label: context.languagePicker("header.config.todo.title"),
       items: [
@@ -188,10 +533,70 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
           hint: context.languagePicker("header.config.todo.deleteTimeHint"),
           value: Literal(context.setting.task.delay, [
             { value: 0, label: context.languagePicker("header.config.todo.deleteTimeOption.0") },
-            { value: 60, label: context.languagePicker("header.config.todo.deleteTimeOption.60") }, 
-            { value: 3600, label: context.languagePicker("header.config.todo.deleteTimeOption.3600") }, 
+            { value: 60, label: context.languagePicker("header.config.todo.deleteTimeOption.60") },
+            { value: 3600, label: context.languagePicker("header.config.todo.deleteTimeOption.3600") },
             { value: 86400, label: context.languagePicker("header.config.todo.deleteTimeOption.86400") }
           ], "task.delay", handleApply),
+        }
+      ]
+    },
+    {
+      id: settingField.extension,
+      label: context.languagePicker("header.config.extension.title"),
+      items: [
+        {
+          key: context.languagePicker("header.config.extension.python"),
+          value: (
+            <Stack spacing={1}>
+              <String
+                caption={context.languagePicker("header.config.extension.pythonLinux")}
+                value={context.setting.extension.python.linux}
+                width={240}
+                type="text"
+                field="extension.python.linux"
+                handleCheck={(value) => value.length > 0}
+                handleApply={handleApply}
+                code={true}
+              />
+              <String
+                caption={context.languagePicker("header.config.extension.pythonWin32")}
+                value={context.setting.extension.python.win32}
+                width={240}
+                type="text"
+                field="extension.python.win32"
+                handleCheck={(value) => value.length > 0}
+                handleApply={handleApply}
+                code={true}
+              />
+            </Stack>
+          )
+        },
+        {
+          key: context.languagePicker("header.config.extension.pandoc"),
+          value: (
+            <Stack spacing={1}>
+              <String
+                caption={context.languagePicker("header.config.extension.pandocLinux")}
+                value={context.setting.extension.pandoc.linux}
+                width={240}
+                type="text"
+                field="extension.pandoc.linux"
+                handleCheck={(value) => value.length > 0}
+                handleApply={handleApply}
+                code={true}
+              />
+              <String
+                caption={context.languagePicker("header.config.extension.pandocWin32")}
+                value={context.setting.extension.pandoc.win32}
+                width={240}
+                type="text"
+                field="extension.pandoc.win32"
+                handleCheck={(value) => value.length > 0}
+                handleApply={handleApply}
+                code={true}
+              />
+            </Stack>
+          )
         }
       ]
     },
@@ -325,6 +730,7 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
                 handleCheck={(_) => true}
                 handleApply={handleApply}
                 translate={(value) => JSON.parse('"' + value.replace(/"/g, '\\"') + '"')}
+                code={true}
               />
             </Stack>
           )
@@ -494,9 +900,9 @@ export default function Config(props) {
         aria-labelledby="config-modal-title"
         sx={{
           p: 0,
-          width: { xs: "95vw", sm: "82vw" },
+          width: { xs: "95vw", md: "82vw" },
           maxWidth: 900,
-          height: { xs: "90vh", sm: "78vh" },
+          height: { xs: "90vh", md: "78vh" },
           maxHeight: 700,
           overflow: "hidden",
           display: "flex",
@@ -524,7 +930,7 @@ export default function Config(props) {
           >
             {context.languagePicker("header.config.title")}
           </Typography>
-          <Box sx={{ display: { sm: "none" } }}>
+          <Box sx={{ display: { md: "none" } }}>
             <IconButton
               variant="plain"
               color="neutral"
@@ -554,7 +960,7 @@ export default function Config(props) {
               overflowY: "auto",
               pt: 2,
               pb: 1,
-              display: { xs: "none", sm: "block" },
+              display: { xs: "none", md: "block" },
             }}
           >
             {sectionUncurry.map((s) => (
@@ -589,7 +995,7 @@ export default function Config(props) {
                 bgcolor: "background.surface",
                 zIndex: 10,
                 overflowY: "auto",
-                display: { sm: "none" },
+                display: { md: "none" },
               }}
             >
               {sectionUncurry.map((s) => (
@@ -617,7 +1023,7 @@ export default function Config(props) {
             sx={{
               flex: 1,
               overflowY: "auto",
-              px: { xs: 2.5, sm: 4 },
+              px: { xs: 2.5, md: 4 },
               pt: 3,
               pb: 0,
             }}
@@ -640,11 +1046,11 @@ export default function Config(props) {
                       {i > 0 && <Divider />}
                       <Box
                         sx={{
-                          display: { xs: "flex", sm: "grid" },
+                          display: { xs: "flex", md: "grid" },
                           flexDirection: "column",
-                          gridTemplateColumns: { sm: "200px 1fr" },
+                          gridTemplateColumns: { md: "200px 1fr" },
                           py: 2,
-                          gap: { xs: 1, sm: 2 },
+                          gap: { xs: 1, md: 2 },
                           alignItems: "start",
                         }}
                       >
@@ -658,7 +1064,7 @@ export default function Config(props) {
                             </Typography>
                           )}
                         </Box>
-                        <Box sx={{ width: { xs: "100%" } }}>
+                        <Box sx={{ width: "100%" }}>
                           {item.value}
                         </Box>
                       </Box>

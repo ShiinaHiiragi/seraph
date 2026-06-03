@@ -26,6 +26,9 @@ const GlobalTheme = (language) => extendTheme({
       xl: 1200,
     },
   },
+  radius: {
+    sm: "4px"
+  },
   typography: {
     h3: {
       letterSpacing: "0.02em"

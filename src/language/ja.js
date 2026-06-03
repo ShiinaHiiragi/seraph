@@ -17,6 +17,78 @@ const ja = {
         reset: "デフォルトにリセット",
         resetButton: "リセット"
       },
+      terminal: {
+        title: "ターミナル",
+        enable: "ターミナルを有効",
+        shell: "シェル",
+        shellLinux: "Linux でのシェルパス",
+        shellWin32: "Windows でのシェルパス",
+        timeout: "コネクションタイムアウト",
+        timeoutOption: {
+          15: "15 分",
+          30: "30 分",
+          60: "1 時間",
+          120: "2 時間",
+          240: "4 時間",
+          360: "6 時間"
+        },
+        "cursor": "カーソル",
+        "cursorBlink": "カーソルをブリンク",
+        "reflowCursorLine": "カーソルを含む行をリフロー",
+        "cursorStyle": "アクティブカーソルのスタイル",
+        "activeStyleOption": {
+          "block": "ブロック",
+          "bar": "バー",
+          "underline": "アンダーライン"
+        },
+        "cursorInactiveStyle": "インアクティブカーソルのスタイル",
+        "inactiveStyleOption": {
+          "outline": "アウトライン",
+          "block": "ブロック",
+          "bar": "バー",
+          "underline": "アンダーライン",
+          "none": "なし"
+        },
+        "font": "フォント",
+        "fontSize": "フォントサイズ",
+        "fontFamily": "ターミナルフォント",
+        "fontWeight": "ノーマルテキストのフォントウェイト",
+        "fontWeightBold": "ボールドテキストのフォントウェイト",
+        "text": "テキスト",
+        "letterSpacing": "レタースペーシング",
+        "lineHeight": "ラインハイト",
+        "contrastRatio": "最小コントラスト比",
+        "wordSeparator": "ワードセパレーター",
+        "scroll": "スクロール",
+        "scrollback": "スクロールバック量",
+        "scrollNormal": "ノーマルスクロール感度",
+        "scrollFast": "ファストスクロール感度",
+        "theme": "テーマ",
+        "themeTransparency": "トランスペアレントを有効にする（リロードが必要）",
+        "themeOption": {
+          "selectionBackground": "選択範囲のバックグラウンドカラー",
+          "background": "バックグラウンドカラー",
+          "foreground": "フォアグラウンドカラー",
+          "cursor": "カーソルカラー",
+          "cursorAccent": "カーソルアクセントカラー",
+          "black": "ブラック",
+          "blue": "ブルー",
+          "cyan": "シアン",
+          "green": "グリーン",
+          "magenta": "マゼンタ",
+          "red": "レッド",
+          "white": "ホワイト",
+          "yellow": "イエロー",
+          "brightBlack": "ブライトブラック",
+          "brightBlue": "ブライトブルー",
+          "brightCyan": "ブライトシアン",
+          "brightGreen": "ブライトグリーン",
+          "brightMagenta": "ブライトマゼンタ",
+          "brightRed": "ブライトレッド",
+          "brightWhite": "ブライトホワイト",
+          "brightYellow": "ブライトイエロー"
+        }
+      },
       todo: {
         title: "トゥードゥー",
         deleteTime: "デリートのディレイ",
@@ -27,6 +99,15 @@ const ja = {
           3600: "1 時間",
           86400: "1 日"
         }
+      },
+      extension: {
+        title: "エクステンション",
+        python: "Python",
+        pythonLinux: "Linux で Python のパス",
+        pythonWin32: "Windows で Python のパス",
+        pandoc: "Pandoc",
+        pandocLinux: "Linux で Pandoc のパス",
+        pandocWin32: "Windows で Pandoc のパス"
       },
       epub: {
         title: "EPUB コンバーター",
@@ -101,6 +182,7 @@ const ja = {
         createTime: "{0} に作成",
         modifiedTime: "{0} に最終更新"
       },
+      items: "{0} 件",
       rowMenu: {
         open: "オープン",
         rename: "リネーム",
@@ -273,6 +355,10 @@ const ja = {
       inDevelopment: {
         title: "イン・ディベロップメント",
         caption: "必要であればギットハブでニューイシューをサブミットしてください。"
+      },
+      disabled: {
+        "title": "フィーチャーが無効",
+        "caption": "このフィーチャーをアクセスするには、セッティングで有効にしてください。"
       }
     }
   }

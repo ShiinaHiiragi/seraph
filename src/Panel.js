@@ -26,6 +26,7 @@ import GlobalTheme from "./interface/theme";
 import GlobalContext, {
   ConstantContext,
   globalState,
+  defaultPlatform,
   defaultClipboard,
   defaultSetting,
   setValue,
@@ -113,6 +114,8 @@ const Panel = () => {
   const [globalSwitch, setGlobalSwitch] = React.useState(globalState.INNOCENT);
   const [clipboard, setClipboard] = React.useState(defaultClipboard);
   const [setting, setSetting] = React.useState(defaultSetting);
+  const [platform, setPlatform] = React.useState(defaultPlatform);
+
   const [publicFolders, setPublicFolders] = React.useState([]);
   const [privateFolders, setPrivateFolders] = React.useState([]);
   const sortedPublicFolders = React.useMemo(() => publicFolders.sortBy(), [publicFolders]);
@@ -143,6 +146,7 @@ const Panel = () => {
         if (data.private) {
           setPrivateFolders(data.private);
           setClipboard(data.clipboard);
+          setPlatform(data.platform);
           setGlobalSwitch(globalState.AUTHORITY);
         } else {
           setGlobalSwitch(globalState.ANONYMOUS);
@@ -179,6 +183,7 @@ const Panel = () => {
         sortedPublicFolders: sortedPublicFolders,
         sortedPrivateFolders: sortedPrivateFolders,
         setting: setting,
+        platform: platform
       }}
     >
       <GlobalStyles styles={toastTheme} />

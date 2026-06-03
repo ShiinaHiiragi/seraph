@@ -17,6 +17,78 @@ const zhHans = {
         reset: "重置为默认值",
         resetButton: "重置"
       },
+      terminal: {
+        title: "终端",
+        enable: "启用终端",
+        shell: "Shell",
+        shellLinux: "Linux 的 Shell 路径",
+        shellWin32: "Windows 的 Shell 路径",
+        timeout: "超时时间",
+        timeoutOption: {
+          15: "15 分钟",
+          30: "30 分钟",
+          60: "1 小时",
+          120: "2 小时",
+          240: "4 小时",
+          360: "6 小时"
+        },
+        "cursor": "光标",
+        "cursorBlink": "光标闪烁",
+        "reflowCursorLine": "重排包含光标的行",
+        "cursorStyle": "活动光标样式",
+        "activeStyleOption": {
+          "block": "实心",
+          "bar": "条状",
+          "underline": "下划线"
+        },
+        "cursorInactiveStyle": "非活动光标样式",
+        "inactiveStyleOption": {
+          "outline": "轮廓",
+          "block": "实心",
+          "bar": "条状",
+          "underline": "下划线",
+          "none": "无"
+        },
+        "font": "字体",
+        "fontSize": "字号",
+        "fontFamily": "终端字体",
+        "fontWeight": "普通文本字重",
+        "fontWeightBold": "粗体文本字重",
+        "text": "文本",
+        "letterSpacing": "字间距",
+        "lineHeight": "行高",
+        "contrastRatio": "最小对比度",
+        "wordSeparator": "单词分隔符",
+        "scroll": "滚动",
+        "scrollback": "历史行数",
+        "scrollNormal": "普通滚动灵敏度",
+        "scrollFast": "快速滚动灵敏度",
+        "theme": "主题",
+        "themeTransparency": "允许透明背景（需要重新加载）",
+        "themeOption": {
+          "selectionBackground": "选区背景色",
+          "background": "背景颜色",
+          "foreground": "前景颜色",
+          "cursor": "光标颜色",
+          "cursorAccent": "光标强调色",
+          "black": "黑色",
+          "blue": "蓝色",
+          "cyan": "青色",
+          "green": "绿色",
+          "magenta": "洋红色",
+          "red": "红色",
+          "white": "白色",
+          "yellow": "黄色",
+          "brightBlack": "亮黑色",
+          "brightBlue": "亮蓝色",
+          "brightCyan": "亮青色",
+          "brightGreen": "亮绿色",
+          "brightMagenta": "亮洋红色",
+          "brightRed": "亮红色",
+          "brightWhite": "亮白色",
+          "brightYellow": "亮黄色"
+        }
+      },
       todo: {
         title: "待办",
         deleteTime: "删除延迟",
@@ -27,6 +99,15 @@ const zhHans = {
           3600: "1 小时",
           86400: "1 天"
         }
+      },
+      extension: {
+        title: "扩展",
+        python: "Python",
+        pythonLinux: "Linux 的 Python 路径",
+        pythonWin32: "Windows 的 Python 路径",
+        pandoc: "Pandoc",
+        pandocLinux: "Linux 的 Pandoc 路径",
+        pandocWin32: "Windows 的 Pandoc 路径"
       },
       epub: {
         title: "EPUB 转换",
@@ -101,6 +182,7 @@ const zhHans = {
         createTime: "创建于 {0}",
         modifiedTime: "最后修改于 {0}"
       },
+      items: "{0} 项",
       rowMenu: {
         open: "打开",
         rename: "重命名",
@@ -273,6 +355,10 @@ const zhHans = {
       inDevelopment: {
         title: "开发中",
         caption: "如有需要，请在 GitHub 上提交新 Issue。"
+      },
+      disabled: {
+        title: "功能已禁用",
+        caption: "请在设置中启用"
       }
     }
   }

@@ -33,7 +33,8 @@ router.get('/meta', (req, res, next) => {
       public: publicFolder,
       private: privateFolder,
       clipboard: api.configOperator.config.clipboard,
-      setting: api.configOperator.config.setting
+      setting: api.configOperator.config.setting,
+      platform: process.platform
     })
     return;
   }
@@ -43,7 +44,7 @@ router.post('/init', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
     if (req.status.err == api.Status.authErrCode.NotInit) {
       const { password, language } = req.body;
-      api.configOperator.setConfigMetadata("password", password);
+      api.configOperator.savePassword(password);
       api.configOperator.setConfigSetting("meta.language", language);
       api.tokenOperator.addNewSession(res);
 
@@ -72,7 +73,7 @@ router.post('/login', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
     if (req.status.err === api.Status.authErrCode.InvalidToken) {
       const { password } = req.body;
-      if (password === api.configOperator.config.metadata.password) {
+      if (api.configOperator.verifyPassword(password)) {
         // public is neccesarry because files starts with dot are hidden
         const publicFolder = api.fileOperator.readFoldersList(api.dataPath.publicDirPath);
         const privateFolder = api.fileOperator.readFoldersList(api.dataPath.privateDirPath);

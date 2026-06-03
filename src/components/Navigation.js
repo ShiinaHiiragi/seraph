@@ -13,7 +13,7 @@ import NavigateNextOutlinedIcon from "@mui/icons-material/NavigateNextOutlined";
 // import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 // import EventNoteOutlinedIcon from "@mui/icons-material/EventNoteOutlined";
 // import ForwardToInboxOutlinedIcon from "@mui/icons-material/ForwardToInboxOutlined";
-// import TerminalOutlinedIcon from "@mui/icons-material/TerminalOutlined";
+import TerminalOutlinedIcon from "@mui/icons-material/TerminalOutlined";
 import DoneIcon from "@mui/icons-material/Done";
 import GlobalContext from "../interface/constants";
 import { pathStartWith } from "../interface/constants";
@@ -183,7 +183,7 @@ export default function Navigation(props) {
                   </ListItemDecorator>
                   <ListItemContent>{context.languagePicker("nav.utility.subscription")}</ListItemContent>
                 </ListItemButton>
-              </ListItem>}
+              </ListItem>} */}
               {context.isAuthority && <ListItem>
                 <ListItemButton
                   selected={pathStartWith("/terminal")}
@@ -194,7 +194,7 @@ export default function Navigation(props) {
                   </ListItemDecorator>
                   <ListItemContent>{context.languagePicker("nav.utility.terminal")}</ListItemContent>
                 </ListItemButton>
-              </ListItem>} */}
+              </ListItem>}
               {context.isAuthority && <ListItem>
                 <ListItemButton
                   selected={pathStartWith("/todo")}

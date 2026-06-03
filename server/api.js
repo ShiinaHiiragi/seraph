@@ -5,7 +5,7 @@ const dotenv = require('dotenv');
 const mime = require('mime');
 const child = require('child_process');
 const assert = require('assert');
-const CryptoJS = require('crypto-js');
+const crypto = require('crypto');
 const checkDiskSpace = require('check-disk-space').default
 
 String.prototype.versionGE = function (min) {
@@ -81,8 +81,73 @@ const defaultConfig = {
       language: "en",
       token: 60
     },
+    terminal: {
+      enable: false,
+      shell: {
+        linux: "bash",
+        win32: "powershell.exe"
+      },
+      timeout: 30,
+      cursor: {
+        blink: false,
+        reflow: false,
+        active: "block",
+        inactive: "outline"
+      },
+      font: {
+        size: 14,
+        family: "Noto Sans Mono",
+        weight: "normal",
+        weightBold: "bold"
+      },
+      scroll: {
+        back: 1000,
+        normal: 1,
+        fast: 4
+      },
+      text: {
+        space: 0,
+        height: 1,
+        contrast: 1,
+        separator: "()[]{} ',\"`─‘’|"
+      },
+      theme: {
+        transparency: false,
+        selectionBackground: "#C8D2E6",
+        background: "#F8F8F8",
+        foreground: "#383838",
+        cursor: "#383838",
+        cursorAccent: "#F8F8F8",
+        black: "#383A42",
+        blue: "#4078F2",
+        cyan: "#0184BC",
+        green: "#50A14F",
+        magenta: "#A626A4",
+        red: "#E45649",
+        white: "#A0A1A7",
+        yellow: "#C18401",
+        brightBlack: "#4F525E",
+        brightBlue: "#4078F2",
+        brightCyan: "#0184BC",
+        brightGreen: "#50A14F",
+        brightMagenta: "#A626A4",
+        brightRed: "#E45649",
+        brightWhite: "#383A42",
+        brightYellow: "#C18401"
+      }
+    },
     task: {
       delay: 60
+    },
+    extension: {
+      python: {
+        linux: "python3",
+        win32: "python"
+      },
+      pandoc: {
+        linux: "pandoc",
+        win32: "pandoc"
+      }
     },
     epub: {
       page: {
@@ -230,13 +295,18 @@ const fileOperator = {
   },
 
   readFileInfo: (folderPath, filename) => {
-    const stat = fs.lstatSync(path.join(folderPath, filename));
+    const filePath = path.join(folderPath, filename)
+    const stat = fs.lstatSync(filePath);
+    const isDir = stat.isDirectory();
+
     return {
       name: filename,
-      size: stat.size,
+      size: isDir
+        ? fs.readdirSync(filePath).length
+        : stat.size,
       time: stat.birthtime,
       mtime: stat.mtime,
-      type: stat.isDirectory()
+      type: isDir
         ? "directory"
         : (mime.getType(filename) ?? "unknown")
     }
@@ -338,6 +408,18 @@ const configOperator = {
       setting: configOperator.setValue(config.setting, key, value)
     })
     );
+  },
+
+  savePassword: (password) => {
+    const salt = crypto.randomBytes(16).toString('hex');
+    const hash = crypto.scryptSync(password, salt, 64).toString('hex');
+    configOperator.setConfigMetadata("password", `${salt}:${hash}`)
+  },
+
+  verifyPassword: (password) => {
+    const [salt, hash] = configOperator.config.metadata.password.split(':');
+    const candidate = crypto.scryptSync(password, salt, 64).toString('hex');
+    return crypto.timingSafeEqual(Buffer.from(candidate, 'hex'), Buffer.from(hash, 'hex'));
   }
 }
 
@@ -389,14 +471,7 @@ const tokenOperator = {
   },
 
   addNewSession: (res) => {
-    const session = CryptoJS.SHA256(
-      Array(16).fill().reduce(
-        (current) => current +
-          Math.random().toString(36).slice(2, 6),
-        ""
-      )
-    ).toString();
-
+    const session = crypto.randomBytes(32).toString('hex');
     cookieOperator.setSessionCookie(res, session);
     tokenOperator.setToken((token) => [
       ...token,
@@ -426,7 +501,10 @@ const tokenOperator = {
 
     let sessionIndex = tokenOperator.token.findIndex((item) => item.session === session)
     if (sessionIndex >= 0) {
-      cookieOperator.setSessionCookie(res, session);
+      // res is undefined when wssAuth() called
+      if (res !== undefined) {
+        cookieOperator.setSessionCookie(res, session);
+      }
       tokenOperator.setToken((token) => {
         token[sessionIndex].timestamp = Date.now() + expiredPeriod;
         return token;
@@ -439,7 +517,6 @@ const tokenOperator = {
 };
 
 const checkerOperator = {
-  python: os.platform() === 'win32' ? 'python' : 'python3',
   pass: (miss) => {
     const notPassed = miss instanceof Array && miss.length > 0
     return {
@@ -458,7 +535,10 @@ const checkerOperator = {
 
   checkPandoc: () => () => {
     try {
-      child.execFileSync('pandoc', ['--version']);
+      child.execFileSync(
+        configOperator.config.setting.extension.pandoc[process.platform],
+        ['--version']
+      );
       return checkerOperator.pass()
     } catch (_) {
       return checkerOperator.pass([{ id: "pandoc", cat: "Packages" }]);
@@ -468,7 +548,7 @@ const checkerOperator = {
   checkPython: (minVersion) => () => {
     try {
       const stdout = child.execFileSync(
-        checkerOperator.python,
+        configOperator.config.setting.extension.python[process.platform],
         ['--version'],
         { encoding: 'utf8' }
       );
@@ -490,7 +570,7 @@ const checkerOperator = {
 
     try {
       const stdout = child.execFileSync(
-        checkerOperator.python,
+        configOperator.config.setting.extension.python[process.platform],
         ['-c', script],
         { encoding: 'utf8' }
       );
@@ -560,13 +640,7 @@ const taskOperator = {
 
   addTask: (name, description, type, dueTime) => {
     taskOperator.__clearExpiredTask();
-    const id = CryptoJS.MD5(
-      Array(16).fill().reduce(
-        (current) => current +
-          Math.random().toString(36).slice(2, 6),
-        ""
-      )
-    ).toString();
+    const id = crypto.randomBytes(16).toString('hex');
 
     const newTask = {
       id: id,

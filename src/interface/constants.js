@@ -104,18 +104,86 @@ const globalState = {
   AUTHORITY: "authority"
 };
 
+const defaultPlatform = "linux";
+
 const defaultClipboard = {
   permanent: null,
   directory: null,
   path: null
 };
+
 const defaultSetting = {
   meta: {
     language: "en",
     token: 60
   },
+  terminal: {
+    enable: false,
+    shell: {
+      linux: "bash",
+      win32: "powershell.exe"
+    },
+    timeout: 30,
+    cursor: {
+      blink: false,
+      reflow: false,
+      active: "block",
+      inactive: "outline"
+    },
+    font: {
+      size: 14,
+      family: "Noto Sans Mono",
+      weight: "normal",
+      weightBold: "bold"
+    },
+    scroll: {
+      back: 1000,
+      normal: 1,
+      fast: 4
+    },
+    text: {
+      space: 0,
+      height: 1,
+      contrast: 1,
+      separator: "()[]{} ',\"`─‘’|"
+    },
+    theme: {
+      transparency: false,
+      selectionBackground: "#C8D2E6",
+      background: "#F8F8F8",
+      foreground: "#383838",
+      cursor: "#383838",
+      cursorAccent: "#F8F8F8",
+      black: "#383A42",
+      blue: "#4078F2",
+      cyan: "#0184BC",
+      green: "#50A14F",
+      magenta: "#A626A4",
+      red: "#E45649",
+      white: "#A0A1A7",
+      yellow: "#C18401",
+      brightBlack: "#4F525E",
+      brightBlue: "#4078F2",
+      brightCyan: "#0184BC",
+      brightGreen: "#50A14F",
+      brightMagenta: "#A626A4",
+      brightRed: "#E45649",
+      brightWhite: "#383A42",
+      brightYellow: "#C18401"
+    }
+  },
   task: {
     delay: 60
+  },
+  extension: {
+    python: {
+      linux: "python3",
+      win32: "python"
+    },
+    pandoc: {
+      linux: "pandoc",
+      win32: "pandoc"
+    }
   },
   epub: {
     page: {
@@ -152,11 +220,70 @@ const defaultSetting = {
     }
   }
 };
+
 const settingField = {
   general: "general",
+  terminal: "terminal",
   todo: "todo",
+  extension: "extension",
   epub: "epub"
 }
+
+const monospaceFonts = [
+  {
+    name: "Noto Sans Mono",
+    url: "https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@100..900&display=swap"
+  },
+  {
+    name: "Roboto Mono",
+    url: "https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap"
+  },
+  {
+    name: "JetBrains Mono",
+    url: "https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+  },
+  {
+    name: "IBM Plex Mono",
+    url: "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+  },
+  {
+    name: "Ubuntu Mono",
+    url: "https://fonts.googleapis.com/css2?family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+  },
+  {
+    name: "Space Mono",
+    url: "https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+  },
+  {
+    name: "PT Mono",
+    url: "https://fonts.googleapis.com/css2?family=PT+Mono&display=swap"
+  },
+  {
+    name: "DM Mono",
+    url: "https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap"
+  },
+  {
+    name: "Anonymous Pro",
+    url: "https://fonts.googleapis.com/css2?family=Anonymous+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+  },
+  {
+    name: "Source Code Pro",
+    url: "https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap"
+  },
+  {
+    name: "Fira Code",
+    url: "https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap"
+  },
+  {
+    name: "Cascadia Code",
+    url: "https://fonts.googleapis.com/css2?family=Cascadia+Code:ital,wght@0,200..700;1,200..700&display=swap"
+  },
+  {
+    name: "Inconsolata",
+    url: "https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&display=swap"
+  }
+]
+
 const setValue = (obj, key, value) => {
   const parts = key.split(".");
   if (parts.length > 1) {
@@ -181,9 +308,11 @@ export {
   animeDuration,
   toastDuration,
   globalState,
+  defaultPlatform,
   defaultClipboard,
   defaultSetting,
   settingField,
+  monospaceFonts,
   setValue
 };
 
@@ -198,8 +327,10 @@ const isLoopback = (hostname) => {
   const h = hostname.toLowerCase();
   return h === "localhost" || h === "::1" || /^127(\.\d{1,3}){3}$/.test(h);
 }
+
 const generateBaseURL = (protocol, hostname, port) => 
   `${protocol}://${hostname}:${port}`;
+
 const serverBaseURL = isLoopback(process.env.REACT_APP_HOSTNAME)
   ? generateBaseURL(
     "http",
@@ -212,13 +343,16 @@ const serverBaseURL = isLoopback(process.env.REACT_APP_HOSTNAME)
     process.env.REACT_APP_SSLCERT === "nginx"
       ? process.env.REACT_APP_NPORT
       : process.env.REACT_APP_SPORT
-  )
+  );
+const serverWebSocketURL = serverBaseURL.replace("http", "ws");
+
 
 export {
   encodePath,
   pathStartWith,
   generateBaseURL,
-  serverBaseURL
+  serverBaseURL,
+  serverWebSocketURL
 }
 
 

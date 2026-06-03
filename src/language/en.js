@@ -17,6 +17,78 @@ const en = {
         reset: "Reset to default",
         resetButton: "Reset"
       },
+      terminal: {
+        title: "Terminal",
+        enable: "Enable Terminal",
+        shell: "Shell",
+        shellLinux: "Shell path on Linux",
+        shellWin32: "Shell path on Windows",
+        timeout: "Connection Timeout",
+        timeoutOption: {
+          15: "15 minutes",
+          30: "30 minutes",
+          60: "1 hour",
+          120: "2 hours",
+          240: "4 hours",
+          360: "6 hours"
+        },
+        cursor: "Cursor",
+        cursorBlink: "Cursor blinks",
+        reflowCursorLine: "Reflow the line containing cursor",
+        cursorStyle: "Style of active curcor",
+        activeStyleOption: {
+          block: "Block",
+          bar: "Bar",
+          underline: "Underline"
+        },
+        cursorInactiveStyle: "Style of inactive curcor",
+        inactiveStyleOption: {
+          outline: "Outline",
+          block: "Block",
+          bar: "Bar",
+          underline: "Underline",
+          none: "None"
+        },
+        font: "Font",
+        fontSize: "Font size",
+        fontFamily: "Terminal Font",
+        fontWeight: "Font weight of normal text",
+        fontWeightBold: "Font weight of bold text",
+        text: "Text",
+        letterSpacing: "Letter spacing",
+        lineHeight: "Line height",
+        contrastRatio: "Minimum contrast ratio",
+        wordSeparator: "Word separators",
+        scroll: "Scrolling",
+        scrollback: "Amount of scrollback",
+        scrollNormal: "Normal scrolling sensitivity",
+        scrollFast: "Fast scrolling sensitivity",
+        theme: "Theme",
+        themeTransparency: "Allow transparent background (reload required)",
+        themeOption: {
+          selectionBackground: "Background selection color",
+          background: "Background color",
+          foreground: "Foreground color",
+          cursor: "Cursor color",
+          cursorAccent: "Cursor accent color",
+          black: "Black color",
+          blue: "Blue color",
+          cyan: "Cyan color",
+          green: "Green color",
+          magenta: "Magenta color",
+          red: "Red color",
+          white: "White color",
+          yellow: "Yellow color",
+          brightBlack: "Bright black color",
+          brightBlue: "Bright blue color",
+          brightCyan: "Bright cyan color",
+          brightGreen: "Bright green color",
+          brightMagenta: "Bright magenta color",
+          brightRed: "Bright red color",
+          brightWhite: "Bright white color",
+          brightYellow: "Bright yellow color"
+        }
+      },
       todo: {
         title: "TODO",
         deleteTime: "Delete Delay",
@@ -27,6 +99,15 @@ const en = {
           3600: "1 hour",
           86400: "1 day"
         }
+      },
+      extension: {
+        title: "Extensions",
+        python: "Python",
+        pythonLinux: "Python path on Linux",
+        pythonWin32: "Python path on Windows",
+        pandoc: "Pandoc",
+        pandocLinux: "Pandoc path on Linux",
+        pandocWin32: "Pandoc path on Windows"
       },
       epub: {
         title: "Epub Converter",
@@ -101,6 +182,7 @@ const en = {
         createTime: "Created at {0}",
         modifiedTime: "Last modified at {0}"
       },
+      items: "{0} Items",
       rowMenu: {
         open: "Open",
         rename: "Rename",
@@ -274,6 +356,10 @@ const en = {
         title: "In Development",
         caption: "Please submit a new issue on GitHub if you are in need of it."
       },
+      disabled: {
+        title: "Feature Disabled",
+        caption: "Enable it in setting to access the feature."
+      }
     }
   }
 }

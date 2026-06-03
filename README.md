@@ -160,6 +160,8 @@
 
 ## Log
 
+- 06/03/2026 ver 0.4.1: Fix plaintext cipher
+- 06/02/2026 ver 0.4.0: Add terminal
 - 06/01/2026 ver 0.3.0: Add setting popup
 - 05/29/2026 ver 0.2.4: Add multiple files uploading
 - 05/27/2026 ver 0.2.3: Add converter for epub files fix i18n text
