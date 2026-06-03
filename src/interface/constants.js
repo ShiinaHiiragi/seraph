@@ -104,6 +104,7 @@ const globalState = {
   AUTHORITY: "authority"
 };
 
+const defaultPlatform = "linux";
 const defaultClipboard = {
   permanent: null,
   directory: null,
@@ -115,18 +116,59 @@ const defaultSetting = {
     token: 60
   },
   terminal: {
-    enable: true,
+    enable: false,
     shell: {
       linux: "bash",
       win32: "powershell.exe"
     },
     timeout: 60,
-    style: {
-      fontSize: 16,
-      fontFamily: "Ubuntu Mono",
-      cursorBlink: false
+    cursor: {
+      blink: false,
+      reflow: false,
+      active: "block",
+      inactive: "outline"
     },
-    theme: "Default Light"
+    font: {
+      size: 16,
+      family: "Ubuntu Mono",
+      weight: "normal",
+      weightBold: "bold"
+    },
+    scroll: {
+      back: 1000,
+      normal: 1,
+      fast: 4
+    },
+    text: {
+      space: 0,
+      height: 0,
+      contrast: 4.5,
+      separator: " ()[]{}',\"`─‘’|"
+    },
+    theme: {
+      transparency: false,
+      background: "#F8F8F8",
+      foreground: "#383838",
+      cursor: "#383838",
+      cursorAccent: "#F8F8F8",
+      black: "#383A42",
+      blue: "#4078F2",
+      cyan: "#0184BC",
+      green: "#50A14F",
+      magenta: "#A626A4",
+      red: "#E45649",
+      white: "#A0A1A7",
+      yellow: "#C18401",
+      brightBlack: "#4F525E",
+      brightBlue: "#4078F2",
+      brightCyan: "#0184BC",
+      brightGreen: "#50A14F",
+      brightMagenta: "#A626A4",
+      brightRed: "#E45649",
+      brightWhite: "#383A42",
+      brightYellow: "#C18401",
+      selectionBackground: "#C8D2E6"
+    }
   },
   task: {
     delay: 60
@@ -207,6 +249,7 @@ export {
   animeDuration,
   toastDuration,
   globalState,
+  defaultPlatform,
   defaultClipboard,
   defaultSetting,
   settingField,

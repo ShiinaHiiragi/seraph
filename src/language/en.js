@@ -18,7 +18,12 @@ const en = {
         resetButton: "Reset"
       },
       terminal: {
-        title: "Terminal"
+        title: "Terminal",
+        enable: "Enable Terminal",
+        shell: "Shell",
+        shellLinux: "Shell path on Linux",
+        shellWin32: "Shell path on Windows",
+        timeout: "Connection Timeout"
       },
       todo: {
         title: "TODO",

@@ -33,7 +33,8 @@ router.get('/meta', (req, res, next) => {
       public: publicFolder,
       private: privateFolder,
       clipboard: api.configOperator.config.clipboard,
-      setting: api.configOperator.config.setting
+      setting: api.configOperator.config.setting,
+      platform: process.platform
     })
     return;
   }

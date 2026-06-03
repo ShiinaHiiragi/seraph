@@ -2,6 +2,7 @@ import * as React from "react";
 import Box from "@mui/joy/Box";
 import Divider from "@mui/joy/Divider";
 import IconButton from "@mui/joy/IconButton";
+import Switch from "@mui/joy/Switch";
 import Modal from "@mui/joy/Modal";
 import ModalDialog from "@mui/joy/ModalDialog";
 import Option from "@mui/joy/Option";
@@ -37,7 +38,7 @@ const Literal = (value, itemsMap, field, handleApply) => (
       </Option>
     ))}
   </Select>
-)
+);
 
 // const Trifid = (value, itemsMap, field, handleApply) => (
 //   <RadioGroup
@@ -49,7 +50,7 @@ const Literal = (value, itemsMap, field, handleApply) => (
 //       <Radio key={label} value={value} label={label} />
 //     ))}
 //   </RadioGroup>
-// )
+// );
 
 const Bool = (label, checked, field, handleApply, disabled) => (
   <Checkbox
@@ -59,7 +60,21 @@ const Bool = (label, checked, field, handleApply, disabled) => (
     checked={checked}
     onChange={(event) => handleApply(field, event.target.checked)}
   />
+);
+
+const InstantBool = (checked, field, handleApply, label, disabled) => (
+  <Switch
+    disabled={disabled}
+    size="sm"
+    variant="outlined"
+    label={label}
+    checked={checked}
+    onChange={(event) => handleApply(field, event.target.checked)}
+  />
 )
+
+// Turkey -> Istanbul -> InstantBool
+const Turkey = InstantBool;
 
 const String = (props) => {
   const {
@@ -184,6 +199,16 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
       id: settingField.terminal,
       label: context.languagePicker("header.config.terminal.title"),
       items: [
+        {
+          key: context.languagePicker("header.config.terminal.enable"),
+          value: (
+            Turkey(
+              context.setting.terminal.enable,
+              "terminal.enable",
+              handleApply
+            )
+          )
+        }
       ]
     },
     {

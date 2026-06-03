@@ -6,30 +6,6 @@ import { FitAddon } from "@xterm/addon-fit";
 import RouteField from "../interface/RouteField";
 import GlobalContext, { serverWebSocketURL } from "../interface/constants";
 
-const LIGHT_THEME = {
-  background: "#F8F8F8",
-  foreground: "#383838",
-  cursor: "#383838",
-  cursorAccent: "#383838",
-  black: "#383A42",
-  blue: "#4078F2",
-  cyan: "#0184BC",
-  green: "#50A14F",
-  magenta: "#A626A4",
-  red: "#E45649",
-  white: "#A0A1A7",
-  yellow: "#C18401",
-  brightBlack: "#4F525E",
-  brightBlue: "#4078F2",
-  brightCyan: "#0184BC",
-  brightGreen: "#50A14F",
-  brightMagenta: "#A626A4",
-  brightRed: "#E45649",
-  brightWhite: "#383A42",
-  brightYellow: "#C18401",
-  selectionBackground: "#C8D2E6"
-};
-
 const Terminal = () => {
   const context = React.useContext(GlobalContext);
   const containerRef = React.useRef(null);
@@ -55,13 +31,58 @@ const Terminal = () => {
   // after second tick, the globalSwitch were set properly
   React.useEffect(() => {
     if (context.secondTick && context.isAuthority && containerRef.current) {
+      console.log(context.setting)
       const fitAddon = new FitAddon();
       const xterm = new XTerminal({
-        theme: LIGHT_THEME,
-        fontFamily: 'Ubuntu Mono, Monaco, Consolas, Courier New, monospace',
-        fontSize: 16,
-        cursorBlink: false,
-        convertEol: true
+        windowsPty: context.platform === "win32"
+          ? { backend: "conpty" }
+          : undefined,
+        altClickMovesCursor: true,
+        convertEol: false,
+        customGlyphs: true,
+        disableStdin: false,
+        ignoreBracketedPasteMode: false,
+        scrollOnUserInput: true,
+        smoothScrollDuration: 0,
+        cursorBlink: context.setting.terminal.cursor.blink,
+        reflowCursorLine: context.setting.terminal.cursor.reflow,
+        cursorStyle: context.setting.terminal.cursor.active,
+        cursorInactiveStyle: context.setting.terminal.cursor.inactive,
+        fontSize: context.setting.terminal.font.size,
+        fontFamily: `"${context.setting.terminal.font.family}", monospace`,
+        fontWeight: context.setting.terminal.font.weight,
+        fontWeightBold: context.setting.terminal.font.weightBold,
+        scrollback: context.setting.terminal.scroll.back,
+        scrollSensitivity: context.setting.terminal.scroll.normal,
+        fastScrollSensitivity: context.setting.terminal.scroll.fast,
+        letterSpacing: context.setting.terminal.text.space,
+        lineHeight: context.setting.terminal.text.height,
+        minimumContrastRatio: context.setting.terminal.text.contrast,
+        wordSeparator: context.setting.terminal.text.separator,
+        allowTransparency: context.setting.terminal.theme.transparency,
+        theme: {
+          background: context.setting.terminal.theme.background,
+          foreground: context.setting.terminal.theme.foreground,
+          cursor: context.setting.terminal.theme.cursor,
+          cursorAccent: context.setting.terminal.theme.cursorAccent,
+          black: context.setting.terminal.theme.black,
+          blue: context.setting.terminal.theme.blue,
+          cyan: context.setting.terminal.theme.cyan,
+          green: context.setting.terminal.theme.green,
+          magenta: context.setting.terminal.theme.magenta,
+          red: context.setting.terminal.theme.red,
+          white: context.setting.terminal.theme.white,
+          yellow: context.setting.terminal.theme.yellow,
+          brightBlack: context.setting.terminal.theme.brightBlack,
+          brightBlue: context.setting.terminal.theme.brightBlue,
+          brightCyan: context.setting.terminal.theme.brightCyan,
+          brightGreen: context.setting.terminal.theme.brightGreen,
+          brightMagenta: context.setting.terminal.theme.brightMagenta,
+          brightRed: context.setting.terminal.theme.brightRed,
+          brightWhite: context.setting.terminal.theme.brightWhite,
+          brightYellow: context.setting.terminal.theme.brightYellow,
+          selectionBackground: context.setting.terminal.theme.selectionBackground
+        }
       });
 
       xterm.loadAddon(fitAddon);
@@ -184,7 +205,7 @@ const Terminal = () => {
           width: "100%",
           height: "100%",
           position: "relative",
-          backgroundColor: LIGHT_THEME.background,
+          backgroundColor: context.setting.terminal.theme.background,
           borderWidth: "1px",
           borderStyle: "solid",
           borderColor: "rgba(var(--joy-palette-neutral-mainChannel, 99 107 116) / 0.15)",
