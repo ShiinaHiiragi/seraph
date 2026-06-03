@@ -178,7 +178,9 @@ const defaultSetting = {
 };
 const settingField = {
   general: "general",
+  terminal: "terminal",
   todo: "todo",
+  extension: "extension",
   epub: "epub"
 }
 const setValue = (obj, key, value) => {

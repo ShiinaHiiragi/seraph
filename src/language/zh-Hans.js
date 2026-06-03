@@ -17,6 +17,9 @@ const zhHans = {
         reset: "重置为默认值",
         resetButton: "重置"
       },
+      terminal: {
+        title: "终端"
+      },
       todo: {
         title: "待办",
         deleteTime: "删除延迟",
@@ -27,6 +30,15 @@ const zhHans = {
           3600: "1 小时",
           86400: "1 天"
         }
+      },
+      extension: {
+        title: "扩展",
+        python: "Python",
+        pythonLinux: "Linux 的 Python 路径",
+        pythonWin32: "Windows 的 Python 路径",
+        pandoc: "Pandoc",
+        pandocLinux: "Linux 的 Pandoc 路径",
+        pandocWin32: "Windows 的 Pandoc 路径"
       },
       epub: {
         title: "EPUB 转换",

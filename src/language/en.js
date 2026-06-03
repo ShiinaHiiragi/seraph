@@ -17,6 +17,9 @@ const en = {
         reset: "Reset to default",
         resetButton: "Reset"
       },
+      terminal: {
+        title: "Terminal"
+      },
       todo: {
         title: "TODO",
         deleteTime: "Delete Delay",
@@ -27,6 +30,15 @@ const en = {
           3600: "1 hour",
           86400: "1 day"
         }
+      },
+      extension: {
+        title: "Extensions",
+        python: "Python",
+        pythonLinux: "Python path on Linux",
+        pythonWin32: "Python path on Windows",
+        pandoc: "Pandoc",
+        pandocLinux: "Pandoc path on Linux",
+        pandocWin32: "Pandoc path on Windows"
       },
       epub: {
         title: "Epub Converter",

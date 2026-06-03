@@ -26,7 +26,7 @@ import GlobalContext, {
 import { languageMap } from "../interface/languagePicker";
 
 const Literal = (value, itemsMap, field, handleApply) => (
-  <Select size="sm" value={value} sx={{ maxWidth: 250 }}>
+  <Select size="sm" value={value} sx={{ maxWidth: 240 }}>
     {itemsMap.map(({value, label}) => (
       <Option
         key={value}
@@ -73,7 +73,8 @@ const String = (props) => {
     handleApply,
     start,
     end,
-    translate
+    translate,
+    code
   } = props;
 
   const [localValue, setLocalValue] = React.useState(value);
@@ -121,7 +122,7 @@ const String = (props) => {
         disabled={disabled}
         size="sm"
         type={type}
-        sx={{ maxWidth: width }}
+        sx={{ maxWidth: width, fontFamily: code ? "monospace" : undefined }}
         value={localValue}
         startDecorator={start}
         endDecorator={end}
@@ -180,6 +181,12 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
       ]
     },
     {
+      id: settingField.terminal,
+      label: context.languagePicker("header.config.terminal.title"),
+      items: [
+      ]
+    },
+    {
       id: settingField.todo,
       label: context.languagePicker("header.config.todo.title"),
       items: [
@@ -192,6 +199,66 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
             { value: 3600, label: context.languagePicker("header.config.todo.deleteTimeOption.3600") }, 
             { value: 86400, label: context.languagePicker("header.config.todo.deleteTimeOption.86400") }
           ], "task.delay", handleApply),
+        }
+      ]
+    },
+    {
+      id: settingField.extension,
+      label: context.languagePicker("header.config.extension.title"),
+      items: [
+        {
+          key: context.languagePicker("header.config.extension.python"),
+          value: (
+            <Stack spacing={1}>
+              <String
+                caption={context.languagePicker("header.config.extension.pythonLinux")}
+                value={context.setting.extension.python.linux}
+                width={240}
+                type="text"
+                field="extension.python.linux"
+                handleCheck={(_) => true}
+                handleApply={handleApply}
+                code={true}
+              />
+              <String
+                caption={context.languagePicker("header.config.extension.pythonWin32")}
+                value={context.setting.extension.python.win32}
+                width={240}
+                type="text"
+                field="extension.python.win32"
+                handleCheck={(_) => true}
+                handleApply={handleApply}
+                code={true}
+              />
+            </Stack>
+          )
+        },
+        {
+          key: context.languagePicker("header.config.extension.pandoc"),
+          value: (
+            <Stack spacing={1}>
+              <String
+                caption={context.languagePicker("header.config.extension.pandocLinux")}
+                value={context.setting.extension.pandoc.linux}
+                width={240}
+                type="text"
+                field="extension.pandoc.linux"
+                handleCheck={(_) => true}
+                handleApply={handleApply}
+                code={true}
+              />
+              <String
+                caption={context.languagePicker("header.config.extension.pandocWin32")}
+                value={context.setting.extension.pandoc.win32}
+                width={240}
+                type="text"
+                field="extension.pandoc.win32"
+                handleCheck={(_) => true}
+                handleApply={handleApply}
+                code={true}
+              />
+            </Stack>
+          )
         }
       ]
     },
@@ -325,6 +392,7 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
                 handleCheck={(_) => true}
                 handleApply={handleApply}
                 translate={(value) => JSON.parse('"' + value.replace(/"/g, '\\"') + '"')}
+                code={true}
               />
             </Stack>
           )

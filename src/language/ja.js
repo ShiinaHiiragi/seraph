@@ -17,6 +17,9 @@ const ja = {
         reset: "デフォルトにリセット",
         resetButton: "リセット"
       },
+      terminal: {
+        title: "ターミナル"
+      },
       todo: {
         title: "トゥードゥー",
         deleteTime: "デリートのディレイ",
@@ -27,6 +30,15 @@ const ja = {
           3600: "1 時間",
           86400: "1 日"
         }
+      },
+      extension: {
+        title: "エクステンション",
+        python: "Python",
+        pythonLinux: "Linux で Python のパス",
+        pythonWin32: "Windows で Python のパス",
+        pandoc: "Pandoc",
+        pandocLinux: "Linux で Pandoc のパス",
+        pandocWin32: "Windows で Pandoc のパス"
       },
       epub: {
         title: "EPUB コンバーター",

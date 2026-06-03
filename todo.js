@@ -14,12 +14,13 @@ function verifyPassword(password, stored) {
   return crypto.timingSafeEqual(Buffer.from(candidate, 'hex'), Buffer.from(hash, 'hex'));
 }
 
-// xs 增加 sendCtrl("C") 等
-// 指定 python3 pandoc
 // 指定 bash powershell.exe
 // 指定 timeout, 各种 styles, control lists
-// 如上，密码加密
+
+// 初始化 shell 同意
+// xs 增加 sendCtrl("C") 等
 // dir 返回 sub items 数量
+// 如上，密码加密
 
 const [fontSize, setFontSize] = React.useState(14);
 const [theme, setTheme] = React.useState(LIGHT_THEME);
