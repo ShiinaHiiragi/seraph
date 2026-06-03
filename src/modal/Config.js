@@ -159,6 +159,7 @@ const String = (props) => {
 };
 
 const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
+  // TODO: reset password
   return [
     {
       id: settingField.general,

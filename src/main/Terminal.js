@@ -59,6 +59,8 @@ const Terminal = () => {
     context.setting.terminal.theme,
   ]);
 
+  // TODO: send Ctrl+C under xs
+  // TODO: config control lists in settings
   // const sendCtrl = React.useCallback((letter) => {
   //   const code = letter.toUpperCase().charCodeAt(0) - 64;
   //   if (code >= 1 && code <= 26) {
@@ -74,7 +76,8 @@ const Terminal = () => {
         && containerRef.current
         && context.setting.terminal.enable
     ) {
-      console.log(context.setting)
+      // TODO: ask for agreements
+      // TODO: import fonts automatically
       const fitAddon = new FitAddon();
       const xterm = new XTerminal({
         windowsPty: context.platform === "win32"
