@@ -279,34 +279,32 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
                 )}
               </Stack>
               <Stack spacing={1}>
-                {[
-                  LabeledLiteral(
-                    context.languagePicker("header.config.terminal.cursorStyle"),
-                    context.setting.terminal.cursor.active,
-                    [
-                      { value: "block", label: context.languagePicker("header.config.terminal.activeStyleOption.block") },
-                      { value: "underline", label: context.languagePicker("header.config.terminal.activeStyleOption.underline") },
-                      { value: "bar", label: context.languagePicker("header.config.terminal.activeStyleOption.bar") },
-                    ],
-                    "terminal.cursor.active",
-                    handleApply,
-                    !context.setting.terminal.enable
-                  ),
-                  LabeledLiteral(
-                    context.languagePicker("header.config.terminal.cursorInactiveStyle"),
-                    context.setting.terminal.cursor.inactive,
-                    [
-                      { value: "outline", label: context.languagePicker("header.config.terminal.inactiveStyleOption.outline") },
-                      { value: "block", label: context.languagePicker("header.config.terminal.inactiveStyleOption.block") },
-                      { value: "underline", label: context.languagePicker("header.config.terminal.inactiveStyleOption.underline") },
-                      { value: "bar", label: context.languagePicker("header.config.terminal.inactiveStyleOption.bar") },
-                      { value: "none", label: context.languagePicker("header.config.terminal.inactiveStyleOption.none") },
-                    ],
-                    "terminal.cursor.inactive",
-                    handleApply,
-                    !context.setting.terminal.enable
-                  )
-                ]}
+                {LabeledLiteral(
+                  context.languagePicker("header.config.terminal.cursorStyle"),
+                  context.setting.terminal.cursor.active,
+                  [
+                    { value: "block", label: context.languagePicker("header.config.terminal.activeStyleOption.block") },
+                    { value: "underline", label: context.languagePicker("header.config.terminal.activeStyleOption.underline") },
+                    { value: "bar", label: context.languagePicker("header.config.terminal.activeStyleOption.bar") },
+                  ],
+                  "terminal.cursor.active",
+                  handleApply,
+                  !context.setting.terminal.enable
+                )}
+                {LabeledLiteral(
+                  context.languagePicker("header.config.terminal.cursorInactiveStyle"),
+                  context.setting.terminal.cursor.inactive,
+                  [
+                    { value: "outline", label: context.languagePicker("header.config.terminal.inactiveStyleOption.outline") },
+                    { value: "block", label: context.languagePicker("header.config.terminal.inactiveStyleOption.block") },
+                    { value: "underline", label: context.languagePicker("header.config.terminal.inactiveStyleOption.underline") },
+                    { value: "bar", label: context.languagePicker("header.config.terminal.inactiveStyleOption.bar") },
+                    { value: "none", label: context.languagePicker("header.config.terminal.inactiveStyleOption.none") },
+                  ],
+                  "terminal.cursor.inactive",
+                  handleApply,
+                  !context.setting.terminal.enable
+                )}
               </Stack>
             </Stack>
           )
@@ -471,25 +469,56 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
                 handleApply
               )}
               <Stack spacing={1}>
-                {Object.keys(context.setting.terminal.theme)
-                  .filter((item) => item !== "transparency")
-                  .map((key) => (
+                <String
+                  disabled={!context.setting.terminal.enable}
+                  caption={context.languagePicker("header.config.terminal.themeOption.selectionBackground")}
+                  value={context.setting.terminal.theme.selectionBackground}
+                  width={160}
+                  type="text"
+                  field="terminal.theme.selectionBackground"
+                  handleCheck={(value) => value.trim() !== '' && CSS.supports("color", value.trim())}
+                  handleApply={handleApply}
+                  code={true}
+                />
+                {[
+                  ["background", "foreground"],
+                  ["cursor", "cursorAccent"],
+                  ["black", "brightBlack"],
+                  ["blue", "brightBlue"],
+                  ["cyan", "brightCyan"],
+                  ["green", "brightGreen"],
+                  ["magenta", "brightMagenta"],
+                  ["red", "brightRed"],
+                  ["white", "brightWhite"],
+                  ["yellow", "brightYellow"]
+                ].map(([color, brightColor]) =>
+                  <Stack key={color} spacing={{ md: 1, lg: 4 }} direction={{ md: "column", lg: "row" }}>
                     <String
-                      key={key}
                       disabled={!context.setting.terminal.enable}
-                      caption={context.languagePicker(`header.config.terminal.themeOption.${key}`)}
-                      value={context.setting.terminal.theme[key]}
+                      caption={context.languagePicker(`header.config.terminal.themeOption.${color}`)}
+                      value={context.setting.terminal.theme[color]}
                       width={160}
                       type="text"
-                      field={`terminal.theme.${key}`}
+                      field={`terminal.theme.${color}`}
                       handleCheck={(value) => value.trim() !== '' && CSS.supports("color", value.trim())}
                       handleApply={handleApply}
                       code={true}
                     />
-                ))}
+                    <String
+                      disabled={!context.setting.terminal.enable}
+                      caption={context.languagePicker(`header.config.terminal.themeOption.${brightColor}`)}
+                      value={context.setting.terminal.theme[brightColor]}
+                      width={160}
+                      type="text"
+                      field={`terminal.theme.${brightColor}`}
+                      handleCheck={(value) => value.trim() !== '' && CSS.supports("color", value.trim())}
+                      handleApply={handleApply}
+                      code={true}
+                    />
+                  </Stack>
+                )}
               </Stack>
             </Stack>
-
           )
         }
       ]
@@ -870,9 +899,9 @@ export default function Config(props) {
         aria-labelledby="config-modal-title"
         sx={{
           p: 0,
-          width: { xs: "95vw", sm: "82vw" },
+          width: { xs: "95vw", md: "82vw" },
           maxWidth: 900,
-          height: { xs: "90vh", sm: "78vh" },
+          height: { xs: "90vh", md: "78vh" },
           maxHeight: 700,
           overflow: "hidden",
           display: "flex",
@@ -900,7 +929,7 @@ export default function Config(props) {
           >
             {context.languagePicker("header.config.title")}
           </Typography>
-          <Box sx={{ display: { sm: "none" } }}>
+          <Box sx={{ display: { md: "none" } }}>
             <IconButton
               variant="plain"
               color="neutral"
@@ -930,7 +959,7 @@ export default function Config(props) {
               overflowY: "auto",
               pt: 2,
               pb: 1,
-              display: { xs: "none", sm: "block" },
+              display: { xs: "none", md: "block" },
             }}
           >
             {sectionUncurry.map((s) => (
@@ -965,7 +994,7 @@ export default function Config(props) {
                 bgcolor: "background.surface",
                 zIndex: 10,
                 overflowY: "auto",
-                display: { sm: "none" },
+                display: { md: "none" },
               }}
             >
               {sectionUncurry.map((s) => (
@@ -993,7 +1022,7 @@ export default function Config(props) {
             sx={{
               flex: 1,
               overflowY: "auto",
-              px: { xs: 2.5, sm: 4 },
+              px: { xs: 2.5, md: 4 },
               pt: 3,
               pb: 0,
             }}
@@ -1016,11 +1045,11 @@ export default function Config(props) {
                       {i > 0 && <Divider />}
                       <Box
                         sx={{
-                          display: { xs: "flex", sm: "grid" },
+                          display: { xs: "flex", md: "grid" },
                           flexDirection: "column",
-                          gridTemplateColumns: { sm: "200px 1fr" },
+                          gridTemplateColumns: { md: "200px 1fr" },
                           py: 2,
-                          gap: { xs: 1, sm: 2 },
+                          gap: { xs: 1, md: 2 },
                           alignItems: "start",
                         }}
                       >
@@ -1034,7 +1063,7 @@ export default function Config(props) {
                             </Typography>
                           )}
                         </Box>
-                        <Box sx={{ width: { xs: "100%" } }}>
+                        <Box sx={{ width: "100%" }}>
                           {item.value}
                         </Box>
                       </Box>
