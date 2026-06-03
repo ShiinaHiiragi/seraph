@@ -217,7 +217,9 @@ const Terminal = () => {
         }
 
         if (event.key === "Backspace") {
-          xterm.paste("\x17");
+          if (webSocket.readyState === WebSocket.OPEN) {
+            webSocket.send(JSON.stringify({ type: "input", data: "\x17" }));
+          }
           return false;
         }
         return true;
