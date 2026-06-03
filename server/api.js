@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const mime = require('mime');
 const child = require('child_process');
 const assert = require('assert');
+const crypto = require('crypto');
 const CryptoJS = require('crypto-js');
 const checkDiskSpace = require('check-disk-space').default
 
@@ -408,6 +409,18 @@ const configOperator = {
       setting: configOperator.setValue(config.setting, key, value)
     })
     );
+  },
+
+  savePassword: (password) => {
+    const salt = crypto.randomBytes(16).toString('hex');
+    const hash = crypto.scryptSync(password, salt, 64).toString('hex');
+    configOperator.setConfigMetadata("password", `${salt}:${hash}`)
+  },
+
+  verifyPassword: (password) => {
+    const [salt, hash] = configOperator.config.metadata.password.split(':');
+    const candidate = crypto.scryptSync(password, salt, 64).toString('hex');
+    return crypto.timingSafeEqual(Buffer.from(candidate, 'hex'), Buffer.from(hash, 'hex'));
   }
 }
 
