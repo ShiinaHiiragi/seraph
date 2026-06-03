@@ -229,6 +229,23 @@ const Terminal = () => {
       const observer = new ResizeObserver(() => fitAddon.fit());
       observer.observe(containerRef.current);
 
+      // touch scroll for mobile
+      let touchStartY = 0;
+      const onTouchStart = (e) => {
+        touchStartY = e.touches[0].clientY;
+      };
+      const onTouchMove = (e) => {
+        const deltaY = touchStartY - e.touches[0].clientY;
+        touchStartY = e.touches[0].clientY;
+        const pixelsPerLine = xterm.options.fontSize * xterm.options.lineHeight;
+        const lines = Math.round(deltaY / pixelsPerLine);
+        if (lines !== 0) {
+          xterm.scrollLines(lines);
+        };
+      };
+      containerRef.current.addEventListener("touchstart", onTouchStart, { passive: true });
+      containerRef.current.addEventListener("touchmove", onTouchMove, { passive: true });
+
       return () => {
         xtermRef.current = null;
         webSocket.close();
@@ -236,6 +253,8 @@ const Terminal = () => {
         xtermOnData.dispose();
         xtermOnResize.dispose();
         xterm.dispose();
+        containerRef.current?.removeEventListener("touchstart", onTouchStart);
+        containerRef.current?.removeEventListener("touchmove", onTouchMove);
       };
     }
   // eslint-disable-next-line
