@@ -262,6 +262,7 @@ const defaultOSInfo = {
   userAtHostname: "",
   platform: "",
   kernelVersion: "",
+  uptime: -1,
   memory: -1,
   storage: -1
 };

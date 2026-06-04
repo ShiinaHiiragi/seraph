@@ -69,32 +69,24 @@ const Welcome = () => {
   const context = React.useContext(GlobalContext);
   const { hours, minutes, seconds } = useTime();
   const {
+    days: upDays,
     hours: upHours,
     minutes: upMinutes,
     seconds: upSeconds,
     reset: upReset
   } = useStopwatch();
 
-  // GET /info/version, no auth needed
   const [version, setVersion] = React.useState("");
-
-  // GET /info/os, auth needed
   const [osInfo, setOSInfo] = React.useState(defaultOSInfo);
-  const [uptime, setUptime] = React.useState(-1);
-
-  // GET /info/free, auth needed
   const [memory, setMemory] = React.useState(-1);
   const [storage, setStorage] = React.useState(-1);
 
   React.useEffect(() => {
     if (context.secondTick && context.isAuthority) {
       request("GET/info/os").then((data) => {
-        const { uptime: uptimeData, ...osInfoData } = data.os;
-        setOSInfo(osInfoData);
-        setUptime(Math.trunc(uptimeData / (60 * 60)));
-
+        setOSInfo(data.os);
         const stopwatchOffset = new Date();
-        stopwatchOffset.setSeconds(stopwatchOffset.getSeconds() + uptimeData);
+        stopwatchOffset.setSeconds(stopwatchOffset.getSeconds() + data.os.uptime);
         upReset(stopwatchOffset);
       });
     }
@@ -115,7 +107,6 @@ const Welcome = () => {
       setStorage(storage);
     });
   }, [minutes]);
-  React.useEffect(() => setUptime((uptime) => uptime + 1), [upHours]);
 
   return (
     <RouteField display>
@@ -163,9 +154,9 @@ const Welcome = () => {
               <ItemField item="kernelVersion">
                 {osInfo.kernelVersion}
               </ItemField>}
-            {uptime >= 0 &&
+            {osInfo.uptime >= 0 &&
               <ItemField item="uptime">
-                {String(uptime).padStart(2, '0')}
+                {String(upDays * 24 + upHours).padStart(2, '0')}
                 {":"}
                 {String(upMinutes).padStart(2, '0')}
                 {":"}
