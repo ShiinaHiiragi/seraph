@@ -200,6 +200,7 @@ const Password = (props) => {
       <Input
         size="sm"
         type="password"
+        placeholder={context.languagePicker("header.config.general.passwordPlaceholder")}
         sx={{ maxWidth: 240 }}
         value={password}
         onChange={(event) => setPassword(event.target.value)}

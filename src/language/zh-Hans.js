@@ -15,6 +15,7 @@ const zhHans = {
           2880: "2 天"
         },
         password: "更换密码",
+        passwordPlaceholder: "输入后请保存",
         reset: "重置为默认值",
         resetButton: "重置"
       },

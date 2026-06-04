@@ -15,6 +15,7 @@ const ja = {
           2880: "2 日"
         },
         password: "パスワードを変更",
+        passwordPlaceholder: "入力後にセーブ",
         reset: "デフォルトにリセット",
         resetButton: "リセット"
       },
