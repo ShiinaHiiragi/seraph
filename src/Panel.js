@@ -36,7 +36,7 @@ import GlobalContext, {
 
 const Root = styled('div')(({ theme }) => ({
   width: "100vw",
-  height: "100vh",
+  height: "100dvh",
   display: "flex",
   flexDirection: "column",
   userSelect: "none",
