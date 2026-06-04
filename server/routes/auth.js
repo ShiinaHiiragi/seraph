@@ -102,6 +102,22 @@ router.post('/login', (req, res, next) => {
   return;
 });
 
+router.post('/reset', (req, res, next) => {
+  if (req.status.notAuthSuccess()) {
+    // -> EF_IT or abnormal request
+    next(api.errorStreamControl);
+    return;
+  }
+
+  const { password } = req.body;
+  api.configOperator.savePassword(password);
+
+  // -> ES: no extra info
+  req.status.addExecStatus();
+  res.send(req.status.generateReport());
+  return;
+});
+
 router.post('/logout', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
     // -> EF_IT or abnormal request

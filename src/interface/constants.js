@@ -456,8 +456,8 @@ const request = (query, params, todo, handleReject, handleInit) => {
       method === "POST" ? params : { params: params }
     )
       .then((res) => {
-        window.latestResponse = res
-        window.latestResponseData = res?.data
+        window.lastResponse = res
+        window.lastResponseData = res?.data
 
         // returning ES
         if (res.data.statusCode === Status.statusCode.ExecSuccess) {

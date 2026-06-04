@@ -58,6 +58,7 @@ const attachTerminal = (server, api) => {
     let pingInterval = terminalSetting.lifecycle.ping > 0
       ? setInterval(() => {
         if (ws.readyState === ws.OPEN) {
+          ptyLog('PING', pty.pid);
           ws.ping();
         }
       }, terminalSetting.lifecycle.ping * 1000) : undefined;

@@ -14,7 +14,8 @@ const en = {
           1440: "1 day",
           2880: "2 day"
         },
-        reset: "Reset to default",
+        password: "Change Password",
+        reset: "Reset to Default",
         resetButton: "Reset"
       },
       terminal: {

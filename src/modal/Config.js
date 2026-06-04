@@ -1,4 +1,5 @@
 import * as React from "react";
+import { toast } from "sonner";
 import Box from "@mui/joy/Box";
 import Chip from "@mui/joy/Chip";
 import Divider from "@mui/joy/Divider";
@@ -19,6 +20,7 @@ import Button from "@mui/joy/Button";
 import Input from "@mui/joy/Input";
 import Typography from "@mui/joy/Typography";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import KeyboardArrowLeftOutlinedIcon from "@mui/icons-material/KeyboardArrowLeftOutlined";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import GlobalContext, {
@@ -26,7 +28,8 @@ import GlobalContext, {
   settingField,
   reactionInterval,
   alphabet,
-  monospaceFonts
+  monospaceFonts,
+  request
 } from "../interface/constants";
 import { languageMap } from "../interface/languagePicker";
 
@@ -153,7 +156,7 @@ const StringInput = (props) => {
         value={localValue}
         startDecorator={start}
         endDecorator={end}
-        onChange={(e) => setLocalValue(e.target.value)}
+        onChange={(event) => setLocalValue(event.target.value)}
         error={localError}
         slotProps={{
           startDecorator: { sx: { mr: 0.5, position: "relative", top: "1px" } },
@@ -161,6 +164,55 @@ const StringInput = (props) => {
         }}
       />
     </FormControl>
+  );
+};
+
+const Password = (props) => {
+  const { context } = props;
+
+  const [password, setPassword] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
+
+  const handleChangePassword = React.useCallback(() => {
+    setLoading(true)
+    toast.promise(new Promise((resolve, reject) => {
+      request(
+        "POST/auth/reset",
+        { password: password },
+        { "": () => setLoading(false) },
+        reject
+      )
+        .then(() => {
+          setPassword("");
+          setLoading(false);
+          resolve();
+        })
+    }), {
+      loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
+      success: () => context.languagePicker("modal.toast.success.setting"),
+      error: (data) => data
+    })
+  }, [context, password])
+
+  return (
+    <Stack spacing={1} direction="row">
+      <Input
+        size="sm"
+        type="password"
+        sx={{ maxWidth: 240 }}
+        value={password}
+        onChange={(event) => setPassword(event.target.value)}
+      />
+      {password.length > 0
+        && <IconButton
+          loading={loading}
+          variant="plain"
+          size="sm"
+          onClick={handleChangePassword}
+        >
+          <SaveOutlinedIcon />
+        </IconButton>}
+    </Stack>
   );
 };
 
@@ -172,7 +224,6 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
       .filter((item) => context.setting.terminal.control.ctrl[item])
   )
 
-  // TODO: reset password
   return [
     {
       id: settingField.general,
@@ -200,6 +251,10 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
             { value: 1440, label: context.languagePicker("header.config.general.tokenOption.1440") },
             { value: 2880, label: context.languagePicker("header.config.general.tokenOption.2880") }
           ], "meta.token", handleApply)
+        },
+        {
+          key: context.languagePicker("header.config.general.password"),
+          value: <Password context={context} />
         },
         {
           key: context.languagePicker("header.config.general.reset"),
