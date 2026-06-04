@@ -2,7 +2,10 @@ import React from "react";
 import { useTime, useStopwatch } from "react-timer-hook";
 import { styled } from "@mui/joy/styles";
 import Typography from "@mui/joy/Typography";
-import GlobalContext, { request } from "../interface/constants";
+import GlobalContext, {
+  defaultOSInfo,
+  request
+} from "../interface/constants";
 import RouteField from "../interface/RouteField";
 
 const Center = styled('div')(({ theme }) => ({
@@ -72,19 +75,26 @@ const Welcome = () => {
     reset: upReset
   } = useStopwatch();
 
+  // GET /info/version, no auth needed
   const [version, setVersion] = React.useState("");
-  const [osInfo, setOSInfo] = React.useState({ });
+
+  // GET /info/os, auth needed
+  const [osInfo, setOSInfo] = React.useState(defaultOSInfo);
   const [uptime, setUptime] = React.useState(-1);
+
+  // GET /info/free, auth needed
   const [memory, setMemory] = React.useState(-1);
   const [storage, setStorage] = React.useState(-1);
 
   React.useEffect(() => {
     if (context.secondTick && context.isAuthority) {
       request("GET/info/os").then((data) => {
-        setOSInfo(data.os);
-        setUptime(Math.trunc(data.os.uptime / (60 * 60)));
+        const { uptime: uptimeData, ...osInfoData } = data.os;
+        setOSInfo(osInfoData);
+        setUptime(Math.trunc(uptimeData / (60 * 60)));
+
         const stopwatchOffset = new Date();
-        stopwatchOffset.setSeconds(stopwatchOffset.getSeconds() + data.os.uptime);
+        stopwatchOffset.setSeconds(stopwatchOffset.getSeconds() + uptimeData);
         upReset(stopwatchOffset);
       });
     }
@@ -100,8 +110,9 @@ const Welcome = () => {
 
   React.useEffect(() => {
     request("GET/info/free").then((data) => {
-      setMemory(data.memory);
-      setStorage(data.storage);
+      const { memory, storage } = data;
+      setMemory(memory);
+      setStorage(storage);
     });
   }, [minutes]);
   React.useEffect(() => setUptime((uptime) => uptime + 1), [upHours]);
@@ -139,37 +150,39 @@ const Welcome = () => {
           {String(seconds).padStart(2, '0')}
         </Typography>
         {context.isAuthority &&
-          upHours >= 0 &&
-          memory >= 0 &&
-          storage >= 0 &&
-          Object.keys(osInfo).length > 0 &&
           <InfoField>
-            <ItemField item="userAtHostname">
-              {osInfo.userAtHostname}
-            </ItemField>
-            <ItemField item="platform">
-              {String(osInfo.platform ?? "").upperCaseFirst()}
-            </ItemField>
-            <ItemField item="kernelVersion">
-              {osInfo.kernelVersion}
-            </ItemField>
-            <ItemField item="uptime">
-              {String(uptime).padStart(2, '0')}
-              {":"}
-              {String(upMinutes).padStart(2, '0')}
-              {":"}
-              {String(upSeconds).padStart(2, '0')}
-            </ItemField>
-            <ItemField item="memoryAvailable">
-              {Number(memory).sizeFormat(2)}
-              {" / "}
-              {Number(osInfo.memory).sizeFormat(2)}
-            </ItemField>
+            {osInfo.userAtHostname.length > 0 &&
+              <ItemField item="userAtHostname">
+                {osInfo.userAtHostname}
+              </ItemField>}
+            {osInfo.platform.length > 0 &&
+              <ItemField item="platform">
+                {String(osInfo.platform ?? "").upperCaseFirst()}
+              </ItemField>}
+            {osInfo.kernelVersion.length > 0 &&
+              <ItemField item="kernelVersion">
+                {osInfo.kernelVersion}
+              </ItemField>}
+            {upHours >= 0 &&
+              <ItemField item="uptime">
+                {String(uptime).padStart(2, '0')}
+                {":"}
+                {String(upMinutes).padStart(2, '0')}
+                {":"}
+                {String(upSeconds).padStart(2, '0')}
+              </ItemField>}
+            {memory >= 0 && osInfo.memory &&
+              <ItemField item="memoryAvailable">
+                {Number(memory).sizeFormat(2)}
+                {" / "}
+                {Number(osInfo.memory).sizeFormat(2)}
+              </ItemField>}
+            {storage >= 0 && osInfo.storage >= 0 &&
             <ItemField item="storageAvailable">
               {Number(storage).sizeFormat(2)}
               {" / "}
               {Number(osInfo.storage).sizeFormat(2)}
-            </ItemField>
+            </ItemField>}
           </InfoField>}
       </Center>
     </RouteField>

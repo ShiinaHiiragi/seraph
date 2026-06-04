@@ -258,18 +258,26 @@ const defaultSetting = {
   }
 };
 
+const defaultOSInfo = {
+  userAtHostname: "",
+  platform: "",
+  kernelVersion: "",
+  memory: -1,
+  storage: -1
+};
+
 const settingField = {
   general: "general",
   terminal: "terminal",
   todo: "todo",
   extension: "extension",
   epub: "epub"
-}
+};
 
 const alphabet = Array
   .from(Array(26))
   .map((_, index) => index + 65)
-  .map((item) => String.fromCharCode(item))
+  .map((item) => String.fromCharCode(item));
 
 const monospaceFonts = [
   {
@@ -324,7 +332,7 @@ const monospaceFonts = [
     name: "Inconsolata",
     url: "https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&display=swap"
   }
-]
+];
 
 const setValue = (obj, key, value) => {
   const parts = key.split(".");
@@ -341,7 +349,7 @@ const setValue = (obj, key, value) => {
       [key]: value
     }
   }
-}
+};
 
 export default GlobalContext;
 export {
@@ -353,6 +361,7 @@ export {
   defaultMetadata,
   defaultClipboard,
   defaultSetting,
+  defaultOSInfo,
   settingField,
   alphabet,
   monospaceFonts,
