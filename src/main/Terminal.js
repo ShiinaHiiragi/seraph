@@ -109,10 +109,9 @@ const Terminal = () => {
         && containerRef.current
         && context.setting.terminal.enable
     ) {
-      // TODO: ask for agreements
       const fitAddon = new FitAddon();
       const xterm = new XTerminal({
-        windowsPty: context.platform === "win32"
+        windowsPty: context.metadata.platform === "win32"
           ? { backend: "conpty" }
           : undefined,
         altClickMovesCursor: true,

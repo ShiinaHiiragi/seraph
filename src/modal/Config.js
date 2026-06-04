@@ -216,7 +216,13 @@ const Password = (props) => {
   );
 };
 
-const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
+const SECTIONS = (
+  context,
+  setMetadata,
+  resetButtonLoading,
+  handleApply,
+  handleReset
+) => {
   const escList = context.setting.terminal.control.esc ? ["esc"] : [];
   const controlLists = escList.concat(
     Object
@@ -283,7 +289,24 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
             Turkey(
               context.setting.terminal.enable,
               "terminal.enable",
-              handleApply
+              (field, value) => {
+                if (!context.metadata.terminal && value) {
+                  context.setModalReconfirm({
+                    open: true,
+                    caption: context
+                      .languagePicker("modal.reconfirm.caption.enableTerminal"),
+                    handleAction: () => {
+                      handleApply(field, value);
+                      setMetadata((metadata) => ({
+                        ...metadata,
+                        terminal: true
+                      }));
+                    }
+                  });
+                } else {
+                  handleApply(field, value);
+                }
+              }
             )
           )
         },
@@ -990,6 +1013,7 @@ export default function Config(props) {
     handleApplySetting,
     handleResetSetting,
     mobileNavOpen,
+    setMetadata,
     setMobileNavOpen,
     activeSection,
     setActiveSection,
@@ -1002,10 +1026,17 @@ export default function Config(props) {
   const isSystemScrolling = React.useRef(false);
   const sectionUncurry = React.useMemo(() => SECTIONS(
     context,
+    setMetadata,
     resetButtonLoading,
     handleApplySetting,
     handleResetSetting
-  ), [context, resetButtonLoading, handleApplySetting, handleResetSetting])
+  ), [
+    context,
+    setMetadata,
+    resetButtonLoading,
+    handleApplySetting,
+    handleResetSetting
+  ])
 
   const scrollToSection = React.useCallback((id) => {
     setActiveSection(id);

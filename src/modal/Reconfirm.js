@@ -48,8 +48,10 @@ export default function Reconfirm(props) {
         </Typography>
         <Divider />
         <Typography id="alert-dialog-modal-description" textColor="text.tertiary">
-          {modalReconfirm.captionFirstHalf + 
-            context.languagePicker("modal.reconfirm.captionSecondHalf")}
+          {modalReconfirm.caption
+            ? modalReconfirm.caption
+            : modalReconfirm.captionFirstHalf + 
+              context.languagePicker("modal.reconfirm.captionSecondHalf")}
         </Typography>
         <Box sx={{ display: "flex", gap: 1, justifyContent: "flex-end" }}>
           <Button variant="plain" color="neutral" onClick={handleCloseModalReconfirm}>

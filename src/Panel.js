@@ -26,7 +26,7 @@ import GlobalTheme from "./interface/theme";
 import GlobalContext, {
   ConstantContext,
   globalState,
-  defaultPlatform,
+  defaultMetadata,
   defaultClipboard,
   defaultSetting,
   setValue,
@@ -112,9 +112,9 @@ const Panel = () => {
 
   // global states
   const [globalSwitch, setGlobalSwitch] = React.useState(globalState.INNOCENT);
+  const [metadata, setMetadata] = React.useState(defaultMetadata);
   const [clipboard, setClipboard] = React.useState(defaultClipboard);
   const [setting, setSetting] = React.useState(defaultSetting);
-  const [platform, setPlatform] = React.useState(defaultPlatform);
 
   const [publicFolders, setPublicFolders] = React.useState([]);
   const [privateFolders, setPrivateFolders] = React.useState([]);
@@ -145,8 +145,8 @@ const Panel = () => {
 
         if (data.private) {
           setPrivateFolders(data.private);
+          setMetadata(data.metadata);
           setClipboard(data.clipboard);
-          setPlatform(data.platform);
           setGlobalSwitch(globalState.AUTHORITY);
         } else {
           setGlobalSwitch(globalState.ANONYMOUS);
@@ -182,8 +182,8 @@ const Panel = () => {
         secondTick: secondTick,
         sortedPublicFolders: sortedPublicFolders,
         sortedPrivateFolders: sortedPrivateFolders,
-        setting: setting,
-        platform: platform
+        metadata: metadata,
+        setting: setting
       }}
     >
       <GlobalStyles styles={toastTheme} />
@@ -200,6 +200,7 @@ const Panel = () => {
                 setDrawerOpen={setDrawerOpen}
                 setPublicFolders={setPublicFolders}
                 setPrivateFolders={setPrivateFolders}
+                setMetadata={setMetadata}
                 setClipboard={setClipboard}
                 setSetting={setSetting}
                 setSettingPair={setSettingPair}

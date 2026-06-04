@@ -55,6 +55,7 @@ const Header = (props) => {
     setDrawerOpen,
     setPublicFolders,
     setPrivateFolders,
+    setMetadata,
     setClipboard,
     setSetting,
     setSettingPair
@@ -249,6 +250,7 @@ const Header = (props) => {
         handleApplySetting={handleApplySetting}
         handleResetSetting={handleResetSetting}
         mobileNavOpen={mobileNavOpen}
+        setMetadata={setMetadata}
         setMobileNavOpen={setMobileNavOpen}
         activeSection={activeSection}
         setActiveSection={setActiveSection}

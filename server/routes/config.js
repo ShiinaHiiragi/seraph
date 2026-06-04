@@ -17,7 +17,12 @@ router.post('/set', (req, res, next) => {
     return;
   }
 
-  api.configOperator.setConfigSetting(key, value)
+  api.configOperator.setConfigSetting(key, value);
+
+  // terminal hint only show once
+  if (key == "terminal.enable") {
+    api.configOperator.setConfigMetadata("terminal", true);
+  }
 
   // -> ES: no extra info
   req.status.addExecStatus();

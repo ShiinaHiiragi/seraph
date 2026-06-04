@@ -104,7 +104,10 @@ const globalState = {
   AUTHORITY: "authority"
 };
 
-const defaultPlatform = "linux";
+const defaultMetadata = {
+  terminal: false,
+  platform: "linux"
+};
 
 const defaultClipboard = {
   permanent: null,
@@ -347,7 +350,7 @@ export {
   animeDuration,
   toastDuration,
   globalState,
-  defaultPlatform,
+  defaultMetadata,
   defaultClipboard,
   defaultSetting,
   settingField,

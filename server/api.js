@@ -75,7 +75,8 @@ exports.extentPath = extentPath;
 //   task.delay
 const defaultConfig = {
   metadata: {
-    password: ""
+    password: "",
+    terminal: false
   },
   clipboard: {
     permanent: null,
