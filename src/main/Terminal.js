@@ -247,8 +247,9 @@ const Terminal = () => {
           xterm.scrollLines(lines);
         }
       };
-      containerRef.current.addEventListener("touchstart", onTouchStart, { passive: true });
-      containerRef.current.addEventListener("touchmove", onTouchMove, { passive: true });
+      const container = containerRef.current;
+      container.addEventListener("touchstart", onTouchStart, { passive: true });
+      container.addEventListener("touchmove", onTouchMove, { passive: true });
 
       return () => {
         xtermRef.current = null;
@@ -257,8 +258,8 @@ const Terminal = () => {
         xtermOnData.dispose();
         xtermOnResize.dispose();
         xterm.dispose();
-        containerRef.current?.removeEventListener("touchstart", onTouchStart);
-        containerRef.current?.removeEventListener("touchmove", onTouchMove);
+        container.removeEventListener("touchstart", onTouchStart);
+        container.removeEventListener("touchmove", onTouchMove);
       };
     }
   // eslint-disable-next-line
