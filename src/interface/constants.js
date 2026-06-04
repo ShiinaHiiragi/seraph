@@ -230,7 +230,7 @@ const defaultSetting = {
       next: "次へ →"
     },
     fade: {
-      kana: true,
+      kana: null,
       opaque: "72",
       size: "84",
       top: "-6"
@@ -248,7 +248,7 @@ const defaultSetting = {
       breakLine: ""
     },
     out: {
-      html: true,
+      html: false,
       vert: false,
       keep: false
     }

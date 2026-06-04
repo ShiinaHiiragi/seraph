@@ -178,15 +178,10 @@
 
 ## Memo
 
-1. File Explorer
-    - create markdown
-    - edit in milkdown
-2. Milkdown
-    - edit / read only
+1. Milkdown
+    - create / edit in file explorer
+    - read only
     - save to folder
     - download
-3. Subscription: receive message from
+2. Subscription: receive message from
     - webhook server
-4. Terminal
-    - open powershell / bash
-    - terminal: react-terminal

@@ -848,7 +848,8 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
                 context.languagePicker("header.config.epub.outKeep"),
                 context.setting.epub.out.keep,
                 "epub.out.keep",
-                handleApply
+                handleApply,
+                !context.setting.epub.out.html
               )}
             </Stack>
           )
