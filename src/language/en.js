@@ -275,6 +275,7 @@ const en = {
         modTime: "Delete time of the task has been updated.",
         tick: "The task will be deleted in {0} seconds, which can be cancelled by re-ticking the checkbox before the end of its countdown.",
         tickSync: "The task will be deleted after due time.",
+        tickDel: "The task is completed and deleted immediately.",
         untick: "Changing has been rolled back."
       },
       warning: {

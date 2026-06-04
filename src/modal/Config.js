@@ -272,7 +272,6 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
                   + context.languagePicker("header.config.appendix.reload"),
                 context.setting.terminal.lifecycle.ping,
                 [
-                  { value: 0, label: context.languagePicker("header.config.terminal.lifecyclePingOption.0") },
                   { value: 15, label: context.languagePicker("header.config.terminal.lifecyclePingOption.15") },
                   { value: 30, label: context.languagePicker("header.config.terminal.lifecyclePingOption.30") },
                   { value: 45, label: context.languagePicker("header.config.terminal.lifecyclePingOption.45") },
@@ -280,7 +279,8 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
                   { value: 120, label: context.languagePicker("header.config.terminal.lifecyclePingOption.120") },
                   { value: 180, label: context.languagePicker("header.config.terminal.lifecyclePingOption.180") },
                   { value: 240, label: context.languagePicker("header.config.terminal.lifecyclePingOption.240") },
-                  { value: 300, label: context.languagePicker("header.config.terminal.lifecyclePingOption.300") }
+                  { value: 300, label: context.languagePicker("header.config.terminal.lifecyclePingOption.300") },
+                  { value: 0, label: context.languagePicker("header.config.terminal.lifecyclePingOption.0") }
                 ],
                 "terminal.lifecycle.ping",
                 handleApply,

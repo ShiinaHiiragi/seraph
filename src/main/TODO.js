@@ -129,8 +129,7 @@ const TODO = () => {
   React.useEffect(() => {
     const timeNow = Date.now();
     setTask((task) => task
-      .filter((item) => (item.deleteTime === null || item.deleteTime >= timeNow)
-      )
+      .filter((item) => (item.deleteTime === null || item.deleteTime >= timeNow))
       .map((item) => ({
         ...item,
         expired: item.dueTime <= timeNow
@@ -177,13 +176,19 @@ const TODO = () => {
         reject
       )
         .then((data) => {
-          setTask((task) => task.map((item) =>
-            item.id === id && item.createTime === createTime
-              ? {
-                ...item,
-                deleteTime: data.deleteTime
-              } : item
-          ))
+          if (context.setting.task.delay > 0) {
+            setTask((task) => task.map((item) =>
+              item.id === id && item.createTime === createTime
+                ? {
+                  ...item,
+                  deleteTime: data.deleteTime
+                } : item
+            ))
+          } else {
+            setTask((task) => task.filter((item) =>
+              item.id !== id || item.createTime !== createTime
+            ))
+          }
           resolve(data.type);
         })
         .finally(() => setCheckboxDisabled(false));
@@ -191,8 +196,10 @@ const TODO = () => {
       loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
       success: (type) => type === "sync"
         ? context.languagePicker("modal.toast.success.tickSync")
-        : context.languagePicker("modal.toast.success.tick")
-          .format(context.setting.task.delay),
+        : context.setting.task.delay > 0
+        ? context.languagePicker("modal.toast.success.tick")
+          .format(context.setting.task.delay)
+        : context.languagePicker("modal.toast.success.tickDel"),
       error: (data) => data
     })
   }, [context]);
