@@ -1,6 +1,11 @@
 import React from "react";
 import "@xterm/xterm/css/xterm.css";
 import Box from '@mui/joy/Box';
+import Dropdown from '@mui/joy/Dropdown';
+import Menu from '@mui/joy/Menu';
+import MenuButton from '@mui/joy/MenuButton';
+import MenuItem from '@mui/joy/MenuItem';
+import ListDivider from '@mui/joy/ListDivider';
 import { Terminal as XTerminal } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
 import GlobalContext, { serverWebSocketURL, monospaceFonts } from "../interface/constants";
@@ -12,6 +17,7 @@ const Terminal = () => {
   const containerRef = React.useRef(null);
   const xtermRef = React.useRef(null);
   const fitAddonRef = React.useRef(null);
+  const wsRef = React.useRef(null);
 
   React.useEffect(() => {
     const id = "terminal-monospace";
@@ -80,12 +86,18 @@ const Terminal = () => {
 
   // TODO: send Ctrl+C under xs
   // TODO: config control lists in settings
-  // const sendCtrl = React.useCallback((letter) => {
-  //   const code = letter.toUpperCase().charCodeAt(0) - 64;
-  //   if (code >= 1 && code <= 26) {
-  //     xtermRef.current?.paste(String.fromCharCode(code));
-  //   }
-  // }, []);
+  const sendCtrl = React.useCallback((letter) => {
+    const code = letter.toUpperCase().charCodeAt(0) - 64;
+    if (code >= 1 && code <= 26 && wsRef.current?.readyState === WebSocket.OPEN) {
+      wsRef.current.send(JSON.stringify({ type: "input", data: String.fromCharCode(code) }));
+    }
+  }, []);
+
+  const sendEsc = React.useCallback(() => {
+    if (wsRef.current?.readyState === WebSocket.OPEN) {
+      wsRef.current.send(JSON.stringify({ type: "input", data: "\x1b" }));
+    }
+  }, []);
 
   // after second tick, the globalSwitch were set properly
   React.useEffect(() => {
@@ -158,6 +170,7 @@ const Terminal = () => {
       fitAddonRef.current = fitAddon;
 
       const webSocket = new WebSocket(new URL("/pty", serverWebSocketURL).href);
+      wsRef.current = webSocket;
       webSocket.onopen = () => {
         webSocket.send(JSON.stringify({
           type: "resize",
@@ -171,8 +184,9 @@ const Terminal = () => {
       };
 
       webSocket.onclose = (event) => {
+        const timeFormat = new Date().timeFormat("M/d/yyyy h:mm:ss")
         const reason = event.reason ? `: ${event.reason}` : ""
-        xterm.write(`\r\n\x1b[31m[Connection closed${reason}]\x1b[0m\r\n`);
+        xterm.write(`\r\n\x1b[31m[Connection closed at ${timeFormat}${reason}]\x1b[0m\r\n`);
       }
 
       const xtermOnData = xterm.onData((data) => {
@@ -253,6 +267,7 @@ const Terminal = () => {
 
       return () => {
         xtermRef.current = null;
+        wsRef.current = null;
         webSocket.close();
         observer.disconnect();
         xtermOnData.dispose();
@@ -293,31 +308,80 @@ const Terminal = () => {
       }}
     >
       {context.setting.terminal.enable
-      ? <div
-          style={{
+      ? (
+        <Box
+          sx={{
             width: "100%",
             height: "100%",
-            position: "relative",
-            backgroundColor: context.setting.terminal.theme.background,
-            borderWidth: "1px",
-            borderStyle: "solid",
-            borderColor: "rgba(var(--joy-palette-neutral-mainChannel, 99 107 116) / 0.15)",
-            borderRadius: "var(--joy-radius-sm)",
-            boxSizing: "border-box",
-            overflow: "hidden",
+            display: "flex",
+            flexDirection: "column"
           }}
         >
-          <Box
-            ref={containerRef}
-            sx={{
-              position: "absolute",
-              top: { xs: "6px", sm: "8px" },
-              right: { xs: "0px", sm: "4px" },
-              bottom: { xs: "0px", sm: "4px" },
-              left: { xs: "12px", sm: "16px" }
+          <Box sx={{ display: { xs: "block", sm: "none" }, mb: 1 }}>
+            <Dropdown>
+              <MenuButton
+                sx={{ width: "100%" }}>
+                {context.languagePicker("main.terminal.send")}
+              </MenuButton>
+              <Menu
+                size="sm"
+                modifiers={[{
+                  name: 'sameWidth',
+                  enabled: true,
+                  phase: 'beforeWrite',
+                  requires: ['computeStyles'],
+                  fn: ({ state }) => {
+                    state.styles.popper.width = `${state.rects.reference.width}px`;
+                  }
+                }]}
+              >
+                {context.setting.terminal.control.esc
+                  && <MenuItem onClick={() => sendEsc()}>Esc</MenuItem>}
+                {context.setting.terminal.control.esc
+                  && Object.values(context.setting.terminal.control.ctrl).some((item) => item)
+                  && <ListDivider />}
+                {Array
+                  .from(Array(26))
+                  .map((_, index) => index + 65)
+                  .map((item) => String.fromCharCode(item))
+                  .filter((item) => context.setting.terminal.control.ctrl[item])
+                  .map((item) => (
+                    <MenuItem
+                      key={item}
+                      onClick={() => sendCtrl(item)}
+                    >
+                      Ctrl + {item}
+                    </MenuItem>
+                  ))}
+              </Menu>
+            </Dropdown>
+          </Box>
+          <div
+            style={{
+              flexGrow: 1,
+              position: "relative",
+              backgroundColor: context.setting.terminal.theme.background,
+              borderWidth: "1px",
+              borderStyle: "solid",
+              borderColor: "rgba(var(--joy-palette-neutral-mainChannel, 99 107 116) / 0.15)",
+              borderRadius: "var(--joy-radius-sm)",
+              boxSizing: "border-box",
+              overflow: "hidden",
             }}
-          />
-        </div>
+          >
+            <Box
+              ref={containerRef}
+              sx={{
+                position: "absolute",
+                top: { xs: "6px", sm: "8px" },
+                right: { xs: "0px", sm: "4px" },
+                bottom: { xs: "0px", sm: "4px" },
+                left: { xs: "12px", sm: "16px" }
+              }}
+            />
+          </div>
+        </Box>
+      )
       : <Caption
         title={context.languagePicker("universal.placeholder.disabled.title")}
         caption={context.languagePicker("universal.placeholder.disabled.caption")}

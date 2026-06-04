@@ -223,6 +223,9 @@ const ja = {
         paste: "ペースト"
       }
     },
+    terminal: {
+      send: "制御コードを送信"
+    },
     todo: {
       regulate: {
         createTime: "作成日時",

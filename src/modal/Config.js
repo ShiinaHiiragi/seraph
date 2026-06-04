@@ -501,6 +501,7 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
                 handleApply,
                 !context.setting.terminal.enable
               )}
+              {/* TODO: color indicator at the start */}
               <Stack spacing={1}>
                 <String
                   disabled={!context.setting.terminal.enable}

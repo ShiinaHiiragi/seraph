@@ -143,6 +143,37 @@ const defaultConfig = {
         brightRed: "#E45649",
         brightWhite: "#383A42",
         brightYellow: "#C18401"
+      },
+      control: {
+        esc: true,
+        ctrl: {
+          A: false,
+          B: true,
+          C: true,
+          D: false,
+          E: false,
+          F: false,
+          G: false,
+          H: false,
+          I: false,
+          J: false,
+          K: false,
+          L: false,
+          M: false,
+          N: false,
+          O: false,
+          P: false,
+          Q: false,
+          R: false,
+          S: false,
+          T: false,
+          U: false,
+          V: false,
+          W: false,
+          X: false,
+          Y: false,
+          Z: true
+        }
       }
     },
     task: {

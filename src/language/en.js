@@ -223,6 +223,9 @@ const en = {
         paste: "Paste"
       }
     },
+    terminal: {
+      send: "Send Control Characters"
+    },
     todo: {
       regulate: {
         createTime: "Time Created",

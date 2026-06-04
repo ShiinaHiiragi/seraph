@@ -223,6 +223,9 @@ const zhHans = {
         paste: "粘贴"
       }
     },
+    terminal: {
+      send: "发送控制字符"
+    },
     todo: {
       regulate: {
         createTime: "创建时间",

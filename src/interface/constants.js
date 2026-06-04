@@ -173,6 +173,37 @@ const defaultSetting = {
       brightRed: "#E45649",
       brightWhite: "#383A42",
       brightYellow: "#C18401"
+    },
+    control: {
+      esc: true,
+      ctrl: {
+        A: false,
+        B: true,
+        C: true,
+        D: false,
+        E: false,
+        F: false,
+        G: false,
+        H: false,
+        I: false,
+        J: false,
+        K: false,
+        L: false,
+        M: false,
+        N: false,
+        O: false,
+        P: false,
+        Q: false,
+        R: false,
+        S: false,
+        T: false,
+        U: false,
+        V: false,
+        W: false,
+        X: false,
+        Y: false,
+        Z: true
+      }
     }
   },
   task: {
@@ -507,13 +538,14 @@ const linkReg = /((?:(http|https|Http|Https|rtsp|Rtsp):\/\/(?:(?:[a-zA-Z0-9\$\-\
 
 // eslint-disable-next-line
 String.prototype.annotateLink = function() {
-  let formatted = this, result = [], matched = undefined;
+  let formatted = this, result = [], matched = undefined, index = 0;
   while ((matched = formatted.match(linkReg)) !== null) {
     if (matched.index > 0) {
       result.push(formatted.slice(0, matched.index));
     }
     result.push(
       <Link
+        key={index}
         target="_blank"
         rel="noopener"
         href={matched[0]}
@@ -521,6 +553,7 @@ String.prototype.annotateLink = function() {
         {matched[0]}
       </Link>
     );
+    index += 1
     formatted = formatted.slice(matched.index + matched[0].length);
   }
   result.push(formatted);
