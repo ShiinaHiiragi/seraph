@@ -163,7 +163,7 @@ const Welcome = () => {
               <ItemField item="kernelVersion">
                 {osInfo.kernelVersion}
               </ItemField>}
-            {upHours >= 0 &&
+            {uptime >= 0 &&
               <ItemField item="uptime">
                 {String(uptime).padStart(2, '0')}
                 {":"}
@@ -171,7 +171,7 @@ const Welcome = () => {
                 {":"}
                 {String(upSeconds).padStart(2, '0')}
               </ItemField>}
-            {memory >= 0 && osInfo.memory &&
+            {memory >= 0 && osInfo.memory >= 0 &&
               <ItemField item="memoryAvailable">
                 {Number(memory).sizeFormat(2)}
                 {" / "}
