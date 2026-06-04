@@ -42,7 +42,9 @@ const Item = styled(ListItem)(({ theme }) => ({
 }));
 
 const Details = styled("div")(({ theme }) => ({
-  width: "100%",
+  flexGrow: 1,
+  flexShrink: 1,
+  minWidth: 0,
   display: "flex",
   flexDirection: "column",
   alignItems: "flex-start",
@@ -466,7 +468,11 @@ const TODO = () => {
                       {item.name}
                     </Typography>
                     {item.description.split("\n").map((paragraph, index) => (
-                      <Typography level="body-sm" key={index}>
+                      <Typography
+                        level="body-sm"
+                        key={index}
+                        sx={{ wordBreak: "normal", overflowWrap: "anywhere" }}
+                      >
                         {paragraph.annotateLink()}
                       </Typography>
                     ))}
