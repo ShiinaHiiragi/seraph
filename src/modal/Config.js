@@ -104,7 +104,8 @@ const StringInput = (props) => {
     start,
     end,
     translate,
-    code
+    code,
+    startStyle
   } = props;
 
   const [localValue, setLocalValue] = React.useState(value);
@@ -159,7 +160,7 @@ const StringInput = (props) => {
         onChange={(event) => setLocalValue(event.target.value)}
         error={localError}
         slotProps={{
-          startDecorator: { sx: { mr: 0.5, position: "relative", top: "1px" } },
+          startDecorator: { sx: startStyle ?? { mr: 0.25 } },
           input: { spellCheck: false }
         }}
       />
@@ -604,6 +605,7 @@ const SECTIONS = (
                   handleCheck={(value) => value.trim() !== '' && CSS.supports("color", value.trim())}
                   handleApply={handleApply}
                   code={true}
+                  startStyle={{ mr: 0.75, position: "relative", top: "0.5px" }}
                 />
                 {[
                   ["background", "foreground"],
@@ -629,6 +631,7 @@ const SECTIONS = (
                       handleCheck={(value) => value.trim() !== '' && CSS.supports("color", value.trim())}
                       handleApply={handleApply}
                       code={true}
+                      startStyle={{ mr: 0.75, position: "relative", top: "0.5px" }}
                     />
                     <StringInput
                       disabled={!context.setting.terminal.enable}
@@ -641,6 +644,7 @@ const SECTIONS = (
                       handleCheck={(value) => value.trim() !== '' && CSS.supports("color", value.trim())}
                       handleApply={handleApply}
                       code={true}
+                      startStyle={{ mr: 0.75, position: "relative", top: "0.5px" }}
                     />
                   </Stack>
                 )}
