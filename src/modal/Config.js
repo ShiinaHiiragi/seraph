@@ -155,7 +155,10 @@ const StringInput = (props) => {
         endDecorator={end}
         onChange={(e) => setLocalValue(e.target.value)}
         error={localError}
-        slotProps={{ startDecorator: { sx: { mr: 0.5 } } }}
+        slotProps={{
+          startDecorator: { sx: { mr: 0.5, position: "relative", top: "1px" } },
+          input: { spellCheck: false }
+        }}
       />
     </FormControl>
   );
@@ -511,7 +514,6 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
                 handleApply,
                 !context.setting.terminal.enable
               )}
-              {/* TODO: color indicator at the start */}
               <Stack spacing={1}>
                 <StringInput
                   disabled={!context.setting.terminal.enable}
@@ -520,6 +522,7 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
                   width={160}
                   type="text"
                   field="terminal.theme.selectionBackground"
+                  start={<Typography sx={{ color: context.setting.terminal.theme.selectionBackground}}>ꔷ</Typography>}
                   handleCheck={(value) => value.trim() !== '' && CSS.supports("color", value.trim())}
                   handleApply={handleApply}
                   code={true}
@@ -544,6 +547,7 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
                       width={160}
                       type="text"
                       field={`terminal.theme.${color}`}
+                      start={<Typography sx={{ color: context.setting.terminal.theme[color]}}>ꔷ</Typography>}
                       handleCheck={(value) => value.trim() !== '' && CSS.supports("color", value.trim())}
                       handleApply={handleApply}
                       code={true}
@@ -555,6 +559,7 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
                       width={160}
                       type="text"
                       field={`terminal.theme.${brightColor}`}
+                      start={<Typography sx={{ color: context.setting.terminal.theme[brightColor]}}>ꔷ</Typography>}
                       handleCheck={(value) => value.trim() !== '' && CSS.supports("color", value.trim())}
                       handleApply={handleApply}
                       code={true}

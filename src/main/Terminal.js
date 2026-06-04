@@ -88,8 +88,6 @@ const Terminal = () => {
     context.setting.terminal.theme,
   ]);
 
-  // TODO: send Ctrl+C under xs
-  // TODO: config control lists in settings
   const sendCtrl = React.useCallback((letter) => {
     const code = letter.toUpperCase().charCodeAt(0) - 64;
     if (code >= 1 && code <= 26 && wsRef.current?.readyState === WebSocket.OPEN) {
