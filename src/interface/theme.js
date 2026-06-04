@@ -17,6 +17,15 @@ const localeCombinator = (language) => {
 };
 
 const GlobalTheme = (language) => extendTheme({
+  colorSchemes: {
+    light: {
+      palette: {
+        background: {
+          body: "rgb(245, 247, 250)"
+        }
+      }
+    }
+  },
   breakpoints: {
     values: {
       xs: 0,

@@ -100,7 +100,8 @@ const ja = {
           "brightRed": "ブライトレッド",
           "brightWhite": "ブライトホワイト",
           "brightYellow": "ブライトイエロー"
-        }
+        },
+        control: "制御コード"
       },
       todo: {
         title: "トゥードゥー",

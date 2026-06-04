@@ -165,6 +165,7 @@
 
 ## Log
 
+- 06/04/2026 ver 1.0.0: Update dependencies from @mui/joy
 - 06/03/2026 ver 0.4.1: Fix plaintext cipher
 - 06/02/2026 ver 0.4.0: Add terminal
 - 06/01/2026 ver 0.3.0: Add setting popup
@@ -179,9 +180,7 @@
 ## Memo
 
 1. Milkdown
-    - create / edit in file explorer
-    - read only
-    - save to folder
-    - download
+    - create new / edit existed
+    - read only / write and save
 2. Subscription: receive message from
     - webhook server

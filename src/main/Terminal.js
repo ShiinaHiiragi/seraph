@@ -8,7 +8,11 @@ import MenuItem from '@mui/joy/MenuItem';
 import ListDivider from '@mui/joy/ListDivider';
 import { Terminal as XTerminal } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
-import GlobalContext, { serverWebSocketURL, monospaceFonts } from "../interface/constants";
+import GlobalContext, {
+  serverWebSocketURL,
+  alphabet,
+  monospaceFonts
+} from "../interface/constants";
 import RouteField from "../interface/RouteField";
 import Caption from "../components/Caption";
 
@@ -340,10 +344,7 @@ const Terminal = () => {
                 {context.setting.terminal.control.esc
                   && Object.values(context.setting.terminal.control.ctrl).some((item) => item)
                   && <ListDivider />}
-                {Array
-                  .from(Array(26))
-                  .map((_, index) => index + 65)
-                  .map((item) => String.fromCharCode(item))
+                {alphabet
                   .filter((item) => context.setting.terminal.control.ctrl[item])
                   .map((item) => (
                     <MenuItem

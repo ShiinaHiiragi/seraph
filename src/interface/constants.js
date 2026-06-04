@@ -263,6 +263,11 @@ const settingField = {
   epub: "epub"
 }
 
+const alphabet = Array
+  .from(Array(26))
+  .map((_, index) => index + 65)
+  .map((item) => String.fromCharCode(item))
+
 const monospaceFonts = [
   {
     name: "Noto Sans Mono",
@@ -346,6 +351,7 @@ export {
   defaultClipboard,
   defaultSetting,
   settingField,
+  alphabet,
   monospaceFonts,
   setValue
 };

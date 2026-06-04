@@ -100,7 +100,8 @@ const zhHans = {
           "brightRed": "亮红色",
           "brightWhite": "亮白色",
           "brightYellow": "亮黄色"
-        }
+        },
+        control: "控制字符"
       },
       todo: {
         title: "待办",

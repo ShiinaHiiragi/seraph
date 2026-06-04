@@ -1,5 +1,6 @@
 import * as React from "react";
 import Box from "@mui/joy/Box";
+import Chip from "@mui/joy/Chip";
 import Divider from "@mui/joy/Divider";
 import IconButton from "@mui/joy/IconButton";
 import Switch from "@mui/joy/Switch";
@@ -7,6 +8,7 @@ import Modal from "@mui/joy/Modal";
 import ModalDialog from "@mui/joy/ModalDialog";
 import Option from "@mui/joy/Option";
 import Select from "@mui/joy/Select";
+import ListDivider from '@mui/joy/ListDivider';
 import Stack from "@mui/joy/Stack";
 import FormControl from "@mui/joy/FormControl";
 import FormLabel from "@mui/joy/FormLabel";
@@ -23,6 +25,7 @@ import GlobalContext, {
   animeDuration,
   settingField,
   reactionInterval,
+  alphabet,
   monospaceFonts
 } from "../interface/constants";
 import { languageMap } from "../interface/languagePicker";
@@ -85,7 +88,7 @@ const InstantBool = (label, checked, field, handleApply, disabled) => (
 const Turkey = (checked, field, handleApply, disabled) =>
   InstantBool(undefined, checked, field, handleApply, disabled);
 
-const String = (props) => {
+const StringInput = (props) => {
   const {
     disabled,
     caption,
@@ -159,6 +162,13 @@ const String = (props) => {
 };
 
 const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
+  const escList = context.setting.terminal.control.esc ? ["esc"] : [];
+  const controlLists = escList.concat(
+    Object
+      .keys(context.setting.terminal.control.ctrl)
+      .filter((item) => context.setting.terminal.control.ctrl[item])
+  )
+
   // TODO: reset password
   return [
     {
@@ -223,7 +233,7 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
           key: context.languagePicker("header.config.terminal.shell"),
           value: (
             <Stack spacing={1}>
-              <String
+              <StringInput
                 disabled={!context.setting.terminal.enable}
                 caption={context.languagePicker("header.config.terminal.shellLinux")}
                 value={context.setting.terminal.shell.linux}
@@ -234,7 +244,7 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
                 handleApply={handleApply}
                 code={true}
               />
-              <String
+              <StringInput
                 disabled={!context.setting.terminal.enable}
                 caption={context.languagePicker("header.config.terminal.shellWin32")}
                 value={context.setting.terminal.shell.win32}
@@ -353,7 +363,7 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
                 !context.setting.terminal.enable
               )}
               <Stack spacing={1}>
-                <String
+                <StringInput
                   disabled={!context.setting.terminal.enable}
                   caption={context.languagePicker("header.config.terminal.fontSize")}
                   value={context.setting.terminal.font.size}
@@ -365,7 +375,7 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
                   end="px"
                   translate={(value) => Number(value)}
                 />
-                <String
+                <StringInput
                   disabled={!context.setting.terminal.enable}
                   caption={context.languagePicker("header.config.terminal.fontWeight")}
                   value={context.setting.terminal.font.weight}
@@ -376,7 +386,7 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
                   handleApply={handleApply}
                   code={true}
                 />
-                <String
+                <StringInput
                   disabled={!context.setting.terminal.enable}
                   caption={context.languagePicker("header.config.terminal.fontWeightBold")}
                   value={context.setting.terminal.font.weightBold}
@@ -396,7 +406,7 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
           value: (
             <Stack spacing={2}>
               <Stack spacing={1}>
-                <String
+                <StringInput
                   disabled={!context.setting.terminal.enable}
                   caption={context.languagePicker("header.config.terminal.letterSpacing")}
                   value={context.setting.terminal.text.space}
@@ -407,7 +417,7 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
                   handleApply={handleApply}
                   translate={(value) => Number(value)}
                 />
-                <String
+                <StringInput
                   disabled={!context.setting.terminal.enable}
                   caption={context.languagePicker("header.config.terminal.lineHeight")}
                   value={context.setting.terminal.text.height}
@@ -418,7 +428,7 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
                   handleApply={handleApply}
                   translate={(value) => Number(value)}
                 />
-                <String
+                <StringInput
                   disabled={!context.setting.terminal.enable}
                   caption={context.languagePicker("header.config.terminal.contrastRatio")}
                   value={context.setting.terminal.text.contrast}
@@ -430,7 +440,7 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
                   translate={(value) => Number(value)}
                 />
               </Stack>
-              <String
+              <StringInput
                 disabled={!context.setting.terminal.enable}
                 caption={context.languagePicker("header.config.terminal.wordSeparator")}
                 value={context.setting.terminal.text.separator}
@@ -463,7 +473,7 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
                 !context.setting.terminal.enable
               )}
               <Stack spacing={1}>
-                <String
+                <StringInput
                   disabled={!context.setting.terminal.enable}
                   caption={context.languagePicker("header.config.terminal.scrollNormal")}
                   value={context.setting.terminal.scroll.normal}
@@ -474,7 +484,7 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
                   handleApply={handleApply}
                   translate={(value) => Number(value)}
                 />
-                <String
+                <StringInput
                   disabled={!context.setting.terminal.enable}
                   caption={context.languagePicker("header.config.terminal.scrollFast")}
                   value={context.setting.terminal.scroll.fast}
@@ -503,7 +513,7 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
               )}
               {/* TODO: color indicator at the start */}
               <Stack spacing={1}>
-                <String
+                <StringInput
                   disabled={!context.setting.terminal.enable}
                   caption={context.languagePicker("header.config.terminal.themeOption.selectionBackground")}
                   value={context.setting.terminal.theme.selectionBackground}
@@ -527,7 +537,7 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
                   ["yellow", "brightYellow"]
                 ].map(([color, brightColor]) =>
                   <Stack key={color} spacing={{ xs: 1, lg: 4 }} direction={{ xs: "column", lg: "row" }}>
-                    <String
+                    <StringInput
                       disabled={!context.setting.terminal.enable}
                       caption={context.languagePicker(`header.config.terminal.themeOption.${color}`)}
                       value={context.setting.terminal.theme[color]}
@@ -538,7 +548,7 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
                       handleApply={handleApply}
                       code={true}
                     />
-                    <String
+                    <StringInput
                       disabled={!context.setting.terminal.enable}
                       caption={context.languagePicker(`header.config.terminal.themeOption.${brightColor}`)}
                       value={context.setting.terminal.theme[brightColor]}
@@ -553,6 +563,60 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
                 )}
               </Stack>
             </Stack>
+          )
+        },
+        {
+          key: context.languagePicker("header.config.terminal.control"),
+          value: (
+            <Select
+              multiple
+              size="sm"
+              value={controlLists}
+              renderValue={(selected) => (
+                <Box sx={{ display: 'flex', gap: '0.25rem' }}>
+                  {selected.map((selectedOption, index) => (
+                    <Chip key={index} variant="outlined" color="neutral">
+                      {selectedOption.label}
+                    </Chip>
+                  ))}
+                </Box>
+              )}
+              onChange={(_, newValue) => {
+                // shaole -> false
+                const setFalse = controlLists
+                  .filter((item) => !newValue.includes(item))
+                  .map((item) => ({ key: item, value: false }));
+
+                const setTrue = newValue
+                  .filter((item) => !controlLists.includes(item))
+                  .map((item) => ({ key: item, value: true }));
+
+                const setKey = setFalse
+                  .concat(setTrue)
+                  .map((item) => ({
+                    field: item.key === "esc"
+                      ? "terminal.control.esc"
+                      : `terminal.control.ctrl.${item.key}`,
+                    value: item.value
+                  }));
+
+                setKey.forEach(({ field, value }) => handleApply(field, value))
+              }}
+              sx={{ maxWidth: "320px" }}
+              slotProps={{
+                listbox: {
+                  sx: {
+                    width: '100%',
+                  }
+                }
+              }}
+            >
+              <Option value="esc">Esc</Option>
+              <ListDivider />
+              {alphabet.map((item) =>
+                <Option key={item} value={item}>Ctrl + {item}</Option>
+              )}
+            </Select>
           )
         }
       ]
@@ -581,7 +645,7 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
           key: context.languagePicker("header.config.extension.python"),
           value: (
             <Stack spacing={1}>
-              <String
+              <StringInput
                 caption={context.languagePicker("header.config.extension.pythonLinux")}
                 value={context.setting.extension.python.linux}
                 width={240}
@@ -591,7 +655,7 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
                 handleApply={handleApply}
                 code={true}
               />
-              <String
+              <StringInput
                 caption={context.languagePicker("header.config.extension.pythonWin32")}
                 value={context.setting.extension.python.win32}
                 width={240}
@@ -608,7 +672,7 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
           key: context.languagePicker("header.config.extension.pandoc"),
           value: (
             <Stack spacing={1}>
-              <String
+              <StringInput
                 caption={context.languagePicker("header.config.extension.pandocLinux")}
                 value={context.setting.extension.pandoc.linux}
                 width={240}
@@ -618,7 +682,7 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
                 handleApply={handleApply}
                 code={true}
               />
-              <String
+              <StringInput
                 caption={context.languagePicker("header.config.extension.pandocWin32")}
                 value={context.setting.extension.pandoc.win32}
                 width={240}
@@ -667,7 +731,7 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
                 handleApply
               )}
               <Stack spacing={1}>
-                <String
+                <StringInput
                   disabled={!context.setting.epub.nav.link}
                   caption={context.languagePicker("header.config.epub.navPrev")}
                   value={context.setting.epub.nav.prev}
@@ -677,7 +741,7 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
                   handleCheck={(value) => value.length > 0}
                   handleApply={handleApply}
                 />
-                <String
+                <StringInput
                   disabled={!context.setting.epub.nav.link}
                   caption={context.languagePicker("header.config.epub.navNext")}
                   value={context.setting.epub.nav.next}
@@ -721,7 +785,7 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
                   handleApply
                 )}
               </Stack>
-              <String
+              <StringInput
                 disabled={!context.setting.epub.image.show}
                 caption={context.languagePicker("header.config.epub.imageWidth")}
                 value={context.setting.epub.image.width ?? ""}
@@ -754,7 +818,7 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
                   handleApply
                 )}
               </Stack>
-              <String
+              <StringInput
                 caption={context.languagePicker("header.config.epub.textBreakLine")}
                 value={JSON.stringify(context.setting.epub.text.breakLine).slice(1, -1)}
                 width={160}
@@ -789,7 +853,7 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
                 <Radio value="false" label={context.languagePicker("header.config.epub.fadeFalse")} />
               </RadioGroup>
               <Stack spacing={1}>
-                <String
+                <StringInput
                   disabled={context.setting.epub.fade.kana === null}
                   caption={context.languagePicker("header.config.epub.fadeOpaque")}
                   value={context.setting.epub.fade.opaque}
@@ -800,7 +864,7 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
                   handleApply={handleApply}
                   start="0."
                 />
-                <String
+                <StringInput
                   disabled={context.setting.epub.fade.kana === null}
                   caption={context.languagePicker("header.config.epub.fadeSize")}
                   value={context.setting.epub.fade.size}
@@ -812,7 +876,7 @@ const SECTIONS = (context, resetButtonLoading, handleApply, handleReset) => {
                   start="0."
                   end="em"
                 />
-                <String
+                <StringInput
                   disabled={context.setting.epub.fade.kana === null}
                   caption={context.languagePicker("header.config.epub.fadeTop")}
                   value={context.setting.epub.fade.top}

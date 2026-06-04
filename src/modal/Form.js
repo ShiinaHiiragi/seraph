@@ -82,7 +82,6 @@ export default function ModalForm(props) {
           {children}
         </Stack>
         <Button
-          sx={{ mt: 2 }}
           loading={loading}
           disabled={disabled}
           onClick={handleClick}

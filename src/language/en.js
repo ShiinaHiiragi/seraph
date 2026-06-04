@@ -100,7 +100,8 @@ const en = {
           brightRed: "Bright red color",
           brightWhite: "Bright white color",
           brightYellow: "Bright yellow color"
-        }
+        },
+        control: "Control Characters"
       },
       todo: {
         title: "TODO",

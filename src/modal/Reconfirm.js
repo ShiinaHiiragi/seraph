@@ -51,7 +51,7 @@ export default function Reconfirm(props) {
           {modalReconfirm.captionFirstHalf + 
             context.languagePicker("modal.reconfirm.captionSecondHalf")}
         </Typography>
-        <Box sx={{ display: "flex", gap: 1, justifyContent: "flex-end", pt: 2 }}>
+        <Box sx={{ display: "flex", gap: 1, justifyContent: "flex-end" }}>
           <Button variant="plain" color="neutral" onClick={handleCloseModalReconfirm}>
             {context.languagePicker("universal.button.cancel")}
           </Button>
