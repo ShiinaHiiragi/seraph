@@ -33,13 +33,17 @@ router.get('/os', (req, res, next) => {
 });
 
 router.get('/free', (req, res, next) => {
-  api.diskUsageAsync()
-    .then(({ free }) => {
+  Promise.all([
+    api.cpuUsageAsync(),
+    api.diskUsageAsync()
+  ])
+    .then(([cpus, { free: storage }]) => {
       req.status.addExecStatus();
       res.send({
         ...req.status.generateReport(),
-        memory: api.free(),
-        storage: free
+        cpus: cpus,
+        memory: api.memoryUsageSync(),
+        storage: storage
       });
       return;
     });

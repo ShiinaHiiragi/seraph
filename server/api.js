@@ -754,7 +754,25 @@ exports.taskOperator = taskOperator;
 
 
 // seraph and server info
-const free = () => os.freemem();
+const cpuUsageAsync = (interval = 200) => new Promise((resolve) => {
+  const start = os.cpus();
+  setTimeout(() => {
+    const end = os.cpus();
+    const perCore = start.map((cpu, index) => {
+      const startTimes = cpu.times;
+      const endTimes = end[index].times;
+      const startTime = Object.values(startTimes).reduce((prev, current) => prev + current, 0);
+      const endTime = Object.values(endTimes).reduce((prev, current) => prev + current, 0)
+      const idleDiff = endTimes.idle - startTimes.idle;
+      const totalDiff = endTime - startTime
+      return totalDiff === 0
+        ? 0
+        : 1 - idleDiff / totalDiff;
+    });
+    resolve(perCore.reduce((prev, current) => prev + current, 0) / perCore.length);
+  }, interval);
+});
+const memoryUsageSync = () => os.freemem();
 const diskUsageAsync = () => checkDiskSpace(dataPath.dataDirPath);
 
 const version = () => {
@@ -788,7 +806,8 @@ const osInfo = () => {
   };
 }
 
-exports.free = free;
+exports.cpuUsageAsync = cpuUsageAsync;
+exports.memoryUsageSync = memoryUsageSync;
 exports.diskUsageAsync = diskUsageAsync;
 exports.version = version;
 exports.osInfo = osInfo;
