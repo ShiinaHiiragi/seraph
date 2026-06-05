@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import Box from "@mui/joy/Box";
 import Link from "@mui/joy/Link";
 import { toast } from "sonner";
 
@@ -629,3 +630,43 @@ const OnMounted = ({ onLoad }) => {
 };
 
 export { OnMounted }
+
+
+const cpuHistoryWindow = 100;
+
+const Sparkline = ({ data, height = 64 }) => {
+  if (!data || data.length < 2) {
+    return <Box sx={{ height }} />;
+  }
+
+  const points = data.map((v, i) => [(i / (data.length - 1)) * 100, (1 - v) * 100,]);
+  const lineStr = points.map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(" ");
+  const areaStr = `0,100 ${lineStr} 100,100`;
+
+  return (
+    <svg
+      viewBox="0 0 100 100"
+      preserveAspectRatio="none"
+      style={{ width: "100%", height, display: "block" }}
+    >
+      <defs>
+        <linearGradient id="cpuSparkGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="var(--joy-palette-primary-400)" stopOpacity="0.3" />
+          <stop offset="100%" stopColor="var(--joy-palette-primary-400)" stopOpacity="0" />
+        </linearGradient>
+      </defs>
+      <polygon fill="url(#cpuSparkGrad)" points={areaStr} />
+      <polyline
+        fill="none"
+        stroke="var(--joy-palette-primary-400)"
+        strokeWidth="2.5"
+        strokeLinejoin="round"
+        strokeLinecap="round"
+        points={lineStr}
+        vectorEffect="non-scaling-stroke"
+      />
+    </svg>
+  );
+};
+
+export { cpuHistoryWindow, Sparkline }

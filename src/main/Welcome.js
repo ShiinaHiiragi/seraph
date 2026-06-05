@@ -1,9 +1,14 @@
 import React from "react";
 import { useTime, useStopwatch } from "react-timer-hook";
 import { styled } from "@mui/joy/styles";
+import Box from "@mui/joy/Box";
+import Sheet from "@mui/joy/Sheet";
 import Typography from "@mui/joy/Typography";
+import LinearProgress from "@mui/joy/LinearProgress";
 import GlobalContext, {
   defaultOSInfo,
+  cpuHistoryWindow,
+  Sparkline,
   request
 } from "../interface/constants";
 import RouteField from "../interface/RouteField";
@@ -27,43 +32,27 @@ const Center = styled('div')(({ theme }) => ({
   }
 }));
 
-const InfoField = styled('div')(({ theme }) => ({
-  display: "flex",
-  flexDirection: "column"
-}));
-
-const InfoItem = styled('div')(({ theme }) => ({
+const DashCard = styled(Sheet)(({ theme }) => ({
+  borderRadius: theme.radius.sm,
+  padding: theme.spacing(1.5, 2),
   display: "flex",
   flexDirection: "column",
-  alignItems: "flex-start",
-  paddingBottom: theme.spacing(0.5)
 }));
 
-const ItemField = (props) => {
-  const { item, children } = props;
-  const context = React.useContext(GlobalContext);
-
-  return (
-    <InfoItem style={{ mb: 0.5 }}>
-      <Typography
-        level="body-sm"
-        color="neutral"
-        fontWeight={500}
-        sx={{ minWidth: "3rem" }}
-      >
-        {context.languagePicker(`main.welcome.osInfo.${item}`)}
-      </Typography>
-      <Typography
-        level="body-sm"
-        color="neutral"
-        fontWeight={400}
-        sx={{ flexGrow: 1 }}
-      >
-        {children}
-      </Typography>
-    </InfoItem>
-  )
-}
+const InfoPair = ({ label, value }) => (
+  <Box sx={{ display: "flex", gap: 1, mb: 0.75, alignItems: "baseline" }}>
+    <Typography
+      level="body-xs"
+      color="neutral"
+      sx={{ minWidth: 72, flexShrink: 0 }}
+    >
+      {label}
+    </Typography>
+    <Typography level="body-xs" sx={{ wordBreak: "break-all" }}>
+      {value}
+    </Typography>
+  </Box>
+);
 
 const Welcome = () => {
   const context = React.useContext(GlobalContext);
@@ -78,8 +67,16 @@ const Welcome = () => {
 
   const [version, setVersion] = React.useState("");
   const [osInfo, setOSInfo] = React.useState(defaultOSInfo);
-  const [memory, setMemory] = React.useState(-1);
-  const [storage, setStorage] = React.useState(-1);
+
+  const [cpuHistory, setCpuHistory] = React.useState([]);
+  const [cpuLive, setCpuLive] = React.useState(0);
+  const [memFree, setMemFree] = React.useState(-1);
+  const [diskFree, setDiskFree] = React.useState(-1);
+
+  React.useEffect(() => {
+    request("GET/info/version")
+      .then((data) => setVersion(data.version));
+  }, []);
 
   React.useEffect(() => {
     if (context.secondTick && context.isAuthority) {
@@ -90,7 +87,6 @@ const Welcome = () => {
         upReset(stopwatchOffset);
       });
     }
-    request("GET/info/version").then((data) => setVersion(data.version));
   // eslint-disable-next-line
   }, [
     // check if
@@ -101,83 +97,395 @@ const Welcome = () => {
   ])
 
   React.useEffect(() => {
-    request("GET/info/stat").then((data) => {
-      const { memory, storage } = data;
-      setMemory(memory);
-      setStorage(storage);
-    });
-  }, [minutes]);
+    if (context.secondTick && context.isAuthority) {
+      const pollStatus = () =>
+        request("GET/info/stat").then((data) => {
+          setCpuLive(data.cpus);
+          setCpuHistory((cpuHistory) => [
+            ...cpuHistory.slice(-(cpuHistoryWindow - 1)),
+            data.cpus
+          ]);
+          setMemFree(data.memory);
+          setDiskFree(data.storage);
+      });
+      pollStatus();
+      const id = setInterval(pollStatus, 2000);
+      return () => clearInterval(id);
+    }
+  // eslint-disable-next-line
+  }, [
+    // check if
+    // load with auth naturally
+    context.secondTick,
+    // login in same page
+    context.isAuthority,
+  ])
+
+  const time = [hours, minutes, seconds]
+    .map((num) => String(num).padStart(2, "0"))
+    .join(":");
+
+  const uptime = [upDays * 24 + upHours, upMinutes, upSeconds]
+    .map((num) => String(num).padStart(2, "0"))
+    .join(":");
+
+  const memoryPercentage = osInfo.memory > 0 && memFree >= 0
+      ? ((osInfo.memory - memFree) / osInfo.memory) * 100
+      : 0;
+
+  const storagePercentage = osInfo.storage > 0 && diskFree >= 0
+      ? ((osInfo.storage - diskFree) / osInfo.storage) * 100
+      : 0;
+
+  if (!context.isAuthority) {
+    return (
+      <RouteField display>
+        <Center className="CenterField">
+          <Typography
+            level="h2"
+            color="secondary"
+            fontWeight={600}
+            sx={{ pb: 0.5, letterSpacing: "0.02em" }}
+          >
+            {context.languagePicker("nav.title")}
+            {version.length > 0 &&
+              <Typography
+                component="span"
+                level="body-md"
+                color="neutral"
+                fontWeight={400}
+                children={"v" + version}
+                sx={{ pl: 1 }}
+              />}
+          </Typography>
+          <Typography
+            level="body-lg"
+            color="neutral"
+            fontWeight={500}
+            sx={{ pb: 2, fontVariantNumeric: "tabular-nums" }}
+          >
+            {time}
+          </Typography>
+        </Center>
+      </RouteField>
+    );
+  }
 
   return (
-    <RouteField display>
-      <Center className="CenterField">
-        <Typography
-          level="h2"
-          color="secondary"
-          fontWeight={600}
-          sx={{ pb: 0.5, letterSpacing: "0.02em" }}
+    <RouteField
+      display
+      path={[]}
+      title={
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "baseline",
+            flexShrink: 0,
+            px: 3,
+            pb: 1.5
+          }}
         >
-          {context.languagePicker("nav.title")}
-          {version.length > 0 &&
+          <Typography level="h3" fontWeight={600}>
+            {context.languagePicker("nav.title")}
+            {version.length > 0 && (
+              <Typography
+                component="span"
+                level="body-md"
+                color="neutral"
+                fontWeight={400}
+                children={"v" + version}
+                sx={{ pl: 1 }}
+              />
+            )}
+          </Typography>
+          <Typography
+            level="body-lg"
+            color="neutral"
+            fontWeight={500}
+            sx={{ fontVariantNumeric: "tabular-nums" }}
+          >
+            {time}
+          </Typography>
+        </Box>
+      }
+      sx={{
+        flexDirection: "column",
+        overflowY: "auto"
+      }}
+    >
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          boxSizing: "border-box",
+          gap: 1.5
+        }}
+      >
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: {
+              xs: "1fr",
+              lg: "repeat(3, 1fr)"
+            },
+            gap: 1.5,
+            flexShrink: 0
+          }}
+        >
+          <DashCard variant="outlined">
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-start",
+              }}
+            >
+              <Typography
+                level={{ xs: "body-xs", ld: "title-md" }}
+                color="neutral"
+                sx={{ letterSpacing: "0.02em" }}
+              >
+                {context.languagePicker("main.welcome.osInfo.memoryAvailable")}
+              </Typography>
+              {osInfo.memory > 0 && (
+                <Typography
+                  level="title-lg"
+                  fontWeight={600}
+                  sx={{ fontVariantNumeric: "tabular-nums", lineHeight: 1.2 }}
+                >
+                  {memoryPercentage.toFixed(0)}%
+                </Typography>
+              )}
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                flexGrow: 1,
+                flexDirection: "column",
+                justifyContent: "flex-end",
+                my: 1,
+              }}
+            >
+              <Box>
+                <LinearProgress
+                  determinate
+                  value={memoryPercentage}
+                  color="primary"
+                />
+              </Box>
+            </Box>
+            {memFree >= 0 && osInfo.memory > 0 && (
+              <Typography level="body-xs" color="neutral">
+                {Number(memFree).sizeFormat(1)} / {Number(osInfo.memory).sizeFormat(1)}
+              </Typography>
+            )}
+          </DashCard>
+
+          <DashCard variant="outlined">
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-start",
+              }}
+            >
+              <Typography
+                level={{ xs: "body-xs", ld: "title-md" }}
+                color="neutral"
+                sx={{ letterSpacing: "0.02em" }}
+              >
+                {context.languagePicker("main.welcome.osInfo.storageAvailable")}
+              </Typography>
+              {osInfo.storage > 0 && (
+                <Typography
+                  level="title-lg"
+                  fontWeight={600}
+                  sx={{ fontVariantNumeric: "tabular-nums", lineHeight: 1.2 }}
+                >
+                  {storagePercentage.toFixed(0)}%
+                </Typography>
+              )}
+            </Box>
+            <Box
+              sx={{
+                flex: 1,
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "flex-end",
+                my: 1,
+              }}
+            >
+              <Box>
+                <LinearProgress
+                  determinate
+                  value={storagePercentage}
+                  color="primary"
+                />
+              </Box>
+            </Box>
+            {diskFree >= 0 && osInfo.storage > 0 && (
+              <Typography level="body-xs" color="neutral">
+                {Number(diskFree).sizeFormat(1)} / {Number(osInfo.storage).sizeFormat(1)}
+              </Typography>
+            )}
+          </DashCard>
+
+          <DashCard variant="outlined">
             <Typography
-              component="span"
-              level="body-md"
+              level={{ xs: "body-xs", ld: "title-md" }}
               color="neutral"
-              fontWeight={400}
-              children={"v" + version}
-              sx={{ pl: 1 }}
-            />}
-        </Typography>
-        <Typography
-          level="body-lg"
-          color="neutral"
-          fontWeight={500}
-          sx={{ pb: 2 }}
-        >
-          {String(hours).padStart(2, '0')}
-          {":"}
-          {String(minutes).padStart(2, '0')}
-          {":"}
-          {String(seconds).padStart(2, '0')}
-        </Typography>
-        {context.isAuthority &&
-          <InfoField>
-            {osInfo.userAtHostname.length > 0 &&
-              <ItemField item="userAtHostname">
+              sx={{ letterSpacing: "0.02em" }}
+            >
+              {context.languagePicker("main.welcome.osInfo.uptime")}
+            </Typography>
+            <Typography
+              level="h3"
+              fontWeight={500}
+              sx={{
+                fontVariantNumeric: "tabular-nums",
+                lineHeight: 1,
+                flex: 1,
+                display: "flex",
+                alignItems: "center",
+                my: 1
+              }}
+            >
+              {uptime}
+            </Typography>
+            {osInfo.userAtHostname?.length > 0 && (
+              <Typography level="body-xs" color="neutral" sx={{ fontFamily: "var(--joy-fontFamily-code)" }}>
                 {osInfo.userAtHostname}
-              </ItemField>}
-            {osInfo.platform.length > 0 &&
-              <ItemField item="platform">
-                {String(osInfo.platform ?? "").upperCaseFirst()}
-              </ItemField>}
-            {osInfo.kernelVersion.length > 0 &&
-              <ItemField item="kernelVersion">
-                {osInfo.kernelVersion}
-              </ItemField>}
-            {osInfo.uptime >= 0 &&
-              <ItemField item="uptime">
-                {String(upDays * 24 + upHours).padStart(2, '0')}
-                {":"}
-                {String(upMinutes).padStart(2, '0')}
-                {":"}
-                {String(upSeconds).padStart(2, '0')}
-              </ItemField>}
-            {memory >= 0 && osInfo.memory >= 0 &&
-              <ItemField item="memoryAvailable">
-                {Number(memory).sizeFormat(2)}
-                {" / "}
-                {Number(osInfo.memory).sizeFormat(2)}
-              </ItemField>}
-            {storage >= 0 && osInfo.storage >= 0 &&
-            <ItemField item="storageAvailable">
-              {Number(storage).sizeFormat(2)}
-              {" / "}
-              {Number(osInfo.storage).sizeFormat(2)}
-            </ItemField>}
-          </InfoField>}
-      </Center>
+              </Typography>
+            )}
+          </DashCard>
+        </Box>
+
+        <DashCard variant="outlined">
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "flex-start",
+            }}
+          >
+            <Typography
+              level="title-md"
+              color="neutral"
+              sx={{ letterSpacing: "0.02em" }}
+            >
+              CPU
+            </Typography>
+            <Typography
+              level="title-lg"
+              fontWeight={600}
+              sx={{ fontVariantNumeric: "tabular-nums", lineHeight: 1.2 }}
+            >
+              {(cpuLive * 100).toFixed(2)}%
+            </Typography>
+          </Box>
+          <Box sx={{ mt: 0.5, mb: 1.5 }}>
+            <Sparkline data={cpuHistory} height={96} />
+          </Box>
+          <Typography level="body-xs" color="neutral">
+            {osInfo.cpus?.cores ?? "—"} cores
+          </Typography>
+        </DashCard>
+
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
+            gap: 1.5,
+          }}
+        >
+          <DashCard variant="outlined" sx={{ overflow: "auto", gap: 0 }}>
+            <Typography
+              level="title-md"
+              color="neutral"
+              sx={{ letterSpacing: "0.02em", mb: 1.5 }}
+            >
+              System
+            </Typography>
+            {osInfo.platform?.length > 0 && (
+              <InfoPair
+                label={context.languagePicker("main.welcome.osInfo.platform")}
+                value={String(osInfo.platform).upperCaseFirst()}
+              />
+            )}
+            {osInfo.kernelVersion?.length > 0 && (
+              <InfoPair
+                label={context.languagePicker("main.welcome.osInfo.kernelVersion")}
+                value={osInfo.kernelVersion}
+              />
+            )}
+            {osInfo.network &&
+              Object.entries(osInfo.network).flatMap(([name, ifaces]) =>
+                ifaces.map((iface) => (
+                  <InfoPair
+                    key={`${name}-${iface.address}`}
+                    label={name}
+                    value={iface.address}
+                  />
+                ))
+              )}
+          </DashCard>
+
+          <DashCard variant="outlined" sx={{ overflow: "auto", gap: 0 }}>
+            <Typography
+              level="title-md"
+              color="neutral"
+              sx={{ letterSpacing: "0.02em", mb: 1.5 }}
+            >
+              CPUs and Load
+            </Typography>
+            {osInfo.cpus?.model && (
+              <InfoPair label="Model" value={osInfo.cpus.model} />
+            )}
+            {osInfo.cpus?.cores != null && (
+              <InfoPair label="Cores" value={String(osInfo.cpus.cores)} />
+            )}
+            {osInfo.loadavg && osInfo.cpus?.cores > 0 && (
+              <Box sx={{ mt: 1 }}>
+                {["1m", "5m", "15m"].map((label, i) => {
+                  const val = Math.min(
+                    (osInfo.loadavg[i] / osInfo.cpus.cores) * 100,
+                    100
+                  );
+                  return (
+                    <Box
+                      key={label}
+                      sx={{ display: "flex", alignItems: "center", gap: 1, mb: 0.75 }}
+                    >
+                      <Typography
+                        level="body-xs"
+                        color="neutral"
+                        sx={{ minWidth: 20, flexShrink: 0 }}
+                      >
+                        {label}
+                      </Typography>
+                      <LinearProgress
+                        determinate
+                        value={val}
+                        size="sm"
+                        sx={{ flex: 1 }}
+                      />
+                      <Typography
+                        level="body-xs"
+                        sx={{ minWidth: 28, textAlign: "right", fontVariantNumeric: "tabular-nums" }}
+                      >
+                        {osInfo.loadavg[i].toFixed(2)}
+                      </Typography>
+                    </Box>
+                  );
+                })}
+              </Box>
+            )}
+          </DashCard>
+        </Box>
+      </Box>
     </RouteField>
-  )
-}
+  );
+};
 
 export default Welcome;
