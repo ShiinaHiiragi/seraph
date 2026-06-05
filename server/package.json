@@ -24,13 +24,13 @@
     "http-errors": "~1.6.3",
     "mime": "^3.0.0",
     "morgan": "~1.9.1",
-    "node-dev": "^8.0.0",
     "node-pty": "^1.1.0",
+    "patch-package": "^8.0.1",
+    "run-script-os": "^1.1.6",
     "serve-handler": "^6.1.5",
     "ws": "^8.21.0"
   },
   "devDependencies": {
-    "patch-package": "^8.0.1",
-    "run-script-os": "^1.1.6"
+    "node-dev": "^8.0.0"
   }
 }

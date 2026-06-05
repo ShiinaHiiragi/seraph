@@ -10,13 +10,9 @@
     "@mui/joy": "^5.0.0-beta.52",
     "@mui/material": "^5.14.13",
     "@mui/x-date-pickers": "^6.16.2",
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
     "@xterm/addon-fit": "^0.11.0",
     "@xterm/xterm": "^6.0.0",
     "axios": "^1.5.0",
-    "concurrently": "^8.2.1",
     "dayjs": "^1.11.10",
     "fuse.js": "^6.6.2",
     "react": "^18.2.0",
@@ -62,6 +58,10 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "concurrently": "^8.2.1",
     "run-script-os": "^1.1.6"
   }
 }

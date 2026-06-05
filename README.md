@@ -24,9 +24,11 @@
     # use　`git clone --recurse-submodules` to fetch submodules
     git clone https://github.com/ShiinaHiiragi/seraph
     cd seraph/
-    npm install
-    cd server/ && npm install && cd ..
+    npm install --production
+    npm install --prefix server --production
     ```
+
+    remove `--production` for development
 
 3. (**IMPORTANT**) Create an `.env` file under `seraph/` and add following configuration
 
@@ -167,7 +169,7 @@
 
 ## Log
 
-- 06/04/2026 ver 1.0.0: Update dependencies from @mui/joy
+- 06/04/2026 ver 1.0.0: Update dependencies from @mui/joy and split build bundles
 - 06/03/2026 ver 0.4.1: Fix plaintext cipher
 - 06/02/2026 ver 0.4.0: Add terminal
 - 06/01/2026 ver 0.3.0: Add setting popup
