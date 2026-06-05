@@ -44,6 +44,7 @@
 
         ```shell
         cat > .env <<EOF
+        GENERATE_SOURCEMAP=false
         REACT_APP_HOSTNAME=${YOUR_HOSTNAME}
         REACT_APP_SSLCERT=local
         REACT_APP_SPORT=443
@@ -56,6 +57,7 @@
 
         ```shell
         cat > .env <<EOF
+        GENERATE_SOURCEMAP=false
         REACT_APP_HOSTNAME=${YOUR_HOSTNAME}
         REACT_APP_SSLCERT=nginx
         REACT_APP_NPORT=443

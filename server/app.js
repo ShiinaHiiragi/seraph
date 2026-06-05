@@ -1,4 +1,5 @@
 let express = require('express');
+let compression = require('compression');
 let cookieParser = require('cookie-parser');
 let logger = require('morgan');
 let cors = require('cors');
@@ -19,6 +20,7 @@ let api = require('./api');
 let app = express();
 
 // init middleware
+app.use(compression());
 app.use(logger('dev'));
 app.use(express.json({ limit: '512mb' }));
 app.use(express.urlencoded({ limit: '512mb', extended: true }));

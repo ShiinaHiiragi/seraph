@@ -9,15 +9,6 @@ import Header from "./components/Header";
 import Navigation from "./components/Navigation";
 import SideDrawer from "./components/SideDrawer";
 
-import Welcome from "./main/Welcome";
-import FileExplorer from "./main/FileExplorer"
-import Links from "./main/Links";
-import Milkdown from "./main/Milkdown";
-import Subscription from "./main/Subscription";
-import Terminal from "./main/Terminal";
-import TODO from "./main/TODO";
-import Error from "./main/Error";
-
 import Init from "./modal/Init";
 import Reconfirm from "./modal/Reconfirm";
 
@@ -33,6 +24,15 @@ import GlobalContext, {
   request,
   toastTheme
 } from "./interface/constants";
+
+const Welcome = React.lazy(() => import("./main/Welcome"));
+const FileExplorer = React.lazy(() => import("./main/FileExplorer"));
+const Links = React.lazy(() => import("./main/Links"));
+const Milkdown = React.lazy(() => import("./main/Milkdown"));
+const Subscription = React.lazy(() => import("./main/Subscription"));
+const Terminal = React.lazy(() => import("./main/Terminal"));
+const TODO = React.lazy(() => import("./main/TODO"));
+const Error = React.lazy(() => import("./main/Error"));
 
 const Root = styled('div')(({ theme }) => ({
   width: "100vw",
@@ -224,39 +224,41 @@ const Panel = () => {
                 />
               </NavigationField>
               <MainField className="MainField">
-                <Routes>
-                  <Route exact path="/" element={<Welcome />} />
-                  <Route
-                    path="/public/*"
-                    element={
-                      <FileExplorer
-                        type="public"
-                        clipboard={clipboard}
-                        setClipboard={setClipboard}
-                        setPublicFolders={setPublicFolders}
-                        setPrivateFolders={setPrivateFolders}
-                      />
-                    }
-                  />
-                  <Route
-                    path="/private/*"
-                    element={
-                      <FileExplorer
-                        type="private"
-                        clipboard={clipboard}
-                        setClipboard={setClipboard}
-                        setPublicFolders={setPublicFolders}
-                        setPrivateFolders={setPrivateFolders}
-                      />
-                    }
-                  />
-                  <Route path="/links" element={<Links />} />
-                  <Route path="/milkdown" element={<Milkdown />} />
-                  <Route path="/subscription" element={<Subscription />} />
-                  <Route path="/terminal" element={<Terminal />} />
-                  <Route path="/todo" element={<TODO />} />
-                  <Route path="*" element={<Error />} />
-                </Routes>
+                <React.Suspense fallback={null}>
+                  <Routes>
+                    <Route exact path="/" element={<Welcome />} />
+                    <Route
+                      path="/public/*"
+                      element={
+                        <FileExplorer
+                          type="public"
+                          clipboard={clipboard}
+                          setClipboard={setClipboard}
+                          setPublicFolders={setPublicFolders}
+                          setPrivateFolders={setPrivateFolders}
+                        />
+                      }
+                    />
+                    <Route
+                      path="/private/*"
+                      element={
+                        <FileExplorer
+                          type="private"
+                          clipboard={clipboard}
+                          setClipboard={setClipboard}
+                          setPublicFolders={setPublicFolders}
+                          setPrivateFolders={setPrivateFolders}
+                        />
+                      }
+                    />
+                    <Route path="/links" element={<Links />} />
+                    <Route path="/milkdown" element={<Milkdown />} />
+                    <Route path="/subscription" element={<Subscription />} />
+                    <Route path="/terminal" element={<Terminal />} />
+                    <Route path="/todo" element={<TODO />} />
+                    <Route path="*" element={<Error />} />
+                  </Routes>
+                </React.Suspense>
               </MainField>
             </ContentField>
           </BrowserRouter>
