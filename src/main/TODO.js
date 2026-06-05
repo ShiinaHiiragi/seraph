@@ -478,7 +478,6 @@ const TODO = () => {
                       <Typography
                         level="body-sm"
                         key={index}
-                        sx={{ wordBreak: "normal", overflowWrap: "anywhere" }}
                       >
                         {paragraph.annotateLink()}
                       </Typography>

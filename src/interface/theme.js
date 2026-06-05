@@ -61,6 +61,16 @@ const GlobalTheme = (language) => extendTheme({
     display: localeCombinator(language),
     body: localeCombinator(language),
     code: "'Noto Sans Mono', 'Noto Sans Mono CJK SC', 'Consolas', 'DejaVu Sans Mono', 'Menlo', monospace"
+  },
+  components: {
+    JoyTypography: {
+      styleOverrides: {
+        root: {
+          wordBreak: "normal",
+          overflowWrap: "anywhere",
+        }
+      }
+    }
   }
 });
 
