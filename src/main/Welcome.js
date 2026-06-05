@@ -91,7 +91,7 @@ const Welcome = () => {
   const [osInfo, setOSInfo] = React.useState(defaultOSInfo);
 
   const [cpuHistory, setCpuHistory] = React.useState([]);
-  const [cpuLive, setCpuLive] = React.useState(0);
+  const [cpuComing, setCpuComing] = React.useState([]);
   const [memoryFree, setMemoryFree] = React.useState(-1);
   const [storageFree, setStorageFree] = React.useState(-1);
 
@@ -103,6 +103,7 @@ const Welcome = () => {
   React.useEffect(() => {
     if (context.secondTick && context.isAuthority) {
       request("GET/info/os").then((data) => {
+        console.log(data.os);
         setOSInfo(data.os);
         const stopwatchOffset = new Date();
         stopwatchOffset.setSeconds(stopwatchOffset.getSeconds() + data.os.uptime);
@@ -122,7 +123,6 @@ const Welcome = () => {
     if (context.secondTick && context.isAuthority) {
       const pollStatus = () =>
         request("GET/info/stat").then((data) => {
-          setCpuLive(data.cpus);
           setCpuHistory((cpuHistory) => [
             ...cpuHistory.slice(-(cpuHistoryWindow - 1)),
             data.cpus
@@ -270,13 +270,13 @@ const Welcome = () => {
             >
                 {context.languagePicker("main.welcome.kpiCards.memory")}
               </Typography>
-              {osInfo.memory > 0 && (
+              {osInfo.memory > 0 && memoryFree >= 0 && (
                 <Typography
                   level="title-lg"
                   fontWeight={600}
                   sx={{ fontVariantNumeric: "tabular-nums", lineHeight: 1.2 }}
                 >
-                  {memoryPercentage.toFixed(0)}%
+                  {memoryPercentage.toFixed(1)}%
                 </Typography>
               )}
             </Box>
@@ -321,13 +321,13 @@ const Welcome = () => {
             >
                 {context.languagePicker("main.welcome.kpiCards.storage")}
               </Typography>
-              {osInfo.storage > 0 && (
+              {osInfo.storage > 0 && storageFree >= 0 && (
                 <Typography
                   level="title-lg"
                   fontWeight={600}
                   sx={{ fontVariantNumeric: "tabular-nums", lineHeight: 1.2 }}
                 >
-                  {storagePercentage.toFixed(0)}%
+                  {storagePercentage.toFixed(1)}%
                 </Typography>
               )}
             </Box>
@@ -409,25 +409,27 @@ const Welcome = () => {
               >
                 {context.languagePicker("main.welcome.trend.cpu")}
               </Typography>
-              <Typography
-                level="title-lg"
-                fontWeight={600}
-                sx={{ fontVariantNumeric: "tabular-nums", lineHeight: 1.2 }}
-              >
-                {(cpuLive * 100).toFixed(2)}%
-              </Typography>
+              {cpuHistory.length > 0 &&
+                <Typography
+                  level="title-lg"
+                  fontWeight={600}
+                  sx={{ fontVariantNumeric: "tabular-nums", lineHeight: 1.2 }}
+                >
+                  {(cpuHistory.slice(-1)[0] * 100).toFixed(2)}%
+                </Typography>}
             </Box>
             <Box sx={{ mt: 0.5, mb: 1.5 }}>
               <Sparkline data={cpuHistory} height={80} />
             </Box>
-            {osInfo.cpus && <Typography level="body-xs" color="neutral">
-              {osInfo.cpus.cores}
-              {" "}
-              {context.languagePicker("main.welcome.trend.cores")}
-              &emsp;
-              {osInfo.cpus.speed}
-              {" MHz"}
-            </Typography>}
+            {osInfo.cpus.cores > 0 && osInfo.cpus.speed > 0 &&
+              <Typography level="body-xs" color="neutral">
+                {osInfo.cpus.cores}
+                {" "}
+                {context.languagePicker("main.welcome.trend.cores")}
+                &emsp;
+                {osInfo.cpus.speed}
+                {" MHz"}
+              </Typography>}
           </DashCard>
         </Box>
 
@@ -446,19 +448,19 @@ const Welcome = () => {
             >
               {context.languagePicker("main.welcome.info.systemInfo")}
             </Typography>
-            {osInfo.platform?.length > 0 && (
+            {osInfo.platform.length > 0 && (
               <InfoPair
                 label={context.languagePicker("main.welcome.info.platform")}
                 value={String(osInfo.platform).upperCaseFirst()}
               />
             )}
-            {osInfo.kernelVersion?.length > 0 && (
+            {osInfo.kernelVersion.length > 0 && (
               <InfoPair
                 label={context.languagePicker("main.welcome.info.kernelVersion")}
                 value={osInfo.kernelVersion}
               />
             )}
-            {osInfo.cpus?.model && (
+            {osInfo.cpus.model.length > 0 && (
               <InfoPair
                 label={context.languagePicker("main.welcome.info.cpuModel")}
                 value={osInfo.cpus.model}

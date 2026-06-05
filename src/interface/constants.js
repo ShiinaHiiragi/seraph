@@ -260,12 +260,19 @@ const defaultSetting = {
 };
 
 const defaultOSInfo = {
+  memory: -1,
+  storage: -1,
+  uptime: -1,
   userAtHostname: "",
+  cpuHistory: [],
   platform: "",
   kernelVersion: "",
-  uptime: -1,
-  memory: -1,
-  storage: -1
+  cpus: {
+    model: "",
+    speed: -1,
+    cores: -1
+  },
+  network: { }
 };
 
 const settingField = {

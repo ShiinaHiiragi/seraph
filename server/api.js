@@ -793,7 +793,11 @@ const infoOperator = {
       );
 
     return {
+      memory: os.totalmem(),
+      storage: undefined,
+      uptime: os.uptime(),
       userAtHostname: os.userInfo().username + '@' + os.hostname(),
+      cpuHistory: infoOperator.cpuHistory,
       platform: os.platform() + ' ' + os.release() + ' ' + os.arch(),
       kernelVersion: os.version(),
       cpus: {
@@ -802,8 +806,6 @@ const infoOperator = {
         cores: cpus.length
       },
       network: Object.fromEntries(networkInterfaces),
-      memory: os.totalmem(),
-      uptime: os.uptime()
     }
   },
 
