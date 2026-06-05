@@ -621,3 +621,11 @@ const toastTheme = (theme) => `
 `
 
 export { toastTheme };
+
+
+const OnMounted = ({ onLoad }) => {
+  React.useEffect(() => onLoad(), []);
+  return null;
+};
+
+export { OnMounted }

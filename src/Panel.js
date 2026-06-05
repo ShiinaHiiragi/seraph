@@ -25,14 +25,15 @@ import GlobalContext, {
   toastTheme
 } from "./interface/constants";
 
+import Loading from "./main/Loading";
+import Error from "./main/Error";
+
 const Welcome = React.lazy(() => import("./main/Welcome"));
 const FileExplorer = React.lazy(() => import("./main/FileExplorer"));
-const Links = React.lazy(() => import("./main/Links"));
 const Milkdown = React.lazy(() => import("./main/Milkdown"));
 const Subscription = React.lazy(() => import("./main/Subscription"));
 const Terminal = React.lazy(() => import("./main/Terminal"));
 const TODO = React.lazy(() => import("./main/TODO"));
-const Error = React.lazy(() => import("./main/Error"));
 
 const Root = styled('div')(({ theme }) => ({
   width: "100vw",
@@ -224,7 +225,7 @@ const Panel = () => {
                 />
               </NavigationField>
               <MainField className="MainField">
-                <React.Suspense fallback={null}>
+                <React.Suspense fallback={<Loading />}>
                   <Routes>
                     <Route exact path="/" element={<Welcome />} />
                     <Route
@@ -251,7 +252,6 @@ const Panel = () => {
                         />
                       }
                     />
-                    <Route path="/links" element={<Links />} />
                     <Route path="/milkdown" element={<Milkdown />} />
                     <Route path="/subscription" element={<Subscription />} />
                     <Route path="/terminal" element={<Terminal />} />

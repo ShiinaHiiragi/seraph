@@ -15,7 +15,8 @@ import GlobalContext, {
   request,
   Status,
   defaultSetting,
-  settingField
+  settingField,
+  OnMounted
 } from "../interface/constants";
 import { languagePickerSpawner } from "../interface/languagePicker";
 import ModalForm from "../modal/Form";
@@ -66,6 +67,8 @@ const Header = (props) => {
 
   // state for config
   const [modalConfigOpen, setModalConfigOpen] = React.useState(false);
+  const [modalConfigLoading, setModalConfigLoading] = React.useState(false);
+
   const [mobileNavOpen, setMobileNavOpen] = React.useState(false);
   const [activeSection, setActiveSection] = React.useState(settingField.general);
   const [resetButtonLoading, setResetButtonLoading] = React.useState(false);
@@ -217,7 +220,11 @@ const Header = (props) => {
             size="sm"
             variant="outlined"
             color="neutral"
-            onClick={() => setModalConfigOpen(true)}
+            loading={modalConfigLoading}
+            onClick={() => {
+              setModalConfigLoading(true);
+              setModalConfigOpen(true);
+            }}
           >
             <SettingsOutlinedIcon />
           </IconButton>}
@@ -247,6 +254,7 @@ const Header = (props) => {
       </Box>
       {modalConfigOpen && (
         <React.Suspense fallback={null}>
+          <OnMounted onLoad={() => setModalConfigLoading(false)} />
           <Config
             open={modalConfigOpen}
             handleClose={handleCloseConfig}
