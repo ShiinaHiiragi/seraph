@@ -92,8 +92,8 @@ const Welcome = () => {
 
   const [cpuHistory, setCpuHistory] = React.useState([]);
   const [cpuLive, setCpuLive] = React.useState(0);
-  const [memFree, setMemFree] = React.useState(-1);
-  const [diskFree, setDiskFree] = React.useState(-1);
+  const [memoryFree, setMemoryFree] = React.useState(-1);
+  const [storageFree, setStorageFree] = React.useState(-1);
 
   React.useEffect(() => {
     request("GET/info/version")
@@ -127,8 +127,8 @@ const Welcome = () => {
             ...cpuHistory.slice(-(cpuHistoryWindow - 1)),
             data.cpus
           ]);
-          setMemFree(data.memory);
-          setDiskFree(data.storage);
+          setMemoryFree(data.memory);
+          setStorageFree(data.storage);
       });
       pollStatus();
       const id = setInterval(pollStatus, 2000);
@@ -151,12 +151,12 @@ const Welcome = () => {
     .map((num) => String(num).padStart(2, "0"))
     .join(":");
 
-  const memoryPercentage = osInfo.memory > 0 && memFree >= 0
-      ? ((osInfo.memory - memFree) / osInfo.memory) * 100
+  const memoryPercentage = osInfo.memory > 0 && memoryFree >= 0
+      ? ((osInfo.memory - memoryFree) / osInfo.memory) * 100
       : 0;
 
-  const storagePercentage = osInfo.storage > 0 && diskFree >= 0
-      ? ((osInfo.storage - diskFree) / osInfo.storage) * 100
+  const storagePercentage = osInfo.storage > 0 && storageFree >= 0
+      ? ((osInfo.storage - storageFree) / osInfo.storage) * 100
       : 0;
 
   if (!context.isAuthority) {
@@ -297,9 +297,9 @@ const Welcome = () => {
                 />
               </Box>
             </Box>
-            {memFree >= 0 && osInfo.memory > 0 && (
+            {memoryFree >= 0 && osInfo.memory > 0 && (
               <Typography level="body-xs" color="neutral">
-                {Number(memFree).sizeFormat(1)} / {Number(osInfo.memory).sizeFormat(1)}
+                {Number(memoryFree).sizeFormat(1)} / {Number(osInfo.memory).sizeFormat(1)}
                 {" "}
                 {context.languagePicker("main.welcome.kpiCards.available")}
               </Typography>
@@ -348,9 +348,9 @@ const Welcome = () => {
                 />
               </Box>
             </Box>
-            {diskFree >= 0 && osInfo.storage > 0 && (
+            {storageFree >= 0 && osInfo.storage > 0 && (
               <Typography level="body-xs" color="neutral">
-                {Number(diskFree).sizeFormat(1)} / {Number(osInfo.storage).sizeFormat(1)}
+                {Number(storageFree).sizeFormat(1)} / {Number(osInfo.storage).sizeFormat(1)}
                 {" "}
                 {context.languagePicker("main.welcome.kpiCards.available")}
               </Typography>

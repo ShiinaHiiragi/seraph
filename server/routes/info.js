@@ -6,7 +6,7 @@ router.get('/version', (req, res, next) => {
   req.status.addExecStatus();
   res.send({
     ...req.status.generateReport(),
-    version: api.version()
+    version: api.infoOperator.version()
   });
   return;
 });
@@ -18,13 +18,13 @@ router.get('/os', (req, res, next) => {
     return;
   }
 
-  api.diskUsageAsync()
+  api.infoOperator.diskUsage()
     .then(({ size }) => {
       req.status.addExecStatus();
       res.send({
         ...req.status.generateReport(),
         os: {
-          ...api.osInfo(),
+          ...api.infoOperator.osInfo(),
           storage: size
         }
       });
@@ -34,15 +34,15 @@ router.get('/os', (req, res, next) => {
 
 router.get('/stat', (req, res, next) => {
   Promise.all([
-    api.cpuUsageAsync(),
-    api.diskUsageAsync()
+    api.infoOperator.cpuUsage(),
+    api.infoOperator.diskUsage()
   ])
     .then(([cpus, { free: storage }]) => {
       req.status.addExecStatus();
       res.send({
         ...req.status.generateReport(),
         cpus: cpus,
-        memory: api.memoryUsageSync(),
+        memory: api.infoOperator.memoryUsage(),
         storage: storage
       });
       return;

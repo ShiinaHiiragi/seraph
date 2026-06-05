@@ -754,63 +754,105 @@ exports.taskOperator = taskOperator;
 
 
 // seraph and server info
-const cpuUsageAsync = (interval = 200) => new Promise((resolve) => {
-  const start = os.cpus();
-  setTimeout(() => {
-    const end = os.cpus();
-    const perCore = start.map((cpu, index) => {
-      const startTimes = cpu.times;
-      const endTimes = end[index].times;
-      const startTime = Object.values(startTimes).reduce((prev, current) => prev + current, 0);
-      const endTime = Object.values(endTimes).reduce((prev, current) => prev + current, 0)
-      const idleDiff = endTimes.idle - startTimes.idle;
-      const totalDiff = endTime - startTime
-      return totalDiff === 0
-        ? 0
-        : 1 - idleDiff / totalDiff;
-    });
-    resolve(perCore.reduce((prev, current) => prev + current, 0) / perCore.length);
-  }, interval);
-});
-const memoryUsageSync = () => os.freemem();
-const diskUsageAsync = () => checkDiskSpace(dataPath.dataDirPath);
+const infoOperator = {
+  maxWindow: 200,
+  recordInterval: 1000,
+  netSamplerSpan: 200,
 
-const version = () => {
-  const package = JSON.parse(fs.readFileSync(dataPath.packageFilePath));
-  return package.version;
-}
+  cpuHistory: [],
+  netHistory: [],
 
-const osInfo = () => {
-  const cpus = os.cpus();
-  const networkInterfaces = Object
-    .entries(os.networkInterfaces())
-    .map(([ name, interfaces ]) => [ name, interfaces.filter((item) =>
-      !item.internal && item.family === 'IPv4'
-    )])
-    .filter(([ name, interfaces ]) =>
-      !name.startsWith("veth") && interfaces.length > 0
+  push: (history) => (value) => {
+    if (history.length >= infoOperator.maxWindow) {
+      history.shift();
+    }
+    history.push({
+      value: value,
+      time: Date.now()
+    })
+  },
+
+  // cannot abbreviate as infoOperator.push(infoOperator.cpuHistory)
+  pushCpu: (value) => infoOperator.push(infoOperator.cpuHistory)(value),
+  pushNet: (value) => infoOperator.push(infoOperator.netHistory)(value),
+
+  version: () => {
+    const pkg = JSON.parse(fs.readFileSync(dataPath.packageFilePath));
+    return pkg.version;
+  },
+
+  osInfo: () => {
+    const cpus = os.cpus();
+    const networkInterfaces = Object
+      .entries(os.networkInterfaces())
+      .map(([ name, interfaces ]) => [ name, interfaces.filter((item) =>
+        !item.internal && item.family === 'IPv4'
+      )])
+      .filter(([ name, interfaces ]) =>
+        !name.startsWith("veth") && interfaces.length > 0
+      );
+
+    return {
+      userAtHostname: os.userInfo().username + '@' + os.hostname(),
+      platform: os.platform() + ' ' + os.release() + ' ' + os.arch(),
+      kernelVersion: os.version(),
+      cpus: {
+        model: cpus[0].model,
+        speed: cpus[0].speed,
+        cores: cpus.length
+      },
+      network: Object.fromEntries(networkInterfaces),
+      memory: os.totalmem(),
+      uptime: os.uptime()
+    }
+  },
+
+  handleSampler: (
+    handleRecord,
+    handleDiff,
+    measureInterval = 200
+  ) => () => new Promise((resolve) => {
+    const start = handleRecord();
+    setTimeout(
+      () => resolve(handleDiff(start, handleRecord())),
+      measureInterval
     );
+  }),
 
-  return {
-    userAtHostname: os.userInfo().username + '@' + os.hostname(),
-    platform: os.platform() + ' ' + os.release() + ' ' + os.arch(),
-    kernelVersion: os.version(),
-    cpus: {
-      model: cpus[0].model,
-      speed: cpus[0].speed,
-      cores: cpus.length
-    },
-    network: Object.fromEntries(networkInterfaces),
-    memory: os.totalmem(),
-    uptime: os.uptime()
-  };
-}
+  // unrelated  to time
+  cpuUsage: () => infoOperator.handleSampler(
+    os.cpus,
+    (start, end) => {
+      const perCore = start.map((cpu, index) => {
+        const startTimes = cpu.times, endTimes = end[index].times;
+        const total = Object.values(endTimes).reduce((prev, next) => prev + next, 0)
+          - Object.values(startTimes).reduce((prev, next) => prev + next, 0);
+        return total === 0 ? 0 : 1 - (endTimes.idle - startTimes.idle) / total;
+      });
+      return perCore.reduce((prev, curr) => prev + curr, 0) / perCore.length;
+    }
+  )(),
+  memoryUsage: () => os.freemem(),
+  diskUsage: () => checkDiskSpace(dataPath.dataDirPath),
 
-exports.cpuUsageAsync = cpuUsageAsync;
-exports.memoryUsageSync = memoryUsageSync;
-exports.diskUsageAsync = diskUsageAsync;
-exports.version = version;
-exports.osInfo = osInfo;
+  // TODO: finish this
+  netStates: () => ({ rx: 0, tx: 0 }),
+  netUsage: () => infoOperator.handleSampler(
+    infoOperator.netStates,
+    (start, end) => ({
+      rxBPS: (end.rx - start.rx) / infoOperator.netSamplerSpan * 1000,
+      txBPS: (end.tx - start.tx) / infoOperator.netSamplerSpan * 1000,
+    }),
+    infoOperator.netSamplerSpan
+  )()
+};
+
+setInterval(() => {
+  infoOperator.cpuUsage().then(infoOperator.pushCpu);
+  infoOperator.netUsage().then(infoOperator.pushNet);
+}, infoOperator.recordInterval);
+
+exports.infoOperator = infoOperator;
 
 
 function Status() { }
