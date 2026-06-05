@@ -8,6 +8,7 @@ import LinearProgress from "@mui/joy/LinearProgress";
 import GlobalContext, {
   defaultOSInfo,
   maxHistoryWindow,
+  clipInterval,
   request,
   Sparkline
 } from "../interface/constants";
@@ -90,11 +91,88 @@ const Welcome = () => {
   const [version, setVersion] = React.useState("");
   const [osInfo, setOSInfo] = React.useState(defaultOSInfo);
 
-  const [cpuHistory, setCpuHistory] = React.useState([]);
+  const [history, setHistory] = React.useState([]);
   const [memoryFree, setMemoryFree] = React.useState(-1);
   const [storageFree, setStorageFree] = React.useState(-1);
 
-  const cpuOnComing = React.useRef({ lastRequest: -1, futureCpu: [] });
+  /**
+   * 流程介绍：假设 setting.welcome.interval 为 3s，代表
+   *   - React.useEffect 将最新 3 条记录存入 historyOnComing，之后每秒更新 history
+   *     - 这样可以每秒更新 CPU 数据，但只需要每 interval 秒请求一次服务器
+   *     - 为了实现近似每秒更新，需要每次计算下一次更新前的等待时间
+   *     - 这是因为 request 的时间不确定，setInterval 难以控制
+   *   - 假设 t=0 更新 historyOnComing 中最后一条数据，并发出 request，在 t=0.3s 时收到更新
+   *     - 此时距离下次 request 还剩 2.7s，自然可以想到平均每 0.9s 更新一次 CPU
+   *     - 但这样的更新间隔将是 0.9s、0.9s、0.9+0.3s 的循环
+   *   - 事实上，当剩余秒数 timeRemain 和剩余 CPU 数据数量 itemRemain 差不多时
+   *     - 可以计算 itemRemain 应该在 timeRemain 为多少时更新 CPU
+   *     - 例如，t=0.3 时，timeRemain=2.7，应该在 timeAlign=2 时更新数据，此时要等待 0.7s
+   *     - 之后 timeRemain=2，timeAlign=1，此时要等待 timeRemain - timeAlign = 1s，依此类推
+   *   - 但是如果 timeRemain 和 itemRemain 差了很多
+   *     - 这种情况可能发生吗？很有可能
+   *       - 当服务器存储的历史数据不够多时，itemRemain 可能会远少于 timeRemain
+   *       - 当用户手动调节 interval 时，两者差距可能会很大
+   *       - 但是如果 interval 保持不变，itemRemain 不大可能会远多于 timeRemain
+   *       - 即使因为网络拥堵导致 itemRemain 堆积，updateHistory 也将多余的 item 放入 history
+   *     - 那么在两者差距很大的情况下，能否直接用 timeRemain / itemRemain 计算？
+   *       - 可以，而且这样一次用 timeRemain 的时间更新 itemRemain 次 CPU，下次就能获取到正确的数据数量
+   *       - 但是更新间隔太大或者太小对于体验不够良好，因此增加了 clip 裁剪
+   *       - 加入 clip 后，经过几轮请求依然可以让请求到的数据规模收敛到 interval，只是稍慢一些
+   *   - 特别地，如果 itemRemain 比 timeRemain 稍大一些，timeAlign 在 -1000 ~ 0 之间
+   *     - 这说明 itemRemain 比 timeAlign 大概多了 1，按 timeAlign 的方法论应该立即执行一次更新
+   *     - 但这意味着在约 0.3s 的 request 之间更新了两次，不如直接返回平均值
+   */
+  const historyOnComing = React.useRef({ lastRequest: -1, future: [] });
+  const waitTime = React.useCallback((interval) => {
+    const timeRemain = historyOnComing.current.lastRequest + interval * 1000 - Date.now();
+    const itemRemain = historyOnComing.current.future.length;
+    const timeAlign = timeRemain - (itemRemain - 1) * 1000;
+
+    return timeAlign > 0 && timeAlign < 1000
+      ? timeAlign
+      : clipInterval(Math.min(timeRemain / itemRemain))
+  }, []);
+
+  const updateHistory = React.useCallback(() => {
+    let lastTime = history.slice(-1)?.[0]?.time ?? 0
+
+    if (historyOnComing.current.future.length > 0) {
+      const nextItem = historyOnComing.current.future.shift();
+      lastTime = nextItem.time;
+      setHistory((history) => [...history, nextItem].slice(-maxHistoryWindow));
+    }
+
+    if (historyOnComing.current.future.length > 0) {
+      setTimeout(updateHistory, waitTime(context.setting.welcome.interval));
+    } else {
+      historyOnComing.current.lastRequest = Date.now()
+      request("GET/info/stat", { after: lastTime })
+        .then((data) => {
+          const { memory, storage, history: newHistory } = data;
+          setMemoryFree(memory);
+          setStorageFree(storage);
+          historyOnComing.current.future = newHistory.slice(-context.setting.welcome.interval);
+          const unsynced = newHistory.slice(0, -context.setting.welcome.interval);
+          if (unsynced.length > 0) {
+            const vacancy = Math.floor((unsynced[0].time - lastTime) / 1000);
+            setHistory((history) => [
+              ...history,
+              ...[...Array(vacancy)].map((_, index) => ({
+                cpu: 0,
+                net: 0,
+                time: lastTime + index
+              })),
+              ...unsynced
+            ].slice(-maxHistoryWindow))
+          }
+          setTimeout(updateHistory, waitTime(context.setting.welcome.interval));
+        });
+    }
+  }, [
+    context.setting.welcome.interval,
+    history,
+    waitTime
+  ]);
 
   React.useEffect(() => {
     request("GET/info/version")
@@ -103,28 +181,25 @@ const Welcome = () => {
 
   React.useEffect(() => {
     if (context.secondTick && context.isAuthority) {
-      cpuOnComing.lastRequest = Date.now()
+      historyOnComing.current.lastRequest = Date.now()
       Promise.all([
         request("GET/info/os"),
-        request("GET/info/stat", { cpu: 0, net: 0 })
+        request("GET/info/stat", { after: 0 })
       ])
         .then(([osData, statData]) => {
-          console.log(osData)
-          console.log(statData)
-          const { statusCode: _, ...os } = osData;
-          setOSInfo(os);
+          const { statusCode: _, ...osInfo } = osData;
+          setOSInfo(osInfo);
           const stopwatchOffset = new Date();
-          stopwatchOffset.setSeconds(stopwatchOffset.getSeconds() + os.uptime);
+          stopwatchOffset.setSeconds(stopwatchOffset.getSeconds() + osInfo.uptime);
           upReset(stopwatchOffset);
 
-          // TODO: add net later
-          const { memory, storage, cpu, net: __ } = statData;
-          const statInterval = context.setting.welcome.interval;
+          const { memory, storage, history: newHistory } = statData;
           setMemoryFree(memory);
           setStorageFree(storage);
-          setCpuHistory(cpu.slice(0, -statInterval));
-          cpuOnComing.current.futureCpu = cpu.slice(-statInterval);
-        })
+          setHistory(newHistory.slice(0, -context.setting.welcome.interval));
+          historyOnComing.current.future = newHistory.slice(-context.setting.welcome.interval);
+          setTimeout(updateHistory, waitTime(context.setting.welcome.interval));
+        });
     }
   // eslint-disable-next-line
   }, [
@@ -401,17 +476,17 @@ const Welcome = () => {
               >
                 {context.languagePicker("main.welcome.trend.cpu")}
               </Typography>
-              {cpuHistory.length > 0 &&
+              {history.length > 0 &&
                 <Typography
                   level="title-lg"
                   fontWeight={600}
                   sx={{ fontVariantNumeric: "tabular-nums", lineHeight: 1.2 }}
                 >
-                  {(cpuHistory.slice(-1)[0] * 100).toFixed(2)}%
+                  {(history.slice(-1)[0].cpu * 100).toFixed(2)}%
                 </Typography>}
             </Box>
             <Box sx={{ mt: 0.5, mb: 1.5 }}>
-              <Sparkline data={cpuHistory} height={80} />
+              <Sparkline data={history.map(({ cpu }) => cpu)} height={80} />
             </Box>
             {osInfo.cpus.cores > 0 && osInfo.cpus.speed > 0 &&
               <Typography level="body-xs" color="neutral">

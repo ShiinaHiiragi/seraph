@@ -31,9 +31,13 @@ router.get('/os', (req, res, next) => {
 });
 
 router.get('/stat', (req, res, next) => {
-  const cpu = Number(req.query.cpu);
-  const net = Number(req.query.net);
+  if (req.status.notAuthSuccess()) {
+    // -> EF_IT or abnormal request
+    next(api.errorStreamControl);
+    return;
+  }
 
+  const time = Number(req.query.after);
   api.infoOperator.diskUsage()
     .then(({ free }) => {
       req.status.addExecStatus();
@@ -41,8 +45,7 @@ router.get('/stat', (req, res, next) => {
         ...req.status.generateReport(),
         memory: api.infoOperator.memoryUsage(),
         storage: free,
-        cpu: api.infoOperator.cpuLaterThan(cpu),
-        net: api.infoOperator.netLaterThan(net)
+        history: api.infoOperator.laterThan(time)
       });
       return;
     });

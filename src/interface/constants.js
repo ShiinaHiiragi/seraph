@@ -648,6 +648,8 @@ export { OnMounted }
 // maxHistory = 120, maxInterval = 60
 // extra 20 items kept
 const maxHistoryWindow = 200;
+const clip = (min, value, max) => Math.min(Math.max(min, value), max);
+const clipInterval = (value) => clip(750, value, 1500);
 
 const Sparkline = ({ data, height = 64 }) => {
   if (!data || data.length < 2) {
@@ -686,5 +688,6 @@ const Sparkline = ({ data, height = 64 }) => {
 
 export {
   maxHistoryWindow,
+  clipInterval,
   Sparkline
 }

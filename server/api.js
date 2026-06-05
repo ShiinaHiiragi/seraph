@@ -766,29 +766,20 @@ const infoOperator = {
   recordInterval: 1000,
   netSamplerSpan: 200,
 
-  cpuHistory: [],
-  netHistory: [],
-
-  push: (history) => (value) => {
-    if (history.length >= infoOperator.maxWindow) {
-      history.shift();
+  history: [],
+  push: ([cpu, net]) => {
+    if (infoOperator.history.length >= infoOperator.maxWindow) {
+      infoOperator.history.shift();
     }
-    history.push({
-      value: value,
+    infoOperator.history.push({
+      cpu: cpu,
+      net: net,
       time: Date.now()
     })
   },
-
-  // Array.filter keeps order
-  laterThan: (history) => (timestamp = 0) =>
-    history.filter((item) => item.time >= timestamp),
-
-  // cannot abbreviate as infoOperator.push(infoOperator.cpuHistory)
-  pushCpu: (value) => infoOperator.push(infoOperator.cpuHistory)(value),
-  pushNet: (value) => infoOperator.push(infoOperator.netHistory)(value),
-
-  cpuLaterThan: (timestamp) => infoOperator.laterThan(infoOperator.cpuHistory)(timestamp),
-  netLaterThan: (timestamp) => infoOperator.laterThan(infoOperator.netHistory)(timestamp),
+  // Array.filter keeps the order
+  laterThan: (timestamp = 0) =>
+    infoOperator.history.filter((item) => item.time > timestamp),
 
   version: () => {
     const pkg = JSON.parse(fs.readFileSync(dataPath.packageFilePath));
@@ -850,7 +841,6 @@ const infoOperator = {
   memoryUsage: () => os.freemem(),
   diskUsage: () => checkDiskSpace(dataPath.dataDirPath),
 
-  // TODO: finish this
   netStates: () => ({ rx: 0, tx: 0 }),
   netUsage: () => infoOperator.handleSampler(
     infoOperator.netStates,
@@ -863,8 +853,10 @@ const infoOperator = {
 };
 
 setInterval(() => {
-  infoOperator.cpuUsage().then(infoOperator.pushCpu);
-  infoOperator.netUsage().then(infoOperator.pushNet);
+  Promise.all([
+    infoOperator.cpuUsage(),
+    infoOperator.netUsage()
+  ]).then(infoOperator.push);
 }, infoOperator.recordInterval);
 
 exports.infoOperator = infoOperator;
