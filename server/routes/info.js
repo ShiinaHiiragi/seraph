@@ -32,7 +32,7 @@ router.get('/os', (req, res, next) => {
     });
 });
 
-router.get('/free', (req, res, next) => {
+router.get('/stat', (req, res, next) => {
   Promise.all([
     api.cpuUsageAsync(),
     api.diskUsageAsync()

@@ -101,7 +101,7 @@ const Welcome = () => {
   ])
 
   React.useEffect(() => {
-    request("GET/info/free").then((data) => {
+    request("GET/info/stat").then((data) => {
       const { memory, storage } = data;
       setMemory(memory);
       setStorage(storage);
