@@ -35,6 +35,8 @@ const Subscription = React.lazy(() => import("./main/Subscription"));
 const Terminal = React.lazy(() => import("./main/Terminal"));
 const TODO = React.lazy(() => import("./main/TODO"));
 
+// TODO: wordBreak & overflowWrap
+// TODO: optimize input components
 const Root = styled('div')(({ theme }) => ({
   width: "100vw",
   height: "100dvh",

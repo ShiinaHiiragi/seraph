@@ -20,6 +20,7 @@ export default function ModalForm(props) {
     stackStyle
   } = props;
 
+  // TODO: request name for zip/unzip/epub
   return (
     <Modal
       open={open}
