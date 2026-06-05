@@ -121,6 +121,13 @@ const defaultSetting = {
     language: "en",
     token: 60
   },
+  welcome: {
+    window: {
+      cpu: 120,
+      net: 60
+    },
+    interval: 60,
+  },
   terminal: {
     enable: false,
     shell: {
@@ -638,8 +645,9 @@ const OnMounted = ({ onLoad }) => {
 
 export { OnMounted }
 
-
-const cpuHistoryWindow = 100;
+// maxHistory = 120, maxInterval = 60
+// extra 20 items kept
+const maxHistoryWindow = 200;
 
 const Sparkline = ({ data, height = 64 }) => {
   if (!data || data.length < 2) {
@@ -676,4 +684,7 @@ const Sparkline = ({ data, height = 64 }) => {
   );
 };
 
-export { cpuHistoryWindow, Sparkline }
+export {
+  maxHistoryWindow,
+  Sparkline
+}

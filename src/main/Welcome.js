@@ -7,9 +7,9 @@ import Typography from "@mui/joy/Typography";
 import LinearProgress from "@mui/joy/LinearProgress";
 import GlobalContext, {
   defaultOSInfo,
-  cpuHistoryWindow,
-  Sparkline,
-  request
+  maxHistoryWindow,
+  request,
+  Sparkline
 } from "../interface/constants";
 import RouteField from "../interface/RouteField";
 
@@ -91,9 +91,10 @@ const Welcome = () => {
   const [osInfo, setOSInfo] = React.useState(defaultOSInfo);
 
   const [cpuHistory, setCpuHistory] = React.useState([]);
-  const [cpuComing, setCpuComing] = React.useState([]);
   const [memoryFree, setMemoryFree] = React.useState(-1);
   const [storageFree, setStorageFree] = React.useState(-1);
+
+  const cpuOnComing = React.useRef({ lastRequest: -1, futureCpu: [] });
 
   React.useEffect(() => {
     request("GET/info/version")
@@ -102,37 +103,28 @@ const Welcome = () => {
 
   React.useEffect(() => {
     if (context.secondTick && context.isAuthority) {
-      request("GET/info/os").then((data) => {
-        console.log(data.os);
-        setOSInfo(data.os);
-        const stopwatchOffset = new Date();
-        stopwatchOffset.setSeconds(stopwatchOffset.getSeconds() + data.os.uptime);
-        upReset(stopwatchOffset);
-      });
-    }
-  // eslint-disable-next-line
-  }, [
-    // check if
-    // load with auth naturally
-    context.secondTick,
-    // login in same page
-    context.isAuthority,
-  ])
+      cpuOnComing.lastRequest = Date.now()
+      Promise.all([
+        request("GET/info/os"),
+        request("GET/info/stat", { cpu: 0, net: 0 })
+      ])
+        .then(([osData, statData]) => {
+          console.log(osData)
+          console.log(statData)
+          const { statusCode: _, ...os } = osData;
+          setOSInfo(os);
+          const stopwatchOffset = new Date();
+          stopwatchOffset.setSeconds(stopwatchOffset.getSeconds() + os.uptime);
+          upReset(stopwatchOffset);
 
-  React.useEffect(() => {
-    if (context.secondTick && context.isAuthority) {
-      const pollStatus = () =>
-        request("GET/info/stat").then((data) => {
-          setCpuHistory((cpuHistory) => [
-            ...cpuHistory.slice(-(cpuHistoryWindow - 1)),
-            data.cpus
-          ]);
-          setMemoryFree(data.memory);
-          setStorageFree(data.storage);
-      });
-      pollStatus();
-      const id = setInterval(pollStatus, 2000);
-      return () => clearInterval(id);
+          // TODO: add net later
+          const { memory, storage, cpu, net: __ } = statData;
+          const statInterval = context.setting.welcome.interval;
+          setMemoryFree(memory);
+          setStorageFree(storage);
+          setCpuHistory(cpu.slice(0, -statInterval));
+          cpuOnComing.current.futureCpu = cpu.slice(-statInterval);
+        })
     }
   // eslint-disable-next-line
   }, [

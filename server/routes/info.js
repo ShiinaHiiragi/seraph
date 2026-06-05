@@ -23,27 +23,26 @@ router.get('/os', (req, res, next) => {
       req.status.addExecStatus();
       res.send({
         ...req.status.generateReport(),
-        os: {
-          ...api.infoOperator.osInfo(),
-          storage: size
-        }
+        ...api.infoOperator.osInfo(),
+        storage: size
       });
       return;
     });
 });
 
 router.get('/stat', (req, res, next) => {
-  Promise.all([
-    api.infoOperator.cpuUsage(),
-    api.infoOperator.diskUsage()
-  ])
-    .then(([cpus, { free: storage }]) => {
+  const cpu = Number(req.query.cpu);
+  const net = Number(req.query.net);
+
+  api.infoOperator.diskUsage()
+    .then(({ free }) => {
       req.status.addExecStatus();
       res.send({
         ...req.status.generateReport(),
-        cpus: cpus,
         memory: api.infoOperator.memoryUsage(),
-        storage: storage
+        storage: free,
+        cpu: api.infoOperator.cpuLaterThan(cpu),
+        net: api.infoOperator.netLaterThan(net)
       });
       return;
     });

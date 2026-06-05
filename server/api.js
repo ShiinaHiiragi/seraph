@@ -88,6 +88,13 @@ const defaultConfig = {
       language: "en",
       token: 60
     },
+    welcome: {
+      window: {
+        cpu: 120,
+        net: 60
+      },
+      interval: 60,
+    },
     terminal: {
       enable: false,
       shell: {
@@ -772,9 +779,16 @@ const infoOperator = {
     })
   },
 
+  // Array.filter keeps order
+  laterThan: (history) => (timestamp = 0) =>
+    history.filter((item) => item.time >= timestamp),
+
   // cannot abbreviate as infoOperator.push(infoOperator.cpuHistory)
   pushCpu: (value) => infoOperator.push(infoOperator.cpuHistory)(value),
   pushNet: (value) => infoOperator.push(infoOperator.netHistory)(value),
+
+  cpuLaterThan: (timestamp) => infoOperator.laterThan(infoOperator.cpuHistory)(timestamp),
+  netLaterThan: (timestamp) => infoOperator.laterThan(infoOperator.netHistory)(timestamp),
 
   version: () => {
     const pkg = JSON.parse(fs.readFileSync(dataPath.packageFilePath));
@@ -797,7 +811,6 @@ const infoOperator = {
       storage: undefined,
       uptime: os.uptime(),
       userAtHostname: os.userInfo().username + '@' + os.hostname(),
-      cpuHistory: infoOperator.cpuHistory,
       platform: os.platform() + ' ' + os.release() + ' ' + os.arch(),
       kernelVersion: os.version(),
       cpus: {
