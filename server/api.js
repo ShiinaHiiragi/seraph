@@ -797,9 +797,9 @@ const osInfo = () => {
     kernelVersion: os.version(),
     cpus: {
       model: cpus[0].model,
+      speed: cpus[0].speed,
       cores: cpus.length
     },
-    loadavg: os.loadavg(),
     network: Object.fromEntries(networkInterfaces),
     memory: os.totalmem(),
     uptime: os.uptime()

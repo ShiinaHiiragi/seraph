@@ -33,6 +33,7 @@ const Center = styled('div')(({ theme }) => ({
 }));
 
 const DashCard = styled(Sheet)(({ theme }) => ({
+  containerType: "inline-size",
   borderRadius: theme.radius.sm,
   padding: theme.spacing(1.5, 2),
   display: "flex",
@@ -40,15 +41,32 @@ const DashCard = styled(Sheet)(({ theme }) => ({
 }));
 
 const InfoPair = ({ label, value }) => (
-  <Box sx={{ display: "flex", gap: 1, mb: 0.75, alignItems: "baseline" }}>
+  <Box sx={{
+    display: "flex",
+    flexDirection: "row",
+    gap: 1,
+    mb: 0.75,
+    alignItems: "baseline",
+    "@container (max-width: 420px)": {
+      flexDirection: "column",
+      alignItems: "flex-start",
+      gap: 0.25,
+    },
+  }}>
     <Typography
       level="body-xs"
       color="neutral"
-      sx={{ minWidth: 72, flexShrink: 0 }}
+      sx={{
+        width: "30%",
+        flexShrink: 0,
+        "@container (max-width: 420px)": {
+          width: "100%"
+        }
+      }}
     >
       {label}
     </Typography>
-    <Typography level="body-xs" sx={{ wordBreak: "break-all" }}>
+    <Typography level="body-xs">
       {value}
     </Typography>
   </Box>
@@ -241,11 +259,11 @@ const Welcome = () => {
                 alignItems: "flex-start",
               }}
             >
-              <Typography
-                level={{ xs: "body-xs", ld: "title-md" }}
-                color="neutral"
-                sx={{ letterSpacing: "0.02em" }}
-              >
+            <Typography
+              level="title-md"
+              color="neutral"
+              sx={{ letterSpacing: "0.02em" }}
+            >
                 {context.languagePicker("main.welcome.osInfo.memoryAvailable")}
               </Typography>
               {osInfo.memory > 0 && (
@@ -290,11 +308,11 @@ const Welcome = () => {
                 alignItems: "flex-start",
               }}
             >
-              <Typography
-                level={{ xs: "body-xs", ld: "title-md" }}
-                color="neutral"
-                sx={{ letterSpacing: "0.02em" }}
-              >
+            <Typography
+              level="title-md"
+              color="neutral"
+              sx={{ letterSpacing: "0.02em" }}
+            >
                 {context.languagePicker("main.welcome.osInfo.storageAvailable")}
               </Typography>
               {osInfo.storage > 0 && (
@@ -333,7 +351,7 @@ const Welcome = () => {
 
           <DashCard variant="outlined">
             <Typography
-              level={{ xs: "body-xs", ld: "title-md" }}
+              level="title-md"
               color="neutral"
               sx={{ letterSpacing: "0.02em" }}
             >
@@ -385,7 +403,7 @@ const Welcome = () => {
             </Typography>
           </Box>
           <Box sx={{ mt: 0.5, mb: 1.5 }}>
-            <Sparkline data={cpuHistory} height={96} />
+            <Sparkline data={cpuHistory} height={80} />
           </Box>
           <Typography level="body-xs" color="neutral">
             {osInfo.cpus?.cores ?? "—"} cores
@@ -419,6 +437,25 @@ const Welcome = () => {
                 value={osInfo.kernelVersion}
               />
             )}
+            {osInfo.cpus?.model && (
+              <InfoPair label="CPU Model" value={osInfo.cpus.model} />
+            )}
+            {osInfo.cpus?.cores != null && (
+              <InfoPair label="CPU Speed" value={`${osInfo.cpus.speed} MHz`} />
+            )}
+            {osInfo.cpus?.cores != null && (
+              <InfoPair label="CPU Cores" value={String(osInfo.cpus.cores)} />
+            )}
+          </DashCard>
+
+          <DashCard variant="outlined" sx={{ overflow: "auto", gap: 0 }}>
+            <Typography
+              level="title-md"
+              color="neutral"
+              sx={{ letterSpacing: "0.02em", mb: 1.5 }}
+            >
+              Netword Interfaces
+            </Typography>
             {osInfo.network &&
               Object.entries(osInfo.network).flatMap(([name, ifaces]) =>
                 ifaces.map((iface) => (
@@ -429,58 +466,6 @@ const Welcome = () => {
                   />
                 ))
               )}
-          </DashCard>
-
-          <DashCard variant="outlined" sx={{ overflow: "auto", gap: 0 }}>
-            <Typography
-              level="title-md"
-              color="neutral"
-              sx={{ letterSpacing: "0.02em", mb: 1.5 }}
-            >
-              CPUs and Load
-            </Typography>
-            {osInfo.cpus?.model && (
-              <InfoPair label="Model" value={osInfo.cpus.model} />
-            )}
-            {osInfo.cpus?.cores != null && (
-              <InfoPair label="Cores" value={String(osInfo.cpus.cores)} />
-            )}
-            {osInfo.loadavg && osInfo.cpus?.cores > 0 && (
-              <Box sx={{ mt: 1 }}>
-                {["1m", "5m", "15m"].map((label, i) => {
-                  const val = Math.min(
-                    (osInfo.loadavg[i] / osInfo.cpus.cores) * 100,
-                    100
-                  );
-                  return (
-                    <Box
-                      key={label}
-                      sx={{ display: "flex", alignItems: "center", gap: 1, mb: 0.75 }}
-                    >
-                      <Typography
-                        level="body-xs"
-                        color="neutral"
-                        sx={{ minWidth: 20, flexShrink: 0 }}
-                      >
-                        {label}
-                      </Typography>
-                      <LinearProgress
-                        determinate
-                        value={val}
-                        size="sm"
-                        sx={{ flex: 1 }}
-                      />
-                      <Typography
-                        level="body-xs"
-                        sx={{ minWidth: 28, textAlign: "right", fontVariantNumeric: "tabular-nums" }}
-                      >
-                        {osInfo.loadavg[i].toFixed(2)}
-                      </Typography>
-                    </Box>
-                  );
-                })}
-              </Box>
-            )}
           </DashCard>
         </Box>
       </Box>
