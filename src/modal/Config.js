@@ -153,7 +153,7 @@ const StringInput = (props) => {
         disabled={disabled}
         size="sm"
         type={type}
-        sx={{ maxWidth: width, fontFamily: code ? "'Noto Sans Mono', monospace" : undefined }}
+        sx={{ maxWidth: width, fontFamily: code ? "var(--joy-fontFamily-code)" : undefined }}
         value={localValue}
         startDecorator={start}
         endDecorator={end}

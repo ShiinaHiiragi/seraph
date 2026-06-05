@@ -1,13 +1,27 @@
 import { extendTheme } from "@mui/joy/styles";
 
 const localeCombinator = (language) => {
+  const zhHans = [
+    "'Noto Sans SC'",
+    "'Noto Sans CJK SC'",
+    "'Microsoft YaHei'",
+    "'WenQuanYi Micro Hei'",
+    "'PingFang SC'"
+  ]
+
+  const ja = [
+    "'Noto Sans JP'",
+    "'Noto Sans CJK JP'",
+    "'Yu Gothic'",
+    "'IPAGothic'",
+    "'Hiragino Sans'"
+  ]
+
   const fontMap = {
-    "zh-Hans": ["'Noto Sans SC'"],
-    ja: [
-      "'Noto Sans JP'",
-      "'Noto Sans SC'"
-    ]
+    "zh-Hans": zhHans,
+    ja: [...ja, ...zhHans]
   };
+
   return [
     "Inter",
     ...(fontMap[language] ?? []),
@@ -46,6 +60,7 @@ const GlobalTheme = (language) => extendTheme({
   fontFamily: {
     display: localeCombinator(language),
     body: localeCombinator(language),
+    code: "'Noto Sans Mono', 'Noto Sans Mono CJK SC', 'Consolas', 'DejaVu Sans Mono', 'Menlo', monospace"
   }
 });
 
