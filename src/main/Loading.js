@@ -6,7 +6,7 @@ const Loading = () => (
     position: "relative",
     overflow: "hidden",
     background: "transparent",
-    height: 2.5
+    height: { xs: 1.5, sm: 2.5 }
   }}>
     <Box sx={{
       position: "absolute",

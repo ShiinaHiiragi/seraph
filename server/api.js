@@ -762,13 +762,31 @@ const version = () => {
   return package.version;
 }
 
-const osInfo = () => ({
-  userAtHostname: os.userInfo().username + '@' + os.hostname(),
-  platform: os.platform() + ' ' + os.release() + ' ' + os.arch(),
-  kernelVersion: os.version(),
-  memory: os.totalmem(),
-  uptime: os.uptime()
-});
+const osInfo = () => {
+  const cpus = os.cpus();
+  const networkInterfaces = Object
+    .entries(os.networkInterfaces())
+    .map(([ name, interfaces ]) => [ name, interfaces.filter((item) =>
+      !item.internal && item.family === 'IPv4'
+    )])
+    .filter(([ name, interfaces ]) =>
+      !name.startsWith("veth") && interfaces.length > 0
+    );
+
+  return {
+    userAtHostname: os.userInfo().username + '@' + os.hostname(),
+    platform: os.platform() + ' ' + os.release() + ' ' + os.arch(),
+    kernelVersion: os.version(),
+    cpus: {
+      model: cpus[0].model,
+      cores: cpus.length
+    },
+    loadavg: os.loadavg(),
+    network: Object.fromEntries(networkInterfaces),
+    memory: os.totalmem(),
+    uptime: os.uptime()
+  };
+}
 
 exports.free = free;
 exports.diskUsageAsync = diskUsageAsync;
