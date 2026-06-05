@@ -19,7 +19,8 @@ import GlobalContext, {
 } from "../interface/constants";
 import { languagePickerSpawner } from "../interface/languagePicker";
 import ModalForm from "../modal/Form";
-import Config from "../modal/Config";
+
+const Config = React.lazy(() => import("../modal/Config"));
 
 const HeaderLayout = (props) => {
   return (
@@ -244,18 +245,22 @@ const Header = (props) => {
           </IconButton>
         }
       </Box>
-      <Config
-        open={modalConfigOpen}
-        handleClose={handleCloseConfig}
-        handleApplySetting={handleApplySetting}
-        handleResetSetting={handleResetSetting}
-        mobileNavOpen={mobileNavOpen}
-        setMetadata={setMetadata}
-        setMobileNavOpen={setMobileNavOpen}
-        activeSection={activeSection}
-        setActiveSection={setActiveSection}
-        resetButtonLoading={resetButtonLoading}
-      />
+      {modalConfigOpen && (
+        <React.Suspense fallback={null}>
+          <Config
+            open={modalConfigOpen}
+            handleClose={handleCloseConfig}
+            handleApplySetting={handleApplySetting}
+            handleResetSetting={handleResetSetting}
+            mobileNavOpen={mobileNavOpen}
+            setMetadata={setMetadata}
+            setMobileNavOpen={setMobileNavOpen}
+            activeSection={activeSection}
+            setActiveSection={setActiveSection}
+            resetButtonLoading={resetButtonLoading}
+          />
+        </React.Suspense>
+      )}
       <ModalForm
         open={modalLoginOpen}
         loading={buttonLoading}
