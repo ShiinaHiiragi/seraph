@@ -176,13 +176,22 @@ const ja = {
   },
   main: {
     welcome: {
-      osInfo: {
-        userAtHostname: "ユーザー@ホストネーム",
+      kpiCards: {
+        memory: "メモリ",
+        storage: "ストレージ",
+        available: "空き",
+        uptime: "アップタイム"
+      },
+      trend: {
+        cpu: "CPU",
+        cores: "コア"
+      },
+      info: {
+        systemInfo: "システム情報",
         platform: "カーネルとプラットフォーム",
         kernelVersion: "オーエスのバージョン",
-        memoryAvailable: "フリーメモリ",
-        storageAvailable: "フリーストレージ",
-        uptime: "アップタイム"
+        cpuModel: "CPU モデル",
+        network: "ネットワークインタフェース"
       }
     },
     error: {

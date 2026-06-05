@@ -40,7 +40,7 @@ const DashCard = styled(Sheet)(({ theme }) => ({
   flexDirection: "column",
 }));
 
-const InfoPair = ({ label, value, sxValue }) => (
+const InfoPair = ({ label, value, keyWidth, sxValue }) => (
   <Box sx={{
     display: "flex",
     flexDirection: "row",
@@ -57,7 +57,7 @@ const InfoPair = ({ label, value, sxValue }) => (
       level="body-xs"
       color="neutral"
       sx={{
-        width: "30%",
+        width: keyWidth ?? "30%",
         flexShrink: 0,
         "@container (max-width: 420px)": {
           width: "100%"
@@ -72,7 +72,6 @@ const InfoPair = ({ label, value, sxValue }) => (
   </Box>
 );
 
-// TODO: localization
 // TODO: keep records in server
 // TODO: add network
 // TODO: add process list
@@ -269,7 +268,7 @@ const Welcome = () => {
               color="neutral"
               sx={{ letterSpacing: "0.02em" }}
             >
-                {context.languagePicker("main.welcome.osInfo.memoryAvailable")}
+                {context.languagePicker("main.welcome.kpiCards.memory")}
               </Typography>
               {osInfo.memory > 0 && (
                 <Typography
@@ -301,6 +300,8 @@ const Welcome = () => {
             {memFree >= 0 && osInfo.memory > 0 && (
               <Typography level="body-xs" color="neutral">
                 {Number(memFree).sizeFormat(1)} / {Number(osInfo.memory).sizeFormat(1)}
+                {" "}
+                {context.languagePicker("main.welcome.kpiCards.available")}
               </Typography>
             )}
           </DashCard>
@@ -318,7 +319,7 @@ const Welcome = () => {
               color="neutral"
               sx={{ letterSpacing: "0.02em" }}
             >
-                {context.languagePicker("main.welcome.osInfo.storageAvailable")}
+                {context.languagePicker("main.welcome.kpiCards.storage")}
               </Typography>
               {osInfo.storage > 0 && (
                 <Typography
@@ -350,6 +351,8 @@ const Welcome = () => {
             {diskFree >= 0 && osInfo.storage > 0 && (
               <Typography level="body-xs" color="neutral">
                 {Number(diskFree).sizeFormat(1)} / {Number(osInfo.storage).sizeFormat(1)}
+                {" "}
+                {context.languagePicker("main.welcome.kpiCards.available")}
               </Typography>
             )}
           </DashCard>
@@ -360,7 +363,7 @@ const Welcome = () => {
               color="neutral"
               sx={{ letterSpacing: "0.02em" }}
             >
-              {context.languagePicker("main.welcome.osInfo.uptime")}
+              {context.languagePicker("main.welcome.kpiCards.uptime")}
             </Typography>
             <Typography
               level="h3"
@@ -384,36 +387,49 @@ const Welcome = () => {
           </DashCard>
         </Box>
 
-        <DashCard variant="outlined">
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "flex-start",
-            }}
-          >
-            <Typography
-              level="title-md"
-              color="neutral"
-              sx={{ letterSpacing: "0.02em" }}
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: { xs: "1fr", md: "1fr" },
+            gap: 1.5,
+          }}
+        >
+          <DashCard variant="outlined">
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-start",
+              }}
             >
-              CPU
-            </Typography>
-            <Typography
-              level="title-lg"
-              fontWeight={600}
-              sx={{ fontVariantNumeric: "tabular-nums", lineHeight: 1.2 }}
-            >
-              {(cpuLive * 100).toFixed(2)}%
-            </Typography>
-          </Box>
-          <Box sx={{ mt: 0.5, mb: 1.5 }}>
-            <Sparkline data={cpuHistory} height={80} />
-          </Box>
-          <Typography level="body-xs" color="neutral">
-            {osInfo.cpus?.cores ?? "—"} cores
-          </Typography>
-        </DashCard>
+              <Typography
+                level="title-md"
+                color="neutral"
+                sx={{ letterSpacing: "0.02em" }}
+              >
+                {context.languagePicker("main.welcome.trend.cpu")}
+              </Typography>
+              <Typography
+                level="title-lg"
+                fontWeight={600}
+                sx={{ fontVariantNumeric: "tabular-nums", lineHeight: 1.2 }}
+              >
+                {(cpuLive * 100).toFixed(2)}%
+              </Typography>
+            </Box>
+            <Box sx={{ mt: 0.5, mb: 1.5 }}>
+              <Sparkline data={cpuHistory} height={80} />
+            </Box>
+            {osInfo.cpus && <Typography level="body-xs" color="neutral">
+              {osInfo.cpus.cores}
+              {" "}
+              {context.languagePicker("main.welcome.trend.cores")}
+              &emsp;
+              {osInfo.cpus.speed}
+              {" MHz"}
+            </Typography>}
+          </DashCard>
+        </Box>
 
         <Box
           sx={{
@@ -428,28 +444,25 @@ const Welcome = () => {
               color="neutral"
               sx={{ letterSpacing: "0.02em", mb: 1.5 }}
             >
-              System Information
+              {context.languagePicker("main.welcome.info.systemInfo")}
             </Typography>
             {osInfo.platform?.length > 0 && (
               <InfoPair
-                label={context.languagePicker("main.welcome.osInfo.platform")}
+                label={context.languagePicker("main.welcome.info.platform")}
                 value={String(osInfo.platform).upperCaseFirst()}
               />
             )}
             {osInfo.kernelVersion?.length > 0 && (
               <InfoPair
-                label={context.languagePicker("main.welcome.osInfo.kernelVersion")}
+                label={context.languagePicker("main.welcome.info.kernelVersion")}
                 value={osInfo.kernelVersion}
               />
             )}
             {osInfo.cpus?.model && (
-              <InfoPair label="CPU Model" value={osInfo.cpus.model} />
-            )}
-            {osInfo.cpus?.cores != null && (
-              <InfoPair label="CPU Cores" value={String(osInfo.cpus.cores)} />
-            )}
-            {osInfo.cpus?.cores != null && (
-              <InfoPair label="CPU Speed" value={`${osInfo.cpus.speed} MHz`} />
+              <InfoPair
+                label={context.languagePicker("main.welcome.info.cpuModel")}
+                value={osInfo.cpus.model}
+              />
             )}
           </DashCard>
 
@@ -459,7 +472,7 @@ const Welcome = () => {
               color="neutral"
               sx={{ letterSpacing: "0.02em", mb: 1.5 }}
             >
-              Netword Interfaces
+              {context.languagePicker("main.welcome.info.network")}
             </Typography>
             {osInfo.network &&
               Object.entries(osInfo.network).flatMap(([name, ifaces]) =>
@@ -468,6 +481,7 @@ const Welcome = () => {
                     key={`${name}-${iface.address}`}
                     label={name}
                     value={iface.address}
+                    keyWidth="40%"
                     sxValue={{ fontVariantNumeric: "tabular-nums" }}
                   />
                 ))

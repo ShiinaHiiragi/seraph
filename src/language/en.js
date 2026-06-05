@@ -176,13 +176,22 @@ const en = {
   },
   main: {
     welcome: {
-      osInfo: {
-        userAtHostname: "Username@Hostname",
+      kpiCards: {
+        memory: "Memory Usage",
+        storage: "Storage Usage",
+        available: "available",
+        uptime: "Uptime"
+      },
+      trend: {
+        cpu: "CPU",
+        cores: "Cores"
+      },
+      info: {
+        systemInfo: "System Information",
         platform: "Kernel and Platform",
         kernelVersion: "OS Version",
-        memoryAvailable: "Memory Available",
-        storageAvailable: "Storage Available",
-        uptime: "Uptime"
+        cpuModel: "CPU Model",
+        network: "Network Interfaces"
       }
     },
     error: {

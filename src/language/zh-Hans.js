@@ -176,13 +176,22 @@ const zhHans = {
   },
   main: {
     welcome: {
-      osInfo: {
-        userAtHostname: "用户名@主机名",
+      kpiCards: {
+        memory: "内存占用",
+        storage: "外存占用",
+        available: "可用",
+        uptime: "正常运行时间"
+      },
+      trend: {
+        cpu: "CPU",
+        cores: "核"
+      },
+      info: {
+        systemInfo: "系统信息",
         platform: "内核与平台",
         kernelVersion: "操作系统版本",
-        memoryAvailable: "可用内存",
-        storageAvailable: "可用外存",
-        uptime: "正常运行时间"
+        cpuModel: "CPU 型号",
+        network: "网络接口"
       }
     },
     error: {
