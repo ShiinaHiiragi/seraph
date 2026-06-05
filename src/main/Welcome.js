@@ -40,7 +40,7 @@ const DashCard = styled(Sheet)(({ theme }) => ({
   flexDirection: "column",
 }));
 
-const InfoPair = ({ label, value }) => (
+const InfoPair = ({ label, value, sxValue }) => (
   <Box sx={{
     display: "flex",
     flexDirection: "row",
@@ -66,12 +66,17 @@ const InfoPair = ({ label, value }) => (
     >
       {label}
     </Typography>
-    <Typography level="body-xs">
+    <Typography level="body-xs" sx={{ ...sxValue }}>
       {value}
     </Typography>
   </Box>
 );
 
+// TODO: localization
+// TODO: keep records in server
+// TODO: add network
+// TODO: add process list
+// TODO: add related configs
 const Welcome = () => {
   const context = React.useContext(GlobalContext);
   const { hours, minutes, seconds } = useTime();
@@ -423,7 +428,7 @@ const Welcome = () => {
               color="neutral"
               sx={{ letterSpacing: "0.02em", mb: 1.5 }}
             >
-              System
+              System Information
             </Typography>
             {osInfo.platform?.length > 0 && (
               <InfoPair
@@ -441,10 +446,10 @@ const Welcome = () => {
               <InfoPair label="CPU Model" value={osInfo.cpus.model} />
             )}
             {osInfo.cpus?.cores != null && (
-              <InfoPair label="CPU Speed" value={`${osInfo.cpus.speed} MHz`} />
+              <InfoPair label="CPU Cores" value={String(osInfo.cpus.cores)} />
             )}
             {osInfo.cpus?.cores != null && (
-              <InfoPair label="CPU Cores" value={String(osInfo.cpus.cores)} />
+              <InfoPair label="CPU Speed" value={`${osInfo.cpus.speed} MHz`} />
             )}
           </DashCard>
 
@@ -463,6 +468,7 @@ const Welcome = () => {
                     key={`${name}-${iface.address}`}
                     label={name}
                     value={iface.address}
+                    sxValue={{ fontVariantNumeric: "tabular-nums" }}
                   />
                 ))
               )}
