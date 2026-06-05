@@ -136,11 +136,10 @@ const Welcome = () => {
       : clipInterval(timeRemain / itemRemain)
   }, []);
 
-  const updateHistory = React.useCallback(() => {
+  const updateHistory = React.useCallback((lastTime) => {
     if (cancelRef.current) {
       return;
     }
-    let lastTime = history.slice(-1)?.[0]?.time ?? 0
 
     if (historyRef.current.future.length > 0) {
       const nextItem = historyRef.current.future.shift();
@@ -150,7 +149,7 @@ const Welcome = () => {
 
     if (historyRef.current.future.length > 0) {
       timeoutRef.current = setTimeout(
-        updateHistory,
+        () => updateHistory(lastTime),
         waitTime(context.setting.welcome.interval)
       );
     } else {
@@ -167,27 +166,26 @@ const Welcome = () => {
           const unsynced = newHistory.slice(0, -context.setting.welcome.interval);
           if (unsynced.length > 0) {
             const vacancy = Math.floor((unsynced[0].time - lastTime) / 1000);
-            setHistory((history) => [
-              ...history,
-              ...[...Array(vacancy)].map((_, index) => ({
-                cpu: 0,
-                net: 0,
-                time: lastTime + index
-              })),
-              ...unsynced
-            ].slice(-maxHistoryWindow))
+            setHistory((history) => {
+              lastTime = history.slice(-1)[0].time;
+              return [
+                ...history,
+                ...[...Array(vacancy)].map((_, index) => ({
+                  cpu: 0,
+                  net: 0,
+                  time: lastTime + index
+                })),
+                ...unsynced
+              ].slice(-maxHistoryWindow)
+            })
           }
           timeoutRef.current = setTimeout(
-            updateHistory,
+            () => updateHistory(lastTime),
             waitTime(context.setting.welcome.interval)
           );
         });
     }
-  }, [
-    context.setting.welcome.interval,
-    history,
-    waitTime
-  ]);
+  }, [context.setting.welcome.interval, waitTime]);
 
   React.useEffect(() => {
     request("GET/info/version")
@@ -215,10 +213,11 @@ const Welcome = () => {
           const { memory, storage, history: newHistory } = statData;
           setMemoryFree(memory);
           setStorageFree(storage);
-          setHistory(newHistory.slice(0, -context.setting.welcome.interval));
+          const historyInit = newHistory.slice(0, -context.setting.welcome.interval);
+          setHistory(historyInit);
           historyRef.current.future = newHistory.slice(-context.setting.welcome.interval);
           timeoutRef.current = setTimeout(
-            updateHistory,
+            () => updateHistory(historyInit.slice(-1)?.[0]?.time ?? 0),
             waitTime(context.setting.welcome.interval)
           );
         });
