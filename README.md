@@ -139,27 +139,35 @@
     npm start
     ```
 
-    - for Linux user who receive error like 'Port 80 requires elevated privileges', try running
+6. Open the page and initialize configuration via setting language and password
 
-        ```shell
-        sudo setcap 'cap_net_bind_service=+ep' $(which node)
-        ```
+#### Troubleshooting
 
-    - for Linux user who receive error like 'sudo: node: command not found', add path of node to visudo
+1. `EACCES: permission denied, open 'node_modules/.cache/.eslintcache'`: try running
 
-        ```shell
-        sudo visudo
-        ```
+    ```shell
+    sudo chown -R $USER:$USER node_modules/.cache
+    ```
 
-    - for those who receive error like 'Can't resolve `@mui/material/utils`', try running the following command
+2. `Port 80 requires elevated privileges`: try running
 
-        ```shell
-        npm install @mui/material @emotion/react @emotion/styled
-        ```
+    ```shell
+    sudo setcap 'cap_net_bind_service=+ep' $(which node)
+    ```
 
-6. Open page and initialize configuration via setting language and password
+3. `sudo: node: command not found`: add path of node to visudo using
 
-### Backup
+    ```shell
+    sudo visudo
+    ```
+
+4. `Can't resolve @mui/material/utils`: try running
+
+    ```shell
+    npm install @mui/material @emotion/react @emotion/styled
+    ```
+
+#### Backup
 
 - All data are stored in `server/data/`
 
