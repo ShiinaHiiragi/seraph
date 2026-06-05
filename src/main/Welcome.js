@@ -95,13 +95,17 @@ const Welcome = () => {
   const [memoryFree, setMemoryFree] = React.useState(-1);
   const [storageFree, setStorageFree] = React.useState(-1);
 
+  const historyRef = React.useRef({ lastRequest: -1, future: [] });
+  const timeoutRef = React.useRef(null);
+  const cancelRef = React.useRef(false);
+
   /**
    * 流程介绍：假设 setting.welcome.interval 为 3s，代表
-   *   - React.useEffect 将最新 3 条记录存入 historyOnComing，之后每秒更新 history
+   *   - React.useEffect 将最新 3 条记录存入 historyRef，之后每秒更新 history
    *     - 这样可以每秒更新 CPU 数据，但只需要每 interval 秒请求一次服务器
    *     - 为了实现近似每秒更新，需要每次计算下一次更新前的等待时间
    *     - 这是因为 request 的时间不确定，setInterval 难以控制
-   *   - 假设 t=0 更新 historyOnComing 中最后一条数据，并发出 request，在 t=0.3s 时收到更新
+   *   - 假设 t=0 更新 historyRef 中最后一条数据，并发出 request，在 t=0.3s 时收到更新
    *     - 此时距离下次 request 还剩 2.7s，自然可以想到平均每 0.9s 更新一次 CPU
    *     - 但这样的更新间隔将是 0.9s、0.9s、0.9+0.3s 的循环
    *   - 事实上，当剩余秒数 timeRemain 和剩余 CPU 数据数量 itemRemain 差不多时
@@ -120,38 +124,46 @@ const Welcome = () => {
    *       - 加入 clip 后，经过几轮请求依然可以让请求到的数据规模收敛到 interval，只是稍慢一些
    *   - 特别地，如果 itemRemain 比 timeRemain 稍大一些，timeAlign 在 -1000 ~ 0 之间
    *     - 这说明 itemRemain 比 timeAlign 大概多了 1，按 timeAlign 的方法论应该立即执行一次更新
-   *     - 但这意味着在约 0.3s 的 request 之间更新了两次，不如直接返回平均值
+   *     - 但这意味着在约 0.3s 的 request 之间更新了两次，不如直接返回平均值，实际效果更加平滑
    */
-  const historyOnComing = React.useRef({ lastRequest: -1, future: [] });
   const waitTime = React.useCallback((interval) => {
-    const timeRemain = historyOnComing.current.lastRequest + interval * 1000 - Date.now();
-    const itemRemain = historyOnComing.current.future.length;
+    const timeRemain = historyRef.current.lastRequest + interval * 1000 - Date.now();
+    const itemRemain = historyRef.current.future.length;
     const timeAlign = timeRemain - (itemRemain - 1) * 1000;
 
     return timeAlign > 0 && timeAlign < 1000
       ? timeAlign
-      : clipInterval(Math.min(timeRemain / itemRemain))
+      : clipInterval(timeRemain / itemRemain)
   }, []);
 
   const updateHistory = React.useCallback(() => {
+    if (cancelRef.current) {
+      return;
+    }
     let lastTime = history.slice(-1)?.[0]?.time ?? 0
 
-    if (historyOnComing.current.future.length > 0) {
-      const nextItem = historyOnComing.current.future.shift();
+    if (historyRef.current.future.length > 0) {
+      const nextItem = historyRef.current.future.shift();
       lastTime = nextItem.time;
       setHistory((history) => [...history, nextItem].slice(-maxHistoryWindow));
     }
 
-    if (historyOnComing.current.future.length > 0) {
-      setTimeout(updateHistory, waitTime(context.setting.welcome.interval));
+    if (historyRef.current.future.length > 0) {
+      timeoutRef.current = setTimeout(
+        updateHistory,
+        waitTime(context.setting.welcome.interval)
+      );
     } else {
-      historyOnComing.current.lastRequest = Date.now()
+      historyRef.current.lastRequest = Date.now()
       request("GET/info/stat", { after: lastTime })
         .then((data) => {
+          if (cancelRef.current) {
+            return;
+          }
           const { memory, storage, history: newHistory } = data;
           setMemoryFree(memory);
           setStorageFree(storage);
-          historyOnComing.current.future = newHistory.slice(-context.setting.welcome.interval);
+          historyRef.current.future = newHistory.slice(-context.setting.welcome.interval);
           const unsynced = newHistory.slice(0, -context.setting.welcome.interval);
           if (unsynced.length > 0) {
             const vacancy = Math.floor((unsynced[0].time - lastTime) / 1000);
@@ -165,7 +177,10 @@ const Welcome = () => {
               ...unsynced
             ].slice(-maxHistoryWindow))
           }
-          setTimeout(updateHistory, waitTime(context.setting.welcome.interval));
+          timeoutRef.current = setTimeout(
+            updateHistory,
+            waitTime(context.setting.welcome.interval)
+          );
         });
     }
   }, [
@@ -181,12 +196,16 @@ const Welcome = () => {
 
   React.useEffect(() => {
     if (context.secondTick && context.isAuthority) {
-      historyOnComing.current.lastRequest = Date.now()
+      cancelRef.current = false;
+      historyRef.current.lastRequest = Date.now()
       Promise.all([
         request("GET/info/os"),
         request("GET/info/stat", { after: 0 })
       ])
         .then(([osData, statData]) => {
+          if (cancelRef.current) {
+            return;
+          }
           const { statusCode: _, ...osInfo } = osData;
           setOSInfo(osInfo);
           const stopwatchOffset = new Date();
@@ -197,9 +216,17 @@ const Welcome = () => {
           setMemoryFree(memory);
           setStorageFree(storage);
           setHistory(newHistory.slice(0, -context.setting.welcome.interval));
-          historyOnComing.current.future = newHistory.slice(-context.setting.welcome.interval);
-          setTimeout(updateHistory, waitTime(context.setting.welcome.interval));
+          historyRef.current.future = newHistory.slice(-context.setting.welcome.interval);
+          timeoutRef.current = setTimeout(
+            updateHistory,
+            waitTime(context.setting.welcome.interval)
+          );
         });
+
+      return () => {
+        cancelRef.current = true;
+        clearTimeout(timeoutRef.current);
+      }
     }
   // eslint-disable-next-line
   }, [
