@@ -15,6 +15,7 @@ const en = {
           2880: "2 day"
         },
         password: "Change Password",
+        passwordPlaceholder: "Please save after input",
         reset: "Reset to Default",
         resetButton: "Reset"
       },
