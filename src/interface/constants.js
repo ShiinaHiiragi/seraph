@@ -624,7 +624,7 @@ export { toastTheme };
 
 
 const OnMounted = ({ onLoad }) => {
-  React.useEffect(() => onLoad(), []);
+  React.useEffect(() => onLoad(), [onLoad]);
   return null;
 };
 
