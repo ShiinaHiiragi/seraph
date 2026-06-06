@@ -257,14 +257,14 @@ const Welcome = () => {
   const cpuUsage = history.abstract((item) => item.cpu);
   const memoryUsage = history.abstract((item) => item.mem);
   const storageUsage = history.abstract((item) => item.disk);
-  // const rxUsage = history.abstract((item) => item.net.rxBPS);
-  // const txUsage = history.abstract((item) => item.net.txBPS);
+  const rxUsage = history.abstract((item) => item.net.rxBPS);
+  const txUsage = history.abstract((item) => item.net.txBPS);
 
   const cpuTrend = history.map(({ cpu }) => cpu);
   const memoryTrend = history.map(({ mem }) => mem);
   const storageTrend = history.map(({ disk }) => disk);
-  // const rxTrend = history.map(({ net }) => net.rxBPS);
-  // const txTrend = history.map(({ net }) => net.txBPS);
+  const rxTrend = history.map(({ net }) => net.rxBPS);
+  const txTrend = history.map(({ net }) => net.txBPS);
 
   if (!context.isAuthority) {
     return (
@@ -679,6 +679,107 @@ const Welcome = () => {
                 &ensp;
                 {context.languagePicker("main.welcome.trend.max")}
                 {formatFree(storageUsage.max, osInfo.storage).toFixed(2)}%
+              </Typography>}
+          </DashCard>
+        </Box>
+
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: {
+              xs: "1fr",
+              lg: "repeat(2, 1fr)"
+            },
+            gap: 1.5,
+          }}
+        >
+          <DashCard variant="outlined">
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-start",
+              }}
+            >
+              <Typography
+                level="title-md"
+                color="neutral"
+                sx={{ letterSpacing: "0.02em" }}
+              >
+                {context.languagePicker("main.welcome.trend.rx")}
+              </Typography>
+              {history.length > 0 &&
+                <Typography
+                  level="title-lg"
+                  fontWeight={600}
+                  sx={{ fontVariantNumeric: "tabular-nums", lineHeight: 1.2 }}
+                >
+                  {rxUsage.latest.sizeFormat()}
+                </Typography>}
+            </Box>
+            <Box sx={{ mt: 0.5, mb: 1.5 }}>
+              <Sparkline data={rxTrend} height={80} />
+            </Box>
+            {history.length > 0 &&
+              <Typography
+                level="body-xs"
+                color="neutral"
+                align="right"
+                sx={{ fontVariantNumeric: "tabular-nums" }}
+              >
+                {context.languagePicker("main.welcome.trend.min")}
+                {rxUsage.min.sizeFormat()}
+                &ensp;
+                {context.languagePicker("main.welcome.trend.avg")}
+                {rxUsage.avg.sizeFormat()}
+                &ensp;
+                {context.languagePicker("main.welcome.trend.max")}
+                {rxUsage.max.sizeFormat()}
+              </Typography>}
+          </DashCard>
+
+          <DashCard variant="outlined">
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-start",
+              }}
+            >
+              <Typography
+                level="title-md"
+                color="neutral"
+                sx={{ letterSpacing: "0.02em" }}
+              >
+                {context.languagePicker("main.welcome.trend.tx")}
+              </Typography>
+              {history.length > 0 &&
+                <Typography
+                  level="title-lg"
+                  fontWeight={600}
+                  sx={{ fontVariantNumeric: "tabular-nums", lineHeight: 1.2 }}
+                >
+                  {txUsage.latest.sizeFormat()}
+                </Typography>}
+            </Box>
+            <Box sx={{ mt: 0.5, mb: 1.5 }}>
+              <Sparkline data={txTrend} height={80} />
+            </Box>
+            {history.length > 0 &&
+              <Typography
+                level="body-xs"
+                color="neutral"
+                align="right"
+                sx={{ fontVariantNumeric: "tabular-nums" }}
+              >
+                {context.languagePicker("main.welcome.trend.min")}
+                {txUsage.min.sizeFormat()}
+                &ensp;
+                {context.languagePicker("main.welcome.trend.avg")}
+                {txUsage.avg.sizeFormat()}
+                &ensp;
+                {context.languagePicker("main.welcome.trend.max")}
+                {txUsage.max.sizeFormat()}
               </Typography>}
           </DashCard>
         </Box>

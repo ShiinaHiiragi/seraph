@@ -204,6 +204,8 @@ const en = {
         cpu: "CPU Status",
         memory: "Memory Status",
         storage: "Storage Status",
+        rx: "RX Status",
+        tx: "TX Status",
         min: "Min: ",
         max: "Max: ",
         avg: "Avg: "

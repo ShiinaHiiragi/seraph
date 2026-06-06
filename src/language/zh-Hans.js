@@ -204,6 +204,8 @@ const zhHans = {
         cpu: "CPU 统计",
         memory: "内存统计",
         storage: "外存统计",
+        rx: "RX 统计",
+        tx: "TX 统计",
         min: "最小值：",
         max: "最大值：",
         avg: "平均值："
