@@ -19,6 +19,22 @@ const zhHans = {
         reset: "重置为默认值",
         resetButton: "重置"
       },
+      welcome: {
+        title: "仪表盘",
+        interval: "请求间隔",
+        intervalOption: {
+          1: "1 秒",
+          2: "2 秒",
+          3: "3 秒",
+          4: "4 秒",
+          5: "5 秒",
+          10: "10 秒",
+          15: "15 秒",
+          30: "30 秒",
+          45: "45 秒",
+          60: "60 秒"
+        }
+      },
       terminal: {
         title: "终端",
         enable: "启用终端",

@@ -19,6 +19,22 @@ const en = {
         reset: "Reset to Default",
         resetButton: "Reset"
       },
+      welcome: {
+        title: "Dashboard",
+        interval: "Request Interval",
+        intervalOption: {
+          1: "1 second",
+          2: "2 seconds",
+          3: "3 seconds",
+          4: "4 seconds",
+          5: "5 seconds",
+          10: "10 seconds",
+          15: "15 seconds",
+          30: "30 seconds",
+          45: "45 seconds",
+          60: "60 seconds"
+        }
+      },
       terminal: {
         title: "Terminal",
         enable: "Enable Terminal",

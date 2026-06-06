@@ -98,6 +98,7 @@ const Welcome = () => {
   const historyRef = React.useRef({ lastRequest: -1, future: [] });
   const timeoutRef = React.useRef(null);
   const cancelRef = React.useRef(false);
+  const intervalRef = React.useRef(context.setting.welcome.interval);
 
   /**
    * 流程介绍：假设 setting.welcome.interval 为 3s，代表
@@ -150,7 +151,7 @@ const Welcome = () => {
     if (historyRef.current.future.length > 0) {
       timeoutRef.current = setTimeout(
         () => updateHistory(lastTime),
-        waitTime(context.setting.welcome.interval)
+        waitTime(intervalRef.current)
       );
     } else {
       historyRef.current.lastRequest = Date.now()
@@ -162,8 +163,8 @@ const Welcome = () => {
           const { memory, storage, history: newHistory } = data;
           setMemoryFree(memory);
           setStorageFree(storage);
-          historyRef.current.future = newHistory.slice(-context.setting.welcome.interval);
-          const unsynced = newHistory.slice(0, -context.setting.welcome.interval);
+          historyRef.current.future = newHistory.slice(-intervalRef.current);
+          const unsynced = newHistory.slice(0, -intervalRef.current);
           if (unsynced.length > 0) {
             const vacancy = Math.floor((unsynced[0].time - lastTime) / 1000);
             setHistory((history) => {
@@ -181,11 +182,16 @@ const Welcome = () => {
           }
           timeoutRef.current = setTimeout(
             () => updateHistory(lastTime),
-            waitTime(context.setting.welcome.interval)
+            waitTime(intervalRef.current)
           );
         });
     }
-  }, [context.setting.welcome.interval, waitTime]);
+  // waitTime never changes
+  }, [waitTime]);
+
+  React.useEffect(() => {
+    intervalRef.current = context.setting.welcome.interval;
+  }, [context.setting.welcome.interval]);
 
   React.useEffect(() => {
     request("GET/info/version")
@@ -211,9 +217,9 @@ const Welcome = () => {
           upReset(stopwatchOffset);
 
           const { memory, storage, history: newHistory } = statData;
+          const historyInit = newHistory.slice(0, -context.setting.welcome.interval);
           setMemoryFree(memory);
           setStorageFree(storage);
-          const historyInit = newHistory.slice(0, -context.setting.welcome.interval);
           setHistory(historyInit);
           historyRef.current.future = newHistory.slice(-context.setting.welcome.interval);
           timeoutRef.current = setTimeout(
@@ -225,7 +231,7 @@ const Welcome = () => {
       return () => {
         cancelRef.current = true;
         clearTimeout(timeoutRef.current);
-      }
+      };
     }
   // eslint-disable-next-line
   }, [

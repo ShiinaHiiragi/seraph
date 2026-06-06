@@ -284,6 +284,7 @@ const defaultOSInfo = {
 
 const settingField = {
   general: "general",
+  welcome: "welcome",
   terminal: "terminal",
   todo: "todo",
   extension: "extension",
