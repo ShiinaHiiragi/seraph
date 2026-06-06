@@ -215,7 +215,8 @@ const en = {
         platform: "Kernel and Platform",
         kernelVersion: "OS Version",
         cpuModel: "CPU Model",
-        network: "Network Interfaces"
+        network: "Network Interfaces",
+        process: "Processes"
       }
     },
     error: {

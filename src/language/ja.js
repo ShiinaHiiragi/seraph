@@ -215,7 +215,8 @@ const ja = {
         platform: "カーネルとプラットフォーム",
         kernelVersion: "オーエスのバージョン",
         cpuModel: "CPU モデル",
-        network: "ネットワークインタフェース"
+        network: "ネットワークインタフェース",
+        process: "プロセス"
       }
     },
     error: {

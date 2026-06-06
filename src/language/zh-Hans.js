@@ -215,7 +215,8 @@ const zhHans = {
         platform: "内核与平台",
         kernelVersion: "操作系统版本",
         cpuModel: "CPU 型号",
-        network: "网络接口"
+        network: "网络接口",
+        process: "进程"
       }
     },
     error: {

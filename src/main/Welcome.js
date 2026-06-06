@@ -60,7 +60,7 @@ const InfoPair = ({ label, value, keyWidth, sxValue }) => (
       level="body-xs"
       color="neutral"
       sx={{
-        width: keyWidth ?? "30%",
+        width: keyWidth ?? "35%",
         flexShrink: 0,
         "@container (max-width: 420px)": {
           width: "100%"
@@ -784,61 +784,67 @@ const Welcome = () => {
           </DashCard>
         </Box>
 
-        <Box
-          sx={{
-            display: "grid",
-            gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
-            gap: 1.5,
-          }}
-        >
-          <DashCard variant="outlined" sx={{ overflow: "auto", gap: 0 }}>
-            <Typography
-              level="title-md"
-              color="neutral"
-              sx={{ letterSpacing: "0.02em", mb: 1.5 }}
-            >
-              {context.languagePicker("main.welcome.info.systemInfo")}
-            </Typography>
-            {osInfo.platform.length > 0 && (
-              <InfoPair
-                label={context.languagePicker("main.welcome.info.platform")}
-                value={String(osInfo.platform).upperCaseFirst()}
-              />
-            )}
-            {osInfo.kernelVersion.length > 0 && (
-              <InfoPair
-                label={context.languagePicker("main.welcome.info.kernelVersion")}
-                value={osInfo.kernelVersion}
-              />
-            )}
-            {osInfo.cpus.model.length > 0 && (
-              <InfoPair
-                label={context.languagePicker("main.welcome.info.cpuModel")}
-                value={osInfo.cpus.model}
-              />
-            )}
-          </DashCard>
-
-          <DashCard variant="outlined" sx={{ overflow: "auto", gap: 0 }}>
-            <Typography
-              level="title-md"
-              color="neutral"
-              sx={{ letterSpacing: "0.02em", mb: 1.5 }}
-            >
-              {context.languagePicker("main.welcome.info.network")}
-            </Typography>
-            {osInfo.network &&
-              Object.entries(osInfo.network).flatMap(([name, ifaces]) =>
-                ifaces.map((iface) => (
-                  <InfoPair
-                    key={`${name}-${iface.address}`}
-                    label={name}
-                    value={iface.address}
-                    keyWidth="40%"
-                    sxValue={{ fontVariantNumeric: "tabular-nums" }}
-                  />
-                ))
+        <Box sx={{ display: "flex", gap: 1.5, flexDirection: { xs: "column", lg: "row" } }}>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5, flex: 1, minWidth: 0, flexGrow: 2 }}>
+            <DashCard variant="outlined" sx={{ overflow: "auto", gap: 0 }}>
+              <Typography
+                level="title-md"
+                color="neutral"
+                sx={{ letterSpacing: "0.02em", mb: 1.5 }}
+              >
+                {context.languagePicker("main.welcome.info.systemInfo")}
+              </Typography>
+              {osInfo.platform.length > 0 && (
+                <InfoPair
+                  label={context.languagePicker("main.welcome.info.platform")}
+                  value={String(osInfo.platform).upperCaseFirst()}
+                />
               )}
+              {osInfo.kernelVersion.length > 0 && (
+                <InfoPair
+                  label={context.languagePicker("main.welcome.info.kernelVersion")}
+                  value={osInfo.kernelVersion}
+                />
+              )}
+              {osInfo.cpus.model.length > 0 && (
+                <InfoPair
+                  label={context.languagePicker("main.welcome.info.cpuModel")}
+                  value={osInfo.cpus.model}
+                />
+              )}
+            </DashCard>
+
+            <DashCard variant="outlined" sx={{ overflow: "auto", gap: 0 }}>
+              <Typography
+                level="title-md"
+                color="neutral"
+                sx={{ letterSpacing: "0.02em", mb: 1.5 }}
+              >
+                {context.languagePicker("main.welcome.info.network")}
+              </Typography>
+              {osInfo.network &&
+                Object.entries(osInfo.network).flatMap(([name, ifaces]) =>
+                  ifaces.map((iface) => (
+                    <InfoPair
+                      key={`${name}-${iface.address}`}
+                      label={name}
+                      value={iface.address}
+                      sxValue={{ fontVariantNumeric: "tabular-nums" }}
+                    />
+                  ))
+                )}
+            </DashCard>
+          </Box>
+
+          <DashCard variant="outlined" sx={{ overflow: "auto", gap: 0, flex: 1, minWidth: 0, flexGrow: 3 }}>
+            <Typography
+              level="title-md"
+              color="neutral"
+              sx={{ letterSpacing: "0.02em", mb: 1.5 }}
+            >
+              {context.languagePicker("main.welcome.info.process")}
+            </Typography>
+            PID LIST HERE
           </DashCard>
         </Box>
       </Box>
