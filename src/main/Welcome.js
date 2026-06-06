@@ -256,15 +256,19 @@ const Welcome = () => {
 
   const cpuUsage = history.abstract((item) => item.cpu);
   const memoryUsage = history.abstract((item) => item.mem);
-  const storageUsage = history.abstract((item) => item.disk);
-  const rxUsage = history.abstract((item) => item.net.rx);
-  const txUsage = history.abstract((item) => item.net.tx);
+  const storageUsage = history.abstract((item) => item.disk.free);
+  const rxDiskUsage = history.abstract((item) => item.disk.rx);
+  const wxDiskUsage = history.abstract((item) => item.disk.wx);
+  const rxNetUsage = history.abstract((item) => item.net.rx);
+  const txNetUsage = history.abstract((item) => item.net.tx);
 
   const cpuTrend = history.map(({ cpu }) => cpu);
   const memoryTrend = history.map(({ mem }) => mem);
-  const storageTrend = history.map(({ disk }) => disk);
-  const rxTrend = history.map(({ net }) => net.rx);
-  const txTrend = history.map(({ net }) => net.tx);
+  const storageTrend = history.map(({ disk }) => disk.free);
+  const rxDiskTrend = history.map(({ disk }) => disk.rx);
+  const wxDiskTrend = history.map(({ disk }) => disk.wx);
+  const rxNetTrend = history.map(({ net }) => net.rx);
+  const txNetTrend = history.map(({ net }) => net.tx);
 
   if (!context.isAuthority) {
     return (
@@ -587,7 +591,8 @@ const Welcome = () => {
             display: "grid",
             gridTemplateColumns: {
               xs: "1fr",
-              lg: "repeat(2, 1fr)"
+              lg: "repeat(2, 1fr)",
+              xl: "repeat(4, 1fr)"
             },
             gap: 1.5,
           }}
@@ -681,6 +686,96 @@ const Welcome = () => {
                 {formatFree(storageUsage.max, osInfo.storage).toFixed(2)}%
               </Typography>}
           </DashCard>
+
+          <DashCard variant="outlined">
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-start",
+              }}
+            >
+              <Typography
+                level="title-md"
+                color="neutral"
+                sx={{ letterSpacing: "0.02em" }}
+              >
+                {context.languagePicker("main.welcome.trend.rxDisk")}
+              </Typography>
+              {history.length > 0 &&
+                <Typography
+                  level="title-lg"
+                  fontWeight={600}
+                  sx={{ fontVariantNumeric: "tabular-nums", lineHeight: 1.2 }}
+                >
+                  {rxDiskUsage.latest.sizeFormat()}/s
+                </Typography>}
+            </Box>
+            <Box sx={{ mt: 0.5, mb: 1.5 }}>
+              <Sparkline data={storageTrend} height={80} />
+            </Box>
+            {history.length > 0 &&
+              <Typography
+                level="body-xs"
+                color="neutral"
+                align="right"
+                sx={{ fontVariantNumeric: "tabular-nums" }}
+              >
+                {context.languagePicker("main.welcome.trend.min")}
+                {rxDiskUsage.min.sizeFormat()}/s
+                &ensp;
+                {context.languagePicker("main.welcome.trend.avg")}
+                {rxDiskUsage.avg.sizeFormat()}/s
+                &ensp;
+                {context.languagePicker("main.welcome.trend.max")}
+                {rxDiskUsage.max.sizeFormat()}/s
+              </Typography>}
+          </DashCard>
+
+          <DashCard variant="outlined">
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-start",
+              }}
+            >
+              <Typography
+                level="title-md"
+                color="neutral"
+                sx={{ letterSpacing: "0.02em" }}
+              >
+                {context.languagePicker("main.welcome.trend.wxDisk")}
+              </Typography>
+              {history.length > 0 &&
+                <Typography
+                  level="title-lg"
+                  fontWeight={600}
+                  sx={{ fontVariantNumeric: "tabular-nums", lineHeight: 1.2 }}
+                >
+                  {wxDiskUsage.latest.sizeFormat()}/s
+                </Typography>}
+            </Box>
+            <Box sx={{ mt: 0.5, mb: 1.5 }}>
+              <Sparkline data={storageTrend} height={80} />
+            </Box>
+            {history.length > 0 &&
+              <Typography
+                level="body-xs"
+                color="neutral"
+                align="right"
+                sx={{ fontVariantNumeric: "tabular-nums" }}
+              >
+                {context.languagePicker("main.welcome.trend.min")}
+                {wxDiskUsage.min.sizeFormat()}/s
+                &ensp;
+                {context.languagePicker("main.welcome.trend.avg")}
+                {wxDiskUsage.avg.sizeFormat()}/s
+                &ensp;
+                {context.languagePicker("main.welcome.trend.max")}
+                {wxDiskUsage.max.sizeFormat()}/s
+              </Typography>}
+          </DashCard>
         </Box>
 
         <Box
@@ -706,7 +801,7 @@ const Welcome = () => {
                 color="neutral"
                 sx={{ letterSpacing: "0.02em" }}
               >
-                {context.languagePicker("main.welcome.trend.rx")}
+                {context.languagePicker("main.welcome.trend.rxNet")}
               </Typography>
               {history.length > 0 &&
                 <Typography
@@ -714,11 +809,11 @@ const Welcome = () => {
                   fontWeight={600}
                   sx={{ fontVariantNumeric: "tabular-nums", lineHeight: 1.2 }}
                 >
-                  {rxUsage.latest.sizeFormat()}/s
+                  {rxNetUsage.latest.sizeFormat()}/s
                 </Typography>}
             </Box>
             <Box sx={{ mt: 0.5, mb: 1.5 }}>
-              <Sparkline data={rxTrend} height={80} />
+              <Sparkline data={rxNetTrend} height={80} />
             </Box>
             {history.length > 0 &&
               <Typography
@@ -728,13 +823,13 @@ const Welcome = () => {
                 sx={{ fontVariantNumeric: "tabular-nums" }}
               >
                 {context.languagePicker("main.welcome.trend.min")}
-                {rxUsage.min.sizeFormat()}/s
+                {rxNetUsage.min.sizeFormat()}/s
                 &ensp;
                 {context.languagePicker("main.welcome.trend.avg")}
-                {rxUsage.avg.sizeFormat()}/s
+                {rxNetUsage.avg.sizeFormat()}/s
                 &ensp;
                 {context.languagePicker("main.welcome.trend.max")}
-                {rxUsage.max.sizeFormat()}/s
+                {rxNetUsage.max.sizeFormat()}/s
               </Typography>}
           </DashCard>
 
@@ -751,7 +846,7 @@ const Welcome = () => {
                 color="neutral"
                 sx={{ letterSpacing: "0.02em" }}
               >
-                {context.languagePicker("main.welcome.trend.tx")}
+                {context.languagePicker("main.welcome.trend.txNet")}
               </Typography>
               {history.length > 0 &&
                 <Typography
@@ -759,11 +854,11 @@ const Welcome = () => {
                   fontWeight={600}
                   sx={{ fontVariantNumeric: "tabular-nums", lineHeight: 1.2 }}
                 >
-                  {txUsage.latest.sizeFormat()}/s
+                  {txNetUsage.latest.sizeFormat()}/s
                 </Typography>}
             </Box>
             <Box sx={{ mt: 0.5, mb: 1.5 }}>
-              <Sparkline data={txTrend} height={80} />
+              <Sparkline data={txNetTrend} height={80} />
             </Box>
             {history.length > 0 &&
               <Typography
@@ -773,13 +868,13 @@ const Welcome = () => {
                 sx={{ fontVariantNumeric: "tabular-nums" }}
               >
                 {context.languagePicker("main.welcome.trend.min")}
-                {txUsage.min.sizeFormat()}/s
+                {txNetUsage.min.sizeFormat()}/s
                 &ensp;
                 {context.languagePicker("main.welcome.trend.avg")}
-                {txUsage.avg.sizeFormat()}/s
+                {txNetUsage.avg.sizeFormat()}/s
                 &ensp;
                 {context.languagePicker("main.welcome.trend.max")}
-                {txUsage.max.sizeFormat()}/s
+                {txNetUsage.max.sizeFormat()}/s
               </Typography>}
           </DashCard>
         </Box>

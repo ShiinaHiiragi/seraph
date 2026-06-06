@@ -204,11 +204,13 @@ const ja = {
         cpu: "CPU ステータス",
         memory: "メモリステータス",
         storage: "ストレージステータス",
-        rx: "RX ステータス",
-        tx: "TX ステータス",
-        min: "ミニマム：",
-        max: "マックス：",
-        avg: "アベレージ："
+        rxDisk: "Read Status",
+        wxDisk: "Write Status",
+        rxNet: "RX ステータス",
+        txNet: "TX ステータス",
+        min: "Min: ",
+        max: "Max: ",
+        avg: "Avg: "
       },
       info: {
         systemInfo: "システム情報",

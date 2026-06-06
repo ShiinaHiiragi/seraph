@@ -774,7 +774,7 @@ const infoOperator = {
     infoOperator.history.push({
       cpu: cpu,
       mem: mem,
-      disk: disk.free,
+      disk: disk,
       net: net,
       time: Date.now()
     })
@@ -841,7 +841,15 @@ const infoOperator = {
     }
   )(),
   memoryUsage: () => os.freemem(),
-  diskUsage: () => checkDiskSpace(dataPath.dataDirPath),
+  diskUsage: () => new Promise((resolve) => Promise.all([
+    checkDiskSpace(dataPath.dataDirPath),
+    si.fsStats()
+  ]).then(([{ free, size }, res]) => resolve({
+    free: free,
+    size: size,
+    rx: res?.rx_sec ?? 0,
+    wx: res?.wx_sec ?? 0
+  }))),
 
   physicalInterface: /^(eth|ens|enp|em|wlan|wlp)/,
   netUsage: () => si.networkStats()
@@ -852,8 +860,8 @@ const infoOperator = {
           : iface.operstate === 'up' && !iface.iface.startsWith('vEthernet')
       );
       return {
-        rx: filtered.reduce((sum, i) => sum + (i.rx_sec ?? 0), 0),
-        tx: filtered.reduce((sum, i) => sum + (i.tx_sec ?? 0), 0),
+        rx: filtered.reduce((prev, curr) => prev + (curr.rx_sec ?? 0), 0),
+        tx: filtered.reduce((prev, curr) => prev + (curr.tx_sec ?? 0), 0),
       };
     })
 };
