@@ -788,8 +788,13 @@ const infoOperator = {
     return pkg.version;
   },
 
-  osInfo: () => {
-    const cpus = os.cpus();
+  osInfoAsync: () => Promise.all([
+    infoOperator.diskUsage(),
+    si.system(),
+    si.bios(),
+    si.osInfo(),
+    si.cpu()
+  ]).then(([{ size }, systemInfo, biosInfo, osInfo_, cpuInfo]) => {
     const networkInterfaces = Object
       .entries(os.networkInterfaces())
       .map(([ name, interfaces ]) => [ name, interfaces.filter((item) =>
@@ -801,45 +806,33 @@ const infoOperator = {
 
     return {
       memory: os.totalmem(),
-      storage: undefined,
-      uptime: os.uptime(),
+      storage: size,
+      uptime: undefined,
       userAtHostname: os.userInfo().username + '@' + os.hostname(),
-      platform: os.platform() + ' ' + os.release() + ' ' + os.arch(),
-      kernelVersion: os.version(),
-      cpus: {
-        model: cpus[0].model,
-        speed: cpus[0].speed,
-        cores: cpus.length
+      manufacturer: systemInfo.manufacturer,
+      model: systemInfo.model,
+      serial: systemInfo.serial,
+      virtual: systemInfo.virtual ? systemInfo.virtualHost : null,
+      biosVersion: biosInfo.version,
+      platform: process.platform === 'linux'
+        ? `${osInfo_.distro} ${osInfo_.release} (${osInfo_.codename}) ${osInfo_.arch}`
+        : `${osInfo_.distro} (${osInfo_.codename}) ${osInfo_.arch}`,
+      kernel: osInfo_.kernel,
+      cpu: {
+        model: cpuInfo.manufacturer + ' ' + cpuInfo.brand,
+        speed: cpuInfo.speed,
+        cores: cpuInfo.cores,
+        cache: cpuInfo.cache
       },
-      network: Object.fromEntries(networkInterfaces),
+      network: Object.fromEntries(networkInterfaces)
     }
-  },
-
-  handleSampler: (
-    handleRecord,
-    handleDiff,
-    measureInterval = 200
-  ) => () => new Promise((resolve) => {
-    const start = handleRecord();
-    setTimeout(
-      () => resolve(handleDiff(start, handleRecord())),
-      measureInterval
-    );
   }),
 
   // unrelated  to time
-  cpuUsage: () => infoOperator.handleSampler(
-    os.cpus,
-    (start, end) => {
-      const perCore = start.map((cpu, index) => {
-        const startTimes = cpu.times, endTimes = end[index].times;
-        const total = Object.values(endTimes).reduce((prev, next) => prev + next, 0)
-          - Object.values(startTimes).reduce((prev, next) => prev + next, 0);
-        return total === 0 ? 0 : 1 - (endTimes.idle - startTimes.idle) / total;
-      });
-      return perCore.reduce((prev, curr) => prev + curr, 0) / perCore.length;
-    }
-  )(),
+  cpuUsage: () => new Promise((resolve) =>
+    si.currentLoad()
+      .then(({ currentLoad }) => resolve(currentLoad / 100))
+  ),
   memoryUsage: () => os.freemem(),
   diskUsage: () => new Promise((resolve) => Promise.all([
     checkDiskSpace(dataPath.dataDirPath),
@@ -876,6 +869,7 @@ setInterval(() => {
 }, infoOperator.recordInterval);
 
 exports.infoOperator = infoOperator;
+exports.cachedInfo = infoOperator.osInfoAsync();
 
 
 function Status() { }

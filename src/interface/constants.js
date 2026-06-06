@@ -285,16 +285,21 @@ const defaultOSInfo = {
   storage: -1,
   uptime: -1,
   userAtHostname: "",
-  cpuHistory: [],
+  manufacturer: "",
+  model: "",
+  serial: "",
+  virtual: null,
+  biosVersion: "",
   platform: "",
-  kernelVersion: "",
-  cpus: {
+  kernel: "",
+  cpu: {
     model: "",
     speed: -1,
-    cores: -1
+    cores: -1,
+    cache: { l1d: -1, l1i: -1, l2: -1, l3: -1 }
   },
   network: { }
-};
+}
 
 const settingField = {
   general: "general",

@@ -1,3 +1,4 @@
+let os = require('os');
 let express = require('express');
 let api = require('../api');
 let router = express.Router();
@@ -18,16 +19,15 @@ router.get('/os', (req, res, next) => {
     return;
   }
 
-  api.infoOperator.diskUsage()
-    .then(({ size }) => {
-      req.status.addExecStatus();
-      res.send({
-        ...req.status.generateReport(),
-        ...api.infoOperator.osInfo(),
-        storage: size
-      });
-      return;
+  api.cachedInfo.then((osInfo) => {
+    req.status.addExecStatus();
+    res.send({
+      ...req.status.generateReport(),
+      ...osInfo,
+      uptime: os.uptime()
     });
+    return;
+  });
 });
 
 router.get('/stat', (req, res, next) => {

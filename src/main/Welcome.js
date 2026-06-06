@@ -390,13 +390,13 @@ const Welcome = () => {
               >
                 {(cpuUsage.latest * 100).toFixed(1)}%
               </Typography>}
-            {osInfo.cpus.cores > 0 && osInfo.cpus.speed > 0 &&
+            {osInfo.cpu.cores > 0 && osInfo.cpu.speed > 0 &&
               <Typography level="body-xs" color="neutral">
-                {osInfo.cpus.cores}
+                {osInfo.cpu.cores}
                 {" "}
                 {context.languagePicker("main.welcome.kpiCards.cores")}
                 {" / "}
-                {osInfo.cpus.speed}
+                {osInfo.cpu.speed}
                 {" MHz"}
               </Typography>}
           </DashCard>
@@ -444,7 +444,7 @@ const Welcome = () => {
               </Box>
             </Box>
             {history.length > 0 && osInfo.memory > 0 && (
-              <Typography level="body-xs" color="neutral">
+              <Typography level="body-xs" color="neutral" sx={{ fontVariantNumeric: "tabular-nums" }}>
                 {Number(memoryUsage.latest).sizeFormat(1)} / {Number(osInfo.memory).sizeFormat(1)}
                 {" "}
                 {context.languagePicker("main.welcome.kpiCards.available")}
@@ -495,7 +495,7 @@ const Welcome = () => {
               </Box>
             </Box>
             {history.length > 0 && osInfo.storage > 0 &&
-              <Typography level="body-xs" color="neutral">
+              <Typography level="body-xs" color="neutral" sx={{ fontVariantNumeric: "tabular-nums" }}>
                 {Number(storageUsage.latest).sizeFormat(1)} / {Number(osInfo.storage).sizeFormat(1)}
                 {" "}
                 {context.languagePicker("main.welcome.kpiCards.available")}
@@ -895,16 +895,16 @@ const Welcome = () => {
                   value={String(osInfo.platform).upperCaseFirst()}
                 />
               )}
-              {osInfo.kernelVersion.length > 0 && (
+              {osInfo.kernel.length > 0 && (
                 <InfoPair
-                  label={context.languagePicker("main.welcome.info.kernelVersion")}
-                  value={osInfo.kernelVersion}
+                  label={context.languagePicker("main.welcome.info.kernel")}
+                  value={osInfo.kernel}
                 />
               )}
-              {osInfo.cpus.model.length > 0 && (
+              {osInfo.cpu.model.length > 0 && (
                 <InfoPair
                   label={context.languagePicker("main.welcome.info.cpuModel")}
-                  value={osInfo.cpus.model}
+                  value={osInfo.cpu.model}
                 />
               )}
             </DashCard>
