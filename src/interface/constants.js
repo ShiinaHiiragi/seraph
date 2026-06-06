@@ -658,7 +658,8 @@ const Sparkline = ({ data, height = 64 }) => {
     return <Box sx={{ height }} />;
   }
 
-  const points = data.map((v, i) => [(i / (data.length - 1)) * 100, (1 - v) * 100,]);
+  const max = Math.max(...data) * 1.25 || 1;
+  const points = data.map((v, i) => [(i / (data.length - 1)) * 100, (1 - v / max) * 100]);
   const lineStr = points.map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(" ");
   const areaStr = `0,100 ${lineStr} 100,100`;
 

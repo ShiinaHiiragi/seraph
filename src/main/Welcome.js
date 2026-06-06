@@ -74,7 +74,6 @@ const InfoPair = ({ label, value, keyWidth, sxValue }) => (
   </Box>
 );
 
-// TODO: keep records in server
 // TODO: add network
 // TODO: add process list
 // TODO: add related configs
@@ -91,10 +90,7 @@ const Welcome = () => {
 
   const [version, setVersion] = React.useState("");
   const [osInfo, setOSInfo] = React.useState(defaultOSInfo);
-
   const [history, setHistory] = React.useState([]);
-  const [memoryFree, setMemoryFree] = React.useState(-1);
-  const [storageFree, setStorageFree] = React.useState(-1);
 
   const historyRef = React.useRef({ lastRequest: -1, future: [] });
   const timeoutRef = React.useRef(null);
@@ -161,9 +157,7 @@ const Welcome = () => {
           if (cancelRef.current) {
             return;
           }
-          const { memory, storage, history: newHistory } = data;
-          setMemoryFree(memory);
-          setStorageFree(storage);
+          const { history: newHistory } = data;
           historyRef.current.future = newHistory.slice(-intervalRef.current);
           const unsynced = newHistory.slice(0, -intervalRef.current);
           if (unsynced.length > 0) {
@@ -220,10 +214,8 @@ const Welcome = () => {
           stopwatchOffset.setSeconds(stopwatchOffset.getSeconds() + osInfo.uptime);
           upReset(stopwatchOffset);
 
-          const { memory, storage, history: newHistory } = statData;
+          const { history: newHistory } = statData;
           const historyInit = newHistory.slice(0, -context.setting.welcome.interval);
-          setMemoryFree(memory);
-          setStorageFree(storage);
           setHistory(historyInit);
           historyRef.current.future = newHistory.slice(-context.setting.welcome.interval);
           timeoutRef.current = setTimeout(
@@ -254,13 +246,21 @@ const Welcome = () => {
     .map((num) => String(num).padStart(2, "0"))
     .join(":");
 
-  const memoryPercentage = osInfo.memory > 0 && memoryFree >= 0
+  const cpuLatest = history.slice(-1)?.[0]?.cpu ?? -1;
+  const cpuTrend = history.map(({ cpu }) => cpu);
+
+  const memoryFree = history.slice(-1)?.[0]?.mem ?? -1;
+  const memoryLatest = osInfo.memory > 0 && memoryFree >= 0
       ? ((osInfo.memory - memoryFree) / osInfo.memory) * 100
       : 0;
 
-  const storagePercentage = osInfo.storage > 0 && storageFree >= 0
+  const storageFree = history.slice(-1)?.[0]?.disk ?? -1;
+  const storageLatest = osInfo.storage > 0 && storageFree >= 0
       ? ((osInfo.storage - storageFree) / osInfo.storage) * 100
       : 0;
+
+  const rxLatest = history.slice(-1)?.[0]?.net?.rx ?? -1;
+  const txLatest = history.slice(-1)?.[0]?.net?.tx ?? -1;
 
   if (!context.isAuthority) {
     return (
@@ -379,7 +379,7 @@ const Welcome = () => {
                   fontWeight={600}
                   sx={{ fontVariantNumeric: "tabular-nums", lineHeight: 1.2 }}
                 >
-                  {memoryPercentage.toFixed(1)}%
+                  {memoryLatest.toFixed(1)}%
                 </Typography>
               )}
             </Box>
@@ -395,7 +395,7 @@ const Welcome = () => {
               <Box>
                 <LinearProgress
                   determinate
-                  value={memoryPercentage}
+                  value={memoryLatest}
                   color="primary"
                 />
               </Box>
@@ -430,7 +430,7 @@ const Welcome = () => {
                   fontWeight={600}
                   sx={{ fontVariantNumeric: "tabular-nums", lineHeight: 1.2 }}
                 >
-                  {storagePercentage.toFixed(1)}%
+                  {storageLatest.toFixed(1)}%
                 </Typography>
               )}
             </Box>
@@ -446,7 +446,7 @@ const Welcome = () => {
               <Box>
                 <LinearProgress
                   determinate
-                  value={storagePercentage}
+                  value={storageLatest}
                   color="primary"
                 />
               </Box>
@@ -518,11 +518,11 @@ const Welcome = () => {
                   fontWeight={600}
                   sx={{ fontVariantNumeric: "tabular-nums", lineHeight: 1.2 }}
                 >
-                  {(history.slice(-1)[0].cpu * 100).toFixed(2)}%
+                  {(cpuLatest * 100).toFixed(2)}%
                 </Typography>}
             </Box>
             <Box sx={{ mt: 0.5, mb: 1.5 }}>
-              <Sparkline data={history.map(({ cpu }) => cpu)} height={80} />
+              <Sparkline data={cpuTrend} height={80} />
             </Box>
             {osInfo.cpus.cores > 0 && osInfo.cpus.speed > 0 &&
               <Typography level="body-xs" color="neutral">

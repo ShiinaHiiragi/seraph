@@ -767,12 +767,14 @@ const infoOperator = {
   netSamplerSpan: 200,
 
   history: [],
-  push: ([cpu, net]) => {
+  push: ([cpu, mem, disk, net]) => {
     if (infoOperator.history.length >= infoOperator.maxWindow) {
       infoOperator.history.shift();
     }
     infoOperator.history.push({
       cpu: cpu,
+      mem: mem,
+      disk: disk.free,
       net: net,
       time: Date.now()
     })
@@ -841,7 +843,23 @@ const infoOperator = {
   memoryUsage: () => os.freemem(),
   diskUsage: () => checkDiskSpace(dataPath.dataDirPath),
 
-  netStates: () => ({ rx: 0, tx: 0 }),
+  physicalInterface: /^(eth|ens|enp|em|wlan|wlp)/,
+  netStates: process.platform === 'linux'
+    ? () => {
+      const lines = fs.readFileSync('/proc/net/dev', 'utf8').split('\n');
+      let rx = 0, tx = 0;
+      for (const line of lines.slice(2)) {
+        const trimmed = line.trim();
+        const [iface, data] = trimmed.split(':');
+        if (trimmed && infoOperator.physicalInterface.test(iface.trim())) {
+          const fields = data.trim().split(/\s+/);
+          rx += parseInt(fields[0]);
+          tx += parseInt(fields[8]);
+        }
+      }
+      return { rx: rx, tx: tx };
+    }
+    : () => ({ rx: 0, tx: 0 }),
   netUsage: () => infoOperator.handleSampler(
     infoOperator.netStates,
     (start, end) => ({
@@ -855,7 +873,9 @@ const infoOperator = {
 setInterval(() => {
   Promise.all([
     infoOperator.cpuUsage(),
-    infoOperator.netUsage()
+    new Promise((resolve) => resolve(infoOperator.memoryUsage())),
+    infoOperator.diskUsage(),
+    infoOperator.netUsage(),
   ]).then(infoOperator.push);
 }, infoOperator.recordInterval);
 
