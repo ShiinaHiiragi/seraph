@@ -8,6 +8,7 @@ import LinearProgress from "@mui/joy/LinearProgress";
 import GlobalContext, {
   defaultOSInfo,
   maxHistoryWindow,
+  vacantTolerance,
   clipInterval,
   request,
   Sparkline
@@ -166,7 +167,10 @@ const Welcome = () => {
           historyRef.current.future = newHistory.slice(-intervalRef.current);
           const unsynced = newHistory.slice(0, -intervalRef.current);
           if (unsynced.length > 0) {
-            const vacancy = Math.floor((unsynced[0].time - lastTime) / 1000);
+            const timeGap = unsynced[0].time - lastTime;
+            const vacancy = timeGap > vacantTolerance
+              ? Math.floor((timeGap) / 1000)
+              : 0;
             setHistory((history) => {
               lastTime = history.slice(-1)[0].time;
               return [
