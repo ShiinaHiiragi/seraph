@@ -257,14 +257,14 @@ const Welcome = () => {
   const cpuUsage = history.abstract((item) => item.cpu);
   const memoryUsage = history.abstract((item) => item.mem);
   const storageUsage = history.abstract((item) => item.disk);
-  const rxUsage = history.abstract((item) => item.net.rxBPS);
-  const txUsage = history.abstract((item) => item.net.txBPS);
+  const rxUsage = history.abstract((item) => item.net.rx);
+  const txUsage = history.abstract((item) => item.net.tx);
 
   const cpuTrend = history.map(({ cpu }) => cpu);
   const memoryTrend = history.map(({ mem }) => mem);
   const storageTrend = history.map(({ disk }) => disk);
-  const rxTrend = history.map(({ net }) => net.rxBPS);
-  const txTrend = history.map(({ net }) => net.txBPS);
+  const rxTrend = history.map(({ net }) => net.rx);
+  const txTrend = history.map(({ net }) => net.tx);
 
   if (!context.isAuthority) {
     return (
@@ -371,7 +371,7 @@ const Welcome = () => {
             >
               {context.languagePicker("main.welcome.kpiCards.cpu")}
             </Typography>
-            {osInfo.uptime > 0 &&
+            {cpuUsage.latest > 0 &&
               <Typography
                 level="h3"
                 fontWeight={500}

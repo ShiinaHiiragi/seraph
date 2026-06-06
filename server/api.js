@@ -863,8 +863,8 @@ const infoOperator = {
   netUsage: () => infoOperator.handleSampler(
     infoOperator.netStates,
     (start, end) => ({
-      rxBPS: (end.rx - start.rx) / infoOperator.netSamplerSpan * 1000,
-      txBPS: (end.tx - start.tx) / infoOperator.netSamplerSpan * 1000,
+      rx: (end.rx - start.rx) / infoOperator.netSamplerSpan * 1000,
+      tx: (end.tx - start.tx) / infoOperator.netSamplerSpan * 1000,
     }),
     infoOperator.netSamplerSpan
   )()
