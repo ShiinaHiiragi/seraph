@@ -126,7 +126,7 @@ const defaultSetting = {
       cpu: 120,
       net: 60
     },
-    interval: 60,
+    interval: 45,
   },
   terminal: {
     enable: false,
