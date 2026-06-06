@@ -9,6 +9,7 @@ import GlobalContext, {
   defaultOSInfo,
   maxHistoryWindow,
   vacantTolerance,
+  formatFree,
   clipInterval,
   request,
   Sparkline
@@ -93,9 +94,9 @@ const Welcome = () => {
   const [history, setHistory] = React.useState([]);
 
   const historyRef = React.useRef({ lastRequest: -1, future: [] });
+  const intervalRef = React.useRef(context.setting.welcome.interval);
   const timeoutRef = React.useRef(null);
   const cancelRef = React.useRef(false);
-  const intervalRef = React.useRef(context.setting.welcome.interval);
 
   /**
    * 流程介绍：假设 setting.welcome.interval 为 3s，代表
@@ -125,7 +126,8 @@ const Welcome = () => {
    *     - 但这意味着在约 0.3s 的 request 之间更新了两次，不如直接返回平均值，实际效果更加平滑
    */
   const waitTime = React.useCallback((interval) => {
-    const timeRemain = historyRef.current.lastRequest + interval * 1000 - Date.now();
+    const dueTime = historyRef.current.lastRequest + interval * 1000;
+    const timeRemain = Math.max(dueTime - Date.now(), 0);
     const itemRemain = historyRef.current.future.length;
     const timeAlign = timeRemain - (itemRemain - 1) * 1000;
 
@@ -145,13 +147,18 @@ const Welcome = () => {
       setHistory((history) => [...history, nextItem].slice(-maxHistoryWindow));
     }
 
-    if (historyRef.current.future.length > 0) {
+    // need instant update if page is frozen
+    if (
+      historyRef.current.future.length > 0
+        && (Date.now() - lastTime < 2 * intervalRef.current * 1000)
+    ) {
       timeoutRef.current = setTimeout(
         () => updateHistory(lastTime),
         waitTime(intervalRef.current)
       );
     } else {
-      historyRef.current.lastRequest = Date.now()
+      historyRef.current.lastRequest = Date.now();
+      historyRef.current.future.length = 0;
       request("GET/info/stat", { after: lastTime })
         .then((data) => {
           if (cancelRef.current) {
@@ -163,7 +170,7 @@ const Welcome = () => {
           if (unsynced.length > 0) {
             const timeGap = unsynced[0].time - lastTime;
             const vacancy = timeGap > vacantTolerance
-              ? Math.floor((timeGap) / 1000)
+              ? Math.min(Math.floor((timeGap) / 1000), maxHistoryWindow)
               : 0;
             setHistory((history) => {
               lastTime = history.slice(-1)[0].time;
@@ -184,7 +191,8 @@ const Welcome = () => {
           );
         });
     }
-  // waitTime never changes
+  // waitTime actually never changes
+  // setTimeout will use original updateHistory forever
   }, [waitTime]);
 
   React.useEffect(() => {
@@ -246,21 +254,17 @@ const Welcome = () => {
     .map((num) => String(num).padStart(2, "0"))
     .join(":");
 
-  const cpuLatest = history.slice(-1)?.[0]?.cpu ?? -1;
+  const cpuUsage = history.abstract((item) => item.cpu);
+  const memoryUsage = history.abstract((item) => item.mem);
+  const storageUsage = history.abstract((item) => item.disk);
+  const rxUsage = history.abstract((item) => item.net.rxBPS);
+  const txUsage = history.abstract((item) => item.net.txBPS);
+
   const cpuTrend = history.map(({ cpu }) => cpu);
-
-  const memoryFree = history.slice(-1)?.[0]?.mem ?? -1;
-  const memoryLatest = osInfo.memory > 0 && memoryFree >= 0
-      ? ((osInfo.memory - memoryFree) / osInfo.memory) * 100
-      : 0;
-
-  const storageFree = history.slice(-1)?.[0]?.disk ?? -1;
-  const storageLatest = osInfo.storage > 0 && storageFree >= 0
-      ? ((osInfo.storage - storageFree) / osInfo.storage) * 100
-      : 0;
-
-  const rxLatest = history.slice(-1)?.[0]?.net?.rx ?? -1;
-  const txLatest = history.slice(-1)?.[0]?.net?.tx ?? -1;
+  const memoryTrend = history.map(({ mem }) => mem);
+  const storageTrend = history.map(({ disk }) => disk);
+  const rxTrend = history.map(({ net }) => net.rxBPS);
+  const txTrend = history.map(({ net }) => net.txBPS);
 
   if (!context.isAuthority) {
     return (
@@ -352,7 +356,8 @@ const Welcome = () => {
             display: "grid",
             gridTemplateColumns: {
               xs: "1fr",
-              lg: "repeat(3, 1fr)"
+              lg: "repeat(2, 1fr)",
+              xl: "repeat(4, 1fr)"
             },
             gap: 1.5,
             flexShrink: 0
@@ -366,22 +371,21 @@ const Welcome = () => {
                 alignItems: "flex-start",
               }}
             >
-            <Typography
-              level="title-md"
-              color="neutral"
-              sx={{ letterSpacing: "0.02em" }}
-            >
+              <Typography
+                level="title-md"
+                color="neutral"
+                sx={{ letterSpacing: "0.02em" }}
+              >
                 {context.languagePicker("main.welcome.kpiCards.memory")}
               </Typography>
-              {osInfo.memory > 0 && memoryFree >= 0 && (
+              {memoryUsage.latest > 0 && osInfo.memory > 0 &&
                 <Typography
                   level="title-lg"
                   fontWeight={600}
                   sx={{ fontVariantNumeric: "tabular-nums", lineHeight: 1.2 }}
                 >
-                  {memoryLatest.toFixed(1)}%
-                </Typography>
-              )}
+                  {formatFree(memoryUsage.latest, osInfo.memory).toFixed(1)}%
+                </Typography>}
             </Box>
             <Box
               sx={{
@@ -393,16 +397,17 @@ const Welcome = () => {
               }}
             >
               <Box>
-                <LinearProgress
-                  determinate
-                  value={memoryLatest}
-                  color="primary"
-                />
+                {memoryUsage.latest > 0 && osInfo.memory > 0 &&
+                  <LinearProgress
+                    determinate
+                    value={formatFree(memoryUsage.latest, osInfo.memory)}
+                    color="primary"
+                  />}
               </Box>
             </Box>
-            {memoryFree >= 0 && osInfo.memory > 0 && (
+            {memoryUsage.latest > 0 && osInfo.memory > 0 && (
               <Typography level="body-xs" color="neutral">
-                {Number(memoryFree).sizeFormat(1)} / {Number(osInfo.memory).sizeFormat(1)}
+                {Number(memoryUsage.latest).sizeFormat(1)} / {Number(osInfo.memory).sizeFormat(1)}
                 {" "}
                 {context.languagePicker("main.welcome.kpiCards.available")}
               </Typography>
@@ -424,15 +429,14 @@ const Welcome = () => {
             >
                 {context.languagePicker("main.welcome.kpiCards.storage")}
               </Typography>
-              {osInfo.storage > 0 && storageFree >= 0 && (
+              {storageUsage.latest >= 0 && osInfo.storage > 0 &&
                 <Typography
                   level="title-lg"
                   fontWeight={600}
                   sx={{ fontVariantNumeric: "tabular-nums", lineHeight: 1.2 }}
                 >
-                  {storageLatest.toFixed(1)}%
-                </Typography>
-              )}
+                  {formatFree(storageUsage.latest, osInfo.storage).toFixed(1)}%
+                </Typography>}
             </Box>
             <Box
               sx={{
@@ -444,20 +448,20 @@ const Welcome = () => {
               }}
             >
               <Box>
-                <LinearProgress
-                  determinate
-                  value={storageLatest}
-                  color="primary"
-                />
+                {storageUsage.latest >= 0 && osInfo.storage > 0 &&
+                  <LinearProgress
+                    determinate
+                    value={formatFree(storageUsage.latest, osInfo.storage)}
+                    color="primary"
+                  />}
               </Box>
             </Box>
-            {storageFree >= 0 && osInfo.storage > 0 && (
+            {storageUsage.latest >= 0 && osInfo.storage > 0 &&
               <Typography level="body-xs" color="neutral">
-                {Number(storageFree).sizeFormat(1)} / {Number(osInfo.storage).sizeFormat(1)}
+                {Number(storageUsage.latest).sizeFormat(1)} / {Number(osInfo.storage).sizeFormat(1)}
                 {" "}
                 {context.languagePicker("main.welcome.kpiCards.available")}
-              </Typography>
-            )}
+              </Typography>}
           </DashCard>
 
           <DashCard variant="outlined">
@@ -468,20 +472,21 @@ const Welcome = () => {
             >
               {context.languagePicker("main.welcome.kpiCards.uptime")}
             </Typography>
-            <Typography
-              level="h3"
-              fontWeight={500}
-              sx={{
-                fontVariantNumeric: "tabular-nums",
-                lineHeight: 1,
-                flex: 1,
-                display: "flex",
-                alignItems: "center",
-                my: 1
-              }}
-            >
-              {uptime}
-            </Typography>
+            {osInfo.uptime > 0 &&
+              <Typography
+                level="h3"
+                fontWeight={500}
+                sx={{
+                  fontVariantNumeric: "tabular-nums",
+                  lineHeight: 1,
+                  flex: 1,
+                  display: "flex",
+                  alignItems: "center",
+                  my: 1
+                }}
+              >
+                {uptime}
+              </Typography>}
             {osInfo.userAtHostname?.length > 0 && (
               <Typography level="body-xs" color="neutral" sx={{ fontFamily: "var(--joy-fontFamily-code)" }}>
                 {osInfo.userAtHostname}
@@ -518,7 +523,7 @@ const Welcome = () => {
                   fontWeight={600}
                   sx={{ fontVariantNumeric: "tabular-nums", lineHeight: 1.2 }}
                 >
-                  {(cpuLatest * 100).toFixed(2)}%
+                  {(cpuUsage.latest * 100).toFixed(2)}%
                 </Typography>}
             </Box>
             <Box sx={{ mt: 0.5, mb: 1.5 }}>

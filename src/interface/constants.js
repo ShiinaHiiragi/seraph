@@ -83,6 +83,20 @@ Array.prototype.sortBy = function(key, reverse = false) {
 };
 
 // eslint-disable-next-line
+Array.prototype.abstract = function(handleKey) {
+  if (this.length === 0) {
+    return { latest: -1, min: -1, max: -1, avg: -1 };
+  }
+
+  return {
+    latest: handleKey(this.slice(-1)[0]),
+    min: this.reduce((prev, curr) => Math.min(prev, handleKey(curr)), handleKey(this[0])),
+    max: this.reduce((prev, curr) => Math.max(prev, handleKey(curr)), handleKey(this[0])),
+    avg: this.reduce((prev, curr) => prev + handleKey(curr), 0) / this.length
+  };
+};
+
+// eslint-disable-next-line
 String.prototype.timeFormat = function(formatString) {
   return new Date(this).timeFormat(formatString);
 }
@@ -650,6 +664,7 @@ export { OnMounted }
 // extra 20 items kept
 const maxHistoryWindow = 200;
 const vacantTolerance = 2000;
+const formatFree = (free, total) => (total - free) / total * 100;
 const clip = (min, value, max) => Math.min(Math.max(min, value), max);
 const clipInterval = (value) => clip(750, value, 1500);
 
@@ -692,6 +707,7 @@ const Sparkline = ({ data, height = 64 }) => {
 export {
   maxHistoryWindow,
   vacantTolerance,
+  formatFree,
   clipInterval,
   Sparkline
 }
