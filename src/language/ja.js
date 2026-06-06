@@ -202,6 +202,8 @@ const ja = {
       },
       trend: {
         cpu: "CPU ステータス",
+        memory: "メモリステータス",
+        storage: "ストレージステータス",
         min: "ミニマム：",
         max: "マックス：",
         avg: "アベレージ："

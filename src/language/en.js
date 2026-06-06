@@ -202,6 +202,8 @@ const en = {
       },
       trend: {
         cpu: "CPU Status",
+        memory: "Memory Status",
+        storage: "Storage Status",
         min: "Min: ",
         max: "Max: ",
         avg: "Avg: "

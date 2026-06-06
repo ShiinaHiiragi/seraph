@@ -261,8 +261,8 @@ const Welcome = () => {
   // const txUsage = history.abstract((item) => item.net.txBPS);
 
   const cpuTrend = history.map(({ cpu }) => cpu);
-  // const memoryTrend = history.map(({ mem }) => mem);
-  // const storageTrend = history.map(({ disk }) => disk);
+  const memoryTrend = history.map(({ mem }) => mem);
+  const storageTrend = history.map(({ disk }) => disk);
   // const rxTrend = history.map(({ net }) => net.rxBPS);
   // const txTrend = history.map(({ net }) => net.txBPS);
 
@@ -578,6 +578,107 @@ const Welcome = () => {
                 &ensp;
                 {context.languagePicker("main.welcome.trend.max")}
                 {(cpuUsage.max * 100).toFixed(2)}%
+              </Typography>}
+          </DashCard>
+        </Box>
+
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: {
+              xs: "1fr",
+              lg: "repeat(2, 1fr)"
+            },
+            gap: 1.5,
+          }}
+        >
+          <DashCard variant="outlined">
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-start",
+              }}
+            >
+              <Typography
+                level="title-md"
+                color="neutral"
+                sx={{ letterSpacing: "0.02em" }}
+              >
+                {context.languagePicker("main.welcome.trend.memory")}
+              </Typography>
+              {history.length > 0 && osInfo.memory > 0 &&
+                <Typography
+                  level="title-lg"
+                  fontWeight={600}
+                  sx={{ fontVariantNumeric: "tabular-nums", lineHeight: 1.2 }}
+                >
+                  {formatFree(memoryUsage.latest, osInfo.memory).toFixed(2)}%
+                </Typography>}
+            </Box>
+            <Box sx={{ mt: 0.5, mb: 1.5 }}>
+              <Sparkline data={memoryTrend} height={80} />
+            </Box>
+            {history.length > 0 &&
+              <Typography
+                level="body-xs"
+                color="neutral"
+                align="right"
+                sx={{ fontVariantNumeric: "tabular-nums" }}
+              >
+                {context.languagePicker("main.welcome.trend.min")}
+                {formatFree(memoryUsage.min, osInfo.memory).toFixed(2)}%
+                &ensp;
+                {context.languagePicker("main.welcome.trend.avg")}
+                {formatFree(memoryUsage.avg, osInfo.memory).toFixed(2)}%
+                &ensp;
+                {context.languagePicker("main.welcome.trend.max")}
+                {formatFree(memoryUsage.max, osInfo.memory).toFixed(2)}%
+              </Typography>}
+          </DashCard>
+
+          <DashCard variant="outlined">
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-start",
+              }}
+            >
+              <Typography
+                level="title-md"
+                color="neutral"
+                sx={{ letterSpacing: "0.02em" }}
+              >
+                {context.languagePicker("main.welcome.trend.storage")}
+              </Typography>
+              {history.length > 0 && osInfo.storage > 0 &&
+                <Typography
+                  level="title-lg"
+                  fontWeight={600}
+                  sx={{ fontVariantNumeric: "tabular-nums", lineHeight: 1.2 }}
+                >
+                  {formatFree(storageUsage.latest, osInfo.storage).toFixed(2)}%
+                </Typography>}
+            </Box>
+            <Box sx={{ mt: 0.5, mb: 1.5 }}>
+              <Sparkline data={storageTrend} height={80} />
+            </Box>
+            {history.length > 0 &&
+              <Typography
+                level="body-xs"
+                color="neutral"
+                align="right"
+                sx={{ fontVariantNumeric: "tabular-nums" }}
+              >
+                {context.languagePicker("main.welcome.trend.min")}
+                {formatFree(storageUsage.min, osInfo.storage).toFixed(2)}%
+                &ensp;
+                {context.languagePicker("main.welcome.trend.avg")}
+                {formatFree(storageUsage.avg, osInfo.storage).toFixed(2)}%
+                &ensp;
+                {context.languagePicker("main.welcome.trend.max")}
+                {formatFree(storageUsage.max, osInfo.storage).toFixed(2)}%
               </Typography>}
           </DashCard>
         </Box>

@@ -202,6 +202,8 @@ const zhHans = {
       },
       trend: {
         cpu: "CPU 统计",
+        memory: "内存统计",
+        storage: "外存统计",
         min: "最小值：",
         max: "最大值：",
         avg: "平均值："
