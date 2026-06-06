@@ -714,7 +714,7 @@ const Welcome = () => {
                   fontWeight={600}
                   sx={{ fontVariantNumeric: "tabular-nums", lineHeight: 1.2 }}
                 >
-                  {rxUsage.latest.sizeFormat()}
+                  {rxUsage.latest.sizeFormat()}/s
                 </Typography>}
             </Box>
             <Box sx={{ mt: 0.5, mb: 1.5 }}>
@@ -728,13 +728,13 @@ const Welcome = () => {
                 sx={{ fontVariantNumeric: "tabular-nums" }}
               >
                 {context.languagePicker("main.welcome.trend.min")}
-                {rxUsage.min.sizeFormat()}
+                {rxUsage.min.sizeFormat()}/s
                 &ensp;
                 {context.languagePicker("main.welcome.trend.avg")}
-                {rxUsage.avg.sizeFormat()}
+                {rxUsage.avg.sizeFormat()}/s
                 &ensp;
                 {context.languagePicker("main.welcome.trend.max")}
-                {rxUsage.max.sizeFormat()}
+                {rxUsage.max.sizeFormat()}/s
               </Typography>}
           </DashCard>
 
@@ -759,7 +759,7 @@ const Welcome = () => {
                   fontWeight={600}
                   sx={{ fontVariantNumeric: "tabular-nums", lineHeight: 1.2 }}
                 >
-                  {txUsage.latest.sizeFormat()}
+                  {txUsage.latest.sizeFormat()}/s
                 </Typography>}
             </Box>
             <Box sx={{ mt: 0.5, mb: 1.5 }}>
@@ -773,13 +773,13 @@ const Welcome = () => {
                 sx={{ fontVariantNumeric: "tabular-nums" }}
               >
                 {context.languagePicker("main.welcome.trend.min")}
-                {txUsage.min.sizeFormat()}
+                {txUsage.min.sizeFormat()}/s
                 &ensp;
                 {context.languagePicker("main.welcome.trend.avg")}
-                {txUsage.avg.sizeFormat()}
+                {txUsage.avg.sizeFormat()}/s
                 &ensp;
                 {context.languagePicker("main.welcome.trend.max")}
-                {txUsage.max.sizeFormat()}
+                {txUsage.max.sizeFormat()}/s
               </Typography>}
           </DashCard>
         </Box>

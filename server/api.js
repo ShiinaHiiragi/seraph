@@ -7,6 +7,7 @@ const child = require('child_process');
 const assert = require('assert');
 const crypto = require('crypto');
 const checkDiskSpace = require('check-disk-space').default
+const si = require('systeminformation')
 
 String.prototype.versionGE = function (min) {
   const left = this.split('.').map(Number);
@@ -764,7 +765,6 @@ exports.taskOperator = taskOperator;
 const infoOperator = {
   maxWindow: 200,
   recordInterval: 1000,
-  netSamplerSpan: 200,
 
   history: [],
   push: ([cpu, mem, disk, net]) => {
@@ -844,30 +844,18 @@ const infoOperator = {
   diskUsage: () => checkDiskSpace(dataPath.dataDirPath),
 
   physicalInterface: /^(eth|ens|enp|em|wlan|wlp)/,
-  netStates: process.platform === 'linux'
-    ? () => {
-      const lines = fs.readFileSync('/proc/net/dev', 'utf8').split('\n');
-      let rx = 0, tx = 0;
-      for (const line of lines.slice(2)) {
-        const trimmed = line.trim();
-        const [iface, data] = trimmed.split(':');
-        if (trimmed && infoOperator.physicalInterface.test(iface.trim())) {
-          const fields = data.trim().split(/\s+/);
-          rx += parseInt(fields[0]);
-          tx += parseInt(fields[8]);
-        }
-      }
-      return { rx: rx, tx: tx };
-    }
-    : () => ({ rx: 0, tx: 0 }),
-  netUsage: () => infoOperator.handleSampler(
-    infoOperator.netStates,
-    (start, end) => ({
-      rx: (end.rx - start.rx) / infoOperator.netSamplerSpan * 1000,
-      tx: (end.tx - start.tx) / infoOperator.netSamplerSpan * 1000,
-    }),
-    infoOperator.netSamplerSpan
-  )()
+  netUsage: () => si.networkStats()
+    .then((stats) => {
+      const filtered = stats.filter((iface) =>
+        process.platform === 'linux'
+          ? infoOperator.physicalInterface.test(iface.iface)
+          : iface.operstate === 'up' && !iface.iface.startsWith('vEthernet')
+      );
+      return {
+        rx: filtered.reduce((sum, i) => sum + (i.rx_sec ?? 0), 0),
+        tx: filtered.reduce((sum, i) => sum + (i.tx_sec ?? 0), 0),
+      };
+    })
 };
 
 setInterval(() => {
