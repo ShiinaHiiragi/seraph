@@ -201,7 +201,10 @@ const zhHans = {
         uptime: "正常运行时间"
       },
       trend: {
-        cpu: "CPU 统计"
+        cpu: "CPU 统计",
+        min: "最小值：",
+        max: "最大值：",
+        avg: "平均值："
       },
       info: {
         systemInfo: "系统信息",

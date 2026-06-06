@@ -363,7 +363,7 @@ const Welcome = () => {
             flexShrink: 0
           }}
         >
-          <DashCard variant="outlined">
+          <DashCard variant="outlined" sx={{ order: { lg: 1 } }}>
             <Box
               sx={{
                 display: "flex",
@@ -416,7 +416,7 @@ const Welcome = () => {
               </Typography>}
           </DashCard>
 
-          <DashCard variant="outlined">
+          <DashCard variant="outlined" sx={{ order: { lg: 3, xl: 2 } }}>
             <Box
               sx={{
                 display: "flex",
@@ -467,7 +467,7 @@ const Welcome = () => {
             )}
           </DashCard>
 
-          <DashCard variant="outlined">
+          <DashCard variant="outlined" sx={{ order: { lg: 4, xl: 3 } }}>
             <Box
               sx={{
                 display: "flex",
@@ -517,7 +517,7 @@ const Welcome = () => {
               </Typography>}
           </DashCard>
 
-          <DashCard variant="outlined">
+          <DashCard variant="outlined" sx={{ order: { lg: 2, xl: 4 } }}>
             <Typography
               level="title-md"
               color="neutral"
@@ -589,11 +589,14 @@ const Welcome = () => {
                 align="right"
                 sx={{ fontVariantNumeric: "tabular-nums" }}
               >
-                Min: {(cpuUsage.min * 100).toFixed(2)}%
+                {context.languagePicker("main.welcome.trend.min")}
+                {(cpuUsage.min * 100).toFixed(2)}%
                 &ensp;
-                Avg: {(cpuUsage.avg * 100).toFixed(2)}%
+                {context.languagePicker("main.welcome.trend.avg")}
+                {(cpuUsage.avg * 100).toFixed(2)}%
                 &ensp;
-                Max: {(cpuUsage.max * 100).toFixed(2)}%
+                {context.languagePicker("main.welcome.trend.max")}
+                {(cpuUsage.max * 100).toFixed(2)}%
               </Typography>}
           </DashCard>
         </Box>

@@ -201,7 +201,10 @@ const en = {
         uptime: "Uptime"
       },
       trend: {
-        cpu: "CPU Status"
+        cpu: "CPU Status",
+        min: "Min: ",
+        max: "Max: ",
+        avg: "Avg: "
       },
       info: {
         systemInfo: "System Information",

@@ -201,7 +201,10 @@ const ja = {
         uptime: "アップタイム"
       },
       trend: {
-        cpu: "CPU ステータス"
+        cpu: "CPU ステータス",
+        min: "ミニマム：",
+        max: "マックス：",
+        avg: "アベレージ："
       },
       info: {
         systemInfo: "システム情報",
