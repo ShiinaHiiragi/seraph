@@ -288,7 +288,7 @@ const defaultOSInfo = {
   manufacturer: "",
   model: "",
   serial: "",
-  virtual: null,
+  virtual: undefined,
   biosVersion: "",
   platform: "",
   kernel: "",

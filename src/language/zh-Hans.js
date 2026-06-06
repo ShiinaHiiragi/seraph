@@ -214,9 +214,16 @@ const zhHans = {
       },
       info: {
         systemInfo: "系统信息",
-        platform: "内核与平台",
-        kernelVersion: "操作系统版本",
+        manufacturer: "生产商",
+        model: "设备型号",
+        serial: "序列号",
+        virtual: "虚拟机",
+        virtualNull: "N/A",
+        biosVersion: "Bios 版本",
+        platform: "操作系统",
+        kernel: "内核版本",
         cpuModel: "CPU 型号",
+        cpuCache: "缓存",
         network: "网络接口",
         process: "进程"
       }

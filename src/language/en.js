@@ -214,9 +214,16 @@ const en = {
       },
       info: {
         systemInfo: "System Information",
-        platform: "Kernel and Platform",
-        kernelVersion: "OS Version",
+        manufacturer: "Manufacturer",
+        model: "Device Model",
+        serial: "Serial",
+        virtual: "Virtual Machine",
+        virtualNull: "N/A",
+        biosVersion: "BIOS Version",
+        platform: "Operating System",
+        kernel: "Kernel Version",
         cpuModel: "CPU Model",
+        cpuCache: "Cache",
         network: "Network Interfaces",
         process: "Processes"
       }

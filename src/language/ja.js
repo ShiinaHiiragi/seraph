@@ -214,9 +214,16 @@ const ja = {
       },
       info: {
         systemInfo: "システム情報",
-        platform: "カーネルとプラットフォーム",
-        kernelVersion: "オーエスのバージョン",
+        manufacturer: "メーカー",
+        model: "デバイス モデル",
+        serial: "シリアル",
+        virtual: "バーチャル マシン",
+        virtualNull: "N/A",
+        biosVersion: "BIOS バージョン",
+        platform: "オペレーティングシステム",
+        kernel: "カーネルバージョン",
         cpuModel: "CPU モデル",
+        cpuCache: "キャッシュ",
         network: "ネットワークインタフェース",
         process: "プロセス"
       }

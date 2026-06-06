@@ -60,7 +60,7 @@ const InfoPair = ({ label, value, keyWidth, sxValue }) => (
       level="body-xs"
       color="neutral"
       sx={{
-        width: keyWidth ?? "35%",
+        width: keyWidth ?? "32%",
         flexShrink: 0,
         "@container (max-width: 420px)": {
           width: "100%"
@@ -75,7 +75,6 @@ const InfoPair = ({ label, value, keyWidth, sxValue }) => (
   </Box>
 );
 
-// TODO: add network
 // TODO: add process list
 // TODO: add related configs
 const Welcome = () => {
@@ -889,6 +888,40 @@ const Welcome = () => {
               >
                 {context.languagePicker("main.welcome.info.systemInfo")}
               </Typography>
+              {osInfo.manufacturer.length > 0 && (
+                <InfoPair
+                  label={context.languagePicker("main.welcome.info.manufacturer")}
+                  value={String(osInfo.manufacturer).upperCaseFirst()}
+                />
+              )}
+              {osInfo.model.length > 0 && (
+                <InfoPair
+                  label={context.languagePicker("main.welcome.info.model")}
+                  value={String(osInfo.model).upperCaseFirst()}
+                />
+              )}
+              {osInfo.serial.length > 0 && (
+                <InfoPair
+                  label={context.languagePicker("main.welcome.info.serial")}
+                  value={String(osInfo.serial).upperCaseFirst()}
+                />
+              )}
+
+              {osInfo.virtual !== undefined && (
+                <InfoPair
+                  label={context.languagePicker("main.welcome.info.virtual")}
+                  value={osInfo.virtual === null
+                    ? context.languagePicker("main.welcome.info.virtualNull")
+                    : String(osInfo.virtual).upperCaseFirst()
+                  }
+                />
+              )}
+              {osInfo.biosVersion.length > 0 && (
+                <InfoPair
+                  label={context.languagePicker("main.welcome.info.biosVersion")}
+                  value={String(osInfo.biosVersion).upperCaseFirst()}
+                />
+              )}
               {osInfo.platform.length > 0 && (
                 <InfoPair
                   label={context.languagePicker("main.welcome.info.platform")}
@@ -905,6 +938,12 @@ const Welcome = () => {
                 <InfoPair
                   label={context.languagePicker("main.welcome.info.cpuModel")}
                   value={osInfo.cpu.model}
+                />
+              )}
+              {Object.values(osInfo.cpu.cache).every((item) => item > 0) && (
+                <InfoPair
+                  label={context.languagePicker("main.welcome.info.cpuCache")}
+                  value={`L1d ${osInfo.cpu.cache.l1d.sizeFormat()} / L1i ${osInfo.cpu.cache.l1i.sizeFormat()} / L2 ${osInfo.cpu.cache.l2.sizeFormat()} / L3${osInfo.cpu.cache.l3.sizeFormat()}`}
                 />
               )}
             </DashCard>
