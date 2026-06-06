@@ -193,10 +193,10 @@ const en = {
   main: {
     welcome: {
       kpiCards: {
-        cpu: "CPU Usage",
+        cpu: "CPU",
         cores: "Cores",
-        memory: "Memory Usage",
-        storage: "Storage Usage",
+        memory: "Memory",
+        storage: "Storage",
         available: "available",
         uptime: "Uptime"
       },

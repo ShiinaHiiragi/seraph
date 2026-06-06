@@ -363,48 +363,29 @@ const Welcome = () => {
             flexShrink: 0
           }}
         >
-          <DashCard variant="outlined" sx={{ order: { lg: 1 } }}>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "flex-start",
-              }}
+          <DashCard variant="outlined" sx={{ order: { lg: 1, xl: 1 } }}>
+            <Typography
+              level="title-md"
+              color="neutral"
+              sx={{ letterSpacing: "0.02em" }}
             >
+              {context.languagePicker("main.welcome.kpiCards.cpu")}
+            </Typography>
+            {osInfo.uptime > 0 &&
               <Typography
-                level="title-md"
-                color="neutral"
-                sx={{ letterSpacing: "0.02em" }}
+                level="h3"
+                fontWeight={500}
+                sx={{
+                  fontVariantNumeric: "tabular-nums",
+                  lineHeight: 1,
+                  flex: 1,
+                  display: "flex",
+                  alignItems: "center",
+                  my: 1
+                }}
               >
-                {context.languagePicker("main.welcome.kpiCards.cpu")}
-              </Typography>
-              {history.length > 0 &&
-                <Typography
-                  level="title-lg"
-                  fontWeight={600}
-                  sx={{ fontVariantNumeric: "tabular-nums", lineHeight: 1.2 }}
-                >
-                  {(cpuUsage.latest * 100).toFixed(1)}%
-                </Typography>}
-            </Box>
-            <Box
-              sx={{
-                display: "flex",
-                flexGrow: 1,
-                flexDirection: "column",
-                justifyContent: "flex-end",
-                my: 1,
-              }}
-            >
-              <Box>
-                {history.length > 0 &&
-                  <LinearProgress
-                    determinate
-                    value={cpuUsage.latest * 100}
-                    color="primary"
-                  />}
-              </Box>
-            </Box>
+                {(cpuUsage.latest * 100).toFixed(1)}%
+              </Typography>}
             {osInfo.cpus.cores > 0 && osInfo.cpus.speed > 0 &&
               <Typography level="body-xs" color="neutral">
                 {osInfo.cpus.cores}
