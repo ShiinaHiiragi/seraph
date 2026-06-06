@@ -257,14 +257,14 @@ const Welcome = () => {
   const cpuUsage = history.abstract((item) => item.cpu);
   const memoryUsage = history.abstract((item) => item.mem);
   const storageUsage = history.abstract((item) => item.disk);
-  const rxUsage = history.abstract((item) => item.net.rxBPS);
-  const txUsage = history.abstract((item) => item.net.txBPS);
+  // const rxUsage = history.abstract((item) => item.net.rxBPS);
+  // const txUsage = history.abstract((item) => item.net.txBPS);
 
   const cpuTrend = history.map(({ cpu }) => cpu);
-  const memoryTrend = history.map(({ mem }) => mem);
-  const storageTrend = history.map(({ disk }) => disk);
-  const rxTrend = history.map(({ net }) => net.rxBPS);
-  const txTrend = history.map(({ net }) => net.txBPS);
+  // const memoryTrend = history.map(({ mem }) => mem);
+  // const storageTrend = history.map(({ disk }) => disk);
+  // const rxTrend = history.map(({ net }) => net.rxBPS);
+  // const txTrend = history.map(({ net }) => net.txBPS);
 
   if (!context.isAuthority) {
     return (
@@ -376,9 +376,62 @@ const Welcome = () => {
                 color="neutral"
                 sx={{ letterSpacing: "0.02em" }}
               >
+                {context.languagePicker("main.welcome.kpiCards.cpu")}
+              </Typography>
+              {history.length > 0 &&
+                <Typography
+                  level="title-lg"
+                  fontWeight={600}
+                  sx={{ fontVariantNumeric: "tabular-nums", lineHeight: 1.2 }}
+                >
+                  {(cpuUsage.latest * 100).toFixed(1)}%
+                </Typography>}
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                flexGrow: 1,
+                flexDirection: "column",
+                justifyContent: "flex-end",
+                my: 1,
+              }}
+            >
+              <Box>
+                {history.length > 0 &&
+                  <LinearProgress
+                    determinate
+                    value={cpuUsage.latest * 100}
+                    color="primary"
+                  />}
+              </Box>
+            </Box>
+            {osInfo.cpus.cores > 0 && osInfo.cpus.speed > 0 &&
+              <Typography level="body-xs" color="neutral">
+                {osInfo.cpus.cores}
+                {" "}
+                {context.languagePicker("main.welcome.kpiCards.cores")}
+                {" / "}
+                {osInfo.cpus.speed}
+                {" MHz"}
+              </Typography>}
+          </DashCard>
+
+          <DashCard variant="outlined">
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-start",
+              }}
+            >
+              <Typography
+                level="title-md"
+                color="neutral"
+                sx={{ letterSpacing: "0.02em" }}
+              >
                 {context.languagePicker("main.welcome.kpiCards.memory")}
               </Typography>
-              {memoryUsage.latest > 0 && osInfo.memory > 0 &&
+              {history.length > 0 && osInfo.memory > 0 &&
                 <Typography
                   level="title-lg"
                   fontWeight={600}
@@ -397,7 +450,7 @@ const Welcome = () => {
               }}
             >
               <Box>
-                {memoryUsage.latest > 0 && osInfo.memory > 0 &&
+                {history.length > 0 && osInfo.memory > 0 &&
                   <LinearProgress
                     determinate
                     value={formatFree(memoryUsage.latest, osInfo.memory)}
@@ -405,7 +458,7 @@ const Welcome = () => {
                   />}
               </Box>
             </Box>
-            {memoryUsage.latest > 0 && osInfo.memory > 0 && (
+            {history.length > 0 && osInfo.memory > 0 && (
               <Typography level="body-xs" color="neutral">
                 {Number(memoryUsage.latest).sizeFormat(1)} / {Number(osInfo.memory).sizeFormat(1)}
                 {" "}
@@ -429,7 +482,7 @@ const Welcome = () => {
             >
                 {context.languagePicker("main.welcome.kpiCards.storage")}
               </Typography>
-              {storageUsage.latest >= 0 && osInfo.storage > 0 &&
+              {history.length > 0 && osInfo.storage > 0 &&
                 <Typography
                   level="title-lg"
                   fontWeight={600}
@@ -448,7 +501,7 @@ const Welcome = () => {
               }}
             >
               <Box>
-                {storageUsage.latest >= 0 && osInfo.storage > 0 &&
+                {history.length > 0 && osInfo.storage > 0 &&
                   <LinearProgress
                     determinate
                     value={formatFree(storageUsage.latest, osInfo.storage)}
@@ -456,7 +509,7 @@ const Welcome = () => {
                   />}
               </Box>
             </Box>
-            {storageUsage.latest >= 0 && osInfo.storage > 0 &&
+            {history.length > 0 && osInfo.storage > 0 &&
               <Typography level="body-xs" color="neutral">
                 {Number(storageUsage.latest).sizeFormat(1)} / {Number(osInfo.storage).sizeFormat(1)}
                 {" "}
@@ -498,7 +551,7 @@ const Welcome = () => {
         <Box
           sx={{
             display: "grid",
-            gridTemplateColumns: { xs: "1fr", md: "1fr" },
+            gridTemplateColumns: { xs: "1fr" },
             gap: 1.5,
           }}
         >
@@ -529,14 +582,18 @@ const Welcome = () => {
             <Box sx={{ mt: 0.5, mb: 1.5 }}>
               <Sparkline data={cpuTrend} height={80} />
             </Box>
-            {osInfo.cpus.cores > 0 && osInfo.cpus.speed > 0 &&
-              <Typography level="body-xs" color="neutral">
-                {osInfo.cpus.cores}
-                {" "}
-                {context.languagePicker("main.welcome.trend.cores")}
-                &emsp;
-                {osInfo.cpus.speed}
-                {" MHz"}
+            {history.length > 0 &&
+              <Typography
+                level="body-xs"
+                color="neutral"
+                align="right"
+                sx={{ fontVariantNumeric: "tabular-nums" }}
+              >
+                Min: {(cpuUsage.min * 100).toFixed(2)}%
+                &ensp;
+                Avg: {(cpuUsage.avg * 100).toFixed(2)}%
+                &ensp;
+                Max: {(cpuUsage.max * 100).toFixed(2)}%
               </Typography>}
           </DashCard>
         </Box>

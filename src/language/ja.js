@@ -193,14 +193,15 @@ const ja = {
   main: {
     welcome: {
       kpiCards: {
+        cpu: "CPU",
+        cores: "コア",
         memory: "メモリ",
         storage: "ストレージ",
         available: "空き",
         uptime: "アップタイム"
       },
       trend: {
-        cpu: "CPU",
-        cores: "コア"
+        cpu: "CPU ステータス"
       },
       info: {
         systemInfo: "システム情報",

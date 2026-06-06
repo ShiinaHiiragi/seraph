@@ -193,14 +193,15 @@ const zhHans = {
   main: {
     welcome: {
       kpiCards: {
+        cpu: "CPU 占用",
+        cores: "核",
         memory: "内存占用",
         storage: "外存占用",
         available: "可用",
         uptime: "正常运行时间"
       },
       trend: {
-        cpu: "CPU",
-        cores: "核"
+        cpu: "CPU 统计"
       },
       info: {
         systemInfo: "系统信息",
