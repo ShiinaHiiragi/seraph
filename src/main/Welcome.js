@@ -2,6 +2,7 @@ import React from "react";
 import { useTime, useStopwatch } from "react-timer-hook";
 import { styled } from "@mui/joy/styles";
 import Box from "@mui/joy/Box";
+import Table from "@mui/joy/Table";
 import Sheet from "@mui/joy/Sheet";
 import Typography from "@mui/joy/Typography";
 import LinearProgress from "@mui/joy/LinearProgress";
@@ -74,6 +75,18 @@ const InfoPair = ({ label, value, keyWidth, sxValue }) => (
     </Typography>
   </Box>
 );
+
+function createData(name,calories,fat,carbs,protein) {
+  return { name, calories, fat, carbs, protein };
+}
+
+const rows = [
+  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
+  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
+  createData('Eclair', 262, 16.0, 24, 6.0),
+  createData('Cupcake', 305, 3.7, 67, 4.3),
+  createData('Gingerbread', 356, 16.0, 49, 3.9),
+];
 
 // TODO: add process list
 // TODO: add related configs
@@ -573,14 +586,18 @@ const Welcome = () => {
                 align="right"
                 sx={{ fontVariantNumeric: "tabular-nums" }}
               >
-                {context.languagePicker("main.welcome.trend.min")}
-                {(cpuUsage.min * 100).toFixed(2)}%
-                &ensp;
+                <Box component="span" sx={{ "@container (max-width: 260px)": { display: "none" } }}>
+                  {context.languagePicker("main.welcome.trend.min")}
+                  {(cpuUsage.min * 100).toFixed(2)}%
+                  &ensp;
+                </Box>
                 {context.languagePicker("main.welcome.trend.avg")}
                 {(cpuUsage.avg * 100).toFixed(2)}%
-                &ensp;
-                {context.languagePicker("main.welcome.trend.max")}
-                {(cpuUsage.max * 100).toFixed(2)}%
+                <Box component="span" sx={{ "@container (max-width: 260px)": { display: "none" } }}>
+                  &ensp;
+                  {context.languagePicker("main.welcome.trend.max")}
+                  {(cpuUsage.max * 100).toFixed(2)}%
+                </Box>
               </Typography>}
           </DashCard>
         </Box>
@@ -630,14 +647,18 @@ const Welcome = () => {
                 align="right"
                 sx={{ fontVariantNumeric: "tabular-nums" }}
               >
-                {context.languagePicker("main.welcome.trend.min")}
-                {formatFree(memoryUsage.min, osInfo.memory).toFixed(2)}%
-                &ensp;
+                <Box component="span" sx={{ "@container (max-width: 260px)": { display: "none" } }}>
+                  {context.languagePicker("main.welcome.trend.min")}
+                  {formatFree(memoryUsage.min, osInfo.memory).toFixed(2)}%
+                  &ensp;
+                </Box>
                 {context.languagePicker("main.welcome.trend.avg")}
                 {formatFree(memoryUsage.avg, osInfo.memory).toFixed(2)}%
-                &ensp;
-                {context.languagePicker("main.welcome.trend.max")}
-                {formatFree(memoryUsage.max, osInfo.memory).toFixed(2)}%
+                <Box component="span" sx={{ "@container (max-width: 260px)": { display: "none" } }}>
+                  &ensp;
+                  {context.languagePicker("main.welcome.trend.max")}
+                  {formatFree(memoryUsage.max, osInfo.memory).toFixed(2)}%
+                </Box>
               </Typography>}
           </DashCard>
 
@@ -675,14 +696,18 @@ const Welcome = () => {
                 align="right"
                 sx={{ fontVariantNumeric: "tabular-nums" }}
               >
-                {context.languagePicker("main.welcome.trend.min")}
-                {formatFree(storageUsage.min, osInfo.storage).toFixed(2)}%
-                &ensp;
+                <Box component="span" sx={{ "@container (max-width: 260px)": { display: "none" } }}>
+                  {context.languagePicker("main.welcome.trend.min")}
+                  {formatFree(storageUsage.min, osInfo.storage).toFixed(2)}%
+                  &ensp;
+                </Box>
                 {context.languagePicker("main.welcome.trend.avg")}
                 {formatFree(storageUsage.avg, osInfo.storage).toFixed(2)}%
-                &ensp;
-                {context.languagePicker("main.welcome.trend.max")}
-                {formatFree(storageUsage.max, osInfo.storage).toFixed(2)}%
+                <Box component="span" sx={{ "@container (max-width: 260px)": { display: "none" } }}>
+                  &ensp;
+                  {context.languagePicker("main.welcome.trend.max")}
+                  {formatFree(storageUsage.max, osInfo.storage).toFixed(2)}%
+                </Box>
               </Typography>}
           </DashCard>
 
@@ -711,7 +736,7 @@ const Welcome = () => {
                 </Typography>}
             </Box>
             <Box sx={{ mt: 0.5, mb: 1.5 }}>
-              <Sparkline data={storageTrend} height={80} />
+              <Sparkline data={rxDiskTrend} height={80} />
             </Box>
             {history.length > 0 &&
               <Typography
@@ -720,14 +745,18 @@ const Welcome = () => {
                 align="right"
                 sx={{ fontVariantNumeric: "tabular-nums" }}
               >
-                {context.languagePicker("main.welcome.trend.min")}
-                {rxDiskUsage.min.sizeFormat()}/s
-                &ensp;
+                <Box component="span" sx={{ "@container (max-width: 290px)": { display: "none" } }}>
+                  {context.languagePicker("main.welcome.trend.min")}
+                  {rxDiskUsage.min.sizeFormat()}/s
+                  &ensp;
+                </Box>
                 {context.languagePicker("main.welcome.trend.avg")}
                 {rxDiskUsage.avg.sizeFormat()}/s
-                &ensp;
-                {context.languagePicker("main.welcome.trend.max")}
-                {rxDiskUsage.max.sizeFormat()}/s
+                <Box component="span" sx={{ "@container (max-width: 290px)": { display: "none" } }}>
+                  &ensp;
+                  {context.languagePicker("main.welcome.trend.max")}
+                  {rxDiskUsage.max.sizeFormat()}/s
+                </Box>
               </Typography>}
           </DashCard>
 
@@ -756,7 +785,7 @@ const Welcome = () => {
                 </Typography>}
             </Box>
             <Box sx={{ mt: 0.5, mb: 1.5 }}>
-              <Sparkline data={storageTrend} height={80} />
+              <Sparkline data={wxDiskTrend} height={80} />
             </Box>
             {history.length > 0 &&
               <Typography
@@ -765,14 +794,18 @@ const Welcome = () => {
                 align="right"
                 sx={{ fontVariantNumeric: "tabular-nums" }}
               >
-                {context.languagePicker("main.welcome.trend.min")}
-                {wxDiskUsage.min.sizeFormat()}/s
-                &ensp;
+                <Box component="span" sx={{ "@container (max-width: 290px)": { display: "none" } }}>
+                  {context.languagePicker("main.welcome.trend.min")}
+                  {wxDiskUsage.min.sizeFormat()}/s
+                  &ensp;
+                </Box>
                 {context.languagePicker("main.welcome.trend.avg")}
                 {wxDiskUsage.avg.sizeFormat()}/s
-                &ensp;
-                {context.languagePicker("main.welcome.trend.max")}
-                {wxDiskUsage.max.sizeFormat()}/s
+                <Box component="span" sx={{ "@container (max-width: 290px)": { display: "none" } }}>
+                  &ensp;
+                  {context.languagePicker("main.welcome.trend.max")}
+                  {wxDiskUsage.max.sizeFormat()}/s
+                </Box>
               </Typography>}
           </DashCard>
         </Box>
@@ -821,14 +854,18 @@ const Welcome = () => {
                 align="right"
                 sx={{ fontVariantNumeric: "tabular-nums" }}
               >
-                {context.languagePicker("main.welcome.trend.min")}
-                {rxNetUsage.min.sizeFormat()}/s
-                &ensp;
+                <Box component="span" sx={{ "@container (max-width: 290px)": { display: "none" } }}>
+                  {context.languagePicker("main.welcome.trend.min")}
+                  {rxNetUsage.min.sizeFormat()}/s
+                  &ensp;
+                </Box>
                 {context.languagePicker("main.welcome.trend.avg")}
                 {rxNetUsage.avg.sizeFormat()}/s
-                &ensp;
-                {context.languagePicker("main.welcome.trend.max")}
-                {rxNetUsage.max.sizeFormat()}/s
+                <Box component="span" sx={{ "@container (max-width: 290px)": { display: "none" } }}>
+                  &ensp;
+                  {context.languagePicker("main.welcome.trend.max")}
+                  {rxNetUsage.max.sizeFormat()}/s
+                </Box>
               </Typography>}
           </DashCard>
 
@@ -866,14 +903,18 @@ const Welcome = () => {
                 align="right"
                 sx={{ fontVariantNumeric: "tabular-nums" }}
               >
-                {context.languagePicker("main.welcome.trend.min")}
-                {txNetUsage.min.sizeFormat()}/s
-                &ensp;
+                <Box component="span" sx={{ "@container (max-width: 290px)": { display: "none" } }}>
+                  {context.languagePicker("main.welcome.trend.min")}
+                  {txNetUsage.min.sizeFormat()}/s
+                  &ensp;
+                </Box>
                 {context.languagePicker("main.welcome.trend.avg")}
                 {txNetUsage.avg.sizeFormat()}/s
-                &ensp;
-                {context.languagePicker("main.welcome.trend.max")}
-                {txNetUsage.max.sizeFormat()}/s
+                <Box component="span" sx={{ "@container (max-width: 290px)": { display: "none" } }}>
+                  &ensp;
+                  {context.languagePicker("main.welcome.trend.max")}
+                  {txNetUsage.max.sizeFormat()}/s
+                </Box>
               </Typography>}
           </DashCard>
         </Box>
@@ -978,7 +1019,28 @@ const Welcome = () => {
             >
               {context.languagePicker("main.welcome.info.process")}
             </Typography>
-            PID LIST HERE
+            <Table sx={{ '& thead th:nth-child(1)': { width: '40%' } }}>
+              <thead>
+                <tr>
+                  <th>Column width (40%)</th>
+                  <th>Calories</th>
+                  <th>Fat&nbsp;(g)</th>
+                  <th>Carbs&nbsp;(g)</th>
+                  <th>Protein&nbsp;(g)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map((row) => (
+                  <tr key={row.name}>
+                    <td>{row.name}</td>
+                    <td>{row.calories}</td>
+                    <td>{row.fat}</td>
+                    <td>{row.carbs}</td>
+                    <td>{row.protein}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
           </DashCard>
         </Box>
       </Box>
