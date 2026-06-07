@@ -38,14 +38,13 @@ router.get('/stat', (req, res, next) => {
   }
 
   const time = Number(req.query.after);
-  api.infoOperator.diskUsage()
-    .then(({ free }) => {
+  api.infoOperator.processList('cpu', 10)
+    .then((ps) => {
       req.status.addExecStatus();
       res.send({
         ...req.status.generateReport(),
-        memory: api.infoOperator.memoryUsage(),
-        storage: free,
-        history: api.infoOperator.laterThan(time)
+        history: api.infoOperator.laterThan(time),
+        process: ps
       });
       return;
     });

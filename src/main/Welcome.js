@@ -17,7 +17,7 @@ import GlobalContext, {
 } from "../interface/constants";
 import RouteField from "../interface/RouteField";
 
-const Center = styled('div')(({ theme }) => ({
+const Center = styled("div")(({ theme }) => ({
   width: "100%",
   height: "100%",
   display: "flex",
@@ -76,18 +76,6 @@ const InfoPair = ({ label, value, keyWidth, sxValue }) => (
   </Box>
 );
 
-function createData(name,calories,fat,carbs,protein) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
-
 // TODO: add process list
 // TODO: add related configs
 const Welcome = () => {
@@ -104,6 +92,7 @@ const Welcome = () => {
   const [version, setVersion] = React.useState("");
   const [osInfo, setOSInfo] = React.useState(defaultOSInfo);
   const [history, setHistory] = React.useState([]);
+  const [processList, setProcessList] = React.useState([]);
 
   const historyRef = React.useRef({ lastRequest: -1, future: [] });
   const intervalRef = React.useRef(context.setting.welcome.interval);
@@ -176,7 +165,7 @@ const Welcome = () => {
           if (cancelRef.current) {
             return;
           }
-          const { history: newHistory } = data;
+          const { history: newHistory, process } = data;
           historyRef.current.future = newHistory.slice(-intervalRef.current);
           const unsynced = newHistory.slice(0, -intervalRef.current);
           if (unsynced.length > 0) {
@@ -196,6 +185,7 @@ const Welcome = () => {
                 ...unsynced
               ].slice(-maxHistoryWindow)
             })
+            setProcessList(process)
           }
           timeoutRef.current = setTimeout(
             () => updateHistory(lastTime),
@@ -234,9 +224,10 @@ const Welcome = () => {
           stopwatchOffset.setSeconds(stopwatchOffset.getSeconds() + osInfo.uptime);
           upReset(stopwatchOffset);
 
-          const { history: newHistory } = statData;
+          const { history: newHistory, process } = statData;
           const historyInit = newHistory.slice(0, -context.setting.welcome.interval);
           setHistory(historyInit);
+          setProcessList(process);
           historyRef.current.future = newHistory.slice(-context.setting.welcome.interval);
           timeoutRef.current = setTimeout(
             () => updateHistory(historyInit.slice(-1)?.[0]?.time ?? 0),
@@ -1011,7 +1002,16 @@ const Welcome = () => {
             </DashCard>
           </Box>
 
-          <DashCard variant="outlined" sx={{ overflow: "auto", gap: 0, flex: 1, minWidth: 0, flexGrow: 3 }}>
+          <DashCard
+            variant="outlined"
+            sx={{
+              overflow: "auto",
+              gap: 0,
+              flex: 1,
+              minWidth: 0,
+              flexGrow: 3
+            }}
+          >
             <Typography
               level="title-md"
               color="neutral"
@@ -1019,24 +1019,37 @@ const Welcome = () => {
             >
               {context.languagePicker("main.welcome.info.process")}
             </Typography>
-            <Table sx={{ '& thead th:nth-child(1)': { width: '40%' } }}>
+            <Table
+              sx={{
+                "& thead th:nth-child(1)": {
+                  width: "40%",
+                },
+                "& td:nth-child(1)": {
+                  wordBreak: "normal",
+                  overflowWrap: "anywhere"
+                },
+                "@media (max-width: 480px)": {
+                  "& th:nth-child(5), & td:nth-child(5)": { display: "none" },
+                }
+              }}
+            >
               <thead>
                 <tr>
-                  <th>Column width (40%)</th>
-                  <th>Calories</th>
-                  <th>Fat&nbsp;(g)</th>
-                  <th>Carbs&nbsp;(g)</th>
-                  <th>Protein&nbsp;(g)</th>
+                  <th>Name</th>
+                  <th>PID</th>
+                  <th>CPU%</th>
+                  <th>MEM%</th>
+                  <th>Priority</th>
                 </tr>
               </thead>
               <tbody>
-                {rows.map((row) => (
-                  <tr key={row.name}>
-                    <td>{row.name}</td>
-                    <td>{row.calories}</td>
-                    <td>{row.fat}</td>
-                    <td>{row.carbs}</td>
-                    <td>{row.protein}</td>
+                {processList.map((item) => (
+                  <tr key={item.name}>
+                    <td>{item.name}</td>
+                    <td>{item.pid}</td>
+                    <td>{item.cpu.toFixed(2)}</td>
+                    <td>{item.mem.toFixed(2)}</td>
+                    <td>{item.priority}</td>
                   </tr>
                 ))}
               </tbody>

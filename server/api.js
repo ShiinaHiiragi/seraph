@@ -856,7 +856,14 @@ const infoOperator = {
         rx: filtered.reduce((prev, curr) => prev + (curr.rx_sec ?? 0), 0),
         tx: filtered.reduce((prev, curr) => prev + (curr.tx_sec ?? 0), 0),
       };
-    })
+    }),
+
+  processList: (by, count) => si.processes().then(({ list }) =>
+    list
+      .sort((left, right) => right[by] - left[by])
+      .slice(0, count)
+      .map(({ name, pid, cpu, mem, priority }) => ({ name, pid, cpu, mem, priority }))
+  )
 };
 
 setInterval(() => {
