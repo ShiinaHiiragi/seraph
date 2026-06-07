@@ -354,12 +354,12 @@ const SECTIONS = (
         },
         {
           key: context.languagePicker("header.config.welcome.process"),
+          hint: context.languagePicker("header.config.welcome.processHint"),
           value: (
             <Stack spacing={1}>
               <FormControl>
                 <FormLabel sx={{ mb: 0, color: "neutral.500" }}>
-                  {context.languagePicker("header.config.welcome.processSort")
-                    + context.languagePicker("header.config.appendix.wait")}
+                  {context.languagePicker("header.config.welcome.processSort")}
                 </FormLabel>
                 <RadioGroup
                   size="sm"
@@ -372,8 +372,7 @@ const SECTIONS = (
                 </RadioGroup>
               </FormControl>
               {LabeledLiteral(
-                context.languagePicker("header.config.welcome.processCount")
-                  + context.languagePicker("header.config.appendix.wait"),
+                context.languagePicker("header.config.welcome.processCount"),
                 context.setting.welcome.process.count,
                 [5, 10, 15, 20, 25].map((num) => ({ value: num, label: num })),
                 "welcome.process.count",

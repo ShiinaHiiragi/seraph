@@ -41,6 +41,7 @@ const en = {
         windowDisk: "Disk I/O",
         windowNet: "Network Rx/Tx",
         process: "Processes List",
+        processHint: "applied on next request",
         processSort: "Sort by",
         processSortBy: {
           cpu: "CPU",
@@ -187,8 +188,7 @@ const en = {
         outKeep: "Keep intermediate markdown files"
       },
       appendix: {
-        reload: " (reload required)",
-        wait: " (applied on next request)"
+        reload: " (reload required)"
       }
     }
   },

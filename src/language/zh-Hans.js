@@ -41,6 +41,7 @@ const zhHans = {
         windowDisk: "磁盘 I/O",
         windowNet: "网络 Rx/Tx",
         process: "进程列表",
+        processHint: "下次请求生效",
         processSort: "排序方式",
         processSortBy: {
           cpu: "CPU",
@@ -187,8 +188,7 @@ const zhHans = {
         outKeep: "保留转换前的 Markdown 文件"
       },
       appendix: {
-        reload: "（需要重新加载）",
-        wait: "（下次请求生效）"
+        reload: "（需要重新加载）"
       }
     }
   },

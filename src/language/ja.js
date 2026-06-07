@@ -41,6 +41,7 @@ const ja = {
         windowDisk: "ディスク I/O",
         windowNet: "ネットワーク Rx/Tx",
         process: "プロセスリスト",
+        processHint: "次のリクエストから",
         processSort: "並べ替え",
         processSortBy: {
           cpu: "CPU 順",
@@ -187,8 +188,7 @@ const ja = {
         outKeep: "中間 Markdown ファイルをキープする"
       },
       appendix: {
-        reload: "（リロードが必要）",
-        wait: "（次のリクエストから）"
+        reload: "（リロードが必要）"
       }
     }
   },
