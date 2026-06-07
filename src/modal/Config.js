@@ -9,6 +9,7 @@ import Modal from "@mui/joy/Modal";
 import ModalDialog from "@mui/joy/ModalDialog";
 import Option from "@mui/joy/Option";
 import Select from "@mui/joy/Select";
+import Tooltip from '@mui/joy/Tooltip';
 import ListDivider from '@mui/joy/ListDivider';
 import Stack from "@mui/joy/Stack";
 import FormControl from "@mui/joy/FormControl";
@@ -21,6 +22,7 @@ import Input from "@mui/joy/Input";
 import Typography from "@mui/joy/Typography";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import KeyboardArrowLeftOutlinedIcon from "@mui/icons-material/KeyboardArrowLeftOutlined";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import GlobalContext, {
@@ -251,7 +253,7 @@ const SECTIONS = (
         },
         {
           key: context.languagePicker("header.config.general.token"),
-          hint: context.languagePicker("header.config.general.tokenHint"),
+          tip: context.languagePicker("header.config.general.tokenTip"),
           value: Literal(context.setting.meta.token, [
             { value: 15, label: context.languagePicker("header.config.general.tokenOption.15") },
             { value: 60, label: context.languagePicker("header.config.general.tokenOption.60") },
@@ -287,6 +289,7 @@ const SECTIONS = (
       items: [
         {
           key: context.languagePicker("header.config.welcome.interval"),
+          tip: context.languagePicker("header.config.welcome.intervalTip"),
           value: Literal(context.setting.welcome.interval, [
             { value: 1, label: context.languagePicker("header.config.welcome.intervalOption.1") },
             { value: 2, label: context.languagePicker("header.config.welcome.intervalOption.2") },
@@ -1353,8 +1356,34 @@ export default function Config(props) {
                         }}
                       >
                         <Box>
-                          <Typography level="body-sm" sx={{ fontWeight: 600 }}>
+                          <Typography
+                            level="body-sm"
+                            sx={{
+                              fontWeight: 600,
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: 0.5
+                            }}
+                          >
                             {item.key}
+                            {item.tip &&
+                              <Tooltip
+                                size="sm"
+                                variant="outlined"
+                                color="neutral"
+                                title={item.tip}
+                                placement="right"
+                                sx={{ maxWidth: 300 }}
+                              >
+                                <HelpOutlineOutlinedIcon
+                                  sx={{
+                                    fontSize: 16,
+                                    ":hover": {
+                                      color: "var(--joy-palette-neutral-400)"
+                                    }
+                                  }}
+                                />
+                              </Tooltip>}
                           </Typography>
                           {item.hint && (
                             <Typography level="body-xs" textColor="text.tertiary">

@@ -6,7 +6,7 @@ const zhHans = {
         title: "通用",
         language: "显示语言",
         token: "令牌有效期限",
-        tokenHint: "自最后访问",
+        tokenTip: "每次发起请求都将更新令牌有效期限（终端 WebSocket 传输除外）",
         tokenOption: {
           15: "15 分钟",
           60: "1 小时",
@@ -22,6 +22,7 @@ const zhHans = {
       welcome: {
         title: "仪表盘",
         interval: "请求间隔",
+        intervalTip: "客户端同步实时数据的频率；更大的请求间隔将减少服务器处理压力，同时将削弱数据时效性",
         intervalOption: {
           1: "1 秒",
           2: "2 秒",

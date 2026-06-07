@@ -1024,6 +1024,7 @@ const Welcome = () => {
               {context.languagePicker("main.welcome.info.process")}
             </Typography>
             <Table
+              hoverRow={true}
               sx={{
                 "& thead th:nth-of-type(1)": {
                   width: "40%",
@@ -1040,7 +1041,8 @@ const Welcome = () => {
                   "& thead th:nth-of-type(1)": {
                     width: "50%",
                   }
-                }
+                },
+                "--TableRow-hoverBackground": "var(--joy-palette-background-level1)"
               }}
             >
               <thead>
