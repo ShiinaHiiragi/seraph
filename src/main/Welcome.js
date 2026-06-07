@@ -632,6 +632,7 @@ const Welcome = () => {
             <Box sx={{ mt: 0.5, mb: 1.5 }}>
               <Sparkline data={memoryTrend.slice(-context.setting.welcome.window.memory)} height={80} />
             </Box>
+            {/* memoryUsage samples from os.memfree(), so min mem usage is max mem free */}
             {history.length > 0 &&
               <Typography
                 level="body-xs"
@@ -641,7 +642,7 @@ const Welcome = () => {
               >
                 <Box component="span" sx={{ "@container (max-width: 260px)": { display: "none" } }}>
                   {context.languagePicker("main.welcome.trend.min")}
-                  {formatFree(memoryUsage.min, osInfo.memory).toFixed(2)}%
+                  {formatFree(memoryUsage.max, osInfo.memory).toFixed(2)}%
                   &ensp;
                 </Box>
                 {context.languagePicker("main.welcome.trend.avg")}
@@ -649,7 +650,7 @@ const Welcome = () => {
                 <Box component="span" sx={{ "@container (max-width: 260px)": { display: "none" } }}>
                   &ensp;
                   {context.languagePicker("main.welcome.trend.max")}
-                  {formatFree(memoryUsage.max, osInfo.memory).toFixed(2)}%
+                  {formatFree(memoryUsage.min, osInfo.memory).toFixed(2)}%
                 </Box>
               </Typography>}
           </DashCard>
@@ -681,6 +682,7 @@ const Welcome = () => {
             <Box sx={{ mt: 0.5, mb: 1.5 }}>
               <Sparkline data={storageTrend.slice(-context.setting.welcome.window.storage)} height={80} />
             </Box>
+            {/* also works for free storage */}
             {history.length > 0 &&
               <Typography
                 level="body-xs"
@@ -690,7 +692,7 @@ const Welcome = () => {
               >
                 <Box component="span" sx={{ "@container (max-width: 260px)": { display: "none" } }}>
                   {context.languagePicker("main.welcome.trend.min")}
-                  {formatFree(storageUsage.min, osInfo.storage).toFixed(2)}%
+                  {formatFree(storageUsage.max, osInfo.storage).toFixed(2)}%
                   &ensp;
                 </Box>
                 {context.languagePicker("main.welcome.trend.avg")}
@@ -698,7 +700,7 @@ const Welcome = () => {
                 <Box component="span" sx={{ "@container (max-width: 260px)": { display: "none" } }}>
                   &ensp;
                   {context.languagePicker("main.welcome.trend.max")}
-                  {formatFree(storageUsage.max, osInfo.storage).toFixed(2)}%
+                  {formatFree(storageUsage.min, osInfo.storage).toFixed(2)}%
                 </Box>
               </Typography>}
           </DashCard>
