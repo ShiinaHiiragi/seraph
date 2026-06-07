@@ -240,6 +240,7 @@ const ja = {
         kernel: "カーネルバージョン",
         cpuModel: "CPU モデル",
         cpuCache: "キャッシュ",
+        mac: "MAC アドレス",
         network: "ネットワークインタフェース",
         process: "プロセスリスト",
         name: "プロセス名",

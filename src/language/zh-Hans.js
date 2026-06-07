@@ -240,6 +240,7 @@ const zhHans = {
         kernel: "内核版本",
         cpuModel: "CPU 型号",
         cpuCache: "缓存",
+        mac: "MAC 地址",
         network: "网络接口",
         process: "进程列表",
         name: "名称",

@@ -305,6 +305,7 @@ const defaultOSInfo = {
     cores: -1,
     cache: { l1d: -1, l1i: -1, l2: -1, l3: -1 }
   },
+  mac: "",
   network: { }
 }
 

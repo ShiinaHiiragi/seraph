@@ -800,8 +800,9 @@ const infoOperator = {
     si.system(),
     si.bios(),
     si.osInfo(),
-    si.cpu()
-  ]).then(([{ size }, systemInfo, biosInfo, osInfo_, cpuInfo]) => {
+    si.cpu(),
+    si.uuid()
+  ]).then(([{ size }, systemInfo, biosInfo, osInfo_, cpuInfo, uuid]) => {
     const networkInterfaces = Object
       .entries(os.networkInterfaces())
       .map(([ name, interfaces ]) => [ name, interfaces.filter((item) =>
@@ -831,6 +832,7 @@ const infoOperator = {
         cores: cpuInfo.cores,
         cache: cpuInfo.cache
       },
+      mac: uuid.macs[0] ?? "",
       network: Object.fromEntries(networkInterfaces)
     }
   }),

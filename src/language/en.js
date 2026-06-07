@@ -240,6 +240,7 @@ const en = {
         kernel: "Kernel Version",
         cpuModel: "CPU Model",
         cpuCache: "Cache",
+        mac: "MAC Address",
         network: "Network Interfaces",
         process: "Processes List",
         name: "Name",

@@ -76,8 +76,6 @@ const InfoPair = ({ label, value, keyWidth, sxValue }) => (
   </Box>
 );
 
-// TODO: add process list
-// TODO: add related configs
 const Welcome = () => {
   const context = React.useContext(GlobalContext);
   const { hours, minutes, seconds } = useTime();
@@ -979,6 +977,12 @@ const Welcome = () => {
                 <InfoPair
                   label={context.languagePicker("main.welcome.info.cpuCache")}
                   value={`L1d ${osInfo.cpu.cache.l1d.sizeFormat()} / L1i ${osInfo.cpu.cache.l1i.sizeFormat()} / L2 ${osInfo.cpu.cache.l2.sizeFormat()} / L3 ${osInfo.cpu.cache.l3.sizeFormat()}`}
+                />
+              )}
+              {osInfo.mac.length > 0 && (
+                <InfoPair
+                  label={context.languagePicker("main.welcome.info.mac")}
+                  value={osInfo.mac.toUpperCase()}
                 />
               )}
             </DashCard>
