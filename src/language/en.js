@@ -33,7 +33,21 @@ const en = {
           30: "30 seconds",
           45: "45 seconds",
           60: "60 seconds"
-        }
+        },
+        window: "History Window Size",
+        windowCpu: "CPU",
+        windowMemory: "Memory",
+        windowStorage: "Storage",
+        windowDisk: "Disk I/O",
+        windowNet: "Network Rx/Tx",
+        process: "Processes List",
+        processSort: "Sort by",
+        processSortBy: {
+          cpu: "CPU",
+          mem: "Memory",
+          priority: "Priority"
+        },
+        processCount: "Number of Processes"
       },
       terminal: {
         title: "Terminal",
@@ -42,7 +56,7 @@ const en = {
         shellLinux: "Shell path on Linux",
         shellWin32: "Shell path on Windows",
         lifecycle: "Lifecycle",
-        lifecycleTimeout: "Connection Timeout",
+        lifecycleTimeout: "Connection timeout",
         lifecycleTimeoutOption: {
           15: "15 minutes",
           30: "30 minutes",
@@ -173,7 +187,8 @@ const en = {
         outKeep: "Keep intermediate markdown files"
       },
       appendix: {
-        reload: " (reload required)"
+        reload: " (reload required)",
+        wait: " (applied on next request)"
       }
     }
   },

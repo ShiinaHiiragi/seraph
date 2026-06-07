@@ -38,7 +38,10 @@ router.get('/stat', (req, res, next) => {
   }
 
   const time = Number(req.query.after);
-  api.infoOperator.processList('cpu', 10)
+  api.infoOperator.processList(
+    api.configOperator.config.setting.welcome.process.sortBy,
+    api.configOperator.config.setting.welcome.process.count,
+  )
     .then((ps) => {
       req.status.addExecStatus();
       res.send({

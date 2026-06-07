@@ -33,7 +33,21 @@ const ja = {
           30: "30 秒",
           45: "45 秒",
           60: "60 秒"
-        }
+        },
+        window: "ウィンドウサイズ",
+        windowCpu: "CPU",
+        windowMemory: "メモリ",
+        windowStorage: "ストレージ",
+        windowDisk: "ディスク I/O",
+        windowNet: "ネットワーク Rx/Tx",
+        process: "プロセスリスト",
+        processSort: "並べ替え",
+        processSortBy: {
+          cpu: "CPU 順",
+          mem: "メモリ順",
+          priority: "優先度順"
+        },
+        processCount: "プロセス数"
       },
       terminal: {
         title: "ターミナル",
@@ -173,7 +187,8 @@ const ja = {
         outKeep: "中間 Markdown ファイルをキープする"
       },
       appendix: {
-        reload: "（リロードが必要）"
+        reload: "（リロードが必要）",
+        wait: "（次のリクエストから）"
       }
     }
   },

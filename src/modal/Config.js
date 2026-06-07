@@ -47,12 +47,12 @@ const Literal = (value, itemsMap, field, handleApply, disabled) => (
   </Select>
 );
 
-const LabeledLiteral = (caption, value, itemsMap, field, handleApply, disabled) => (
+const LabeledLiteral = (caption, value, itemsMap, field, handleApply, disabled, maxWidth) => (
   <FormControl>
     <FormLabel sx={{ mb: 0, color: "neutral.500" }}>
       {caption}
     </FormLabel>
-    <Select size="sm" value={value} sx={{ maxWidth: 240 }} disabled={disabled}>
+    <Select size="sm" value={value} sx={{ maxWidth: maxWidth ?? 240 }} disabled={disabled}>
       {itemsMap.map(({value, label}) => (
         <Option
           key={value}
@@ -201,7 +201,7 @@ const Password = (props) => {
         size="sm"
         type="password"
         placeholder={context.languagePicker("header.config.general.passwordPlaceholder")}
-        sx={{ maxWidth: 240 }}
+        sx={{ maxWidth: 240, flexGrow: 1 }}
         value={password}
         onChange={(event) => setPassword(event.target.value)}
       />
@@ -299,6 +299,90 @@ const SECTIONS = (
             { value: 45, label: context.languagePicker("header.config.welcome.intervalOption.45") },
             { value: 60, label: context.languagePicker("header.config.welcome.intervalOption.60") }
           ], "welcome.interval", handleApply)
+        },
+        {
+          key: context.languagePicker("header.config.welcome.window"),
+          value: (
+            <Stack spacing={1}>
+              {LabeledLiteral(
+                context.languagePicker("header.config.welcome.windowCpu"),
+                context.setting.welcome.window.cpu,
+                [20, 40, 60, 80, 100, 120].map((num) => ({ value: num, label: num })),
+                "welcome.window.cpu",
+                handleApply,
+                undefined,
+                120
+              )}
+              {LabeledLiteral(
+                context.languagePicker("header.config.welcome.windowMemory"),
+                context.setting.welcome.window.memory,
+                [20, 40, 60, 80, 100, 120].map((num) => ({ value: num, label: num })),
+                "welcome.window.memory",
+                handleApply,
+                undefined,
+                120
+              )}
+              {LabeledLiteral(
+                context.languagePicker("header.config.welcome.windowStorage"),
+                context.setting.welcome.window.storage,
+                [20, 40, 60, 80, 100, 120].map((num) => ({ value: num, label: num })),
+                "welcome.window.storage",
+                handleApply,
+                undefined,
+                120
+              )}
+              {LabeledLiteral(
+                context.languagePicker("header.config.welcome.windowDisk"),
+                context.setting.welcome.window.disk,
+                [20, 40, 60, 80, 100, 120].map((num) => ({ value: num, label: num })),
+                "welcome.window.disk",
+                handleApply,
+                undefined,
+                120
+              )}
+              {LabeledLiteral(
+                context.languagePicker("header.config.welcome.windowNet"),
+                context.setting.welcome.window.net,
+                [20, 40, 60, 80, 100, 120].map((num) => ({ value: num, label: num })),
+                "welcome.window.net",
+                handleApply,
+                undefined,
+                120
+              )}
+            </Stack>
+          )
+        },
+        {
+          key: context.languagePicker("header.config.welcome.process"),
+          value: (
+            <Stack spacing={1}>
+              <FormControl>
+                <FormLabel sx={{ mb: 0, color: "neutral.500" }}>
+                  {context.languagePicker("header.config.welcome.processSort")
+                    + context.languagePicker("header.config.appendix.wait")}
+                </FormLabel>
+                <RadioGroup
+                  size="sm"
+                  value={context.setting.welcome.process.sortBy}
+                  onChange={(event) => handleApply("welcome.process.sortBy", event.target.value)}
+                >
+                  <Radio value="cpu" label={context.languagePicker("header.config.welcome.processSortBy.cpu")} />
+                  <Radio value="mem" label={context.languagePicker("header.config.welcome.processSortBy.mem")} />
+                  <Radio value="priority" label={context.languagePicker("header.config.welcome.processSortBy.priority")} />
+                </RadioGroup>
+              </FormControl>
+              {LabeledLiteral(
+                context.languagePicker("header.config.welcome.processCount")
+                  + context.languagePicker("header.config.appendix.wait"),
+                context.setting.welcome.process.count,
+                [5, 10, 15, 20, 25].map((num) => ({ value: num, label: num })),
+                "welcome.process.count",
+                handleApply,
+                undefined,
+                120
+              )}
+            </Stack>
+          )
         }
       ]
     },

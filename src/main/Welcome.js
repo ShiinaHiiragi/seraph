@@ -568,7 +568,7 @@ const Welcome = () => {
                 </Typography>}
             </Box>
             <Box sx={{ mt: 0.5, mb: 1.5 }}>
-              <Sparkline data={cpuTrend} height={80} />
+              <Sparkline data={cpuTrend.slice(-context.setting.welcome.window.cpu)} height={80} />
             </Box>
             {history.length > 0 &&
               <Typography
@@ -631,7 +631,7 @@ const Welcome = () => {
                 </Typography>}
             </Box>
             <Box sx={{ mt: 0.5, mb: 1.5 }}>
-              <Sparkline data={memoryTrend} height={80} />
+              <Sparkline data={memoryTrend.slice(-context.setting.welcome.window.memory)} height={80} />
             </Box>
             {history.length > 0 &&
               <Typography
@@ -680,7 +680,7 @@ const Welcome = () => {
                 </Typography>}
             </Box>
             <Box sx={{ mt: 0.5, mb: 1.5 }}>
-              <Sparkline data={storageTrend} height={80} />
+              <Sparkline data={storageTrend.slice(-context.setting.welcome.window.storage)} height={80} />
             </Box>
             {history.length > 0 &&
               <Typography
@@ -730,7 +730,7 @@ const Welcome = () => {
                   </Typography>}
               </Box>
               <Box sx={{ mt: 0.5, mb: 1.5 }}>
-                <Sparkline data={rxDiskTrend} height={80} />
+                <Sparkline data={rxDiskTrend.slice(-context.setting.welcome.window.disk)} height={80} />
               </Box>
               {history.length > 0 &&
                 <Typography
@@ -780,7 +780,7 @@ const Welcome = () => {
                   </Typography>}
               </Box>
               <Box sx={{ mt: 0.5, mb: 1.5 }}>
-                <Sparkline data={wxDiskTrend} height={80} />
+                <Sparkline data={wxDiskTrend.slice(-context.setting.welcome.window.disk)} height={80} />
               </Box>
               {history.length > 0 &&
                 <Typography
@@ -840,7 +840,7 @@ const Welcome = () => {
                 </Typography>}
             </Box>
             <Box sx={{ mt: 0.5, mb: 1.5 }}>
-              <Sparkline data={rxNetTrend} height={80} />
+              <Sparkline data={rxNetTrend.slice(-context.setting.welcome.window.net)} height={80} />
             </Box>
             {history.length > 0 &&
               <Typography
@@ -889,7 +889,7 @@ const Welcome = () => {
                 </Typography>}
             </Box>
             <Box sx={{ mt: 0.5, mb: 1.5 }}>
-              <Sparkline data={txNetTrend} height={80} />
+              <Sparkline data={txNetTrend.slice(-context.setting.welcome.window.net)} height={80} />
             </Box>
             {history.length > 0 &&
               <Typography

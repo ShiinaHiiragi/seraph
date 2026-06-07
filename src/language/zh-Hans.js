@@ -33,7 +33,21 @@ const zhHans = {
           30: "30 秒",
           45: "45 秒",
           60: "60 秒"
-        }
+        },
+        window: "历史窗口大小",
+        windowCpu: "CPU",
+        windowMemory: "内存",
+        windowStorage: "外存",
+        windowDisk: "磁盘 I/O",
+        windowNet: "网络 Rx/Tx",
+        process: "进程列表",
+        processSort: "排序方式",
+        processSortBy: {
+          cpu: "CPU",
+          mem: "内存",
+          priority: "优先级"
+        },
+        processCount: "进程数"
       },
       terminal: {
         title: "终端",
@@ -173,7 +187,8 @@ const zhHans = {
         outKeep: "保留转换前的 Markdown 文件"
       },
       appendix: {
-        reload: "（需要重新加载）"
+        reload: "（需要重新加载）",
+        wait: "（下次请求生效）"
       }
     }
   },

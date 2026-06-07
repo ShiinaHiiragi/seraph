@@ -90,11 +90,18 @@ const defaultConfig = {
       token: 60
     },
     welcome: {
+      interval: 45,
       window: {
         cpu: 120,
+        memory: 80,
+        storage: 20,
+        disk: 60,
         net: 60
       },
-      interval: 45,
+      process: {
+        sortBy: "cpu",
+        count: 10
+      }
     },
     terminal: {
       enable: false,
