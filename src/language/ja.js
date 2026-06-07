@@ -225,7 +225,12 @@ const ja = {
         cpuModel: "CPU モデル",
         cpuCache: "キャッシュ",
         network: "ネットワークインタフェース",
-        process: "プロセス"
+        process: "プロセスリスト",
+        name: "プロセス名",
+        pid: "PID",
+        cpu: "CPU %",
+        mem: "メモリ %",
+        priority: "優先度"
       }
     },
     error: {

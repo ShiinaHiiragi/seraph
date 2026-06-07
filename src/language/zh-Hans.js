@@ -225,7 +225,12 @@ const zhHans = {
         cpuModel: "CPU 型号",
         cpuCache: "缓存",
         network: "网络接口",
-        process: "进程"
+        process: "进程列表",
+        name: "名称",
+        pid: "PID",
+        cpu: "CPU %",
+        mem: "内存 %",
+        priority: "优先级"
       }
     },
     error: {

@@ -599,7 +599,9 @@ const Welcome = () => {
             gridTemplateColumns: {
               xs: "1fr",
               lg: "repeat(2, 1fr)",
-              xl: "repeat(4, 1fr)"
+              xl: context.metadata.platform === "win32"
+                ? "repeat(2, 1fr)"
+                : "repeat(4, 1fr)"
             },
             gap: 1.5,
           }}
@@ -702,103 +704,105 @@ const Welcome = () => {
               </Typography>}
           </DashCard>
 
-          <DashCard variant="outlined">
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "flex-start",
-              }}
-            >
-              <Typography
-                level="title-md"
-                color="neutral"
-                sx={{ letterSpacing: "0.02em" }}
+          {context.metadata.platform !== "win32" &&
+            <DashCard variant="outlined">
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "flex-start",
+                }}
               >
-                {context.languagePicker("main.welcome.trend.rxDisk")}
-              </Typography>
+                <Typography
+                  level="title-md"
+                  color="neutral"
+                  sx={{ letterSpacing: "0.02em" }}
+                >
+                  {context.languagePicker("main.welcome.trend.rxDisk")}
+                </Typography>
+                {history.length > 0 &&
+                  <Typography
+                    level="title-lg"
+                    fontWeight={600}
+                    sx={{ fontVariantNumeric: "tabular-nums", lineHeight: 1.2 }}
+                  >
+                    {rxDiskUsage.latest.sizeFormat()}/s
+                  </Typography>}
+              </Box>
+              <Box sx={{ mt: 0.5, mb: 1.5 }}>
+                <Sparkline data={rxDiskTrend} height={80} />
+              </Box>
               {history.length > 0 &&
                 <Typography
-                  level="title-lg"
-                  fontWeight={600}
-                  sx={{ fontVariantNumeric: "tabular-nums", lineHeight: 1.2 }}
+                  level="body-xs"
+                  color="neutral"
+                  align="right"
+                  sx={{ fontVariantNumeric: "tabular-nums" }}
                 >
-                  {rxDiskUsage.latest.sizeFormat()}/s
+                  <Box component="span" sx={{ "@container (max-width: 290px)": { display: "none" } }}>
+                    {context.languagePicker("main.welcome.trend.min")}
+                    {rxDiskUsage.min.sizeFormat()}/s
+                    &ensp;
+                  </Box>
+                  {context.languagePicker("main.welcome.trend.avg")}
+                  {rxDiskUsage.avg.sizeFormat()}/s
+                  <Box component="span" sx={{ "@container (max-width: 290px)": { display: "none" } }}>
+                    &ensp;
+                    {context.languagePicker("main.welcome.trend.max")}
+                    {rxDiskUsage.max.sizeFormat()}/s
+                  </Box>
                 </Typography>}
-            </Box>
-            <Box sx={{ mt: 0.5, mb: 1.5 }}>
-              <Sparkline data={rxDiskTrend} height={80} />
-            </Box>
-            {history.length > 0 &&
-              <Typography
-                level="body-xs"
-                color="neutral"
-                align="right"
-                sx={{ fontVariantNumeric: "tabular-nums" }}
-              >
-                <Box component="span" sx={{ "@container (max-width: 290px)": { display: "none" } }}>
-                  {context.languagePicker("main.welcome.trend.min")}
-                  {rxDiskUsage.min.sizeFormat()}/s
-                  &ensp;
-                </Box>
-                {context.languagePicker("main.welcome.trend.avg")}
-                {rxDiskUsage.avg.sizeFormat()}/s
-                <Box component="span" sx={{ "@container (max-width: 290px)": { display: "none" } }}>
-                  &ensp;
-                  {context.languagePicker("main.welcome.trend.max")}
-                  {rxDiskUsage.max.sizeFormat()}/s
-                </Box>
-              </Typography>}
-          </DashCard>
+            </DashCard>}
 
-          <DashCard variant="outlined">
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "flex-start",
-              }}
-            >
-              <Typography
-                level="title-md"
-                color="neutral"
-                sx={{ letterSpacing: "0.02em" }}
+          {context.metadata.platform !== "win32" &&
+            <DashCard variant="outlined">
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "flex-start",
+                }}
               >
-                {context.languagePicker("main.welcome.trend.wxDisk")}
-              </Typography>
+                <Typography
+                  level="title-md"
+                  color="neutral"
+                  sx={{ letterSpacing: "0.02em" }}
+                >
+                  {context.languagePicker("main.welcome.trend.wxDisk")}
+                </Typography>
+                {history.length > 0 &&
+                  <Typography
+                    level="title-lg"
+                    fontWeight={600}
+                    sx={{ fontVariantNumeric: "tabular-nums", lineHeight: 1.2 }}
+                  >
+                    {wxDiskUsage.latest.sizeFormat()}/s
+                  </Typography>}
+              </Box>
+              <Box sx={{ mt: 0.5, mb: 1.5 }}>
+                <Sparkline data={wxDiskTrend} height={80} />
+              </Box>
               {history.length > 0 &&
                 <Typography
-                  level="title-lg"
-                  fontWeight={600}
-                  sx={{ fontVariantNumeric: "tabular-nums", lineHeight: 1.2 }}
+                  level="body-xs"
+                  color="neutral"
+                  align="right"
+                  sx={{ fontVariantNumeric: "tabular-nums" }}
                 >
-                  {wxDiskUsage.latest.sizeFormat()}/s
+                  <Box component="span" sx={{ "@container (max-width: 290px)": { display: "none" } }}>
+                    {context.languagePicker("main.welcome.trend.min")}
+                    {wxDiskUsage.min.sizeFormat()}/s
+                    &ensp;
+                  </Box>
+                  {context.languagePicker("main.welcome.trend.avg")}
+                  {wxDiskUsage.avg.sizeFormat()}/s
+                  <Box component="span" sx={{ "@container (max-width: 290px)": { display: "none" } }}>
+                    &ensp;
+                    {context.languagePicker("main.welcome.trend.max")}
+                    {wxDiskUsage.max.sizeFormat()}/s
+                  </Box>
                 </Typography>}
-            </Box>
-            <Box sx={{ mt: 0.5, mb: 1.5 }}>
-              <Sparkline data={wxDiskTrend} height={80} />
-            </Box>
-            {history.length > 0 &&
-              <Typography
-                level="body-xs"
-                color="neutral"
-                align="right"
-                sx={{ fontVariantNumeric: "tabular-nums" }}
-              >
-                <Box component="span" sx={{ "@container (max-width: 290px)": { display: "none" } }}>
-                  {context.languagePicker("main.welcome.trend.min")}
-                  {wxDiskUsage.min.sizeFormat()}/s
-                  &ensp;
-                </Box>
-                {context.languagePicker("main.welcome.trend.avg")}
-                {wxDiskUsage.avg.sizeFormat()}/s
-                <Box component="span" sx={{ "@container (max-width: 290px)": { display: "none" } }}>
-                  &ensp;
-                  {context.languagePicker("main.welcome.trend.max")}
-                  {wxDiskUsage.max.sizeFormat()}/s
-                </Box>
-              </Typography>}
-          </DashCard>
+            </DashCard>}
         </Box>
 
         <Box
@@ -1041,11 +1045,11 @@ const Welcome = () => {
             >
               <thead>
                 <tr>
-                  <th>Name</th>
-                  <th>PID</th>
-                  <th>CPU%</th>
-                  <th>MEM%</th>
-                  <th>Priority</th>
+                  <th>{context.languagePicker("main.welcome.info.name")}</th>
+                  <th>{context.languagePicker("main.welcome.info.pid")}</th>
+                  <th>{context.languagePicker("main.welcome.info.cpu")}</th>
+                  <th>{context.languagePicker("main.welcome.info.mem")}</th>
+                  <th>{context.languagePicker("main.welcome.info.priority")}</th>
                 </tr>
               </thead>
               <tbody>

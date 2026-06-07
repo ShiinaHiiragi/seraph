@@ -225,7 +225,12 @@ const en = {
         cpuModel: "CPU Model",
         cpuCache: "Cache",
         network: "Network Interfaces",
-        process: "Processes"
+        process: "Processes List",
+        name: "Name",
+        pid: "PID",
+        cpu: "CPU %",
+        mem: "MEM %",
+        priority: "PRIO"
       }
     },
     error: {
