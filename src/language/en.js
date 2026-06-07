@@ -6,7 +6,7 @@ const en = {
         title: "General",
         language: "Display Language",
         token: "Token Expiry",
-        tokenTip: "Each request refreshes the token expiration time (excluding terminal WebSocket connections).",
+        tokenTip: "Each request extends the token expiration time (excluding terminal WebSocket connections).",
         tokenOption: {
           15: "15 minutes",
           60: "1 hour",
