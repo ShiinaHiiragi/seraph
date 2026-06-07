@@ -7,6 +7,7 @@ const child = require('child_process');
 const assert = require('assert');
 const crypto = require('crypto');
 const checkDiskSpace = require('check-disk-space').default
+const si = require('systeminformation')
 
 String.prototype.versionGE = function (min) {
   const left = this.split('.').map(Number);
@@ -87,6 +88,13 @@ const defaultConfig = {
     meta: {
       language: "en",
       token: 60
+    },
+    welcome: {
+      window: {
+        cpu: 120,
+        net: 60
+      },
+      interval: 45,
     },
     terminal: {
       enable: false,
@@ -754,63 +762,122 @@ exports.taskOperator = taskOperator;
 
 
 // seraph and server info
-const cpuUsageAsync = (interval = 200) => new Promise((resolve) => {
-  const start = os.cpus();
-  setTimeout(() => {
-    const end = os.cpus();
-    const perCore = start.map((cpu, index) => {
-      const startTimes = cpu.times;
-      const endTimes = end[index].times;
-      const startTime = Object.values(startTimes).reduce((prev, current) => prev + current, 0);
-      const endTime = Object.values(endTimes).reduce((prev, current) => prev + current, 0)
-      const idleDiff = endTimes.idle - startTimes.idle;
-      const totalDiff = endTime - startTime
-      return totalDiff === 0
-        ? 0
-        : 1 - idleDiff / totalDiff;
-    });
-    resolve(perCore.reduce((prev, current) => prev + current, 0) / perCore.length);
-  }, interval);
-});
-const memoryUsageSync = () => os.freemem();
-const diskUsageAsync = () => checkDiskSpace(dataPath.dataDirPath);
+const infoOperator = {
+  maxWindow: 200,
+  recordInterval: 1000,
 
-const version = () => {
-  const package = JSON.parse(fs.readFileSync(dataPath.packageFilePath));
-  return package.version;
-}
+  history: [],
+  push: ([cpu, mem, disk, net]) => {
+    if (infoOperator.history.length >= infoOperator.maxWindow) {
+      infoOperator.history.shift();
+    }
+    infoOperator.history.push({
+      cpu: cpu,
+      mem: mem,
+      disk: disk,
+      net: net,
+      time: Date.now()
+    })
+  },
+  // Array.filter keeps the order
+  laterThan: (timestamp = 0) =>
+    infoOperator.history.filter((item) => item.time > timestamp),
 
-const osInfo = () => {
-  const cpus = os.cpus();
-  const networkInterfaces = Object
-    .entries(os.networkInterfaces())
-    .map(([ name, interfaces ]) => [ name, interfaces.filter((item) =>
-      !item.internal && item.family === 'IPv4'
-    )])
-    .filter(([ name, interfaces ]) =>
-      !name.startsWith("veth") && interfaces.length > 0
-    );
+  version: () => {
+    const pkg = JSON.parse(fs.readFileSync(dataPath.packageFilePath));
+    return pkg.version;
+  },
 
-  return {
-    userAtHostname: os.userInfo().username + '@' + os.hostname(),
-    platform: os.platform() + ' ' + os.release() + ' ' + os.arch(),
-    kernelVersion: os.version(),
-    cpus: {
-      model: cpus[0].model,
-      cores: cpus.length
-    },
-    loadavg: os.loadavg(),
-    network: Object.fromEntries(networkInterfaces),
-    memory: os.totalmem(),
-    uptime: os.uptime()
-  };
-}
+  osInfoAsync: () => Promise.all([
+    infoOperator.diskUsage(),
+    si.system(),
+    si.bios(),
+    si.osInfo(),
+    si.cpu()
+  ]).then(([{ size }, systemInfo, biosInfo, osInfo_, cpuInfo]) => {
+    const networkInterfaces = Object
+      .entries(os.networkInterfaces())
+      .map(([ name, interfaces ]) => [ name, interfaces.filter((item) =>
+        !item.internal && item.family === 'IPv4'
+      )])
+      .filter(([ name, interfaces ]) =>
+        !name.startsWith("veth") && interfaces.length > 0
+      );
 
-exports.cpuUsageAsync = cpuUsageAsync;
-exports.memoryUsageSync = memoryUsageSync;
-exports.diskUsageAsync = diskUsageAsync;
-exports.version = version;
-exports.osInfo = osInfo;
+    return {
+      memory: os.totalmem(),
+      storage: size,
+      uptime: undefined,
+      userAtHostname: os.userInfo().username + '@' + os.hostname(),
+      manufacturer: systemInfo.manufacturer,
+      model: systemInfo.model,
+      serial: systemInfo.serial,
+      virtual: systemInfo.virtual ? systemInfo.virtualHost : null,
+      biosVersion: biosInfo.version,
+      platform: process.platform === 'linux'
+        ? `${osInfo_.distro} ${osInfo_.release} (${osInfo_.codename}) ${osInfo_.arch}`
+        : `${osInfo_.distro} (${osInfo_.codename}) ${osInfo_.arch}`,
+      kernel: osInfo_.kernel,
+      cpu: {
+        model: cpuInfo.manufacturer + ' ' + cpuInfo.brand,
+        speed: cpuInfo.speed,
+        cores: cpuInfo.cores,
+        cache: cpuInfo.cache
+      },
+      network: Object.fromEntries(networkInterfaces)
+    }
+  }),
+
+  // unrelated  to time
+  cpuUsage: () => new Promise((resolve) =>
+    si.currentLoad()
+      .then(({ currentLoad }) => resolve(currentLoad / 100))
+  ),
+  memoryUsage: () => os.freemem(),
+  diskUsage: () => new Promise((resolve) => Promise.all([
+    checkDiskSpace(dataPath.dataDirPath),
+    si.fsStats()
+  ]).then(([{ free, size }, res]) => resolve({
+    free: free,
+    size: size,
+    rx: res?.rx_sec ?? 0,
+    wx: res?.wx_sec ?? 0
+  }))),
+
+  physicalInterface: /^(eth|ens|enp|em|wlan|wlp)/,
+  netUsage: () => si.networkStats()
+    .then((stats) => {
+      const filtered = stats.filter((iface) =>
+        process.platform === 'linux'
+          ? infoOperator.physicalInterface.test(iface.iface)
+          : iface.operstate === 'up' && !iface.iface.startsWith('vEthernet')
+      );
+      return {
+        rx: filtered.reduce((prev, curr) => prev + (curr.rx_sec ?? 0), 0),
+        tx: filtered.reduce((prev, curr) => prev + (curr.tx_sec ?? 0), 0),
+      };
+    }),
+
+  processList: (by, count) => si.processes().then(({ list }) =>
+    list
+      .sort((left, right) => right[by] - left[by])
+      .filter(({ name }) => name !== 'System Idle Process')
+      .slice(0, count)
+      .map(({ name, pid, cpu, mem, priority }) => ({ name, pid, cpu, mem, priority }))
+  )
+};
+
+setInterval(() => {
+  Promise.all([
+    infoOperator.cpuUsage(),
+    new Promise((resolve) => resolve(infoOperator.memoryUsage())),
+    infoOperator.diskUsage(),
+    infoOperator.netUsage(),
+  ]).then(infoOperator.push);
+}, infoOperator.recordInterval);
+
+exports.infoOperator = infoOperator;
+exports.cachedInfo = infoOperator.osInfoAsync();
 
 
 function Status() { }

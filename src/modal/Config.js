@@ -282,6 +282,27 @@ const SECTIONS = (
       ]
     },
     {
+      id: settingField.welcome,
+      label: context.languagePicker("header.config.welcome.title"),
+      items: [
+        {
+          key: context.languagePicker("header.config.welcome.interval"),
+          value: Literal(context.setting.welcome.interval, [
+            { value: 1, label: context.languagePicker("header.config.welcome.intervalOption.1") },
+            { value: 2, label: context.languagePicker("header.config.welcome.intervalOption.2") },
+            { value: 3, label: context.languagePicker("header.config.welcome.intervalOption.3") },
+            { value: 4, label: context.languagePicker("header.config.welcome.intervalOption.4") },
+            { value: 5, label: context.languagePicker("header.config.welcome.intervalOption.5") },
+            { value: 10, label: context.languagePicker("header.config.welcome.intervalOption.10") },
+            { value: 15, label: context.languagePicker("header.config.welcome.intervalOption.15") },
+            { value: 30, label: context.languagePicker("header.config.welcome.intervalOption.30") },
+            { value: 45, label: context.languagePicker("header.config.welcome.intervalOption.45") },
+            { value: 60, label: context.languagePicker("header.config.welcome.intervalOption.60") }
+          ], "welcome.interval", handleApply)
+        }
+      ]
+    },
+    {
       id: settingField.terminal,
       label: context.languagePicker("header.config.terminal.title"),
       items: [
@@ -1235,9 +1256,9 @@ export default function Config(props) {
                   {section.label}
                 </Typography>
                 <Stack>
-                  {section.items.map((item, i) => (
-                    <React.Fragment key={i}>
-                      {i > 0 && <Divider />}
+                  {section.items.map((item, index) => (
+                    <React.Fragment key={index}>
+                      {index > 0 && <Divider />}
                       <Box
                         sx={{
                           display: { xs: "flex", md: "grid" },

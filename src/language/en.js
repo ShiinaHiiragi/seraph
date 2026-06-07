@@ -19,6 +19,22 @@ const en = {
         reset: "Reset to Default",
         resetButton: "Reset"
       },
+      welcome: {
+        title: "Dashboard",
+        interval: "Request Interval",
+        intervalOption: {
+          1: "1 second",
+          2: "2 seconds",
+          3: "3 seconds",
+          4: "4 seconds",
+          5: "5 seconds",
+          10: "10 seconds",
+          15: "15 seconds",
+          30: "30 seconds",
+          45: "45 seconds",
+          60: "60 seconds"
+        }
+      },
       terminal: {
         title: "Terminal",
         enable: "Enable Terminal",
@@ -176,13 +192,45 @@ const en = {
   },
   main: {
     welcome: {
-      osInfo: {
-        userAtHostname: "Username@Hostname",
-        platform: "Kernel and Platform",
-        kernelVersion: "OS Version",
-        memoryAvailable: "Memory Available",
-        storageAvailable: "Storage Available",
+      kpiCards: {
+        cpu: "CPU",
+        cores: "Cores",
+        memory: "Memory",
+        storage: "Storage",
+        available: "available",
         uptime: "Uptime"
+      },
+      trend: {
+        cpu: "CPU Status",
+        memory: "Memory Status",
+        storage: "Storage Status",
+        rxDisk: "Read Status",
+        wxDisk: "Write Status",
+        rxNet: "RX Status",
+        txNet: "TX Status",
+        min: "Min: ",
+        max: "Max: ",
+        avg: "Avg: "
+      },
+      info: {
+        systemInfo: "System Information",
+        manufacturer: "Manufacturer",
+        model: "Device Model",
+        serial: "Serial",
+        virtual: "Virtual Machine",
+        virtualNull: "N/A",
+        biosVersion: "BIOS Version",
+        platform: "Operating System",
+        kernel: "Kernel Version",
+        cpuModel: "CPU Model",
+        cpuCache: "Cache",
+        network: "Network Interfaces",
+        process: "Processes List",
+        name: "Name",
+        pid: "PID",
+        cpu: "CPU %",
+        mem: "MEM %",
+        priority: "PRIO"
       }
     },
     error: {

@@ -177,6 +177,7 @@
 
 ## Log
 
+- 06/05/2026 ver 1.0.1: Add loading animation and fix words wrap
 - 06/04/2026 ver 1.0.0: Update dependencies from @mui/joy and split build bundles
 - 06/03/2026 ver 0.4.1: Fix plaintext cipher
 - 06/02/2026 ver 0.4.0: Add terminal

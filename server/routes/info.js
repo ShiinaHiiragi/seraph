@@ -1,3 +1,4 @@
+let os = require('os');
 let express = require('express');
 let api = require('../api');
 let router = express.Router();
@@ -6,7 +7,7 @@ router.get('/version', (req, res, next) => {
   req.status.addExecStatus();
   res.send({
     ...req.status.generateReport(),
-    version: api.version()
+    version: api.infoOperator.version()
   });
   return;
 });
@@ -18,32 +19,32 @@ router.get('/os', (req, res, next) => {
     return;
   }
 
-  api.diskUsageAsync()
-    .then(({ size }) => {
-      req.status.addExecStatus();
-      res.send({
-        ...req.status.generateReport(),
-        os: {
-          ...api.osInfo(),
-          storage: size
-        }
-      });
-      return;
+  api.cachedInfo.then((osInfo) => {
+    req.status.addExecStatus();
+    res.send({
+      ...req.status.generateReport(),
+      ...osInfo,
+      uptime: os.uptime()
     });
+    return;
+  });
 });
 
 router.get('/stat', (req, res, next) => {
-  Promise.all([
-    api.cpuUsageAsync(),
-    api.diskUsageAsync()
-  ])
-    .then(([cpus, { free: storage }]) => {
+  if (req.status.notAuthSuccess()) {
+    // -> EF_IT or abnormal request
+    next(api.errorStreamControl);
+    return;
+  }
+
+  const time = Number(req.query.after);
+  api.infoOperator.processList('cpu', 10)
+    .then((ps) => {
       req.status.addExecStatus();
       res.send({
         ...req.status.generateReport(),
-        cpus: cpus,
-        memory: api.memoryUsageSync(),
-        storage: storage
+        history: api.infoOperator.laterThan(time),
+        process: ps
       });
       return;
     });

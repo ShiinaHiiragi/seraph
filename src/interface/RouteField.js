@@ -69,7 +69,7 @@ const RouteField = (props) => {
           >
             <HomeRoundedIcon />
           </Link>
-          {breadcrumb.slice(0, -1).map((item, index) => (
+          {path.length > 0 && breadcrumb.slice(0, -1).map((item, index) => (
             <Link
               key={index}
               underline="none"
@@ -86,22 +86,22 @@ const RouteField = (props) => {
               {item}
             </Link>
           ))}
-          <Typography
+          {path.length > 0 && <Typography
             color={"primary"}
             fontWeight={500}
             fontSize={12}
           >
             {breadcrumb.slice(-1)[0]}
-          </Typography>
+          </Typography>}
         </Breadcrumbs>
       }
       {
-        title &&
-        <Typography
-          level="h3"
-          children={title}
-          sx={{ paddingLeft: 3, paddingRight: 3, paddingBottom: 1.5 }}
-        />
+        title && typeof title === "string"
+          ? <Typography
+            level="h3"
+            children={title}
+            sx={{ paddingLeft: 3, paddingRight: 3, paddingBottom: 1.5 }}
+          /> : title
       }
       <RouteFieldRaw
         className="RouteFieldRawInner"

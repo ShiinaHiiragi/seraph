@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import Box from "@mui/joy/Box";
 import Link from "@mui/joy/Link";
 import { toast } from "sonner";
 
@@ -82,6 +83,20 @@ Array.prototype.sortBy = function(key, reverse = false) {
 };
 
 // eslint-disable-next-line
+Array.prototype.abstract = function(handleKey) {
+  if (this.length === 0) {
+    return { latest: -1, min: -1, max: -1, avg: -1 };
+  }
+
+  return {
+    latest: handleKey(this.slice(-1)[0]),
+    min: this.reduce((prev, curr) => Math.min(prev, handleKey(curr)), handleKey(this[0])),
+    max: this.reduce((prev, curr) => Math.max(prev, handleKey(curr)), handleKey(this[0])),
+    avg: this.reduce((prev, curr) => prev + handleKey(curr), 0) / this.length
+  };
+};
+
+// eslint-disable-next-line
 String.prototype.timeFormat = function(formatString) {
   return new Date(this).timeFormat(formatString);
 }
@@ -119,6 +134,13 @@ const defaultSetting = {
   meta: {
     language: "en",
     token: 60
+  },
+  welcome: {
+    window: {
+      cpu: 120,
+      net: 60
+    },
+    interval: 45,
   },
   terminal: {
     enable: false,
@@ -259,16 +281,29 @@ const defaultSetting = {
 };
 
 const defaultOSInfo = {
-  userAtHostname: "",
-  platform: "",
-  kernelVersion: "",
-  uptime: -1,
   memory: -1,
-  storage: -1
-};
+  storage: -1,
+  uptime: -1,
+  userAtHostname: "",
+  manufacturer: "",
+  model: "",
+  serial: "",
+  virtual: undefined,
+  biosVersion: "",
+  platform: "",
+  kernel: "",
+  cpu: {
+    model: "",
+    speed: -1,
+    cores: -1,
+    cache: { l1d: -1, l1i: -1, l2: -1, l3: -1 }
+  },
+  network: { }
+}
 
 const settingField = {
   general: "general",
+  welcome: "welcome",
   terminal: "terminal",
   todo: "todo",
   extension: "extension",
@@ -629,3 +664,55 @@ const OnMounted = ({ onLoad }) => {
 };
 
 export { OnMounted }
+
+// maxHistory = 120, maxInterval = 60
+// extra 20 items kept
+const maxHistoryWindow = 200;
+const vacantTolerance = 2000;
+const formatFree = (free, total) => (total - free) / total * 100;
+const clip = (min, value, max) => Math.min(Math.max(min, value), max);
+const clipInterval = (value) => clip(750, value, 1500);
+
+const Sparkline = ({ data, height = 64 }) => {
+  if (!data || data.length < 2) {
+    return <Box sx={{ height }} />;
+  }
+
+  const max = Math.max(...data) * 1.25 || 1;
+  const points = data.map((v, i) => [(i / (data.length - 1)) * 100, (1 - v / max) * 100]);
+  const lineStr = points.map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(" ");
+  const areaStr = `0,100 ${lineStr} 100,100`;
+
+  return (
+    <svg
+      viewBox="0 0 100 100"
+      preserveAspectRatio="none"
+      style={{ width: "100%", height, display: "block" }}
+    >
+      <defs>
+        <linearGradient id="cpuSparkGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="var(--joy-palette-primary-400)" stopOpacity="0.3" />
+          <stop offset="100%" stopColor="var(--joy-palette-primary-400)" stopOpacity="0" />
+        </linearGradient>
+      </defs>
+      <polygon fill="url(#cpuSparkGrad)" points={areaStr} />
+      <polyline
+        fill="none"
+        stroke="var(--joy-palette-primary-400)"
+        strokeWidth="2.5"
+        strokeLinejoin="round"
+        strokeLinecap="round"
+        points={lineStr}
+        vectorEffect="non-scaling-stroke"
+      />
+    </svg>
+  );
+};
+
+export {
+  maxHistoryWindow,
+  vacantTolerance,
+  formatFree,
+  clipInterval,
+  Sparkline
+}

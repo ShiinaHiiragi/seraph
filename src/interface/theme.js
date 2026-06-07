@@ -46,7 +46,7 @@ const GlobalTheme = (language) => extendTheme({
       sm: 600,
       md: 800,
       lg: 1000,
-      xl: 1200,
+      xl: 1200
     },
   },
   radius: {

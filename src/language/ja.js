@@ -19,6 +19,22 @@ const ja = {
         reset: "デフォルトにリセット",
         resetButton: "リセット"
       },
+      welcome: {
+        title: "ダッシュボード",
+        interval: "リクエストの間隔",
+        intervalOption: {
+          1: "1 秒",
+          2: "2 秒",
+          3: "3 秒",
+          4: "4 秒",
+          5: "5 秒",
+          10: "10 秒",
+          15: "15 秒",
+          30: "30 秒",
+          45: "45 秒",
+          60: "60 秒"
+        }
+      },
       terminal: {
         title: "ターミナル",
         enable: "ターミナルを有効",
@@ -176,13 +192,45 @@ const ja = {
   },
   main: {
     welcome: {
-      osInfo: {
-        userAtHostname: "ユーザー@ホストネーム",
-        platform: "カーネルとプラットフォーム",
-        kernelVersion: "オーエスのバージョン",
-        memoryAvailable: "フリーメモリ",
-        storageAvailable: "フリーストレージ",
+      kpiCards: {
+        cpu: "CPU",
+        cores: "コア",
+        memory: "メモリ",
+        storage: "ストレージ",
+        available: "空き",
         uptime: "アップタイム"
+      },
+      trend: {
+        cpu: "CPU ステータス",
+        memory: "メモリステータス",
+        storage: "ストレージステータス",
+        rxDisk: "読みステータス",
+        wxDisk: "書きステータス",
+        rxNet: "RX ステータス",
+        txNet: "TX ステータス",
+        min: "Min: ",
+        max: "Max: ",
+        avg: "Avg: "
+      },
+      info: {
+        systemInfo: "システム情報",
+        manufacturer: "メーカー",
+        model: "デバイスモデル",
+        serial: "シリアル",
+        virtual: "バーチャルマシン",
+        virtualNull: "N/A",
+        biosVersion: "BIOS バージョン",
+        platform: "オペレーティングシステム",
+        kernel: "カーネルバージョン",
+        cpuModel: "CPU モデル",
+        cpuCache: "キャッシュ",
+        network: "ネットワークインタフェース",
+        process: "プロセスリスト",
+        name: "プロセス名",
+        pid: "PID",
+        cpu: "CPU %",
+        mem: "メモリ %",
+        priority: "優先度"
       }
     },
     error: {

@@ -19,6 +19,22 @@ const zhHans = {
         reset: "重置为默认值",
         resetButton: "重置"
       },
+      welcome: {
+        title: "仪表盘",
+        interval: "请求间隔",
+        intervalOption: {
+          1: "1 秒",
+          2: "2 秒",
+          3: "3 秒",
+          4: "4 秒",
+          5: "5 秒",
+          10: "10 秒",
+          15: "15 秒",
+          30: "30 秒",
+          45: "45 秒",
+          60: "60 秒"
+        }
+      },
       terminal: {
         title: "终端",
         enable: "启用终端",
@@ -176,13 +192,45 @@ const zhHans = {
   },
   main: {
     welcome: {
-      osInfo: {
-        userAtHostname: "用户名@主机名",
-        platform: "内核与平台",
-        kernelVersion: "操作系统版本",
-        memoryAvailable: "可用内存",
-        storageAvailable: "可用外存",
+      kpiCards: {
+        cpu: "CPU 占用",
+        cores: "核",
+        memory: "内存占用",
+        storage: "外存占用",
+        available: "可用",
         uptime: "正常运行时间"
+      },
+      trend: {
+        cpu: "CPU 统计",
+        memory: "内存统计",
+        storage: "外存统计",
+        rxDisk: "读取统计",
+        wxDisk: "写入统计",
+        rxNet: "RX 统计",
+        txNet: "TX 统计",
+        min: "最小：",
+        max: "最大：",
+        avg: "平均："
+      },
+      info: {
+        systemInfo: "系统信息",
+        manufacturer: "生产商",
+        model: "设备型号",
+        serial: "序列号",
+        virtual: "虚拟机",
+        virtualNull: "N/A",
+        biosVersion: "Bios 版本",
+        platform: "操作系统",
+        kernel: "内核版本",
+        cpuModel: "CPU 型号",
+        cpuCache: "缓存",
+        network: "网络接口",
+        process: "进程列表",
+        name: "名称",
+        pid: "PID",
+        cpu: "CPU %",
+        mem: "内存 %",
+        priority: "优先级"
       }
     },
     error: {
