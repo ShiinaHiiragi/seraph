@@ -177,7 +177,9 @@ const Welcome = () => {
                 ...history,
                 ...[...Array(vacancy)].map((_, index) => ({
                   cpu: 0,
-                  net: 0,
+                  mem: 0,
+                  disk: { free: 0, rx: 0, wx: 0 },
+                  net: { rx: 0, tx: 0 },
                   time: lastTime + index
                 })),
                 ...unsynced
