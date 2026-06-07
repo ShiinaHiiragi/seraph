@@ -185,8 +185,8 @@ const Welcome = () => {
                 ...unsynced
               ].slice(-maxHistoryWindow)
             })
-            setProcessList(process)
           }
+          setProcessList(process)
           timeoutRef.current = setTimeout(
             () => updateHistory(lastTime),
             waitTime(intervalRef.current)
@@ -1005,7 +1005,7 @@ const Welcome = () => {
           <DashCard
             variant="outlined"
             sx={{
-              overflow: "auto",
+              overflow: "visible",
               gap: 0,
               flex: 1,
               minWidth: 0,
@@ -1021,15 +1021,21 @@ const Welcome = () => {
             </Typography>
             <Table
               sx={{
-                "& thead th:nth-child(1)": {
+                "& thead th:nth-of-type(1)": {
                   width: "40%",
                 },
-                "& td:nth-child(1)": {
+                "& td:nth-of-type(1)": {
                   wordBreak: "normal",
                   overflowWrap: "anywhere"
                 },
-                "@media (max-width: 480px)": {
-                  "& th:nth-child(5), & td:nth-child(5)": { display: "none" },
+                "@container (max-width: 480px)": {
+                  "& th:nth-of-type(5), & td:nth-of-type(5)": { display: "none" },
+                },
+                "@container (max-width: 340px)": {
+                  "& th:nth-of-type(2), & td:nth-of-type(2)": { display: "none" },
+                  "& thead th:nth-of-type(1)": {
+                    width: "50%",
+                  }
                 }
               }}
             >
@@ -1044,7 +1050,7 @@ const Welcome = () => {
               </thead>
               <tbody>
                 {processList.map((item) => (
-                  <tr key={item.name}>
+                  <tr key={item.pid}>
                     <td>{item.name}</td>
                     <td>{item.pid}</td>
                     <td>{item.cpu.toFixed(2)}</td>

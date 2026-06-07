@@ -861,6 +861,7 @@ const infoOperator = {
   processList: (by, count) => si.processes().then(({ list }) =>
     list
       .sort((left, right) => right[by] - left[by])
+      .filter(({ name }) => name !== 'System Idle Process')
       .slice(0, count)
       .map(({ name, pid, cpu, mem, priority }) => ({ name, pid, cpu, mem, priority }))
   )
