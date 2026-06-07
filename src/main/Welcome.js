@@ -393,14 +393,13 @@ const Welcome = () => {
               >
                 {(cpuUsage.latest * 100).toFixed(1)}%
               </Typography>}
-            {osInfo.cpu.cores > 0 && osInfo.cpu.speed > 0 &&
+            {osInfo.cpu.cores >= 0 && osInfo.cpu.speed >= 0 &&
               <Typography level="body-xs" color="neutral">
-                {osInfo.cpu.cores}
-                {" "}
-                {context.languagePicker("main.welcome.kpiCards.cores")}
-                {" / "}
-                {osInfo.cpu.speed}
-                {" MHz"}
+                {osInfo.cpu.cores > 0 && osInfo.cpu.cores
+                  + " "
+                  + context.languagePicker("main.welcome.kpiCards.cores")}
+                {osInfo.cpu.cores > 0 && osInfo.cpu.speed > 0 && " / "}
+                {osInfo.cpu.speed > 0 && osInfo.cpu.speed + " GHz"}
               </Typography>}
           </DashCard>
 
@@ -979,7 +978,7 @@ const Welcome = () => {
               {Object.values(osInfo.cpu.cache).every((item) => item > 0) && (
                 <InfoPair
                   label={context.languagePicker("main.welcome.info.cpuCache")}
-                  value={`L1d ${osInfo.cpu.cache.l1d.sizeFormat()} / L1i ${osInfo.cpu.cache.l1i.sizeFormat()} / L2 ${osInfo.cpu.cache.l2.sizeFormat()} / L3${osInfo.cpu.cache.l3.sizeFormat()}`}
+                  value={`L1d ${osInfo.cpu.cache.l1d.sizeFormat()} / L1i ${osInfo.cpu.cache.l1i.sizeFormat()} / L2 ${osInfo.cpu.cache.l2.sizeFormat()} / L3 ${osInfo.cpu.cache.l3.sizeFormat()}`}
                 />
               )}
             </DashCard>
