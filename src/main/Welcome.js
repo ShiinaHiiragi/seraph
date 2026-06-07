@@ -259,8 +259,6 @@ const Welcome = () => {
 
   const cpuUsage = history.abstract((item) => item.cpu);
   const memoryUsage = history.abstract((item) => item.mem);
-  console.log("suspicious items:", history.filter(item => !item.disk));
-  window.debugHistory = history;
   const storageUsage = history.abstract((item) => item.disk.free);
   const rxDiskUsage = history.abstract((item) => item.disk.rx);
   const wxDiskUsage = history.abstract((item) => item.disk.wx);
