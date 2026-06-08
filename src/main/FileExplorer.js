@@ -134,7 +134,6 @@ const FileExplorer = (props) => {
 
   // new folder
   const [modalNewOpen, setModalNewOpen] = React.useState(false);
-  const [modalNewDisabled, setModalNewDisabled] = React.useState(false);
   const [modalNewLoading, setModalNewLoading] = React.useState(false);
   const [formNewFolderNameText, setFormNewFolderNameText] = React.useState("");
   const handleCloseNew = React.useCallback(() => {
@@ -143,10 +142,11 @@ const FileExplorer = (props) => {
     setFormNewFolderNameText("");
   }, [ ]);
 
-  React.useEffect(() => setModalNewDisabled(() =>
-    filesList.some((item) => item.name === formNewFolderNameText)
-      || formNewFolderNameText.length === 0
-  ), [filesList, formNewFolderNameText]);
+  const modalNewDisabled = React.useMemo(
+    () => filesList.some((item) => item.name === formNewFolderNameText)
+      || formNewFolderNameText.length === 0,
+    [filesList, formNewFolderNameText]
+  );
 
   const handleNewFolder = React.useCallback(() => {
     if (!isValidFilename(formNewFolderNameText)) {
@@ -376,17 +376,17 @@ const FileExplorer = (props) => {
   // states and function for rename
   const [modalRenameOpen, setModalRenameOpen] = React.useState(null);
   const [modalRenameLoading, setModalRenameLoading] = React.useState(false);
-  const [modalRenameDisabled, setModalRenameDisabled] = React.useState(false);
   const [formNewFilenameText, setFormNewFilenameText] = React.useState("");
   const handleCloseRename = React.useCallback(() => {
     setModalRenameOpen(false);
     setModalRenameLoading(false);
   }, [ ]);
 
-  React.useEffect(() => setModalRenameDisabled(() =>
-    filesList.some((item) => item.name === formNewFilenameText)
-      || formNewFilenameText.length === 0
-  ), [filesList, modalRenameOpen, formNewFilenameText]);
+  const modalRenameDisabled = React.useMemo(
+    () => filesList.some((item) => item.name === formNewFilenameText)
+      || formNewFilenameText.length === 0,
+    [filesList, formNewFilenameText]
+  );
 
   const handleRename = React.useCallback(() => {
     if (!isValidFilename(formNewFilenameText)) {
