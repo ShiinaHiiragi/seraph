@@ -80,7 +80,7 @@ const dataPath = {
   tokenFilePath: path.join(__dirname, "./data/token.json"),
   taskFilePath: path.join(__dirname, "./data/task.json"),
   authFilePath: path.join(__dirname, "./401.html"),
-  extensionDirPath: path.join(__dirname, "./extensions"),
+  extensionDirPath: path.join(__dirname, "../extensions"),
   publicDirFolderPath: (folderName) => path.join(__dirname, "./data/public", folderName),
   privateDirFolderPath: (folderName) => path.join(__dirname, "./data/private", folderName),
 };
@@ -235,7 +235,7 @@ const defaultConfig = {
         front: true
       },
       nav: {
-        link: true,
+        link: false,
         prev: "← 前へ",
         next: "次へ →"
       },
