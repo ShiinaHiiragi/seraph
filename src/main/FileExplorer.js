@@ -24,6 +24,7 @@ import GlobalContext, {
   pathStartWith
 } from "../interface/constants";
 import RouteField from "../interface/RouteField";
+import SemiInput from "../interface/SemiInput";
 import FileTable from "../components/FileTable";
 import FileList from "../components/FileList";
 import Caption from "../components/Caption";
@@ -129,17 +130,8 @@ const FileExplorer = (props) => {
     setFilter(null);
   }, [type, folderName]);
 
-  React.useEffect(() => {
-    const timeoutID = setTimeout(() =>
-      setGuard((guard) => [search, guard[1]]
-    ), reactionInterval.slow);
-    return () => clearTimeout(timeoutID);
-  }, [search]);
-
-  React.useEffect(() => setGuard((guard) => [
-    guard[0],
-    filter
-  ]), [filter]);
+  React.useEffect(() => setGuard((guard) => [search, guard[1]]), [search]);
+  React.useEffect(() => setGuard((guard) => [guard[0], filter]), [filter]);
 
   // new folder
   const [modalNewOpen, setModalNewOpen] = React.useState(false);
@@ -519,10 +511,11 @@ const FileExplorer = (props) => {
           >
             <Box sx={{ display: "flex", flexGrow: 1 }}>
               <FormControl sx={{ width: "100%" }} size="sm">
-                <Input
+                <SemiInput
+                  initValue={search}
+                  setValue={setSearch}
+                  offset={reactionInterval.slow}
                   autoComplete="off"
-                  value={search}
-                  onChange={(event) => setSearch(event.target.value)}
                   size="sm"
                   placeholder={context.languagePicker("main.folder.viewRegulate.search")}
                   startDecorator={<SearchIcon />}
