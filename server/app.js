@@ -88,6 +88,8 @@ app.use((req, res) => {
 });
 
 // error handler must possess four parameters
+// `if (!cond) { next(api.errorStreamControl); return; }` act as `assert(cond)`;
+// which means we believe that `!cond` should not happen
 app.use((err, req, res, _) => {
   if (!err.validity) {
     console.error(err);

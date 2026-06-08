@@ -56,7 +56,7 @@ router.get('/stat', (req, res, next) => {
       return;
     })
     .catch((err) => {
-      // EF_ISE: unkown internal error
+      // EF_ISE: unkown internal error in async function
       next(err);
       return;
     });

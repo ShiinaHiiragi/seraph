@@ -316,10 +316,8 @@ router.post('/zip', (req, res, next) => {
     return;
   }
 
-  const { type, folderName, filename, newName } = req.body;
+  const { type, folderName, filename, newFilename } = req.body;
   const { folderPath, filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
-
-  const newFilename = filename + ".zip"
   const { filePath: newFilePath } = api.fileOperator.pathCombinator(type, folderName, newFilename);
 
   if (!fs.existsSync(filePath)) {
@@ -342,7 +340,7 @@ router.post('/zip', (req, res, next) => {
     zip.writeZip(newFilePath);
     fs.chmodSync(newFilePath, 0o777);
   } catch (_) {
-    // -> EF_FME: fs.unlinkSync error
+    // -> EF_FME: zip error
     req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
     res.send(req.status.generateReport());
     return;
@@ -412,7 +410,7 @@ router.post('/unzip', (req, res, next) => {
     zip.extractAllTo(path.join(folderPath, extractName));
     chmodSyncR(newDirPath, 0o777);
   } catch (_) {
-    // -> EF_FME: fs.unlinkSync error
+    // -> EF_FME: unzip error
     req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
     res.send(req.status.generateReport());
     return;
@@ -434,7 +432,7 @@ router.post('/epub', (req, res, next) => {
     return;
   }
 
-  const { type, folderName, filename, newName } = req.body;
+  const { type, folderName, filename, newDirName } = req.body;
   const { folderPath, filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
 
   if (!fs.existsSync(filePath)) {
@@ -444,7 +442,7 @@ router.post('/epub', (req, res, next) => {
     return;
   }
 
-  const newDirPath = path.join(folderPath, newName);
+  const newDirPath = path.join(folderPath, newDirName);
   if (fs.existsSync(newDirPath)) {
     // -> EF_IC: filename already exists
     req.status.addExecStatus(api.Status.execErrCode.IdentifierConflict);
@@ -494,6 +492,7 @@ router.post('/epub', (req, res, next) => {
       })
     ], { env: { ...process.env, PYTHONUTF8: '1' } }, (err, stdout, stderr) => {
       if (err) {
+        // -> EF_EE: fail to execute epub.py
         req.status.addExecStatus(api.Status.execErrCode.ExtensionError);
         res.send({
           ...req.status.generateReport(),
@@ -508,8 +507,9 @@ router.post('/epub', (req, res, next) => {
           const tempDirPath = path.join(tempdir, fs.readdirSync(tempdir)[0]);
           fse.moveSync(tempDirPath, newDirPath);
         } catch (err) {
-          // -> EF_ISE: unknown error
-          next(err);
+          // -> EF_FME: fse.moveSync error
+          req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
+          res.send(req.status.generateReport());
           resolve();
           return;
         }
@@ -518,7 +518,7 @@ router.post('/epub', (req, res, next) => {
         req.status.addExecStatus();
         res.send({
           ...req.status.generateReport(),
-          ...api.fileOperator.readFileInfo(folderPath, newName)
+          ...api.fileOperator.readFileInfo(folderPath, newDirName)
         });
         resolve();
         return;
