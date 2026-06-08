@@ -3,7 +3,6 @@ import { toast } from "sonner";
 import { useParams } from "react-router";
 import Fuse from "fuse.js";
 import isValidFilename from "valid-filename";
-import Input from "@mui/joy/Input";
 import Box from "@mui/joy/Box";
 import FormControl from "@mui/joy/FormControl";
 import Select from "@mui/joy/Select";
@@ -144,16 +143,10 @@ const FileExplorer = (props) => {
     setFormNewFolderNameText("");
   }, [ ]);
 
-  React.useEffect(() => {
-    const timeoutID = setTimeout(() => setModalNewDisabled(() => {
-      if (filesList.filter((item) => item.name === formNewFolderNameText).length > 0) {
-        return true
-      } else {
-        return formNewFolderNameText.length === 0
-      }
-    }), reactionInterval.rapid);
-    return () => clearTimeout(timeoutID);
-  }, [filesList, formNewFolderNameText]);
+  React.useEffect(() => setModalNewDisabled(() =>
+    filesList.some((item) => item.name === formNewFolderNameText)
+      || formNewFolderNameText.length === 0
+  ), [filesList, formNewFolderNameText]);
 
   const handleNewFolder = React.useCallback(() => {
     if (!isValidFilename(formNewFolderNameText)) {
@@ -390,16 +383,10 @@ const FileExplorer = (props) => {
     setModalRenameLoading(false);
   }, [ ]);
 
-  React.useEffect(() => {
-    const timeoutID = setTimeout(() => setModalRenameDisabled(() => {
-      if (filesList.filter((item) => item.name === formNewFilenameText).length > 0) {
-        return true
-      } else {
-        return formNewFilenameText.length === 0
-      }
-    }), reactionInterval.rapid);
-    return () => clearTimeout(timeoutID);
-  }, [filesList, modalRenameOpen, formNewFilenameText]);
+  React.useEffect(() => setModalRenameDisabled(() =>
+    filesList.some((item) => item.name === formNewFilenameText)
+      || formNewFilenameText.length === 0
+  ), [filesList, modalRenameOpen, formNewFilenameText]);
 
   const handleRename = React.useCallback(() => {
     if (!isValidFilename(formNewFilenameText)) {
@@ -640,12 +627,13 @@ const FileExplorer = (props) => {
         caption={context.languagePicker("modal.form.rename.caption")}
         button={context.languagePicker("universal.button.submit")}
       >
-        <Input
+        <SemiInput
+          initValue={formNewFilenameText}
+          setValue={setFormNewFilenameText}
+          offset={reactionInterval.rapid}
           autoFocus
           autoComplete="off"
           placeholder={context.languagePicker("modal.form.rename.placeholder")}
-          value={formNewFilenameText}
-          onChange={(event) => setFormNewFilenameText(event.target.value)}
         />
       </ModalForm>
       <ModalForm
@@ -658,12 +646,13 @@ const FileExplorer = (props) => {
         caption={context.languagePicker("modal.form.new.caption")}
         button={context.languagePicker("universal.button.submit")}
       >
-        <Input
+        <SemiInput
+          initValue={formNewFolderNameText}
+          setValue={setFormNewFolderNameText}
+          offset={reactionInterval.rapid}
           autoFocus
           autoComplete="off"
           placeholder={context.languagePicker("modal.form.new.placeholder")}
-          value={formNewFolderNameText}
-          onChange={(event) => setFormNewFolderNameText(event.target.value)}
         />
       </ModalForm>
       <label role="button" ref={uploadRef}>
