@@ -23,13 +23,38 @@ String.prototype.versionGE = function (min) {
   return true;
 };
 
+const Permission = {
+  lowSecurity: 0o755,
+  highSecurity: 0o700,
+  auto: (type) => type === 'private'
+    ? Permission.highSecurity
+    : Permission.lowSecurity,
+  chmodSyncR: (unknownPath, mode) => {
+    const stat = fs.lstatSync(unknownPath);
+    if (stat.isSymbolicLink()) {
+      return;
+    }
+    fs.chmodSync(unknownPath, mode);
+
+    if (stat.isDirectory()) {
+      fs.readdirSync(unknownPath)
+        .forEach((file) => fileOperator.chmodSyncR(
+          path.join(unknownPath, file),
+          mode
+        ))
+    }
+  }
+};
+
+exports.Permission = Permission;
+
 // copy .env in react directory
 // use .env to build base URL
 fs.copyFileSync(
   path.join(__dirname, '../.env'),
   path.join(__dirname, '/.env')
 );
-fs.chmodSync(path.join(__dirname, '/.env'), 0o777);
+fs.chmodSync(path.join(__dirname, '/.env'), Permission.lowSecurity);
 
 dotenv.config();
 const isLoopback = (hostname) => {
@@ -52,10 +77,6 @@ const dataPath = {
   configFilePath: path.join(__dirname, "./data/config.json"),
   tokenFilePath: path.join(__dirname, "./data/token.json"),
   taskFilePath: path.join(__dirname, "./data/task.json"),
-  markdownDirPath: path.join(__dirname, "./data/markdown"),
-  publicMarkdownDirPath: path.join(__dirname, "./data/markdown/public"),
-  privateMarkdownDirPath: path.join(__dirname, "./data/markdown/private"),
-  independentMarkdownDirPath: path.join(__dirname, "./data/markdown/independent"),
   extensionDirPath: path.join(__dirname, "../extensions"),
   publicDirFolderPath: (folderName) => path.join(__dirname, "./data/public", folderName),
   privateDirFolderPath: (folderName) => path.join(__dirname, "./data/private", folderName),
@@ -277,10 +298,10 @@ const fileOperator = {
     };
   },
 
-  probeDir: (dirPath) => {
+  probeDir: (dirPath, mode) => {
     if (!fs.existsSync(dirPath)) {
       fs.mkdirSync(dirPath);
-      fs.chmodSync(dirPath, 0o777);
+      fs.chmodSync(dirPath, mode ?? Permission.lowSecurity);
     }
     return fileOperator;
   },
@@ -291,7 +312,7 @@ const fileOperator = {
         dataPath.configFilePath,
         JSON.stringify(defaultConfig, null, 2)
       );
-      fs.chmodSync(dataPath.configFilePath, 0o777);
+      fs.chmodSync(dataPath.configFilePath, Permission.highSecurity);
     }
     return JSON.parse(fs.readFileSync(dataPath.configFilePath));
   },
@@ -309,7 +330,7 @@ const fileOperator = {
         dataPath.tokenFilePath,
         JSON.stringify([ ], null, 2)
       );
-      fs.chmodSync(dataPath.tokenFilePath, 0o777);
+      fs.chmodSync(dataPath.tokenFilePath, Permission.highSecurity);
     }
     return JSON.parse(fs.readFileSync(dataPath.tokenFilePath));
   },
@@ -327,7 +348,7 @@ const fileOperator = {
         dataPath.taskFilePath,
         JSON.stringify([ ], null, 2)
       );
-      fs.chmodSync(dataPath.taskFilePath, 0o777);
+      fs.chmodSync(dataPath.taskFilePath, Permission.highSecurity);
     }
     return JSON.parse(fs.readFileSync(dataPath.taskFilePath));
   },
@@ -404,11 +425,7 @@ exports.fileOperator = fileOperator;
   fileOperator
     .probeDir(dataPath.dataDirPath)
     .probeDir(dataPath.publicDirPath)
-    .probeDir(dataPath.privateDirPath)
-    .probeDir(dataPath.markdownDirPath)
-    .probeDir(dataPath.publicMarkdownDirPath)
-    .probeDir(dataPath.privateMarkdownDirPath)
-    .probeDir(dataPath.independentMarkdownDirPath);
+    .probeDir(dataPath.privateDirPath, Permission.highSecurity);
 
   fileOperator.readConfig();
   fileOperator.readToken();

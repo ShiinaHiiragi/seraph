@@ -34,7 +34,7 @@ router.post('/new', (req, res, next) => {
 
   try {
     fs.mkdirSync(filePath);
-    fs.chmodSync(filePath, 0o777);
+    fs.chmodSync(filePath, api.Permission.auto(type));
   } catch (_) {
     // -> EF_FME: fs.writeFileSync error
     req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
@@ -84,7 +84,7 @@ router.post('/upload', (req, res, next) => {
   try {
     const fileBuffer = Buffer.from(base, 'base64');
     fs.writeFileSync(filePath, fileBuffer);
-    fs.chmodSync(filePath, 0o777);
+    fs.chmodSync(filePath, api.Permission.auto(type));
   } catch (_) {
     // -> EF_FME: fs.writeFileSync error
     req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
@@ -204,7 +204,6 @@ router.post('/rename', (req, res, next) => {
 
   try {
     fs.renameSync(filePath, newFilePath);
-    fs.chmodSync(newFilePath, 0o777);
   } catch (_) {
     // -> EF_FME: fs.renameSync error
     req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
@@ -338,7 +337,7 @@ router.post('/zip', (req, res, next) => {
   try {
     zip.addLocalFolder(filePath);
     zip.writeZip(newFilePath);
-    fs.chmodSync(newFilePath, 0o777);
+    fs.chmodSync(newFilePath, api.Permission.auto(type));
   } catch (_) {
     // -> EF_FME: zip error
     req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
@@ -390,25 +389,9 @@ router.post('/unzip', (req, res, next) => {
     return;
   }
 
-  const chmodSyncR = (dirPath, mode) => {
-    fs.chmodSync(dirPath, mode);
-    const files = fs.readdirSync(dirPath);
-
-    for (const file of files) {
-      const filePath = path.join(dirPath, file);
-      const stats = fs.statSync(filePath);
-  
-      if (stats.isDirectory()) {
-        chmodSyncR(filePath, mode);
-      } else {
-        fs.chmodSync(filePath, mode);
-      }
-    }
-  }
-
   try {
     zip.extractAllTo(path.join(folderPath, extractName));
-    chmodSyncR(newDirPath, 0o777);
+    api.Permission.chmodSyncR(newDirPath, api.Permission.auto(type));
   } catch (_) {
     // -> EF_FME: unzip error
     req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
@@ -506,6 +489,7 @@ router.post('/epub', (req, res, next) => {
         try {
           const tempDirPath = path.join(tempdir, fs.readdirSync(tempdir)[0]);
           fse.moveSync(tempDirPath, newDirPath);
+          api.Permission.chmodSyncR(newDirPath, api.Permission.auto(type))
         } catch (err) {
           // -> EF_FME: fse.moveSync error
           req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
