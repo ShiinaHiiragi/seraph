@@ -244,6 +244,26 @@ const defaultConfig = {
 exports.defaultConfig = defaultConfig;
 
 const fileOperator = {
+  tempPrefix: 'seraph-',
+  operateInTemp: (handleOperate) =>
+    fs.promises.mkdtemp(path.join(os.tmpdir(), fileOperator.tempPrefix))
+      .then((tempdir) =>
+        Promise.resolve(handleOperate(tempdir))
+          .finally(() => console.log(`removed ${tempdir}`) || fs.promises.rm(tempdir, { recursive: true, force: true }))
+      ),
+
+  operateInTempSync: (handleOperateSync) => {
+    const tempdir = fs.mkdtempSync(path.join(
+      os.tmpdir(),
+      fileOperator.tempPrefix
+    ));
+    try {
+      handleOperateSync(tempdir);
+    } finally {
+      fs.rmSync(tempdir, { recursive: true, force: true });
+    }
+  },
+
   pathCombinator: (type, folderName, filename) => {
     const folderPath = dataPath[
       type === "private"

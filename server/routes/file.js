@@ -316,7 +316,7 @@ router.post('/zip', (req, res, next) => {
     return;
   }
 
-  const { type, folderName, filename } = req.body;
+  const { type, folderName, filename, newName } = req.body;
   const { folderPath, filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
 
   const newFilename = filename + ".zip"
@@ -348,7 +348,7 @@ router.post('/zip', (req, res, next) => {
     return;
   }
 
-  // -> ES: no extra info
+  // -> ES: info of new file
   req.status.addExecStatus();
   res.send({
     ...req.status.generateReport(),
@@ -364,7 +364,7 @@ router.post('/unzip', (req, res, next) => {
     return;
   }
 
-  const { type, folderName, filename } = req.body;
+  const { type, folderName, filename, newName } = req.body;
   const { folderPath, filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
 
   if (!fs.existsSync(filePath)) {
@@ -418,7 +418,7 @@ router.post('/unzip', (req, res, next) => {
     return;
   }
 
-  // -> ES: no extra info
+  // -> ES: info of new folder/file
   req.status.addExecStatus();
   res.send({
     ...req.status.generateReport(),
@@ -434,7 +434,7 @@ router.post('/epub', (req, res, next) => {
     return;
   }
 
-  const { type, folderName, filename } = req.body;
+  const { type, folderName, filename, newName } = req.body;
   const { folderPath, filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
 
   if (!fs.existsSync(filePath)) {
@@ -444,9 +444,7 @@ router.post('/epub', (req, res, next) => {
     return;
   }
 
-  const newDirName = filename.split(".").slice(0, -1).join(".");
-  const newDirPath = path.join(folderPath, newDirName);
-
+  const newDirPath = path.join(folderPath, newName);
   if (fs.existsSync(newDirPath)) {
     // -> EF_IC: filename already exists
     req.status.addExecStatus(api.Status.execErrCode.IdentifierConflict);
@@ -465,54 +463,68 @@ router.post('/epub', (req, res, next) => {
   }
 
   // use async function to avoid blocking
-  const epubSetting = api.configOperator.config.setting.epub;
-  child.execFile(api.configOperator.config.setting.extension.python[process.platform], [
-    api.extentPath.epubConverterFilePath,
-    '-c',
-    JSON.stringify({
-      "path.src": filePath,
-      "path.dst": folderPath,
-      "page.split": epubSetting.page.split,
-      "page.front": epubSetting.page.front,
-      "nav.link": epubSetting.nav.link,
-      "nav.prev": epubSetting.nav.prev,
-      "nav.next": epubSetting.nav.next,
-      "fade.kana": epubSetting.fade.kana,
-      "fade.opaque": `0.${epubSetting.fade.opaque}`,
-      "fade.size": `0.${epubSetting.fade.size}em`,
-      "fade.top": `${epubSetting.fade.top}px`,
-      "image.show": epubSetting.image.show,
-      "image.width": epubSetting.image.width,
-      "image.ialt": epubSetting.image.altInline,
-      "image.balt": epubSetting.image.altBlock,
-      "image.spec": epubSetting.image.spec,
-      "page.clear": epubSetting.text.clearLine,
-      "ruby.show": epubSetting.text.showRuby,
-      "break.text": epubSetting.text.breakLine,
-      "out.html": epubSetting.out.html,
-      "out.keep": epubSetting.out.keep,
-      "out.vert": epubSetting.out.vert
-    })
-  ], { env: { ...process.env, PYTHONUTF8: '1' } }, (err, stdout, stderr) => {
-    if (err) {
-      req.status.addExecStatus(api.Status.execErrCode.ExtensionError);
-      res.send({
-        ...req.status.generateReport(),
-        code: err.code,
-        stdout: stdout,
-        stderr: stderr
-      });
-      return;
-    } else {
-      // -> ES: no extra info
-      req.status.addExecStatus();
-      res.send({
-        ...req.status.generateReport(),
-        ...api.fileOperator.readFileInfo(folderPath, newDirName)
-      });
-      return;
-    }
-  });
+  api.fileOperator.operateInTemp((tempdir) => new Promise((resolve) => {
+    const epubSetting = api.configOperator.config.setting.epub;
+    child.execFile(api.configOperator.config.setting.extension.python[process.platform], [
+      api.extentPath.epubConverterFilePath,
+      '-c',
+      JSON.stringify({
+        "path.src": filePath,
+        "path.dst": tempdir,
+        "page.split": epubSetting.page.split,
+        "page.front": epubSetting.page.front,
+        "nav.link": epubSetting.nav.link,
+        "nav.prev": epubSetting.nav.prev,
+        "nav.next": epubSetting.nav.next,
+        "fade.kana": epubSetting.fade.kana,
+        "fade.opaque": `0.${epubSetting.fade.opaque}`,
+        "fade.size": `0.${epubSetting.fade.size}em`,
+        "fade.top": `${epubSetting.fade.top}px`,
+        "image.show": epubSetting.image.show,
+        "image.width": epubSetting.image.width,
+        "image.ialt": epubSetting.image.altInline,
+        "image.balt": epubSetting.image.altBlock,
+        "image.spec": epubSetting.image.spec,
+        "page.clear": epubSetting.text.clearLine,
+        "ruby.show": epubSetting.text.showRuby,
+        "break.text": epubSetting.text.breakLine,
+        "out.html": epubSetting.out.html,
+        "out.keep": epubSetting.out.keep,
+        "out.vert": epubSetting.out.vert
+      })
+    ], { env: { ...process.env, PYTHONUTF8: '1' } }, (err, stdout, stderr) => {
+      if (err) {
+        req.status.addExecStatus(api.Status.execErrCode.ExtensionError);
+        res.send({
+          ...req.status.generateReport(),
+          code: err.code,
+          stdout: stdout,
+          stderr: stderr
+        });
+        resolve();
+        return;
+      } else {
+        try {
+          const tempDirPath = path.join(tempdir, fs.readdirSync(tempdir)[0]);
+          fse.moveSync(tempDirPath, newDirPath);
+        } catch (err) {
+          // -> EF_ISE: unknown error
+          next(err);
+          resolve();
+          return;
+        }
+
+        // -> ES: info of new folder
+        req.status.addExecStatus();
+        res.send({
+          ...req.status.generateReport(),
+          ...api.fileOperator.readFileInfo(folderPath, newName)
+        });
+        resolve();
+        return;
+      }
+    });
+  }));
 });
 
 module.exports = router;
