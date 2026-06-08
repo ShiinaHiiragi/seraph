@@ -133,9 +133,7 @@ export default function RowMenu(props) {
       request("POST/file/zip", {
         type: type,
         folderName: folderName,
-        filename: filename,
-        // TEMP: add modal to decide new name
-        newFilename: "test.zip"
+        filename: filename
       }, undefined, reject)
         .then((data) => {
           const { statusCode, errorCode, ...newInfo } = data;
@@ -167,9 +165,7 @@ export default function RowMenu(props) {
       request("POST/file/unzip", {
         type: type,
         folderName: folderName,
-        filename: filename,
-        // TEMP: add modal to decide new name
-        newName: "test"
+        filename: filename
       }, undefined, reject)
         .then((data) => {
           const { statusCode, errorCode, ...newInfo } = data;
@@ -201,9 +197,7 @@ export default function RowMenu(props) {
       request("POST/file/epub", {
         type: type,
         folderName: folderName,
-        filename: filename,
-        // TEMP: add modal to decide new name
-        newDirName: "test"
+        filename: filename
       }, {
         [Status.execErrCode.ExtensionError]: (data) => {
           console.log(data.stderr);

@@ -39,7 +39,7 @@ const Permission = {
 
     if (stat.isDirectory()) {
       fs.readdirSync(unknownPath)
-        .forEach((file) => fileOperator.chmodSyncR(
+        .forEach((file) => Permission.chmodSyncR(
           path.join(unknownPath, file),
           mode
         ))

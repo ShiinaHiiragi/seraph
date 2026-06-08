@@ -161,6 +161,8 @@ router.post('/paste', (req, res, next) => {
       fse.moveSync(filePath, newFilePath);
       api.configOperator.clearConfigClipboard();
     }
+    // rewrite permission
+    api.chmodSyncR(newFilePath, api.Permission.auto(newType));
   } catch (_) {
     // -> EF_FME: fs.cpSync or fs.rmSync error
     req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
@@ -315,8 +317,10 @@ router.post('/zip', (req, res, next) => {
     return;
   }
 
-  const { type, folderName, filename, newFilename } = req.body;
+  const { type, folderName, filename } = req.body;
   const { folderPath, filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
+
+  const newFilename = filename + ".zip"
   const { filePath: newFilePath } = api.fileOperator.pathCombinator(type, folderName, newFilename);
 
   if (!fs.existsSync(filePath)) {
@@ -361,7 +365,7 @@ router.post('/unzip', (req, res, next) => {
     return;
   }
 
-  const { type, folderName, filename, newName } = req.body;
+  const { type, folderName, filename } = req.body;
   const { folderPath, filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
 
   if (!fs.existsSync(filePath)) {
@@ -415,7 +419,7 @@ router.post('/epub', (req, res, next) => {
     return;
   }
 
-  const { type, folderName, filename, newDirName } = req.body;
+  const { type, folderName, filename } = req.body;
   const { folderPath, filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
 
   if (!fs.existsSync(filePath)) {
@@ -425,6 +429,7 @@ router.post('/epub', (req, res, next) => {
     return;
   }
 
+  const newDirName = filename.split(".").slice(0, -1).join(".");
   const newDirPath = path.join(folderPath, newDirName);
   if (fs.existsSync(newDirPath)) {
     // -> EF_IC: filename already exists
@@ -490,7 +495,7 @@ router.post('/epub', (req, res, next) => {
           const tempDirPath = path.join(tempdir, fs.readdirSync(tempdir)[0]);
           fse.moveSync(tempDirPath, newDirPath);
           api.Permission.chmodSyncR(newDirPath, api.Permission.auto(type))
-        } catch (err) {
+        } catch (_) {
           // -> EF_FME: fse.moveSync error
           req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
           res.send(req.status.generateReport());
