@@ -201,7 +201,6 @@ const en = {
     private: "Private",
     utility: {
       title: "Utility",
-      links: "Links",
       subscription: "Subscription",
       milkdown: "Milkdown",
       terminal: "Terminal",

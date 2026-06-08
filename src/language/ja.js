@@ -201,7 +201,6 @@ const ja = {
     private: "プライベート",
     utility: {
       title: "ユーティリティ",
-      links: "リンク",
       subscription: "サブスクリプション",
       milkdown: "ミルクダウン",
       terminal: "ターミナル",

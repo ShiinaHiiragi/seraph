@@ -10,8 +10,7 @@ import Typography from "@mui/joy/Typography"
 import GreyLogo from "../logo-grey.svg";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import NavigateNextOutlinedIcon from "@mui/icons-material/NavigateNextOutlined";
-// import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
-// import EventNoteOutlinedIcon from "@mui/icons-material/EventNoteOutlined";
+import EventNoteOutlinedIcon from "@mui/icons-material/EventNoteOutlined";
 // import ForwardToInboxOutlinedIcon from "@mui/icons-material/ForwardToInboxOutlined";
 import TerminalOutlinedIcon from "@mui/icons-material/TerminalOutlined";
 import DoneIcon from "@mui/icons-material/Done";
@@ -151,17 +150,6 @@ export default function Navigation(props) {
                 "& .JoyListItemButton-root": { p: "8px" },
               }}
             >
-              {/* {context.isAuthority && <ListItem>
-                <ListItemButton
-                  selected={pathStartWith("/links")}
-                  onClick={() => navigateTo("/links")}
-                >
-                  <ListItemDecorator sx={{ color: "neutral.500" }}>
-                    <ShareOutlinedIcon fontSize="small" />
-                  </ListItemDecorator>
-                  <ListItemContent>{context.languagePicker("nav.utility.links")}</ListItemContent>
-                </ListItemButton>
-              </ListItem>}
               <ListItem>
                 <ListItemButton
                   selected={pathStartWith("/milkdown")}
@@ -173,7 +161,7 @@ export default function Navigation(props) {
                   <ListItemContent>{context.languagePicker("nav.utility.milkdown")}</ListItemContent>
                 </ListItemButton>
               </ListItem>
-              {context.isAuthority && <ListItem>
+              {/* {context.isAuthority && <ListItem>
                 <ListItemButton
                   selected={pathStartWith("/subscription")}
                   onClick={() => navigateTo("/subscription")}

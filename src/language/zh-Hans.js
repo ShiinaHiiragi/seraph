@@ -201,7 +201,6 @@ const zhHans = {
     private: "私有",
     utility: {
       title: "实用",
-      links: "链接",
       subscription: "订阅",
       milkdown: "Milkdown",
       terminal: "终端",
