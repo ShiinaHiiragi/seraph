@@ -257,7 +257,7 @@ const defaultSetting = {
       front: true
     },
     nav: {
-      link: true,
+      link: false,
       prev: "← 前へ",
       next: "次へ →"
     },
