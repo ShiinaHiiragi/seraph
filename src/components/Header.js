@@ -287,10 +287,8 @@ const Header = (props) => {
             setValue={setFormPasswordText}
             autoFocus
             placeholder={context.languagePicker("modal.form.login.placeholder")}
-            value={formPasswordText}
             error={formPasswordError}
             autoComplete="current-password"
-            onChange={(event) => setFormPasswordText(event.target.value)}
             slotProps={{ input: { type: "password" } }}
           />
         </form>
