@@ -118,7 +118,7 @@ const FileExplorer = (props) => {
       )
     ].sortBy();
 
-    if (filesList.filter((item) => item.type === "directory").length) {
+    if (filesList.some((item) => item.type === "directory")) {
       newFilterList.unshift("Directory")
     }
     setFilterList(newFilterList);
@@ -630,7 +630,6 @@ const FileExplorer = (props) => {
         <SemiInput
           initValue={formNewFilenameText}
           setValue={setFormNewFilenameText}
-          offset={reactionInterval.rapid}
           autoFocus
           autoComplete="off"
           placeholder={context.languagePicker("modal.form.rename.placeholder")}
@@ -649,7 +648,6 @@ const FileExplorer = (props) => {
         <SemiInput
           initValue={formNewFolderNameText}
           setValue={setFormNewFolderNameText}
-          offset={reactionInterval.rapid}
           autoFocus
           autoComplete="off"
           placeholder={context.languagePicker("modal.form.new.placeholder")}

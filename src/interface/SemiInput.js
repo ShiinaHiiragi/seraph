@@ -1,5 +1,6 @@
 import * as React from "react";
 import Input from "@mui/joy/Input";
+import { reactionInterval } from "./constants";
 
 export default function SemiInput(props) {
   const {
@@ -11,7 +12,10 @@ export default function SemiInput(props) {
 
   const [localValue, setLocalValue] = React.useState(initValue);
   React.useEffect(() => {
-    const timeoutId = setTimeout(() => setValue(localValue), offset);
+    const timeoutId = setTimeout(
+      () => setValue(localValue),
+      offset ?? reactionInterval.rapid
+    );
     return () => clearTimeout(timeoutId);
   }, [localValue, offset, setValue]);
 

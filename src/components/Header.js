@@ -19,6 +19,7 @@ import GlobalContext, {
   OnMounted
 } from "../interface/constants";
 import { languagePickerSpawner } from "../interface/languagePicker";
+import SemiInput from "../interface/SemiInput";
 import ModalForm from "../modal/Form";
 
 const Config = React.lazy(() => import("../modal/Config"));
@@ -281,7 +282,9 @@ const Header = (props) => {
       >
         <form>
           <Input type="text" autoComplete="username" sx={{ display: "none" }} />
-          <Input
+          <SemiInput
+            initValue={formPasswordText}
+            setValue={setFormPasswordText}
             autoFocus
             placeholder={context.languagePicker("modal.form.login.placeholder")}
             value={formPasswordText}
