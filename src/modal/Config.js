@@ -1375,7 +1375,12 @@ export default function Config(props) {
                                 color="neutral"
                                 title={item.tip}
                                 placement="right"
-                                sx={{ maxWidth: 300, py: 0.5, px: 0.75 }}
+                                sx={{
+                                  maxWidth: 300,
+                                  py: 0.5,
+                                  px: 0.75,
+                                  cursor: "default"
+                                }}
                               >
                                 <HelpOutlineOutlinedIcon
                                   sx={{
