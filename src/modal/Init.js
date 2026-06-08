@@ -20,6 +20,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { request, globalState } from "../interface/constants";
 import { languageMap } from "../interface/languagePicker";
+import SemiInput from "../interface/SemiInput";
 
 const Aligned = styled("span")(({ theme }) => ({
   paddingLeft: theme.spacing(4)
@@ -135,7 +136,9 @@ export default function Init(props) {
             <Input type="text" autoComplete="username" sx={{ display: "none" }} />
             <FormControl>
               <FormLabel>{context.languagePicker("modal.init.password.label")}</FormLabel>
-              <Input
+              <SemiInput
+                initValue={formPasswordText}
+                setValue={setFormPasswordText}
                 autoFocus
                 endDecorator={
                   <IconButton
@@ -153,9 +156,7 @@ export default function Init(props) {
                   </IconButton>
                 }
                 placeholder={context.languagePicker("modal.init.password.placeholder")}
-                value={formPasswordText}
                 autoComplete="new-password"
-                onChange={(event) => setFormPasswordText(event.target.value)}
                 slotProps={{ input: { type: formPasswordType } }}
               />
             </FormControl>
