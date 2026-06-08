@@ -130,10 +130,10 @@ const FileExplorer = (props) => {
   }, [type, folderName]);
 
   React.useEffect(() => {
-    const timeOutId = setTimeout(() =>
+    const timeoutID = setTimeout(() =>
       setGuard((guard) => [search, guard[1]]
     ), reactionInterval.slow);
-    return () => clearTimeout(timeOutId);
+    return () => clearTimeout(timeoutID);
   }, [search]);
 
   React.useEffect(() => setGuard((guard) => [
@@ -153,14 +153,14 @@ const FileExplorer = (props) => {
   }, [ ]);
 
   React.useEffect(() => {
-    const timeOutId = setTimeout(() => setModalNewDisabled(() => {
+    const timeoutID = setTimeout(() => setModalNewDisabled(() => {
       if (filesList.filter((item) => item.name === formNewFolderNameText).length > 0) {
         return true
       } else {
         return formNewFolderNameText.length === 0
       }
     }), reactionInterval.rapid);
-    return () => clearTimeout(timeOutId);
+    return () => clearTimeout(timeoutID);
   }, [filesList, formNewFolderNameText]);
 
   const handleNewFolder = React.useCallback(() => {
@@ -399,14 +399,14 @@ const FileExplorer = (props) => {
   }, [ ]);
 
   React.useEffect(() => {
-    const timeOutId = setTimeout(() => setModalRenameDisabled(() => {
+    const timeoutID = setTimeout(() => setModalRenameDisabled(() => {
       if (filesList.filter((item) => item.name === formNewFilenameText).length > 0) {
         return true
       } else {
         return formNewFilenameText.length === 0
       }
     }), reactionInterval.rapid);
-    return () => clearTimeout(timeOutId);
+    return () => clearTimeout(timeoutID);
   }, [filesList, modalRenameOpen, formNewFilenameText]);
 
   const handleRename = React.useCallback(() => {
