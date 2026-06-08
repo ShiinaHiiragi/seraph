@@ -19,8 +19,6 @@ import IconButton from "@mui/joy/IconButton";
 import FormControl from "@mui/joy/FormControl";
 import FormLabel from "@mui/joy/FormLabel";
 import FormHelperText from "@mui/joy/FormHelperText";
-import Input from "@mui/joy/Input";
-import Textarea from "@mui/joy/Textarea";
 import Select from "@mui/joy/Select";
 import Option from "@mui/joy/Option";
 import Button from "@mui/joy/Button";
@@ -33,6 +31,7 @@ import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import AccessAlarmsOutlinedIcon from "@mui/icons-material/AccessAlarmsOutlined";
 import RouteField from "../interface/RouteField";
 import GlobalContext, { request } from "../interface/constants";
+import SemiInput, { SemiTextarea } from "../interface/SemiInput";
 import ModalForm from "../modal/Form";
 import Picker from "../components/Picker";
 
@@ -616,20 +615,21 @@ const TODO = () => {
       >
         <FormControl>
           <FormLabel>{context.languagePicker("main.todo.regulate.name")}</FormLabel>
-          <Input
-            value={modalTaskName}
-            onChange={(event) => setModalTaskName(event.target.value)}
+          <SemiInput
+            initValue={modalTaskName}
+            setValue={setModalTaskName}
             placeholder={context.languagePicker("universal.placeholder.instruction.required")}
           />
         </FormControl>
         <FormControl>
           <FormLabel>{context.languagePicker("main.todo.regulate.description")}</FormLabel>
-          <Textarea
+          <SemiTextarea
+            initValue={modalTaskDesciption}
+            setValue={setModalTaskDesciption}
             minRows={4}
             maxRows={4}
             placeholder={context.languagePicker("universal.placeholder.instruction.optional")}
             value={modalTaskDesciption}
-            onChange={(event) => setModalTaskDesciption(event.target.value)}
           />
         </FormControl>
         <FormControl>
