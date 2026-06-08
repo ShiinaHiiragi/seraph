@@ -162,7 +162,7 @@ router.post('/paste', (req, res, next) => {
       api.configOperator.clearConfigClipboard();
     }
     // rewrite permission
-    api.chmodSyncR(newFilePath, api.Permission.auto(newType));
+    api.Permission.chmodSyncR(newFilePath, api.Permission.auto(newType));
   } catch (_) {
     // -> EF_FME: fs.cpSync or fs.rmSync error
     req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
