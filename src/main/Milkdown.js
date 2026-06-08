@@ -1,9 +1,28 @@
 import React from "react";
+import Box from "@mui/joy/Box";
+import { Crepe } from "@milkdown/crepe";
+import { Milkdown, MilkdownProvider, useEditor } from "@milkdown/react";
 import RouteField from "../interface/RouteField";
 import GlobalContext from "../interface/constants";
-import Caption from "../components/Caption";
 
-const Milkdown = () => {
+import "@milkdown/crepe/theme/common/style.css";
+import "@milkdown/crepe/theme/frame.css";
+
+const editorWrapStyle = {
+  flex: 1,
+  display: "flex",
+  flexDirection: "column",
+  minHeight: 0,
+};
+
+const CrepeEditorInner = () => {
+  useEditor((root) => {
+    return new Crepe({ root, defaultValue: "" });
+  }, []);
+  return <Milkdown />;
+};
+
+const CrepeEditor = () => {
   const context = React.useContext(GlobalContext);
 
   return (
@@ -15,12 +34,13 @@ const Milkdown = () => {
       ]}
       title={context.languagePicker("nav.utility.milkdown")}
     >
-      <Caption
-        title={context.languagePicker("universal.placeholder.inDevelopment.title")}
-        caption={context.languagePicker("universal.placeholder.inDevelopment.caption")}
-      />
+      <Box sx={editorWrapStyle}>
+        <MilkdownProvider>
+          <CrepeEditorInner />
+        </MilkdownProvider>
+      </Box>
     </RouteField>
-  )
+  );
 }
 
-export default Milkdown;
+export default CrepeEditor;

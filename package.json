@@ -7,6 +7,8 @@
     "@emotion/styled": "^11.14.1",
     "@fontsource/inter": "^5.0.8",
     "@milkdown/crepe": "^7.21.2",
+    "@milkdown/kit": "^7.21.2",
+    "@milkdown/react": "^7.21.2",
     "@mui/icons-material": "^5.14.8",
     "@mui/joy": "^5.0.0-beta.52",
     "@mui/material": "^5.14.13",
