@@ -4,6 +4,7 @@ let api = require('../api');
 let router = express.Router();
 
 router.get('/version', (req, res, next) => {
+  // -> ES: return version
   req.status.addExecStatus();
   res.send({
     ...req.status.generateReport(),
@@ -19,7 +20,9 @@ router.get('/os', (req, res, next) => {
     return;
   }
 
+  // error in api.cachedInfo will be thown immediately on start
   api.cachedInfo.then((osInfo) => {
+    // -> ES: return os info
     req.status.addExecStatus();
     res.send({
       ...req.status.generateReport(),
@@ -43,12 +46,18 @@ router.get('/stat', (req, res, next) => {
     api.configOperator.config.setting.welcome.process.count,
   )
     .then((ps) => {
+      // -> ES: return stat history
       req.status.addExecStatus();
       res.send({
         ...req.status.generateReport(),
         history: api.infoOperator.laterThan(time),
         process: ps
       });
+      return;
+    })
+    .catch((err) => {
+      // EF_ISE: unkown internal error
+      next(err);
       return;
     });
 });
