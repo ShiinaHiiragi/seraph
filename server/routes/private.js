@@ -5,12 +5,6 @@ let api = require('../api');
 let router = express.Router();
 
 router.get('/*/:filename', (req, res, next) => {
-  if (req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
-    next(api.errorStreamControl);
-    return;
-  }
-
   const { '0': folderName, filename } = req.params;
   const folderPath = api.dataPath.privateDirFolderPath(folderName);
   const filePath = path.join(folderPath, filename);
@@ -24,6 +18,13 @@ router.get('/*/:filename', (req, res, next) => {
   if (fs.lstatSync(filePath).isDirectory()) {
     // -> next: is a directory
     next();
+    return;
+  }
+
+  if (req.status.notAuthSuccess()) {
+    // -> EF_IT: is a file but fail to authenticate
+    // send home-made 401 page instead of strange json
+    res.sendFile(api.dataPath.authFilePath);
     return;
   }
 

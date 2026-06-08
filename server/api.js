@@ -79,7 +79,8 @@ const dataPath = {
   configFilePath: path.join(__dirname, "./data/config.json"),
   tokenFilePath: path.join(__dirname, "./data/token.json"),
   taskFilePath: path.join(__dirname, "./data/task.json"),
-  extensionDirPath: path.join(__dirname, "../extensions"),
+  authFilePath: path.join(__dirname, "./401.html"),
+  extensionDirPath: path.join(__dirname, "./extensions"),
   publicDirFolderPath: (folderName) => path.join(__dirname, "./data/public", folderName),
   privateDirFolderPath: (folderName) => path.join(__dirname, "./data/private", folderName),
 };
