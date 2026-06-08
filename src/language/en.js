@@ -185,6 +185,7 @@ const en = {
         textShowRuby: "Show ruby if exists",
         textBreakLine: "Text to replace <br> (escapes supported)",
         out: "Output",
+        outTip: "The output HTML styles are fixed and cannot be changed.",
         outHTML: "Convert markdown to HTML",
         outVert: "Make HTML text vertical",
         outKeep: "Keep intermediate markdown files"

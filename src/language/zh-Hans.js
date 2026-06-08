@@ -185,6 +185,7 @@ const zhHans = {
         textShowRuby: "显示 Ruby",
         textBreakLine: "替换 <br> 的文本（支持转义）",
         out: "输出",
+        outTip: "输出的 HTML 样式固定不可变动",
         outHTML: "将 Markdown 转换为 HTML",
         outVert: "将 HTML 版式设为竖排",
         outKeep: "保留转换前的 Markdown 文件"

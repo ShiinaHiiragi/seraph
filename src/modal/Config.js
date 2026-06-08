@@ -1089,6 +1089,7 @@ const SECTIONS = (
         },
         {
           key: context.languagePicker("header.config.epub.out"),
+          tip: context.languagePicker("header.config.epub.outTip"),
           value: (
             <Stack spacing={1}>
               {Bool(
