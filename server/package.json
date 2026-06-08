@@ -6,10 +6,10 @@
     "postinstall": "patch-package",
     "dev": "run-script-os",
     "server": "run-script-os",
-    "dev:win32": "node-dev ./bin/www",
-    "dev:linux": "sudo node ./node_modules/.bin/node-dev ./bin/www",
-    "server:win32": "node ./bin/www",
-    "server:linux": "sudo node ./bin/www"
+    "dev:win32": "cross-env NODE_MODE=dev node-dev ./bin/www",
+    "dev:linux": "cross-env NODE_MODE=dev sudo -E node ./node_modules/.bin/node-dev ./bin/www",
+    "server:win32": "cross-env NODE_MODE=deploy node ./bin/www",
+    "server:linux": "cross-env NODE_MODE=deploy sudo -E node ./bin/www"
   },
   "dependencies": {
     "adm-zip": "^0.5.10",
@@ -17,6 +17,7 @@
     "compression": "^1.8.1",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
+    "cross-env": "^10.1.0",
     "debug": "~2.6.9",
     "dotenv": "^16.3.1",
     "express": "~4.16.1",

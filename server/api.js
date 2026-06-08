@@ -23,9 +23,10 @@ String.prototype.versionGE = function (min) {
   return true;
 };
 
+const isDev = process.env.NODE_MODE === 'dev';
 const Permission = {
-  lowSecurity: 0o755,
-  highSecurity: 0o700,
+  lowSecurity: isDev ? 0o777 : 0o755,
+  highSecurity: isDev ? 0o777 : 0o700,
   auto: (type) => type === 'private'
     ? Permission.highSecurity
     : Permission.lowSecurity,
@@ -46,6 +47,7 @@ const Permission = {
   }
 };
 
+exports.isDev = isDev;
 exports.Permission = Permission;
 
 // copy .env in react directory
