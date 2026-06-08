@@ -145,7 +145,8 @@ const en = {
           0: "Immediately",
           60: "1 minute",
           3600: "1 hour",
-          86400: "1 day"
+          86400: "1 day",
+          never: "Never"
         }
       },
       extension: {
@@ -344,6 +345,7 @@ const en = {
         tick: "The task will be deleted in {0} seconds, which can be cancelled by re-ticking the checkbox before the end of its countdown.",
         tickSync: "The task will be deleted after due time.",
         tickDel: "The task is completed and deleted immediately.",
+        tickOnly: "The task is completed.",
         untick: "Changing has been rolled back."
       },
       warning: {

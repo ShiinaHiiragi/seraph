@@ -129,7 +129,11 @@ const TODO = () => {
   React.useEffect(() => {
     const timeNow = Date.now();
     setTask((task) => task
-      .filter((item) => (item.deleteTime === null || item.deleteTime >= timeNow))
+      .filter((item) => (
+        item.deleteTime === null
+          || item.deleteTime === -1
+          || item.deleteTime >= timeNow
+      ))
       .map((item) => ({
         ...item,
         expired: item.dueTime <= timeNow
@@ -176,17 +180,17 @@ const TODO = () => {
         reject
       )
         .then((data) => {
-          if (context.setting.task.delay > 0) {
+          if (context.setting.task.delay === 0) {
+            setTask((task) => task.filter((item) =>
+              item.id !== id || item.createTime !== createTime
+            ))
+          } else {
             setTask((task) => task.map((item) =>
               item.id === id && item.createTime === createTime
                 ? {
                   ...item,
                   deleteTime: data.deleteTime
                 } : item
-            ))
-          } else {
-            setTask((task) => task.filter((item) =>
-              item.id !== id || item.createTime !== createTime
             ))
           }
           resolve(data.type);
@@ -199,6 +203,8 @@ const TODO = () => {
         : context.setting.task.delay > 0
         ? context.languagePicker("modal.toast.success.tick")
           .format(context.setting.task.delay)
+        : context.setting.task.delay < 0
+        ? context.languagePicker("modal.toast.success.tickOnly")
         : context.languagePicker("modal.toast.success.tickDel"),
       error: (data) => data
     })
@@ -317,7 +323,7 @@ const TODO = () => {
     }
   }, [context, taskInfo]);
 
-  const handleDeleteTask = (id, createTime, name) => {
+  const handleDeleteTask = React.useCallback((id, createTime, name) => {
     toast.promise(new Promise((resolve, reject) => {
       request(
         "POST/utility/todo/delete",
@@ -339,7 +345,7 @@ const TODO = () => {
         .format(name),
       error: (data) => data
     })
-  };
+  }, [context]);
 
   return (
     <RouteField
@@ -560,7 +566,7 @@ const TODO = () => {
                       </Menu>
                     </Dropdown>
                     <Box sx={{ flexGrow: 1 }} />
-                    {item.type !== "sync" && item.deleteTime &&
+                    {item.type !== "sync" && item.deleteTime && item.deleteTime > 0 &&
                       <Countdown
                         date={item.deleteTime ?? 0}
                         intervalDelay={0}

@@ -664,7 +664,10 @@ const checkerParam = {
   ]
 }
 
-const taskDelay = () => configOperator.config.setting.task.delay * 1000;
+const taskDelay = () => configOperator.config.setting.task.delay >= 0
+  ? Date.now() + configOperator.config.setting.task.delay * 1000
+  : -1;
+
 const taskOperator = {
   task: fileOperator.readTask(),
   setTask: (handle) => {
@@ -676,7 +679,11 @@ const taskOperator = {
   __clearExpiredTask: () => {
     const timeNow = Date.now();
     taskOperator.setTask((task) => task.filter(
-      (item) => (item.deleteTime === null || item.deleteTime >= timeNow)
+      (item) => (
+        item.deleteTime === null
+          || item.deleteTime === -1
+          || item.deleteTime >= timeNow
+      )
     ));
   },
 
@@ -716,7 +723,7 @@ const taskOperator = {
     taskOperator.setTask((task) => {
       task[index].deleteTime = task[index].type === 'sync'
         ? task[index].dueTime
-        : Date.now() + taskDelay();
+        : taskDelay();
       return task;
     })
     return taskOperator.task[index];
@@ -732,7 +739,7 @@ const taskOperator = {
   editTask: (index, name, description, type, dueTime) => {
     taskOperator.setTask((task) => {
       if (type !== 'sync' && task[index].deleteTime !== null) {
-        task[index].deleteTime = Date.now() + taskDelay();
+        task[index].deleteTime = taskDelay();
       }
       if (type === 'sync' && task[index].deleteTime !== null) {
         task[index].deleteTime = dueTime;

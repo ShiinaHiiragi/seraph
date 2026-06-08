@@ -827,7 +827,8 @@ const SECTIONS = (
             { value: 0, label: context.languagePicker("header.config.todo.deleteTimeOption.0") },
             { value: 60, label: context.languagePicker("header.config.todo.deleteTimeOption.60") },
             { value: 3600, label: context.languagePicker("header.config.todo.deleteTimeOption.3600") },
-            { value: 86400, label: context.languagePicker("header.config.todo.deleteTimeOption.86400") }
+            { value: 86400, label: context.languagePicker("header.config.todo.deleteTimeOption.86400") },
+            { value: -1, label: context.languagePicker("header.config.todo.deleteTimeOption.never") },
           ], "task.delay", handleApply),
         }
       ]
