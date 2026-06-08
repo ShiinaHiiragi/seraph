@@ -44,12 +44,14 @@ if (originURL.length > 0) {
 
 // unified authenticator
 app.use((req, res, next) => {
+  const session = req.cookies[api.cookieOperator.sessionName];
+  const auto = ["/info/stat"].includes(req.path);
+
   req.status = new api.Status();
   req.status.addAuthStatus(
     api.configOperator.config.metadata.password.length
-      ? api.tokenOperator.validateUpdateSession(
-        res, req.cookies[api.cookieOperator.sessionName]
-      ) ? undefined
+      ? api.tokenOperator.validateUpdateSession(res, session, auto)
+      ? undefined
       : api.Status.authErrCode.InvalidToken
       : api.Status.authErrCode.NotInit
   );

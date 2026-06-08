@@ -649,6 +649,8 @@ const toastTheme = (theme) => `
     --gray8: ${theme.vars.palette.neutral[700]};
     --gray9: ${theme.vars.palette.neutral[800]};
     --gray10: ${theme.vars.palette.neutral[900]};
+    word-break: normal;
+    overflow-wrap: anywhere;
   }
 
   [data-sonner-toast][data-styled=true] {

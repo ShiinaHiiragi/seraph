@@ -529,13 +529,10 @@ const tokenOperator = {
   addNewSession: (res) => {
     const session = crypto.randomBytes(32).toString('hex');
     cookieOperator.setSessionCookie(res, session);
-    tokenOperator.setToken((token) => [
-      ...token,
-      {
-        session: session,
-        timestamp: Date.now() + expiredPeriod()
-      }
-    ]);
+    tokenOperator.setToken((token) => [...token, {
+      session: session,
+      timestamp: Date.now() + expiredPeriod()
+    }]);
     return session;
   },
 
@@ -546,7 +543,7 @@ const tokenOperator = {
     );
   },
 
-  validateUpdateSession: (res, session) => {
+  validateUpdateSession: (res, session, isAuto) => {
     const __clearExpiredSessions = () => {
       const timeNow = Date.now();
       tokenOperator.setToken((token) => 
@@ -558,13 +555,13 @@ const tokenOperator = {
     let sessionIndex = tokenOperator.token.findIndex((item) => item.session === session)
     if (sessionIndex >= 0) {
       // res is undefined when wssAuth() called
-      if (res !== undefined) {
+      if (res !== undefined && !isAuto) {
         cookieOperator.setSessionCookie(res, session);
+        tokenOperator.setToken((token) => {
+          token[sessionIndex].timestamp = Date.now() + expiredPeriod();
+          return token;
+        });
       }
-      tokenOperator.setToken((token) => {
-        token[sessionIndex].timestamp = Date.now() + expiredPeriod();
-        return token;
-      });
       return true;
     } else {
       return false;
