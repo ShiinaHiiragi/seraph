@@ -356,7 +356,7 @@ const en = {
       exception: {
         incorrectPassword: "Incorrect password.",
         resourcesUnexist: "Resources requested do not exist.",
-        identifierConflict: "Naming identifiers conflicts.",
+        identifierConflict: "Naming identifiers conflicts; please rename or remove {0} first.",
         fileModuleError: "Exception occurred in file operation module.",
         environmentMissing: "Pre-check for extension module environment failed. Please check console for more details.",
         extensionError: "Exception occurred in inner extension module. Please check console for more details.",

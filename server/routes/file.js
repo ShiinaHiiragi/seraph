@@ -28,7 +28,7 @@ router.post('/new', (req, res, next) => {
   if (fs.existsSync(filePath)) {
     // -> EF_IC: new filename already exists
     req.status.addExecStatus(api.Status.execErrCode.IdentifierConflict);
-    res.send(req.status.generateReport());
+    res.send({...req.status.generateReport(), 0: filename});
     return;
   }
 
@@ -77,7 +77,7 @@ router.post('/upload', (req, res, next) => {
   if (fs.existsSync(filePath)) {
     // -> EF_IC: new filename already exists
     req.status.addExecStatus(api.Status.execErrCode.IdentifierConflict);
-    res.send(req.status.generateReport());
+    res.send({...req.status.generateReport(), 0: filename});
     return;
   }
 
@@ -144,7 +144,7 @@ router.post('/paste', (req, res, next) => {
   if (fs.existsSync(newFilePath)) {
     // -> EF_IC: new filename already exists
     req.status.addExecStatus(api.Status.execErrCode.IdentifierConflict);
-    res.send(req.status.generateReport());
+    res.send({...req.status.generateReport(), 0: filename});
     return;
   }
 
@@ -200,7 +200,7 @@ router.post('/rename', (req, res, next) => {
   if (fs.existsSync(newFilePath)) {
     // -> EF_IC: new filename already exists
     req.status.addExecStatus(api.Status.execErrCode.IdentifierConflict);
-    res.send(req.status.generateReport());
+    res.send({...req.status.generateReport(), 0: newFilename});
     return;
   }
 
@@ -333,7 +333,7 @@ router.post('/zip', (req, res, next) => {
   if (fs.existsSync(newFilePath)) {
     // -> EF_IC: filename already exists
     req.status.addExecStatus(api.Status.execErrCode.IdentifierConflict);
-    res.send(req.status.generateReport());
+    res.send({...req.status.generateReport(), 0: newFilename});
     return;
   }
 
@@ -389,7 +389,7 @@ router.post('/unzip', (req, res, next) => {
   if (fs.existsSync(newDirPath)) {
     // -> EF_IC: filename already exists
     req.status.addExecStatus(api.Status.execErrCode.IdentifierConflict);
-    res.send(req.status.generateReport());
+    res.send({...req.status.generateReport(), 0: newDirName});
     return;
   }
 
@@ -434,7 +434,7 @@ router.post('/epub', (req, res, next) => {
   if (fs.existsSync(newDirPath)) {
     // -> EF_IC: filename already exists
     req.status.addExecStatus(api.Status.execErrCode.IdentifierConflict);
-    res.send(req.status.generateReport());
+    res.send({...req.status.generateReport(), 0: newDirName});
     return;
   }
 

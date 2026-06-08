@@ -484,7 +484,8 @@ const Status = {
  *       - AF：IT 直接处理，NI 进入 catch
  *       - 余下的进入 catch，一般用 request.unparseableResponse（第一类不可控错误）
  *       - 返回 500：node 出错，进入 axios 的 catch（第二类不可控错误）
- *   2. todo 是什么：EF 在 languagePicker 处找到错误后，不会进入返回的 Promise 流，因
+ *   2. EF 的自动处理部分会识别 res.data 的数字 key，并 format 到错误信息中
+ *   3. todo 是什么：EF 在 languagePicker 处找到错误后，不会进入返回的 Promise 流，因
  *      此额外动作需要用 todo 指定，这个函数被传入返回的响应体 data 部分
  *       - 当第二项参数不需要指定的时候，填 undefined 即可
  *       - key 为 "" 时，对应的函数一定会被执行，相当于 finally
@@ -550,9 +551,22 @@ const request = (query, params, todo, handleReject, handleInit) => {
             const matchedErrorCode = Status.execErrCode[
               mathcedErrorState.upperCaseFirst()
             ];
-            (handleReject ?? toast.error)(ConstantContext.languagePicker(
-              "modal.toast.exception." + mathcedErrorState
-            ));
+
+            const interCount =
+              Object.keys(res.data)
+                .map(Number)
+                .sort((left, right) => left - right)
+                .findIndex((key, index) => key !== index);
+
+            const errorInfo = [...Array(interCount).keys()].reduce(
+              (prev, curr) => prev.format(res.data[curr]),
+              ConstantContext.languagePicker(
+                "modal.toast.exception."
+                  + mathcedErrorState
+              )
+            )
+
+            ;(handleReject ?? toast.error)(errorInfo);
 
             const planned = todo?.[matchedErrorCode];
             if (planned instanceof Function) {
