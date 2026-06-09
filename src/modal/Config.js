@@ -343,6 +343,15 @@ const SECTIONS = (
                 120
               )}
               {LabeledLiteral(
+                context.languagePicker("header.config.welcome.windowTemp"),
+                context.setting.welcome.window.temp,
+                [20, 40, 60, 80, 100, 120].map((num) => ({ value: num, label: num })),
+                "welcome.window.temp",
+                handleApply,
+                undefined,
+                120
+              )}
+              {LabeledLiteral(
                 context.languagePicker("header.config.welcome.windowMemory"),
                 context.setting.welcome.window.memory,
                 [20, 40, 60, 80, 100, 120].map((num) => ({ value: num, label: num })),

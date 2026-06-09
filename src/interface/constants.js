@@ -140,6 +140,7 @@ const defaultSetting = {
     interval: 45,
     window: {
       cpu: 120,
+      temp: 60,
       memory: 80,
       storage: 20,
       disk: 60,

@@ -38,6 +38,7 @@ const ja = {
         },
         window: "ウィンドウサイズ",
         windowCpu: "CPU",
+        windowTemp: "テンペラチャー",
         windowMemory: "メモリ",
         windowStorage: "ストレージ",
         windowDisk: "ディスク I/O",
@@ -220,6 +221,7 @@ const ja = {
       },
       trend: {
         cpu: "CPU ステータス",
+        temp: "テンペラチャー",
         memory: "メモリステータス",
         storage: "ストレージステータス",
         rxDisk: "読みステータス",

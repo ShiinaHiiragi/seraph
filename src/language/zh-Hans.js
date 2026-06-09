@@ -38,6 +38,7 @@ const zhHans = {
         },
         window: "历史窗口大小",
         windowCpu: "CPU",
+        windowTemp: "温度",
         windowMemory: "内存",
         windowStorage: "外存",
         windowDisk: "磁盘 I/O",
@@ -220,6 +221,7 @@ const zhHans = {
       },
       trend: {
         cpu: "CPU 统计",
+        temp: "温度统计",
         memory: "内存统计",
         storage: "外存统计",
         rxDisk: "读取统计",

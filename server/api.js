@@ -118,6 +118,7 @@ const defaultConfig = {
       interval: 45,
       window: {
         cpu: 120,
+        temp: 60,
         memory: 80,
         storage: 20,
         disk: 60,
@@ -819,12 +820,13 @@ const infoOperator = {
   recordInterval: 1000,
 
   history: [],
-  push: ([cpu, mem, disk, net]) => {
+  push: ([cpu, temp, mem, disk, net]) => {
     if (infoOperator.history.length >= infoOperator.maxWindow) {
       infoOperator.history.shift();
     }
     infoOperator.history.push({
       cpu: cpu,
+      temp: temp,
       mem: mem,
       disk: disk,
       net: net,
@@ -887,6 +889,10 @@ const infoOperator = {
     si.currentLoad()
       .then(({ currentLoad }) => resolve(currentLoad / 100))
   ),
+  cpuTemp: () => new Promise((resolve) =>
+    si.cpuTemperature()
+      .then((result) => resolve(result?.main ?? 0))
+  ),
   memoryUsage: () => os.freemem(),
   diskUsage: () => new Promise((resolve) => Promise.all([
     checkDiskSpace(dataPath.dataDirPath),
@@ -924,9 +930,10 @@ const infoOperator = {
 setInterval(() => {
   Promise.all([
     infoOperator.cpuUsage(),
+    infoOperator.cpuTemp(),
     new Promise((resolve) => resolve(infoOperator.memoryUsage())),
     infoOperator.diskUsage(),
-    infoOperator.netUsage(),
+    infoOperator.netUsage()
   ]).then(infoOperator.push);
 }, infoOperator.recordInterval);
 

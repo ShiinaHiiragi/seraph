@@ -38,6 +38,7 @@ const en = {
         },
         window: "History Window Size",
         windowCpu: "CPU",
+        windowTemp: "Temperature",
         windowMemory: "Memory",
         windowStorage: "Storage",
         windowDisk: "Disk I/O",
@@ -220,6 +221,7 @@ const en = {
       },
       trend: {
         cpu: "CPU Status",
+        temp: "Temperature",
         memory: "Memory Status",
         storage: "Storage Status",
         rxDisk: "Read Status",

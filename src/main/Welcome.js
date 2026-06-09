@@ -177,6 +177,7 @@ const Welcome = () => {
                 ...history,
                 ...[...Array(vacancy)].map((_, index) => ({
                   cpu: 0,
+                  temp: 0,
                   mem: 0,
                   disk: { free: 0, rx: 0, wx: 0 },
                   net: { rx: 0, tx: 0 },
@@ -264,6 +265,7 @@ const Welcome = () => {
     .join(":");
 
   const cpuUsage = history.abstract((item) => item.cpu);
+  const tempUsage = history.abstract((item) => item.temp);
   const memoryUsage = history.abstract((item) => item.mem);
   const storageUsage = history.abstract((item) => item.disk.free);
   const rxDiskUsage = history.abstract((item) => item.disk.rx);
@@ -272,6 +274,7 @@ const Welcome = () => {
   const txNetUsage = history.abstract((item) => item.net.tx);
 
   const cpuTrend = history.map(({ cpu }) => cpu);
+  const tempTrend = history.map(({ temp }) => temp);
   const memoryTrend = history.map(({ mem }) => mem);
   const storageTrend = history.map(({ disk }) => disk.free);
   const rxDiskTrend = history.map(({ disk }) => disk.rx);
@@ -544,7 +547,11 @@ const Welcome = () => {
         <Box
           sx={{
             display: "grid",
-            gridTemplateColumns: { xs: "1fr" },
+            gridTemplateColumns: {
+              xs: "1fr",
+              lg: "1fr 1fr",
+              xl: "3fr 1fr"
+            },
             gap: 1.5,
           }}
         >
@@ -593,6 +600,55 @@ const Welcome = () => {
                   &ensp;
                   {context.languagePicker("main.welcome.trend.max")}
                   {(cpuUsage.max * 100).toFixed(2)}%
+                </Box>
+              </Typography>}
+          </DashCard>
+
+          <DashCard variant="outlined">
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-start",
+              }}
+            >
+              <Typography
+                level="title-md"
+                color="neutral"
+                sx={{ letterSpacing: "0.02em" }}
+              >
+                {context.languagePicker("main.welcome.trend.temp")}
+              </Typography>
+              {history.length > 0 &&
+                <Typography
+                  level="title-lg"
+                  fontWeight={600}
+                  sx={{ fontVariantNumeric: "tabular-nums", lineHeight: 1.2 }}
+                >
+                  {tempUsage.latest}℃
+                </Typography>}
+            </Box>
+            <Box sx={{ mt: 0.5, mb: 1.5 }}>
+              <Sparkline data={tempTrend.slice(-context.setting.welcome.window.temp)} height={80} />
+            </Box>
+            {history.length > 0 &&
+              <Typography
+                level="body-xs"
+                color="neutral"
+                align="right"
+                sx={{ fontVariantNumeric: "tabular-nums" }}
+              >
+                <Box component="span" sx={{ "@container (max-width: 260px)": { display: "none" } }}>
+                  {context.languagePicker("main.welcome.trend.min")}
+                  {tempUsage.min}℃
+                  &ensp;
+                </Box>
+                {context.languagePicker("main.welcome.trend.avg")}
+                {tempUsage.avg.toFixed(0)}℃
+                <Box component="span" sx={{ "@container (max-width: 260px)": { display: "none" } }}>
+                  &ensp;
+                  {context.languagePicker("main.welcome.trend.max")}
+                  {tempUsage.max}℃
                 </Box>
               </Typography>}
           </DashCard>
