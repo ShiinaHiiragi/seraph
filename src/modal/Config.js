@@ -327,7 +327,7 @@ const SECTIONS = (
             { value: 30, label: context.languagePicker("header.config.welcome.intervalOption.30") },
             { value: 45, label: context.languagePicker("header.config.welcome.intervalOption.45") },
             { value: 60, label: context.languagePicker("header.config.welcome.intervalOption.60") }
-          ], "welcome.interval", handleApply)
+          ], "welcome.interval", handleApply, !context.setting.welcome.enable)
         },
         {
           key: context.languagePicker("header.config.welcome.window"),
@@ -339,7 +339,7 @@ const SECTIONS = (
                 [20, 40, 60, 80, 100, 120].map((num) => ({ value: num, label: num })),
                 "welcome.window.cpu",
                 handleApply,
-                undefined,
+                !context.setting.welcome.enable,
                 120
               )}
               {LabeledLiteral(
@@ -348,7 +348,7 @@ const SECTIONS = (
                 [20, 40, 60, 80, 100, 120].map((num) => ({ value: num, label: num })),
                 "welcome.window.temp",
                 handleApply,
-                undefined,
+                !context.setting.welcome.enable,
                 120
               )}
               {LabeledLiteral(
@@ -357,7 +357,7 @@ const SECTIONS = (
                 [20, 40, 60, 80, 100, 120].map((num) => ({ value: num, label: num })),
                 "welcome.window.memory",
                 handleApply,
-                undefined,
+                !context.setting.welcome.enable,
                 120
               )}
               {LabeledLiteral(
@@ -366,7 +366,7 @@ const SECTIONS = (
                 [20, 40, 60, 80, 100, 120].map((num) => ({ value: num, label: num })),
                 "welcome.window.storage",
                 handleApply,
-                undefined,
+                !context.setting.welcome.enable,
                 120
               )}
               {LabeledLiteral(
@@ -375,7 +375,7 @@ const SECTIONS = (
                 [20, 40, 60, 80, 100, 120].map((num) => ({ value: num, label: num })),
                 "welcome.window.disk",
                 handleApply,
-                undefined,
+                !context.setting.welcome.enable,
                 120
               )}
               {LabeledLiteral(
@@ -384,7 +384,7 @@ const SECTIONS = (
                 [20, 40, 60, 80, 100, 120].map((num) => ({ value: num, label: num })),
                 "welcome.window.net",
                 handleApply,
-                undefined,
+                !context.setting.welcome.enable,
                 120
               )}
             </Stack>
@@ -404,9 +404,21 @@ const SECTIONS = (
                   value={context.setting.welcome.process.sortBy}
                   onChange={(event) => handleApply("welcome.process.sortBy", event.target.value)}
                 >
-                  <Radio value="cpu" label={context.languagePicker("header.config.welcome.processSortBy.cpu")} />
-                  <Radio value="mem" label={context.languagePicker("header.config.welcome.processSortBy.mem")} />
-                  <Radio value="priority" label={context.languagePicker("header.config.welcome.processSortBy.priority")} />
+                  <Radio
+                    value="cpu"
+                    label={context.languagePicker("header.config.welcome.processSortBy.cpu")}
+                    disabled={!context.setting.welcome.enable}
+                  />
+                  <Radio
+                    value="mem"
+                    label={context.languagePicker("header.config.welcome.processSortBy.mem")}
+                    disabled={!context.setting.welcome.enable}
+                  />
+                  <Radio
+                    value="priority"
+                    label={context.languagePicker("header.config.welcome.processSortBy.priority")}
+                    disabled={!context.setting.welcome.enable}
+                  />
                 </RadioGroup>
               </FormControl>
               {LabeledLiteral(
@@ -415,7 +427,7 @@ const SECTIONS = (
                 [5, 10, 15, 20, 25].map((num) => ({ value: num, label: num })),
                 "welcome.process.count",
                 handleApply,
-                undefined,
+                !context.setting.welcome.enable,
                 120
               )}
             </Stack>
@@ -802,6 +814,7 @@ const SECTIONS = (
               multiple
               size="sm"
               value={controlLists}
+              disabled={!context.setting.terminal.enable}
               renderValue={(selected) => (
                 <Box sx={{ display: 'flex', gap: '0.25rem' }}>
                   {selected.map((selectedOption, index) => (
