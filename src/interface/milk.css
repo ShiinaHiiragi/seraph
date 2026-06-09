@@ -1,39 +1,59 @@
+/* general styles */
 .milkdown {
-  /* Backgrounds */
   --crepe-color-background: var(--joy-palette-background-body);
   --crepe-color-surface: var(--joy-palette-background-surface);
   --crepe-color-surface-low: var(--joy-palette-background-level1);
 
-  /* Text */
   --crepe-color-on-background: var(--joy-palette-text-primary);
   --crepe-color-on-surface: var(--joy-palette-text-primary);
   --crepe-color-on-surface-variant: var(--joy-palette-text-secondary);
 
-  /* Borders */
   --crepe-color-outline: var(--joy-palette-neutral-outlinedBorder);
 
-  /* Primary accent */
   --crepe-color-primary: var(--joy-palette-primary-500);
   --crepe-color-secondary: var(--joy-palette-primary-softBg);
   --crepe-color-on-secondary: var(--joy-palette-primary-softColor);
 
-  /* Inverse (tooltip chips) — solid neutral flips correctly in dark mode */
   --crepe-color-inverse: var(--joy-palette-neutral-solidBg);
   --crepe-color-on-inverse: var(--joy-palette-neutral-solidColor);
 
-  /* Code & errors */
   --crepe-color-inline-code: var(--joy-palette-danger-500);
   --crepe-color-error: var(--joy-palette-danger-500);
 
-  /* Interactive states */
   --crepe-color-hover: var(--joy-palette-neutral-plainHoverBg);
   --crepe-color-selected: var(--joy-palette-neutral-softActiveBg);
   --crepe-color-inline-area: var(--joy-palette-neutral-softBg);
 
-  /* Typography */
   --crepe-font-title: var(--joy-fontFamily-display);
   --crepe-font-default: var(--joy-fontFamily-body);
   --crepe-font-code: var(--joy-fontFamily-code);
+}
 
-  /* Shadows — keep Milkdown defaults */
+/* editor */
+.milkdown .ProseMirror {
+  padding: 16px 80px;
+}
+
+/* block menu popup */
+.milkdown .milkdown-block-handle {
+}
+
+/* slash menu popup */
+.milkdown .milkdown-slash-menu {
+}
+
+/* tool menu popup when selecting text */
+.milkdown .milkdown-toolbar {
+}
+
+/* link preview popup when hovering on links */
+.milkdown .milkdown-link-preview {
+}
+
+/* link input popup */
+.milkdown .milkdown-link-edit {
+}
+
+/* latex input popup */
+.milkdown .milkdown-latex-inline-edit {
 }
