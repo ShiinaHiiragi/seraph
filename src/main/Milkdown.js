@@ -38,10 +38,10 @@ const MaildownField = styled(Box)(({ theme }) => ({
 }));
 
 const CrepeEditorInner = () => {
-  const { get: _ } = useEditor((root) =>
+  useEditor((root) =>
     new CrepeBuilder({
       root,
-      defaultValue: "### Init Value"
+      defaultValue: "### IN DEV..."
     })
       .addFeature(codeMirror)
       .addFeature(listItem)
