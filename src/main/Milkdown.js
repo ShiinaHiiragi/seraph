@@ -1,8 +1,18 @@
 import React from "react";
-import { styled } from "@mui/joy/styles";
 import Box from "@mui/joy/Box";
-import { Crepe } from "@milkdown/crepe";
+import { styled } from "@mui/joy/styles";
 import { Milkdown, MilkdownProvider, useEditor } from "@milkdown/react";
+import { CrepeBuilder } from "@milkdown/crepe/builder";
+import { codeMirror } from "@milkdown/crepe/feature/code-mirror";
+import { listItem } from "@milkdown/crepe/feature/list-item";
+import { linkTooltip } from "@milkdown/crepe/feature/link-tooltip";
+import { imageBlock } from "@milkdown/crepe/feature/image-block";
+import { blockEdit } from "@milkdown/crepe/feature/block-edit";
+import { toolbar } from "@milkdown/crepe/feature/toolbar";
+import { table } from "@milkdown/crepe/feature/table";
+import { cursor } from "@milkdown/crepe/feature/cursor";
+import { placeholder } from "@milkdown/crepe/feature/placeholder";
+import { latex } from "@milkdown/crepe/feature/latex";
 import RouteField from "../interface/RouteField";
 import GlobalContext from "../interface/constants";
 
@@ -28,10 +38,22 @@ const MaildownField = styled(Box)(({ theme }) => ({
 }));
 
 const CrepeEditorInner = () => {
-  const { get } = useEditor((root) => {
-    return new Crepe({ root })
-  });
-
+  const { get: _ } = useEditor((root) =>
+    new CrepeBuilder({
+      root,
+      defaultValue: "### Init Value"
+    })
+      .addFeature(codeMirror)
+      .addFeature(listItem)
+      .addFeature(linkTooltip)
+      .addFeature(imageBlock)
+      .addFeature(blockEdit)
+      .addFeature(toolbar)
+      .addFeature(table)
+      .addFeature(cursor)
+      .addFeature(placeholder)
+      .addFeature(latex)
+  );
   return <Milkdown />;
 };
 
