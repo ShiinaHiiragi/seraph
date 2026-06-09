@@ -20,6 +20,8 @@ import RadioGroup from "@mui/joy/RadioGroup";
 import Button from "@mui/joy/Button";
 import Input from "@mui/joy/Input";
 import Typography from "@mui/joy/Typography";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
@@ -174,6 +176,7 @@ const Password = (props) => {
   const { context } = props;
 
   const [password, setPassword] = React.useState("");
+  const [inputType, setInputType] = React.useState("password");
   const [loading, setLoading] = React.useState(false);
 
   const handleChangePassword = React.useCallback(() => {
@@ -201,11 +204,24 @@ const Password = (props) => {
     <Stack spacing={1} direction="row">
       <Input
         size="sm"
-        type="password"
+        type={inputType}
         placeholder={context.languagePicker("header.config.general.passwordPlaceholder")}
         sx={{ maxWidth: 240, flexGrow: 1 }}
         value={password}
         onChange={(event) => setPassword(event.target.value)}
+        endDecorator={
+          <IconButton
+            onClick={() => {
+              setInputType((inputType) => 
+                inputType === "password" ? "text" : "password"
+              );
+            }}
+          >
+            {inputType === "password"
+              ? <VisibilityIcon />
+              : <VisibilityOffIcon />}
+          </IconButton>
+        }
       />
       {password.length > 0
         && <IconButton
