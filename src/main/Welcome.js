@@ -207,7 +207,11 @@ const Welcome = () => {
   }, []);
 
   React.useEffect(() => {
-    if (context.secondTick && context.isAuthority) {
+    if (
+      context.secondTick
+        && context.isAuthority
+        && context.setting.welcome.enable
+    ) {
       cancelRef.current = false;
       historyRef.current.lastRequest = Date.now()
       Promise.all([
@@ -247,6 +251,8 @@ const Welcome = () => {
     context.secondTick,
     // login in same page
     context.isAuthority,
+    // dashboard is hidden
+    context.setting.welcome.enable
   ])
 
   const time = [hours, minutes, seconds]
@@ -273,7 +279,7 @@ const Welcome = () => {
   const rxNetTrend = history.map(({ net }) => net.rx);
   const txNetTrend = history.map(({ net }) => net.tx);
 
-  if (!context.isAuthority) {
+  if (!context.isAuthority || !context.setting.welcome.enable) {
     return (
       <RouteField display>
         <Center className="CenterField">

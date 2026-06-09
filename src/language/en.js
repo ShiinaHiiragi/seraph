@@ -21,6 +21,7 @@ const en = {
       },
       welcome: {
         title: "Dashboard",
+        enable: "Enable Dashboard",
         interval: "Request Interval",
         intervalTip: "How often the client synchronizes real-time data. Longer intervals reduce server load but may decrease data freshness.",
         intervalOption: {

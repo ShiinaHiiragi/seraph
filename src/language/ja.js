@@ -21,6 +21,7 @@ const ja = {
       },
       welcome: {
         title: "ダッシュボード",
+        enable: "ダッシュボードを有効",
         interval: "リクエストの間隔",
         intervalTip: "クライアントがリアルタイムデータを同期する頻度です。間隔を長くするとサーバー負荷は軽減されますが、データの即時性は低下します",
         intervalOption: {

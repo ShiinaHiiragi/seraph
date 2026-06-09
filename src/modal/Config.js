@@ -288,6 +288,16 @@ const SECTIONS = (
       label: context.languagePicker("header.config.welcome.title"),
       items: [
         {
+          key: context.languagePicker("header.config.welcome.enable"),
+          value: (
+            Turkey(
+              context.setting.welcome.enable,
+              "welcome.enable",
+              handleApply
+            )
+          )
+        },
+        {
           key: context.languagePicker("header.config.welcome.interval"),
           tip: context.languagePicker("header.config.welcome.intervalTip"),
           value: Literal(context.setting.welcome.interval, [

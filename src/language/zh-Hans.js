@@ -21,6 +21,7 @@ const zhHans = {
       },
       welcome: {
         title: "仪表盘",
+        enable: "启用仪表盘",
         interval: "请求间隔",
         intervalTip: "客户端同步实时数据的频率；更大的请求间隔将减少服务器处理压力，同时将削弱数据时效性",
         intervalOption: {

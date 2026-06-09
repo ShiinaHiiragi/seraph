@@ -136,6 +136,7 @@ const defaultSetting = {
     token: 60
   },
   welcome: {
+    enable: true,
     interval: 45,
     window: {
       cpu: 120,
