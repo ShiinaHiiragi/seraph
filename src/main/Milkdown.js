@@ -7,7 +7,7 @@ import RouteField from "../interface/RouteField";
 import GlobalContext from "../interface/constants";
 
 import "@milkdown/crepe/theme/common/style.css";
-import "@milkdown/crepe/theme/nord.css";
+import "../interface/milk.css";
 
 const MaildownField = styled(Box)(({ theme }) => ({
   flex: 1,
