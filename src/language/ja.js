@@ -143,7 +143,7 @@ const ja = {
         control: "制御コード"
       },
       todo: {
-        title: "トゥードゥー",
+        title: "タスク",
         deleteTime: "デリートのディレイ",
         deleteTimeHint: "タスク遂行の後",
         deleteTimeOption: {
@@ -210,7 +210,7 @@ const ja = {
       subscription: "サブスクリプション",
       milkdown: "ミルクダウン",
       terminal: "ターミナル",
-      todo: "トゥードゥー"
+      todo: "タスク"
     }
   },
   main: {

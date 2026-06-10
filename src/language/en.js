@@ -143,7 +143,7 @@ const en = {
         control: "Control Characters"
       },
       todo: {
-        title: "TODO",
+        title: "Task",
         deleteTime: "Delete Delay",
         deleteTimeHint: "of completed tasks",
         deleteTimeOption: {
@@ -210,7 +210,7 @@ const en = {
       subscription: "Subscription",
       milkdown: "Milkdown",
       terminal: "Terminal",
-      todo: "TODO"
+      todo: "Task"
     }
   },
   main: {

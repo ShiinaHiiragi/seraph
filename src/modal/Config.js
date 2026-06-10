@@ -52,11 +52,16 @@ const Literal = (value, itemsMap, field, handleApply, disabled, maxWidth) => (
 );
 
 const LabeledLiteral = (caption, value, itemsMap, field, handleApply, disabled, maxWidth) => (
-  <FormControl sx={{ maxWidth: maxWidth ?? 240, flexGrow: 1 }}>
+  <FormControl sx={{ maxWidth: (maxWidth ?? 240) + 20, flexGrow: 1 }}>
     <FormLabel sx={{ mb: 0, color: "neutral.500" }}>
       {caption}
     </FormLabel>
-    <Select size="sm" value={value} disabled={disabled}>
+    <Select
+      size="sm"
+      value={value}
+      disabled={disabled}
+      sx={{ maxWidth: (maxWidth ?? 240) }}
+    >
       {itemsMap.map(({value, label}) => (
         <Option
           key={value}
