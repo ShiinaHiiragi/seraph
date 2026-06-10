@@ -162,6 +162,7 @@ const en = {
       },
       epub: {
         title: "Epub Converter",
+        enable: "Enable Converter",
         page: "Pages",
         pageSplit: "Split pages by chapters",
         pageFront: "Include front pages",

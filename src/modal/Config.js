@@ -946,6 +946,16 @@ const SECTIONS = (
       label: context.languagePicker("header.config.epub.title"),
       items: [
         {
+          key: context.languagePicker("header.config.epub.enable"),
+          value: (
+            Turkey(
+              context.setting.epub.enable,
+              "epub.enable",
+              handleApply
+            )
+          )
+        },
+        {
           key: context.languagePicker("header.config.epub.page"),
           value: (
             <Stack spacing={1}>
@@ -953,13 +963,15 @@ const SECTIONS = (
                 context.languagePicker("header.config.epub.pageSplit"),
                 context.setting.epub.page.split,
                 "epub.page.split",
-                handleApply
+                handleApply,
+                !context.setting.epub.enable
               )}
               {Bool(
                 context.languagePicker("header.config.epub.pageFront"),
                 context.setting.epub.page.front,
                 "epub.page.front",
-                handleApply
+                handleApply,
+                !context.setting.epub.enable
               )}
             </Stack>
           )
@@ -972,11 +984,12 @@ const SECTIONS = (
                 context.languagePicker("header.config.epub.navLink"),
                 context.setting.epub.nav.link,
                 "epub.nav.link",
-                handleApply
+                handleApply,
+                !context.setting.epub.enable
               )}
               <Stack spacing={1}>
                 <StringInput
-                  disabled={!context.setting.epub.nav.link}
+                  disabled={!context.setting.epub.enable || !context.setting.epub.nav.link}
                   caption={context.languagePicker("header.config.epub.navPrev")}
                   value={context.setting.epub.nav.prev}
                   width={160}
@@ -986,7 +999,7 @@ const SECTIONS = (
                   handleApply={handleApply}
                 />
                 <StringInput
-                  disabled={!context.setting.epub.nav.link}
+                  disabled={!context.setting.epub.enable || !context.setting.epub.nav.link}
                   caption={context.languagePicker("header.config.epub.navNext")}
                   value={context.setting.epub.nav.next}
                   width={160}
@@ -1008,29 +1021,33 @@ const SECTIONS = (
                   context.languagePicker("header.config.epub.imageSpec"),
                   context.setting.epub.image.spec,
                   "epub.image.spec",
-                  handleApply
+                  handleApply,
+                  !context.setting.epub.enable
                 )}
                 {Bool(
                   context.languagePicker("header.config.epub.imageAltInline"),
                   context.setting.epub.image.altInline,
                   "epub.image.altInline",
-                  handleApply
+                  handleApply,
+                  !context.setting.epub.enable
                 )}
                 {Bool(
                   context.languagePicker("header.config.epub.imageAltBlock"),
                   context.setting.epub.image.altBlock,
                   "epub.image.altBlock",
-                  handleApply
+                  handleApply,
+                  !context.setting.epub.enable
                 )}
                 {Bool(
                   context.languagePicker("header.config.epub.imageShow"),
                   context.setting.epub.image.show,
                   "epub.image.show",
-                  handleApply
+                  handleApply,
+                  !context.setting.epub.enable
                 )}
               </Stack>
               <StringInput
-                disabled={!context.setting.epub.image.show}
+                disabled={!context.setting.epub.enable || !context.setting.epub.image.show}
                 caption={context.languagePicker("header.config.epub.imageWidth")}
                 value={context.setting.epub.image.width ?? ""}
                 width={100}
@@ -1053,16 +1070,19 @@ const SECTIONS = (
                   context.languagePicker("header.config.epub.textClearLine"),
                   context.setting.epub.text.clearLine,
                   "epub.text.clearLine",
-                  handleApply
+                  handleApply,
+                  !context.setting.epub.enable
                 )}
                 {Bool(
                   context.languagePicker("header.config.epub.textShowRuby"),
                   context.setting.epub.text.showRuby,
                   "epub.text.showRuby",
-                  handleApply
+                  handleApply,
+                  !context.setting.epub.enable
                 )}
               </Stack>
               <StringInput
+                disabled={!context.setting.epub.enable}
                 caption={context.languagePicker("header.config.epub.textBreakLine")}
                 value={JSON.stringify(context.setting.epub.text.breakLine).slice(1, -1)}
                 width={160}
@@ -1092,13 +1112,25 @@ const SECTIONS = (
                     : null
                 )}
               >
-                <Radio value="null" label={context.languagePicker("header.config.epub.fadeNull")} />
-                <Radio value="true" label={context.languagePicker("header.config.epub.fadeTrue")} />
-                <Radio value="false" label={context.languagePicker("header.config.epub.fadeFalse")} />
+                <Radio
+                  value="null"
+                  label={context.languagePicker("header.config.epub.fadeNull")}
+                  disabled={!context.setting.epub.enable}
+                />
+                <Radio
+                  value="true"
+                  label={context.languagePicker("header.config.epub.fadeTrue")}
+                  disabled={!context.setting.epub.enable}
+                />
+                <Radio
+                  value="false"
+                  label={context.languagePicker("header.config.epub.fadeFalse")}
+                  disabled={!context.setting.epub.enable}
+                />
               </RadioGroup>
               <Stack spacing={1}>
                 <StringInput
-                  disabled={context.setting.epub.fade.kana === null}
+                  disabled={!context.setting.epub.enable || context.setting.epub.fade.kana === null}
                   caption={context.languagePicker("header.config.epub.fadeOpaque")}
                   value={context.setting.epub.fade.opaque}
                   width={100}
@@ -1109,7 +1141,7 @@ const SECTIONS = (
                   start="0."
                 />
                 <StringInput
-                  disabled={context.setting.epub.fade.kana === null}
+                  disabled={!context.setting.epub.enable || context.setting.epub.fade.kana === null}
                   caption={context.languagePicker("header.config.epub.fadeSize")}
                   value={context.setting.epub.fade.size}
                   width={100}
@@ -1121,7 +1153,7 @@ const SECTIONS = (
                   end="em"
                 />
                 <StringInput
-                  disabled={context.setting.epub.fade.kana === null}
+                  disabled={!context.setting.epub.enable || context.setting.epub.fade.kana === null}
                   caption={context.languagePicker("header.config.epub.fadeTop")}
                   value={context.setting.epub.fade.top}
                   width={100}
@@ -1144,21 +1176,22 @@ const SECTIONS = (
                 context.languagePicker("header.config.epub.outHTML"),
                 context.setting.epub.out.html,
                 "epub.out.html",
-                handleApply
+                handleApply,
+                !context.setting.epub.enable
               )}
               {Bool(
                 context.languagePicker("header.config.epub.outVert"),
                 context.setting.epub.out.vert,
                 "epub.out.vert",
                 handleApply,
-                !context.setting.epub.out.html
+                !context.setting.epub.enable || !context.setting.epub.out.html
               )}
               {Bool(
                 context.languagePicker("header.config.epub.outKeep"),
                 context.setting.epub.out.keep,
                 "epub.out.keep",
                 handleApply,
-                !context.setting.epub.out.html
+                !context.setting.epub.enable || !context.setting.epub.out.html
               )}
             </Stack>
           )

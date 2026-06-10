@@ -232,6 +232,7 @@ const defaultConfig = {
       }
     },
     epub: {
+      enable: false,
       page: {
         split: true,
         front: true

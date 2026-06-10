@@ -162,6 +162,7 @@ const ja = {
       },
       epub: {
         title: "EPUB コンバーター",
+        enable: "コンバーターを有効",
         page: "ページ",
         pageSplit: "チャプターごとにページをスプリットする",
         pageFront: "フロントページをインクルードする",

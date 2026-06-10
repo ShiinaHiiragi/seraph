@@ -162,6 +162,7 @@ const zhHans = {
       },
       epub: {
         title: "EPUB 转换",
+        enable: "启用转换",
         page: "分页",
         pageSplit: "按章节分页",
         pageFront: "包含正文前页面",

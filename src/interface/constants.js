@@ -254,6 +254,7 @@ const defaultSetting = {
     }
   },
   epub: {
+    enable: false,
     page: {
       split: true,
       front: true

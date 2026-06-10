@@ -267,10 +267,12 @@ export default function RowMenu(props) {
           <MenuItem onClick={handleExtract}>
             {context.languagePicker("main.folder.rowMenu.extract")}
           </MenuItem>}
-        {fileType === "application/epub+zip" && folderName.length > 0 &&
-          <MenuItem onClick={handleEpub}>
-            {context.languagePicker("main.folder.rowMenu.epub")}
-          </MenuItem>}
+        {fileType === "application/epub+zip"
+          && folderName.length > 0
+          && context.setting.epub.enable
+          && <MenuItem onClick={handleEpub}>
+              {context.languagePicker("main.folder.rowMenu.epub")}
+            </MenuItem>}
         <Divider />
         <MenuItem
           color="danger"
