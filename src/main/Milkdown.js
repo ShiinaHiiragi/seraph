@@ -38,13 +38,16 @@ const MaildownField = styled(Box)(({ theme }) => ({
   }
 }));
 
-const CrepeEditorInner = () => {
+const CrepeEditorInner = (props) => {
+  const { crepeRef, crepeSnapshot } = props;
   const context = React.useContext(GlobalContext);
 
   useEditor((root) => {
+    console.log(crepeRef.current?.status);
+
     const crepe = new Crepe({
       root,
-      defaultValue: "",
+      defaultValue: crepeSnapshot.current ?? "Requesting...",
       features: {
         [CrepeFeature.blockEdit]: root.offsetWidth >= 552
       },
@@ -57,12 +60,22 @@ const CrepeEditorInner = () => {
 
     // crepe.editor
     //   .use(emoji);
+    crepeRef.current = crepe.editor;
     return crepe;
   }, [context.setting]);
+
+  React.useEffect(() => {
+    return () => {
+      crepeSnapshot.current = null;
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return <Milkdown />;
 };
 
-const CrepeEditor = () => {
+const CrepeEditor = (props) => {
+  const { crepeRef, crepeSnapshot } = props;
   const context = React.useContext(GlobalContext);
 
   return (
@@ -77,7 +90,10 @@ const CrepeEditor = () => {
     >
       <MaildownField>
         <MilkdownProvider>
-          <CrepeEditorInner />
+          <CrepeEditorInner
+            crepeRef={crepeRef}
+            crepeSnapshot={crepeSnapshot}
+          />
         </MilkdownProvider>
       </MaildownField>
     </RouteField>

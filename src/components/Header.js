@@ -9,6 +9,8 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import { Link, useNavigate } from "react-router-dom";
+import { EditorStatus } from "@milkdown/kit/core";
+import { getMarkdown } from "@milkdown/kit/utils";
 import GreyLogo from "../logo-grey.svg";
 import GlobalContext, {
   globalState,
@@ -54,6 +56,8 @@ const HeaderLayout = (props) => {
 
 const Header = (props) => {
   const {
+    crepeRef,
+    crepeSnapshot,
     setGlobalSwitch,
     setDrawerOpen,
     setPublicFolders,
@@ -64,7 +68,7 @@ const Header = (props) => {
     setSettingPair
   } = props;
   const context = React.useContext(GlobalContext);
-  const navigate = useNavigate();
+  const navigate = useNavigate(crepeRef);
 
   // state for config
   const [modalConfigOpen, setModalConfigOpen] = React.useState(false);
@@ -73,6 +77,17 @@ const Header = (props) => {
   const [mobileNavOpen, setMobileNavOpen] = React.useState(false);
   const [activeSection, setActiveSection] = React.useState(settingField.general);
   const [resetButtonLoading, setResetButtonLoading] = React.useState(false);
+
+  const handleToggleConfig = React.useCallback(() => {
+    if (crepeRef.current?.status === EditorStatus.Created) {
+      const markdown = crepeRef.current.action(getMarkdown());
+      crepeSnapshot.current = markdown;
+    }
+    // crepeRef.current?.action?.(getMarkdown());
+    setModalConfigLoading(true);
+    setModalConfigOpen(true);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleCloseConfig = React.useCallback(() => {
     setModalConfigOpen(false);
@@ -222,10 +237,7 @@ const Header = (props) => {
             variant="outlined"
             color="neutral"
             loading={modalConfigLoading}
-            onClick={() => {
-              setModalConfigLoading(true);
-              setModalConfigOpen(true);
-            }}
+            onClick={handleToggleConfig}
           >
             <SettingsOutlinedIcon />
           </IconButton>}

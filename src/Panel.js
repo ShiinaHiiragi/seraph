@@ -127,6 +127,12 @@ const Panel = () => {
   const [firstTick, setFirstTick] = React.useState(false);
   const [secondTick, setSecondTick] = React.useState(false);
 
+  // editor will re-construct when setting changed
+  // which will clear contents of the editor
+  // crepeSnaoshot will save current text when setting is toggled
+  const crepeRef = React.useRef(null);
+  const crepeSnapshot = React.useRef(null);
+
   // language related
   const languagePicker = React.useMemo(() => {
     ConstantContext.languagePicker = languagePickerSpawner(setting.meta.language);
@@ -197,6 +203,8 @@ const Panel = () => {
           <BrowserRouter>
             <HeaderField className="HeaderField">
               <Header
+                crepeRef={crepeRef}
+                crepeSnapshot={crepeSnapshot}
                 setGlobalSwitch={setGlobalSwitch}
                 setDrawerOpen={setDrawerOpen}
                 setPublicFolders={setPublicFolders}
@@ -252,7 +260,15 @@ const Panel = () => {
                         />
                       }
                     />
-                    <Route path="/milkdown" element={<Milkdown />} />
+                    <Route
+                      path="/milkdown"
+                      element={
+                        <Milkdown
+                          crepeRef={crepeRef}
+                          crepeSnapshot={crepeSnapshot}
+                        />
+                      }
+                    />
                     <Route path="/subscription" element={<Subscription />} />
                     <Route path="/terminal" element={<Terminal />} />
                     <Route path="/todo" element={<TODO />} />

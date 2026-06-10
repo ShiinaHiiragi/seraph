@@ -278,7 +278,7 @@ const Terminal = () => {
         container.removeEventListener("touchmove", onTouchMove);
       };
     }
-  // eslint-disable-next-line
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     // check if
     // load with auth naturally

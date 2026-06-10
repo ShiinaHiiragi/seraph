@@ -42,7 +42,7 @@ const RouteField = (props) => {
         loginButton.click()
       }
     }
-  // eslint-disable-next-line
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [context.secondTick]);
 
   return (
