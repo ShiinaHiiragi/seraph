@@ -22,7 +22,8 @@ const zhHans = {
       welcome: {
         title: "仪表盘",
         enable: "启用仪表盘",
-        enableTemp: "在仪表盘显示温度统计",
+        enableTip: "CPU 温度与磁盘 I/O 数据可能由于平台或机种差异而无法获取",
+        enableTemp: "在仪表盘显示 CPU 温度统计",
         enableDisk: "在仪表盘显示磁盘 I/O 统计",
         interval: "请求间隔",
         intervalTip: "客户端同步实时数据的频率；更大的请求间隔将减少服务器处理压力，同时将削弱数据时效性",

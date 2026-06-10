@@ -22,7 +22,8 @@ const en = {
       welcome: {
         title: "Dashboard",
         enable: "Enable Dashboard",
-        enableTemp: "Show temperature status on dashboard",
+        enableTip: "CPU temperature and disk I/O data may not be available due to differences of platforms or machine models.",
+        enableTemp: "Show CPU temperature status on dashboard",
         enableDisk: "Show Disk I/O status on dashboard",
         interval: "Request Interval",
         intervalTip: "How often the client synchronizes real-time data. Longer intervals reduce server load but may decrease data freshness.",

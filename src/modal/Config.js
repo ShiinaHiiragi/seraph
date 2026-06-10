@@ -37,8 +37,8 @@ import GlobalContext, {
 } from "../interface/constants";
 import { languageMap } from "../interface/languagePicker";
 
-const Literal = (value, itemsMap, field, handleApply, disabled) => (
-  <Select size="sm" value={value} sx={{ maxWidth: 240 }} disabled={disabled}>
+const Literal = (value, itemsMap, field, handleApply, disabled, maxWidth) => (
+  <Select size="sm" value={value} sx={{ maxWidth: maxWidth ?? 240 }} disabled={disabled}>
     {itemsMap.map(({value, label}) => (
       <Option
         key={value}
@@ -52,11 +52,11 @@ const Literal = (value, itemsMap, field, handleApply, disabled) => (
 );
 
 const LabeledLiteral = (caption, value, itemsMap, field, handleApply, disabled, maxWidth) => (
-  <FormControl>
+  <FormControl sx={{ maxWidth: maxWidth ?? 240, flexGrow: 1 }}>
     <FormLabel sx={{ mb: 0, color: "neutral.500" }}>
       {caption}
     </FormLabel>
-    <Select size="sm" value={value} sx={{ maxWidth: maxWidth ?? 240 }} disabled={disabled}>
+    <Select size="sm" value={value} disabled={disabled}>
       {itemsMap.map(({value, label}) => (
         <Option
           key={value}
@@ -305,6 +305,7 @@ const SECTIONS = (
       items: [
         {
           key: context.languagePicker("header.config.welcome.enable"),
+          tip: context.languagePicker("header.config.welcome.enableTip"),
           value: (
             <Stack spacing={2}>
               <Box>
@@ -353,60 +354,67 @@ const SECTIONS = (
           key: context.languagePicker("header.config.welcome.window"),
           value: (
             <Stack spacing={1}>
-              {LabeledLiteral(
-                context.languagePicker("header.config.welcome.windowCpu"),
-                context.setting.welcome.window.cpu,
-                [20, 40, 60, 80, 100, 120].map((num) => ({ value: num, label: num })),
-                "welcome.window.cpu",
-                handleApply,
-                !context.setting.welcome.enable.panel,
-                120
-              )}
-              {LabeledLiteral(
-                context.languagePicker("header.config.welcome.windowTemp"),
-                context.setting.welcome.window.temp,
-                [20, 40, 60, 80, 100, 120].map((num) => ({ value: num, label: num })),
-                "welcome.window.temp",
-                handleApply,
-                !context.setting.welcome.enable.panel,
-                120
-              )}
-              {LabeledLiteral(
-                context.languagePicker("header.config.welcome.windowMemory"),
-                context.setting.welcome.window.memory,
-                [20, 40, 60, 80, 100, 120].map((num) => ({ value: num, label: num })),
-                "welcome.window.memory",
-                handleApply,
-                !context.setting.welcome.enable.panel,
-                120
-              )}
-              {LabeledLiteral(
-                context.languagePicker("header.config.welcome.windowStorage"),
-                context.setting.welcome.window.storage,
-                [20, 40, 60, 80, 100, 120].map((num) => ({ value: num, label: num })),
-                "welcome.window.storage",
-                handleApply,
-                !context.setting.welcome.enable.panel,
-                120
-              )}
-              {LabeledLiteral(
-                context.languagePicker("header.config.welcome.windowDisk"),
-                context.setting.welcome.window.disk,
-                [20, 40, 60, 80, 100, 120].map((num) => ({ value: num, label: num })),
-                "welcome.window.disk",
-                handleApply,
-                !context.setting.welcome.enable.panel,
-                120
-              )}
-              {LabeledLiteral(
-                context.languagePicker("header.config.welcome.windowNet"),
-                context.setting.welcome.window.net,
-                [20, 40, 60, 80, 100, 120].map((num) => ({ value: num, label: num })),
-                "welcome.window.net",
-                handleApply,
-                !context.setting.welcome.enable.panel,
-                120
-              )}
+              <Stack spacing={{ xs: 1, lg: 4 }} direction={{ xs: "column", lg: "row" }}>
+                {LabeledLiteral(
+                  context.languagePicker("header.config.welcome.windowCpu"),
+                  context.setting.welcome.window.cpu,
+                  [20, 40, 60, 80, 100, 120].map((num) => ({ value: num, label: num })),
+                  "welcome.window.cpu",
+                  handleApply,
+                  !context.setting.welcome.enable.panel,
+                  120,
+                  { flexGrow: 1 }
+                )}
+                {LabeledLiteral(
+                  context.languagePicker("header.config.welcome.windowTemp"),
+                  context.setting.welcome.window.temp,
+                  [20, 40, 60, 80, 100, 120].map((num) => ({ value: num, label: num })),
+                  "welcome.window.temp",
+                  handleApply,
+                  !context.setting.welcome.enable.panel,
+                  120
+                )}
+              </Stack>
+              <Stack spacing={{ xs: 1, lg: 4 }} direction={{ xs: "column", lg: "row" }}>
+                {LabeledLiteral(
+                  context.languagePicker("header.config.welcome.windowMemory"),
+                  context.setting.welcome.window.memory,
+                  [20, 40, 60, 80, 100, 120].map((num) => ({ value: num, label: num })),
+                  "welcome.window.memory",
+                  handleApply,
+                  !context.setting.welcome.enable.panel,
+                  120
+                )}
+                {LabeledLiteral(
+                  context.languagePicker("header.config.welcome.windowStorage"),
+                  context.setting.welcome.window.storage,
+                  [20, 40, 60, 80, 100, 120].map((num) => ({ value: num, label: num })),
+                  "welcome.window.storage",
+                  handleApply,
+                  !context.setting.welcome.enable.panel,
+                  120
+                )}
+              </Stack>
+              <Stack spacing={{ xs: 1, lg: 4 }} direction={{ xs: "column", lg: "row" }}>
+                {LabeledLiteral(
+                  context.languagePicker("header.config.welcome.windowDisk"),
+                  context.setting.welcome.window.disk,
+                  [20, 40, 60, 80, 100, 120].map((num) => ({ value: num, label: num })),
+                  "welcome.window.disk",
+                  handleApply,
+                  !context.setting.welcome.enable.panel,
+                  120
+                )}
+                {LabeledLiteral(
+                  context.languagePicker("header.config.welcome.windowNet"),
+                  context.setting.welcome.window.net,
+                  [20, 40, 60, 80, 100, 120].map((num) => ({ value: num, label: num })),
+                  "welcome.window.net",
+                  handleApply,
+                  !context.setting.welcome.enable.panel,
+                  120
+                )}
+              </Stack>
             </Stack>
           )
         },

@@ -211,7 +211,7 @@ const Welcome = () => {
     if (
       context.secondTick
         && context.isAuthority
-        && context.setting.welcome.enable
+        && context.setting.welcome.enable.panel
     ) {
       cancelRef.current = false;
       historyRef.current.lastRequest = Date.now()
@@ -253,7 +253,7 @@ const Welcome = () => {
     // login in same page
     context.isAuthority,
     // dashboard is hidden
-    context.setting.welcome.enable
+    context.setting.welcome.enable.panel
   ])
 
   const time = [hours, minutes, seconds]
@@ -282,7 +282,7 @@ const Welcome = () => {
   const rxNetTrend = history.map(({ net }) => net.rx);
   const txNetTrend = history.map(({ net }) => net.tx);
 
-  if (!context.isAuthority || !context.setting.welcome.enable) {
+  if (!context.isAuthority || !context.setting.welcome.enable.panel) {
     return (
       <RouteField display>
         <Center className="CenterField">
@@ -549,8 +549,12 @@ const Welcome = () => {
             display: "grid",
             gridTemplateColumns: {
               xs: "1fr",
-              lg: "1fr 1fr",
-              xl: "3fr 1fr"
+              lg: context.setting.welcome.enable.temp
+                ? "1fr 1fr"
+                : "1fr",
+              xl: context.setting.welcome.enable.temp
+                ? "3fr 1fr"
+                : "1fr"
             },
             gap: 1.5,
           }}
@@ -604,7 +608,7 @@ const Welcome = () => {
               </Typography>}
           </DashCard>
 
-          <DashCard variant="outlined">
+          {context.setting.welcome.enable.temp && <DashCard variant="outlined">
             <Box
               sx={{
                 display: "flex",
@@ -651,7 +655,7 @@ const Welcome = () => {
                   {tempUsage.max}℃
                 </Box>
               </Typography>}
-          </DashCard>
+          </DashCard>}
         </Box>
 
         <Box
@@ -660,9 +664,9 @@ const Welcome = () => {
             gridTemplateColumns: {
               xs: "1fr",
               lg: "repeat(2, 1fr)",
-              xl: context.metadata.platform === "win32"
-                ? "repeat(2, 1fr)"
-                : "repeat(4, 1fr)"
+              xl: context.setting.welcome.enable.disk
+                ? "repeat(4, 1fr)"
+                : "repeat(2, 1fr)"
             },
             gap: 1.5,
           }}
@@ -767,7 +771,7 @@ const Welcome = () => {
               </Typography>}
           </DashCard>
 
-          {context.metadata.platform !== "win32" &&
+          {context.setting.welcome.enable.disk &&
             <DashCard variant="outlined">
               <Box
                 sx={{
@@ -817,7 +821,7 @@ const Welcome = () => {
                 </Typography>}
             </DashCard>}
 
-          {context.metadata.platform !== "win32" &&
+          {context.setting.welcome.enable.disk &&
             <DashCard variant="outlined">
               <Box
                 sx={{

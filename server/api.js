@@ -117,7 +117,7 @@ const defaultConfig = {
       enable: {
         panel: true,
         temp: false,
-        disk: false
+        disk: true
       },
       interval: 45,
       window: {
