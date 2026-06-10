@@ -22,6 +22,8 @@ const ja = {
       welcome: {
         title: "ダッシュボード",
         enable: "ダッシュボードを有効",
+        enableTemp: "テンペラチャーステータスを表示する",
+        enableDisk: "ディスク I/O ステータスを表示する",
         interval: "リクエストの間隔",
         intervalTip: "クライアントがリアルタイムデータを同期する頻度です。間隔を長くするとサーバー負荷は軽減されますが、データの即時性は低下します",
         intervalOption: {

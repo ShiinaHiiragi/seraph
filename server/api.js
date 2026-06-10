@@ -114,7 +114,11 @@ const defaultConfig = {
       token: 60
     },
     welcome: {
-      enable: true,
+      enable: {
+        panel: true,
+        temp: false,
+        disk: false
+      },
       interval: 45,
       window: {
         cpu: 120,
