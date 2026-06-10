@@ -34,20 +34,27 @@ const MaildownField = styled(Box)(({ theme }) => ({
     flex: 1,
     overflowY: "auto",
     minHeight: 0
+  },
+  [theme.breakpoints.only("xs")]: {
+    "& .milkdown .ProseMirror": {
+      padding: theme.spacing(1, 1)
+    }
+  },
+  [theme.breakpoints.up("sm")]: {
+    "& .milkdown .ProseMirror": {
+      padding: theme.spacing(2, 10)
+    }
   }
 }));
 
 const CrepeEditorInner = () => {
-  useEditor((root) =>
-    new CrepeBuilder({
-      root,
-      defaultValue: "### IN DEV..."
-    })
+  useEditor((root) => 
+    new CrepeBuilder({root, defaultValue: ""})
       .addFeature(codeMirror)
       .addFeature(listItem)
       .addFeature(linkTooltip)
       .addFeature(imageBlock)
-      .addFeature(blockEdit)
+      .addFeature(root.offsetWidth >= 552 ? blockEdit : () => {})
       .addFeature(toolbar)
       .addFeature(table)
       .addFeature(cursor)
