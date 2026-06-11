@@ -132,6 +132,7 @@ const Panel = () => {
   // and act as init value for re-construction when setting changed
   const crepeEditor = React.useRef(null);
   const crepeUtils = React.useRef(null);
+  const crepeModify = React.useRef(null);
   const crepeSnapshot = React.useRef("");
 
   const switchAction = React.useCallback((actionName) => (...args) => {
@@ -148,20 +149,22 @@ const Panel = () => {
     editor: crepeEditor,
     utils: crepeUtils,
     snapshot: crepeSnapshot,
+    modify: crepeModify,
     load: (editor, utils) => {
       crepeEditor.current = editor;
       crepeUtils.current = utils;
+      crepeModify.current = false;
     },
     unload: () => {
       crepeEditor.current = null;
       crepeUtils.current = null;
+      crepeModify.current = null;
     },
     isLoaded: () => crepeEditor.current !== null,
     isCreated: () => crepeEditor.current?.status === "Created",
     getText: switchAction("getMarkdown"),
     setText: switchAction("replaceAll")
   }), [switchAction]);
-  window.crepeRef = crepeRef;
 
   // language related
   const languagePicker = React.useMemo(() => {

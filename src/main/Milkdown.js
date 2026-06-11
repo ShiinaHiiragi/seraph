@@ -4,6 +4,7 @@ import { styled } from "@mui/joy/styles";
 import { Milkdown, MilkdownProvider, useEditor } from "@milkdown/react";
 import { Crepe, CrepeFeature } from "@milkdown/crepe";
 import { getMarkdown, replaceAll } from "@milkdown/kit/utils";
+import { listener, listenerCtx } from "@milkdown/kit/plugin/listener";
 // import { emoji } from "@milkdown/plugin-emoji";
 import Loading from "./Loading";
 import RouteField from "../interface/RouteField";
@@ -61,8 +62,14 @@ const CrepeEditorInner = (props) => {
       },
     });
 
-    // crepe.editor
-    //   .use(emoji);
+    crepe.editor
+      .config((ctx) => {
+        ctx.get(listenerCtx).markdownUpdated(() => {
+          context.crepeRef.modify.current = true;
+        });
+      })
+      .use(listener);
+
     context.crepeRef.load(crepe.editor, { getMarkdown, replaceAll });
     return crepe;
   }, [
@@ -92,7 +99,7 @@ const CrepeEditor = (props) => {
       // TODO: get text from server via filename
       setCrepeState(1);
       setFileContent("Init value");
-    }, 2000)
+    }, 1000);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     // check if
