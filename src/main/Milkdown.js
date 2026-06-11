@@ -41,7 +41,7 @@ const MaildownField = styled(Box)(({ theme }) => ({
   },
   [theme.breakpoints.up("sm")]: {
     "& .milkdown .ProseMirror": {
-      padding: theme.spacing(2, 10)
+      padding: theme.spacing(2, 6)
     }
   }
 }));
@@ -58,7 +58,7 @@ const CrepeEditorInner = (props) => {
         ? context.crepeRef.snapshot.current
         : fileContent,
       features: {
-        [CrepeFeature.blockEdit]: root.offsetWidth >= 552
+        // [CrepeFeature.blockEdit]: root.offsetWidth >= 552
       },
       featureConfigs: {
         [CrepeFeature.Placeholder]: {

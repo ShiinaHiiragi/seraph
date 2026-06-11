@@ -35,6 +35,9 @@
 
 /* block menu popup */
 .milkdown .milkdown-block-handle {
+  .operation-item:nth-of-type(1) {
+    display: none;
+  }
 }
 
 /* slash menu popup */
