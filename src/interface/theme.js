@@ -63,6 +63,15 @@ const GlobalTheme = (language) => extendTheme({
     code: "'Noto Sans Mono', 'Noto Sans Mono CJK SC', 'Consolas', 'DejaVu Sans Mono', 'Menlo', monospace"
   },
   components: {
+    JoyInput: {
+      defaultProps: {
+        slotProps: {
+          input: {
+            spellCheck: false
+          }
+        }
+      }
+    },
     JoyTypography: {
       styleOverrides: {
         root: {

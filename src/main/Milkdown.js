@@ -3,6 +3,7 @@ import Box from "@mui/joy/Box";
 import { styled } from "@mui/joy/styles";
 import { Milkdown, MilkdownProvider, useEditor } from "@milkdown/react";
 import { Crepe, CrepeFeature } from "@milkdown/crepe";
+import { editorViewOptionsCtx } from "@milkdown/kit/core";
 import { getMarkdown, replaceAll } from "@milkdown/kit/utils";
 import { listener, listenerCtx } from "@milkdown/kit/plugin/listener";
 // import { emoji } from "@milkdown/plugin-emoji";
@@ -28,6 +29,10 @@ const MaildownField = styled(Box)(({ theme }) => ({
     flex: 1,
     overflowY: "auto",
     minHeight: 0
+  },
+  "& .milkdown .ProseMirror": {
+    wordBreak: "normal",
+    overflowWrap: "anywhere"
   },
   [theme.breakpoints.only("xs")]: {
     "& .milkdown .ProseMirror": {
@@ -64,6 +69,12 @@ const CrepeEditorInner = (props) => {
 
     crepe.editor
       .config((ctx) => {
+        ctx.update(editorViewOptionsCtx, (prev) => ({
+          ...prev,
+          attributes: {
+            spellcheck: "false"
+          }
+        }));
         ctx.get(listenerCtx).markdownUpdated(() => {
           context.crepeRef.modify.current = true;
         });
@@ -74,6 +85,8 @@ const CrepeEditorInner = (props) => {
     return crepe;
   }, [
     context.setting.meta.language
+    // TODO: add config in context.setting
+    // spell check
   ]);
 
   React.useEffect(() => {

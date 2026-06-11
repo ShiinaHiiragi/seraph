@@ -168,10 +168,7 @@ const StringInput = (props) => {
         endDecorator={end}
         onChange={(event) => setLocalValue(event.target.value)}
         error={localError}
-        slotProps={{
-          startDecorator: { sx: startStyle ?? { mr: 0.25 } },
-          input: { spellCheck: false }
-        }}
+        slotProps={{ startDecorator: { sx: startStyle ?? { mr: 0.25 } } }}
       />
     </FormControl>
   );
