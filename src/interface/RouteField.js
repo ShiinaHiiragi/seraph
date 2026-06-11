@@ -106,12 +106,7 @@ const RouteField = (props) => {
       }
       <RouteFieldRaw
         className="RouteFieldRawInner"
-        sx={{
-          paddingLeft: 3,
-          paddingRight: 3,
-          paddingBottom: 2,
-          ...sx
-        }}
+        sx={{ px: 3, pb: 2, ...sx }}
         {...otherProps}
       >
         {display
