@@ -29,10 +29,10 @@ import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
 import TodayOutlinedIcon from "@mui/icons-material/TodayOutlined";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import AccessAlarmsOutlinedIcon from "@mui/icons-material/AccessAlarmsOutlined";
-import Loading from "./Loading";
 import RouteField from "../interface/RouteField";
 import GlobalContext, { request } from "../interface/constants";
 import SemiInput, { SemiTextarea } from "../interface/SemiInput";
+import Loading from "./Loading";
 import ModalForm from "../modal/Form";
 import Picker from "../components/Picker";
 
@@ -347,21 +347,21 @@ const TODO = () => {
     })
   }, [context]);
 
-  return taskState === 0
-    ? <Loading />
-    : (
-      <RouteField
-        display={context.isAuthority}
-        path={[
-          context.languagePicker("nav.utility.title"),
-          context.languagePicker("nav.utility.todo")
-        ]}
-        title={context.languagePicker("nav.utility.todo")}
-        sx={{
-          flexDirection: "column",
-          overflowY: "auto"
-        }}
-      >
+  return (
+    <RouteField
+      display={context.isAuthority}
+      path={[
+        context.languagePicker("nav.utility.title"),
+        context.languagePicker("nav.utility.todo")
+      ]}
+      title={context.languagePicker("nav.utility.todo")}
+      sx={{
+        flexDirection: "column",
+        overflowY: "auto"
+      }}
+    >
+      {taskState === 0 && <Loading pinned /> }
+      {taskState === 1 &&
         <React.Fragment>
           <Box
             className="SearchAndFilters"
@@ -587,95 +587,95 @@ const TODO = () => {
               </React.Fragment>
             ))}
           </List>
-        </React.Fragment>
-        <ModalForm
-          open={modalTaskOpen}
-          loading={modalButtonLoading}
-          disabled={
-            matchHistory(modalTaskName, modalTaskDesciption, modalTaskType, modalTaskDueTime) ||
-            modalTaskName.length === 0 ||
-            (modalTaskType !== "permanent" && modalTaskDueTime?.$ms !== 0) ||
-            (modalTaskType === "sync" && modalTaskExpired)
+        </React.Fragment>}
+      <ModalForm
+        open={modalTaskOpen}
+        loading={modalButtonLoading}
+        disabled={
+          matchHistory(modalTaskName, modalTaskDesciption, modalTaskType, modalTaskDueTime) ||
+          modalTaskName.length === 0 ||
+          (modalTaskType !== "permanent" && modalTaskDueTime?.$ms !== 0) ||
+          (modalTaskType === "sync" && modalTaskExpired)
+        }
+        handleClose={() => setModalTaskOpen(false)}
+        handleClick={() => {
+          const expired = checkExpired();
+          if (expired) {
+            setModalTaskExpired(expired);
+            return;
           }
-          handleClose={() => setModalTaskOpen(false)}
-          handleClick={() => {
-            const expired = checkExpired();
-            if (expired) {
-              setModalTaskExpired(expired);
-              return;
-            }
-            handleModTask(
-              modalTaskName,
-              modalTaskDesciption,
-              modalTaskType,
-              modalTaskDueTime?.valueOf() ?? null
-            );
-          }}
-          title={modalTaskTitle}
-          caption={context.languagePicker("modal.form.todo.caption")}
-          button={context.languagePicker("universal.button.submit")}
-        >
-          <FormControl>
-            <FormLabel>{context.languagePicker("main.todo.regulate.name")}</FormLabel>
-            <SemiInput
-              initValue={modalTaskName}
-              setValue={setModalTaskName}
-              placeholder={context.languagePicker("universal.placeholder.instruction.required")}
+          handleModTask(
+            modalTaskName,
+            modalTaskDesciption,
+            modalTaskType,
+            modalTaskDueTime?.valueOf() ?? null
+          );
+        }}
+        title={modalTaskTitle}
+        caption={context.languagePicker("modal.form.todo.caption")}
+        button={context.languagePicker("universal.button.submit")}
+      >
+        <FormControl>
+          <FormLabel>{context.languagePicker("main.todo.regulate.name")}</FormLabel>
+          <SemiInput
+            initValue={modalTaskName}
+            setValue={setModalTaskName}
+            placeholder={context.languagePicker("universal.placeholder.instruction.required")}
+          />
+        </FormControl>
+        <FormControl>
+          <FormLabel>{context.languagePicker("main.todo.regulate.description")}</FormLabel>
+          <SemiTextarea
+            initValue={modalTaskDesciption}
+            setValue={setModalTaskDesciption}
+            minRows={4}
+            maxRows={4}
+            placeholder={context.languagePicker("universal.placeholder.instruction.optional")}
+            value={modalTaskDesciption}
+          />
+        </FormControl>
+        <FormControl>
+          <FormLabel>{context.languagePicker("main.todo.regulate.type")}</FormLabel>
+          <Select value={modalTaskType}>
+            <Option
+              value="permanent"
+              onClick={() => {
+                setModalTaskType("permanent");
+                setModalTaskDueTime(null);
+              }}
+            >
+              {context.languagePicker("main.todo.type.permanent")}
+            </Option>
+            <Option value="async" onClick={() => setModalTaskType("async")}>
+              {context.languagePicker("main.todo.type.async")}
+            </Option>
+            <Option value="sync" onClick={() => setModalTaskType("sync")}>
+              {context.languagePicker("main.todo.type.sync")}
+            </Option>
+          </Select>
+        </FormControl>
+        {modalTaskType !== "permanent" &&
+          <FormControl error={modalTaskExpired}>
+            <FormLabel>
+              {context.languagePicker("main.todo.regulate.dueTime")}
+            </FormLabel>
+            <Picker
+              timeFormat={context.languagePicker("universal.time.taskModalFormat")}
+              value={modalTaskDueTime}
+              onChange={(newValue) => setModalTaskDueTime(newValue)}
             />
-          </FormControl>
-          <FormControl>
-            <FormLabel>{context.languagePicker("main.todo.regulate.description")}</FormLabel>
-            <SemiTextarea
-              initValue={modalTaskDesciption}
-              setValue={setModalTaskDesciption}
-              minRows={4}
-              maxRows={4}
-              placeholder={context.languagePicker("universal.placeholder.instruction.optional")}
-              value={modalTaskDesciption}
-            />
-          </FormControl>
-          <FormControl>
-            <FormLabel>{context.languagePicker("main.todo.regulate.type")}</FormLabel>
-            <Select value={modalTaskType}>
-              <Option
-                value="permanent"
-                onClick={() => {
-                  setModalTaskType("permanent");
-                  setModalTaskDueTime(null);
-                }}
-              >
-                {context.languagePicker("main.todo.type.permanent")}
-              </Option>
-              <Option value="async" onClick={() => setModalTaskType("async")}>
-                {context.languagePicker("main.todo.type.async")}
-              </Option>
-              <Option value="sync" onClick={() => setModalTaskType("sync")}>
-                {context.languagePicker("main.todo.type.sync")}
-              </Option>
-            </Select>
-          </FormControl>
-          {modalTaskType !== "permanent" &&
-            <FormControl error={modalTaskExpired}>
-              <FormLabel>
-                {context.languagePicker("main.todo.regulate.dueTime")}
-              </FormLabel>
-              <Picker
-                timeFormat={context.languagePicker("universal.time.taskModalFormat")}
-                value={modalTaskDueTime}
-                onChange={(newValue) => setModalTaskDueTime(newValue)}
-              />
-              {modalTaskExpired && <FormHelperText>
-                {context
-                  .languagePicker("modal.form.todo.helperFirstHalf")
-                  .format(
-                    modalTaskType !== "sync"
-                      ? context.languagePicker("modal.form.todo.helperSecondHalf")
-                      : "")}
-              </FormHelperText>}
-            </FormControl>}
-        </ModalForm>
-      </RouteField>
-    )
+            {modalTaskExpired && <FormHelperText>
+              {context
+                .languagePicker("modal.form.todo.helperFirstHalf")
+                .format(
+                  modalTaskType !== "sync"
+                    ? context.languagePicker("modal.form.todo.helperSecondHalf")
+                    : "")}
+            </FormHelperText>}
+          </FormControl>}
+      </ModalForm>
+    </RouteField>
+  )
 }
 
 export default TODO;

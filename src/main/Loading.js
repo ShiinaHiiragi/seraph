@@ -1,9 +1,10 @@
 import React from "react";
 import Box from "@mui/joy/Box";
 
-const Loading = () => (
+const Loading = ({ pinned }) => (
   <Box sx={{
-    position: "relative",
+    position: pinned ? "absolute" : "relative",
+    ...(pinned && { top: 0, left: 0, right: 0, zIndex: 1 }),
     overflow: "hidden",
     background: "transparent",
     height: { xs: 1.5, sm: 2.5 }

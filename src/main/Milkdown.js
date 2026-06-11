@@ -107,32 +107,31 @@ const CrepeEditor = (props) => {
     context.secondTick
   ]);
 
-  return crepeState === 0 || fileContent === null
-    ? <Loading />
-    : (
-      <RouteField
-        display
-        path={[
-          context.languagePicker("nav.utility.title"),
-          context.languagePicker("nav.utility.milkdown")
-        ]}
-        title={context.languagePicker("nav.utility.milkdown")}
-        sx={{
-          flexGrow: 1,
-          minHeight: 0,
-          height: "auto"
-        }}
-      >
-        {crepeState === 1 && fileContent !== null &&
-          <MaildownField>
-            <MilkdownProvider>
-              <CrepeEditorInner
-                fileContent={fileContent}
-              />
-            </MilkdownProvider>
-          </MaildownField>}
-      </RouteField>
-    );
+  return (
+    <RouteField
+      display
+      path={[
+        context.languagePicker("nav.utility.title"),
+        context.languagePicker("nav.utility.milkdown")
+      ]}
+      title={context.languagePicker("nav.utility.milkdown")}
+      sx={{
+        flexGrow: 1,
+        minHeight: 0,
+        height: "auto"
+      }}
+    >
+      {(crepeState === 0 || fileContent === null) && <Loading pinned />}
+      {(crepeState === 1 && fileContent !== null) &&
+        <MaildownField>
+          <MilkdownProvider>
+            <CrepeEditorInner
+              fileContent={fileContent}
+            />
+          </MilkdownProvider>
+        </MaildownField>}
+    </RouteField>
+  );
 }
 
 export default CrepeEditor;
