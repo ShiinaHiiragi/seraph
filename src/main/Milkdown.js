@@ -29,17 +29,17 @@ const MaildownField = styled(Box)(({ theme }) => ({
     flex: 1,
     overflowY: "auto",
     minHeight: 0,
-    [theme.breakpoints.only("xs")]: {
+    [theme.breakpoints.down("md")]: {
       padding: theme.spacing(0, 2.5, 2, 2.5)
     }
   },
   "& .milkdown .ProseMirror": {
     wordBreak: "normal",
     overflowWrap: "anywhere",
-    [theme.breakpoints.only("xs")]: {
+    [theme.breakpoints.down("md")]: {
       padding: theme.spacing(0, 1)
     },
-    [theme.breakpoints.up("sm")]: {
+    [theme.breakpoints.up("md")]: {
       padding: theme.spacing(2, 6)
     }
   }
@@ -146,8 +146,8 @@ Laborum deserunt sit laborum Lorem sit in dolore velit aliquip. Non ex pariatur 
       ]}
       title={context.languagePicker("nav.utility.milkdown")}
       sx={{
-        px: { xs: 0, sm: 3 },
-        pb: { xs: 0, sm: 2 },
+        px: { xs: 0, md: 3 },
+        pb: { xs: 0, md: 2 },
         flexGrow: 1,
         minHeight: 0,
         height: "auto"
