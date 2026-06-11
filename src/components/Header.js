@@ -75,7 +75,7 @@ const Header = (props) => {
   const [resetButtonLoading, setResetButtonLoading] = React.useState(false);
 
   const handleToggleConfig = React.useCallback(() => {
-    context.crepe.snapshot.current = context.crepe.getText();
+    context.crepeRef.snapshot.current = context.crepeRef.getText();
     setModalConfigLoading(true);
     setModalConfigOpen(true);
   // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -3,8 +3,6 @@ import CssBaseline from "@mui/joy/CssBaseline";
 import GlobalStyles from "@mui/joy/GlobalStyles";
 import { styled, CssVarsProvider } from "@mui/joy/styles";
 import { BrowserRouter, Routes, Route } from "react-router-dom"
-import { EditorStatus } from "@milkdown/kit/core";
-import { getMarkdown, replaceAll } from "@milkdown/kit/utils";
 import { Toaster } from "sonner";
 
 import Header from "./components/Header";
@@ -129,32 +127,41 @@ const Panel = () => {
   const [firstTick, setFirstTick] = React.useState(false);
   const [secondTick, setSecondTick] = React.useState(false);
 
-  // crepeRef.current !== null when crepe is loaded
+  // crepeEditor.current !== null when crepe is loaded
   // crepeSnapshot save current text every time setting is toggled
   // and act as init value for re-construction when setting changed
-  const crepeRef = React.useRef(null);
+  const crepeEditor = React.useRef(null);
+  const crepeUtils = React.useRef(null);
   const crepeSnapshot = React.useRef("");
 
-  const switchAction = React.useCallback((handleAction) => (...args) => {
-    if (crepeRef.current?.status === EditorStatus.Created) {
-      const result = crepeRef.current.action(handleAction(...args));
+  const switchAction = React.useCallback((actionName) => (...args) => {
+    if (crepeEditor.current?.status === "Created") {
+      const handleAction = crepeUtils.current[actionName];
+      const result = crepeEditor.current.action(handleAction(...args));
       return result === undefined ? true : result;
     } else {
       return false;
     }
   }, []);
 
-  const crepe = React.useMemo(() => ({
-    editor: crepeRef,
+  const crepeRef = React.useMemo(() => ({
+    editor: crepeEditor,
+    utils: crepeUtils,
     snapshot: crepeSnapshot,
-    load: (editor) => { crepeRef.current = editor; },
-    unload: () => { crepeRef.current = null; },
-    isLoaded: () => crepeRef.current !== null,
-    isCreated: () => crepeRef.current?.status === EditorStatus.Created,
-    getText: switchAction(getMarkdown),
-    setText: switchAction(replaceAll)
+    load: (editor, utils) => {
+      crepeEditor.current = editor;
+      crepeUtils.current = utils;
+    },
+    unload: () => {
+      crepeEditor.current = null;
+      crepeUtils.current = null;
+    },
+    isLoaded: () => crepeEditor.current !== null,
+    isCreated: () => crepeEditor.current?.status === "Created",
+    getText: switchAction("getMarkdown"),
+    setText: switchAction("replaceAll")
   }), [switchAction]);
-  window.crepe = crepe;
+  window.crepeRef = crepeRef;
 
   // language related
   const languagePicker = React.useMemo(() => {
@@ -212,7 +219,7 @@ const Panel = () => {
         secondTick: secondTick,
         sortedPublicFolders: sortedPublicFolders,
         sortedPrivateFolders: sortedPrivateFolders,
-        crepe: crepe,
+        crepeRef: crepeRef,
         metadata: metadata,
         setting: setting
       }}

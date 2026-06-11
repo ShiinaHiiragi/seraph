@@ -3,6 +3,7 @@ import Box from "@mui/joy/Box";
 import { styled } from "@mui/joy/styles";
 import { Milkdown, MilkdownProvider, useEditor } from "@milkdown/react";
 import { Crepe, CrepeFeature } from "@milkdown/crepe";
+import { getMarkdown, replaceAll } from "@milkdown/kit/utils";
 // import { emoji } from "@milkdown/plugin-emoji";
 import RouteField from "../interface/RouteField";
 import GlobalContext from "../interface/constants";
@@ -42,12 +43,11 @@ const CrepeEditorInner = () => {
   const context = React.useContext(GlobalContext);
 
   useEditor((root) => {
-    const isReloading = context.crepe.isLoaded();
-
+    const isReloading = context.crepeRef.isLoaded();
     const crepe = new Crepe({
       root,
       defaultValue: isReloading
-        ? context.crepe.snapshot.current
+        ? context.crepeRef.snapshot.current
         : "Requesting...",
       features: {
         [CrepeFeature.blockEdit]: root.offsetWidth >= 552
@@ -61,13 +61,23 @@ const CrepeEditorInner = () => {
 
     // crepe.editor
     //   .use(emoji);
-    context.crepe.load(crepe.editor);
+    context.crepeRef.load(crepe.editor, { getMarkdown, replaceAll });
+    if (!isReloading) {
+      crepe.create().then(() => {
+        // TODO: get text from server
+        setTimeout(() => {
+          context.crepeRef.setText("Done...")
+        }, 200);
+      });
+    }
     return crepe;
-  }, [context.setting]);
+  }, [
+    context.setting.meta.language
+  ]);
 
   React.useEffect(() => {
     return () => {
-      context.crepe.unload();
+      context.crepeRef.unload();
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
