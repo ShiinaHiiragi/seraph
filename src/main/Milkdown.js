@@ -5,6 +5,7 @@ import { Milkdown, MilkdownProvider, useEditor } from "@milkdown/react";
 import { Crepe, CrepeFeature } from "@milkdown/crepe";
 import { getMarkdown, replaceAll } from "@milkdown/kit/utils";
 // import { emoji } from "@milkdown/plugin-emoji";
+import Loading from "./Loading";
 import RouteField from "../interface/RouteField";
 import GlobalContext from "../interface/constants";
 
@@ -99,30 +100,32 @@ const CrepeEditor = (props) => {
     context.secondTick
   ]);
 
-  return (
-    <RouteField
-      display
-      path={[
-        context.languagePicker("nav.utility.title"),
-        context.languagePicker("nav.utility.milkdown")
-      ]}
-      title={context.languagePicker("nav.utility.milkdown")}
-      sx={{
-        flexGrow: 1,
-        minHeight: 0,
-        height: "auto"
-      }}
-    >
-      {crepeState === 1 && fileContent !== null &&
-        <MaildownField>
-          <MilkdownProvider>
-            <CrepeEditorInner
-              fileContent={fileContent}
-            />
-          </MilkdownProvider>
-        </MaildownField>}
-    </RouteField>
-  );
+  return crepeState === 0 || fileContent === null
+    ? <Loading />
+    : (
+      <RouteField
+        display
+        path={[
+          context.languagePicker("nav.utility.title"),
+          context.languagePicker("nav.utility.milkdown")
+        ]}
+        title={context.languagePicker("nav.utility.milkdown")}
+        sx={{
+          flexGrow: 1,
+          minHeight: 0,
+          height: "auto"
+        }}
+      >
+        {crepeState === 1 && fileContent !== null &&
+          <MaildownField>
+            <MilkdownProvider>
+              <CrepeEditorInner
+                fileContent={fileContent}
+              />
+            </MilkdownProvider>
+          </MaildownField>}
+      </RouteField>
+    );
 }
 
 export default CrepeEditor;

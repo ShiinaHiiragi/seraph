@@ -22,6 +22,7 @@ import GlobalContext, {
   defaultClipboard,
   pathStartWith
 } from "../interface/constants";
+import Loading from "./Loading";
 import RouteField from "../interface/RouteField";
 import SemiInput from "../interface/SemiInput";
 import FileTable from "../components/FileTable";
@@ -448,224 +449,226 @@ const FileExplorer = (props) => {
     handleCloseRename
   ]);
 
-  return (
-    <RouteField
-      display={display}
-      path={[
-        context.languagePicker(`nav.${type}`),
-        ...(folderName.length ? folderName.split("/") : [])
-      ]}
-      link={`/${type}${folderName.length ? "/" : ""}${folderName}`}
-      title={
-        folderName.split("/").slice(-1)[0]
-          || context.languagePicker(`nav.${type}`)
-      }
-      sxRaw={{
-        overflowY: {
-          xs: "hidden",
-          sm: "hidden"
+  return folderState === 0
+    ? <Loading />
+    : (
+      <RouteField
+        display={display}
+        path={[
+          context.languagePicker(`nav.${type}`),
+          ...(folderName.length ? folderName.split("/") : [])
+        ]}
+        link={`/${type}${folderName.length ? "/" : ""}${folderName}`}
+        title={
+          folderName.split("/").slice(-1)[0]
+            || context.languagePicker(`nav.${type}`)
         }
-      }}
-      sx={{
-        flexDirection: "column",
-        overflowY: {
-          xs: "auto",
-          sm: "hidden"
-        },
-        overflowX: {
-          xs: "auto",
-          sm: "hidden"
-        },
-        height: {
-          xs: "auto",
-          sm: "100%"
-        }
-      }}
-    >
-      {folderState === 1 &&
-        <React.Fragment>
-          <Box
-            className="SearchAndFilters"
-            sx={{
-              borderRadius: "sm",
-              pb: 2,
-              display: "flex",
-              flexWrap: "no-wrap",
-              flexDirection: { xs: "column", sm: "row" },
-              gap: { xs: 1.5, sm: 1.5 },
-              "& > *": { minWidth: { xs: "120px", md: "160px" } },
-            }}
-          >
-            <Box sx={{ display: "flex", flexGrow: 1 }}>
-              <FormControl sx={{ width: "100%" }} size="sm">
-                <SemiInput
-                  initValue={search}
-                  setValue={setSearch}
-                  offset={reactionInterval.slow}
-                  autoComplete="off"
-                  size="sm"
-                  placeholder={context.languagePicker("main.folder.viewRegulate.search")}
-                  startDecorator={<SearchIcon />}
-                />
-              </FormControl>
-            </Box>
+        sxRaw={{
+          overflowY: {
+            xs: "hidden",
+            sm: "hidden"
+          }
+        }}
+        sx={{
+          flexDirection: "column",
+          overflowY: {
+            xs: "auto",
+            sm: "hidden"
+          },
+          overflowX: {
+            xs: "auto",
+            sm: "hidden"
+          },
+          height: {
+            xs: "auto",
+            sm: "100%"
+          }
+        }}
+      >
+        {folderState === 1 &&
+          <React.Fragment>
             <Box
+              className="SearchAndFilters"
               sx={{
+                borderRadius: "sm",
+                pb: 2,
                 display: "flex",
-                gap: context.isAuthority ? 1.5 : 0,
-                width: { xs: "100%", sm: "auto" }
+                flexWrap: "no-wrap",
+                flexDirection: { xs: "column", sm: "row" },
+                gap: { xs: 1.5, sm: 1.5 },
+                "& > *": { minWidth: { xs: "120px", md: "160px" } },
               }}
             >
-              <FormControl
-                size="sm"
+              <Box sx={{ display: "flex", flexGrow: 1 }}>
+                <FormControl sx={{ width: "100%" }} size="sm">
+                  <SemiInput
+                    initValue={search}
+                    setValue={setSearch}
+                    offset={reactionInterval.slow}
+                    autoComplete="off"
+                    size="sm"
+                    placeholder={context.languagePicker("main.folder.viewRegulate.search")}
+                    startDecorator={<SearchIcon />}
+                  />
+                </FormControl>
+              </Box>
+              <Box
                 sx={{
-                  flexGrow: 1,
-                  minWidth: context.isAuthority ? "160px" : "200px"
+                  display: "flex",
+                  gap: context.isAuthority ? 1.5 : 0,
+                  width: { xs: "100%", sm: "auto" }
                 }}
               >
-                <Select
+                <FormControl
                   size="sm"
-                  placeholder={context.languagePicker("main.folder.viewRegulate.filter")}
-                  slotProps={{ button: { sx: { whiteSpace: "wrap" } } }}
-                  value={filter}
-                  onChange={(event) => setFilter(event.target.id)}
+                  sx={{
+                    flexGrow: 1,
+                    minWidth: context.isAuthority ? "160px" : "200px"
+                  }}
                 >
-                  <Option id="All" value="All">
-                    {context.languagePicker("main.folder.viewRegulate.all")}
-                  </Option>
-                  {filterList.map((item) => (<Option id={item} key={item} value={item}>
-                    {item === "Unknown"
-                      ? context.languagePicker("main.folder.viewRegulate.unknown")
-                      : item === "Directory"
-                      ? context.languagePicker("main.folder.viewRegulate.directory")
-                      : item}
-                  </Option>))}
-                </Select>
-              </FormControl>
-              {context.isAuthority &&
-                <FormControl size="sm" sx={{ justifyContent: "flex-end" }}>
-                  <Dropdown>
-                    <MenuButton
-                      color="primary"
-                      variant="solid"
-                      startDecorator={<AddOutlinedIcon />}
-                      size="sm"
-                    >
-                      {context.languagePicker("main.folder.viewRegulate.add")}
-                    </MenuButton>
-                    <Menu
-                      size="sm"
-                      placement="bottom-end"
-                      sx={{ userSelect: "none" }}
-                    >
-                      <MenuItem onClick={() => setModalNewOpen(true)}>
-                        {context.languagePicker("main.folder.addMenu.newFolder")}
-                      </MenuItem>
-                      <MenuItem
-                        onClick={() => uploadRef.current.click()}
-                        component="label"
-                        disabled={folderName.length === 0}
+                  <Select
+                    size="sm"
+                    placeholder={context.languagePicker("main.folder.viewRegulate.filter")}
+                    slotProps={{ button: { sx: { whiteSpace: "wrap" } } }}
+                    value={filter}
+                    onChange={(event) => setFilter(event.target.id)}
+                  >
+                    <Option id="All" value="All">
+                      {context.languagePicker("main.folder.viewRegulate.all")}
+                    </Option>
+                    {filterList.map((item) => (<Option id={item} key={item} value={item}>
+                      {item === "Unknown"
+                        ? context.languagePicker("main.folder.viewRegulate.unknown")
+                        : item === "Directory"
+                        ? context.languagePicker("main.folder.viewRegulate.directory")
+                        : item}
+                    </Option>))}
+                  </Select>
+                </FormControl>
+                {context.isAuthority &&
+                  <FormControl size="sm" sx={{ justifyContent: "flex-end" }}>
+                    <Dropdown>
+                      <MenuButton
+                        color="primary"
+                        variant="solid"
+                        startDecorator={<AddOutlinedIcon />}
+                        size="sm"
                       >
-                        {context.languagePicker("main.folder.addMenu.newFile")}
-                      </MenuItem>
-                      <ListDivider />
-                      <MenuItem
-                        onClick={handlePaste}
-                        disabled={
-                          (folderName.length === 0 && clipboard.directory === false)
-                          || clipboard.path === null
-                        }
+                        {context.languagePicker("main.folder.viewRegulate.add")}
+                      </MenuButton>
+                      <Menu
+                        size="sm"
+                        placement="bottom-end"
+                        sx={{ userSelect: "none" }}
                       >
-                        {context.languagePicker("main.folder.addMenu.paste")}
-                      </MenuItem>
-                    </Menu>
-                  </Dropdown>
-                </FormControl>}
+                        <MenuItem onClick={() => setModalNewOpen(true)}>
+                          {context.languagePicker("main.folder.addMenu.newFolder")}
+                        </MenuItem>
+                        <MenuItem
+                          onClick={() => uploadRef.current.click()}
+                          component="label"
+                          disabled={folderName.length === 0}
+                        >
+                          {context.languagePicker("main.folder.addMenu.newFile")}
+                        </MenuItem>
+                        <ListDivider />
+                        <MenuItem
+                          onClick={handlePaste}
+                          disabled={
+                            (folderName.length === 0 && clipboard.directory === false)
+                            || clipboard.path === null
+                          }
+                        >
+                          {context.languagePicker("main.folder.addMenu.paste")}
+                        </MenuItem>
+                      </Menu>
+                    </Dropdown>
+                  </FormControl>}
+              </Box>
             </Box>
-          </Box>
-          <FileTable
-            handleClickSort={handleClickSort}
-            type={type}
-            folderName={folderName}
-            sortedFilesList={sortedFilesList}
-            setModalRenameOpen={setModalRenameOpen}
-            setFormNewFilenameText={setFormNewFilenameText}
-            setFilesList={setFilesList}
-            guard={guard}
-            searcher={searcher}
-            filesSorting={filesSorting}
-            setClipboard={setClipboard}
-            setPublicFolders={setPublicFolders}
-            setPrivateFolders={setPrivateFolders}
+            <FileTable
+              handleClickSort={handleClickSort}
+              type={type}
+              folderName={folderName}
+              sortedFilesList={sortedFilesList}
+              setModalRenameOpen={setModalRenameOpen}
+              setFormNewFilenameText={setFormNewFilenameText}
+              setFilesList={setFilesList}
+              guard={guard}
+              searcher={searcher}
+              filesSorting={filesSorting}
+              setClipboard={setClipboard}
+              setPublicFolders={setPublicFolders}
+              setPrivateFolders={setPrivateFolders}
+            />
+            <FileList
+              type={type}
+              folderName={folderName}
+              sortedFilesList={sortedFilesList}
+              setModalRenameOpen={setModalRenameOpen}
+              setFormNewFilenameText={setFormNewFilenameText}
+              setFilesList={setFilesList}
+              guard={guard}
+              searcher={searcher}
+              setClipboard={setClipboard}
+              setPublicFolders={setPublicFolders}
+              setPrivateFolders={setPrivateFolders}
+            />
+          </React.Fragment>}
+        {folderState === -1 &&
+          <Caption
+            title={context.languagePicker("universal.placeholder.unexist.title")}
+            caption={context.languagePicker("universal.placeholder.unexist.caption")}
+          />}
+        <ModalForm
+          open={Boolean(modalRenameOpen)}
+          loading={modalRenameLoading}
+          disabled={modalRenameDisabled}
+          handleClose={handleCloseRename}
+          handleClick={handleRename}
+          title={context.languagePicker("modal.form.rename.title")}
+          caption={context.languagePicker("modal.form.rename.caption")}
+          button={context.languagePicker("universal.button.submit")}
+        >
+          <SemiInput
+            initValue={formNewFilenameText}
+            setValue={setFormNewFilenameText}
+            autoFocus
+            autoComplete="off"
+            placeholder={context.languagePicker("modal.form.rename.placeholder")}
           />
-          <FileList
-            type={type}
-            folderName={folderName}
-            sortedFilesList={sortedFilesList}
-            setModalRenameOpen={setModalRenameOpen}
-            setFormNewFilenameText={setFormNewFilenameText}
-            setFilesList={setFilesList}
-            guard={guard}
-            searcher={searcher}
-            setClipboard={setClipboard}
-            setPublicFolders={setPublicFolders}
-            setPrivateFolders={setPrivateFolders}
+        </ModalForm>
+        <ModalForm
+          open={modalNewOpen}
+          disabled={modalNewDisabled}
+          loading={modalNewLoading}
+          handleClose={handleCloseNew}
+          handleClick={handleNewFolder}
+          title={context.languagePicker("modal.form.new.title")}
+          caption={context.languagePicker("modal.form.new.caption")}
+          button={context.languagePicker("universal.button.submit")}
+        >
+          <SemiInput
+            initValue={formNewFolderNameText}
+            setValue={setFormNewFolderNameText}
+            autoFocus
+            autoComplete="off"
+            placeholder={context.languagePicker("modal.form.new.placeholder")}
           />
-        </React.Fragment>}
-      {folderState === -1 &&
-        <Caption
-          title={context.languagePicker("universal.placeholder.unexist.title")}
-          caption={context.languagePicker("universal.placeholder.unexist.caption")}
-        />}
-      <ModalForm
-        open={Boolean(modalRenameOpen)}
-        loading={modalRenameLoading}
-        disabled={modalRenameDisabled}
-        handleClose={handleCloseRename}
-        handleClick={handleRename}
-        title={context.languagePicker("modal.form.rename.title")}
-        caption={context.languagePicker("modal.form.rename.caption")}
-        button={context.languagePicker("universal.button.submit")}
-      >
-        <SemiInput
-          initValue={formNewFilenameText}
-          setValue={setFormNewFilenameText}
-          autoFocus
-          autoComplete="off"
-          placeholder={context.languagePicker("modal.form.rename.placeholder")}
-        />
-      </ModalForm>
-      <ModalForm
-        open={modalNewOpen}
-        disabled={modalNewDisabled}
-        loading={modalNewLoading}
-        handleClose={handleCloseNew}
-        handleClick={handleNewFolder}
-        title={context.languagePicker("modal.form.new.title")}
-        caption={context.languagePicker("modal.form.new.caption")}
-        button={context.languagePicker("universal.button.submit")}
-      >
-        <SemiInput
-          initValue={formNewFolderNameText}
-          setValue={setFormNewFolderNameText}
-          autoFocus
-          autoComplete="off"
-          placeholder={context.languagePicker("modal.form.new.placeholder")}
-        />
-      </ModalForm>
-      <label role="button" ref={uploadRef}>
-        <input
-          hidden
-          multiple
-          type="file"
-          onChange={(event) => {
-            handleProprocessFile(event);
-            event.target.value = null;
-          }}
-        />
-      </label>
-    </RouteField>
-  )
+        </ModalForm>
+        <label role="button" ref={uploadRef}>
+          <input
+            hidden
+            multiple
+            type="file"
+            onChange={(event) => {
+              handleProprocessFile(event);
+              event.target.value = null;
+            }}
+          />
+        </label>
+      </RouteField>
+    )
 }
 
 export default FileExplorer;
