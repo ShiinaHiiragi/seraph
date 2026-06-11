@@ -39,7 +39,8 @@ const MaildownField = styled(Box)(({ theme }) => ({
   }
 }));
 
-const CrepeEditorInner = () => {
+const CrepeEditorInner = (props) => {
+  const { fileContent } = props;
   const context = React.useContext(GlobalContext);
 
   useEditor((root) => {
@@ -48,7 +49,7 @@ const CrepeEditorInner = () => {
       root,
       defaultValue: isReloading
         ? context.crepeRef.snapshot.current
-        : "Requesting...",
+        : fileContent,
       features: {
         [CrepeFeature.blockEdit]: root.offsetWidth >= 552
       },
@@ -62,14 +63,6 @@ const CrepeEditorInner = () => {
     // crepe.editor
     //   .use(emoji);
     context.crepeRef.load(crepe.editor, { getMarkdown, replaceAll });
-    if (!isReloading) {
-      crepe.create().then(() => {
-        // TODO: get text from server
-        setTimeout(() => {
-          context.crepeRef.setText("Done...")
-        }, 200);
-      });
-    }
     return crepe;
   }, [
     context.setting.meta.language
@@ -86,8 +79,25 @@ const CrepeEditorInner = () => {
 };
 
 const CrepeEditor = (props) => {
-  const { crepeRef, crepeSnapshot } = props;
   const context = React.useContext(GlobalContext);
+
+  const [crepeState, setCrepeState] = React.useState(0);
+  const [fileContent, setFileContent] = React.useState(null);
+
+  React.useEffect(() => {
+    setCrepeState(0);
+    setTimeout(() => {
+      // TODO: get filename by url path
+      // TODO: get text from server via filename
+      setCrepeState(1);
+      setFileContent("Init value");
+    }, 2000)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    // check if
+    // load with auth naturally
+    context.secondTick
+  ]);
 
   return (
     <RouteField
@@ -97,16 +107,20 @@ const CrepeEditor = (props) => {
         context.languagePicker("nav.utility.milkdown")
       ]}
       title={context.languagePicker("nav.utility.milkdown")}
-      sx={{ flexGrow: 1, minHeight: 0, height: "auto" }}
+      sx={{
+        flexGrow: 1,
+        minHeight: 0,
+        height: "auto"
+      }}
     >
-      <MaildownField>
-        <MilkdownProvider>
-          <CrepeEditorInner
-            crepeRef={crepeRef}
-            crepeSnapshot={crepeSnapshot}
-          />
-        </MilkdownProvider>
-      </MaildownField>
+      {crepeState === 1 && fileContent !== null &&
+        <MaildownField>
+          <MilkdownProvider>
+            <CrepeEditorInner
+              fileContent={fileContent}
+            />
+          </MilkdownProvider>
+        </MaildownField>}
     </RouteField>
   );
 }
