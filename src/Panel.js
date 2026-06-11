@@ -1,8 +1,10 @@
 import React from "react";
-import GlobalStyles from "@mui/joy/GlobalStyles";
 import CssBaseline from "@mui/joy/CssBaseline";
+import GlobalStyles from "@mui/joy/GlobalStyles";
 import { styled, CssVarsProvider } from "@mui/joy/styles";
 import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { EditorStatus } from "@milkdown/kit/core";
+import { getMarkdown, replaceAll } from "@milkdown/kit/utils";
 import { Toaster } from "sonner";
 
 import Header from "./components/Header";
@@ -127,11 +129,32 @@ const Panel = () => {
   const [firstTick, setFirstTick] = React.useState(false);
   const [secondTick, setSecondTick] = React.useState(false);
 
-  // editor will re-construct when setting changed
-  // which will clear contents of the editor
-  // crepeSnaoshot will save current text when setting is toggled
+  // crepeRef.current !== null when crepe is loaded
+  // crepeSnapshot save current text every time setting is toggled
+  // and act as init value for re-construction when setting changed
   const crepeRef = React.useRef(null);
-  const crepeSnapshot = React.useRef(null);
+  const crepeSnapshot = React.useRef("");
+
+  const switchAction = React.useCallback((handleAction) => (...args) => {
+    if (crepeRef.current?.status === EditorStatus.Created) {
+      const result = crepeRef.current.action(handleAction(...args));
+      return result === undefined ? true : result;
+    } else {
+      return false;
+    }
+  }, []);
+
+  const crepe = React.useMemo(() => ({
+    editor: crepeRef,
+    snapshot: crepeSnapshot,
+    load: (editor) => { crepeRef.current = editor; },
+    unload: () => { crepeRef.current = null; },
+    isLoaded: () => crepeRef.current !== null,
+    isCreated: () => crepeRef.current?.status === EditorStatus.Created,
+    getText: switchAction(getMarkdown),
+    setText: switchAction(replaceAll)
+  }), [switchAction]);
+  window.crepe = crepe;
 
   // language related
   const languagePicker = React.useMemo(() => {
@@ -189,6 +212,7 @@ const Panel = () => {
         secondTick: secondTick,
         sortedPublicFolders: sortedPublicFolders,
         sortedPrivateFolders: sortedPrivateFolders,
+        crepe: crepe,
         metadata: metadata,
         setting: setting
       }}
@@ -203,8 +227,6 @@ const Panel = () => {
           <BrowserRouter>
             <HeaderField className="HeaderField">
               <Header
-                crepeRef={crepeRef}
-                crepeSnapshot={crepeSnapshot}
                 setGlobalSwitch={setGlobalSwitch}
                 setDrawerOpen={setDrawerOpen}
                 setPublicFolders={setPublicFolders}
@@ -260,15 +282,7 @@ const Panel = () => {
                         />
                       }
                     />
-                    <Route
-                      path="/milkdown"
-                      element={
-                        <Milkdown
-                          crepeRef={crepeRef}
-                          crepeSnapshot={crepeSnapshot}
-                        />
-                      }
-                    />
+                    <Route path="/milkdown" element={<Milkdown />} />
                     <Route path="/subscription" element={<Subscription />} />
                     <Route path="/terminal" element={<Terminal />} />
                     <Route path="/todo" element={<TODO />} />
