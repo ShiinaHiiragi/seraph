@@ -35,18 +35,20 @@
 }
 
 /* Virtual Caret */
-.milkdown .ProseMirror .prosemirror-virtual-cursor {
-  border-left-width: 1px;
-}
+.milkdown .ProseMirror {
+  .prosemirror-virtual-cursor {
+    border-left-width: 1px;
+  }
 
-.milkdown .ProseMirror .prosemirror-virtual-cursor-left {
-  border-bottom-width: 1px;
-  border-right-width: 1px;
-}
+  .prosemirror-virtual-cursor-left {
+    border-bottom-width: 1px;
+    border-right-width: 1px;
+  }
 
-.milkdown .ProseMirror .prosemirror-virtual-cursor-right {
-  border-bottom-width: 1px;
-  border-left-width: 1px;
+  .prosemirror-virtual-cursor-right {
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+  }
 }
 
 .milkdown .ProseMirror-focused .prosemirror-virtual-cursor-animation {
@@ -55,15 +57,22 @@
 }
 
 /* Markdown Elements */
-.milkdown .milkdown-code-block {
-}
+.milkdown .ProseMirror {
+  h1, h2, h3, h4, h5, h6 {
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
 
-.milkdown .ProseMirror blockquote {
-  padding-left: 16px;
-}
+  blockquote {
+    padding-left: 16px;
+  }
 
-.milkdown span[data-type='math_inline'] {
-  color: var(--crepe-color-on-background);
+  .milkdown-code-block {
+  }
+
+  span[data-type='math_inline'] {
+    color: var(--crepe-color-on-background);
+  }
 }
 
 /* Link Preview Popup */
