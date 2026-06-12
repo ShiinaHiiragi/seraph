@@ -42,7 +42,7 @@ const Root = styled('div')(({ theme }) => ({
   flexDirection: "column",
   userSelect: "none",
   "& ::selection": {
-    background: "rgb(173, 214, 255)"
+    background: "var(--joy-palette-neutral-softActiveBg)"
   },
   "& ::-webkit-scrollbar": {
     width: "6px",

@@ -1302,7 +1302,7 @@ export default function Config(props) {
       onClose={handleClose}
       sx={{
         userSelect: "none",
-        "& ::selection": { background: "rgb(173, 214, 255)" },
+        "& ::selection": { background: "var(--joy-palette-neutral-softActiveBg)" },
         "& ::-webkit-scrollbar": { width: "6px", height: "6px" },
         "& ::-webkit-scrollbar-track": { backgroundColor: "rgb(250,250,250)" },
         "& ::-webkit-scrollbar-thumb": { backgroundColor: "rgb(190,190,190)" },

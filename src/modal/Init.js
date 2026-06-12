@@ -90,7 +90,7 @@ export default function Init(props) {
       sx={{
         userSelect: "none",
         "& ::selection": {
-          background: "rgb(173, 214, 255)"
+          background: "var(--joy-palette-neutral-softActiveBg)"
         }
       }}
     >

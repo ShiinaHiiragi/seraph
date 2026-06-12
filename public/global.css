@@ -1,3 +1,9 @@
+/* Global Variables */
+:root {
+  --seraph-background-color: #F5F7FA;
+  --seraph-scrollbar-color: #BEBEBE;
+}
+
 /* Selection */
 html {
   user-select: none;
@@ -8,7 +14,7 @@ body {
 }
 
 ::selection {
-  background: rgb(173, 214, 255);
+  background: var(--joy-palette-neutral-softActiveBg);
 }
 
 /* cyrillic-ext */
