@@ -34,8 +34,9 @@ const GlobalTheme = (language) => extendTheme({
   colorSchemes: {
     light: {
       palette: {
+        scrollbarThumb: "#BEBEBE",
         background: {
-          body: "rgb(245, 247, 250)"
+          body: "#F5F7FA"
         }
       }
     }

@@ -1304,8 +1304,8 @@ export default function Config(props) {
         userSelect: "none",
         "& ::selection": { background: "var(--joy-palette-neutral-softActiveBg)" },
         "& ::-webkit-scrollbar": { width: "6px", height: "6px" },
-        "& ::-webkit-scrollbar-track": { backgroundColor: "rgb(250,250,250)" },
-        "& ::-webkit-scrollbar-thumb": { backgroundColor: "rgb(190,190,190)" },
+        "& ::-webkit-scrollbar-track": { backgroundColor: "var(--joy-palette-background-surface)" },
+        "& ::-webkit-scrollbar-thumb": { backgroundColor: "var(--joy-palette-scrollbarThumb)" },
       }}
     >
       <ModalDialog

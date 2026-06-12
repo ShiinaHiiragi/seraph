@@ -50,15 +50,15 @@ const Root = styled('div')(({ theme }) => ({
   },
   "& ::-webkit-scrollbar-track": {
     borderRadius: 0,
-    backgroundColor: "rgb(250, 250, 250)"
+    backgroundColor: "var(--joy-palette-background-body)"
   },
   "& ::-webkit-scrollbar-thumb": {
     borderRadius: 0,
-    backgroundColor: "rgb(190, 190, 190)"
+    backgroundColor: "var(--joy-palette-scrollbarThumb)"
   },
   "& html": {
     userSelect: "none",
-    scrollbarColor: "rgb(190, 190, 190) rgb(250, 250, 250)"
+    scrollbarColor: "var(--joy-palette-scrollbarThumb) var(--joy-palette-background-body)"
   }
 }));
 

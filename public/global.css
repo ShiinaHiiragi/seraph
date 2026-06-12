@@ -1,9 +1,3 @@
-/* Global Variables */
-:root {
-  --seraph-background-color: #F5F7FA;
-  --seraph-scrollbar-color: #BEBEBE;
-}
-
 /* Selection */
 html {
   user-select: none;
