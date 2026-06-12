@@ -34,6 +34,7 @@
   --prosemirror-virtual-cursor-color: var(--crepe-color-on-background);
 }
 
+/* virtual caret */
 .milkdown .ProseMirror .prosemirror-virtual-cursor {
   border-left-width: 1px;
 }
@@ -53,6 +54,16 @@
   animation-delay: 0.25s;
 }
 
+/* block quote */
+.milkdown .ProseMirror blockquote {
+  padding-left: 16px;
+}
+
+/* inline math */
+.milkdown span[data-type='math_inline'] {
+  color: var(--crepe-color-on-background);
+}
+
 /* block menu popup */
 .milkdown .milkdown-block-handle {
   .operation-item:nth-of-type(1) {
@@ -60,15 +71,9 @@
   }
 }
 
-.milkdown .milkdown-top-bar {
-  background-color: var(--joy-palette-background-body);
-  padding-left: 0;
-  padding-right: 0;
-  border: 0;
-}
-
 /* slash menu popup */
 .milkdown .milkdown-slash-menu {
+  border-radius: var(--joy-radius-sm) !important;
 }
 
 /* tool menu popup when selecting text */
