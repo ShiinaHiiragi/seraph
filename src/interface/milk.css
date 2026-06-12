@@ -1,4 +1,4 @@
-/* general styles */
+/* General Styles */
 .milkdown {
   --crepe-color-background: var(--joy-palette-background-body);
   --crepe-color-surface: var(--joy-palette-background-surface);
@@ -28,13 +28,13 @@
   --crepe-font-code: var(--joy-fontFamily-code);
 }
 
-/* editor */
+/* Editor */
 .milkdown .ProseMirror {
   caret-color: transparent;
   --prosemirror-virtual-cursor-color: var(--crepe-color-on-background);
 }
 
-/* virtual caret */
+/* Virtual Caret */
 .milkdown .ProseMirror .prosemirror-virtual-cursor {
   border-left-width: 1px;
 }
@@ -54,40 +54,47 @@
   animation-delay: 0.25s;
 }
 
-/* block quote */
+/* Markdown Elements */
+.milkdown .milkdown-code-block {
+}
+
 .milkdown .ProseMirror blockquote {
   padding-left: 16px;
 }
 
-/* inline math */
 .milkdown span[data-type='math_inline'] {
   color: var(--crepe-color-on-background);
 }
 
-/* block menu popup */
+/* Link Preview Popup */
+.milkdown .milkdown-link-preview {
+}
+
+/* Link Input Popup */
+.milkdown .milkdown-link-edit {
+}
+
+/* Block Menu Popup */
 .milkdown .milkdown-block-handle {
   .operation-item:nth-of-type(1) {
     display: none;
   }
 }
 
-/* slash menu popup */
+/* Slash Menu Popup */
 .milkdown .milkdown-slash-menu {
-  border-radius: var(--joy-radius-sm) !important;
+  ul li {
+    border-radius: var(--joy-radius-sm);
+  }
+  .menu-groups .menu-group li {
+    padding: 8px 8px;
+  }
 }
 
-/* tool menu popup when selecting text */
+/* Tool Menu Popup */
 .milkdown .milkdown-toolbar {
 }
 
-/* link preview popup when hovering on links */
-.milkdown .milkdown-link-preview {
-}
-
-/* link input popup */
-.milkdown .milkdown-link-edit {
-}
-
-/* latex input popup */
+/* LaTeX Input Popup */
 .milkdown .milkdown-latex-inline-edit {
 }
