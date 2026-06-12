@@ -60,9 +60,14 @@ const CrepeEditorInner = (props) => {
         ? context.crepeRef.snapshot.current
         : fileContent,
       features: {
-        // [CrepeFeature.blockEdit]: root.offsetWidth >= 552
+        // [CrepeFeature.blockEdit]: root.offsetWidth >= 552,
+        [CrepeFeature.Toolbar]: false,
+        [CrepeFeature.TopBar]: true
       },
       featureConfigs: {
+        [CrepeFeature.Cursor]: {
+          width: 2,
+        },
         [CrepeFeature.Placeholder]: {
           text: context.languagePicker("nav.utility.milkdown")
         },
