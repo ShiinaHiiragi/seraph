@@ -1,8 +1,8 @@
 /* General Styles */
 .milkdown {
   --crepe-color-background: var(--joy-palette-background-body);
-  --crepe-color-surface: var(--joy-palette-background-surface);
-  --crepe-color-surface-low: var(--joy-palette-background-level1);
+  --crepe-color-surface: var(--joy-palette-neutral-50);
+  --crepe-color-surface-low: var(--joy-palette-neutral-100);
 
   --crepe-color-on-background: var(--joy-palette-text-primary);
   --crepe-color-on-surface: var(--joy-palette-text-primary);
@@ -68,6 +68,12 @@
   }
 
   .milkdown-code-block {
+    .cm-activeLineGutter {
+      background-color: transparent;
+    }
+    .cm-selectionBackground {
+      background-color: var(--crepe-color-selected) !important;
+    }
   }
 
   span[data-type='math_inline'] {
