@@ -7,8 +7,8 @@ const ja = {
         language: "言語",
         reset: "デフォルトにリセット",
         resetButton: "リセット",
-        download: "バックアップ",
-        downloadButton: "ダウンロード"
+        download: "セッティングをエクスポート",
+        downloadButton: "エクスポート"
       },
       "account": {
         title: "アカウント",

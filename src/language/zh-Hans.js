@@ -7,8 +7,8 @@ const zhHans = {
         language: "显示语言",
         reset: "重置为默认值",
         resetButton: "重置",
-        download: "备份设置",
-        downloadButton: "下载"
+        download: "导出设置",
+        downloadButton: "导出"
       },
       "account": {
         title: "账号",

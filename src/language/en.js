@@ -7,8 +7,8 @@ const en = {
         language: "Display Language",
         reset: "Reset to Default",
         resetButton: "Reset",
-        download: "Backup Setting",
-        downloadButton: "Download"
+        download: "Export Setting",
+        downloadButton: "Export"
       },
       "account": {
         title: "Account",
