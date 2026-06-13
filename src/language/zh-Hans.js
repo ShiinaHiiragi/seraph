@@ -7,6 +7,8 @@ const zhHans = {
         language: "显示语言",
         reset: "重置为默认值",
         resetButton: "重置",
+        upload: "导入设置",
+        uploadButton: "导入",
         download: "导出设置",
         downloadButton: "导出"
       },
@@ -342,6 +344,7 @@ const zhHans = {
         init: "密码设置成功，感谢使用 SERAPH。",
         logout: "退出成功。",
         setting: "设置已保存。",
+        import: "设置已保存；总计 {1} 条有效项目中更新了 {0} 条。",
         new: "{0} 已创建。",
         upload: "{0} 已上传至 {1}。",
         files: "所有文件",
@@ -363,7 +366,8 @@ const zhHans = {
       },
       warning: {
         invalidToken: "令牌无效或已过期，页面将在若干秒内自动刷新。",
-        illegalRename: "文件名预检查不通过。"
+        illegalRename: "文件名预检查不通过。",
+        invalidConfig: "备份文件预检查不通过。"
       },
       exception: {
         incorrectPassword: "密码错误。",

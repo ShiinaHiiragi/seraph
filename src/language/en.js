@@ -7,6 +7,8 @@ const en = {
         language: "Display Language",
         reset: "Reset to Default",
         resetButton: "Reset",
+        upload: "Import Setting",
+        uploadButton: "Import",
         download: "Export Setting",
         downloadButton: "Export"
       },
@@ -342,6 +344,7 @@ const en = {
         init: "Password is set successfully. Thanks for using Seraph.",
         logout: "Logged out successfully.",
         setting: "New setting has been saved.",
+        import: "New setting has been saved, and {0} out of {1} valid entries has been updated.",
         new: "{0} has been created.",
         upload: "{0} has been uploaded to {1}.",
         files: "All files",
@@ -363,7 +366,8 @@ const en = {
       },
       warning: {
         invalidToken: "Token is invalid or expired. The page will be refreshed automatically in seconds.",
-        illegalRename: "Filename pre-check failed."
+        illegalRename: "Filename pre-check failed.",
+        invalidConfig: "Backup file pre-check failed."
       },
       exception: {
         incorrectPassword: "Incorrect password.",

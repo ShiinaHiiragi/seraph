@@ -116,7 +116,7 @@ const Header = (props) => {
           : context.languagePicker
         )("modal.toast.success.setting"),
       error: (data) => data
-    })
+    });
   }, [context, setSettingPair]);
 
   const handleResetSetting = React.useCallback(() => {
@@ -145,6 +145,51 @@ const Header = (props) => {
       }
     });
   }, [context, setSetting])
+
+  const handleUpload = React.useCallback((event) => {
+    const file = event.target.files[0];
+    if (!file.type.startsWith("text/") && file.type !== "application/json") {
+      toast.error(context.languagePicker("modal.toast.warning.invalidConfig"));
+      event.target.value = null;
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.readAsText(file, "utf-8");
+    reader.onload = (event) => {
+      try {
+        const obj = JSON.parse(event.target.result);
+        (typeof obj === "object").assert();
+        toast.promise(new Promise((resolve, reject) => {
+          request("POST/config/file", { setting: obj }, undefined, reject)
+            .then((data) => {
+              const { counter, setting } = data;
+              setSetting(setting);
+              resolve({
+                picker: languagePickerSpawner(setting.meta.language),
+                counter: counter
+              });
+            });
+        }), {
+          loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
+          success: ({ picker, counter }) =>
+            picker("modal.toast.success.import")
+              .format(counter.valid, counter.total),
+          error: (data) => data
+        });
+      } catch {
+        toast.error(context.languagePicker("modal.toast.warning.invalidConfig"));
+      }
+    };
+    reader.onerror = (event) => {
+      const error = event.target.error;
+      toast.error(
+        context.languagePicker("modal.toast.error.browserError")
+          .format(error.name, error.message)
+      );
+    }
+    event.target.value = null;
+  }, [context, setSetting]);
 
   const handleDownload = React.useCallback(() => {
     const url = URL.createObjectURL(new Blob(
@@ -296,6 +341,7 @@ const Header = (props) => {
             handleClose={handleCloseConfig}
             handleApplySetting={handleApplySetting}
             handleResetSetting={handleResetSetting}
+            handleUpload={handleUpload}
             handleDownload={handleDownload}
             mobileNavOpen={mobileNavOpen}
             setMetadata={setMetadata}

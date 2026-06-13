@@ -7,6 +7,8 @@ const ja = {
         language: "言語",
         reset: "デフォルトにリセット",
         resetButton: "リセット",
+        upload: "セッティングをインポート",
+        uploadButton: "インポート",
         download: "セッティングをエクスポート",
         downloadButton: "エクスポート"
       },
@@ -342,6 +344,7 @@ const ja = {
         init: "パスワードがセットされました。セラフをご利用いただき、ありがとうございます。",
         logout: "ログアウトしました。",
         setting: "セッティングがセーブされました。",
+        import: "セッティングがセーブされ、有効なエントリ {1} 件のうちに {0} 件がアップデイトされました。",
         new: "{0} が作成されました。",
         upload: "{0} が {1} にアップロードされました。",
         files: "すべてのファイル",
@@ -363,7 +366,8 @@ const ja = {
       },
       warning: {
         invalidToken: "トークンが無効または期限切れになり、数秒後にページはリフレッシュされます。",
-        illegalRename: "ファイル名の事前チェックがフェイルしました。"
+        illegalRename: "ファイル名の事前チェックがフェイルしました。",
+        invalidConfig: "バックアップファイルの事前チェックがフェイルしました。"
       },
       exception: {
         incorrectPassword: "パスワードが間違っています。",

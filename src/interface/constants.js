@@ -2,7 +2,15 @@ import React from "react";
 import axios from "axios";
 import Box from "@mui/joy/Box";
 import Link from "@mui/joy/Link";
+import { styled } from '@mui/joy';
 import { toast } from "sonner";
+
+// eslint-disable-next-line no-extend-native
+Boolean.prototype.assert = function (message) {
+  if (!this) {
+    throw new Error(message ?? 'Assertion failed');
+  }
+}
 
 // eslint-disable-next-line no-extend-native
 String.prototype.upperCaseFirst = function () {
@@ -712,6 +720,21 @@ const toastTheme = (theme) => `
 `
 
 export { toastTheme };
+
+
+const HiddenInput = styled('input')`
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  white-space: nowrap;
+  width: 1px;
+`;
+
+export { HiddenInput };
 
 
 const OnMounted = ({ onLoad }) => {

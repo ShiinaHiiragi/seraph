@@ -27,7 +27,11 @@ import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import KeyboardArrowLeftOutlinedIcon from "@mui/icons-material/KeyboardArrowLeftOutlined";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
+import RestartAltOutlinedIcon from "@mui/icons-material/RestartAltOutlined";
+import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
+import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import GlobalContext, {
+  HiddenInput,
   animeDuration,
   settingField,
   reactionInterval,
@@ -244,6 +248,7 @@ const SECTIONS = (
   resetButtonLoading,
   handleApply,
   handleReset,
+  handleUpload,
   handleDownload
 ) => {
   const escList = context.setting.terminal.control.esc ? ["esc"] : [];
@@ -277,11 +282,28 @@ const SECTIONS = (
               size="sm"
               color="neutral"
               variant="outlined"
-              sx={{ minWidth: 100 }}
+              sx={{ minWidth: 80 }}
               onClick={handleReset}
               loading={resetButtonLoading}
+              startDecorator={<RestartAltOutlinedIcon />}
             >
               {context.languagePicker("header.config.general.resetButton")}
+            </Button>
+          )
+        },
+        {
+          key: context.languagePicker("header.config.general.upload"),
+          value: (
+            <Button
+              size="sm"
+              color="neutral"
+              variant="outlined"
+              component="label"
+              sx={{ minWidth: 80 }}
+              startDecorator={<FileUploadOutlinedIcon />}
+            >
+              {context.languagePicker("header.config.general.uploadButton")}
+              <HiddenInput type="file" onChange={handleUpload} />
             </Button>
           )
         },
@@ -292,8 +314,9 @@ const SECTIONS = (
               size="sm"
               color="neutral"
               variant="outlined"
-              sx={{ minWidth: 100 }}
+              sx={{ minWidth: 80 }}
               onClick={handleDownload}
+              startDecorator={<FileDownloadOutlinedIcon />}
             >
               {context.languagePicker("header.config.general.downloadButton")}
             </Button>
@@ -1258,6 +1281,7 @@ export default function Config(props) {
     handleClose,
     handleApplySetting,
     handleResetSetting,
+    handleUpload,
     handleDownload,
     mobileNavOpen,
     setMetadata,
@@ -1277,6 +1301,7 @@ export default function Config(props) {
     resetButtonLoading,
     handleApplySetting,
     handleResetSetting,
+    handleUpload,
     handleDownload
   ), [
     context,
@@ -1284,6 +1309,7 @@ export default function Config(props) {
     resetButtonLoading,
     handleApplySetting,
     handleResetSetting,
+    handleUpload,
     handleDownload
   ])
 
