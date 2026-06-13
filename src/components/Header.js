@@ -83,8 +83,11 @@ const Header = (props) => {
           if (!objectEquiv(setting, data.setting)) {
             const languagePicker = languagePickerSpawner(data.setting.meta.language);
             toast(languagePicker("modal.toast.plain.updateSetting"));
+            return data.setting;
+          } else {
+            // avoid jittering of display
+            return setting;
           }
-          return data.setting;
         });
       });
     setModalConfigLoading(true);
