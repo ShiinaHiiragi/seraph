@@ -451,8 +451,8 @@ const configOperator = {
 
   checkKey: (obj, key, value) =>
     typeof configOperator.getValue(obj, key) === typeof value
-      || value === null,
-      // || configOperator.getValue(obj, key) === null,
+      || value === null
+      || configOperator.getValue(obj, key) === null,
 
   setValue: (obj, key, value) => {
     const parts = key.split(".");
