@@ -177,6 +177,7 @@
 
 ## Log
 
+- 06/13/2026 ver 1.1.3: Add import/export for config
 - 06/09/2026 ver 1.1.2: Add several config options
 - 06/08/2026 ver 1.1.1: Fix permission problem and input field
 - 06/07/2026 ver 1.1.0: Change welcome page into system dashboard
