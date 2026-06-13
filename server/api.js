@@ -443,10 +443,16 @@ exports.fileOperator = fileOperator;
 })();
 
 const configOperator = {
-  hasKey: (obj, key) => key.split(".").reduce(
-    (current, nextKey) => current?.[nextKey],
-    obj
-  ) !== undefined,
+  getValue: (obj, key) =>
+    key.split(".").reduce((current, nextKey) => current?.[nextKey], obj),
+
+  hasKey: (obj, key) =>
+    configOperator.getValue(obj, key) !== undefined,
+
+  checkKey: (obj, key, value) =>
+    typeof configOperator.getValue(obj, key) === typeof value
+      || value === null,
+      // || configOperator.getValue(obj, key) === null,
 
   setValue: (obj, key, value) => {
     const parts = key.split(".");
@@ -509,8 +515,7 @@ const configOperator = {
     configOperator.setConfig((config) => ({
       ...config,
       setting: configOperator.setValue(config.setting, key, value)
-    })
-    );
+    }));
   },
 
   savePassword: (password) => {
@@ -965,6 +970,7 @@ Status.authErrCode = {
 Status.execErrCode = {
   IncorrectPassword: "IP",
   ResourcesUnexist: "RU",
+  TypeCheckFailed: "TCF",
   IdentifierConflict: "IC",
   FileModuleError: "FME",
   EnvironmentMissing: "EM",

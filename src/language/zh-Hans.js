@@ -368,6 +368,7 @@ const zhHans = {
       exception: {
         incorrectPassword: "密码错误。",
         resourcesUnexist: "请求的资源不存在。",
+        typeCheckFailed: "类型检查不通过。",
         identifierConflict: "命名标识符冲突；请先重命名或移除文件 {0}。",
         fileModuleError: "文件操作模块产生异常。",
         environmentMissing: "拓展模块环境事前检查不通过：请查阅控制台获得更多细节。",

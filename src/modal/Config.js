@@ -1258,6 +1258,7 @@ export default function Config(props) {
     handleClose,
     handleApplySetting,
     handleResetSetting,
+    handleDownload,
     mobileNavOpen,
     setMetadata,
     setMobileNavOpen,
@@ -1266,17 +1267,6 @@ export default function Config(props) {
     resetButtonLoading
   } = props;
   const context = React.useContext(GlobalContext);
-
-  const handleDownload = React.useCallback(() => {
-    const url = URL.createObjectURL(new Blob(
-      [JSON.stringify(context.setting, null, 2)],
-      { type: "application/json" }
-    ));
-    Object.assign(
-      document.createElement("a"),
-      { href: url, download: `setting.json` }
-    ).click();
-  }, [context]);
 
   const [containerElement, setContainerElement] = React.useState(null);
   const sectionRefs = React.useRef({});

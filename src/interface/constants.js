@@ -497,6 +497,7 @@ const Status = {
   execErrCode: {
     IncorrectPassword: "IP",
     ResourcesUnexist: "RU",
+    TypeCheckFailed: "TCF",
     IdentifierConflict: "IC",
     FileModuleError: "FME",
     EnvironmentMissing: "EM",
@@ -521,6 +522,7 @@ const Status = {
  *       - key 为 "" 时，对应的函数一定会被执行，相当于 finally
  *   3. handleReject 是什么：有些用了 toast.promise 的 request，希望将 loading 后的
  *      错误状态归到 promise 的内部，此时可以传入这个参数
+ *      实际使用若在 request 外有 toast.promise，一般直接传入 reject 即可
  *   4. 注意一致性
  *       - 服务器返回错误码中，只分为认证错误和执行错误
  *       - 但在 languagePicker 中，错误分为警告、异常和错误三种

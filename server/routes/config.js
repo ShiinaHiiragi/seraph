@@ -17,6 +17,13 @@ router.post('/set', (req, res, next) => {
     return;
   }
 
+  if (!api.configOperator.checkKey(api.configOperator.config.setting, key, value)) {
+    // -> EF_TC: type check failed
+    req.status.addExecStatus(api.Status.execErrCode.TypeCheckFailed);
+    res.send(req.status.generateReport());
+    return;
+  }
+
   api.configOperator.setConfigSetting(key, value);
 
   // terminal hint only show once

@@ -103,10 +103,10 @@ const Header = (props) => {
 
   const handleApplySetting = React.useCallback((key, value) => {
     toast.promise(new Promise((resolve, reject) => {
-      request("POST/config/set", { key: key, value: value })
+      request("POST/config/set", { key: key, value: value }, undefined, reject)
         .then(() => {
-          setSettingPair(key, value)
-          resolve()
+          setSettingPair(key, value);
+          resolve();
         })
     }), {
       loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
@@ -145,6 +145,17 @@ const Header = (props) => {
       }
     });
   }, [context, setSetting])
+
+  const handleDownload = React.useCallback(() => {
+    const url = URL.createObjectURL(new Blob(
+      [JSON.stringify(context.setting, null, 2)],
+      { type: "application/json" }
+    ));
+    Object.assign(
+      document.createElement("a"),
+      { href: url, download: `setting.json` }
+    ).click();
+  }, [context]);
 
   // function and states for login
   const [modalLoginOpen, setModalLoginOpen] = React.useState(false);
@@ -285,6 +296,7 @@ const Header = (props) => {
             handleClose={handleCloseConfig}
             handleApplySetting={handleApplySetting}
             handleResetSetting={handleResetSetting}
+            handleDownload={handleDownload}
             mobileNavOpen={mobileNavOpen}
             setMetadata={setMetadata}
             setMobileNavOpen={setMobileNavOpen}
