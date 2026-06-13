@@ -5,6 +5,11 @@ const zhHans = {
       general: {
         title: "通用",
         language: "显示语言",
+        reset: "重置为默认值",
+        resetButton: "重置"
+      },
+      "account": {
+        title: "账号",
         token: "令牌有效期限",
         tokenTip: "每次发起请求都将更新令牌有效期限（终端 WebSocket 传输除外）",
         tokenOption: {
@@ -16,8 +21,6 @@ const zhHans = {
         },
         password: "更换密码",
         passwordPlaceholder: "输入后请保存",
-        reset: "重置为默认值",
-        resetButton: "重置"
       },
       welcome: {
         title: "仪表盘",

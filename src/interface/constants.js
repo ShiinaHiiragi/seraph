@@ -340,6 +340,7 @@ const defaultOSInfo = {
 
 const settingField = {
   general: "general",
+  account: "account",
   welcome: "welcome",
   terminal: "terminal",
   todo: "todo",

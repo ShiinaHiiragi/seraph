@@ -207,7 +207,7 @@ const Password = (props) => {
       <Input
         size="sm"
         type={inputType}
-        placeholder={context.languagePicker("header.config.general.passwordPlaceholder")}
+        placeholder={context.languagePicker("header.config.account.passwordPlaceholder")}
         sx={{ maxWidth: 240, flexGrow: 1 }}
         value={password}
         onChange={(event) => setPassword(event.target.value)}
@@ -270,21 +270,6 @@ const SECTIONS = (
           ),
         },
         {
-          key: context.languagePicker("header.config.general.token"),
-          tip: context.languagePicker("header.config.general.tokenTip"),
-          value: Literal(context.setting.meta.token, [
-            { value: 15, label: context.languagePicker("header.config.general.tokenOption.15") },
-            { value: 60, label: context.languagePicker("header.config.general.tokenOption.60") },
-            { value: 720, label: context.languagePicker("header.config.general.tokenOption.720") },
-            { value: 1440, label: context.languagePicker("header.config.general.tokenOption.1440") },
-            { value: 2880, label: context.languagePicker("header.config.general.tokenOption.2880") }
-          ], "meta.token", handleApply)
-        },
-        {
-          key: context.languagePicker("header.config.general.password"),
-          value: <Password context={context} />
-        },
-        {
           key: context.languagePicker("header.config.general.reset"),
           value: (
             <Button
@@ -299,6 +284,27 @@ const SECTIONS = (
             </Button>
           )
         }
+      ]
+    },
+    {
+      id: settingField.account,
+      label: context.languagePicker("header.config.account.title"),
+      items: [
+        {
+          key: context.languagePicker("header.config.account.token"),
+          tip: context.languagePicker("header.config.account.tokenTip"),
+          value: Literal(context.setting.meta.token, [
+            { value: 15, label: context.languagePicker("header.config.account.tokenOption.15") },
+            { value: 60, label: context.languagePicker("header.config.account.tokenOption.60") },
+            { value: 720, label: context.languagePicker("header.config.account.tokenOption.720") },
+            { value: 1440, label: context.languagePicker("header.config.account.tokenOption.1440") },
+            { value: 2880, label: context.languagePicker("header.config.account.tokenOption.2880") }
+          ], "meta.token", handleApply)
+        },
+        {
+          key: context.languagePicker("header.config.account.password"),
+          value: <Password context={context} />
+        },
       ]
     },
     {

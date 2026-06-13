@@ -5,6 +5,11 @@ const en = {
       general: {
         title: "General",
         language: "Display Language",
+        reset: "Reset to Default",
+        resetButton: "Reset"
+      },
+      "account": {
+        title: "Account",
         token: "Token Expiry",
         tokenTip: "Each request extends the token expiration time (excluding terminal WebSocket connections).",
         tokenOption: {
@@ -16,8 +21,6 @@ const en = {
         },
         password: "Change Password",
         passwordPlaceholder: "Please save after input",
-        reset: "Reset to Default",
-        resetButton: "Reset"
       },
       welcome: {
         title: "Dashboard",

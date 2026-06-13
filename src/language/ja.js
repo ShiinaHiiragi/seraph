@@ -5,6 +5,11 @@ const ja = {
       general: {
         title: "ゼネラル",
         language: "言語",
+        reset: "デフォルトにリセット",
+        resetButton: "リセット"
+      },
+      "account": {
+        title: "アカウント",
         token: "トークンの有効期間",
         tokenTip: "リクエストごとにトークンの有効期限がアップデートされます（ターミナルのウェブソケットのコネクションを除く）",
         tokenOption: {
@@ -16,8 +21,6 @@ const ja = {
         },
         password: "パスワードを変更",
         passwordPlaceholder: "入力後にセーブ",
-        reset: "デフォルトにリセット",
-        resetButton: "リセット"
       },
       welcome: {
         title: "ダッシュボード",
