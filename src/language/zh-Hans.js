@@ -6,7 +6,9 @@ const zhHans = {
         title: "通用",
         language: "显示语言",
         reset: "重置为默认值",
-        resetButton: "重置"
+        resetButton: "重置",
+        download: "备份设置",
+        downloadButton: "下载"
       },
       "account": {
         title: "账号",

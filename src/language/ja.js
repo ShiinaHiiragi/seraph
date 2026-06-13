@@ -6,7 +6,9 @@ const ja = {
         title: "ゼネラル",
         language: "言語",
         reset: "デフォルトにリセット",
-        resetButton: "リセット"
+        resetButton: "リセット",
+        download: "バックアップ",
+        downloadButton: "ダウンロード"
       },
       "account": {
         title: "アカウント",

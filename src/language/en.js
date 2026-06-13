@@ -6,7 +6,9 @@ const en = {
         title: "General",
         language: "Display Language",
         reset: "Reset to Default",
-        resetButton: "Reset"
+        resetButton: "Reset",
+        download: "Backup Setting",
+        downloadButton: "Download"
       },
       "account": {
         title: "Account",

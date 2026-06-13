@@ -243,7 +243,8 @@ const SECTIONS = (
   setMetadata,
   resetButtonLoading,
   handleApply,
-  handleReset
+  handleReset,
+  handleDownload
 ) => {
   const escList = context.setting.terminal.control.esc ? ["esc"] : [];
   const controlLists = escList.concat(
@@ -276,11 +277,25 @@ const SECTIONS = (
               size="sm"
               color="neutral"
               variant="outlined"
-              sx={{ minWidth: 80 }}
+              sx={{ minWidth: 100 }}
               onClick={handleReset}
               loading={resetButtonLoading}
             >
               {context.languagePicker("header.config.general.resetButton")}
+            </Button>
+          )
+        },
+        {
+          key: context.languagePicker("header.config.general.download"),
+          value: (
+            <Button
+              size="sm"
+              color="neutral"
+              variant="outlined"
+              sx={{ minWidth: 100 }}
+              onClick={handleDownload}
+            >
+              {context.languagePicker("header.config.general.downloadButton")}
             </Button>
           )
         }
@@ -1252,6 +1267,17 @@ export default function Config(props) {
   } = props;
   const context = React.useContext(GlobalContext);
 
+  const handleDownload = React.useCallback(() => {
+    const url = URL.createObjectURL(new Blob(
+      [JSON.stringify(context.setting, null, 2)],
+      { type: "application/json" }
+    ));
+    Object.assign(
+      document.createElement("a"),
+      { href: url, download: `setting.json` }
+    ).click();
+  }, [context]);
+
   const [containerElement, setContainerElement] = React.useState(null);
   const sectionRefs = React.useRef({});
   const isSystemScrolling = React.useRef(false);
@@ -1260,13 +1286,15 @@ export default function Config(props) {
     setMetadata,
     resetButtonLoading,
     handleApplySetting,
-    handleResetSetting
+    handleResetSetting,
+    handleDownload
   ), [
     context,
     setMetadata,
     resetButtonLoading,
     handleApplySetting,
-    handleResetSetting
+    handleResetSetting,
+    handleDownload
   ])
 
   const scrollToSection = React.useCallback((id) => {
