@@ -52,7 +52,7 @@ const Literal = (
 ) => (
   <Select size="sm" value={value} sx={{ maxWidth: maxWidth ?? 240 }} disabled={disabled}>
     {!itemsMap.some((item) => item.value === value) && (
-      <Option value={value} sx={{ display: "none" }}>
+      <Option value={value} disabled sx={{ '&.Mui-selected': { bgcolor: 'transparent' } }}>
         {fallback ? fallback(value) : value}
       </Option>
     )}
@@ -89,7 +89,7 @@ const LabeledLiteral = (
       sx={{ maxWidth: (maxWidth ?? 240) }}
     >
       {!itemsMap.some((item) => item.value === value) && (
-        <Option value={value} sx={{ display: "none" }}>
+        <Option value={value} disabled sx={{ '&.Mui-selected': { bgcolor: 'transparent' } }}>
           {fallback ? fallback(value) : value}
         </Option>
       )}
