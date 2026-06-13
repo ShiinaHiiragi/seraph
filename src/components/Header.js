@@ -81,7 +81,8 @@ const Header = (props) => {
       .then((data) => {
         setSetting((setting) => {
           if (!objectEquiv(setting, data.setting)) {
-            toast(context.languagePicker("modal.toast.plain.updateSetting"));
+            const languagePicker = languagePickerSpawner(data.setting.meta.language);
+            toast(languagePicker("modal.toast.plain.updateSetting"));
           }
           return data.setting;
         });
