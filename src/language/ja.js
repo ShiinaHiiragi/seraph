@@ -205,6 +205,10 @@ const ja = {
       },
       appendix: {
         reload: "（リロードが必要）"
+      },
+      fallback: {
+        seconds: "{0} 秒",
+        minutes: "{0} 分"
       }
     }
   },

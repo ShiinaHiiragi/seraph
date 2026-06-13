@@ -205,6 +205,10 @@ const en = {
       },
       appendix: {
         reload: " (reload required)"
+      },
+      fallback: {
+        seconds: "{0} seconds",
+        minutes: "{0} minutes"
       }
     }
   },

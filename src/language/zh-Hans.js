@@ -205,6 +205,10 @@ const zhHans = {
       },
       appendix: {
         reload: "（需要重新加载）"
+      },
+      fallback: {
+        seconds: "{0} 秒",
+        minutes: "{0} 分钟"
       }
     }
   },

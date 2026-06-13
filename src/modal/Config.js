@@ -41,8 +41,21 @@ import GlobalContext, {
 } from "../interface/constants";
 import { languageMap } from "../interface/languagePicker";
 
-const Literal = (value, itemsMap, field, handleApply, disabled, maxWidth) => (
+const Literal = (
+  value,
+  itemsMap,
+  field,
+  handleApply,
+  disabled,
+  maxWidth,
+  fallback
+) => (
   <Select size="sm" value={value} sx={{ maxWidth: maxWidth ?? 240 }} disabled={disabled}>
+    {!itemsMap.some((item) => item.value === value) && (
+      <Option value={value} sx={{ display: "none" }}>
+        {fallback ? fallback(value) : value}
+      </Option>
+    )}
     {itemsMap.map(({value, label}) => (
       <Option
         key={value}
@@ -55,7 +68,16 @@ const Literal = (value, itemsMap, field, handleApply, disabled, maxWidth) => (
   </Select>
 );
 
-const LabeledLiteral = (caption, value, itemsMap, field, handleApply, disabled, maxWidth) => (
+const LabeledLiteral = (
+  caption,
+  value,
+  itemsMap,
+  field,
+  handleApply,
+  disabled,
+  maxWidth,
+  fallback
+) => (
   <FormControl sx={{ maxWidth: (maxWidth ?? 240) + 20, flexGrow: 1 }}>
     <FormLabel sx={{ mb: 0, color: "neutral.500" }}>
       {caption}
@@ -66,6 +88,11 @@ const LabeledLiteral = (caption, value, itemsMap, field, handleApply, disabled, 
       disabled={disabled}
       sx={{ maxWidth: (maxWidth ?? 240) }}
     >
+      {!itemsMap.some((item) => item.value === value) && (
+        <Option value={value} sx={{ display: "none" }}>
+          {fallback ? fallback(value) : value}
+        </Option>
+      )}
       {itemsMap.map(({value, label}) => (
         <Option
           key={value}
@@ -331,13 +358,21 @@ const SECTIONS = (
         {
           key: context.languagePicker("header.config.account.token"),
           tip: context.languagePicker("header.config.account.tokenTip"),
-          value: Literal(context.setting.meta.token, [
-            { value: 15, label: context.languagePicker("header.config.account.tokenOption.15") },
-            { value: 60, label: context.languagePicker("header.config.account.tokenOption.60") },
-            { value: 720, label: context.languagePicker("header.config.account.tokenOption.720") },
-            { value: 1440, label: context.languagePicker("header.config.account.tokenOption.1440") },
-            { value: 2880, label: context.languagePicker("header.config.account.tokenOption.2880") }
-          ], "meta.token", handleApply)
+          value: Literal(
+            context.setting.meta.token,
+            [
+              { value: 15, label: context.languagePicker("header.config.account.tokenOption.15") },
+              { value: 60, label: context.languagePicker("header.config.account.tokenOption.60") },
+              { value: 720, label: context.languagePicker("header.config.account.tokenOption.720") },
+              { value: 1440, label: context.languagePicker("header.config.account.tokenOption.1440") },
+              { value: 2880, label: context.languagePicker("header.config.account.tokenOption.2880") }
+            ],
+            "meta.token",
+            handleApply,
+            undefined,
+            undefined,
+            (value) => context.languagePicker("header.config.fallback.minutes").format(value)
+          )
         },
         {
           key: context.languagePicker("header.config.account.password"),
@@ -383,18 +418,26 @@ const SECTIONS = (
         {
           key: context.languagePicker("header.config.welcome.interval"),
           tip: context.languagePicker("header.config.welcome.intervalTip"),
-          value: Literal(context.setting.welcome.interval, [
-            { value: 1, label: context.languagePicker("header.config.welcome.intervalOption.1") },
-            { value: 2, label: context.languagePicker("header.config.welcome.intervalOption.2") },
-            { value: 3, label: context.languagePicker("header.config.welcome.intervalOption.3") },
-            { value: 4, label: context.languagePicker("header.config.welcome.intervalOption.4") },
-            { value: 5, label: context.languagePicker("header.config.welcome.intervalOption.5") },
-            { value: 10, label: context.languagePicker("header.config.welcome.intervalOption.10") },
-            { value: 15, label: context.languagePicker("header.config.welcome.intervalOption.15") },
-            { value: 30, label: context.languagePicker("header.config.welcome.intervalOption.30") },
-            { value: 45, label: context.languagePicker("header.config.welcome.intervalOption.45") },
-            { value: 60, label: context.languagePicker("header.config.welcome.intervalOption.60") }
-          ], "welcome.interval", handleApply, !context.setting.welcome.enable.panel)
+          value: Literal(
+            context.setting.welcome.interval,
+            [
+              { value: 1, label: context.languagePicker("header.config.welcome.intervalOption.1") },
+              { value: 2, label: context.languagePicker("header.config.welcome.intervalOption.2") },
+              { value: 3, label: context.languagePicker("header.config.welcome.intervalOption.3") },
+              { value: 4, label: context.languagePicker("header.config.welcome.intervalOption.4") },
+              { value: 5, label: context.languagePicker("header.config.welcome.intervalOption.5") },
+              { value: 10, label: context.languagePicker("header.config.welcome.intervalOption.10") },
+              { value: 15, label: context.languagePicker("header.config.welcome.intervalOption.15") },
+              { value: 30, label: context.languagePicker("header.config.welcome.intervalOption.30") },
+              { value: 45, label: context.languagePicker("header.config.welcome.intervalOption.45") },
+              { value: 60, label: context.languagePicker("header.config.welcome.intervalOption.60") }
+            ],
+            "welcome.interval",
+            handleApply,
+            !context.setting.welcome.enable.panel,
+            undefined,
+            (value) => context.languagePicker("header.config.fallback.seconds").format(value)
+          )
         },
         {
           key: context.languagePicker("header.config.welcome.window"),
@@ -408,8 +451,7 @@ const SECTIONS = (
                   "welcome.window.cpu",
                   handleApply,
                   !context.setting.welcome.enable.panel,
-                  120,
-                  { flexGrow: 1 }
+                  120
                 )}
                 {LabeledLiteral(
                   context.languagePicker("header.config.welcome.windowTemp"),
@@ -586,7 +628,9 @@ const SECTIONS = (
                 ],
                 "terminal.lifecycle.timeout",
                 handleApply,
-                !context.setting.terminal.enable
+                !context.setting.terminal.enable,
+                undefined,
+                (value) => context.languagePicker("header.config.fallback.minutes").format(value)
               )}
               {LabeledLiteral(
                 context.languagePicker("header.config.terminal.lifecyclePing")
@@ -605,7 +649,9 @@ const SECTIONS = (
                 ],
                 "terminal.lifecycle.ping",
                 handleApply,
-                !context.setting.terminal.enable
+                !context.setting.terminal.enable,
+                undefined,
+                (value) => context.languagePicker("header.config.fallback.seconds").format(value)
               )}
             </Stack>
           )
@@ -945,13 +991,21 @@ const SECTIONS = (
         {
           key: context.languagePicker("header.config.todo.deleteTime"),
           hint: context.languagePicker("header.config.todo.deleteTimeHint"),
-          value: Literal(context.setting.task.delay, [
-            { value: 0, label: context.languagePicker("header.config.todo.deleteTimeOption.0") },
-            { value: 60, label: context.languagePicker("header.config.todo.deleteTimeOption.60") },
-            { value: 3600, label: context.languagePicker("header.config.todo.deleteTimeOption.3600") },
-            { value: 86400, label: context.languagePicker("header.config.todo.deleteTimeOption.86400") },
-            { value: -1, label: context.languagePicker("header.config.todo.deleteTimeOption.never") },
-          ], "task.delay", handleApply),
+          value: Literal(
+            context.setting.task.delay,
+            [
+              { value: 0, label: context.languagePicker("header.config.todo.deleteTimeOption.0") },
+              { value: 60, label: context.languagePicker("header.config.todo.deleteTimeOption.60") },
+              { value: 3600, label: context.languagePicker("header.config.todo.deleteTimeOption.3600") },
+              { value: 86400, label: context.languagePicker("header.config.todo.deleteTimeOption.86400") },
+              { value: -1, label: context.languagePicker("header.config.todo.deleteTimeOption.never") },
+            ],
+            "task.delay",
+            handleApply,
+            undefined,
+            undefined,
+            (value) => context.languagePicker("header.config.fallback.seconds").format(value)
+          ),
         }
       ]
     },
