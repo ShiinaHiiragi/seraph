@@ -330,7 +330,8 @@ const en = {
       plain: {
         login: "Welcome back to Seraph.",
         generalReconfirm: "Operation is in progress. Please wait for a second.",
-        uploading: "The file is being uploaded. Please wait for a second."
+        uploading: "The file is being uploaded. Please wait for a second.",
+        updateSetting: "Latest setting has been synchronized."
       },
       success: {
         init: "Password is set successfully. Thanks for using Seraph.",

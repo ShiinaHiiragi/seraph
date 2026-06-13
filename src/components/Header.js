@@ -11,6 +11,7 @@ import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import { Link, useNavigate } from "react-router-dom";
 import GreyLogo from "../logo-grey.svg";
 import GlobalContext, {
+  objectEquiv,
   globalState,
   request,
   Status,
@@ -76,6 +77,15 @@ const Header = (props) => {
 
   const handleToggleConfig = React.useCallback(() => {
     context.crepeRef.snapshot.current = context.crepeRef.getText();
+    request("GET/config/copy")
+      .then((data) => {
+        setSetting((setting) => {
+          if (!objectEquiv(setting, data.setting)) {
+            toast(context.languagePicker("modal.toast.plain.updateSetting"));
+          }
+          return data.setting;
+        });
+      });
     setModalConfigLoading(true);
     setModalConfigOpen(true);
   // eslint-disable-next-line react-hooks/exhaustive-deps

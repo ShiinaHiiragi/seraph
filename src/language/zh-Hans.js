@@ -330,7 +330,8 @@ const zhHans = {
       plain: {
         login: "欢迎回到 SERAPH。",
         generalReconfirm: "操作正在进行，请稍等。",
-        uploading: "文件正在上传，请稍等。"
+        uploading: "文件正在上传，请稍等。",
+        updateSetting: "最新设置已同步。"
       },
       success: {
         init: "密码设置成功，感谢使用 SERAPH。",

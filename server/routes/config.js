@@ -49,4 +49,20 @@ router.post('/reset', (req, res, next) => {
   return;
 });
 
+router.get('/copy', (req, res, next) => {
+  if (req.status.notAuthSuccess()) {
+    // -> EF_IT or abnormal request
+    next(api.errorStreamControl);
+    return;
+  }
+
+  // -> ES: no extra info
+  req.status.addExecStatus();
+  res.send({
+    ...req.status.generateReport(),
+    setting: api.configOperator.config.setting
+  });
+  return;
+});
+
 module.exports = router;

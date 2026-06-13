@@ -101,6 +101,28 @@ String.prototype.timeFormat = function(formatString) {
   return new Date(this).timeFormat(formatString);
 }
 
+const objectEquiv = (left, right) => {
+  if (left === right) {
+    return true;
+  }
+  if (typeof left !== "object" || typeof right !== "object") {
+    return false;
+  }
+  if (left === null || right === null) {
+    return false;
+  }
+
+  const keysLeft = Object.keys(left);
+  const keysRight = Object.keys(right);
+  if (keysLeft.length !== keysRight.length) {
+    return false;
+  }
+  return keysLeft.every((key) =>
+    objectEquiv(left[key], right[key])
+  );
+}
+
+export { objectEquiv };
 
 const GlobalContext = React.createContext({ });
 const ConstantContext = { };
