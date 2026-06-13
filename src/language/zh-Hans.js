@@ -412,7 +412,8 @@ const zhHans = {
       captionFirstHalf: {
         logout: "即将退出 SERAPH。",
         deleteFile: "正在删除文件 {0}。",
-        deleteTask: "正在删除任务 {0}。"
+        deleteTask: "正在删除任务 {0}。",
+        resetConfig: "正在恢复默认设置。"
       },
       caption: {
         enableTerminal: "点击「继续」表示您已知悉使用远程 PTY 的风险，并自行为一切可能造成的后果负责。"

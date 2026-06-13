@@ -106,24 +106,30 @@ const Header = (props) => {
   }, [context, setSettingPair]);
 
   const handleResetSetting = React.useCallback(() => {
-    setResetButtonLoading(true)
-    toast.promise(new Promise((resolve, reject) => {
-      request(
-        "POST/config/reset",
-        undefined,
-        { "": () => setResetButtonLoading(false) },
-        reject
-      )
-        .then(() => {
-          setResetButtonLoading(false)
-          setSetting(defaultSetting)
-          resolve()
+    context.setModalReconfirm({
+      open: true,
+      captionFirstHalf: context.languagePicker("modal.reconfirm.captionFirstHalf.resetConfig"),
+      handleAction: () => {
+        setResetButtonLoading(true)
+        toast.promise(new Promise((resolve, reject) => {
+          request(
+            "POST/config/reset",
+            undefined,
+            { "": () => setResetButtonLoading(false) },
+            reject
+          )
+            .then(() => {
+              setResetButtonLoading(false)
+              setSetting(defaultSetting)
+              resolve()
+            })
+        }), {
+          loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
+          success: () => languagePickerSpawner(defaultSetting.meta.language)("modal.toast.success.setting"),
+          error: (data) => data
         })
-    }), {
-      loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
-      success: () => languagePickerSpawner(defaultSetting.meta.language)("modal.toast.success.setting"),
-      error: (data) => data
-    })
+      }
+    });
   }, [context, setSetting])
 
   // function and states for login

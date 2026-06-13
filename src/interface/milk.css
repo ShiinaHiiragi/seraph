@@ -68,6 +68,9 @@
   }
 
   .milkdown-code-block {
+    .cm-line, .cm-gutters {
+      font-family: var(--crepe-font-code);
+    }
     .cm-activeLineGutter {
       background-color: transparent;
     }

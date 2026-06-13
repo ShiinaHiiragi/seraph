@@ -412,7 +412,8 @@ const en = {
       captionFirstHalf: {
         logout: "You are logging out Seraph. ",
         deleteFile: "You are deleting file {0}. ",
-        deleteTask: "You are deleting task {0}. "
+        deleteTask: "You are deleting task {0}. ",
+        resetConfig: "You are resetting configs. "
       },
       caption: {
         enableTerminal: "By clicking 'Continue', you acknowledge the risks of using remote PTY and accept full responsibility for any consequences that may result."
