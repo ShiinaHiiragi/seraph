@@ -10,7 +10,7 @@ import Typography from "@mui/joy/Typography"
 import GreyLogo from "../logo-grey.svg";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import NavigateNextOutlinedIcon from "@mui/icons-material/NavigateNextOutlined";
-// import EventNoteOutlinedIcon from "@mui/icons-material/EventNoteOutlined";
+import EventNoteOutlinedIcon from "@mui/icons-material/EventNoteOutlined";
 // import ForwardToInboxOutlinedIcon from "@mui/icons-material/ForwardToInboxOutlined";
 import TerminalOutlinedIcon from "@mui/icons-material/TerminalOutlined";
 import DoneIcon from "@mui/icons-material/Done";
@@ -150,7 +150,7 @@ export default function Navigation(props) {
                 "& .JoyListItemButton-root": { p: "8px" },
               }}
             >
-              {/* <ListItem>
+              <ListItem>
                 <ListItemButton
                   selected={pathStartWith("/milkdown")}
                   onClick={() => navigateTo("/milkdown")}
@@ -161,7 +161,7 @@ export default function Navigation(props) {
                   <ListItemContent>{context.languagePicker("nav.utility.milkdown")}</ListItemContent>
                 </ListItemButton>
               </ListItem>
-              {context.isAuthority && <ListItem>
+              {/* {context.isAuthority && <ListItem>
                 <ListItemButton
                   selected={pathStartWith("/subscription")}
                   onClick={() => navigateTo("/subscription")}
