@@ -152,8 +152,8 @@ export default function Navigation(props) {
             >
               <ListItem>
                 <ListItemButton
-                  selected={pathStartWith("/milkdown")}
-                  onClick={() => navigateTo("/milkdown")}
+                  selected={pathStartWith("/crepe")}
+                  onClick={() => navigateTo("/crepe")}
                 >
                   <ListItemDecorator sx={{ color: "neutral.500" }}>
                     <EventNoteOutlinedIcon fontSize="small" />

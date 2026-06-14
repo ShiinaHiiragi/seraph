@@ -219,7 +219,7 @@ const en = {
     utility: {
       title: "Utility",
       subscription: "Subscription",
-      milkdown: "Milkdown",
+      milkdown: "Crepe",
       terminal: "Terminal",
       todo: "Task"
     }

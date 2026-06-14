@@ -219,7 +219,7 @@ const ja = {
     utility: {
       title: "ユーティリティ",
       subscription: "サブスクリプション",
-      milkdown: "ミルクダウン",
+      milkdown: "クレープ",
       terminal: "ターミナル",
       todo: "タスク"
     }

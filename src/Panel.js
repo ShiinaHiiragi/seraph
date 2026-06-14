@@ -292,7 +292,7 @@ const Panel = () => {
                         />
                       }
                     />
-                    <Route path="/milkdown" element={<Milkdown />} />
+                    <Route path="/crepe/*" element={<Milkdown />} />
                     <Route path="/subscription" element={<Subscription />} />
                     <Route path="/terminal" element={<Terminal />} />
                     <Route path="/todo" element={<TODO />} />

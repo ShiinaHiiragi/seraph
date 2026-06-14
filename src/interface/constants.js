@@ -109,6 +109,8 @@ String.prototype.timeFormat = function(formatString) {
   return new Date(this).timeFormat(formatString);
 }
 
+const id = (x) => x;
+
 const objectEquiv = (left, right) => {
   if (left === right) {
     return true;
@@ -130,7 +132,7 @@ const objectEquiv = (left, right) => {
   );
 }
 
-export { objectEquiv };
+export { id, objectEquiv };
 
 const GlobalContext = React.createContext({ });
 const ConstantContext = { };

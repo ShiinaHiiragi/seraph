@@ -14,6 +14,7 @@ let fileRouter = require('./routes/file');
 let folderRouter = require('./routes/folder');
 let configRouter = require('./routes/config');
 
+let crepeRouter = require('./routes/crepe');
 let todoRouter = require('./routes/todo');
 
 let api = require('./api');
@@ -70,6 +71,7 @@ app.use('/config', configRouter)
 
 let utilityRouter = express.Router();
 utilityRouter.use('/todo', todoRouter);
+utilityRouter.use('/crepe', crepeRouter);
 
 app.use('/utility', utilityRouter);
 

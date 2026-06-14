@@ -219,7 +219,7 @@ const zhHans = {
     utility: {
       title: "实用",
       subscription: "订阅",
-      milkdown: "Milkdown",
+      milkdown: "Crepe",
       terminal: "终端",
       todo: "待办"
     }
