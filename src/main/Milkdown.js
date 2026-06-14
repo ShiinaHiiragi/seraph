@@ -15,7 +15,11 @@ import { $prose } from "@milkdown/kit/utils";
 // import { emoji } from "@milkdown/plugin-emoji";
 import Loading from "./Loading";
 import RouteField from "../interface/RouteField";
-import GlobalContext, { id, request } from "../interface/constants";
+import GlobalContext, {
+  id,
+  request,
+  Status
+} from "../interface/constants";
 
 import "@milkdown/crepe/theme/common/style.css";
 import "../interface/milk.css";
@@ -153,22 +157,32 @@ const CrepeEditor = (props) => {
 
   React.useEffect(() => {
     setCrepeState(0);
-    try {
-      ["public", "private"]
-        .map((prefix) => folderName.startsWith(prefix))
-        .some(id)
-        .assert();
-    } catch {
-      navigate("/crepe");
-    }
-
-    request("GET/utility/crepe/load", {
-      type: folderName.split("/")[0],
-      file: folderName.split("/").slice(1).join("/")
-    }).then((data) => {
+    if (folderName.length > 0) {
+      try {
+        ["public", "private"]
+          .map((prefix) => folderName.startsWith(prefix))
+          .some(id)
+          .assert();
+      } catch {
+        setCrepeState(1);
+        setFileContent("");
+        navigate("/crepe");
+      }
+      request("GET/utility/crepe/load", {
+        type: folderName.split("/")[0],
+        file: folderName.split("/").slice(1).join("/")
+      }, { [Status.execErrCode.ResourcesUnexist]: () => {
+        setCrepeState(1);
+        setFileContent("");
+        navigate("/crepe");
+      } }).then((data) => {
+        setCrepeState(1);
+        setFileContent(data.text);
+      });
+    } else {
       setCrepeState(1);
-      setFileContent(data.text);
-    });
+      setFileContent("");
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     // check if
