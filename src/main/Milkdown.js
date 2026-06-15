@@ -211,6 +211,11 @@ const CrepeEditor = () => {
       context.languagePicker("nav.utility.milkdown")
     ], [context, folderName, crepeType, crepePath, crepeTitle]);
 
+  const breadLink = React.useMemo(
+    () => folderName.length ? `/${folderName}` : undefined,
+    [folderName]
+  );
+
   React.useEffect(() => {
     context.crepeRef.setReadOnly(readOnly);
   }, [context, readOnly]);
@@ -245,6 +250,7 @@ const CrepeEditor = () => {
       setCrepeState(1);
       setCrepeRefer(false);
       setFileContent("");
+      setReadOnly(false);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -259,7 +265,7 @@ const CrepeEditor = () => {
     <RouteField
       display
       path={breadcrumb}
-      link={`/${folderName}`}
+      link={breadLink}
       title={
         <Stack
           direction="row"
