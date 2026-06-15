@@ -5,14 +5,19 @@ let api = require('../api');
 let router = express.Router();
 
 router.get('/load', (req, res, next) => {
-  const { type, file } = req.query;
+  const { type, folderName, filename } = req.query;
   if (type === 'private' && req.status.notAuthSuccess()) {
     // -> EF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }
 
-  const filePath = path.join(api.dataPath.dataDirPath, type, file);
+  const handlePath = type === 'private'
+    ? api.dataPath.privateDirFolderPath
+    : api.dataPath.publicDirFolderPath;
+  const folderPath = handlePath(folderName);
+  const filePath = path.join(folderPath, filename);
+
   if (!fs.existsSync(filePath)) {
     // -> EF_RU: folder don't exist
     req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);

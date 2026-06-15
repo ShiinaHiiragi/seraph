@@ -16,7 +16,6 @@ import { $prose } from "@milkdown/kit/utils";
 import Loading from "./Loading";
 import RouteField from "../interface/RouteField";
 import GlobalContext, {
-  id,
   request,
   Status
 } from "../interface/constants";
@@ -157,6 +156,7 @@ const CrepeEditor = () => {
   const context = React.useContext(GlobalContext);
 
   const [crepeState, setCrepeState] = React.useState(0);
+  const [crepeRefer, setCrepeRefer] = React.useState(false);
   const [fileContent, setFileContent] = React.useState(null);
 
   const folderName = React.useMemo(
@@ -167,47 +167,67 @@ const CrepeEditor = () => {
     [rawFolderName]
   );
 
+  const folderPart = React.useMemo(() => folderName.split("/"), [folderName]);
+  const crepeType = React.useMemo(() => folderPart[0], [folderPart]);
+  const crepePath = React.useMemo(() => folderPart.slice(1, -1), [folderPart]);
+  const crepeTitle = React.useMemo(
+    () => folderName.length
+      ? folderPart.slice(-1)[0]
+      : context.languagePicker("nav.utility.milkdown"),
+    [folderName, folderPart, context]
+  );
+
+  const breadcrumb = React.useMemo(() => folderName.length
+    ? [
+      context.languagePicker(`nav.${crepeType}`),
+      ...crepePath,
+      crepeTitle
+    ] : [
+      context.languagePicker("nav.utility.title"),
+      context.languagePicker("nav.utility.milkdown")
+    ], [context, folderName, crepeType, crepePath, crepeTitle]);
+
+  // why not using savable in crepeTitle & breadcrumb?
+  // because we need breadcrumb to be shown when text is loading
+  const savable = React.useMemo(
+    () => crepeState === 1 && crepeRefer,
+    [crepeState, crepeRefer]
+  );
+
   React.useEffect(() => {
     setCrepeState(0);
-    const validPath = ["public", "private"]
-      .map((prefix) => folderName.startsWith(prefix))
-      .some(id);
-
-    const initCrepe = (text) => {
-      setCrepeState(1);
-      setFileContent(text ?? "");
-      if (text === undefined) {
+    if (folderName.length > 0) {
+      request("GET/utility/crepe/load", {
+        type: crepeType,
+        folderName: crepePath.join("/"),
+        filename: crepeTitle
+      }, { [Status.execErrCode.ResourcesUnexist]: () => {
         navigate("/crepe");
-      }
-    };
-
-    if (validPath) {
-      request(
-        "GET/utility/crepe/load",
-        {
-          type: folderName.split("/")[0],
-          file: folderName.split("/").slice(1).join("/")
-        },
-        { [Status.execErrCode.ResourcesUnexist]: initCrepe }
-      ).then((data) => initCrepe(data.text));
+      } })
+        .then(({ text }) => {
+          setCrepeState(1);
+          setCrepeRefer(true);
+          setFileContent(text);
+        });
     } else {
-      initCrepe();
+      setCrepeState(1);
+      setCrepeRefer(false);
+      setFileContent("");
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     // check if
     // load with auth naturally
-    context.secondTick
+    context.secondTick,
+    // url is changed directly
+    rawFolderName
   ]);
 
   return (
     <RouteField
       display
-      path={[
-        context.languagePicker("nav.utility.title"),
-        context.languagePicker("nav.utility.milkdown")
-      ]}
-      title={context.languagePicker("nav.utility.milkdown")}
+      path={breadcrumb}
+      title={crepeTitle + (savable ? " (S)" : "")}
       sx={{
         px: 0,
         pb: 0,

@@ -179,24 +179,10 @@ export default function FileTable(props) {
                 <td>
                   <Typography level="body-xs">
                     {item.type === "directory"
-                      ? <Link
-                      onClick={() => navigate(
-                        `/${type}${folderName.length ? "/" : ""}${encodePath(folderName)}/${encodeURIComponent(item.name)}`
-                      )}
-                    >
-                      {item.name}
-                    </Link>
-                    : <Link
-                      target="_blank"
-                      href={
-                        new URL(
-                          `/${type}${folderName.length ? "/" : ""}${encodePath(folderName)}/${encodeURIComponent(item.name)}`,
-                          serverBaseURL
-                        ).href
-                      }
-                    >
-                      {item.name}
-                    </Link>}
+                      ? <Link onClick={() => navigate(`/${type}${folderName.length ? "/" : ""}${encodePath(folderName)}/${encodeURIComponent(item.name)}`)}>{item.name}</Link>
+                      : item.type === "text/markdown"
+                      ? <Link onClick={() => navigate(`/crepe/${type}${folderName.length ? "/" : ""}${encodePath(folderName)}/${encodeURIComponent(item.name)}`)}>{item.name}</Link>
+                      : <Link target="_blank" href={new URL(`/${type}${folderName.length ? "/" : ""}${encodePath(folderName)}/${encodeURIComponent(item.name)}`, serverBaseURL).href}>{item.name}</Link>}
                   </Typography>
                 </td>
                 <td>
