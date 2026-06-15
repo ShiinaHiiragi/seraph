@@ -230,6 +230,7 @@ const CrepeEditor = () => {
       display
       path={breadcrumb}
       link={`/${folderName}`}
+      // TODO: remove (S) later
       title={crepeTitle + (savable ? " (S)" : "")}
       sx={{
         px: 0,
