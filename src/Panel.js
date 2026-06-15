@@ -163,7 +163,8 @@ const Panel = () => {
     isLoaded: () => crepeEditor.current !== null,
     isCreated: () => crepeEditor.current?.status === "Created",
     getText: switchAction("getMarkdown"),
-    setText: switchAction("replaceAll")
+    setText: switchAction("replaceAll"),
+    setReadOnly: switchAction("actionSetReadOnly")
   }), [switchAction]);
 
   // language related
