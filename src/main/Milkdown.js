@@ -173,22 +173,25 @@ const CrepeEditor = () => {
       .map((prefix) => folderName.startsWith(prefix))
       .some(id);
 
-    if (validPath) {
-      request("GET/utility/crepe/load", {
-        type: folderName.split("/")[0],
-        file: folderName.split("/").slice(1).join("/")
-      }, { [Status.execErrCode.ResourcesUnexist]: () => {
-        setCrepeState(1);
-        setFileContent("");
-        navigate("/crepe");
-      } }).then((data) => {
-        setCrepeState(1);
-        setFileContent(data.text);
-      });
-    } else {
+    const initCrepe = (text) => {
       setCrepeState(1);
-      setFileContent("");
-      navigate("/crepe");
+      setFileContent(text ?? "");
+      if (text === undefined) {
+        navigate("/crepe");
+      }
+    };
+
+    if (validPath) {
+      request(
+        "GET/utility/crepe/load",
+        {
+          type: folderName.split("/")[0],
+          file: folderName.split("/").slice(1).join("/")
+        },
+        { [Status.execErrCode.ResourcesUnexist]: initCrepe }
+      ).then((data) => initCrepe(data.text));
+    } else {
+      initCrepe();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
