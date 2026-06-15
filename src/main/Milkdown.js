@@ -20,6 +20,13 @@ import GlobalContext, {
   request,
   Status
 } from "../interface/constants";
+import {
+  rubyRemark,
+  rubyNode,
+  rubyBracketInputRule,
+  rubyHtmlInputRule,
+  rubyPasteHandler
+} from "../interface/ruby";
 
 import "@milkdown/crepe/theme/common/style.css";
 import "../interface/milk.css";
@@ -118,7 +125,12 @@ const CrepeEditorInner = (props) => {
           return true;
         }
       })))
-      .use(listener);
+      .use(listener)
+      .use(rubyRemark)
+      .use(rubyNode)
+      .use(rubyBracketInputRule)
+      .use(rubyHtmlInputRule)
+      .use(rubyPasteHandler);
 
     context.crepeRef.load(crepe.editor, { getMarkdown, replaceAll });
     return crepe;
@@ -144,6 +156,9 @@ const CrepeEditor = (props) => {
   const { "*": rawFolderName } = useParams();
   const context = React.useContext(GlobalContext);
 
+  const [crepeState, setCrepeState] = React.useState(0);
+  const [fileContent, setFileContent] = React.useState(null);
+
   const folderName = React.useMemo(
     () => rawFolderName
       .replace(/\/+/g, "/")
@@ -151,9 +166,6 @@ const CrepeEditor = (props) => {
       .replace(/\/$/, ''),
     [rawFolderName]
   );
-
-  const [crepeState, setCrepeState] = React.useState(0);
-  const [fileContent, setFileContent] = React.useState(null);
 
   React.useEffect(() => {
     setCrepeState(0);
