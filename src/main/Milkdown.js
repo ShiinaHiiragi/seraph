@@ -80,7 +80,7 @@ const MaildownField = styled(Box)(({ theme }) => ({
 }));
 
 const CrepeEditorInner = (props) => {
-  const { readOnly, fileContent } = props;
+  const { readOnly, fileContent, setModified } = props;
   const context = React.useContext(GlobalContext);
 
   useEditor((root) => {
@@ -127,6 +127,7 @@ const CrepeEditorInner = (props) => {
         }));
         ctx.get(listenerCtx).markdownUpdated(() => {
           context.crepeRef.modify.current = true;
+          setModified(true);
         });
       })
       .use($prose((ctx) => keymap({
@@ -178,7 +179,9 @@ const CrepeEditor = () => {
   const [crepeState, setCrepeState] = React.useState(0);
   const [crepeRefer, setCrepeRefer] = React.useState(false);
   const [fileContent, setFileContent] = React.useState(null);
+
   const [readOnly, setReadOnly] = React.useState(true);
+  const [modified, setModified] = React.useState(false);
 
   const folderName = React.useMemo(
     () => rawFolderName
@@ -217,6 +220,7 @@ const CrepeEditor = () => {
   // - text content is ready
   // - dest file exists
   // - not read only
+  // and save button is hidden without any modification
   const savable = React.useMemo(
     () => context.isAuthority && crepeState === 1 && crepeRefer && !readOnly,
     [context.isAuthority, crepeState, crepeRefer, readOnly]
@@ -256,7 +260,6 @@ const CrepeEditor = () => {
       display
       path={breadcrumb}
       link={`/${folderName}`}
-      // TODO: remove (S) later
       title={
         <Stack
           direction="row"
@@ -267,7 +270,7 @@ const CrepeEditor = () => {
             level="h3"
             children={crepeTitle}
           />
-          <Stack direction="row" sx={{ position: "relative", top: "1px" }}>
+          <Stack direction="row" sx={{ position: "relative", top: "2px" }}>
             <IconButton
               size="sm"
               variant="soft"
@@ -279,9 +282,13 @@ const CrepeEditor = () => {
             >
               {readOnly ? <EditOffOutlinedIcon /> : <EditOutlinedIcon/>}
             </IconButton>
-            {savable && <IconButton
+            {savable && modified && <IconButton
               size="sm"
               variant="soft"
+              onClick={() => {
+                // TODO: add saving
+                setModified(false);
+              }}
               sx={{
                 backgroundColor: "transparent",
                 "&:hover": { backgroundColor: "transparent" }
@@ -307,6 +314,7 @@ const CrepeEditor = () => {
             <CrepeEditorInner
               readOnly={readOnly}
               fileContent={fileContent}
+              setModified={setModified}
             />
           </MilkdownProvider>
         </MaildownField>}
