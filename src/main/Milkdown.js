@@ -187,11 +187,13 @@ const CrepeEditor = () => {
       context.languagePicker("nav.utility.milkdown")
     ], [context, folderName, crepeType, crepePath, crepeTitle]);
 
-  // why not using savable in crepeTitle & breadcrumb?
-  // because we need breadcrumb to be shown when text is loading
+  // a markdown is savable when
+  // - user has logged in
+  // - text content is ready
+  // - dest file exists
   const savable = React.useMemo(
-    () => crepeState === 1 && crepeRefer,
-    [crepeState, crepeRefer]
+    () => context.isAuthority && crepeState === 1 && crepeRefer,
+    [context.isAuthority, crepeState, crepeRefer]
   );
 
   React.useEffect(() => {
@@ -227,6 +229,7 @@ const CrepeEditor = () => {
     <RouteField
       display
       path={breadcrumb}
+      link={`/${folderName}`}
       title={crepeTitle + (savable ? " (S)" : "")}
       sx={{
         px: 0,
