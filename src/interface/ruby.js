@@ -2,29 +2,53 @@ import { $node, $remark, $inputRule, $prose } from "@milkdown/kit/utils";
 import { InputRule } from "@milkdown/kit/prose/inputrules";
 import { Plugin } from "@milkdown/kit/prose/state";
 
-function splitByRuby(text, textType) {
-  const regex = textType === "html"
-    ? /<ruby>([^<]+)<rt>([^<]+)<\/rt><\/ruby>/g
-    : /\{([^|{}\n]+)\|([^|{}\n]+)\}/g;
+// Parse the inner content of a <ruby> element into [{base, reading}] pairs.
+function parseRubyInner(inner) {
+  const pairs = [];
+  const re = /([^<]*)<rt>([^<]*)<\/rt>/g;
+  let m;
+  while ((m = re.exec(inner)) !== null) {
+    pairs.push({ base: m[1], reading: m[2] });
+  }
+  return pairs;
+}
+
+// Split a plain-text html string on <ruby> elements (multi-rt aware).
+function splitHtmlRuby(html) {
+  const re = /<ruby>((?:[^<]*<rt>[^<]*<\/rt>)+[^<]*)<\/ruby>/g;
   const parts = [];
   let last = 0;
-  let match;
-  while ((match = regex.exec(text)) !== null) {
-    if (match.index > last) {
-      parts.push({ type: textType, value: text.slice(last, match.index) });
+  let m;
+  while ((m = re.exec(html)) !== null) {
+    if (m.index > last) parts.push({ type: "html", value: html.slice(last, m.index) });
+    for (const pair of parseRubyInner(m[1])) {
+      parts.push({ type: "ruby", ...pair });
     }
-    parts.push({ type: "ruby", base: match[1], reading: match[2] });
-    last = match.index + match[0].length;
+    last = m.index + m[0].length;
   }
   if (!parts.length) return null;
-  if (last < text.length) {
-    parts.push({ type: textType, value: text.slice(last) });
-  }
+  if (last < html.length) parts.push({ type: "html", value: html.slice(last) });
   return parts;
 }
 
-// Remark splits <ruby>base<rt>reading</rt></ruby> into separate sibling nodes.
-// This function scans children and merges that sequence back into a ruby node.
+// Split a text string on {base|reading} patterns.
+function splitBracketRuby(text) {
+  const re = /\{([^|{}\n]+)\|([^|{}\n]+)\}/g;
+  const parts = [];
+  let last = 0;
+  let m;
+  while ((m = re.exec(text)) !== null) {
+    if (m.index > last) parts.push({ type: "text", value: text.slice(last, m.index) });
+    parts.push({ type: "ruby", base: m[1], reading: m[2] });
+    last = m.index + m[0].length;
+  }
+  if (!parts.length) return null;
+  if (last < text.length) parts.push({ type: "text", value: text.slice(last) });
+  return parts;
+}
+
+// Remark splits <ruby>A<rt>a</rt>B<rt>b</rt></ruby> into sibling nodes.
+// Walk children and merge any <ruby>…</ruby> sequences back into ruby nodes.
 function processChildren(children) {
   const result = [];
   let i = 0;
@@ -33,40 +57,41 @@ function processChildren(children) {
 
     if (c.type === "html" && /^<ruby>$/.test(c.value.trim())) {
       let j = i + 1;
-      let base = "";
-      let reading = "";
+      const pairs = [];
 
-      if (j < children.length && children[j].type === "text") {
-        base = children[j].value;
-        j++;
+      while (j < children.length) {
+        if (children[j].type === "html" && /^<\/ruby>$/.test(children[j].value.trim())) {
+          j++;
+          break;
+        }
+        let base = "";
+        let reading = "";
+        if (children[j].type === "text") { base = children[j].value; j++; }
+        if (j < children.length && children[j].type === "html" && /^<rt>$/.test(children[j].value.trim())) {
+          j++;
+          if (j < children.length && children[j].type === "text") { reading = children[j].value; j++; }
+          if (j < children.length && children[j].type === "html" && /^<\/rt>$/.test(children[j].value.trim())) j++;
+          pairs.push({ base, reading });
+        } else {
+          break;
+        }
       }
-      if (j < children.length && children[j].type === "html" && /^<rt>$/.test(children[j].value.trim())) {
-        j++;
-        if (j < children.length && children[j].type === "text") {
-          reading = children[j].value;
-          j++;
-        }
-        if (j < children.length && children[j].type === "html" && /^<\/rt>$/.test(children[j].value.trim())) {
-          j++;
-          if (j < children.length && children[j].type === "html" && /^<\/ruby>$/.test(children[j].value.trim())) {
-            j++;
-            if (base) {
-              result.push({ type: "ruby", base, reading });
-              i = j;
-              continue;
-            }
-          }
-        }
+
+      if (pairs.length > 0) {
+        for (const pair of pairs) result.push({ type: "ruby", ...pair });
+        i = j;
+        continue;
       }
     }
 
-    if (c.type === "html" || c.type === "text") {
-      const parts = splitByRuby(c.value, c.type);
-      if (parts) {
-        result.push(...parts);
-        i++;
-        continue;
-      }
+    if (c.type === "html") {
+      const parts = splitHtmlRuby(c.value);
+      if (parts) { result.push(...parts); i++; continue; }
+    }
+
+    if (c.type === "text") {
+      const parts = splitBracketRuby(c.value);
+      if (parts) { result.push(...parts); i++; continue; }
     }
 
     result.push(c);
@@ -85,10 +110,20 @@ function remarkRubyPlugin() {
   return (tree) => visitNode(tree);
 }
 
-const RUBY_PATTERNS = [
-  /\{([^|{}\n]+)\|([^|{}\n]+)\}/g,
-  /<ruby>([^<]+)<rt>([^<]+)<\/rt><\/ruby>/g,
-];
+// For paste: find all ruby patterns in a text node and return replacement specs.
+function findRubyInText(text) {
+  const re = /\{([^|{}\n]+)\|([^|{}\n]+)\}|<ruby>((?:[^<]*<rt>[^<]*<\/rt>)+[^<]*)<\/ruby>/g;
+  const hits = [];
+  let m;
+  while ((m = re.exec(text)) !== null) {
+    if (m[1] !== undefined) {
+      hits.push({ from: m.index, to: m.index + m[0].length, pairs: [{ base: m[1], reading: m[2] }] });
+    } else {
+      hits.push({ from: m.index, to: m.index + m[0].length, pairs: parseRubyInner(m[3]) });
+    }
+  }
+  return hits;
+}
 
 export const rubyRemark = $remark("rubyRemark", () => remarkRubyPlugin);
 
@@ -114,8 +149,6 @@ export const rubyHtmlInputRule = $inputRule(() =>
   )
 );
 
-// Handles paste of plain-text ruby patterns (input rules don't fire on paste).
-// Only runs on paste transactions to avoid interfering with undo/redo.
 export const rubyPasteHandler = $prose(() => new Plugin({
   appendTransaction(transactions, _old, newState) {
     if (!transactions.some(tr => tr.getMeta("uiEvent") === "paste")) return null;
@@ -126,26 +159,16 @@ export const rubyPasteHandler = $prose(() => new Plugin({
     const replacements = [];
     newState.doc.descendants((node, pos) => {
       if (!node.isText) return;
-      for (const regex of RUBY_PATTERNS) {
-        regex.lastIndex = 0;
-        let match;
-        while ((match = regex.exec(node.text)) !== null) {
-          replacements.push({
-            from: pos + match.index,
-            to: pos + match.index + match[0].length,
-            base: match[1],
-            reading: match[2],
-          });
-        }
+      for (const hit of findRubyInText(node.text)) {
+        replacements.push({ from: pos + hit.from, to: pos + hit.to, pairs: hit.pairs });
       }
     });
-
     if (!replacements.length) return null;
 
     const tr = newState.tr;
     replacements.sort((a, b) => b.from - a.from);
-    for (const { from, to, base, reading } of replacements) {
-      tr.replaceWith(from, to, rubyType.create({ base, reading }));
+    for (const { from, to, pairs } of replacements) {
+      tr.replaceWith(from, to, pairs.map(({ base, reading }) => rubyType.create({ base, reading })));
     }
     return tr;
   },
@@ -186,7 +209,7 @@ export const rubyNode = $node("ruby", () => ({
   toMarkdown: {
     match: (node) => node.type.name === "ruby",
     runner: (state, node) => {
-      state.addNode("text", undefined, `{${node.attrs.base}|${node.attrs.reading}}`);
+      state.addNode("html", undefined, `<ruby>${node.attrs.base}<rt>${node.attrs.reading}</rt></ruby>`);
     },
   },
 }));
