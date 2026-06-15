@@ -151,7 +151,7 @@ const CrepeEditorInner = (props) => {
   return <Milkdown />;
 };
 
-const CrepeEditor = (props) => {
+const CrepeEditor = () => {
   const navigate = useNavigate();
   const { "*": rawFolderName } = useParams();
   const context = React.useContext(GlobalContext);
@@ -169,17 +169,11 @@ const CrepeEditor = (props) => {
 
   React.useEffect(() => {
     setCrepeState(0);
-    if (folderName.length > 0) {
-      try {
-        ["public", "private"]
-          .map((prefix) => folderName.startsWith(prefix))
-          .some(id)
-          .assert();
-      } catch {
-        setCrepeState(1);
-        setFileContent("");
-        navigate("/crepe");
-      }
+    const validPath = ["public", "private"]
+      .map((prefix) => folderName.startsWith(prefix))
+      .some(id);
+
+    if (validPath) {
       request("GET/utility/crepe/load", {
         type: folderName.split("/")[0],
         file: folderName.split("/").slice(1).join("/")
@@ -194,6 +188,7 @@ const CrepeEditor = (props) => {
     } else {
       setCrepeState(1);
       setFileContent("");
+      navigate("/crepe");
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
