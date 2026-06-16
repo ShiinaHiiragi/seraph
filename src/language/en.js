@@ -428,6 +428,7 @@ const en = {
         logout: "You are logging out Seraph. ",
         deleteFile: "You are deleting file {0}. ",
         deleteTask: "You are deleting task {0}. ",
+        discardDraft: "You are leaving Crepe without saving changes. ",
         resetConfig: "You are resetting configs. "
       },
       caption: {

@@ -165,7 +165,20 @@ const Panel = () => {
     getText: switchAction("getMarkdown"),
     setText: switchAction("replaceAll"),
     setReadOnly: switchAction("actionSetReadOnly"),
-    setModified: setCrepeModified
+    setModified: setCrepeModified,
+    reconfirm: (context, handleAction) => {
+      context.setModalReconfirm({
+        open: true,
+        captionFirstHalf: context.languagePicker("modal.reconfirm.captionFirstHalf.discardDraft"),
+        handleAction: handleAction
+      });
+    },
+    warning: (context, handleAction) => (event) => {
+      if (context.crepeRef.modified) {
+        event?.preventDefault();
+        context.crepeRef.reconfirm(context, handleAction);
+      }
+    }
   }), [crepeModified, switchAction]);
 
   // language related

@@ -65,6 +65,7 @@ const RouteField = (props) => {
           <Link
             component={RouterLink}
             to="/"
+            onClick={context.crepeRef.warning(context, () => navigate("/"))}
             underline="none"
             color="neutral"
             aria-label="Home"
@@ -75,6 +76,10 @@ const RouteField = (props) => {
             <Link
               component={link !== undefined ? RouterLink : undefined}
               to={link?.split("/")?.slice(0, index + 2)?.join("/")}
+              onClick={link !== undefined ? context.crepeRef.warning(
+                context,
+                () => navigate(link.split("/").slice(0, index + 2).join("/"))
+              ) : undefined}
               key={index}
               underline="none"
               fontWeight={500}

@@ -286,7 +286,10 @@ const Header = (props) => {
         >
           <MenuIcon />
         </IconButton>
-        <RouterLink to="/">
+        <RouterLink
+          to="/"
+          onClick={context.crepeRef.warning(context, () => navigate("/"))}
+        >
           <IconButton
             disabled
             sx={{ display: { xs: "none", sm: "none", md: "inline-flex" } }}
