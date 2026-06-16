@@ -80,7 +80,7 @@ const MaildownField = styled(Box)(({ theme }) => ({
 }));
 
 const CrepeEditorInner = (props) => {
-  const { readOnly, fileContent, setModified } = props;
+  const { readOnly, fileContent } = props;
   const context = React.useContext(GlobalContext);
 
   useEditor((root) => {
@@ -125,9 +125,11 @@ const CrepeEditorInner = (props) => {
             left: 0
           }
         }));
+        // listener will prevent jittering itself
         ctx.get(listenerCtx).markdownUpdated(() => {
-          context.crepeRef.modify.current = true;
-          setModified(true);
+          context.crepeRef.setModified(true);
+          // TODO: word counter for CJK
+          console.log(context.crepeRef.getText().length);
         });
       })
       .use($prose((ctx) => keymap({
@@ -181,7 +183,6 @@ const CrepeEditor = () => {
   const [fileContent, setFileContent] = React.useState(null);
 
   const [readOnly, setReadOnly] = React.useState(true);
-  const [modified, setModified] = React.useState(false);
 
   const folderName = React.useMemo(
     () => rawFolderName
@@ -288,12 +289,12 @@ const CrepeEditor = () => {
             >
               {readOnly ? <EditOffOutlinedIcon /> : <EditOutlinedIcon/>}
             </IconButton>
-            {savable && modified && <IconButton
+            {savable && context.crepeRef.modified && <IconButton
               size="sm"
               variant="soft"
               onClick={() => {
                 // TODO: add saving
-                setModified(false);
+                context.crepeRef.setModified(false);
               }}
               sx={{
                 backgroundColor: "transparent",
@@ -320,7 +321,6 @@ const CrepeEditor = () => {
             <CrepeEditorInner
               readOnly={readOnly}
               fileContent={fileContent}
-              setModified={setModified}
             />
           </MilkdownProvider>
         </MaildownField>}
