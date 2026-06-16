@@ -84,12 +84,9 @@ const CrepeEditorInner = (props) => {
   const context = React.useContext(GlobalContext);
 
   useEditor((root) => {
-    const isReloading = context.crepeRef.isLoaded();
     const crepe = new Crepe({
       root,
-      defaultValue: isReloading
-        ? context.crepeRef.snapshot.current
-        : fileContent,
+      defaultValue: context.crepeRef.snapshot.current ?? fileContent,
       features: {
         [CrepeFeature.Toolbar]: true,
       },
@@ -157,6 +154,7 @@ const CrepeEditorInner = (props) => {
     });
     return crepe;
   }, [
+    fileContent,
     context.setting.meta.language
     // TODO: add config in context.setting
     // spell check
@@ -255,6 +253,9 @@ const CrepeEditor = () => {
       setFileContent("");
       setReadOnly(false);
     }
+
+    // remove state on unmount
+    return () => context.crepeRef.setModified(false);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     // check if

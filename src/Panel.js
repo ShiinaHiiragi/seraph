@@ -132,7 +132,7 @@ const Panel = () => {
   // and act as init value for re-construction when setting changed
   const crepeEditor = React.useRef(null);
   const crepeUtils = React.useRef(null);
-  const crepeSnapshot = React.useRef("");
+  const crepeSnapshot = React.useRef(null);
   const [crepeModified, setCrepeModified] = React.useState(false);
 
   const switchAction = React.useCallback((actionName) => (...args) => {
@@ -165,14 +165,14 @@ const Panel = () => {
     setReadOnly: switchAction("actionSetReadOnly"),
     setModified: setCrepeModified,
     reconfirm: (context, handleAction) => {
-      context.setModalReconfirm({
+      setModalReconfirm({
         open: true,
         caption: context.languagePicker("modal.reconfirm.caption.discardDraft"),
         handleAction: handleAction
       });
     },
     warning: (context, handleAction) => (event) => {
-      if (context.crepeRef.modified) {
+      if (crepeModified) {
         event?.preventDefault();
         context.crepeRef.reconfirm(context, handleAction);
       }

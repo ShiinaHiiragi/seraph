@@ -96,9 +96,11 @@ const Header = (props) => {
   }, []);
 
   const handleCloseConfig = React.useCallback(() => {
+    context.crepeRef.snapshot.current = null;
     setModalConfigOpen(false);
     setMobileNavOpen(false);
     setActiveSection(settingField.general);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleApplySetting = React.useCallback((key, value) => {

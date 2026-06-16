@@ -174,7 +174,11 @@ export default function Navigation(props) {
               <ListItem>
                 <ListItemButton
                   selected={pathStartWith("/crepe")}
-                  onClick={() => navigateTo("/crepe")}
+                  onClick={() => {
+                    if (window.location.pathname !== "/crepe") {
+                      navigateTo("/crepe");
+                    }
+                  }}
                 >
                   <ListItemDecorator sx={{ color: "neutral.500" }}>
                     <EventNoteOutlinedIcon fontSize="small" />
