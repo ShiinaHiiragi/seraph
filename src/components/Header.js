@@ -8,7 +8,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
-import { Link, useNavigate } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import GreyLogo from "../logo-grey.svg";
 import GlobalContext, {
   objectEquiv,
@@ -286,14 +286,14 @@ const Header = (props) => {
         >
           <MenuIcon />
         </IconButton>
-        <Link to="/">
+        <RouterLink to="/">
           <IconButton
             disabled
             sx={{ display: { xs: "none", sm: "none", md: "inline-flex" } }}
           >
             <img src={GreyLogo} width={24} height={24} alt=""/>
           </IconButton>
-        </Link>
+        </RouterLink>
         <Typography component="h1" fontWeight="lg" sx={{ letterSpacing: "0.06em" }}>
           {context.languagePicker("nav.title")}
         </Typography>

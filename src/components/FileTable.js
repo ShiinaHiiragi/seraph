@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import Box from "@mui/joy/Box";
 import Table from "@mui/joy/Table";
 import Sheet from "@mui/joy/Sheet";
@@ -27,7 +27,6 @@ export default function FileTable(props) {
     setPrivateFolders
   } = props;
   const context = React.useContext(GlobalContext);
-  const navigate = useNavigate();
 
   return (
     <Sheet
@@ -179,9 +178,9 @@ export default function FileTable(props) {
                 <td>
                   <Typography level="body-xs">
                     {item.type === "directory"
-                      ? <Link onClick={() => navigate(`/${type}${folderName.length ? "/" : ""}${encodePath(folderName)}/${encodeURIComponent(item.name)}`)}>{item.name}</Link>
+                      ? <Link component={RouterLink} to={`/${type}${folderName.length ? "/" : ""}${encodePath(folderName)}/${encodeURIComponent(item.name)}`}>{item.name}</Link>
                       : item.type === "text/markdown"
-                      ? <Link onClick={() => navigate(`/crepe/${type}${folderName.length ? "/" : ""}${encodePath(folderName)}/${encodeURIComponent(item.name)}`)}>{item.name}</Link>
+                      ? <Link component={RouterLink} to={`/crepe/${type}${folderName.length ? "/" : ""}${encodePath(folderName)}/${encodeURIComponent(item.name)}`}>{item.name}</Link>
                       : <Link target="_blank" href={new URL(`/${type}${folderName.length ? "/" : ""}${encodePath(folderName)}/${encodeURIComponent(item.name)}`, serverBaseURL).href}>{item.name}</Link>}
                   </Typography>
                 </td>

@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import * as React from 'react';
-import { useNavigate } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import Box from '@mui/joy/Box';
 import Typography from '@mui/joy/Typography';
 import List from '@mui/joy/List';
@@ -26,7 +26,6 @@ export default function FileList(props) {
     setPrivateFolders
   } = props;
   const context = React.useContext(GlobalContext);
-  const navigate = useNavigate();
 
   return (
     <Box
@@ -66,9 +65,9 @@ export default function FileList(props) {
                 <div>
                   <Typography fontWeight={600} gutterBottom>
                     {item.type === "directory"
-                      ? <Link onClick={() => navigate(`/${type}${folderName.length ? "/" : ""}${encodePath(folderName)}/${encodeURIComponent(item.name)}`)}>{item.name}</Link>
+                      ? <Link component={RouterLink} to={`/${type}${folderName.length ? "/" : ""}${encodePath(folderName)}/${encodeURIComponent(item.name)}`}>{item.name}</Link>
                       : item.type === "text/markdown"
-                      ? <Link onClick={() => navigate(`/crepe/${type}${folderName.length ? "/" : ""}${encodePath(folderName)}/${encodeURIComponent(item.name)}`)}>{item.name}</Link>
+                      ? <Link component={RouterLink} to={`/crepe/${type}${folderName.length ? "/" : ""}${encodePath(folderName)}/${encodeURIComponent(item.name)}`}>{item.name}</Link>
                       : <Link target="_blank" href={new URL(`/${type}${folderName.length ? "/" : ""}${encodePath(folderName)}/${encodeURIComponent(item.name)}`, serverBaseURL).href}>{item.name}</Link>}
                   </Typography>
                   <Typography level="body-xs" gutterBottom>

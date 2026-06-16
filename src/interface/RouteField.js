@@ -7,7 +7,7 @@ import ChevronRightRoundedIcon from "@mui/icons-material/ChevronRightRounded";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import GlobalContext from "./constants";
 import Caption from "../components/Caption";
-import { useNavigate } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 
 const RouteFieldRaw = styled("div")(({ theme }) => ({
   width: "100%",
@@ -63,24 +63,22 @@ const RouteField = (props) => {
           sx={{ paddingLeft: 3, paddingRight: 3 }}
         >
           <Link
+            component={RouterLink}
+            to="/"
             underline="none"
             color="neutral"
-            onClick={() => navigate("/")}
             aria-label="Home"
           >
             <HomeRoundedIcon />
           </Link>
           {path.length > 0 && breadcrumb.slice(0, -1).map((item, index) => (
             <Link
+              component={link !== undefined ? RouterLink : undefined}
+              to={link?.split("/")?.slice(0, index + 2)?.join("/")}
               key={index}
               underline="none"
               fontWeight={500}
               fontSize={12}
-              onClick={() => {
-                if (link !== undefined) {
-                  navigate(link.split("/").slice(0, index + 2).join("/"))
-                }
-              }}
               color={"neutral"}
               sx={{ cursor: link ? "pointer" : "default" }}
             >

@@ -16,7 +16,7 @@ import TerminalOutlinedIcon from "@mui/icons-material/TerminalOutlined";
 import DoneIcon from "@mui/icons-material/Done";
 import GlobalContext from "../interface/constants";
 import { pathStartWith } from "../interface/constants";
-import { Link, useNavigate } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 
 export default function Navigation(props) {
   const {
@@ -43,11 +43,11 @@ export default function Navigation(props) {
           }}
         >
           <ListItem sx={{ paddingLeft: 0, display: { xs: "inline-flex", sm: "inline-flex", md: "none" } }}>
-            <Link to="/" onClick={() => setDrawerOpen(false)} >
+            <RouterLink to="/" onClick={() => setDrawerOpen(false)} >
               <IconButton disabled sx={{ paddingLeft: "0px" }}>
                 <img src={GreyLogo} width={24} height={24} alt="" />
               </IconButton>
-            </Link>
+            </RouterLink>
             <Typography component="h1" fontWeight="lg" sx={{ letterSpacing: "0.06em" }}>
               {context.languagePicker("nav.title")}
             </Typography>
