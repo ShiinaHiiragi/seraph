@@ -167,7 +167,7 @@ const Panel = () => {
     reconfirm: (context, handleAction) => {
       context.setModalReconfirm({
         open: true,
-        captionFirstHalf: context.languagePicker("modal.reconfirm.captionFirstHalf.discardDraft"),
+        caption: context.languagePicker("modal.reconfirm.caption.discardDraft"),
         handleAction: handleAction
       });
     },

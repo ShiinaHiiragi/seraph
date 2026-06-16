@@ -428,10 +428,10 @@ const en = {
         logout: "You are logging out Seraph. ",
         deleteFile: "You are deleting file {0}. ",
         deleteTask: "You are deleting task {0}. ",
-        discardDraft: "You are leaving Crepe without saving changes. ",
         resetConfig: "You are resetting configs. "
       },
       caption: {
+        discardDraft: "You are leaving Crepe without saving. Click 'Continue' to discard unsaved changes.",
         enableTerminal: "By clicking 'Continue', you acknowledge the risks of using remote PTY and accept full responsibility for any consequences that may result."
       }
     }
