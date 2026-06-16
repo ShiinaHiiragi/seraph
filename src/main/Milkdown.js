@@ -234,6 +234,8 @@ const CrepeEditor = () => {
 
   React.useEffect(() => {
     setCrepeState(0);
+    context.crepeRef.setModified(false);
+
     if (folderName.length > 0) {
       request("GET/utility/crepe/load", {
         type: crepeType,

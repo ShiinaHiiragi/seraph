@@ -153,12 +153,10 @@ const Panel = () => {
     load: (editor, utils) => {
       crepeEditor.current = editor;
       crepeUtils.current = utils;
-      setCrepeModified(false);
     },
     unload: () => {
       crepeEditor.current = null;
       crepeUtils.current = null;
-      setCrepeModified(false);
     },
     isLoaded: () => crepeEditor.current !== null,
     isCreated: () => crepeEditor.current?.status === "Created",
