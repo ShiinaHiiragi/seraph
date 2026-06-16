@@ -219,6 +219,14 @@ const CrepeEditor = () => {
     context.crepeRef.setReadOnly(readOnly);
   }, [context, readOnly]);
 
+  React.useEffect(() => {
+    if (context.crepeRef.modified) {
+      const handler = (event) => event.preventDefault();
+      window.addEventListener("beforeunload", handler);
+      return () => window.removeEventListener("beforeunload", handler);
+    }
+  }, [context.crepeRef.modified]);
+
   // a markdown is savable when
   // - user has logged in
   // - text content is ready
