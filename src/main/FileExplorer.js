@@ -720,8 +720,15 @@ const FileExplorer = (props) => {
           initValue={formPrivateKeyText}
           setValue={setFormPrivateKeyText}
           autoFocus
-          autoComplete="new-password"
-          slotProps={{ input: { type: "password" } }}
+          autoComplete="off"
+          slotProps={{
+            input: {
+              type: "text",
+              style: {
+                WebkitTextSecurity: "disc"
+              }
+            }
+          }}
           placeholder={context.languagePicker("modal.form.decrypt.placeholder")}
           error={formPrivateKeyError}
         />

@@ -235,43 +235,46 @@ const Password = (props) => {
   }, [context, query, password])
 
   return (
-    <Stack spacing={1} direction="row">
-      <Input
-        size="sm"
-        type={inputType}
-        autoComplete="new-password"
-        placeholder={context.languagePicker("header.config.placeholder.password")}
-        sx={{ maxWidth: 240, flexGrow: 1 }}
-        value={password}
-        onChange={(event) => setPassword(event.target.value)}
-        endDecorator={
-          <IconButton
-            onClick={() => {
-              setInputType((inputType) => 
-                inputType === "password" ? "text" : "password"
-              );
-            }}
-          >
-            {inputType === "password"
-              ? <VisibilityIcon />
-              : <VisibilityOffIcon />}
-          </IconButton>
-        }
-      />
-      {password.length > 0
-        && <IconButton
-          loading={loading}
-          variant="plain"
+    <form>
+      <Input type="text" autoComplete="username" sx={{ display: "none" }} />
+      <Stack spacing={1} direction="row">
+        <Input
           size="sm"
-          onClick={reconfirmCaption ? () => context.setModalReconfirm({
-            open: true,
-            caption: reconfirmCaption,
-            handleAction: handleChangePassword
-          }) : handleChangePassword}
-        >
-          <SaveOutlinedIcon />
-        </IconButton>}
-    </Stack>
+          type={inputType}
+          autoComplete="new-password"
+          placeholder={context.languagePicker("header.config.placeholder.password")}
+          sx={{ maxWidth: 240, flexGrow: 1 }}
+          value={password}
+          onChange={(event) => setPassword(event.target.value)}
+          endDecorator={
+            <IconButton
+              onClick={() => {
+                setInputType((inputType) => 
+                  inputType === "password" ? "text" : "password"
+                );
+              }}
+            >
+              {inputType === "password"
+                ? <VisibilityIcon />
+                : <VisibilityOffIcon />}
+            </IconButton>
+          }
+        />
+        {password.length > 0
+          && <IconButton
+            loading={loading}
+            variant="plain"
+            size="sm"
+            onClick={reconfirmCaption ? () => context.setModalReconfirm({
+              open: true,
+              caption: reconfirmCaption,
+              handleAction: handleChangePassword
+            }) : handleChangePassword}
+          >
+            <SaveOutlinedIcon />
+          </IconButton>}
+      </Stack>
+    </form>
   );
 };
 
