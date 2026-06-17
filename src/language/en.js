@@ -453,6 +453,7 @@ const en = {
       },
       caption: {
         discardDraft: "You are leaving Crepe without saving. Click 'Continue' to discard unsaved changes.",
+        changeCipher: "Please note that even if you change the decryption password, files encrypted before the change must still be decrypted using the original password.",
         enableTerminal: "By clicking 'Continue', you acknowledge the risks of using remote PTY and accept full responsibility for any consequences that may result."
       }
     }

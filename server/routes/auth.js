@@ -28,11 +28,7 @@ router.get('/meta', (req, res, next) => {
     const privateFolder = api.fileOperator.readFoldersList(api.dataPath.privateDirPath);
 
     // -> ES: return all metadata except passwords
-    const {
-      password: _password,
-      cipher: _cipher,
-      ...metadata
-    } = api.configOperator.config.metadata;
+    const { password: _, cipher, ...metadata } = api.configOperator.config.metadata;
     req.status.addExecStatus();
     res.send({
       ...req.status.generateReport(),
@@ -40,6 +36,7 @@ router.get('/meta', (req, res, next) => {
       private: privateFolder,
       metadata: {
         ...metadata,
+        cipher: cipher.length > 0,
         platform: process.platform
       },
       clipboard: api.configOperator.config.clipboard,

@@ -206,7 +206,7 @@ const StringInput = (props) => {
 };
 
 const Password = (props) => {
-  const { context, query } = props;
+  const { context, query, reconfirmCaption } = props;
 
   const [password, setPassword] = React.useState("");
   const [inputType, setInputType] = React.useState("password");
@@ -262,7 +262,11 @@ const Password = (props) => {
           loading={loading}
           variant="plain"
           size="sm"
-          onClick={handleChangePassword}
+          onClick={reconfirmCaption ? () => context.setModalReconfirm({
+            open: true,
+            caption: reconfirmCaption,
+            handleAction: handleChangePassword
+          }) : handleChangePassword}
         >
           <SaveOutlinedIcon />
         </IconButton>}
@@ -567,6 +571,11 @@ const SECTIONS = (
             <Password
               context={context}
               query="POST/file/reset"
+              reconfirmCaption={
+                context.metadata.cipher
+                  ? context.languagePicker("modal.reconfirm.caption.changeCipher")
+                  : undefined
+              }
             />
           )
         }
