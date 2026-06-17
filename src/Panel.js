@@ -149,6 +149,8 @@ const PanelLayout = () => {
   const {
     clipboard,
     setClipboard,
+    sortedPublicFolders,
+    sortedPrivateFolders,
     setPublicFolders,
     setPrivateFolders,
     setMetadata,
@@ -186,12 +188,20 @@ const PanelLayout = () => {
           </HeaderField>
           {drawerOpen && (
             <SideDrawer onClose={() => setDrawerOpen(false)}>
-              <Navigation setDrawerOpen={setDrawerOpen} />
+              <Navigation
+                sortedPublicFolders={sortedPublicFolders}
+                sortedPrivateFolders={sortedPrivateFolders}
+                setDrawerOpen={setDrawerOpen}
+              />
             </SideDrawer>
           )}
           <ContentField className="ContentField">
             <NavigationField className="NavigationField">
-              <Navigation setDrawerOpen={setDrawerOpen} />
+              <Navigation
+                sortedPublicFolders={sortedPublicFolders}
+                sortedPrivateFolders={sortedPrivateFolders}
+                setDrawerOpen={setDrawerOpen}
+              />
             </NavigationField>
             <MainField className="MainField">
               <React.Suspense fallback={<Loading />}>
@@ -356,23 +366,22 @@ const Panel = () => {
   return (
     <GlobalContext.Provider
       value={{
-        languagePicker: languagePicker,
-        setModalReconfirm: setModalReconfirm,
-        globalSwitch: globalSwitch,
         isAuthority: isAuthority,
         firstTick: firstTick,
         secondTick: secondTick,
-        sortedPublicFolders: sortedPublicFolders,
-        sortedPrivateFolders: sortedPrivateFolders,
         crepeRef: crepeRef,
         metadata: metadata,
-        setting: setting
+        setting: setting,
+        languagePicker: languagePicker,
+        setModalReconfirm: setModalReconfirm
       }}
     >
       <RouterBridgeContext.Provider
         value={{
           clipboard: clipboard,
           setClipboard: setClipboard,
+          sortedPublicFolders: sortedPublicFolders,
+          sortedPrivateFolders: sortedPrivateFolders,
           setPublicFolders: setPublicFolders,
           setPrivateFolders: setPrivateFolders,
           setMetadata: setMetadata,

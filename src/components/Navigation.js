@@ -19,7 +19,11 @@ import { pathStartWith } from "../interface/constants";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 
 export default function Navigation(props) {
-  const { setDrawerOpen } = props;
+  const {
+    sortedPublicFolders,
+    sortedPrivateFolders,
+    setDrawerOpen
+  } = props;
   const context = React.useContext(GlobalContext);
 
   const navigate = useNavigate();
@@ -76,7 +80,7 @@ export default function Navigation(props) {
                 "& .JoyListItemButton-root": { p: "8px" },
               }}
             >
-              {context.sortedPublicFolders.map((item, index) => (
+              {sortedPublicFolders.map((item, index) => (
                 <ListItem key={index}>
                   <ListItemButton
                     selected={pathStartWith(`/public/${item}`)}
@@ -120,7 +124,7 @@ export default function Navigation(props) {
                 "& .JoyListItemButton-root": { p: "8px" },
               }}
             >
-              {context.sortedPrivateFolders.map((item, index) => (
+              {sortedPrivateFolders.map((item, index) => (
                 <ListItem key={index}>
                   <ListItemButton
                     selected={pathStartWith(`/private/${item}`)}
