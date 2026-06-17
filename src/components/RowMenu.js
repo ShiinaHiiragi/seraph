@@ -313,7 +313,10 @@ export default function RowMenu(props) {
         {fileType !== "directory"
           && folderName.length > 0
           && (
-            <MenuItem onClick={handleEncrypt}>
+            <MenuItem
+              onClick={handleEncrypt}
+              disabled={!context.metadata.cipher}
+            >
               {context.languagePicker("main.folder.rowMenu.encrypt")}
             </MenuItem>
           )}
