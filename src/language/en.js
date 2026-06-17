@@ -360,6 +360,7 @@ const en = {
         extract: "{0} has been extracted to current directory.",
         epub: "{0} has been converted to current directory.",
         delete: "{0} has been deleted.",
+        saveText: "The file has been saved.",
         modTask: "The task has been modified.",
         modTime: "Delete time of the task has been updated.",
         tick: "The task will be deleted in {0} seconds, which can be cancelled by re-ticking the checkbox before the end of its countdown.",

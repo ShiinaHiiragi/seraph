@@ -1,4 +1,5 @@
 import React from "react";
+import { toast } from "sonner";
 import Box from "@mui/joy/Box";
 import Stack from "@mui/joy/Stack";
 import IconButton from "@mui/joy/IconButton";
@@ -289,6 +290,31 @@ const CrepeEditor = () => {
     rawFolderName
   ]);
 
+  const handleSave = React.useCallback(() => {
+    toast.promise(new Promise((resolve, reject) => {
+      const text = context.crepeRef.getText();
+      request(
+        "POST/utility/crepe/save",
+        {
+          type: crepeType,
+          folderName: crepePath.join("/"),
+          filename: crepeTitle,
+          text: text
+        },
+        undefined,
+        reject
+      ).then(() => {
+        setModified(false);
+        setFileContent(text);
+        resolve();
+      })
+    }), {
+      loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
+      success: context.languagePicker("modal.toast.success.saveText"),
+      error: (data) => data
+    });
+  }, [context, crepeType, crepePath, crepeTitle]);
+
   return (
     <RouteField
       display
@@ -319,10 +345,7 @@ const CrepeEditor = () => {
             {savable && modified && <IconButton
               size="sm"
               variant="soft"
-              onClick={() => {
-                // TODO: add saving
-                setModified(false);
-              }}
+              onClick={handleSave}
               sx={{
                 backgroundColor: "transparent",
                 "&:hover": { backgroundColor: "transparent" }
