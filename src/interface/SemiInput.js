@@ -8,6 +8,7 @@ export default function SemiInput(props) {
     initValue,
     setValue,
     offset,
+    selectBasename,
     ...inputProps
   } = props;
 
@@ -20,11 +21,22 @@ export default function SemiInput(props) {
     return () => clearTimeout(timeoutId);
   }, [localValue, offset, setValue]);
 
+  const inputRef = React.useRef(null);
+  React.useEffect(() => {
+    if (selectBasename && inputRef.current) {
+      const val = inputRef.current.value;
+      const dot = val.lastIndexOf(".");
+      inputRef.current.focus();
+      inputRef.current.setSelectionRange(0, dot === -1 ? val.length : dot);
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
     <Input
       {...inputProps}
       value={localValue}
       onChange={(event) => setLocalValue(event.target.value)}
+      slotProps={{ input: { ref: inputRef } }}
     />
   );
 };

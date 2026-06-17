@@ -633,6 +633,7 @@ const FileExplorer = (props) => {
           initValue={formNewFilenameText}
           setValue={setFormNewFilenameText}
           autoFocus
+          selectBasename
           autoComplete="off"
           placeholder={context.languagePicker("modal.form.rename.placeholder")}
         />
