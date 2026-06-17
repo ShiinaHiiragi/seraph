@@ -17,7 +17,9 @@ export default function FileTable(props) {
     type,
     folderName,
     sortedFilesList,
+    setModalFilename,
     setModalRenameOpen,
+    setModalDecryptOpen,
     setFormNewFilenameText,
     setFilesList,
     guard,
@@ -217,7 +219,9 @@ export default function FileTable(props) {
                       type={type}
                       folderName={folderName}
                       filename={item.name}
+                      setModalFilename={setModalFilename}
                       setModalRenameOpen={setModalRenameOpen}
+                      setModalDecryptOpen={setModalDecryptOpen}
                       setFormNewFilenameText={setFormNewFilenameText}
                       setFilesList={setFilesList}
                       setClipboard={setClipboard}

@@ -133,6 +133,9 @@ const FileExplorer = (props) => {
   React.useEffect(() => setGuard((guard) => [search, guard[1]]), [search]);
   React.useEffect(() => setGuard((guard) => [guard[0], filter]), [filter]);
 
+  // used by modal popup
+  const [modalFilename, setModalFilename] = React.useState(null);
+
   // new folder
   const [modalNewOpen, setModalNewOpen] = React.useState(false);
   const [modalNewLoading, setModalNewLoading] = React.useState(false);
@@ -375,10 +378,11 @@ const FileExplorer = (props) => {
   ]);
 
   // states and function for rename
-  const [modalRenameOpen, setModalRenameOpen] = React.useState(null);
+  const [modalRenameOpen, setModalRenameOpen] = React.useState(false);
   const [modalRenameLoading, setModalRenameLoading] = React.useState(false);
   const [formNewFilenameText, setFormNewFilenameText] = React.useState("");
   const handleCloseRename = React.useCallback(() => {
+    setModalFilename(null);
     setModalRenameOpen(false);
     setModalRenameLoading(false);
   }, [ ]);
@@ -395,7 +399,7 @@ const FileExplorer = (props) => {
       return;
     }
 
-    const originFilename = modalRenameOpen, newFilename = formNewFilenameText;
+    const originFilename = modalFilename, newFilename = formNewFilenameText;
     setModalRenameLoading(true);
     toast.promise(new Promise((resolve, reject) => {
       request(
@@ -442,11 +446,69 @@ const FileExplorer = (props) => {
     context,
     type,
     folderName,
-    modalRenameOpen,
+    modalFilename,
     formNewFilenameText,
     setPublicFolders,
     setPrivateFolders,
     handleCloseRename
+  ]);
+
+  // states and function for rename
+  const [modalDecryptOpen, setModalDecryptOpen] = React.useState(false);
+  const [modalDecryptLoading, setModalDecryptLoading] = React.useState(false);
+  const [formPrivateKeyText, setFormPrivateKeyText] = React.useState("");
+  const [formPrivateKeyError, setFormPrivateKeyError] = React.useState(false);
+  const handleCloseDecrypt = React.useCallback(() => {
+    setModalFilename(null);
+    setModalDecryptOpen(false);
+    setModalDecryptLoading(false);
+    setFormPrivateKeyText("");
+    setFormPrivateKeyError(false);
+  }, [ ]);
+
+  const handleDecrypt = React.useCallback(() => {
+    setModalDecryptLoading(true);
+    toast.promise(new Promise((resolve, reject) => {
+      request(
+        "POST/file/decrypt",
+        {
+          type: type,
+          folderName: folderName,
+          filename: modalFilename,
+          privateKey: formPrivateKeyText
+        },
+        {
+          "": () => setModalDecryptLoading(false),
+          [Status.execErrCode.InvalidDecrypt]: () => setFormPrivateKeyError(true)
+        },
+        reject
+      )
+        .then((data) => {
+          const { statusCode, errorCode, ...newInfo } = data;
+          if (pathStartWith(`/${type}/${folderName}`)) {
+            setFilesList((filesList) => [
+              ...filesList,
+              newInfo
+            ]);
+          }
+          handleCloseDecrypt();
+          resolve();
+        })
+        .finally(() => setModalDecryptLoading(false));
+    }), {
+      loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
+      success: context
+        .languagePicker("modal.toast.success.decrypt")
+        .format(modalFilename),
+      error: (data) => data
+    })
+  }, [
+    context,
+    type,
+    folderName,
+    modalFilename,
+    formPrivateKeyText,
+    handleCloseDecrypt
   ]);
 
   return (
@@ -590,7 +652,9 @@ const FileExplorer = (props) => {
             type={type}
             folderName={folderName}
             sortedFilesList={sortedFilesList}
+            setModalFilename={setModalFilename}
             setModalRenameOpen={setModalRenameOpen}
+            setModalDecryptOpen={setModalDecryptOpen}
             setFormNewFilenameText={setFormNewFilenameText}
             setFilesList={setFilesList}
             guard={guard}
@@ -604,7 +668,9 @@ const FileExplorer = (props) => {
             type={type}
             folderName={folderName}
             sortedFilesList={sortedFilesList}
+            setModalFilename={setModalFilename}
             setModalRenameOpen={setModalRenameOpen}
+            setModalDecryptOpen={setModalDecryptOpen}
             setFormNewFilenameText={setFormNewFilenameText}
             setFilesList={setFilesList}
             guard={guard}
@@ -620,7 +686,7 @@ const FileExplorer = (props) => {
           caption={context.languagePicker("universal.placeholder.unexist.caption")}
         />}
       <ModalForm
-        open={Boolean(modalRenameOpen)}
+        open={modalRenameOpen}
         loading={modalRenameLoading}
         disabled={modalRenameDisabled}
         handleClose={handleCloseRename}
@@ -636,6 +702,26 @@ const FileExplorer = (props) => {
           selectBasename
           autoComplete="off"
           placeholder={context.languagePicker("modal.form.rename.placeholder")}
+        />
+      </ModalForm>
+      <ModalForm
+        open={modalDecryptOpen}
+        loading={modalDecryptLoading}
+        disabled={formPrivateKeyText.length === 0}
+        handleClose={handleCloseDecrypt}
+        handleClick={handleDecrypt}
+        title={context.languagePicker("modal.form.decrypt.title")}
+        caption={context.languagePicker("modal.form.decrypt.caption")}
+        button={context.languagePicker("universal.button.submit")}
+      >
+        <SemiInput
+          initValue={formPrivateKeyText}
+          setValue={setFormPrivateKeyText}
+          autoFocus
+          autoComplete="off"
+          placeholder={context.languagePicker("modal.form.decrypt.placeholder")}
+          error={formPrivateKeyError}
+          slotProps={{ input: { type: "password" } }}
         />
       </ModalForm>
       <ModalForm

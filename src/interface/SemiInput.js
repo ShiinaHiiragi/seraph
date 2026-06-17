@@ -36,7 +36,10 @@ export default function SemiInput(props) {
       {...inputProps}
       value={localValue}
       onChange={(event) => setLocalValue(event.target.value)}
-      slotProps={{ input: { ref: inputRef } }}
+      slotProps={{
+        input: { ref: inputRef },
+        ...inputProps.slotProps
+      }}
     />
   );
 };

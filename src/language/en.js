@@ -423,6 +423,11 @@ const en = {
         caption: "Naming restrictions depend on platform on which server locates and try not to modify the extension name as much as possible.",
         placeholder: "New Filename"
       },
+      decrypt: {
+        title: "Decrypting",
+        caption: "Please enter the decryption password set when encrypting this file.",
+        placeholder: "Decryption Password"
+      },
       todo: {
         new: "Create New Task",
         edit: "Edit Task",

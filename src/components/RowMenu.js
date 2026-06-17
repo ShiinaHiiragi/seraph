@@ -21,7 +21,9 @@ export default function RowMenu(props) {
     type,
     folderName,
     filename,
+    setModalFilename,
     setModalRenameOpen,
+    setModalDecryptOpen,
     setFormNewFilenameText,
     setFilesList,
     setClipboard,
@@ -32,9 +34,15 @@ export default function RowMenu(props) {
   const context = React.useContext(GlobalContext);
 
   const handleToggleRename = React.useCallback(() => {
+    setModalFilename(filename)
     setFormNewFilenameText(filename);
-    setModalRenameOpen(filename);
-  }, [setFormNewFilenameText, setModalRenameOpen, filename]);
+    setModalRenameOpen(true);
+  }, [setModalFilename, setFormNewFilenameText, setModalRenameOpen, filename]);
+
+  const handleToggleDecrypt = React.useCallback(() => {
+    setModalFilename(filename);
+    setModalDecryptOpen(true);
+  }, [setModalFilename, setModalDecryptOpen, filename]);
 
   const handleCopy = React.useCallback(() => {
     toast.promise(new Promise((resolve, reject) => {
@@ -151,39 +159,6 @@ export default function RowMenu(props) {
       loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
       success: context
         .languagePicker("modal.toast.success.encrypt")
-        .format(filename),
-      error: (data) => data
-    })
-  }, [
-    context,
-    type,
-    filename,
-    folderName,
-    setFilesList
-  ]);
-
-  const handleDecrypt = React.useCallback(() => {
-    toast.promise(new Promise((resolve, reject) => {
-      request("POST/file/decrypt", {
-        type: type,
-        folderName: folderName,
-        filename: filename,
-        privateKey: "123"
-      }, undefined, reject)
-        .then((data) => {
-          const { statusCode, errorCode, ...newInfo } = data;
-          if (pathStartWith(`/${type}/${folderName}`)) {
-            setFilesList((filesList) => [
-              ...filesList,
-              newInfo
-            ]);
-          }
-          resolve();
-        })
-    }), {
-      loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
-      success: context
-        .languagePicker("modal.toast.success.decrypt")
         .format(filename),
       error: (data) => data
     })
@@ -345,7 +320,7 @@ export default function RowMenu(props) {
           && filename.endsWith(".srph")
           && folderName.length > 0
           && (
-            <MenuItem onClick={handleDecrypt}>
+            <MenuItem onClick={handleToggleDecrypt}>
               {context.languagePicker("main.folder.rowMenu.decrypt")}
             </MenuItem>
           )}

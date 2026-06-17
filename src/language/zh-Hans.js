@@ -423,6 +423,11 @@ const zhHans = {
         caption: "命名限制取决于服务器所在平台，尽量不要修改扩展名。",
         placeholder: "新文件名"
       },
+      decrypt: {
+        title: "解密",
+        caption: "请输入加密此文件时设置的解密密码。",
+        placeholder: "解密密码"
+      },
       todo: {
         new: "创建新任务",
         edit: "编辑任务",
