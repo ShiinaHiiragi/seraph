@@ -367,55 +367,55 @@ const alphabet = Array
 const monospaceFonts = [
   {
     name: "Noto Sans Mono",
-    url: "https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@100..900&display=swap"
+    url: "/font/css2?family=Noto+Sans+Mono:wght@100..900&display=swap"
   },
   {
     name: "Roboto Mono",
-    url: "https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap"
+    url: "/font/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap"
   },
   {
     name: "JetBrains Mono",
-    url: "https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+    url: "/font/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
   },
   {
     name: "IBM Plex Mono",
-    url: "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+    url: "/font/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
   },
   {
     name: "Ubuntu Mono",
-    url: "https://fonts.googleapis.com/css2?family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+    url: "/font/css2?family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
   },
   {
     name: "Space Mono",
-    url: "https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+    url: "/font/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
   },
   {
     name: "PT Mono",
-    url: "https://fonts.googleapis.com/css2?family=PT+Mono&display=swap"
+    url: "/font/css2?family=PT+Mono&display=swap"
   },
   {
     name: "DM Mono",
-    url: "https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap"
+    url: "/font/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap"
   },
   {
     name: "Anonymous Pro",
-    url: "https://fonts.googleapis.com/css2?family=Anonymous+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+    url: "/font/css2?family=Anonymous+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap"
   },
   {
     name: "Source Code Pro",
-    url: "https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap"
+    url: "/font/css2?family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap"
   },
   {
     name: "Fira Code",
-    url: "https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap"
+    url: "/font/css2?family=Fira+Code:wght@300..700&display=swap"
   },
   {
     name: "Cascadia Code",
-    url: "https://fonts.googleapis.com/css2?family=Cascadia+Code:ital,wght@0,200..700;1,200..700&display=swap"
+    url: "/font/css2?family=Cascadia+Code:ital,wght@0,200..700;1,200..700&display=swap"
   },
   {
     name: "Inconsolata",
-    url: "https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&display=swap"
+    url: "/font/css2?family=Inconsolata:wght@200..900&display=swap"
   }
 ];
 

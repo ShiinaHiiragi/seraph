@@ -16,6 +16,7 @@ let configRouter = require('./routes/config');
 
 let crepeRouter = require('./routes/crepe');
 let todoRouter = require('./routes/todo');
+let fontRouter = require('./routes/font');
 
 let api = require('./api');
 let app = express();
@@ -60,6 +61,7 @@ app.use((req, res, next) => {
 });
 
 // express-router
+app.use('/font', fontRouter);
 app.use('/public', publicRouter);
 app.use('/private', privateRouter);
 
