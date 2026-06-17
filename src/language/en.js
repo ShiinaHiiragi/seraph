@@ -12,7 +12,7 @@ const en = {
         download: "Export Setting",
         downloadButton: "Export"
       },
-      "account": {
+      account: {
         title: "Account",
         token: "Token Expiry",
         tokenTip: "Each request extends the token expiration time (excluding terminal WebSocket connections).",

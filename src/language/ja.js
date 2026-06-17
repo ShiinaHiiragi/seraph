@@ -12,7 +12,7 @@ const ja = {
         download: "セッティングをエクスポート",
         downloadButton: "エクスポート"
       },
-      "account": {
+      account: {
         title: "アカウント",
         token: "トークンの有効期間",
         tokenTip: "リクエストごとにトークンの有効期限がアップデートされます（ターミナルのウェブソケットのコネクションを除く）",
@@ -94,61 +94,61 @@ const ja = {
           240: "4 分",
           300: "5 分"
         },
-        "cursor": "カーソル",
-        "cursorBlink": "カーソルをブリンク",
-        "reflowCursorLine": "カーソルを含む行をリフロー",
-        "cursorStyle": "アクティブカーソルのスタイル",
-        "activeStyleOption": {
-          "block": "ブロック",
-          "bar": "バー",
-          "underline": "アンダーライン"
+        cursor: "カーソル",
+        cursorBlink: "カーソルをブリンク",
+        reflowCursorLine: "カーソルを含む行をリフロー",
+        cursorStyle: "アクティブカーソルのスタイル",
+        activeStyleOption: {
+          block: "ブロック",
+          bar: "バー",
+          underline: "アンダーライン"
         },
-        "cursorInactiveStyle": "インアクティブカーソルのスタイル",
-        "inactiveStyleOption": {
-          "outline": "アウトライン",
-          "block": "ブロック",
-          "bar": "バー",
-          "underline": "アンダーライン",
-          "none": "なし"
+        cursorInactiveStyle: "インアクティブカーソルのスタイル",
+        inactiveStyleOption: {
+          outline: "アウトライン",
+          block: "ブロック",
+          bar: "バー",
+          underline: "アンダーライン",
+          none: "なし"
         },
-        "font": "フォント",
-        "fontSize": "フォントサイズ",
-        "fontFamily": "ターミナルフォント",
-        "fontWeight": "ノーマルテキストのフォントウェイト",
-        "fontWeightBold": "ボールドテキストのフォントウェイト",
-        "text": "テキスト",
-        "letterSpacing": "レタースペーシング",
-        "lineHeight": "ラインハイト",
-        "contrastRatio": "最小コントラスト比",
-        "wordSeparator": "ワードセパレーター",
-        "scroll": "スクロール",
-        "scrollback": "スクロールバック量",
-        "scrollNormal": "ノーマルスクロール感度",
-        "scrollFast": "ファストスクロール感度",
-        "theme": "テーマ",
-        "themeTransparency": "トランスペアレントを有効にする",
-        "themeOption": {
-          "selectionBackground": "選択範囲のバックグラウンドカラー",
-          "background": "バックグラウンドカラー",
-          "foreground": "フォアグラウンドカラー",
-          "cursor": "カーソルカラー",
-          "cursorAccent": "カーソルアクセントカラー",
-          "black": "ブラック",
-          "blue": "ブルー",
-          "cyan": "シアン",
-          "green": "グリーン",
-          "magenta": "マゼンタ",
-          "red": "レッド",
-          "white": "ホワイト",
-          "yellow": "イエロー",
-          "brightBlack": "ブライトブラック",
-          "brightBlue": "ブライトブルー",
-          "brightCyan": "ブライトシアン",
-          "brightGreen": "ブライトグリーン",
-          "brightMagenta": "ブライトマゼンタ",
-          "brightRed": "ブライトレッド",
-          "brightWhite": "ブライトホワイト",
-          "brightYellow": "ブライトイエロー"
+        font: "フォント",
+        fontSize: "フォントサイズ",
+        fontFamily: "ターミナルフォント",
+        fontWeight: "ノーマルテキストのフォントウェイト",
+        fontWeightBold: "ボールドテキストのフォントウェイト",
+        text: "テキスト",
+        letterSpacing: "レタースペーシング",
+        lineHeight: "ラインハイト",
+        contrastRatio: "最小コントラスト比",
+        wordSeparator: "ワードセパレーター",
+        scroll: "スクロール",
+        scrollback: "スクロールバック量",
+        scrollNormal: "ノーマルスクロール感度",
+        scrollFast: "ファストスクロール感度",
+        theme: "テーマ",
+        themeTransparency: "トランスペアレントを有効にする",
+        themeOption: {
+          selectionBackground: "選択範囲のバックグラウンドカラー",
+          background: "バックグラウンドカラー",
+          foreground: "フォアグラウンドカラー",
+          cursor: "カーソルカラー",
+          cursorAccent: "カーソルアクセントカラー",
+          black: "ブラック",
+          blue: "ブルー",
+          cyan: "シアン",
+          green: "グリーン",
+          magenta: "マゼンタ",
+          red: "レッド",
+          white: "ホワイト",
+          yellow: "イエロー",
+          brightBlack: "ブライトブラック",
+          brightBlue: "ブライトブルー",
+          brightCyan: "ブライトシアン",
+          brightGreen: "ブライトグリーン",
+          brightMagenta: "ブライトマゼンタ",
+          brightRed: "ブライトレッド",
+          brightWhite: "ブライトホワイト",
+          brightYellow: "ブライトイエロー"
         },
         control: "制御コード"
       },
@@ -496,8 +496,8 @@ const ja = {
         caption: "必要であればギットハブでニューイシューをサブミットしてください。"
       },
       disabled: {
-        "title": "フィーチャーが無効",
-        "caption": "このフィーチャーをアクセスするには、セッティングで有効にしてください。"
+        title: "フィーチャーが無効",
+        caption: "このフィーチャーをアクセスするには、セッティングで有効にしてください。"
       }
     }
   }
