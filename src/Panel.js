@@ -322,7 +322,6 @@ const Panel = () => {
   const crepeEditor = React.useRef(null);
   const crepeUtils = React.useRef(null);
   const crepeSnapshot = React.useRef(null);
-  const [crepeModified, setCrepeModified] = React.useState(false);
 
   const switchAction = React.useCallback((actionName) => (...args) => {
     if (crepeEditor.current?.status === "Created") {
@@ -338,7 +337,6 @@ const Panel = () => {
     editor: crepeEditor,
     utils: crepeUtils,
     snapshot: crepeSnapshot,
-    modified: crepeModified,
     load: (editor, utils) => {
       crepeEditor.current = editor;
       crepeUtils.current = utils;
@@ -351,9 +349,8 @@ const Panel = () => {
     isCreated: () => crepeEditor.current?.status === "Created",
     getText: switchAction("getMarkdown"),
     setText: switchAction("replaceAll"),
-    setReadOnly: switchAction("actionSetReadOnly"),
-    setModified: setCrepeModified
-  }), [crepeModified, switchAction]);
+    setReadOnly: switchAction("actionSetReadOnly")
+  }), [switchAction]);
 
   return (
     <GlobalContext.Provider

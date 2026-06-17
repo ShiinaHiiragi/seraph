@@ -80,7 +80,7 @@ const MaildownField = styled(Box)(({ theme }) => ({
 }));
 
 const CrepeEditorInner = (props) => {
-  const { readOnly, fileContent } = props;
+  const { readOnly, fileContent, setModified } = props;
   const context = React.useContext(GlobalContext);
 
   useEditor((root) => {
@@ -126,7 +126,7 @@ const CrepeEditorInner = (props) => {
         ctx.get(listenerCtx).markdownUpdated(() => {
           // TODO: word counter for CJK
           // TODO: more precised modified flag
-          context.crepeRef.setModified(true);
+          setModified(true);
           // console.log(context.crepeRef.getText().length);
         });
       })
@@ -180,6 +180,7 @@ const CrepeEditor = () => {
   const [fileContent, setFileContent] = React.useState(null);
 
   const [readOnly, setReadOnly] = React.useState(true);
+  const [modified, setModified] = React.useState(false);
 
   const { "*": rawFolderName } = useParams();
   const folderName = React.useMemo(
@@ -220,14 +221,14 @@ const CrepeEditor = () => {
   }, [context, readOnly]);
 
   React.useEffect(() => {
-    if (context.crepeRef.modified) {
+    if (modified) {
       const handler = (event) => event.preventDefault();
       window.addEventListener("beforeunload", handler);
       return () => window.removeEventListener("beforeunload", handler);
     }
-  }, [context.crepeRef.modified]);
+  }, [modified]);
 
-  const blocker = useBlocker(context.crepeRef.modified);
+  const blocker = useBlocker(modified);
   const blockerActiveRef = React.useRef(false);
 
   React.useEffect(() => {
@@ -238,7 +239,7 @@ const CrepeEditor = () => {
         caption: context.languagePicker("modal.reconfirm.caption.discardDraft"),
         handleAction: () => {
           blockerActiveRef.current = false;
-          context.crepeRef.setModified(false);
+          setModified(false);
           blocker.proceed();
         }
       });
@@ -268,7 +269,7 @@ const CrepeEditor = () => {
 
   React.useEffect(() => {
     setCrepeState(0);
-    context.crepeRef.setModified(false);
+    setModified(false);
 
     if (folderName.length > 0) {
       request("GET/utility/crepe/load", {
@@ -289,9 +290,6 @@ const CrepeEditor = () => {
       setFileContent("");
       setReadOnly(false);
     }
-
-    // remove state on unmount
-    return () => context.crepeRef.setModified(false);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     // check if
@@ -328,12 +326,12 @@ const CrepeEditor = () => {
             >
               {readOnly ? <EditOffOutlinedIcon /> : <EditOutlinedIcon/>}
             </IconButton>
-            {savable && context.crepeRef.modified && <IconButton
+            {savable && modified && <IconButton
               size="sm"
               variant="soft"
               onClick={() => {
                 // TODO: add saving
-                context.crepeRef.setModified(false);
+                setModified(false);
               }}
               sx={{
                 backgroundColor: "transparent",
@@ -360,6 +358,7 @@ const CrepeEditor = () => {
             <CrepeEditorInner
               readOnly={readOnly}
               fileContent={fileContent}
+              setModified={setModified}
             />
           </MilkdownProvider>
         </MaildownField>}
