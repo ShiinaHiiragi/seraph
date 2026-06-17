@@ -567,8 +567,8 @@ const FileExplorer = (props) => {
                   setValue={setSearch}
                   offset={reactionInterval.slow}
                   autoComplete="off"
-                  size="sm"
                   placeholder={context.languagePicker("main.folder.viewRegulate.search")}
+                  size="sm"
                   startDecorator={<SearchIcon />}
                 />
               </FormControl>
@@ -700,8 +700,8 @@ const FileExplorer = (props) => {
         <SemiInput
           initValue={formNewFilenameText}
           setValue={setFormNewFilenameText}
-          autoFocus
           selectBasename
+          autoFocus
           autoComplete="off"
           placeholder={context.languagePicker("modal.form.rename.placeholder")}
         />
@@ -720,10 +720,10 @@ const FileExplorer = (props) => {
           initValue={formPrivateKeyText}
           setValue={setFormPrivateKeyText}
           autoFocus
-          maskOnly
+          autoComplete="new-password"
+          slotProps={{ input: { type: "password" } }}
           placeholder={context.languagePicker("modal.form.decrypt.placeholder")}
           error={formPrivateKeyError}
-          slotProps={{ input: { type: "password" } }}
         />
       </ModalForm>
       <ModalForm
@@ -740,7 +740,6 @@ const FileExplorer = (props) => {
           initValue={formNewFolderNameText}
           setValue={setFormNewFolderNameText}
           autoFocus
-          autoComplete="off"
           placeholder={context.languagePicker("modal.form.new.placeholder")}
         />
       </ModalForm>

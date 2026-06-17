@@ -138,6 +138,9 @@ export default function Init(props) {
                 initValue={formPasswordText}
                 setValue={setFormPasswordText}
                 autoFocus
+                autoComplete="new-password"
+                slotProps={{ input: { type: formPasswordType } }}
+                placeholder={context.languagePicker("modal.init.password.placeholder")}
                 endDecorator={
                   <IconButton
                     onClick={() => {
@@ -153,9 +156,6 @@ export default function Init(props) {
                       : <VisibilityOffIcon />}
                   </IconButton>
                 }
-                placeholder={context.languagePicker("modal.init.password.placeholder")}
-                autoComplete="new-password"
-                slotProps={{ input: { type: formPasswordType } }}
               />
             </FormControl>
           </form>
