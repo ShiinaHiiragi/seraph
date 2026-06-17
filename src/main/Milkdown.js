@@ -18,6 +18,7 @@ import { $prose } from "@milkdown/kit/utils";
 // import { emoji } from "@milkdown/plugin-emoji";
 import EditOffOutlinedIcon from "@mui/icons-material/EditOffOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
 // import CloudOutlinedIcon from "@mui/icons-material/CloudOutlined";
 // import CloudDoneOutlinedIcon from "@mui/icons-material/CloudDoneOutlined";
@@ -290,6 +291,17 @@ const CrepeEditor = () => {
     rawFolderName
   ]);
 
+  const handleDownload = React.useCallback(() => {
+    const text = modified ? context.crepeRef.getText() : fileContent;
+    const blob = new Blob([text], { type: "text/markdown" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = crepeTitle;
+    a.click();
+    URL.revokeObjectURL(url);
+  }, [context, modified, fileContent, crepeTitle]);
+
   const handleSave = React.useCallback(() => {
     toast.promise(new Promise((resolve, reject) => {
       const text = context.crepeRef.getText();
@@ -315,6 +327,11 @@ const CrepeEditor = () => {
     });
   }, [context, crepeType, crepePath, crepeTitle]);
 
+  const buttonStyle = React.useMemo(() => ({
+    backgroundColor: "transparent",
+    "&:hover": { backgroundColor: "transparent" }
+  }), []);
+
   return (
     <RouteField
       display
@@ -330,26 +347,28 @@ const CrepeEditor = () => {
             level="h3"
             children={crepeTitle}
           />
-          <Stack direction="row" sx={{ position: "relative", top: "2px" }}>
+          <Stack direction="row" sx={{ position: "relative", top: "1px" }}>
             <IconButton
               size="sm"
               variant="soft"
               onClick={() => setReadOnly((readOnly) => !readOnly)}
-              sx={{
-                backgroundColor: "transparent",
-                "&:hover": { backgroundColor: "transparent" }
-              }}
+              sx={buttonStyle}
             >
               {readOnly ? <EditOffOutlinedIcon /> : <EditOutlinedIcon/>}
+            </IconButton>
+            <IconButton
+              size="sm"
+              variant="soft"
+              onClick={handleDownload}
+              sx={buttonStyle}
+            >
+              <FileDownloadOutlinedIcon />
             </IconButton>
             {savable && modified && <IconButton
               size="sm"
               variant="soft"
               onClick={handleSave}
-              sx={{
-                backgroundColor: "transparent",
-                "&:hover": { backgroundColor: "transparent" }
-              }}
+              sx={buttonStyle}
             >
               <SaveRoundedIcon />
             </IconButton>}
