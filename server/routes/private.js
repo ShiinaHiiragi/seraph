@@ -32,7 +32,10 @@ router.get('/*/:filename', (req, res, next) => {
 
   // -> no code: return file directly
   if (download === '1') {
-    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.setHeader(
+      'Content-Disposition',
+      `attachment; filename*=UTF-8''${encodeURIComponent(filename)}`
+    );
   }
   res.sendFile(filePath, { dotfiles: 'allow' });
   return;
