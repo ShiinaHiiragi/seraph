@@ -206,7 +206,7 @@ const StringInput = (props) => {
 };
 
 const Password = (props) => {
-  const { context } = props;
+  const { context, query } = props;
 
   const [password, setPassword] = React.useState("");
   const [inputType, setInputType] = React.useState("password");
@@ -216,7 +216,7 @@ const Password = (props) => {
     setLoading(true)
     toast.promise(new Promise((resolve, reject) => {
       request(
-        "POST/auth/reset",
+        query,
         { password: password },
         { "": () => setLoading(false) },
         reject
@@ -231,7 +231,7 @@ const Password = (props) => {
       success: () => context.languagePicker("modal.toast.success.setting"),
       error: (data) => data
     })
-  }, [context, password])
+  }, [context, query, password])
 
   return (
     <Stack spacing={1} direction="row">
@@ -239,7 +239,7 @@ const Password = (props) => {
         size="sm"
         type={inputType}
         autoComplete="new-password"
-        placeholder={context.languagePicker("header.config.account.passwordPlaceholder")}
+        placeholder={context.languagePicker("header.config.placeholder.password")}
         sx={{ maxWidth: 240, flexGrow: 1 }}
         value={password}
         onChange={(event) => setPassword(event.target.value)}
@@ -377,7 +377,12 @@ const SECTIONS = (
         },
         {
           key: context.languagePicker("header.config.account.password"),
-          value: <Password context={context} />
+          value: (
+            <Password
+              context={context}
+              query="POST/auth/reset"
+            />
+          )
         },
       ]
     },
@@ -548,6 +553,21 @@ const SECTIONS = (
                 120
               )}
             </Stack>
+          )
+        }
+      ]
+    },
+    {
+      id: settingField.file,
+      label: context.languagePicker("header.config.file.title"),
+      items: [
+        {
+          key: context.languagePicker("header.config.file.cipher"),
+          value: (
+            <Password
+              context={context}
+              query="POST/file/reset"
+            />
           )
         }
       ]

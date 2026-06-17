@@ -352,6 +352,7 @@ const settingField = {
   general: "general",
   account: "account",
   welcome: "welcome",
+  file: "file",
   terminal: "terminal",
   todo: "todo",
   extension: "extension",

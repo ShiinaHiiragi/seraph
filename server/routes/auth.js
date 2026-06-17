@@ -1,3 +1,4 @@
+let assert = require('assert');
 let express = require('express');
 let api = require('../api');
 let router = express.Router();
@@ -118,6 +119,7 @@ router.post('/reset', (req, res, next) => {
   }
 
   const { password } = req.body;
+  assert(password.length > 0);
   api.configOperator.savePassword(password);
 
   // -> ES: no extra info

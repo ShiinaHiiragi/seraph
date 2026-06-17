@@ -2,6 +2,7 @@ let express = require('express');
 let path = require('path');
 let fs = require('fs');
 let fse = require('fs-extra')
+let assert = require('assert');
 let child = require('child_process');
 let AdmZip = require('adm-zip');
 let iconv = require('iconv-lite');
@@ -640,6 +641,23 @@ router.post('/decrypt', (req, res, next) => {
     ...req.status.generateReport(),
     ...api.fileOperator.readFileInfo(folderPath, newFilename)
   });
+  return;
+});
+
+router.post('/reset', (req, res, next) => {
+  if (req.status.notAuthSuccess()) {
+    // -> EF_IT or abnormal request
+    next(api.errorStreamControl);
+    return;
+  }
+
+  const { password: privateKey } = req.body;
+  assert(privateKey.length > 0);
+  api.configOperator.saveCipher(privateKey);
+
+  // -> ES: no extra info
+  req.status.addExecStatus();
+  res.send(req.status.generateReport());
   return;
 });
 

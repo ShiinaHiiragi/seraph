@@ -23,8 +23,7 @@ const zhHans = {
           1440: "1 天",
           2880: "2 天"
         },
-        password: "更换登录密码",
-        passwordPlaceholder: "输入后请保存",
+        password: "更换登录密码"
       },
       welcome: {
         title: "仪表盘",
@@ -62,6 +61,10 @@ const zhHans = {
           priority: "优先级"
         },
         processCount: "进程数"
+      },
+      file: {
+        title: "文件",
+        cipher: "更换解密密码"
       },
       terminal: {
         title: "终端",
@@ -202,6 +205,9 @@ const zhHans = {
         outHTML: "将 Markdown 转换为 HTML",
         outVert: "将 HTML 版式设为竖排",
         outKeep: "保留转换前的 Markdown 文件"
+      },
+      placeholder: {
+        password: "输入后请保存"
       },
       appendix: {
         reload: "（需要重新加载）"

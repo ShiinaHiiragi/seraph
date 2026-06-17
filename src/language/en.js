@@ -23,8 +23,7 @@ const en = {
           1440: "1 day",
           2880: "2 day"
         },
-        password: "Change Login Password",
-        passwordPlaceholder: "Please save after input",
+        password: "Change Login Password"
       },
       welcome: {
         title: "Dashboard",
@@ -62,6 +61,10 @@ const en = {
           priority: "Priority"
         },
         processCount: "Number of Processes"
+      },
+      file: {
+        title: "Files",
+        cipher: "Change Decryption Password"
       },
       terminal: {
         title: "Terminal",
@@ -202,6 +205,9 @@ const en = {
         outHTML: "Convert markdown to HTML",
         outVert: "Make HTML text vertical",
         outKeep: "Keep intermediate markdown files"
+      },
+      placeholder: {
+        password: "Please save after input"
       },
       appendix: {
         reload: " (reload required)"

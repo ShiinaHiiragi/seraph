@@ -23,8 +23,7 @@ const ja = {
           1440: "1 日",
           2880: "2 日"
         },
-        password: "ログインパスワードを変更",
-        passwordPlaceholder: "入力後にセーブ",
+        password: "ログインパスワードを変更"
       },
       welcome: {
         title: "ダッシュボード",
@@ -62,6 +61,10 @@ const ja = {
           priority: "優先度順"
         },
         processCount: "プロセス数"
+      },
+      file: {
+        title: "ファイル",
+        cipher: "デクリプトパスワードを変更"
       },
       terminal: {
         title: "ターミナル",
@@ -202,6 +205,9 @@ const ja = {
         outHTML: "Markdown を HTML にコンバートする",
         outVert: "HTML テキストをバーティカルにする",
         outKeep: "中間 Markdown ファイルをキープする"
+      },
+      placeholder: {
+        password: "入力後にセーブ"
       },
       appendix: {
         reload: "（リロードが必要）"
