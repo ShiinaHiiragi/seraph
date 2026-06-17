@@ -317,13 +317,6 @@ export default function RowMenu(props) {
         <MoreVertRoundedIcon sx={{ display: { xs: "inline-flex", sm: "none" } }} />
       </MenuButton>
       <Menu size="sm" sx={{ minWidth: 140 }}>
-        <MenuItem
-          component="a"
-          target="_blank"
-          href={new URL(`/${type}${folderName.length ? "/" : ""}${encodePath(folderName)}/${encodeURIComponent(filename)}`, serverBaseURL).href + "?download=1"}
-        >
-          {context.languagePicker("main.folder.rowMenu.download")}
-        </MenuItem>
         <MenuItem onClick={handleToggleRename}>
           {context.languagePicker("main.folder.rowMenu.rename")}
         </MenuItem>
@@ -332,6 +325,13 @@ export default function RowMenu(props) {
         </MenuItem>
         <MenuItem onClick={handleCut}>
           {context.languagePicker("main.folder.rowMenu.cut")}
+        </MenuItem>
+        <MenuItem
+          component="a"
+          target="_blank"
+          href={new URL(`/${type}${folderName.length ? "/" : ""}${encodePath(folderName)}/${encodeURIComponent(filename)}`, serverBaseURL).href + "?download=1"}
+        >
+          {context.languagePicker("main.folder.rowMenu.download")}
         </MenuItem>
         {folderName.length > 0 && <Divider />}
         {fileType !== "directory"

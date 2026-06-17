@@ -302,6 +302,7 @@ const ja = {
       viewRegulate: {
         all: "オール",
         unknown: "不明",
+        encrypt: "エンクリプテッドファイル",
         directory: "ディレクトリ",
         search: "ファイル名で検索",
         filter: "フィルター",
@@ -386,6 +387,8 @@ const ja = {
         identifierConflict: "ネーミング識別子競合なので先に {0} をリネームまたはデリートしてください。",
         fileModuleError: "ファイルオペレーションモジュールでエクセプションが発生しました。",
         passwordUnexist: "デクリプトパスワードがセットされていません。",
+        invalidEncrypt: "無効な .srph ファイルです。",
+        invalidDecrypt: "パスワードが無効か、ファイルが改ざんされているため、デクリプトは失敗しました。",
         environmentMissing: "エクステンションモジュールのエンヴァイロメントゥッの事前チェックにがフェイルしました。詳細はコンソールで確認してください。",
         extensionError: "内部エクステンションモジュールでエクセプションが発生しました。詳細はコンソールで確認してください。",
         duplicateRequest: "デュープリケイト・リクエスト: オペレーションのフリークエンシーを下げてください。"

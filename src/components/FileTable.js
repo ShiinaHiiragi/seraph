@@ -193,10 +193,12 @@ export default function FileTable(props) {
                 </td>
                 <td>
                   <Typography level="body-xs">
-                    {item.type === "unknown"
-                      ? context.languagePicker("main.folder.viewRegulate.unknown")
-                      : item.type === "directory"
+                    {item.type === "directory"
                       ? context.languagePicker("main.folder.viewRegulate.directory")
+                      : item.name.endsWith(".srph")
+                      ? context.languagePicker("main.folder.viewRegulate.encrypt")
+                      : item.type === "unknown"
+                      ? context.languagePicker("main.folder.viewRegulate.unknown")
                       : item.type}
                   </Typography>
                 </td>

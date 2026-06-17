@@ -280,6 +280,14 @@ const SERAPH_MAGIC = Buffer.from('535250480100', 'hex');
 const X25519_PKCS8_HEADER = Buffer.from('302e020100300506032b656e04220420', 'hex');
 const X25519_SPKI_HEADER = Buffer.from('302a300506032b656e032100', 'hex');
 
+function APIException(code) {
+  const err = new Error();
+  err.name = 'APIException';
+  err.code = code;
+  Object.setPrototypeOf(err, APIException.prototype);
+  return err;
+}
+
 const fileOperator = {
   tempPrefix: 'seraph-',
   operateInTemp: (handleOperate) =>
@@ -484,18 +492,25 @@ const fileOperator = {
 
     const data = fs.readFileSync(srcPath);
     const offset = SERAPH_MAGIC.length;
+    const magic = data.subarray(0, SERAPH_MAGIC.length);
 
-    const ephPublicKey = crypto.createPublicKey({
-      key: Buffer.concat([
-        X25519_SPKI_HEADER,
-        data.subarray(offset, offset + 32)
-      ]),
-      format: 'der',
-      type: 'spki'
-    });
-    const iv = data.subarray(offset + 32, offset + 48);
-    const authTag = data.subarray(offset + 48, offset + 64);
-    const encrypted = data.subarray(offset + 64);
+    let ephPublicKey, iv, authTag, encrypted
+    try {
+      assert(magic.equals(SERAPH_MAGIC));
+      ephPublicKey = crypto.createPublicKey({
+        key: Buffer.concat([
+          X25519_SPKI_HEADER,
+          data.subarray(offset, offset + 32)
+        ]),
+        format: 'der',
+        type: 'spki'
+      });
+      iv = data.subarray(offset + 32, offset + 48);
+      authTag = data.subarray(offset + 48, offset + 64);
+      encrypted = data.subarray(offset + 64);
+    } catch (_) {
+      throw new APIException("INVALID_FORMAT");
+    }
 
     const recipientPrivateKey = crypto.createPrivateKey({
       key: Buffer.concat([
@@ -516,10 +531,16 @@ const fileOperator = {
 
     const decipher = crypto.createDecipheriv('aes-256-gcm', aesKey, iv);
     decipher.setAuthTag(authTag);
-    const decrypted = Buffer.concat([
-      decipher.update(encrypted),
-      decipher.final()
-    ]);
+
+    let decrypted;
+    try {
+      decrypted = Buffer.concat([
+        decipher.update(encrypted),
+        decipher.final()
+      ]);
+    } catch {
+      throw new APIException("INVALID_CIPHER");
+    }
     fs.writeFileSync(dstPath, decrypted);
   },
 
@@ -1104,6 +1125,8 @@ Status.execErrCode = {
   IdentifierConflict: "IC",
   FileModuleError: "FME",
   PasswordUnexist: "PU",
+  InvalidEncrypt: "IE",
+  InvalidDecrypt: "ID",
   EnvironmentMissing: "EM",
   ExtensionError: "EE",
   DuplicateRequest: "DR",

@@ -302,6 +302,7 @@ const en = {
       viewRegulate: {
         all: "All Type",
         unknown: "Unknown",
+        encrypt: "Encrypted File",
         directory: "Directory",
         search: "Search by Name",
         filter: "Filter by Type",
@@ -386,6 +387,8 @@ const en = {
         identifierConflict: "Naming identifiers conflicts; please rename or remove {0} first.",
         fileModuleError: "Exception occurred in file operation module.",
         passwordUnexist: "The decryption password has not been set.",
+        invalidEncrypt: "Invalid .srph file format.",
+        invalidDecrypt: "Decryption failed due to invalid password or file tampering.",
         environmentMissing: "Pre-check for extension module environment failed. Please check console for more details.",
         extensionError: "Exception occurred in inner extension module. Please check console for more details.",
         duplicateRequest: "Duplicate Request: Please decrease operation frequency."

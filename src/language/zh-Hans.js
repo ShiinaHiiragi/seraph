@@ -302,6 +302,7 @@ const zhHans = {
       viewRegulate: {
         all: "所有类型",
         unknown: "未知",
+        encrypt: "加密文件",
         directory: "目录",
         search: "按名称搜索",
         filter: "按类型过滤",
@@ -386,6 +387,8 @@ const zhHans = {
         identifierConflict: "命名标识符冲突；请先重命名或移除文件 {0}。",
         fileModuleError: "文件操作模块产生异常。",
         passwordUnexist: "解密密码尚未设置。",
+        invalidEncrypt: "无效的 .srph 文件格式。",
+        invalidDecrypt: "由于密码错误或文件被篡改，解密失败。",
         environmentMissing: "拓展模块环境事前检查不通过：请查阅控制台获得更多细节。",
         extensionError: "拓展模块内部错误：请查阅控制台获得更多细节。",
         duplicateRequest: "重复请求：请降低操作频率。"

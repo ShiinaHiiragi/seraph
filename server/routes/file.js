@@ -613,16 +613,25 @@ router.post('/decrypt', (req, res, next) => {
     return;
   }
 
-  // TODO: check magic number
-  // TODO: check final()
-
   try {
     api.fileOperator.decryptFile(filePath, newFilePath, privateKey);
-  } catch {
-    // -> EF_FME: unknown error
-    req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
-    res.send(req.status.generateReport());
-    return;
+  } catch (err) {
+    if (err.code === 'INVALID_FORMAT') {
+      // -> EF_IE: file format error
+      req.status.addExecStatus(api.Status.execErrCode.InvalidEncrypt);
+      res.send(req.status.generateReport());
+      return;
+    } else if (err.code === 'INVALID_CIPHER') {
+      // -> EF_ID: incorrect password
+      req.status.addExecStatus(api.Status.execErrCode.InvalidDecrypt);
+      res.send(req.status.generateReport());
+      return;
+    } else {
+      // -> EF_FME: unknown error
+      req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
+      res.send(req.status.generateReport());
+      return;
+    }
   }
 
   // -> ES: info of new file

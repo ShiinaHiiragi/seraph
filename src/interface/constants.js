@@ -511,6 +511,8 @@ const Status = {
     IdentifierConflict: "IC",
     FileModuleError: "FME",
     PasswordUnexist: "PU",
+    InvalidEncrypt: "IE",
+    InvalidDecrypt: "ID",
     EnvironmentMissing: "EM",
     ExtensionError: "EE",
     DuplicateRequest: "DR",
