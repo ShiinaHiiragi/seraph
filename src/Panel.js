@@ -2,7 +2,7 @@ import React from "react";
 import CssBaseline from "@mui/joy/CssBaseline";
 import GlobalStyles from "@mui/joy/GlobalStyles";
 import { styled, CssVarsProvider } from "@mui/joy/styles";
-import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import { Toaster } from "sonner";
 
 import Header from "./components/Header";
@@ -34,6 +34,8 @@ const Milkdown = React.lazy(() => import("./main/Milkdown"));
 const Subscription = React.lazy(() => import("./main/Subscription"));
 const Terminal = React.lazy(() => import("./main/Terminal"));
 const TODO = React.lazy(() => import("./main/TODO"));
+
+const RouterBridgeContext = React.createContext(null);
 
 const Root = styled('div')(({ theme }) => ({
   width: "100vw",
@@ -101,9 +103,145 @@ const MainField = styled('div')(({ theme }) => ({
   overflowX: "hidden",
 }));
 
-const Panel = () => {
-  // independent components
+function PublicExplorer() {
+  const {
+    clipboard,
+    setClipboard,
+    setPublicFolders,
+    setPrivateFolders
+  } = React.useContext(RouterBridgeContext);
+
+  return (
+    <FileExplorer
+      type="public"
+      clipboard={clipboard}
+      setClipboard={setClipboard}
+      setPublicFolders={setPublicFolders}
+      setPrivateFolders={setPrivateFolders}
+    />
+  );
+}
+
+function PrivateExplorer() {
+  const {
+    clipboard,
+    setClipboard,
+    setPublicFolders,
+    setPrivateFolders
+  } = React.useContext(RouterBridgeContext);
+
+  return (
+    <FileExplorer
+      type="private"
+      clipboard={clipboard}
+      setClipboard={setClipboard}
+      setPublicFolders={setPublicFolders}
+      setPrivateFolders={setPrivateFolders}
+    />
+  );
+}
+
+const PanelLayout = () => {
+  const {
+    setting
+  } = React.useContext(GlobalContext);
+
+  const {
+    clipboard,
+    setClipboard,
+    setPublicFolders,
+    setPrivateFolders,
+    setMetadata,
+    setGlobalSwitch,
+    setSetting,
+    setSettingPair,
+    modalReconfirm,
+    setModalReconfirm,
+    modalInitOpen,
+    setModalInitOpen,
+    setFirstTick,
+  } = React.useContext(RouterBridgeContext);
   const [drawerOpen, setDrawerOpen] = React.useState(false);
+
+  return (
+    <React.Fragment>
+      <GlobalStyles styles={toastTheme} />
+      <Root className="Root">
+        <CssVarsProvider
+          disableTransitionOnChange
+          theme={GlobalTheme(setting.meta.language)}
+        >
+          <CssBaseline />
+          <HeaderField className="HeaderField">
+            <Header
+              setGlobalSwitch={setGlobalSwitch}
+              setDrawerOpen={setDrawerOpen}
+              setPublicFolders={setPublicFolders}
+              setPrivateFolders={setPrivateFolders}
+              setMetadata={setMetadata}
+              setClipboard={setClipboard}
+              setSetting={setSetting}
+              setSettingPair={setSettingPair}
+            />
+          </HeaderField>
+          {drawerOpen && (
+            <SideDrawer onClose={() => setDrawerOpen(false)}>
+              <Navigation setDrawerOpen={setDrawerOpen} />
+            </SideDrawer>
+          )}
+          <ContentField className="ContentField">
+            <NavigationField className="NavigationField">
+              <Navigation setDrawerOpen={setDrawerOpen} />
+            </NavigationField>
+            <MainField className="MainField">
+              <React.Suspense fallback={<Loading />}>
+                <Outlet />
+              </React.Suspense>
+            </MainField>
+          </ContentField>
+          <Init
+            setFirstTick={setFirstTick}
+            setGlobalSwitch={setGlobalSwitch}
+            setClipboard={setClipboard}
+            setSetting={setSetting}
+            setPublicFolders={setPublicFolders}
+            setPrivateFolders={setPrivateFolders}
+            modalInitOpen={modalInitOpen}
+            setModalInitOpen={setModalInitOpen}
+          />
+          <Reconfirm
+            modalReconfirm={modalReconfirm}
+            setModalReconfirm={setModalReconfirm}
+          />
+          <Toaster position="top-center" richColors closeButton />
+        </CssVarsProvider>
+      </Root>
+    </React.Fragment>
+  );
+};
+
+const Panel = () => {
+  // data router
+  // refactored from browser router
+  const routerRef = React.useRef(null);
+  if (!routerRef.current) {
+    routerRef.current = createBrowserRouter([{
+      path: "/",
+      element: <PanelLayout />,
+      children: [
+        { index: true, element: <Welcome /> },
+        { path: "public/*", element: <PublicExplorer /> },
+        { path: "private/*", element: <PrivateExplorer /> },
+        { path: "crepe/*", element: <Milkdown /> },
+        { path: "subscription", element: <Subscription /> },
+        { path: "terminal", element: <Terminal /> },
+        { path: "todo", element: <TODO /> },
+        { path: "*", element: <Error /> },
+      ],
+    }]);
+  }
+
+  // independent components
   const [modalInitOpen, setModalInitOpen] = React.useState(false);
   const [modalReconfirm, setModalReconfirm] = React.useState({
     open: false,
@@ -116,6 +254,9 @@ const Panel = () => {
   const [metadata, setMetadata] = React.useState(defaultMetadata);
   const [clipboard, setClipboard] = React.useState(defaultClipboard);
   const [setting, setSetting] = React.useState(defaultSetting);
+  const setSettingPair = React.useCallback((key, value) => {
+    setSetting((setting) => setValue(setting, key, value))
+  }, [ ]);
 
   const [publicFolders, setPublicFolders] = React.useState([]);
   const [privateFolders, setPrivateFolders] = React.useState([]);
@@ -126,6 +267,45 @@ const Panel = () => {
   // when set to true, the corresponding tick ends
   const [firstTick, setFirstTick] = React.useState(false);
   const [secondTick, setSecondTick] = React.useState(false);
+
+  // language related
+  const languagePicker = React.useMemo(() => {
+    ConstantContext.languagePicker = languagePickerSpawner(setting.meta.language);
+    document.title = ConstantContext.languagePicker("nav.title");
+    document.documentElement.lang = setting.meta.language
+    return languagePickerSpawner(setting.meta.language);
+  }, [setting.meta.language]);
+
+  // first tick starts on page loaded, ends after receiving metadata
+  React.useEffect(() => {
+    request("GET/auth/meta", undefined, undefined, undefined, setModalInitOpen)
+      .then((data) => {
+        setSetting(data.setting);
+        setPublicFolders(data.public);
+        setFirstTick(true);
+
+        if (data.private) {
+          setPrivateFolders(data.private);
+          setMetadata(data.metadata);
+          setClipboard(data.clipboard);
+          setGlobalSwitch(globalState.AUTHORITY);
+        } else {
+          setGlobalSwitch(globalState.ANONYMOUS);
+        }
+      })
+  }, [])
+
+  // second tick starts after first tick is set, ends after globalSwitch is set
+  React.useEffect(() => {
+    if (firstTick && globalSwitch !== globalState.INNOCENT) {
+      setSecondTick(true);
+    }
+  }, [firstTick, globalSwitch]);
+
+  // hide some elements
+  const isAuthority = React.useMemo(() => {
+    return globalSwitch === globalState.AUTHORITY
+  }, [globalSwitch]);
 
   // crepeEditor.current !== null when crepe is loaded
   // crepeSnapshot save current text every time setting is toggled
@@ -173,51 +353,6 @@ const Panel = () => {
     // }
   }), [crepeModified, switchAction]);
 
-  // language related
-  const languagePicker = React.useMemo(() => {
-    ConstantContext.languagePicker = languagePickerSpawner(setting.meta.language);
-    document.title = ConstantContext.languagePicker("nav.title");
-    document.documentElement.lang = setting.meta.language
-    return languagePickerSpawner(setting.meta.language);
-  }, [setting.meta.language]);
-
-  // first tick starts on page loaded
-  //            ends after receiving metadata
-  React.useEffect(() => {
-    request("GET/auth/meta", undefined, undefined, undefined, setModalInitOpen)
-      .then((data) => {
-        setSetting(data.setting);
-        setPublicFolders(data.public);
-        setFirstTick(true);
-
-        if (data.private) {
-          setPrivateFolders(data.private);
-          setMetadata(data.metadata);
-          setClipboard(data.clipboard);
-          setGlobalSwitch(globalState.AUTHORITY);
-        } else {
-          setGlobalSwitch(globalState.ANONYMOUS);
-        }
-      })
-  }, [])
-
-  // second tick starts after first tick is set
-  //             ends after globalSwitch is set
-  React.useEffect(() => {
-    if (firstTick && globalSwitch !== globalState.INNOCENT) {
-      setSecondTick(true);
-    }
-  }, [firstTick, globalSwitch]);
-
-  // hide some elements
-  const isAuthority = React.useMemo(() => {
-    return globalSwitch === globalState.AUTHORITY
-  }, [globalSwitch]);
-
-  const setSettingPair = React.useCallback((key, value) => {
-    setSetting((setting) => setValue(setting, key, value))
-  }, [ ]);
-
   return (
     <GlobalContext.Provider
       value={{
@@ -234,101 +369,27 @@ const Panel = () => {
         setting: setting
       }}
     >
-      <GlobalStyles styles={toastTheme} />
-      <Root className="Root">
-        <CssVarsProvider
-          disableTransitionOnChange
-          theme={GlobalTheme(setting.meta.language)}
-        >
-          <CssBaseline />
-          <BrowserRouter>
-            <HeaderField className="HeaderField">
-              <Header
-                setGlobalSwitch={setGlobalSwitch}
-                setDrawerOpen={setDrawerOpen}
-                setPublicFolders={setPublicFolders}
-                setPrivateFolders={setPrivateFolders}
-                setMetadata={setMetadata}
-                setClipboard={setClipboard}
-                setSetting={setSetting}
-                setSettingPair={setSettingPair}
-              />
-            </HeaderField>
-            {drawerOpen && (
-              <SideDrawer onClose={() => setDrawerOpen(false)}>
-                <Navigation
-                  sortedPublicFolders={sortedPublicFolders}
-                  sortedPrivateFolders={sortedPrivateFolders}
-                  setDrawerOpen={setDrawerOpen}
-                />
-              </SideDrawer>
-            )}
-            <ContentField className="ContentField">
-              <NavigationField className="NavigationField">
-                <Navigation
-                  sortedPublicFolders={sortedPublicFolders}
-                  sortedPrivateFolders={sortedPrivateFolders}
-                  setDrawerOpen={setDrawerOpen}
-                />
-              </NavigationField>
-              <MainField className="MainField">
-                <React.Suspense fallback={<Loading />}>
-                  <Routes>
-                    <Route exact path="/" element={<Welcome />} />
-                    <Route
-                      path="/public/*"
-                      element={
-                        <FileExplorer
-                          type="public"
-                          clipboard={clipboard}
-                          setClipboard={setClipboard}
-                          setPublicFolders={setPublicFolders}
-                          setPrivateFolders={setPrivateFolders}
-                        />
-                      }
-                    />
-                    <Route
-                      path="/private/*"
-                      element={
-                        <FileExplorer
-                          type="private"
-                          clipboard={clipboard}
-                          setClipboard={setClipboard}
-                          setPublicFolders={setPublicFolders}
-                          setPrivateFolders={setPrivateFolders}
-                        />
-                      }
-                    />
-                    <Route path="/crepe/*" element={<Milkdown />} />
-                    <Route path="/subscription" element={<Subscription />} />
-                    <Route path="/terminal" element={<Terminal />} />
-                    <Route path="/todo" element={<TODO />} />
-                    <Route path="*" element={<Error />} />
-                  </Routes>
-                </React.Suspense>
-              </MainField>
-            </ContentField>
-          </BrowserRouter>
-          <Init
-            setFirstTick={setFirstTick}
-            setGlobalSwitch={setGlobalSwitch}
-            setting={setting}
-            setClipboard={setClipboard}
-            setSetting={setSetting}
-            setPublicFolders={setPublicFolders}
-            setPrivateFolders={setPrivateFolders}
-            modalInitOpen={modalInitOpen}
-            setModalInitOpen={setModalInitOpen}
-          />
-          <Reconfirm
-            modalReconfirm={modalReconfirm}
-            setModalReconfirm={setModalReconfirm}
-          />
-          <Toaster position="top-center" richColors closeButton />
-        </CssVarsProvider>
-      </Root>
+      <RouterBridgeContext.Provider
+        value={{
+          clipboard: clipboard,
+          setClipboard: setClipboard,
+          setPublicFolders: setPublicFolders,
+          setPrivateFolders: setPrivateFolders,
+          setMetadata: setMetadata,
+          setGlobalSwitch: setGlobalSwitch,
+          setSetting: setSetting,
+          setSettingPair: setSettingPair,
+          modalReconfirm: modalReconfirm,
+          setModalReconfirm: setModalReconfirm,
+          modalInitOpen: modalInitOpen,
+          setModalInitOpen: setModalInitOpen,
+          setFirstTick: setFirstTick
+        }}
+      >
+        <RouterProvider router={routerRef.current} />
+      </RouterBridgeContext.Provider>
     </GlobalContext.Provider>
   );
-}
+};
 
 export default Panel;

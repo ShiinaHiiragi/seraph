@@ -40,7 +40,6 @@ export default function Init(props) {
   const {
     setFirstTick,
     setGlobalSwitch,
-    setting,
     setClipboard,
     setSetting,
     setPublicFolders,
@@ -56,7 +55,7 @@ export default function Init(props) {
   const handleClickSubmit = React.useCallback(() => {
     setFormPasswordLoading(true);
     request("POST/auth/init", {
-      language: setting.meta.language,
+      language: context.setting.meta.language,
       password: formPasswordText
     })
       .then((data) => {
@@ -73,7 +72,6 @@ export default function Init(props) {
       .finally(() => setFormPasswordLoading(false));
   }, [
     context,
-    setting.meta.language,
     formPasswordText,
     setGlobalSwitch,
     setModalInitOpen,
@@ -115,7 +113,7 @@ export default function Init(props) {
           <FormControl>
             <FormLabel>{context.languagePicker("setting.general.language")}</FormLabel>
             <Select
-              value={setting.meta.language}
+              value={context.setting.meta.language}
               startDecorator={<LanguageOutlinedIcon />}
               onChange={(_, newValue) => setSetting((setting) => ({
                 ...setting,
