@@ -1,11 +1,12 @@
 import React from "react";
+import { toast } from "sonner";
 import Box from "@mui/joy/Box";
 import Stack from "@mui/joy/Stack";
 import IconButton from "@mui/joy/IconButton";
 import Typography from "@mui/joy/Typography";
 import { styled } from "@mui/joy/styles";
 import { useParams } from "react-router";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useBlocker } from "react-router-dom";
 import { Milkdown, MilkdownProvider, useEditor } from "@milkdown/react";
 import { Crepe, CrepeFeature } from "@milkdown/crepe";
 import { editorViewCtx, editorViewOptionsCtx } from "@milkdown/kit/core";
@@ -80,10 +81,11 @@ const MaildownField = styled(Box)(({ theme }) => ({
 }));
 
 const CrepeEditorInner = (props) => {
-  const { readOnly, fileContent } = props;
+  const { readOnly, fileContent, setModified } = props;
   const context = React.useContext(GlobalContext);
 
   useEditor((root) => {
+    let regulatedInitValue = null;
     const crepe = new Crepe({
       root,
       defaultValue: context.crepeRef.snapshot.current ?? fileContent,
@@ -106,28 +108,18 @@ const CrepeEditorInner = (props) => {
       .config((ctx) => {
         ctx.update(editorViewOptionsCtx, (prev) => ({
           ...prev,
-          attributes: {
-            spellcheck: "false"
-          },
-          scrollThreshold: {
-            top: 0,
-            right: 0,
-            bottom: 64,
-            left: 0
-          },
-          scrollMargin: {
-            top: 0,
-            right: 0,
-            bottom: 64,
-            left: 0
-          }
+          attributes: { spellcheck: "false" },
+          scrollThreshold: { top: 0, right: 0, bottom: 64, left: 0 },
+          scrollMargin: { top: 0, right: 0, bottom: 64, left: 0 }
         }));
         // listener will prevent jittering itself
-        ctx.get(listenerCtx).markdownUpdated(() => {
-          context.crepeRef.setModified(true);
-          // TODO: word counter for CJK
-          console.log(context.crepeRef.getText().length);
-        });
+        ctx.get(listenerCtx)
+          .mounted(() => {
+            regulatedInitValue = getMarkdown()(ctx);
+          })
+          .markdownUpdated((_, markdown) => {
+            setModified(markdown !== regulatedInitValue);
+          });
       })
       .use($prose((ctx) => keymap({
         "Mod-k": () => {
@@ -167,13 +159,11 @@ const CrepeEditorInner = (props) => {
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
   return <Milkdown />;
 };
 
 const CrepeEditor = () => {
   const navigate = useNavigate();
-  const { "*": rawFolderName } = useParams();
   const context = React.useContext(GlobalContext);
 
   const [crepeState, setCrepeState] = React.useState(0);
@@ -181,7 +171,9 @@ const CrepeEditor = () => {
   const [fileContent, setFileContent] = React.useState(null);
 
   const [readOnly, setReadOnly] = React.useState(true);
+  const [modified, setModified] = React.useState(false);
 
+  const { "*": rawFolderName } = useParams();
   const folderName = React.useMemo(
     () => rawFolderName
       .replace(/\/+/g, "/")
@@ -220,12 +212,40 @@ const CrepeEditor = () => {
   }, [context, readOnly]);
 
   React.useEffect(() => {
-    if (context.crepeRef.modified) {
+    if (modified) {
       const handler = (event) => event.preventDefault();
       window.addEventListener("beforeunload", handler);
       return () => window.removeEventListener("beforeunload", handler);
     }
-  }, [context.crepeRef.modified]);
+  }, [modified]);
+
+  const blocker = useBlocker(modified);
+  const blockerActiveRef = React.useRef(false);
+
+  React.useEffect(() => {
+    if (blocker.state === "blocked") {
+      blockerActiveRef.current = true;
+      context.setModalReconfirm({
+        open: true,
+        caption: context.languagePicker("modal.reconfirm.caption.discardDraft"),
+        handleAction: () => {
+          blockerActiveRef.current = false;
+          setModified(false);
+          blocker.proceed();
+        }
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [blocker.state]);
+
+  // unblock the router when modal is cancelled
+  React.useEffect(() => {
+    if (blockerActiveRef.current && !context.modalReconfirm?.open) {
+      blockerActiveRef.current = false;
+      blocker.reset();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [context.modalReconfirm?.open]);
 
   // a markdown is savable when
   // - user has logged in
@@ -240,7 +260,7 @@ const CrepeEditor = () => {
 
   React.useEffect(() => {
     setCrepeState(0);
-    context.crepeRef.setModified(false);
+    setModified(false);
 
     if (folderName.length > 0) {
       request("GET/utility/crepe/load", {
@@ -261,9 +281,6 @@ const CrepeEditor = () => {
       setFileContent("");
       setReadOnly(false);
     }
-
-    // remove state on unmount
-    return () => context.crepeRef.setModified(false);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     // check if
@@ -272,6 +289,31 @@ const CrepeEditor = () => {
     // url is changed directly
     rawFolderName
   ]);
+
+  const handleSave = React.useCallback(() => {
+    toast.promise(new Promise((resolve, reject) => {
+      const text = context.crepeRef.getText();
+      request(
+        "POST/utility/crepe/save",
+        {
+          type: crepeType,
+          folderName: crepePath.join("/"),
+          filename: crepeTitle,
+          text: text
+        },
+        undefined,
+        reject
+      ).then(() => {
+        setModified(false);
+        setFileContent(text);
+        resolve();
+      })
+    }), {
+      loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
+      success: context.languagePicker("modal.toast.success.saveText"),
+      error: (data) => data
+    });
+  }, [context, crepeType, crepePath, crepeTitle]);
 
   return (
     <RouteField
@@ -300,13 +342,10 @@ const CrepeEditor = () => {
             >
               {readOnly ? <EditOffOutlinedIcon /> : <EditOutlinedIcon/>}
             </IconButton>
-            {savable && context.crepeRef.modified && <IconButton
+            {savable && modified && <IconButton
               size="sm"
               variant="soft"
-              onClick={() => {
-                // TODO: add saving
-                context.crepeRef.setModified(false);
-              }}
+              onClick={handleSave}
               sx={{
                 backgroundColor: "transparent",
                 "&:hover": { backgroundColor: "transparent" }
@@ -332,6 +371,7 @@ const CrepeEditor = () => {
             <CrepeEditorInner
               readOnly={readOnly}
               fileContent={fileContent}
+              setModified={setModified}
             />
           </MilkdownProvider>
         </MaildownField>}

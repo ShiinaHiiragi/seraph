@@ -28,16 +28,9 @@ export default function Navigation(props) {
 
   const navigate = useNavigate();
   const navigateTo = React.useCallback((pathname) => {
-    const handleAction = () => {
-      navigate(pathname);
-      setDrawerOpen(false);
-    }
-    if (context.crepeRef.modified) {
-      context.crepeRef.reconfirm(context, handleAction);
-    } else {
-      handleAction();
-    }
-  }, [context, navigate, setDrawerOpen]);
+    navigate(pathname);
+    setDrawerOpen(false);
+  }, [navigate, setDrawerOpen]);
 
   return (
     <React.Fragment>
@@ -50,21 +43,7 @@ export default function Navigation(props) {
           }}
         >
           <ListItem sx={{ paddingLeft: 0, display: { xs: "inline-flex", sm: "inline-flex", md: "none" } }}>
-            <RouterLink
-              to="/"
-              onClick={(event) => {
-                const handleAction = () => {
-                  navigate("/");
-                  setDrawerOpen(false);
-                }
-                if (context.crepeRef.modified) {
-                  event.preventDefault();
-                  context.crepeRef.reconfirm(context, handleAction);
-                } else {
-                  handleAction();
-                }
-              }}
-            >
+            <RouterLink onClick={() => navigateTo("/")}>
               <IconButton disabled sx={{ paddingLeft: "0px" }}>
                 <img src={GreyLogo} width={24} height={24} alt="" />
               </IconButton>
