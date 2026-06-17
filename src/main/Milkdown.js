@@ -84,6 +84,7 @@ const CrepeEditorInner = (props) => {
   const context = React.useContext(GlobalContext);
 
   useEditor((root) => {
+    let regulatedInitValue = null;
     const crepe = new Crepe({
       root,
       defaultValue: context.crepeRef.snapshot.current ?? fileContent,
@@ -106,29 +107,18 @@ const CrepeEditorInner = (props) => {
       .config((ctx) => {
         ctx.update(editorViewOptionsCtx, (prev) => ({
           ...prev,
-          attributes: {
-            spellcheck: "false"
-          },
-          scrollThreshold: {
-            top: 0,
-            right: 0,
-            bottom: 64,
-            left: 0
-          },
-          scrollMargin: {
-            top: 0,
-            right: 0,
-            bottom: 64,
-            left: 0
-          }
+          attributes: { spellcheck: "false" },
+          scrollThreshold: { top: 0, right: 0, bottom: 64, left: 0 },
+          scrollMargin: { top: 0, right: 0, bottom: 64, left: 0 }
         }));
         // listener will prevent jittering itself
-        ctx.get(listenerCtx).markdownUpdated(() => {
-          // TODO: word counter for CJK
-          // TODO: more precised modified flag
-          setModified(true);
-          // console.log(context.crepeRef.getText().length);
-        });
+        ctx.get(listenerCtx)
+          .mounted(() => {
+            regulatedInitValue = getMarkdown()(ctx);
+          })
+          .markdownUpdated((_, markdown) => {
+            setModified(markdown !== regulatedInitValue);
+          });
       })
       .use($prose((ctx) => keymap({
         "Mod-k": () => {
