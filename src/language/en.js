@@ -23,7 +23,7 @@ const en = {
           1440: "1 day",
           2880: "2 day"
         },
-        password: "Change Password",
+        password: "Change Login Password",
         passwordPlaceholder: "Please save after input",
       },
       welcome: {
@@ -349,7 +349,7 @@ const en = {
         updateSetting: "Latest setting has been synchronized."
       },
       success: {
-        init: "Password is set successfully. Thanks for using Seraph.",
+        init: "Login password is set successfully. Thanks for using Seraph.",
         logout: "Logged out successfully.",
         setting: "New setting has been saved.",
         import: "New setting has been saved, and {0} out of {1} valid entries has been updated.",
@@ -401,17 +401,17 @@ const en = {
     },
     init: {
       title: "Initialization",
-      caption: "Please set up password on first usage.",
+      caption: "Please set up login password on first usage.",
       password: {
-        label: "Password",
+        label: "Login Password",
         placeholder: "No Restriction"
       }
     },
     form: {
       login: {
         title: "Login",
-        caption: "Please enter password to acquire full access.",
-        placeholder: "Password"
+        caption: "Please enter login password to acquire full access.",
+        placeholder: "Login Password"
       },
       new:{
         title: "Create New Directory",

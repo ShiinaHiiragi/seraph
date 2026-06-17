@@ -23,7 +23,7 @@ const zhHans = {
           1440: "1 天",
           2880: "2 天"
         },
-        password: "更换密码",
+        password: "更换登录密码",
         passwordPlaceholder: "输入后请保存",
       },
       welcome: {
@@ -349,7 +349,7 @@ const zhHans = {
         updateSetting: "最新设置已同步。"
       },
       success: {
-        init: "密码设置成功，感谢使用 SERAPH。",
+        init: "登录密码设置成功，感谢使用 SERAPH。",
         logout: "退出成功。",
         setting: "设置已保存。",
         import: "设置已保存；总计 {1} 条有效项目中更新了 {0} 条。",
@@ -401,17 +401,17 @@ const zhHans = {
     },
     init: {
       title: "初始化",
-      caption: "首次使用请设置密码。",
+      caption: "首次使用请设置登录密码。",
       password: {
-        label: "密码",
+        label: "登录密码",
         placeholder: "无限制"
       }
     },
     form: {
       login: {
         title: "登录",
-        caption: "请输入密码以获得完全访问权限。",
-        placeholder: "密码"
+        caption: "请输入登录密码以获得完全访问权限。",
+        placeholder: "登录密码"
       },
       new:{
         title: "创建新目录",
