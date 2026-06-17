@@ -12,11 +12,10 @@ router.get('/load', (req, res, next) => {
     return;
   }
 
-  const handlePath = type === 'private'
-    ? api.dataPath.privateDirFolderPath
-    : api.dataPath.publicDirFolderPath;
-  const folderPath = handlePath(folderName);
-  const filePath = path.join(folderPath, filename);
+  const {
+    folderPath: _,
+    filePath
+  } = api.fileOperator.pathCombinator(type, folderName, filename);
 
   if (!fs.existsSync(filePath)) {
     // -> EF_RU: folder don't exist
@@ -53,11 +52,10 @@ router.post('/save', (req, res, next) => {
     return;
   }
 
-  const handlePath = type === 'private'
-    ? api.dataPath.privateDirFolderPath
-    : api.dataPath.publicDirFolderPath;
-  const folderPath = handlePath(folderName);
-  const filePath = path.join(folderPath, filename);
+  const {
+    folderPath: _,
+    filePath
+  } = api.fileOperator.pathCombinator(type, folderName, filename);
 
   if (!fs.existsSync(filePath)) {
     // -> EF_RU: folder don't exist

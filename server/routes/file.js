@@ -528,4 +528,110 @@ router.post('/epub', (req, res, next) => {
   }));
 });
 
+router.post('/encrypt', (req, res, next) => {
+  if (req.status.notAuthSuccess()) {
+    // -> EF_IT or abnormal request
+    next(api.errorStreamControl);
+    return;
+  }
+
+  const { type, folderName, filename } = req.body;
+  const { folderPath, filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
+
+  const newFilename = filename + ".srph"
+  const { filePath: newFilePath } = api.fileOperator.pathCombinator(type, folderName, newFilename);
+
+  if (api.configOperator.config.metadata.cipher.length === 0) {
+    // -> EF_PU: password has not been set
+    req.status.addExecStatus(api.Status.execErrCode.IdentifierConflict);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  if (!fs.existsSync(filePath)) {
+    // -> EF_RU: folder don't exist
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  if (fs.existsSync(newFilePath)) {
+    // -> EF_IC: filename already exists
+    req.status.addExecStatus(api.Status.execErrCode.IdentifierConflict);
+    res.send({...req.status.generateReport(), 0: newFilename});
+    return;
+  }
+
+  try {
+    api.fileOperator.encryptFile(filePath, newFilePath);
+  } catch {
+    // -> EF_FME: unknown error
+    req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  // -> ES: info of new file
+  req.status.addExecStatus();
+  res.send({
+    ...req.status.generateReport(),
+    ...api.fileOperator.readFileInfo(folderPath, newFilename)
+  });
+  return;
+});
+
+router.post('/decrypt', (req, res, next) => {
+  if (req.status.notAuthSuccess()) {
+    // -> EF_IT or abnormal request
+    next(api.errorStreamControl);
+    return;
+  }
+
+  const { type, folderName, filename, privateKey } = req.body;
+  const { folderPath, filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
+
+  if (api.configOperator.config.metadata.cipher.length === 0) {
+    // -> EF_PU: password has not been set
+    req.status.addExecStatus(api.Status.execErrCode.IdentifierConflict);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  if (!fs.existsSync(filePath)) {
+    // -> EF_RU: folder don't exist
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  const newFilename = filename.split(".").slice(0, -1).join(".");
+  const newFilePath = path.join(folderPath, newFilename);
+  if (fs.existsSync(newFilePath)) {
+    // -> EF_IC: filename already exists
+    req.status.addExecStatus(api.Status.execErrCode.IdentifierConflict);
+    res.send({...req.status.generateReport(), 0: newFilename});
+    return;
+  }
+
+  // TODO: check magic number
+  // TODO: check final()
+
+  try {
+    api.fileOperator.decryptFile(filePath, newFilePath, privateKey);
+  } catch {
+    // -> EF_FME: unknown error
+    req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  // -> ES: info of new file
+  req.status.addExecStatus();
+  res.send({
+    ...req.status.generateReport(),
+    ...api.fileOperator.readFileInfo(folderPath, newFilename)
+  });
+  return;
+});
+
 module.exports = router;

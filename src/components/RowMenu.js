@@ -1,7 +1,6 @@
 import React from "react";
 import { toast } from "sonner";
 import Divider from "@mui/joy/Divider";
-import Link from "@mui/joy/Link";
 import Menu from "@mui/joy/Menu";
 import MenuButton from "@mui/joy/MenuButton";
 import MenuItem from "@mui/joy/MenuItem";
@@ -130,6 +129,71 @@ export default function RowMenu(props) {
     setPublicFolders,
     setPrivateFolders
   ])
+
+  const handleEncrypt = React.useCallback(() => {
+    toast.promise(new Promise((resolve, reject) => {
+      request("POST/file/encrypt", {
+        type: type,
+        folderName: folderName,
+        filename: filename
+      }, undefined, reject)
+        .then((data) => {
+          const { statusCode, errorCode, ...newInfo } = data;
+          if (pathStartWith(`/${type}/${folderName}`)) {
+            setFilesList((filesList) => [
+              ...filesList,
+              newInfo
+            ]);
+          }
+          resolve();
+        })
+    }), {
+      loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
+      success: context
+        .languagePicker("modal.toast.success.encrypt")
+        .format(filename),
+      error: (data) => data
+    })
+  }, [
+    context,
+    type,
+    filename,
+    folderName,
+    setFilesList
+  ]);
+
+  const handleDecrypt = React.useCallback(() => {
+    toast.promise(new Promise((resolve, reject) => {
+      request("POST/file/decrypt", {
+        type: type,
+        folderName: folderName,
+        filename: filename,
+        privateKey: "123"
+      }, undefined, reject)
+        .then((data) => {
+          const { statusCode, errorCode, ...newInfo } = data;
+          if (pathStartWith(`/${type}/${folderName}`)) {
+            setFilesList((filesList) => [
+              ...filesList,
+              newInfo
+            ]);
+          }
+          resolve();
+        })
+    }), {
+      loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
+      success: context
+        .languagePicker("modal.toast.success.decrypt")
+        .format(filename),
+      error: (data) => data
+    })
+  }, [
+    context,
+    type,
+    filename,
+    folderName,
+    setFilesList
+  ]);
 
   const handleCompress = React.useCallback(() => {
     toast.promise(new Promise((resolve, reject) => {
@@ -269,20 +333,44 @@ export default function RowMenu(props) {
         <MenuItem onClick={handleCut}>
           {context.languagePicker("main.folder.rowMenu.cut")}
         </MenuItem>
-        {fileType === "directory" && folderName.length > 0 &&
-          <MenuItem onClick={handleCompress}>
-            {context.languagePicker("main.folder.rowMenu.compress")}
-          </MenuItem>}
-        {fileType === "application/zip" && folderName.length > 0 &&
-          <MenuItem onClick={handleExtract}>
-            {context.languagePicker("main.folder.rowMenu.extract")}
-          </MenuItem>}
+        {folderName.length > 0 && <Divider />}
+        {fileType !== "directory"
+          && folderName.length > 0
+          && (
+            <MenuItem onClick={handleEncrypt}>
+              {context.languagePicker("main.folder.rowMenu.encrypt")}
+            </MenuItem>
+          )}
+        {fileType !== "directory"
+          && filename.endsWith(".srph")
+          && folderName.length > 0
+          && (
+            <MenuItem onClick={handleDecrypt}>
+              {context.languagePicker("main.folder.rowMenu.decrypt")}
+            </MenuItem>
+          )}
+        {fileType === "directory"
+          && folderName.length > 0
+          && (
+            <MenuItem onClick={handleCompress}>
+              {context.languagePicker("main.folder.rowMenu.compress")}
+            </MenuItem>
+          )}
+        {fileType === "application/zip"
+          && folderName.length > 0
+          && (
+            <MenuItem onClick={handleExtract} disabled={filename.length <= 4}>
+              {context.languagePicker("main.folder.rowMenu.extract")}
+            </MenuItem>
+          )}
         {fileType === "application/epub+zip"
           && folderName.length > 0
           && context.setting.epub.enable
-          && <MenuItem onClick={handleEpub}>
+          && (
+            <MenuItem onClick={handleEpub} disabled={filename.length <= 5}>
               {context.languagePicker("main.folder.rowMenu.epub")}
-            </MenuItem>}
+            </MenuItem>
+          )}
         <Divider />
         <MenuItem
           color="danger"

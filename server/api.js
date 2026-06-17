@@ -98,9 +98,11 @@ exports.extentPath = extentPath;
 // seconds
 //   terminal.lifecycle.ping
 //   task.delay
+// change GET/auth/meta if metadata changes
 const defaultConfig = {
   metadata: {
     password: "",
+    cipher: "",
     terminal: false
   },
   clipboard: {
@@ -274,6 +276,10 @@ const defaultConfig = {
 };
 exports.defaultConfig = defaultConfig;
 
+const SERAPH_MAGIC = Buffer.from('535250480100', 'hex');
+const X25519_PKCS8_HEADER = Buffer.from('302e020100300506032b656e04220420', 'hex');
+const X25519_SPKI_HEADER = Buffer.from('302a300506032b656e032100', 'hex');
+
 const fileOperator = {
   tempPrefix: 'seraph-',
   operateInTemp: (handleOperate) =>
@@ -426,6 +432,107 @@ const fileOperator = {
 
     let folderInfo = fs.readdirSync(folderPath, { withFileTypes: true })
     return folderInfo.map((item) => fileOperator.readFileInfo(folderPath, item.name));
+  },
+
+  encryptFile: (srcPath, dstPath) => {
+    const [salt, publicKeyHex] = configOperator.config.metadata.cipher.split(':');
+    const recipientPublicKey = crypto.createPublicKey({
+      key: Buffer.concat([
+        X25519_SPKI_HEADER,
+        Buffer.from(publicKeyHex, 'hex')
+      ]),
+      format: 'der',
+      type: 'spki'
+    });
+
+    const {
+      privateKey: ephPrivate,
+      publicKey: ephPublic
+    } = crypto.generateKeyPairSync('x25519');
+    const ephPublicBytes = ephPublic.export({
+      type: 'spki',
+      format: 'der'
+    }).subarray(-32);
+
+    const sharedSecret = crypto.diffieHellman({
+      privateKey: ephPrivate,
+      publicKey: recipientPublicKey
+    });
+    const aesKey = crypto.createHash('sha256')
+      .update(sharedSecret)
+      .update(salt)
+      .digest();
+
+    const iv = crypto.randomBytes(16);
+    const cipher = crypto.createCipheriv('aes-256-gcm', aesKey, iv);
+    const input = fs.readFileSync(srcPath);
+    const encrypted = Buffer.concat([cipher.update(input), cipher.final()]);
+    const authTag = cipher.getAuthTag();
+
+    // SERAPH_MAGIC(6) + ephPublic(32) + iv(16) + authTag(16) + ciphertext
+    fs.writeFileSync(dstPath, Buffer.concat([
+      SERAPH_MAGIC,
+      ephPublicBytes,
+      iv,
+      authTag,
+      encrypted
+    ]));
+  },
+
+  decryptFile: (srcPath, dstPath, privateKey) => {
+    const [salt, _] = configOperator.config.metadata.cipher.split(':');
+
+    const data = fs.readFileSync(srcPath);
+    const offset = SERAPH_MAGIC.length;
+
+    const ephPublicKey = crypto.createPublicKey({
+      key: Buffer.concat([
+        X25519_SPKI_HEADER,
+        data.subarray(offset, offset + 32)
+      ]),
+      format: 'der',
+      type: 'spki'
+    });
+    const iv = data.subarray(offset + 32, offset + 48);
+    const authTag = data.subarray(offset + 48, offset + 64);
+    const encrypted = data.subarray(offset + 64);
+
+    const recipientPrivateKey = crypto.createPrivateKey({
+      key: Buffer.concat([
+        X25519_PKCS8_HEADER,
+        crypto.scryptSync(privateKey, salt, 32)
+      ]),
+      format: 'der',
+      type: 'pkcs8'
+    });
+
+    const sharedSecret = crypto.diffieHellman({
+      privateKey: recipientPrivateKey,
+      publicKey: ephPublicKey
+    });
+    const aesKey = crypto.createHash('sha256')
+      .update(sharedSecret)
+      .update(salt).digest();
+
+    const decipher = crypto.createDecipheriv('aes-256-gcm', aesKey, iv);
+    decipher.setAuthTag(authTag);
+    const decrypted = Buffer.concat([
+      decipher.update(encrypted),
+      decipher.final()
+    ]);
+    fs.writeFileSync(dstPath, decrypted);
+  },
+
+  isEncrypted: (filePath) => {
+    try {
+      const fd = fs.openSync(filePath, 'r');
+      const buf = Buffer.alloc(SERAPH_MAGIC.length);
+      fs.readSync(fd, buf, 0, SERAPH_MAGIC.length, 0);
+      fs.closeSync(fd);
+      return buf.equals(SERAPH_MAGIC);
+    } catch {
+      return false;
+    }
   }
 };
 exports.fileOperator = fileOperator;
@@ -528,6 +635,29 @@ const configOperator = {
     const [salt, hash] = configOperator.config.metadata.password.split(':');
     const candidate = crypto.scryptSync(password, salt, 64).toString('hex');
     return crypto.timingSafeEqual(Buffer.from(candidate, 'hex'), Buffer.from(hash, 'hex'));
+  },
+
+  saveCipher: (privateKey) => {
+    let [salt, _] = configOperator.config.metadata.cipher.split(':');
+    // salt cannot be changed if set
+    // because original encrypted files cannot be decrypted
+    // once user changed privateKey after initialization
+    if (salt.length === 0) {
+      salt = crypto.randomBytes(16).toString('hex');
+    }
+    const privateKeyObj = crypto.createPrivateKey({
+      key: Buffer.concat([
+        X25519_PKCS8_HEADER,
+        crypto.scryptSync(privateKey, salt, 32)
+      ]),
+      format: 'der',
+      type: 'pkcs8'
+    });
+    const publicKeyHex = crypto.createPublicKey(privateKeyObj)
+      .export({ type: 'spki', format: 'der' })
+      .subarray(-32)
+      .toString('hex');
+    configOperator.setConfigMetadata("cipher", `${salt}:${publicKeyHex}`);
   }
 }
 
@@ -973,6 +1103,7 @@ Status.execErrCode = {
   TypeCheckFailed: "TCF",
   IdentifierConflict: "IC",
   FileModuleError: "FME",
+  PasswordUnexist: "PU",
   EnvironmentMissing: "EM",
   ExtensionError: "EE",
   DuplicateRequest: "DR",

@@ -510,6 +510,7 @@ const Status = {
     TypeCheckFailed: "TCF",
     IdentifierConflict: "IC",
     FileModuleError: "FME",
+    PasswordUnexist: "PU",
     EnvironmentMissing: "EM",
     ExtensionError: "EE",
     DuplicateRequest: "DR",
