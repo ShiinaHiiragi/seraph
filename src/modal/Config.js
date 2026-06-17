@@ -232,7 +232,7 @@ const Password = (props) => {
       success: () => context.languagePicker("modal.toast.success.setting"),
       error: (data) => data
     })
-  }, [context, query, password])
+  }, [context, query, password, callback])
 
   return (
     <form>
