@@ -124,9 +124,10 @@ const CrepeEditorInner = (props) => {
         }));
         // listener will prevent jittering itself
         ctx.get(listenerCtx).markdownUpdated(() => {
-          context.crepeRef.setModified(true);
           // TODO: word counter for CJK
-          console.log(context.crepeRef.getText().length);
+          // TODO: more precised modified flag
+          context.crepeRef.setModified(true);
+          // console.log(context.crepeRef.getText().length);
         });
       })
       .use($prose((ctx) => keymap({
@@ -167,7 +168,6 @@ const CrepeEditorInner = (props) => {
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
   return <Milkdown />;
 };
 

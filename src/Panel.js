@@ -163,20 +163,14 @@ const Panel = () => {
     getText: switchAction("getMarkdown"),
     setText: switchAction("replaceAll"),
     setReadOnly: switchAction("actionSetReadOnly"),
-    setModified: setCrepeModified,
-    reconfirm: (context, handleAction) => {
-      setModalReconfirm({
-        open: true,
-        caption: context.languagePicker("modal.reconfirm.caption.discardDraft"),
-        handleAction: handleAction
-      });
-    },
-    warning: (context, handleAction) => (event) => {
-      if (crepeModified) {
-        event?.preventDefault();
-        context.crepeRef.reconfirm(context, handleAction);
-      }
-    }
+    setModified: setCrepeModified
+    // reconfirm: (context, handleAction) => {
+    //   setModalReconfirm({
+    //     open: true,
+    //     caption: context.languagePicker("modal.reconfirm.caption.discardDraft"),
+    //     handleAction: handleAction
+    //   });
+    // }
   }), [crepeModified, switchAction]);
 
   // language related

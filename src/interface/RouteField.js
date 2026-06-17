@@ -7,7 +7,7 @@ import ChevronRightRoundedIcon from "@mui/icons-material/ChevronRightRounded";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import GlobalContext from "./constants";
 import Caption from "../components/Caption";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 
 const RouteFieldRaw = styled("div")(({ theme }) => ({
   width: "100%",
@@ -32,7 +32,6 @@ const RouteField = (props) => {
   } = props;
   const context = React.useContext(GlobalContext);
   const breadcrumb = React.useMemo(() => path ?? [ ], [path]);
-  const navigate = useNavigate();
 
   // after second tick, the globalSwitch were set properly
   React.useEffect(() => {
@@ -65,7 +64,6 @@ const RouteField = (props) => {
           <Link
             component={RouterLink}
             to="/"
-            onClick={context.crepeRef.warning(context, () => navigate("/"))}
             underline="none"
             color="neutral"
             aria-label="Home"
@@ -76,10 +74,6 @@ const RouteField = (props) => {
             <Link
               component={link !== undefined ? RouterLink : undefined}
               to={link?.split("/")?.slice(0, index + 2)?.join("/")}
-              onClick={link !== undefined ? context.crepeRef.warning(
-                context,
-                () => navigate(link.split("/").slice(0, index + 2).join("/"))
-              ) : undefined}
               key={index}
               underline="none"
               fontWeight={500}
