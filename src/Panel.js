@@ -103,7 +103,7 @@ const MainField = styled('div')(({ theme }) => ({
   overflowX: "hidden",
 }));
 
-function PublicExplorer() {
+const PublicExplorer = () => {
   const {
     clipboard,
     setClipboard,
@@ -122,7 +122,7 @@ function PublicExplorer() {
   );
 }
 
-function PrivateExplorer() {
+const PrivateExplorer = () => {
   const {
     clipboard,
     setClipboard,
@@ -147,21 +147,20 @@ const PanelLayout = () => {
   } = React.useContext(GlobalContext);
 
   const {
-    clipboard,
-    setClipboard,
+    modalInitOpen,
+    modalReconfirm,
     sortedPublicFolders,
     sortedPrivateFolders,
-    setPublicFolders,
-    setPrivateFolders,
-    setMetadata,
+    setModalReconfirm,
+    setModalInitOpen,
     setGlobalSwitch,
+    setClipboard,
+    setMetadata,
     setSetting,
     setSettingPair,
-    modalReconfirm,
-    setModalReconfirm,
-    modalInitOpen,
-    setModalInitOpen,
-    setFirstTick,
+    setPublicFolders,
+    setPrivateFolders,
+    setFirstTick
   } = React.useContext(RouterBridgeContext);
   const [drawerOpen, setDrawerOpen] = React.useState(false);
 
@@ -261,12 +260,12 @@ const Panel = () => {
 
   // global states
   const [globalSwitch, setGlobalSwitch] = React.useState(globalState.INNOCENT);
-  const [metadata, setMetadata] = React.useState(defaultMetadata);
   const [clipboard, setClipboard] = React.useState(defaultClipboard);
+  const [metadata, setMetadata] = React.useState(defaultMetadata);
   const [setting, setSetting] = React.useState(defaultSetting);
   const setSettingPair = React.useCallback((key, value) => {
     setSetting((setting) => setValue(setting, key, value))
-  }, [ ]);
+  }, []);
 
   const [publicFolders, setPublicFolders] = React.useState([]);
   const [privateFolders, setPrivateFolders] = React.useState([]);
@@ -303,7 +302,7 @@ const Panel = () => {
           setGlobalSwitch(globalState.ANONYMOUS);
         }
       })
-  }, [])
+  }, []);
 
   // second tick starts after first tick is set, ends after globalSwitch is set
   React.useEffect(() => {
@@ -378,20 +377,20 @@ const Panel = () => {
     >
       <RouterBridgeContext.Provider
         value={{
+          modalInitOpen: modalInitOpen,
+          modalReconfirm: modalReconfirm,
           clipboard: clipboard,
-          setClipboard: setClipboard,
           sortedPublicFolders: sortedPublicFolders,
           sortedPrivateFolders: sortedPrivateFolders,
-          setPublicFolders: setPublicFolders,
-          setPrivateFolders: setPrivateFolders,
-          setMetadata: setMetadata,
+          setModalReconfirm: setModalReconfirm,
+          setModalInitOpen: setModalInitOpen,
           setGlobalSwitch: setGlobalSwitch,
+          setClipboard: setClipboard,
+          setMetadata: setMetadata,
           setSetting: setSetting,
           setSettingPair: setSettingPair,
-          modalReconfirm: modalReconfirm,
-          setModalReconfirm: setModalReconfirm,
-          modalInitOpen: modalInitOpen,
-          setModalInitOpen: setModalInitOpen,
+          setPublicFolders: setPublicFolders,
+          setPrivateFolders: setPrivateFolders,
           setFirstTick: setFirstTick
         }}
       >
