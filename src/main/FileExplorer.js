@@ -651,6 +651,7 @@ const FileExplorer = (props) => {
             handleClickSort={handleClickSort}
             type={type}
             folderName={folderName}
+            filesList={filesList}
             sortedFilesList={sortedFilesList}
             setModalFilename={setModalFilename}
             setModalRenameOpen={setModalRenameOpen}
@@ -667,6 +668,7 @@ const FileExplorer = (props) => {
           <FileList
             type={type}
             folderName={folderName}
+            filesList={filesList}
             sortedFilesList={sortedFilesList}
             setModalFilename={setModalFilename}
             setModalRenameOpen={setModalRenameOpen}
@@ -718,7 +720,7 @@ const FileExplorer = (props) => {
           initValue={formPrivateKeyText}
           setValue={setFormPrivateKeyText}
           autoFocus
-          autoComplete="off"
+          maskOnly
           placeholder={context.languagePicker("modal.form.decrypt.placeholder")}
           error={formPrivateKeyError}
           slotProps={{ input: { type: "password" } }}

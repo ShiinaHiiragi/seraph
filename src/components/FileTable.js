@@ -16,6 +16,7 @@ export default function FileTable(props) {
     handleClickSort,
     type,
     folderName,
+    filesList,
     sortedFilesList,
     setModalFilename,
     setModalRenameOpen,
@@ -219,6 +220,7 @@ export default function FileTable(props) {
                       type={type}
                       folderName={folderName}
                       filename={item.name}
+                      filesList={filesList}
                       setModalFilename={setModalFilename}
                       setModalRenameOpen={setModalRenameOpen}
                       setModalDecryptOpen={setModalDecryptOpen}

@@ -9,6 +9,7 @@ export default function SemiInput(props) {
     setValue,
     offset,
     selectBasename,
+    maskOnly,
     ...inputProps
   } = props;
 
@@ -34,11 +35,15 @@ export default function SemiInput(props) {
   return (
     <Input
       {...inputProps}
+      {...(maskOnly && { autoComplete: "new-password" })}
       value={localValue}
       onChange={(event) => setLocalValue(event.target.value)}
       slotProps={{
-        input: { ref: inputRef },
-        ...inputProps.slotProps
+        ...inputProps.slotProps,
+        input: {
+          ref: inputRef,
+          ...inputProps.slotProps?.input,
+        },
       }}
     />
   );

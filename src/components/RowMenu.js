@@ -21,6 +21,7 @@ export default function RowMenu(props) {
     type,
     folderName,
     filename,
+    filesList,
     setModalFilename,
     setModalRenameOpen,
     setModalDecryptOpen,
@@ -320,7 +321,13 @@ export default function RowMenu(props) {
           && filename.endsWith(".srph")
           && folderName.length > 0
           && (
-            <MenuItem onClick={handleToggleDecrypt}>
+            <MenuItem
+              onClick={handleToggleDecrypt}
+              disabled={
+                filesList.some((item) =>
+                  item.name === filename.split(".").slice(0, -1).join("."))
+              }
+            >
               {context.languagePicker("main.folder.rowMenu.decrypt")}
             </MenuItem>
           )}

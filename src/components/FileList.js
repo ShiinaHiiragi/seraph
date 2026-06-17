@@ -15,6 +15,7 @@ export default function FileList(props) {
   const {
     type,
     folderName,
+    filesList,
     sortedFilesList,
     setModalFilename,
     setModalRenameOpen,
@@ -122,6 +123,7 @@ export default function FileList(props) {
                   type={type}
                   folderName={folderName}
                   filename={item.name}
+                  filesList={filesList}
                   setModalFilename={setModalFilename}
                   setModalRenameOpen={setModalRenameOpen}
                   setModalDecryptOpen={setModalDecryptOpen}
