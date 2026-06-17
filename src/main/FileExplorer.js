@@ -740,6 +740,7 @@ const FileExplorer = (props) => {
           initValue={formNewFolderNameText}
           setValue={setFormNewFolderNameText}
           autoFocus
+          autoComplete="off"
           placeholder={context.languagePicker("modal.form.new.placeholder")}
         />
       </ModalForm>

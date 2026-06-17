@@ -620,6 +620,7 @@ const TODO = () => {
           <SemiInput
             initValue={modalTaskName}
             setValue={setModalTaskName}
+            autoComplete="off"
             placeholder={context.languagePicker("universal.placeholder.instruction.required")}
           />
         </FormControl>

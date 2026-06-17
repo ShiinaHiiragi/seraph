@@ -238,7 +238,7 @@ const Password = (props) => {
       <Input
         size="sm"
         type={inputType}
-        autoComplete="current-password"
+        autoComplete="new-password"
         placeholder={context.languagePicker("header.config.account.passwordPlaceholder")}
         sx={{ maxWidth: 240, flexGrow: 1 }}
         value={password}
