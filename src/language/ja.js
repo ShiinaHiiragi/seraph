@@ -288,6 +288,7 @@ const ja = {
       items: "{0} 件",
       rowMenu: {
         open: "オープン",
+        download: "ダウンロード",
         rename: "リネーム",
         copy: "コピー",
         cut: "カット",

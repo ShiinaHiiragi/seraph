@@ -6,6 +6,8 @@ let router = express.Router();
 
 router.get('/*/:filename', (req, res, next) => {
   const { '0': folderName, filename } = req.params;
+  const { download } = req.query;
+
   const folderPath = api.dataPath.privateDirFolderPath(folderName);
   const filePath = path.join(folderPath, filename);
 
@@ -29,6 +31,9 @@ router.get('/*/:filename', (req, res, next) => {
   }
 
   // -> no code: return file directly
+  if (download === '1') {
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+  }
   res.sendFile(filePath, { dotfiles: 'allow' });
   return;
 });

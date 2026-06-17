@@ -288,6 +288,7 @@ const en = {
       items: "{0} Items",
       rowMenu: {
         open: "Open",
+        download: "Download",
         rename: "Rename",
         copy: "Copy",
         cut: "Cut",

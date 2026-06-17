@@ -1,6 +1,7 @@
 import React from "react";
 import { toast } from "sonner";
 import Divider from "@mui/joy/Divider";
+import Link from "@mui/joy/Link";
 import Menu from "@mui/joy/Menu";
 import MenuButton from "@mui/joy/MenuButton";
 import MenuItem from "@mui/joy/MenuItem";
@@ -11,7 +12,9 @@ import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
 import GlobalContext, {
   request,
   Status,
-  pathStartWith
+  pathStartWith,
+  encodePath,
+  serverBaseURL
 } from "../interface/constants";
 
 export default function RowMenu(props) {
@@ -250,6 +253,13 @@ export default function RowMenu(props) {
         <MoreVertRoundedIcon sx={{ display: { xs: "inline-flex", sm: "none" } }} />
       </MenuButton>
       <Menu size="sm" sx={{ minWidth: 140 }}>
+        <MenuItem
+          component="a"
+          target="_blank"
+          href={new URL(`/${type}${folderName.length ? "/" : ""}${encodePath(folderName)}/${encodeURIComponent(filename)}`, serverBaseURL).href + "?download=1"}
+        >
+          {context.languagePicker("main.folder.rowMenu.download")}
+        </MenuItem>
         <MenuItem onClick={handleToggleRename}>
           {context.languagePicker("main.folder.rowMenu.rename")}
         </MenuItem>

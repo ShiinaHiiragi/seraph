@@ -288,6 +288,7 @@ const zhHans = {
       items: "{0} 项",
       rowMenu: {
         open: "打开",
+        download: "下载",
         rename: "重命名",
         copy: "复制",
         cut: "剪切",
