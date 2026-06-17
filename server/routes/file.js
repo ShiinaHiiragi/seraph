@@ -4,6 +4,8 @@ let fs = require('fs');
 let fse = require('fs-extra')
 let child = require('child_process');
 let AdmZip = require('adm-zip');
+let iconv = require('iconv-lite');
+let jschardet = require('jschardet');
 let api = require('../api');
 let router = express.Router();
 
@@ -376,8 +378,18 @@ router.post('/unzip', (req, res, next) => {
   }
 
   const zip = new AdmZip(filePath);
-  const zipEntries = zip
-    .getEntries()
+  const entries = zip.getEntries();
+  const nonUnicodeEntries = entries.filter((item) => !(item.header.flags & 0x800));
+  if (nonUnicodeEntries.length > 0) {
+    const sample = Buffer.concat(nonUnicodeEntries.map((item) => item.rawEntryName));
+    const { encoding, confidence } = jschardet.detect(sample);
+    const enc = confidence > 0.5 && encoding ? encoding : 'gbk';
+    nonUnicodeEntries.forEach((item) => {
+      item.entryName = iconv.decode(e.rawEntryName, enc);
+    });
+  }
+
+  const zipEntries = entries
     .map((item) => item.entryName)
     .filter((item) => /^[^/]*\/?$/.test(item))
 
