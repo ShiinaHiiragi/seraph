@@ -5,7 +5,7 @@ import IconButton from "@mui/joy/IconButton";
 import Typography from "@mui/joy/Typography";
 import { styled } from "@mui/joy/styles";
 import { useParams } from "react-router";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useBlocker } from "react-router-dom";
 import { Milkdown, MilkdownProvider, useEditor } from "@milkdown/react";
 import { Crepe, CrepeFeature } from "@milkdown/crepe";
 import { editorViewCtx, editorViewOptionsCtx } from "@milkdown/kit/core";
@@ -173,7 +173,6 @@ const CrepeEditorInner = (props) => {
 
 const CrepeEditor = () => {
   const navigate = useNavigate();
-  const { "*": rawFolderName } = useParams();
   const context = React.useContext(GlobalContext);
 
   const [crepeState, setCrepeState] = React.useState(0);
@@ -182,6 +181,7 @@ const CrepeEditor = () => {
 
   const [readOnly, setReadOnly] = React.useState(true);
 
+  const { "*": rawFolderName } = useParams();
   const folderName = React.useMemo(
     () => rawFolderName
       .replace(/\/+/g, "/")
@@ -226,6 +226,34 @@ const CrepeEditor = () => {
       return () => window.removeEventListener("beforeunload", handler);
     }
   }, [context.crepeRef.modified]);
+
+  const blocker = useBlocker(context.crepeRef.modified);
+  const blockerActiveRef = React.useRef(false);
+
+  React.useEffect(() => {
+    if (blocker.state === "blocked") {
+      blockerActiveRef.current = true;
+      context.setModalReconfirm({
+        open: true,
+        caption: context.languagePicker("modal.reconfirm.caption.discardDraft"),
+        handleAction: () => {
+          blockerActiveRef.current = false;
+          context.crepeRef.setModified(false);
+          blocker.proceed();
+        }
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [blocker.state]);
+
+  // unblock the router when modal is cancelled
+  React.useEffect(() => {
+    if (blockerActiveRef.current && !context.modalReconfirm?.open) {
+      blockerActiveRef.current = false;
+      blocker.reset();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [context.modalReconfirm?.open]);
 
   // a markdown is savable when
   // - user has logged in

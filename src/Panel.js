@@ -353,13 +353,6 @@ const Panel = () => {
     setText: switchAction("replaceAll"),
     setReadOnly: switchAction("actionSetReadOnly"),
     setModified: setCrepeModified
-    // reconfirm: (context, handleAction) => {
-    //   setModalReconfirm({
-    //     open: true,
-    //     caption: context.languagePicker("modal.reconfirm.caption.discardDraft"),
-    //     handleAction: handleAction
-    //   });
-    // }
   }), [crepeModified, switchAction]);
 
   return (
@@ -371,6 +364,7 @@ const Panel = () => {
         crepeRef: crepeRef,
         metadata: metadata,
         setting: setting,
+        modalReconfirm: modalReconfirm,
         languagePicker: languagePicker,
         setModalReconfirm: setModalReconfirm
       }}
