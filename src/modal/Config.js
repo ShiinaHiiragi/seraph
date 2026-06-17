@@ -206,7 +206,7 @@ const StringInput = (props) => {
 };
 
 const Password = (props) => {
-  const { context, query, reconfirmCaption } = props;
+  const { context, query, reconfirmCaption, callback } = props;
 
   const [password, setPassword] = React.useState("");
   const [inputType, setInputType] = React.useState("password");
@@ -224,6 +224,7 @@ const Password = (props) => {
         .then(() => {
           setPassword("");
           setLoading(false);
+          callback?.();
           resolve();
         })
     }), {
@@ -576,6 +577,10 @@ const SECTIONS = (
                   ? context.languagePicker("modal.reconfirm.caption.changeCipher")
                   : undefined
               }
+              callback={() => setMetadata((metadata) => ({
+                ...metadata,
+                cipher: true
+              }))}
             />
           )
         }
