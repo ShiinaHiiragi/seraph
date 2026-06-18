@@ -15,11 +15,13 @@ import { listener, listenerCtx } from "@milkdown/kit/plugin/listener";
 import { imageBlockSchema } from "@milkdown/kit/component/image-block";
 import { linkTooltipAPI } from "@milkdown/kit/component/link-tooltip";
 import {
+  listItemSchema,
   insertHrCommand,
   insertImageCommand,
   wrapInBlockquoteCommand,
   wrapInBulletListCommand,
   wrapInOrderedListCommand,
+  wrapInBlockTypeCommand,
   toggleInlineCodeCommand,
   createCodeBlockCommand
 } from "@milkdown/kit/preset/commonmark";
@@ -106,7 +108,7 @@ const CrepeEditorInner = (props) => {
       root,
       defaultValue: context.crepeRef.snapshot.current ?? fileContent,
       features: {
-        [CrepeFeature.Toolbar]: true,
+        [CrepeFeature.Toolbar]: true
       },
       featureConfigs: {
         [CrepeFeature.Cursor]: {
@@ -196,20 +198,6 @@ const CrepeEditorInner = (props) => {
         [CrepeFeature.Placeholder]: {
           text: context.languagePicker("main.crepe.placeholder")
         }
-        // [CrepeFeature.Toolbar]: {
-        //   buildToolbar: (builder) => {
-        //     builder
-        //       .getGroup("function")
-        //       .addItem("image", {
-        //         icon: toSVG(ImageOutlinedIcon),
-        //         active: (ctx) => false,
-        //         onRun: (ctx) => {
-        //           ctx.get(commandsCtx)
-        //             .call(insertImageCommand.key)
-        //         }
-        //       })
-        //   }
-        // }
       },
     });
 
@@ -267,7 +255,15 @@ const CrepeEditorInner = (props) => {
           return true;
         },
         "Mod-Alt-7": () => false,
-        // NULL      -> task list
+        // Mod-Alt-t -> task list
+        "Mod-Alt-t": () => {
+          ctx.get(commandsCtx)
+            .call(wrapInBlockTypeCommand.key, {
+              nodeType: listItemSchema.type(ctx),
+              attrs: { checked: false },
+            });
+          return true;
+        },
         // Mod-Alt-g -> images block
         "Mod-Alt-g": () => {
           const { state, dispatch } = ctx.get(editorViewCtx);
