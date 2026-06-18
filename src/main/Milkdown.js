@@ -106,7 +106,7 @@ const CrepeEditorInner = (props) => {
       root,
       defaultValue: context.crepeRef.snapshot.current ?? fileContent,
       features: {
-        [CrepeFeature.Toolbar]: false,
+        [CrepeFeature.Toolbar]: true,
       },
       featureConfigs: {
         [CrepeFeature.Cursor]: {
@@ -196,6 +196,20 @@ const CrepeEditorInner = (props) => {
         [CrepeFeature.Placeholder]: {
           text: context.languagePicker("main.crepe.placeholder")
         }
+        // [CrepeFeature.Toolbar]: {
+        //   buildToolbar: (builder) => {
+        //     builder
+        //       .getGroup("function")
+        //       .addItem("image", {
+        //         icon: toSVG(ImageOutlinedIcon),
+        //         active: (ctx) => false,
+        //         onRun: (ctx) => {
+        //           ctx.get(commandsCtx)
+        //             .call(insertImageCommand.key)
+        //         }
+        //       })
+        //   }
+        // }
       },
     });
 
