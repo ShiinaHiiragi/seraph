@@ -341,13 +341,28 @@ const ja = {
         slash: {
           text: {
             title: "テキスト",
-            h1: "一級見出し"
+            text: "テキスト",
+            h1: "一級見出し",
+            h2: "二級見出し",
+            h3: "三級見出し",
+            h4: "四級見出し",
+            h5: "五級見出し",
+            h6: "六級見出し",
+            quote: "クオート",
+            divider: "ディバイダー"
           },
           list: {
-            title: "リスト"
+            title: "リスト",
+            bulletList: "アンオーダードリスト",
+            orderedList: "オーダードリスト",
+            taskList: "タスクリスト"
           },
           advanced: {
-            title: "アドバンスド"
+            title: "アドバンスド",
+            image: "イメージ",
+            codeBlock: "コード",
+            table: "テーブル",
+            math: "フォーミュラ"
           }
         }
       }

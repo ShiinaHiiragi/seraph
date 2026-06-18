@@ -341,13 +341,28 @@ const zhHans = {
         slash: {
           text: {
             title: "文本",
-            h1: "一级标题"
+            text: "文本",
+            h1: "一级标题",
+            h2: "二级标题",
+            h3: "三级标题",
+            h4: "四级标题",
+            h5: "五级标题",
+            h6: "六级标题",
+            quote: "引用",
+            divider: "分隔线"
           },
           list: {
-            title: "列表"
+            title: "列表",
+            bulletList: "无序列表",
+            orderedList: "有序列表",
+            taskList: "任务列表"
           },
           advanced: {
-            title: "高级"
+            title: "高级",
+            image: "图像",
+            codeBlock: "代码",
+            table: "表格",
+            math: "公式"
           }
         }
       }

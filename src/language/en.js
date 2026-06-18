@@ -341,13 +341,28 @@ const en = {
         slash: {
           text: {
             title: "Text",
-            h1: "Heading 1"
+            text: "Text",
+            h1: "Heading 1",
+            h2: "Heading 1",
+            h3: "Heading 1",
+            h4: "Heading 1",
+            h5: "Heading 1",
+            h6: "Heading 1",
+            quote: "Quote",
+            divider: "Divider"
           },
           list: {
-            title: "List"
+            title: "List",
+            bulletList: "Unordered List",
+            orderedList: "Ordered List",
+            taskList: "Task List"
           },
           advanced: {
-            title: "Advanced"
+            title: "Advanced",
+            image: "Image",
+            codeBlock: "Code",
+            table: "Table",
+            math: "Formula"
           }
         }
       }

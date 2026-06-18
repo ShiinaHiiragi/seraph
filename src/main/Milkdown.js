@@ -109,65 +109,65 @@ const CrepeEditorInner = (props) => {
               icon: ""
             },
             h2: {
-              label: "4",
+              label: context.languagePicker("main.crepe.popup.slash.text.h2"),
               icon: ""
             },
             h3: {
-              label: "5",
+              label: context.languagePicker("main.crepe.popup.slash.text.h3"),
               icon: ""
             },
             h4: {
-              label: "6",
+              label: context.languagePicker("main.crepe.popup.slash.text.h4"),
               icon: ""
             },
             h5: {
-              label: "7",
+              label: context.languagePicker("main.crepe.popup.slash.text.h5"),
               icon: ""
             },
             h6: {
-              label: "8",
+              label: context.languagePicker("main.crepe.popup.slash.text.h6"),
               icon: ""
             },
             quote: {
-              label: "9",
+              label: context.languagePicker("main.crepe.popup.slash.text.quote"),
               icon: ""
             },
             divider: {
-              label: "10",
+              label: context.languagePicker("main.crepe.popup.slash.text.divider"),
               icon: ""
             }
           },
           listGroup: {
             label: context.languagePicker("main.crepe.popup.slash.list.title"),
             bulletList: {
-              label: "12",
+              label: context.languagePicker("main.crepe.popup.slash.list.bulletList"),
               icon: ""
             },
             orderedList: {
-              label: "13",
+              label: context.languagePicker("main.crepe.popup.slash.list.orderedList"),
               icon: ""
             },
             taskList: {
-              label: "14",
+              label: context.languagePicker("main.crepe.popup.slash.list.taskList"),
               icon: ""
             }
           },
           advancedGroup: {
             label: context.languagePicker("main.crepe.popup.slash.advanced.title"),
             image: {
-              label: "16",
+              label: context.languagePicker("main.crepe.popup.slash.advanced.image"),
               icon: ""
             },
             codeBlock: {
-              label: "17",
+              label: context.languagePicker("main.crepe.popup.slash.advanced.codeBlock"),
               icon: ""
             },
             table: {
-              label: "18",
+              label: context.languagePicker("main.crepe.popup.slash.advanced.table"),
               icon: ""
             },
             math: {
-              label: "19",
+              label: context.languagePicker("main.crepe.popup.slash.advanced.math"),
               icon: ""
             }
           },
