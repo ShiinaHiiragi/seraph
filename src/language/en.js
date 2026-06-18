@@ -335,6 +335,23 @@ const en = {
         paste: "Paste"
       }
     },
+    crepe: {
+      placeholder: "Enter text here",
+      popup: {
+        slash: {
+          text: {
+            title: "Text",
+            h1: "Heading 1"
+          },
+          list: {
+            title: "List"
+          },
+          advanced: {
+            title: "Advanced"
+          }
+        }
+      }
+    },
     terminal: {
       send: "Send Control Characters"
     },

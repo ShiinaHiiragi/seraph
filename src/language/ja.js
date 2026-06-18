@@ -335,6 +335,23 @@ const ja = {
         paste: "ペースト"
       }
     },
+    crepe: {
+      placeholder: "ここにテキストを入力してください",
+      popup: {
+        slash: {
+          text: {
+            title: "テキスト",
+            h1: "一級見出し"
+          },
+          list: {
+            title: "リスト"
+          },
+          advanced: {
+            title: "アドバンスド"
+          }
+        }
+      }
+    },
     terminal: {
       send: "制御コードを送信"
     },

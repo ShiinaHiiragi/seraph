@@ -4,6 +4,7 @@ import Box from "@mui/joy/Box";
 import Link from "@mui/joy/Link";
 import { styled } from '@mui/joy';
 import { toast } from "sonner";
+import { renderToStaticMarkup } from "react-dom/server";
 
 // eslint-disable-next-line no-extend-native
 Boolean.prototype.assert = function (message) {
@@ -733,7 +734,7 @@ const toastTheme = (theme) => `
 
 export { toastTheme };
 
-
+const toSVG = (Icon) => renderToStaticMarkup(React.createElement(Icon));
 const HiddenInput = styled('input')`
   clip: rect(0 0 0 0);
   clip-path: inset(50%);
@@ -746,7 +747,7 @@ const HiddenInput = styled('input')`
   width: 1px;
 `;
 
-export { HiddenInput };
+export { toSVG, HiddenInput };
 
 
 const OnMounted = ({ onLoad }) => {

@@ -137,8 +137,15 @@
 
 /* Slash Menu Popup */
 .milkdown .milkdown-slash-menu {
+  border-radius: var(--joy-radius-sm);
   ul li {
     border-radius: var(--joy-radius-sm);
+    span {
+      font-weight: var(--joy-fontWeight-md) !important;
+    }
+  }
+  .tab-group {
+    padding-top: 4px;
   }
   .menu-groups .menu-group li {
     padding: 8px 8px;

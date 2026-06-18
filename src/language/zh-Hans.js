@@ -335,6 +335,23 @@ const zhHans = {
         paste: "粘贴"
       }
     },
+    crepe: {
+      placeholder: "在此输入文本",
+      popup: {
+        slash: {
+          text: {
+            title: "文本",
+            h1: "一级标题"
+          },
+          list: {
+            title: "列表"
+          },
+          advanced: {
+            title: "高级"
+          }
+        }
+      }
+    },
     terminal: {
       send: "发送控制字符"
     },

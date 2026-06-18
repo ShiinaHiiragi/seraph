@@ -356,7 +356,9 @@ const Panel = () => {
     isCreated: () => crepeEditor.current?.status === "Created",
     getText: switchAction("getMarkdown"),
     setText: switchAction("replaceAll"),
-    setReadOnly: switchAction("actionSetReadOnly")
+    setReadOnly: (readOnly) => {
+      crepeUtils.current?.setReadonly(readOnly);
+    }
   }), [switchAction]);
 
   return (

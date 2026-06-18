@@ -23,12 +23,11 @@ import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
 // import CloudOutlinedIcon from "@mui/icons-material/CloudOutlined";
 // import CloudDoneOutlinedIcon from "@mui/icons-material/CloudDoneOutlined";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import DoneIcon from "@mui/icons-material/Done";
 import Loading from "./Loading";
 import RouteField from "../interface/RouteField";
-import GlobalContext, {
-  request,
-  Status
-} from "../interface/constants";
+import GlobalContext, { request, Status, toSVG } from "../interface/constants";
 import {
   rubyRemark,
   rubyNode,
@@ -39,14 +38,6 @@ import {
 
 import "@milkdown/crepe/theme/common/style.css";
 import "../interface/milk.css";
-
-function actionSetReadOnly(readOnly) {
-  return (ctx) => {
-    ctx.get(editorViewCtx).setProps({
-      editable: () => !readOnly
-    });
-  }
-}
 
 const MaildownField = styled(Box)(({ theme }) => ({
   flex: 1,
@@ -95,11 +86,94 @@ const CrepeEditorInner = (props) => {
         [CrepeFeature.Toolbar]: false,
       },
       featureConfigs: {
-        [CrepeFeature.Cursor]: {
-          width: 2,
+        [CrepeFeature.Cursor]: { width: 2 },
+        [CrepeFeature.LinkTooltip]: {
+          editButton: toSVG(EditOutlinedIcon),
+          removeButton: toSVG(DeleteOutlineOutlinedIcon),
+          confirmButton: toSVG(DoneIcon),
+          inputPlaceholder: "URL"
         },
-        [Crepe.Feature.LinkTooltip]: {
-          inputPlaceholder: "URL",
+        [CrepeFeature.ImageBlock]: {
+          // TODO: upload
+        },
+        [CrepeFeature.BlockEdit]: {
+          // TODO: find good icons
+          textGroup: {
+            label: context.languagePicker("main.crepe.popup.slash.text.title"),
+            text: {
+              label: context.languagePicker("main.crepe.popup.slash.text.text"),
+              icon: ""
+            },
+            h1: {
+              label: context.languagePicker("main.crepe.popup.slash.text.h1"),
+              icon: ""
+            },
+            h2: {
+              label: "4",
+              icon: ""
+            },
+            h3: {
+              label: "5",
+              icon: ""
+            },
+            h4: {
+              label: "6",
+              icon: ""
+            },
+            h5: {
+              label: "7",
+              icon: ""
+            },
+            h6: {
+              label: "8",
+              icon: ""
+            },
+            quote: {
+              label: "9",
+              icon: ""
+            },
+            divider: {
+              label: "10",
+              icon: ""
+            }
+          },
+          listGroup: {
+            label: context.languagePicker("main.crepe.popup.slash.list.title"),
+            bulletList: {
+              label: "12",
+              icon: ""
+            },
+            orderedList: {
+              label: "13",
+              icon: ""
+            },
+            taskList: {
+              label: "14",
+              icon: ""
+            }
+          },
+          advancedGroup: {
+            label: context.languagePicker("main.crepe.popup.slash.advanced.title"),
+            image: {
+              label: "16",
+              icon: ""
+            },
+            codeBlock: {
+              label: "17",
+              icon: ""
+            },
+            table: {
+              label: "18",
+              icon: ""
+            },
+            math: {
+              label: "19",
+              icon: ""
+            }
+          },
+        },
+        [CrepeFeature.Placeholder]: {
+          text: context.languagePicker("main.crepe.placeholder")
         }
       },
     });
@@ -159,12 +233,12 @@ const CrepeEditorInner = (props) => {
     context.crepeRef.load(crepe.editor, {
       getMarkdown,
       replaceAll,
-      actionSetReadOnly
+      setReadonly: crepe.setReadonly.bind(crepe)
     });
     return crepe;
   }, [
     fileContent,
-    context.setting.meta.language
+    context.languagePicker
     // TODO: add config in context.setting
     // spell check
     // enable tool bar
