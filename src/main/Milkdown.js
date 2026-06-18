@@ -19,7 +19,7 @@ import {
   wrapInOrderedListCommand,
   createCodeBlockCommand,
   toggleInlineCodeCommand
-} from '@milkdown/kit/preset/commonmark';
+} from "@milkdown/kit/preset/commonmark";
 import { toggleStrikethroughCommand } from "@milkdown/kit/preset/gfm";
 import { keymap } from "@milkdown/kit/prose/keymap";
 import { Plugin } from "@milkdown/kit/prose/state";
@@ -94,7 +94,7 @@ const MaildownField = styled(Box)(({ theme }) => ({
 }));
 
 const CrepeEditorInner = (props) => {
-  const { readOnly, fileContent, setModified, editRef, saveRef } = props;
+  const { readOnly, fileContent, setModified, saveRef } = props;
   const context = React.useContext(GlobalContext);
 
   useEditor((root) => {
@@ -265,7 +265,7 @@ const CrepeEditorInner = (props) => {
           return true;
         },
         "Mod-Alt-x": () => false,
-        // Mod-`     -> inline code
+        // Mod-`     -> inline code (Mod-e was used for editable/read-only)
         "Mod-`": () => {
           ctx.get(commandsCtx)
             .call(toggleInlineCodeCommand.key);
@@ -280,11 +280,6 @@ const CrepeEditorInner = (props) => {
           }
           ctx.get(linkTooltipAPI.key)
             .addLink(selection.from, selection.to);
-          return true;
-        },
-        // Mod-e     -> editable or read-only (originally inline code)
-        "Mod-e": () => {
-          editRef.current?.click();
           return true;
         },
         // Mod-s     -> save to file
@@ -435,8 +430,17 @@ const CrepeEditor = () => {
     [context.isAuthority, crepeState, crepeRefer, readOnly]
   );
 
-  const editRef = React.useRef(null);
   const saveRef = React.useRef(null);
+  React.useEffect(() => {
+    const handler = (event) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === "e") {
+        event.preventDefault();
+        setReadOnly((readOnly) => !readOnly);
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []);
 
   React.useEffect(() => {
     setCrepeState(0);
@@ -528,7 +532,6 @@ const CrepeEditor = () => {
           />
           <Stack direction="row" sx={{ position: "relative", top: "1px" }}>
             <IconButton
-              ref={editRef}
               size="sm"
               variant="soft"
               onClick={() => setReadOnly((readOnly) => !readOnly)}
@@ -572,7 +575,6 @@ const CrepeEditor = () => {
               readOnly={readOnly}
               fileContent={fileContent}
               setModified={setModified}
-              editRef={editRef}
               saveRef={saveRef}
             />
           </MilkdownProvider>
