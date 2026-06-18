@@ -187,6 +187,12 @@ const defaultSetting = {
       count: 10
     }
   },
+  file: {
+    sort: {
+      field: "name",
+      reverse: false
+    }
+  },
   terminal: {
     enable: false,
     shell: {

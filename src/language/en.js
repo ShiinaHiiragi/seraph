@@ -64,6 +64,18 @@ const en = {
       },
       file: {
         title: "Files",
+        sort: "Default Sorting",
+        sortBy: {
+          name: "Name",
+          size: "Size",
+          type: "Type",
+          time: "Time"
+        },
+        sortOrder: "Order",
+        sortOrderOption: {
+          asc: "Ascending",
+          desc: "Descending"
+        },
         cipher: "Change Decryption Password"
       },
       terminal: {

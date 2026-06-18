@@ -49,7 +49,10 @@ const FileExplorer = (props) => {
   );
 
   const [filesList, setFilesList] = React.useState([]);
-  const [filesSorting, setFilesSorting] = React.useState(["name", false]);
+  const [filesSorting, setFilesSorting] = React.useState([
+    context.setting.file.sort.field,
+    context.setting.file.sort.reverse
+  ]);
   const [folderState, setFolderState] = React.useState(0);
 
   // remove duplicate file entries

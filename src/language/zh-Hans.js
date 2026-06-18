@@ -64,6 +64,18 @@ const zhHans = {
       },
       file: {
         title: "文件",
+        sort: "默认排序",
+        sortBy: {
+          name: "文件名",
+          size: "大小",
+          type: "类型",
+          time: "创建时间"
+        },
+        sortOrder: "顺序",
+        sortOrderOption: {
+          asc: "升序",
+          desc: "降序"
+        },
         cipher: "更换解密密码"
       },
       terminal: {

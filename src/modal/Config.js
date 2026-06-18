@@ -570,6 +570,43 @@ const SECTIONS = (
       label: context.languagePicker("header.config.file.title"),
       items: [
         {
+          key: context.languagePicker("header.config.file.sort"),
+          value: (
+            <Stack spacing={2}>
+              {Literal(
+                context.setting.file.sort.field,
+                [
+                  { value: "name", label: context.languagePicker("header.config.file.sortBy.name") },
+                  { value: "size", label: context.languagePicker("header.config.file.sortBy.size") },
+                  { value: "type", label: context.languagePicker("header.config.file.sortBy.type") },
+                  { value: "time", label: context.languagePicker("header.config.file.sortBy.time") }
+                ],
+                "file.sort.field",
+                handleApply
+              )}
+              <FormControl>
+                <FormLabel sx={{ mb: 0, color: "neutral.500" }}>
+                  {context.languagePicker("header.config.file.sortOrder")}
+                </FormLabel>
+                <RadioGroup
+                  size="sm"
+                  value={String(context.setting.file.sort.reverse)}
+                  onChange={(event) => handleApply("file.sort.reverse", event.target.value === "true")}
+                >
+                  <Radio
+                    value="false"
+                    label={context.languagePicker("header.config.file.sortOrderOption.asc")}
+                  />
+                  <Radio
+                    value="true"
+                    label={context.languagePicker("header.config.file.sortOrderOption.desc")}
+                  />
+                </RadioGroup>
+              </FormControl>
+            </Stack>
+          )
+        },
+        {
           key: context.languagePicker("header.config.file.cipher"),
           value: (
             <Password

@@ -64,6 +64,18 @@ const ja = {
       },
       file: {
         title: "ファイル",
+        sort: "デフォルトの並べ替え",
+        sortBy: {
+          name: "ファイル名",
+          size: "サイズ",
+          type: "タイプ",
+          time: "作成日時"
+        },
+        sortOrder: "シーケンス",
+        sortOrderOption: {
+          asc: "昇順",
+          desc: "降順"
+        },
         cipher: "デクリプトパスワードを変更"
       },
       terminal: {
