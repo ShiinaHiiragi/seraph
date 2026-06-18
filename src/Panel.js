@@ -3,7 +3,7 @@ import CssBaseline from "@mui/joy/CssBaseline";
 import GlobalStyles from "@mui/joy/GlobalStyles";
 import { styled, CssVarsProvider } from "@mui/joy/styles";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
-import { Toaster } from "sonner";
+import { Toaster, toast } from "sonner";
 
 import Header from "./components/Header";
 import Navigation from "./components/Navigation";
@@ -298,6 +298,13 @@ const Panel = () => {
           setMetadata(data.metadata);
           setClipboard(data.clipboard);
           setGlobalSwitch(globalState.AUTHORITY);
+          if (data.saltWarning) {
+            toast.error(
+              languagePickerSpawner(data.setting.meta.language)("modal.toast.warning.saltMissing")
+                .format(data.metadata.appdata),
+              { duration: Infinity }
+            );
+          }
         } else {
           setGlobalSwitch(globalState.ANONYMOUS);
         }

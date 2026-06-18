@@ -9,6 +9,16 @@ const crypto = require('crypto');
 const checkDiskSpace = require('check-disk-space').default
 const si = require('systeminformation')
 
+const APP_NAME = "Seraph";
+const SERAPH_MAGIC = Buffer.from('535250480100', 'hex');
+const X25519_PKCS8_HEADER = Buffer.from('302e020100300506032b656e04220420', 'hex');
+const X25519_SPKI_HEADER = Buffer.from('302a300506032b656e032100', 'hex');
+
+exports.APP_NAME = APP_NAME;
+exports.SERAPH_MAGIC = SERAPH_MAGIC;
+exports.X25519_PKCS8_HEADER = X25519_PKCS8_HEADER;
+exports.X25519_SPKI_HEADER = X25519_SPKI_HEADER;
+
 String.prototype.versionGE = function (min) {
   const left = this.split('.').map(Number);
   const right = min.split('.').map(Number);
@@ -81,6 +91,10 @@ const dataPath = {
   taskFilePath: path.join(__dirname, "./data/task.json"),
   authFilePath: path.join(__dirname, "./401.html"),
   extensionDirPath: path.join(__dirname, "../extensions"),
+  appdataDirPath: process.platform === 'win32'
+    ? path.join(process.env.APPDATA || path.join(os.homedir(), 'AppData', 'Roaming'), APP_NAME)
+    : path.join(process.env.XDG_CONFIG_HOME || path.join(os.homedir(), '.config'), APP_NAME),
+  appdataFilePath: (filename) => path.join(dataPath.appdataDirPath, filename),
   publicDirFolderPath: (folderName) => path.join(__dirname, "./data/public", folderName),
   privateDirFolderPath: (folderName) => path.join(__dirname, "./data/private", folderName),
 };
@@ -282,10 +296,6 @@ const defaultConfig = {
 };
 exports.defaultConfig = defaultConfig;
 
-const SERAPH_MAGIC = Buffer.from('535250480100', 'hex');
-const X25519_PKCS8_HEADER = Buffer.from('302e020100300506032b656e04220420', 'hex');
-const X25519_SPKI_HEADER = Buffer.from('302a300506032b656e032100', 'hex');
-
 function APIException(code) {
   const err = new Error();
   err.name = 'APIException';
@@ -296,6 +306,8 @@ function APIException(code) {
 
 const fileOperator = {
   tempPrefix: 'seraph-',
+  saltFilePath: dataPath.appdataFilePath("salt.json"),
+
   operateInTemp: (handleOperate) =>
     fs.promises.mkdtemp(path.join(os.tmpdir(), fileOperator.tempPrefix))
       .then((tempdir) =>
@@ -387,6 +399,25 @@ const fileOperator = {
     fs.writeFileSync(
       dataPath.taskFilePath,
       JSON.stringify(task, null, 2)
+    );
+  },
+
+  readSalt: () => {
+    if (!fs.existsSync(fileOperator.saltFilePath)) {
+      fs.writeFileSync(
+        fileOperator.saltFilePath,
+        JSON.stringify([ ], null, 2)
+      );
+      fs.chmodSync(fileOperator.saltFilePath, Permission.lowSecurity);
+    }
+    return JSON.parse(fs.readFileSync(fileOperator.saltFilePath))
+      .filter((item) => item.length > 0);
+  },
+
+  saveSalt: (salt) => {
+    fs.writeFileSync(
+      fileOperator.saltFilePath,
+      JSON.stringify(salt, null, 2)
     );
   },
 
@@ -494,8 +525,7 @@ const fileOperator = {
   },
 
   decryptFile: (srcPath, dstPath, privateKey) => {
-    const [salt, _] = configOperator.config.metadata.cipher.split(':');
-
+    const salt = configOperator.getSalt();
     const data = fs.readFileSync(srcPath);
     const offset = SERAPH_MAGIC.length;
     const magic = data.subarray(0, SERAPH_MAGIC.length);
@@ -569,11 +599,13 @@ exports.fileOperator = fileOperator;
   fileOperator
     .probeDir(dataPath.dataDirPath)
     .probeDir(dataPath.publicDirPath)
-    .probeDir(dataPath.privateDirPath, Permission.highSecurity);
+    .probeDir(dataPath.privateDirPath, Permission.highSecurity)
+    .probeDir(dataPath.appdataDirPath);
 
   fileOperator.readConfig();
   fileOperator.readToken();
   fileOperator.readTask();
+  fileOperator.readSalt();
 })();
 
 const configOperator = {
@@ -622,6 +654,16 @@ const configOperator = {
     }));
   },
 
+  getMetadata: () => {
+    const { password: _, cipher, ...metadata } = configOperator.config.metadata;
+    return {
+      ...metadata,
+      salt: cipher.split(":")[0],
+      appdata: dataPath.appdataDirPath,
+      platform: process.platform
+    };
+  },
+
   setConfigClipboard: (path, permanent) => {
     const { filePath } = fileOperator.pathCombinator(...path);
     configOperator.setConfig((config) => ({
@@ -664,14 +706,16 @@ const configOperator = {
     return crypto.timingSafeEqual(Buffer.from(candidate, 'hex'), Buffer.from(hash, 'hex'));
   },
 
+  getSalt: () => configOperator.config.metadata.cipher.split(':')[0],
   saveCipher: (privateKey) => {
-    let [salt, _] = configOperator.config.metadata.cipher.split(':');
     // salt cannot be changed if set
     // because original encrypted files cannot be decrypted
     // once user changed privateKey after initialization
+    let salt = configOperator.getSalt();
     if (salt.length === 0) {
       salt = crypto.randomBytes(16).toString('hex');
     }
+    saltOperator.addSalt(salt);
     const privateKeyObj = crypto.createPrivateKey({
       key: Buffer.concat([
         X25519_PKCS8_HEADER,
@@ -972,6 +1016,60 @@ const taskOperator = {
   }
 };
 
+const saltOperator = {
+  salt: fileOperator.readSalt(),
+  selfCheckOnStart: false,
+
+  setSalt: (handle) => {
+    const newSalt = handle(saltOperator.salt);
+    fileOperator.saveSalt(newSalt);
+    saltOperator.salt = newSalt;
+  },
+
+  addSalt: (salt) => {
+    saltOperator.setSalt((salts) =>
+      salt.length === 0 || salts.includes(salt)
+        ? salts
+        : [...salts, salt]
+    );
+  },
+
+  cruiseEncrypted: (currentDir) => {
+    const entries = fs.readdirSync(currentDir, { withFileTypes: true });
+    for (const entry of entries) {
+      const fullPath = path.join(currentDir, entry.name);
+      if (entry.isDirectory()) {
+        if (saltOperator.cruiseEncrypted(fullPath)) {
+          return true;
+        }
+      } else if (entry.isFile() && fileOperator.isEncrypted(fullPath)) {
+        return true;
+      }
+    }
+    return false;
+  },
+
+  selfCheck: () => {
+    const salt = configOperator.getSalt();
+    const hasSalt = saltOperator.salt.includes(salt);
+    saltOperator.addSalt(salt);
+    return !hasSalt && (
+      saltOperator.cruiseEncrypted(dataPath.privateDirPath)
+        || saltOperator.cruiseEncrypted(dataPath.publicDirPath)
+    );
+  },
+
+  getSelfCheck: () => {
+    const result = saltOperator.selfCheckOnStart;
+    saltOperator.selfCheckOnStart = false;
+    return result;
+  }
+};
+
+;(function () {
+  saltOperator.selfCheckOnStart = saltOperator.selfCheck();
+})();
+
 exports.expiredPeriod = expiredPeriod;
 exports.cookieOperator = cookieOperator;
 exports.taskDelay = taskDelay;
@@ -979,6 +1077,7 @@ exports.tokenOperator = tokenOperator;
 exports.checkerOperator = checkerOperator;
 exports.checkerParam = checkerParam;
 exports.taskOperator = taskOperator;
+exports.saltOperator = saltOperator;
 
 
 // seraph and server info

@@ -28,20 +28,16 @@ router.get('/meta', (req, res, next) => {
     const privateFolder = api.fileOperator.readFoldersList(api.dataPath.privateDirPath);
 
     // -> ES: return all metadata except passwords
-    const { password: _, cipher, ...metadata } = api.configOperator.config.metadata;
     req.status.addExecStatus();
     res.send({
       ...req.status.generateReport(),
       public: publicFolder,
       private: privateFolder,
-      metadata: {
-        ...metadata,
-        salt: cipher.split(":")[0],
-        platform: process.platform
-      },
+      metadata: api.configOperator.getMetadata(),
       clipboard: api.configOperator.config.clipboard,
-      setting: api.configOperator.config.setting
-    })
+      setting: api.configOperator.config.setting,
+      saltWarning: api.saltOperator.getSelfCheck()
+    });
     return;
   }
 });
@@ -91,7 +87,9 @@ router.post('/login', (req, res, next) => {
           ...req.status.generateReport(),
           public: publicFolder,
           private: privateFolder,
-          clipboard: api.configOperator.config.clipboard
+          metadata: api.configOperator.getMetadata(),
+          clipboard: api.configOperator.config.clipboard,
+          saltWarning: api.saltOperator.getSelfCheck()
         });
         return;
       } else {

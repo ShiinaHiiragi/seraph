@@ -659,7 +659,7 @@ router.post('/reset', (req, res, next) => {
   req.status.addExecStatus();
   res.send({
     ...req.status.generateReport(),
-    salt: api.configOperator.config.metadata.cipher.split(":")[0]
+    salt: api.configOperator.getSalt()
   });
   return;
 });

@@ -77,7 +77,7 @@ const en = {
           desc: "Descending"
         },
         salt: "Decryption Salt",
-        saltTip: "Decryption salt does not change when password changes. All files encrypted before can no longer be restored once the salt is lost.",
+        saltTip: "Decryption salt does not change when password changes. All files encrypted before can no longer be recovered once the salt is lost.",
         saltUnexist: "(Not set)",
         cipher: "Change Decryption Password"
       },
@@ -399,6 +399,7 @@ const en = {
       },
       warning: {
         invalidToken: "Token is invalid or expired. The page will be refreshed automatically in seconds.",
+        saltMissing: "The server has detected that the decryption salt was changed or deleted, which may make previously encrypted files unrecoverable. You can find all local salt backups saved under {0}.",
         illegalRename: "Filename pre-check failed.",
         invalidConfig: "Backup file pre-check failed."
       },

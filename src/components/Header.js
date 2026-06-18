@@ -235,10 +235,18 @@ const Header = (props) => {
       .then((data) => {
         setPublicFolders(data.public);
         setPrivateFolders(data.private);
+        setMetadata(data.metadata);
         setClipboard(data.clipboard);
         setGlobalSwitch(globalState.AUTHORITY);
         handleCloseLogin();
         toast(context.languagePicker("modal.toast.plain.login"));
+        if (data.saltWarning) {
+          toast.error(
+            context.languagePicker("modal.toast.warning.saltMissing")
+              .format(data.metadata.appdata),
+            { duration: Infinity }
+          );
+        }
       })
       .finally(() => setButtonLoading(false));
   }, [
@@ -246,6 +254,7 @@ const Header = (props) => {
     setGlobalSwitch,
     setPublicFolders,
     setPrivateFolders,
+    setMetadata,
     setClipboard,
     formPasswordText,
     handleCloseLogin
