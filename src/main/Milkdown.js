@@ -14,6 +14,7 @@ import { getMarkdown, replaceAll } from "@milkdown/kit/utils";
 import { listener, listenerCtx } from "@milkdown/kit/plugin/listener";
 import { linkTooltipAPI } from "@milkdown/kit/component/link-tooltip";
 import { keymap } from "@milkdown/kit/prose/keymap";
+import { Plugin } from "@milkdown/kit/prose/state";
 import { $prose } from "@milkdown/kit/utils";
 // import { emoji } from "@milkdown/plugin-emoji";
 import EditOffOutlinedIcon from "@mui/icons-material/EditOffOutlined";
@@ -131,6 +132,22 @@ const CrepeEditorInner = (props) => {
           ctx.get(linkTooltipAPI.key)
             .addLink(selection.from, selection.to);
           return true;
+        }
+      })))
+      .use($prose(() => new Plugin({
+        props: {
+          handleDOMEvents: {
+            click(view, event) {
+              if (view.editable) return false
+              const a = event.target.closest("a[href]");
+              if (a) {
+                event.preventDefault();
+                window.open(a.href, "_blank", "noopener,noreferrer");
+                return true
+              }
+              return false
+            }
+          }
         }
       })))
       .use(listener)
