@@ -336,7 +336,7 @@ const ja = {
       }
     },
     crepe: {
-      placeholder: "ここにテキストを入力してください",
+      placeholder: "ここにテキストを入力",
       popup: {
         slash: {
           text: {
