@@ -16,16 +16,19 @@ import { imageBlockSchema } from "@milkdown/kit/component/image-block";
 import { linkTooltipAPI } from "@milkdown/kit/component/link-tooltip";
 import {
   listItemSchema,
+  codeBlockSchema,
   insertHrCommand,
   insertImageCommand,
   wrapInBlockquoteCommand,
   wrapInBulletListCommand,
   wrapInOrderedListCommand,
   wrapInBlockTypeCommand,
+  addBlockTypeCommand,
+  selectTextNearPosCommand,
   toggleInlineCodeCommand,
   createCodeBlockCommand
 } from "@milkdown/kit/preset/commonmark";
-import { toggleStrikethroughCommand } from "@milkdown/kit/preset/gfm";
+import { createTable, toggleStrikethroughCommand } from "@milkdown/kit/preset/gfm";
 import { keymap } from "@milkdown/kit/prose/keymap";
 import { Plugin } from "@milkdown/kit/prose/state";
 // import { emoji } from "@milkdown/plugin-emoji";
@@ -221,41 +224,41 @@ const CrepeEditorInner = (props) => {
           });
       })
       .use($prose((ctx) => keymap({
-        // Mod-Alt-0 -> text (default)
-        // Mod-Alt-1 -> h1 (default)
-        // Mod-Alt-2 -> h2 (default)
-        // Mod-Alt-3 -> h3 (default)
-        // Mod-Alt-4 -> h4 (default)
-        // Mod-Alt-5 -> h5 (default)
-        // Mod-Alt-6 -> h6 (default)
-        // Mod-Alt-q -> quote block
+        // Mod-Alt-0 -> block text (default)
+        // Mod-Alt-1 -> block h1 (default)
+        // Mod-Alt-2 -> block h2 (default)
+        // Mod-Alt-3 -> block h3 (default)
+        // Mod-Alt-4 -> block h4 (default)
+        // Mod-Alt-5 -> block h5 (default)
+        // Mod-Alt-6 -> block h6 (default)
+        // Mod-Alt-q -> block quote
+        "Mod-Shift-b": () => false,
         "Mod-Alt-q": () => {
           ctx.get(commandsCtx)
             .call(wrapInBlockquoteCommand.key);
           return true;
         },
-        "Mod-Shift-b": () => false,
-        // Mod-Alt-d -> divider
+        // Mod-Alt-d -> block divider
         "Mod-Alt-d": () => {
           ctx.get(commandsCtx)
             .call(insertHrCommand.key);
           return true;
         },
-        // Mod-Alt-u -> unordered list
+        // Mod-Alt-u -> block unordered list
+        "Mod-Alt-8": () => false,
         "Mod-Alt-u": () => {
           ctx.get(commandsCtx)
             .call(wrapInBulletListCommand.key);
           return true;
         },
-        "Mod-Alt-8": () => false,
-        // Mod-Alt-o -> ordered list
+        // Mod-Alt-o -> block ordered list
+        "Mod-Alt-7": () => false,
         "Mod-Alt-o": () => {
           ctx.get(commandsCtx)
             .call(wrapInOrderedListCommand.key);
           return true;
         },
-        "Mod-Alt-7": () => false,
-        // Mod-Alt-t -> task list
+        // Mod-Alt-t -> block task list
         "Mod-Alt-t": () => {
           ctx.get(commandsCtx)
             .call(wrapInBlockTypeCommand.key, {
@@ -264,45 +267,64 @@ const CrepeEditorInner = (props) => {
             });
           return true;
         },
-        // Mod-Alt-g -> images block
+        // Mod-Alt-g -> block images
         "Mod-Alt-g": () => {
-          const { state, dispatch } = ctx.get(editorViewCtx);
-          const nodeType = imageBlockSchema.type(ctx);
-          const node = nodeType.create({ src: "", caption: "", ratio: 1 });
-          const tr = state.tr.replaceSelectionWith(node);
-          dispatch(tr.scrollIntoView());
+          ctx.get(commandsCtx)
+            .call(addBlockTypeCommand.key, {
+              nodeType: imageBlockSchema.type(ctx)
+            });
           return true;
         },
-        // Mod-Alt-` -> code block
+        // Mod-Alt-` -> block code
+        "Mod-Alt-c": () => false,
         "Mod-Alt-`": () => {
           ctx.get(commandsCtx)
             .call(createCodeBlockCommand.key);
           return true;
         },
-        "Mod-Alt-c": () => false,
-        // NULL      -> tables
-        // NULL      -> latex block
-        // Mod-b     -> bold text (default)
-        // Mod-i     -> italic text (default)
-        // Mod-q     -> delete line
+        // Mod-Alt-p -> block tables
+        "Mod-Alt-p": () => {
+          ctx.get(commandsCtx)
+            .call(addBlockTypeCommand.key, {
+              nodeType: createTable(ctx, 3, 3),
+            });
+          ctx.get(commandsCtx)
+            .call(selectTextNearPosCommand.key, {
+              pos: ctx.get(editorViewCtx).state.selection.from
+            });
+          return true;
+        },
+        // Mod-Alt-m -> block latex
+        "Mod-Alt-m": () => {
+          ctx.get(commandsCtx)
+            .call(addBlockTypeCommand.key, {
+              nodeType: codeBlockSchema.type(ctx),
+              attrs: { language: 'LaTeX' },
+            });
+          return true;
+        },
+        // Mod-b     -> inline bold text (default)
+        // Mod-i     -> inline italic text (default)
+        // Mod-q     -> inline strike through
+        "Mod-Alt-x": () => false,
         "Mod-q": () => {
           ctx.get(commandsCtx)
             .call(toggleStrikethroughCommand.key);
           return true;
         },
-        // Mod-g     -> image inline
+        // Mod-g     -> inline image
         "Mod-g": () => {
           ctx.get(commandsCtx)
             .call(insertImageCommand.key);
           return true;
         },
-        "Mod-Alt-x": () => false,
         // Mod-`     -> inline code (Mod-e was used for editable/read-only)
         "Mod-`": () => {
           ctx.get(commandsCtx)
             .call(toggleInlineCodeCommand.key);
           return true;
         },
+        // TODO
         // NULL      -> inline math
         // Mod-l     -> inline link
         "Mod-l": () => {
@@ -314,6 +336,7 @@ const CrepeEditorInner = (props) => {
             .addLink(state.selection.from, state.selection.to);
           return true;
         },
+        // TODO: may be global shortcut
         // Mod-s     -> save to file
         "Mod-s": () => {
           saveRef.current?.click();
