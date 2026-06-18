@@ -13,7 +13,12 @@ import { editorViewCtx, editorViewOptionsCtx, commandsCtx } from "@milkdown/kit/
 import { getMarkdown, replaceAll, $prose } from "@milkdown/kit/utils";
 import { listener, listenerCtx } from "@milkdown/kit/plugin/listener";
 import { linkTooltipAPI } from "@milkdown/kit/component/link-tooltip";
-import { wrapInBlockquoteCommand } from '@milkdown/kit/preset/commonmark';
+import {
+  wrapInBlockquoteCommand,
+  wrapInBulletListCommand,
+  wrapInOrderedListCommand,
+} from '@milkdown/kit/preset/commonmark';
+import { toggleStrikethroughCommand } from "@milkdown/kit/preset/gfm";
 import { keymap } from "@milkdown/kit/prose/keymap";
 import { Plugin } from "@milkdown/kit/prose/state";
 // import { emoji } from "@milkdown/plugin-emoji";
@@ -209,13 +214,53 @@ const CrepeEditorInner = (props) => {
           });
       })
       .use($prose((ctx) => keymap({
-        "Mod-m": () => {
+        // Mod-Alt-0 -> text (default
+        // Mod-Alt-1 -> h1 (default)
+        // Mod-Alt-2 -> h2 (default)
+        // Mod-Alt-3 -> h3 (default)
+        // Mod-Alt-4 -> h4 (default)
+        // Mod-Alt-5 -> h5 (default)
+        // Mod-Alt-6 -> h6 (default)
+        // Mod-Alt-b -> quote block
+        "Mod-Alt-b": () => {
           ctx.get(commandsCtx)
             .call(wrapInBlockquoteCommand.key);
           return true;
         },
         "Mod-Shift-b": () => false,
-        "Mod-k": () => {
+        // NULL      -> divider
+        // Mod-Alt-u -> unordered list
+        "Mod-Alt-u": () => {
+          ctx.get(commandsCtx)
+            .call(wrapInBulletListCommand.key);
+          return true;
+        },
+        "Mod-Alt-8": () => false,
+        // Mod-Alt-o -> ordered list
+        "Mod-Alt-o": () => {
+          ctx.get(commandsCtx)
+            .call(wrapInOrderedListCommand.key);
+          return true;
+        },
+        "Mod-Alt-7": () => false,
+        // NULL      -> task list
+        // NULL      -> images
+        // Mod-Alt-c -> code block (default)
+        // NULL      -> tables
+        // NULL      -> latex block
+        // Mod-b     -> bold text (default)
+        // Mod-i     -> italic text (default)
+        // Mod-q     -> delete line
+        "Mod-q": () => {
+          ctx.get(commandsCtx)
+            .call(toggleStrikethroughCommand.key);
+          return true;
+        },
+        "Mod-Alt-x": () => false,
+        // Mod-e     -> inline code (default)
+        // NULL      -> inline math
+        // Mod-l     -> inline link
+        "Mod-l": () => {
           const { selection } = ctx.get(editorViewCtx).state;
           if (selection.empty) {
             return false;
