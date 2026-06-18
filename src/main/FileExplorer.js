@@ -343,6 +343,23 @@ const FileExplorer = (props) => {
             ]);
           }
 
+          // e.g. cut X/a/b/c -> paste to X/a
+          // then size of X/a/b should one less than origin value
+          if (
+            !clipboard.permanent
+              && originFolderName.startsWith(folderName + "/")
+              && originFolderName.split("/").length === folderName.split("/").length + 1
+          ) {
+            setFilesList((filesList) => filesList.map((item) =>
+              item.name === originFolderName.split("/").slice(-1)[0]
+                ? {
+                  ...item,
+                  size: item.size - 1
+                }
+                : item
+            ));
+          }
+
           setClipboard((clipboard) =>
             clipboard.permanent ? clipboard : { ...defaultClipboard }
           )
