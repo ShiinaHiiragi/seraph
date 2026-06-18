@@ -22,6 +22,7 @@ import Input from "@mui/joy/Input";
 import Typography from "@mui/joy/Typography";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
@@ -221,10 +222,10 @@ const Password = (props) => {
         { "": () => setLoading(false) },
         reject
       )
-        .then(() => {
+        .then((data) => {
           setPassword("");
           setLoading(false);
-          callback?.();
+          callback?.(data);
           resolve();
         })
     }), {
@@ -281,6 +282,8 @@ const Password = (props) => {
 const SECTIONS = (
   context,
   setMetadata,
+  showSalt,
+  setShowSalt,
   resetButtonLoading,
   handleApply,
   handleReset,
@@ -609,6 +612,71 @@ const SECTIONS = (
           )
         },
         {
+          key: context.languagePicker("header.config.file.salt"),
+          tip: context.metadata.salt.length > 0
+            ? context.languagePicker("header.config.file.saltTip")
+            : undefined,
+          value: (
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                flexDirection: "row"
+              }}
+            >
+              <Typography
+                level="body-sm"
+                color="neutral.500"
+                sx={{
+                  fontSize: "0.8rem",
+                  maxWidth: 248,
+                  flexGrow: 1,
+                  overflow: "hidden",
+                  whiteSpace: "nowrap",
+                  textOverflow: "ellipsis"
+                }}
+              >
+                {context.metadata.salt.length > 0
+                  ? showSalt
+                  ? context.metadata.salt
+                  : "•".repeat(context.metadata.salt.length)
+                  : context.languagePicker("header.config.file.saltUnexist")}
+              </Typography>
+              {context.metadata.salt.length > 0 && (
+                <React.Fragment>
+                  <IconButton
+                    size="sm"
+                    variant="soft"
+                    onClick={() => setShowSalt((showSalt) => !showSalt)}
+                    sx={{
+                      backgroundColor: "transparent",
+                      "&:hover": { backgroundColor: "transparent" }
+                    }}
+                  >
+                    {showSalt
+                      ? <VisibilityOffIcon sx={{ width: 16, height: 16 }} />
+                      : <VisibilityIcon sx={{ width: 16, height: 16 }} />}
+                  </IconButton>
+                  <IconButton
+                    size="sm"
+                    variant="soft"
+                    onClick={() => {
+                      navigator.clipboard.writeText(context.metadata.salt)
+                        .then(() => toast.success("Y"));
+                    }}
+                    sx={{
+                      backgroundColor: "transparent",
+                      "&:hover": { backgroundColor: "transparent" }
+                    }}
+                  >
+                    <ContentCopyOutlinedIcon sx={{ width: 16, height: 16 }} />
+                  </IconButton>
+                </React.Fragment>
+              )}
+            </Box>
+          )
+        },
+        {
           key: context.languagePicker("header.config.file.cipher"),
           value: (
             <Password
@@ -619,9 +687,9 @@ const SECTIONS = (
                   ? context.languagePicker("modal.reconfirm.caption.changeCipher")
                   : undefined
               }
-              callback={() => setMetadata((metadata) => ({
+              callback={(data) => setMetadata((metadata) => ({
                 ...metadata,
-                cipher: true
+                salt: data.salt
               }))}
             />
           )
@@ -1423,12 +1491,16 @@ export default function Config(props) {
   } = props;
   const context = React.useContext(GlobalContext);
 
+  const [showSalt, setShowSalt] = React.useState(false);
   const [containerElement, setContainerElement] = React.useState(null);
+
   const sectionRefs = React.useRef({});
   const isSystemScrolling = React.useRef(false);
   const sectionUncurry = React.useMemo(() => SECTIONS(
     context,
     setMetadata,
+    showSalt,
+    setShowSalt,
     resetButtonLoading,
     handleApplySetting,
     handleResetSetting,
@@ -1437,6 +1509,7 @@ export default function Config(props) {
   ), [
     context,
     setMetadata,
+    showSalt,
     resetButtonLoading,
     handleApplySetting,
     handleResetSetting,

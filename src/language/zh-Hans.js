@@ -76,6 +76,9 @@ const zhHans = {
           asc: "升序",
           desc: "降序"
         },
+        salt: "盐",
+        saltTip: "解密盐不会随密码变换；一旦丢失，在此之前加密的所有文件都将无法恢复。",
+        saltUnexist: "(未设置)",
         cipher: "更换解密密码"
       },
       terminal: {

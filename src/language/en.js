@@ -76,6 +76,9 @@ const en = {
           asc: "Ascending",
           desc: "Descending"
         },
+        salt: "Decryption Salt",
+        saltTip: "Decryption salt does not change when password changes. All files encrypted before can no longer be restored once the salt is lost.",
+        saltUnexist: "(Not set)",
         cipher: "Change Decryption Password"
       },
       terminal: {

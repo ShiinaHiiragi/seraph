@@ -657,7 +657,10 @@ router.post('/reset', (req, res, next) => {
 
   // -> ES: no extra info
   req.status.addExecStatus();
-  res.send(req.status.generateReport());
+  res.send({
+    ...req.status.generateReport(),
+    salt: api.configOperator.config.metadata.cipher.split(":")[0]
+  });
   return;
 });
 
