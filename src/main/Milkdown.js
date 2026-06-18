@@ -17,6 +17,7 @@ import {
   wrapInBlockquoteCommand,
   wrapInBulletListCommand,
   wrapInOrderedListCommand,
+  createCodeBlockCommand
 } from '@milkdown/kit/preset/commonmark';
 import { toggleStrikethroughCommand } from "@milkdown/kit/preset/gfm";
 import { keymap } from "@milkdown/kit/prose/keymap";
@@ -92,7 +93,7 @@ const MaildownField = styled(Box)(({ theme }) => ({
 }));
 
 const CrepeEditorInner = (props) => {
-  const { readOnly, fileContent, setModified } = props;
+  const { readOnly, fileContent, setModified, saveRef } = props;
   const context = React.useContext(GlobalContext);
 
   useEditor((root) => {
@@ -221,8 +222,8 @@ const CrepeEditorInner = (props) => {
         // Mod-Alt-4 -> h4 (default)
         // Mod-Alt-5 -> h5 (default)
         // Mod-Alt-6 -> h6 (default)
-        // Mod-Alt-b -> quote block
-        "Mod-Alt-b": () => {
+        // Mod-Alt-q -> quote block
+        "Mod-Alt-q": () => {
           ctx.get(commandsCtx)
             .call(wrapInBlockquoteCommand.key);
           return true;
@@ -245,7 +246,13 @@ const CrepeEditorInner = (props) => {
         "Mod-Alt-7": () => false,
         // NULL      -> task list
         // NULL      -> images
-        // Mod-Alt-c -> code block (default)
+        // Mod-Alt-c -> code block
+        "Mod-Alt-e": () => {
+          ctx.get(commandsCtx)
+            .call(createCodeBlockCommand.key);
+          return true;
+        },
+        "Mod-Alt-c": () => false,
         // NULL      -> tables
         // NULL      -> latex block
         // Mod-b     -> bold text (default)
@@ -267,6 +274,10 @@ const CrepeEditorInner = (props) => {
           }
           ctx.get(linkTooltipAPI.key)
             .addLink(selection.from, selection.to);
+          return true;
+        },
+        "Mod-s": () => {
+          saveRef.current?.click();
           return true;
         }
       })))
@@ -375,6 +386,7 @@ const CrepeEditor = () => {
 
   const blocker = useBlocker(modified);
   const blockerActiveRef = React.useRef(false);
+  const saveRef = React.useRef(null);
 
   React.useEffect(() => {
     if (blocker.state === "blocked") {
@@ -518,6 +530,7 @@ const CrepeEditor = () => {
               <FileDownloadOutlinedIcon />
             </IconButton>
             {savable && modified && <IconButton
+              ref={saveRef}
               size="sm"
               variant="soft"
               onClick={handleSave}
@@ -544,6 +557,7 @@ const CrepeEditor = () => {
               readOnly={readOnly}
               fileContent={fileContent}
               setModified={setModified}
+              saveRef={saveRef}
             />
           </MilkdownProvider>
         </MaildownField>}
