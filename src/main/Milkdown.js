@@ -12,6 +12,7 @@ import { Crepe, CrepeFeature } from "@milkdown/crepe";
 import { editorViewCtx, editorViewOptionsCtx, commandsCtx } from "@milkdown/kit/core";
 import { getMarkdown, replaceAll, $prose } from "@milkdown/kit/utils";
 import { listener, listenerCtx } from "@milkdown/kit/plugin/listener";
+import { imageBlockSchema } from "@milkdown/kit/component/image-block";
 import { linkTooltipAPI } from "@milkdown/kit/component/link-tooltip";
 import {
   insertHrCommand,
@@ -253,10 +254,13 @@ const CrepeEditorInner = (props) => {
         },
         "Mod-Alt-7": () => false,
         // NULL      -> task list
-        // Mod-Alt-i -> images
-        "Mod-Alt-i": () => {
-          ctx.get(commandsCtx)
-            .call(insertImageCommand.key);
+        // Mod-Alt-g -> images block
+        "Mod-Alt-g": () => {
+          const { state, dispatch } = ctx.get(editorViewCtx);
+          const nodeType = imageBlockSchema.type(ctx);
+          const node = nodeType.create({ src: "", caption: "", ratio: 1 });
+          const tr = state.tr.replaceSelectionWith(node);
+          dispatch(tr.scrollIntoView());
           return true;
         },
         // Mod-Alt-` -> code block
@@ -276,6 +280,12 @@ const CrepeEditorInner = (props) => {
             .call(toggleStrikethroughCommand.key);
           return true;
         },
+        // Mod-g     -> image inline
+        "Mod-g": () => {
+          ctx.get(commandsCtx)
+            .call(insertImageCommand.key);
+          return true;
+        },
         "Mod-Alt-x": () => false,
         // Mod-`     -> inline code (Mod-e was used for editable/read-only)
         "Mod-`": () => {
@@ -286,12 +296,12 @@ const CrepeEditorInner = (props) => {
         // NULL      -> inline math
         // Mod-l     -> inline link
         "Mod-l": () => {
-          const { selection } = ctx.get(editorViewCtx).state;
-          if (selection.empty) {
+          const { state } = ctx.get(editorViewCtx);
+          if (state.selection.empty) {
             return false;
           }
           ctx.get(linkTooltipAPI.key)
-            .addLink(selection.from, selection.to);
+            .addLink(state.selection.from, state.selection.to);
           return true;
         },
         // Mod-s     -> save to file
