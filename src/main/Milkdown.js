@@ -99,7 +99,9 @@ const CrepeEditorInner = (props) => {
         [CrepeFeature.Toolbar]: false,
       },
       featureConfigs: {
-        [CrepeFeature.Cursor]: { width: 2 },
+        [CrepeFeature.Cursor]: {
+          width: 2
+        },
         [CrepeFeature.LinkTooltip]: {
           editButton: toSVG(EditOutlinedIcon),
           removeButton: toSVG(DeleteOutlineOutlinedIcon),
@@ -107,10 +109,9 @@ const CrepeEditorInner = (props) => {
           inputPlaceholder: "URL"
         },
         [CrepeFeature.ImageBlock]: {
-          // TODO: upload
+          // TODO: upload images
         },
         [CrepeFeature.BlockEdit]: {
-          // TODO: find good icons
           textGroup: {
             label: context.languagePicker("main.crepe.popup.slash.text.title"),
             text: {
@@ -191,13 +192,14 @@ const CrepeEditorInner = (props) => {
     crepe.setReadonly(readOnly);
     crepe.editor
       .config((ctx) => {
+        // preserve some space for scrolling
         ctx.update(editorViewOptionsCtx, (prev) => ({
           ...prev,
           attributes: { spellcheck: "false" },
           scrollThreshold: { top: 0, right: 0, bottom: 64, left: 0 },
           scrollMargin: { top: 0, right: 0, bottom: 64, left: 0 }
         }));
-        // listener will prevent jittering itself
+        // listener itself prevents jittering
         ctx.get(listenerCtx)
           .mounted(() => {
             regulatedInitValue = getMarkdown()(ctx);
