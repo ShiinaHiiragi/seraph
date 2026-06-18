@@ -25,6 +25,19 @@ import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
 // import CloudDoneOutlinedIcon from "@mui/icons-material/CloudDoneOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import DoneIcon from "@mui/icons-material/Done";
+import NotesOutlinedIcon from "@mui/icons-material/NotesOutlined";
+import LooksOneOutlinedIcon from "@mui/icons-material/LooksOneOutlined";
+import LooksTwoOutlinedIcon from "@mui/icons-material/LooksTwoOutlined";
+import Looks3OutlinedIcon from "@mui/icons-material/Looks3Outlined";
+import Looks4OutlinedIcon from "@mui/icons-material/Looks4Outlined";
+import Looks5OutlinedIcon from "@mui/icons-material/Looks5Outlined";
+import Looks6OutlinedIcon from "@mui/icons-material/Looks6Outlined";
+import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
+import HorizontalRuleOutlinedIcon from '@mui/icons-material/HorizontalRuleOutlined';
+import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
+import CodeOutlinedIcon from '@mui/icons-material/CodeOutlined';
+import CalendarViewMonthOutlinedIcon from '@mui/icons-material/CalendarViewMonthOutlined';
+import FunctionsOutlinedIcon from '@mui/icons-material/FunctionsOutlined';
 import Loading from "./Loading";
 import RouteField from "../interface/RouteField";
 import GlobalContext, { request, Status, toSVG } from "../interface/constants";
@@ -102,73 +115,70 @@ const CrepeEditorInner = (props) => {
             label: context.languagePicker("main.crepe.popup.slash.text.title"),
             text: {
               label: context.languagePicker("main.crepe.popup.slash.text.text"),
-              icon: ""
+              icon: toSVG(NotesOutlinedIcon)
             },
             h1: {
               label: context.languagePicker("main.crepe.popup.slash.text.h1"),
-              icon: ""
+              icon: toSVG(LooksOneOutlinedIcon)
             },
             h2: {
               label: context.languagePicker("main.crepe.popup.slash.text.h2"),
-              icon: ""
+              icon: toSVG(LooksTwoOutlinedIcon)
             },
             h3: {
               label: context.languagePicker("main.crepe.popup.slash.text.h3"),
-              icon: ""
+              icon: toSVG(Looks3OutlinedIcon)
             },
             h4: {
               label: context.languagePicker("main.crepe.popup.slash.text.h4"),
-              icon: ""
+              icon: toSVG(Looks4OutlinedIcon)
             },
             h5: {
               label: context.languagePicker("main.crepe.popup.slash.text.h5"),
-              icon: ""
+              icon: toSVG(Looks5OutlinedIcon)
             },
             h6: {
               label: context.languagePicker("main.crepe.popup.slash.text.h6"),
-              icon: ""
+              icon: toSVG(Looks6OutlinedIcon)
             },
             quote: {
               label: context.languagePicker("main.crepe.popup.slash.text.quote"),
-              icon: ""
+              icon: toSVG(FormatQuoteIcon)
             },
             divider: {
               label: context.languagePicker("main.crepe.popup.slash.text.divider"),
-              icon: ""
+              icon: toSVG(HorizontalRuleOutlinedIcon)
             }
           },
           listGroup: {
             label: context.languagePicker("main.crepe.popup.slash.list.title"),
             bulletList: {
-              label: context.languagePicker("main.crepe.popup.slash.list.bulletList"),
-              icon: ""
+              label: context.languagePicker("main.crepe.popup.slash.list.bulletList")
             },
             orderedList: {
-              label: context.languagePicker("main.crepe.popup.slash.list.orderedList"),
-              icon: ""
+              label: context.languagePicker("main.crepe.popup.slash.list.orderedList")
             },
             taskList: {
-              label: context.languagePicker("main.crepe.popup.slash.list.taskList"),
-              icon: ""
+              label: context.languagePicker("main.crepe.popup.slash.list.taskList")
             }
           },
           advancedGroup: {
             label: context.languagePicker("main.crepe.popup.slash.advanced.title"),
             image: {
               label: context.languagePicker("main.crepe.popup.slash.advanced.image"),
-              icon: ""
+              icon: toSVG(ImageOutlinedIcon)
             },
             codeBlock: {
               label: context.languagePicker("main.crepe.popup.slash.advanced.codeBlock"),
-              icon: ""
+              icon: toSVG(CodeOutlinedIcon)
             },
             table: {
               label: context.languagePicker("main.crepe.popup.slash.advanced.table"),
-              icon: ""
+              icon: toSVG(CalendarViewMonthOutlinedIcon)
             },
             math: {
               label: context.languagePicker("main.crepe.popup.slash.advanced.math"),
-              icon: ""
+              icon: toSVG(FunctionsOutlinedIcon)
             }
           },
         },
@@ -268,8 +278,8 @@ const CrepeEditor = () => {
   const folderName = React.useMemo(
     () => rawFolderName
       .replace(/\/+/g, "/")
-      .replace(/^\//, '')
-      .replace(/\/$/, ''),
+      .replace(/^\//, "")
+      .replace(/\/$/, ""),
     [rawFolderName]
   );
 
