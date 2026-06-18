@@ -2,18 +2,18 @@ import React from "react";
 import { useParams } from "react-router";
 import { useNavigate, useBlocker } from "react-router-dom";
 import { toast } from "sonner";
+import { styled } from "@mui/joy/styles";
 import Box from "@mui/joy/Box";
 import Stack from "@mui/joy/Stack";
 import IconButton from "@mui/joy/IconButton";
 import Typography from "@mui/joy/Typography";
-import { styled } from "@mui/joy/styles";
-import { Crepe, CrepeFeature } from "@milkdown/crepe";
 import { Milkdown, MilkdownProvider, useEditor } from "@milkdown/react";
-import { editorViewCtx, editorViewOptionsCtx } from "@milkdown/kit/core";
-import { getMarkdown, replaceAll } from "@milkdown/kit/utils";
+import { Crepe, CrepeFeature } from "@milkdown/crepe";
+import { editorViewCtx, editorViewOptionsCtx, commandsCtx } from "@milkdown/kit/core";
+import { getMarkdown, replaceAll, $prose } from "@milkdown/kit/utils";
 import { listener, listenerCtx } from "@milkdown/kit/plugin/listener";
 import { linkTooltipAPI } from "@milkdown/kit/component/link-tooltip";
-import { $prose } from "@milkdown/kit/utils";
+import { wrapInBlockquoteCommand } from '@milkdown/kit/preset/commonmark';
 import { keymap } from "@milkdown/kit/prose/keymap";
 import { Plugin } from "@milkdown/kit/prose/state";
 // import { emoji } from "@milkdown/plugin-emoji";
@@ -209,6 +209,12 @@ const CrepeEditorInner = (props) => {
           });
       })
       .use($prose((ctx) => keymap({
+        "Mod-m": () => {
+          ctx.get(commandsCtx)
+            .call(wrapInBlockquoteCommand.key);
+          return true;
+        },
+        "Mod-Shift-b": () => false,
         "Mod-k": () => {
           const { selection } = ctx.get(editorViewCtx).state;
           if (selection.empty) {
