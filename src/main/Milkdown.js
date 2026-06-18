@@ -14,11 +14,13 @@ import { getMarkdown, replaceAll, $prose } from "@milkdown/kit/utils";
 import { listener, listenerCtx } from "@milkdown/kit/plugin/listener";
 import { linkTooltipAPI } from "@milkdown/kit/component/link-tooltip";
 import {
+  insertHrCommand,
+  insertImageCommand,
   wrapInBlockquoteCommand,
   wrapInBulletListCommand,
   wrapInOrderedListCommand,
-  createCodeBlockCommand,
-  toggleInlineCodeCommand
+  toggleInlineCodeCommand,
+  createCodeBlockCommand
 } from "@milkdown/kit/preset/commonmark";
 import { toggleStrikethroughCommand } from "@milkdown/kit/preset/gfm";
 import { keymap } from "@milkdown/kit/prose/keymap";
@@ -230,7 +232,12 @@ const CrepeEditorInner = (props) => {
           return true;
         },
         "Mod-Shift-b": () => false,
-        // NULL      -> divider
+        // Mod-Alt-d -> divider
+        "Mod-Alt-d": () => {
+          ctx.get(commandsCtx)
+            .call(insertHrCommand.key);
+          return true;
+        },
         // Mod-Alt-u -> unordered list
         "Mod-Alt-u": () => {
           ctx.get(commandsCtx)
@@ -246,7 +253,12 @@ const CrepeEditorInner = (props) => {
         },
         "Mod-Alt-7": () => false,
         // NULL      -> task list
-        // NULL      -> images
+        // Mod-Alt-i -> images
+        "Mod-Alt-i": () => {
+          ctx.get(commandsCtx)
+            .call(insertImageCommand.key);
+          return true;
+        },
         // Mod-Alt-` -> code block
         "Mod-Alt-`": () => {
           ctx.get(commandsCtx)
