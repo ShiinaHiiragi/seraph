@@ -590,6 +590,8 @@ const SECTIONS = (
                 </FormLabel>
                 <RadioGroup
                   size="sm"
+                  orientation="horizontal"
+                  sx={{ gap: 1.5 }}
                   value={String(context.setting.file.sort.reverse)}
                   onChange={(event) => handleApply("file.sort.reverse", event.target.value === "true")}
                 >
