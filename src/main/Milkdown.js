@@ -92,15 +92,14 @@ const CrepeEditorInner = (props) => {
       root,
       defaultValue: context.crepeRef.snapshot.current ?? fileContent,
       features: {
-        [CrepeFeature.Toolbar]: true,
+        [CrepeFeature.Toolbar]: false,
       },
       featureConfigs: {
         [CrepeFeature.Cursor]: {
           width: 2,
         },
         [Crepe.Feature.LinkTooltip]: {
-          inputPlaceholder: "Enter URL...",
-          onCopyLink: () => console.log("Link copied"),
+          inputPlaceholder: "URL",
         }
       },
     });
