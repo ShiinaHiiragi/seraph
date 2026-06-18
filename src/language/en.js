@@ -373,6 +373,7 @@ const en = {
         init: "Login password is set successfully. Thanks for using Seraph.",
         logout: "Logged out successfully.",
         setting: "New setting has been saved.",
+        salt: "Salt has been copied to clipboard.",
         import: "New setting has been saved, and {0} out of {1} valid entries has been updated.",
         new: "{0} has been created.",
         upload: "{0} has been uploaded to {1}.",

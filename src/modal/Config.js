@@ -662,7 +662,7 @@ const SECTIONS = (
                     variant="soft"
                     onClick={() => {
                       navigator.clipboard.writeText(context.metadata.salt)
-                        .then(() => toast.success("Y"));
+                        .then(() => toast.success(context.languagePicker("modal.toast.success.salt")));
                     }}
                     sx={{
                       backgroundColor: "transparent",
