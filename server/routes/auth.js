@@ -36,7 +36,7 @@ router.get('/meta', (req, res, next) => {
       private: privateFolder,
       metadata: {
         ...metadata,
-        cipher: cipher.length > 0,
+        salt: cipher.split(":")[0],
         platform: process.platform
       },
       clipboard: api.configOperator.config.clipboard,

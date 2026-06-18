@@ -615,7 +615,7 @@ const SECTIONS = (
               context={context}
               query="POST/file/reset"
               reconfirmCaption={
-                context.metadata.cipher
+                context.metadata.salt.length > 0
                   ? context.languagePicker("modal.reconfirm.caption.changeCipher")
                   : undefined
               }

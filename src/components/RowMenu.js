@@ -315,7 +315,7 @@ export default function RowMenu(props) {
           && (
             <MenuItem
               onClick={handleEncrypt}
-              disabled={!context.metadata.cipher}
+              disabled={context.metadata.salt.length === 0}
             >
               {context.languagePicker("main.folder.rowMenu.encrypt")}
             </MenuItem>
