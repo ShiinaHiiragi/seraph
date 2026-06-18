@@ -177,6 +177,7 @@
 
 ## Log
 
+- 06/18/2026 ver 1.2.2: Add salt manager for data safety
 - 06/17/2026 ver 1.2.1: Add encryption/decryption for files
 - 06/16/2026 ver 1.2.0: Refactor base components to data router
 - 06/15/2026 ver 1.1.4: Change links properties inside web pages
