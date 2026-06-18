@@ -17,7 +17,8 @@ import {
   wrapInBlockquoteCommand,
   wrapInBulletListCommand,
   wrapInOrderedListCommand,
-  createCodeBlockCommand
+  createCodeBlockCommand,
+  toggleInlineCodeCommand
 } from '@milkdown/kit/preset/commonmark';
 import { toggleStrikethroughCommand } from "@milkdown/kit/preset/gfm";
 import { keymap } from "@milkdown/kit/prose/keymap";
@@ -93,7 +94,7 @@ const MaildownField = styled(Box)(({ theme }) => ({
 }));
 
 const CrepeEditorInner = (props) => {
-  const { readOnly, fileContent, setModified, saveRef } = props;
+  const { readOnly, fileContent, setModified, editRef, saveRef } = props;
   const context = React.useContext(GlobalContext);
 
   useEditor((root) => {
@@ -215,7 +216,7 @@ const CrepeEditorInner = (props) => {
           });
       })
       .use($prose((ctx) => keymap({
-        // Mod-Alt-0 -> text (default
+        // Mod-Alt-0 -> text (default)
         // Mod-Alt-1 -> h1 (default)
         // Mod-Alt-2 -> h2 (default)
         // Mod-Alt-3 -> h3 (default)
@@ -246,8 +247,8 @@ const CrepeEditorInner = (props) => {
         "Mod-Alt-7": () => false,
         // NULL      -> task list
         // NULL      -> images
-        // Mod-Alt-c -> code block
-        "Mod-Alt-e": () => {
+        // Mod-Alt-` -> code block
+        "Mod-Alt-`": () => {
           ctx.get(commandsCtx)
             .call(createCodeBlockCommand.key);
           return true;
@@ -264,7 +265,12 @@ const CrepeEditorInner = (props) => {
           return true;
         },
         "Mod-Alt-x": () => false,
-        // Mod-e     -> inline code (default)
+        // Mod-`     -> inline code
+        "Mod-`": () => {
+          ctx.get(commandsCtx)
+            .call(toggleInlineCodeCommand.key);
+          return true;
+        },
         // NULL      -> inline math
         // Mod-l     -> inline link
         "Mod-l": () => {
@@ -276,6 +282,12 @@ const CrepeEditorInner = (props) => {
             .addLink(selection.from, selection.to);
           return true;
         },
+        // Mod-e     -> editable or read-only (originally inline code)
+        "Mod-e": () => {
+          editRef.current?.click();
+          return true;
+        },
+        // Mod-s     -> save to file
         "Mod-s": () => {
           saveRef.current?.click();
           return true;
@@ -386,7 +398,6 @@ const CrepeEditor = () => {
 
   const blocker = useBlocker(modified);
   const blockerActiveRef = React.useRef(false);
-  const saveRef = React.useRef(null);
 
   React.useEffect(() => {
     if (blocker.state === "blocked") {
@@ -423,6 +434,9 @@ const CrepeEditor = () => {
     () => context.isAuthority && crepeState === 1 && crepeRefer && !readOnly,
     [context.isAuthority, crepeState, crepeRefer, readOnly]
   );
+
+  const editRef = React.useRef(null);
+  const saveRef = React.useRef(null);
 
   React.useEffect(() => {
     setCrepeState(0);
@@ -514,6 +528,7 @@ const CrepeEditor = () => {
           />
           <Stack direction="row" sx={{ position: "relative", top: "1px" }}>
             <IconButton
+              ref={editRef}
               size="sm"
               variant="soft"
               onClick={() => setReadOnly((readOnly) => !readOnly)}
@@ -557,6 +572,7 @@ const CrepeEditor = () => {
               readOnly={readOnly}
               fileContent={fileContent}
               setModified={setModified}
+              editRef={editRef}
               saveRef={saveRef}
             />
           </MilkdownProvider>
