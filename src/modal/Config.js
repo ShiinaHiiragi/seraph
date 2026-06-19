@@ -256,8 +256,8 @@ const Password = (props) => {
               }}
             >
               {inputType === "password"
-                ? <VisibilityOffIcon />
-                : <VisibilityIcon />}
+                ? <VisibilityIcon />
+                : <VisibilityOffIcon />}
             </IconButton>
           }
         />
@@ -654,8 +654,8 @@ const SECTIONS = (
                     }}
                   >
                     {showSalt
-                      ? <VisibilityIcon sx={{ width: 16, height: 16 }} />
-                      : <VisibilityOffIcon sx={{ width: 16, height: 16 }} />}
+                      ? <VisibilityOffIcon sx={{ width: 16, height: 16 }} />
+                      : <VisibilityIcon sx={{ width: 16, height: 16 }} />}
                   </IconButton>
                   <IconButton
                     size="sm"

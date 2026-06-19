@@ -152,8 +152,8 @@ export default function Init(props) {
                     }}
                   >
                     {formPasswordType === "password"
-                      ? <VisibilityOffIcon />
-                      : <VisibilityIcon />}
+                      ? <VisibilityIcon />
+                      : <VisibilityOffIcon />}
                   </IconButton>
                 }
               />
