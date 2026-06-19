@@ -209,6 +209,12 @@
       overflow-y: hidden;
       scrollbar-width: none;
       -ms-overflow-style: none;
+      caret-color: var(--crepe-color-on-background);
+    }
+    .milkdown-icon {
+      fill: var(--crepe-color-outline);
+      height: 18px;
+      width: 18px;
     }
   }
 }

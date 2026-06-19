@@ -274,10 +274,10 @@ const CrepeEditorInner = (props) => {
           deleteColIcon: toSVG(DeleteOutlineOutlinedIcon)
         },
         [CrepeFeature.Latex]: {
-            katexOptions: {
-              throwOnError: false
-            },
-            inlineEditConfirm: toSVG(DoneIcon)
+          katexOptions: {
+            throwOnError: false
+          },
+          inlineEditConfirm: toSVG(DoneIcon)
         }
       },
     });
