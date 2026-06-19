@@ -315,7 +315,10 @@ export default function RowMenu(props) {
           && (
             <MenuItem
               onClick={handleEncrypt}
-              disabled={context.metadata.salt.length === 0}
+              disabled={
+                context.metadata.salt.length === 0
+                  || filesList.some((item) => item.name === filename + ".srph")
+              }
             >
               {context.languagePicker("main.folder.rowMenu.encrypt")}
             </MenuItem>
@@ -337,14 +340,24 @@ export default function RowMenu(props) {
         {fileType === "directory"
           && folderName.length > 0
           && (
-            <MenuItem onClick={handleCompress}>
+            <MenuItem
+              onClick={handleCompress}
+              disabled={filesList.some((item) => item.name === filename + ".zip")}
+            >
               {context.languagePicker("main.folder.rowMenu.compress")}
             </MenuItem>
           )}
         {fileType === "application/zip"
           && folderName.length > 0
           && (
-            <MenuItem onClick={handleExtract} disabled={filename.length <= 4}>
+            <MenuItem
+              onClick={handleExtract}
+              disabled={
+                filename.length <= 4 || filesList.some((item) =>
+                  item.name === filename.split(".").slice(0, -1).join(".")
+                )
+              }
+            >
               {context.languagePicker("main.folder.rowMenu.extract")}
             </MenuItem>
           )}
@@ -352,7 +365,14 @@ export default function RowMenu(props) {
           && folderName.length > 0
           && context.setting.epub.enable
           && (
-            <MenuItem onClick={handleEpub} disabled={filename.length <= 5}>
+            <MenuItem
+              onClick={handleEpub}
+              disabled={
+                filename.length <= 5 || filesList.some((item) =>
+                  item.name === filename.split(".").slice(0, -1).join(".")
+                )
+              }
+            >
               {context.languagePicker("main.folder.rowMenu.epub")}
             </MenuItem>
           )}
