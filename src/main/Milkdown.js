@@ -312,7 +312,7 @@ const CrepeEditorInner = (props) => {
             .call(toggleStrikethroughCommand.key);
           return true;
         },
-        // Mod-g     -> inline image
+        // Mod-g     -> inline image (inaccessible via neither toolbar or slash)
         "Mod-g": () => {
           ctx.get(commandsCtx)
             .call(insertImageCommand.key);
@@ -365,7 +365,8 @@ const CrepeEditorInner = (props) => {
     context.crepeRef.load(crepe.editor, {
       getMarkdown,
       replaceAll,
-      setReadonly: crepe.setReadonly.bind(crepe)
+      focus: () => (ctx) => ctx.get(editorViewCtx).focus(),
+      setReadOnly: crepe.setReadonly.bind(crepe)
     });
     return crepe;
   }, [
@@ -432,6 +433,9 @@ const CrepeEditor = () => {
 
   React.useEffect(() => {
     context.crepeRef.setReadOnly(readOnly);
+    if (!readOnly) {
+      context.crepeRef.setFocus();
+    }
   }, [context, readOnly]);
 
   React.useEffect(() => {
@@ -590,6 +594,7 @@ const CrepeEditor = () => {
               size="sm"
               variant="soft"
               onClick={() => setReadOnly((readOnly) => !readOnly)}
+              onMouseDown={(event) => event.preventDefault()}
               sx={buttonStyle}
             >
               {readOnly ? <EditOffOutlinedIcon /> : <EditOutlinedIcon/>}
@@ -598,6 +603,7 @@ const CrepeEditor = () => {
               size="sm"
               variant="soft"
               onClick={handleDownload}
+              onMouseDown={(event) => event.preventDefault()}
               sx={buttonStyle}
             >
               <FileDownloadOutlinedIcon />
@@ -606,6 +612,7 @@ const CrepeEditor = () => {
               size="sm"
               variant="soft"
               onClick={handleSave}
+              onMouseDown={(event) => event.preventDefault()}
               sx={buttonStyle}
               ref={saveRef}
             >
