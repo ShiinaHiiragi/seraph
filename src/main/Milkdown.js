@@ -43,17 +43,17 @@ import {
   crosshairCursor,
   highlightActiveLine,
   keymap as codeMirrorKeymap
-} from '@codemirror/view';
+} from "@codemirror/view";
 import {
   foldGutter,
   indentOnInput,
   bracketMatching,
   foldKeymap
-} from '@codemirror/language';
-import { EditorState } from '@codemirror/state';
-import { closeBrackets, closeBracketsKeymap } from '@codemirror/autocomplete';
-import { defaultKeymap, historyKeymap } from '@codemirror/commands';
-import { highlightSelectionMatches } from '@codemirror/search';
+} from "@codemirror/language";
+import { EditorState } from "@codemirror/state";
+import { closeBrackets, closeBracketsKeymap } from "@codemirror/autocomplete";
+import { defaultKeymap, historyKeymap } from "@codemirror/commands";
+import { highlightSelectionMatches } from "@codemirror/search";
 // import { emoji } from "@milkdown/plugin-emoji";
 import EditOffOutlinedIcon from "@mui/icons-material/EditOffOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
@@ -70,14 +70,15 @@ import Looks5OutlinedIcon from "@mui/icons-material/Looks5Outlined";
 import Looks6OutlinedIcon from "@mui/icons-material/Looks6Outlined";
 import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
 import HorizontalRuleOutlinedIcon from "@mui/icons-material/HorizontalRuleOutlined";
-import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined';
-import FormatListNumberedOutlinedIcon from '@mui/icons-material/FormatListNumberedOutlined';
-import ChecklistOutlinedIcon from '@mui/icons-material/ChecklistOutlined';
+import FormatListBulletedOutlinedIcon from "@mui/icons-material/FormatListBulletedOutlined";
+import FormatListNumberedOutlinedIcon from "@mui/icons-material/FormatListNumberedOutlined";
+import ChecklistOutlinedIcon from "@mui/icons-material/ChecklistOutlined";
 import ImageOutlinedIcon from "@mui/icons-material/ImageOutlined";
 import CodeOutlinedIcon from "@mui/icons-material/CodeOutlined";
 import CalendarViewMonthOutlinedIcon from "@mui/icons-material/CalendarViewMonthOutlined";
 import FunctionsOutlinedIcon from "@mui/icons-material/FunctionsOutlined";
-import InsertLinkOutlinedIcon from '@mui/icons-material/InsertLinkOutlined';
+import InsertLinkOutlinedIcon from "@mui/icons-material/InsertLinkOutlined";
+import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
 import Loading from "./Loading";
 import RouteField from "../interface/RouteField";
 import GlobalContext, { request, Status, toSVG } from "../interface/constants";
@@ -255,8 +256,8 @@ const CrepeEditorInner = (props) => {
               ...foldKeymap
             ])
           ],
-          expandIcon: "",
-          // copyIcon: "",
+          // TODO: finish config
+          copyIcon: toSVG(ContentCopyOutlinedIcon),
           copyText: "COPY",
           onCopy: () => console.log("Y")
         }
@@ -371,7 +372,7 @@ const CrepeEditorInner = (props) => {
           ctx.get(commandsCtx)
             .call(addBlockTypeCommand.key, {
               nodeType: codeBlockSchema.type(ctx),
-              attrs: { language: 'LaTeX' },
+              attrs: { language: "LaTeX" },
             });
           return true;
         },
@@ -399,7 +400,7 @@ const CrepeEditorInner = (props) => {
         // Mod-m     -> inline math
         "Mod-m": () => {
           // @milkdown/crepe/src/feature/latex/constants.ts
-          //   const toggleLatexCommandName = 'ToggleLatex'
+          //   const toggleLatexCommandName = "ToggleLatex"
           ctx.get(commandsCtx)
             .call("ToggleLatex");
           return true;

@@ -155,6 +155,12 @@
 
 /* Code Mirror Structure */
 .milkdown .milkdown-code-block {
+  .cm-cursor {
+    border-left-width: 1px;
+    border-left-color: var(--crepe-color-on-background);
+    animation-timing-function: step-end;
+    animation-delay: 0.25s;
+  }
   .expand-icon {
     transition: none !important;
   }
