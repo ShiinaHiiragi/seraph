@@ -37,6 +37,7 @@ import { toggleLinkCommand } from "@milkdown/kit/component/link-tooltip";
 import { keymap } from "@milkdown/kit/prose/keymap";
 import { TextSelection, Plugin } from "@milkdown/kit/prose/state";
 import {
+  EditorView,
   lineNumbers,
   dropCursor,
   rectangularSelection,
@@ -238,6 +239,8 @@ const CrepeEditorInner = (props) => {
         },
         [CrepeFeature.CodeMirror]: {
           extensions: [
+            // TODO: wrap / .milkdown .ProseMirror .milkdown-code-block { overflow: hidden; }
+            EditorView.lineWrapping,
             lineNumbers(),
             highlightActiveLine(),
             foldGutter(),

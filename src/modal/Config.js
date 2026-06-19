@@ -654,8 +654,8 @@ const SECTIONS = (
                     }}
                   >
                     {showSalt
-                      ? <VisibilityOffIcon sx={{ width: 16, height: 16 }} />
-                      : <VisibilityIcon sx={{ width: 16, height: 16 }} />}
+                      ? <VisibilityIcon sx={{ width: 16, height: 16 }} />
+                      : <VisibilityOffIcon sx={{ width: 16, height: 16 }} />}
                   </IconButton>
                   <IconButton
                     size="sm"
