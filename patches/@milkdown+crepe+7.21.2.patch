@@ -1,0 +1,22 @@
+diff --git a/node_modules/@milkdown/crepe/lib/esm/index.js b/node_modules/@milkdown/crepe/lib/esm/index.js
+index 831ee39..55a5a16 100644
+--- a/node_modules/@milkdown/crepe/lib/esm/index.js
++++ b/node_modules/@milkdown/crepe/lib/esm/index.js
+@@ -23,7 +23,7 @@ import { createTable, toggleStrikethroughCommand, strikethroughSchema, gfm } fro
+ import { defaultKeymap, indentWithTab } from '@codemirror/commands';
+ import { keymap } from '@codemirror/view';
+ import { codeBlockConfig, codeBlockComponent } from '@milkdown/kit/component/code-block';
+-import { basicSetup } from 'codemirror';
++import { minimalSetup } from 'codemirror';
+ import { dropIndicatorConfig, cursor as cursor$1 } from '@milkdown/kit/plugin/cursor';
+ import { createVirtualCursor } from 'prosemirror-virtual-cursor';
+ import { inlineImageConfig, imageInlineComponent } from '@milkdown/kit/component/image-inline';
+@@ -2949,7 +2949,7 @@ const codeMirror = (editor, config = {}) => {
+     const { languages = [], theme } = config;
+     const extensions = [
+       keymap.of(defaultKeymap.concat(indentWithTab)),
+-      basicSetup
++      minimalSetup
+     ];
+     if (theme) {
+       extensions.push(theme);
