@@ -256,8 +256,8 @@ const Password = (props) => {
               }}
             >
               {inputType === "password"
-                ? <VisibilityIcon />
-                : <VisibilityOffIcon />}
+                ? <VisibilityOffIcon />
+                : <VisibilityIcon />}
             </IconButton>
           }
         />

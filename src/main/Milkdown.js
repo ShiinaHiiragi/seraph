@@ -36,6 +36,7 @@ import { imageBlockSchema } from "@milkdown/kit/component/image-block";
 import { toggleLinkCommand } from "@milkdown/kit/component/link-tooltip";
 import { keymap } from "@milkdown/kit/prose/keymap";
 import { TextSelection, Plugin } from "@milkdown/kit/prose/state";
+import { autocompletion } from "@codemirror/autocomplete";
 // import { emoji } from "@milkdown/plugin-emoji";
 import EditOffOutlinedIcon from "@mui/icons-material/EditOffOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
@@ -218,6 +219,9 @@ const CrepeEditorInner = (props) => {
           linkIcon: toSVG(InsertLinkOutlinedIcon)
         },
         [CrepeFeature.CodeMirror]: {
+          extensions: [
+            autocompletion({ activateOnTyping: false, override: [] })
+          ],
           expandIcon: "",
           // copyIcon: "",
           copyText: "COPY",

@@ -157,18 +157,22 @@
 }
 
 /* Code Mirror Structure */
-.milkdown-code-block {
+.milkdown .milkdown-code-block {
+  .expand-icon {
+    transition: none !important;
+  }
+  .copy-button {
+    border-radius: var(--joy-radius-sm) !important;
+  }
   .list-wrapper {
     border-radius: var(--joy-radius-sm) !important;
     .search-box {
       outline-color: var(--joy-palette-neutral-outlinedBorder);
     }
-    li {
+    .language-list-item {
+      padding: 8px 20px !important;
       font-weight: var(--joy-fontWeight-md) !important;
     }
-  }
-  .copy-button {
-    border-radius: var(--joy-radius-sm) !important;
   }
   .cm-panels.cm-panels-bottom {
     border: 0px;
