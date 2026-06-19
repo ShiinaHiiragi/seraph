@@ -386,7 +386,7 @@ router.post('/unzip', (req, res, next) => {
     const { encoding, confidence } = jschardet.detect(sample);
     const enc = confidence > 0.5 && encoding ? encoding : 'gbk';
     nonUnicodeEntries.forEach((item) => {
-      item.entryName = iconv.decode(e.rawEntryName, enc);
+      item.entryName = iconv.decode(item.rawEntryName, enc);
     });
   }
 

@@ -48,7 +48,12 @@ const Details = styled("div")(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   alignItems: "flex-start",
-  padding: theme.spacing(0, 1.5)
+  [theme.breakpoints.only("xs")]: {
+    padding: 0,
+  },
+  [theme.breakpoints.up("sm")]: {
+    padding: theme.spacing(0, 1.5)
+  }
 }));
 
 const TODO = () => {
@@ -457,7 +462,7 @@ const TODO = () => {
           <List>
             {processedTask.map((item, index, self) => (
               <React.Fragment key={item.id}>
-                <Item>
+                <Item sx={{ gap: { xs: "0.5rem", sm: "var(--ListItem-gap)" } }}>
                   <Box sx={{ pt: 0.5 }} >
                     <Checkbox
                       variant="outlined"
