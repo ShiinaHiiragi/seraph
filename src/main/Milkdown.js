@@ -102,7 +102,7 @@ const MaildownField = styled(Box)(({ theme }) => ({
 }));
 
 const CrepeEditorInner = (props) => {
-  const { readOnly, fileContent, setModified, saveRef } = props;
+  const { readOnly, fileContent, setModified } = props;
   const context = React.useContext(GlobalContext);
 
   useEditor((root) => {
@@ -337,11 +337,6 @@ const CrepeEditorInner = (props) => {
           ctx.get(commandsCtx)
             .call(toggleLinkCommand.key);
           return true;
-        },
-        // Mod-s     -> save to file
-        "Mod-s": () => {
-          saveRef.current?.click();
-          return true;
         }
       })))
       .use($prose(() => new Plugin({
@@ -486,18 +481,6 @@ const CrepeEditor = () => {
     [context.isAuthority, crepeState, crepeRefer, readOnly]
   );
 
-  const saveRef = React.useRef(null);
-  React.useEffect(() => {
-    const handler = (event) => {
-      if ((event.ctrlKey || event.metaKey) && event.key === "e") {
-        event.preventDefault();
-        setReadOnly((readOnly) => !readOnly);
-      }
-    };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, []);
-
   React.useEffect(() => {
     setCrepeState(0);
     setModified(false);
@@ -566,6 +549,21 @@ const CrepeEditor = () => {
     });
   }, [context, crepeType, crepePath, crepeTitle]);
 
+  React.useEffect(() => {
+    const handler = (event) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === "e") {
+        event.preventDefault();
+        setReadOnly((readOnly) => !readOnly);
+      }
+      if ((event.ctrlKey || event.metaKey) && event.key === "s") {
+        event.preventDefault();
+        handleSave();
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [handleSave]);
+
   const buttonStyle = React.useMemo(() => ({
     backgroundColor: "transparent",
     "&:hover": { backgroundColor: "transparent" }
@@ -604,7 +602,6 @@ const CrepeEditor = () => {
               <FileDownloadOutlinedIcon />
             </IconButton>
             {savable && modified && <IconButton
-              ref={saveRef}
               size="sm"
               variant="soft"
               onClick={handleSave}
@@ -631,7 +628,6 @@ const CrepeEditor = () => {
               readOnly={readOnly}
               fileContent={fileContent}
               setModified={setModified}
-              saveRef={saveRef}
             />
           </MilkdownProvider>
         </MaildownField>}
