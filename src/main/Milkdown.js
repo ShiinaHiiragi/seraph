@@ -15,10 +15,6 @@ import {
   editorViewOptionsCtx,
   commandsCtx
 } from "@milkdown/kit/core";
-import { getMarkdown, replaceAll, $prose } from "@milkdown/kit/utils";
-import { listener, listenerCtx } from "@milkdown/kit/plugin/listener";
-import { imageBlockSchema } from "@milkdown/kit/component/image-block";
-import { toggleLinkCommand } from "@milkdown/kit/component/link-tooltip";
 import {
   listItemSchema,
   codeBlockSchema,
@@ -34,6 +30,10 @@ import {
   createCodeBlockCommand
 } from "@milkdown/kit/preset/commonmark";
 import { createTable, toggleStrikethroughCommand } from "@milkdown/kit/preset/gfm";
+import { getMarkdown, replaceAll, $prose } from "@milkdown/kit/utils";
+import { listener, listenerCtx } from "@milkdown/kit/plugin/listener";
+import { imageBlockSchema } from "@milkdown/kit/component/image-block";
+import { toggleLinkCommand } from "@milkdown/kit/component/link-tooltip";
 import { keymap } from "@milkdown/kit/prose/keymap";
 import { TextSelection, Plugin } from "@milkdown/kit/prose/state";
 // import { emoji } from "@milkdown/plugin-emoji";
@@ -355,11 +355,10 @@ const CrepeEditorInner = (props) => {
         props: {
           handleDOMEvents: {
             click(view, event) {
-              if (view.editable) return false
-              const a = event.target.closest("a[href]");
-              if (a) {
+              const anchor = event.target.closest("a[href]");
+              if (!view.editable && anchor) {
                 event.preventDefault();
-                window.open(a.href, "_blank", "noopener,noreferrer");
+                window.open(anchor.href, "_blank", "noopener,noreferrer");
                 return true
               }
               return false
