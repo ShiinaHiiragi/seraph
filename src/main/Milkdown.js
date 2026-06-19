@@ -52,10 +52,14 @@ import Looks5OutlinedIcon from "@mui/icons-material/Looks5Outlined";
 import Looks6OutlinedIcon from "@mui/icons-material/Looks6Outlined";
 import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
 import HorizontalRuleOutlinedIcon from "@mui/icons-material/HorizontalRuleOutlined";
+import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined';
+import FormatListNumberedOutlinedIcon from '@mui/icons-material/FormatListNumberedOutlined';
+import ChecklistOutlinedIcon from '@mui/icons-material/ChecklistOutlined';
 import ImageOutlinedIcon from "@mui/icons-material/ImageOutlined";
 import CodeOutlinedIcon from "@mui/icons-material/CodeOutlined";
 import CalendarViewMonthOutlinedIcon from "@mui/icons-material/CalendarViewMonthOutlined";
 import FunctionsOutlinedIcon from "@mui/icons-material/FunctionsOutlined";
+import InsertLinkOutlinedIcon from '@mui/icons-material/InsertLinkOutlined';
 import Loading from "./Loading";
 import RouteField from "../interface/RouteField";
 import GlobalContext, { request, Status, toSVG } from "../interface/constants";
@@ -172,13 +176,16 @@ const CrepeEditorInner = (props) => {
           listGroup: {
             label: context.languagePicker("main.crepe.popup.slash.list.title"),
             bulletList: {
-              label: context.languagePicker("main.crepe.popup.slash.list.bulletList")
+              label: context.languagePicker("main.crepe.popup.slash.list.bulletList"),
+              icon: toSVG(FormatListBulletedOutlinedIcon)
             },
             orderedList: {
-              label: context.languagePicker("main.crepe.popup.slash.list.orderedList")
+              label: context.languagePicker("main.crepe.popup.slash.list.orderedList"),
+              icon: toSVG(FormatListNumberedOutlinedIcon)
             },
             taskList: {
-              label: context.languagePicker("main.crepe.popup.slash.list.taskList")
+              label: context.languagePicker("main.crepe.popup.slash.list.taskList"),
+              icon: toSVG(ChecklistOutlinedIcon)
             }
           },
           advancedGroup: {
@@ -203,6 +210,10 @@ const CrepeEditorInner = (props) => {
         },
         [CrepeFeature.Placeholder]: {
           text: context.languagePicker("main.crepe.placeholder")
+        },
+        [CrepeFeature.Toolbar]: {
+          codeIcon: toSVG(CodeOutlinedIcon),
+          linkIcon: toSVG(InsertLinkOutlinedIcon)
         }
       },
     });
@@ -397,8 +408,7 @@ const CrepeEditorInner = (props) => {
     fileContent,
     context.languagePicker
     // TODO: add config in context.setting
-    // spell check
-    // enable tool bar
+    // spell check, enable tool bar
   ]);
 
   React.useEffect(() => {

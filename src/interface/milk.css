@@ -26,6 +26,11 @@
   --crepe-font-title: var(--joy-fontFamily-display);
   --crepe-font-default: var(--joy-fontFamily-body);
   --crepe-font-code: var(--joy-fontFamily-code);
+
+  --crepe-shadow-1: var(--joy-shadowRing, 0 0 #000),
+    0px 1px 4px -1px rgba(var(--joy-shadowChannel, 21 21 21) / var(--joy-shadowOpacity, 0.05)),
+    0px 3px 6px -1px rgba(var(--joy-shadowChannel, 21 21 21) / var(--joy-shadowOpacity, 0.05));
+  --crepe-shadow-2: var(--crepe-shadow-1);
 }
 
 /* Editor */
@@ -94,9 +99,6 @@
   .link-preview {
     align-items: center;
     border-radius: var(--joy-radius-sm);
-    border-color: var(--joy-palette-neutral-100);
-    border-width: 2px;
-    border-style: solid;
     span:nth-of-type(1) {
       display: none;
     }
@@ -115,15 +117,11 @@
   .link-edit {
     align-items: center;
     border-radius: var(--joy-radius-sm);
-    border-color: var(--joy-palette-neutral-100);
-    border-width: 2px;
-    border-style: solid;
     height: 40px;
     padding-left: 12px;
     .input-area {
       font-family: var(--crepe-font-default);
       font-size: 0.92rem;
-      margin-bottom: 1px;
     }
   }
 }
@@ -154,6 +152,7 @@
 
 /* Tool Menu Popup */
 .milkdown .milkdown-toolbar {
+  border-radius: var(--joy-radius-sm);
 }
 
 /* LaTeX Input Popup */
