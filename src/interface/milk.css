@@ -185,6 +185,30 @@
   }
 }
 
+/* Table Structure */
+.milkdown .milkdown-table-block {
+  .button-group {
+    border-radius: var(--joy-radius-sm) !important;
+  }
+}
+
 /* LaTeX Input Popup */
 .milkdown .milkdown-latex-inline-edit {
+  border-radius: var(--joy-radius-sm);
+  height: 40px;
+  padding-top: 11px;
+  padding-bottom: 11px;
+  .container {
+    height: 18px;
+    .ProseMirror {
+      font-size: 0.92rem;
+      height: 18px;
+      line-height: 18px;
+      white-space: nowrap;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+  }
 }

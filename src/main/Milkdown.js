@@ -268,6 +268,16 @@ const CrepeEditorInner = (props) => {
             ? context.languagePicker("main.crepe.code.edit")
             : context.languagePicker("main.crepe.code.hide"),
           previewLabel: context.languagePicker("main.crepe.code.preview")
+        },
+        [CrepeFeature.Table]: {
+          deleteRowIcon: toSVG(DeleteOutlineOutlinedIcon),
+          deleteColIcon: toSVG(DeleteOutlineOutlinedIcon)
+        },
+        [CrepeFeature.Latex]: {
+            katexOptions: {
+              throwOnError: false
+            },
+            inlineEditConfirm: toSVG(DoneIcon)
         }
       },
     });
@@ -409,6 +419,10 @@ const CrepeEditorInner = (props) => {
         "Mod-m": () => {
           // @milkdown/crepe/src/feature/latex/constants.ts
           //   const toggleLatexCommandName = "ToggleLatex"
+          const { from, to } = ctx.get(editorViewCtx).state.selection;
+          if (from === to) {
+            return false;
+          }
           ctx.get(commandsCtx)
             .call("ToggleLatex");
           return true;
