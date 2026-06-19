@@ -41,8 +41,6 @@ import EditOffOutlinedIcon from "@mui/icons-material/EditOffOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
-// import CloudOutlinedIcon from "@mui/icons-material/CloudOutlined";
-// import CloudDoneOutlinedIcon from "@mui/icons-material/CloudDoneOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import DoneIcon from "@mui/icons-material/Done";
 import NotesOutlinedIcon from "@mui/icons-material/NotesOutlined";
@@ -588,6 +586,10 @@ const CrepeEditor = () => {
         event.preventDefault();
         setReadOnly((readOnly) => !readOnly);
       }
+      if ((event.ctrlKey || event.metaKey) && event.key === "d") {
+        event.preventDefault();
+        handleDownload();
+      }
       if ((event.ctrlKey || event.metaKey) && event.key === "s") {
         event.preventDefault();
         saveRef.current?.click();
@@ -595,7 +597,7 @@ const CrepeEditor = () => {
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, []);
+  }, [handleDownload]);
 
   const buttonStyle = React.useMemo(() => ({
     backgroundColor: "transparent",
