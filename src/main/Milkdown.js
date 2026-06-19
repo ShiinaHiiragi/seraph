@@ -111,9 +111,11 @@ const MaildownField = styled(Box)(({ theme }) => ({
 const CrepeEditorInner = (props) => {
   const { readOnly, fileContent, setModified } = props;
   const context = React.useContext(GlobalContext);
+  const normalizedFileContent = React.useRef(null);
 
   useEditor((root) => {
     let regulatedInitValue = null;
+    const loadedFromSnapshot = context.crepeRef.snapshot.current !== null;
     const crepe = new Crepe({
       root,
       defaultValue: context.crepeRef.snapshot.current ?? fileContent,
@@ -214,6 +216,12 @@ const CrepeEditorInner = (props) => {
         [CrepeFeature.Toolbar]: {
           codeIcon: toSVG(CodeOutlinedIcon),
           linkIcon: toSVG(InsertLinkOutlinedIcon)
+        },
+        [CrepeFeature.CodeMirror]: {
+          expandIcon: "",
+          // copyIcon: "",
+          copyText: "COPY",
+          onCopy: () => console.log("Y")
         }
       },
     });
@@ -227,6 +235,7 @@ const CrepeEditorInner = (props) => {
           // fallback to autofocus for remaining situations
           context.crepeRef.setSelect(context.crepeRef.select.current);
           context.crepeRef.select.current = null;
+          context.crepeRef.snapshot.current = null;
         }
       })
       .config((ctx) => {
@@ -240,10 +249,13 @@ const CrepeEditorInner = (props) => {
         // listener itself prevents jittering
         ctx.get(listenerCtx)
           .mounted(() => {
-            regulatedInitValue = getMarkdown()(ctx);
+            if (!loadedFromSnapshot) {
+              normalizedFileContent.current = getMarkdown()(ctx).trimEnd();
+            }
+            regulatedInitValue = normalizedFileContent.current;
           })
           .markdownUpdated((_, markdown) => {
-            setModified(markdown !== regulatedInitValue);
+            setModified(markdown.trimEnd() !== regulatedInitValue);
           });
       })
       .use($prose((ctx) => keymap({
@@ -406,6 +418,7 @@ const CrepeEditorInner = (props) => {
     return crepe;
   }, [
     fileContent,
+    readOnly,
     context.languagePicker
     // TODO: add config in context.setting
     // spell check, enable tool bar
@@ -551,6 +564,12 @@ const CrepeEditor = () => {
     rawFolderName
   ]);
 
+  const handleToggleReadOnly = React.useCallback(() => {
+    context.crepeRef.snapshot.current = context.crepeRef.getText();
+    context.crepeRef.select.current = context.crepeRef.getSelect();
+    setReadOnly((readOnly) => !readOnly);
+  }, [context]);
+
   const handleDownload = React.useCallback(() => {
     const text = modified ? context.crepeRef.getText() : fileContent;
     const blob = new Blob([text], { type: "text/markdown" });
@@ -593,7 +612,7 @@ const CrepeEditor = () => {
     const handler = (event) => {
       if ((event.ctrlKey || event.metaKey) && event.key === "e") {
         event.preventDefault();
-        setReadOnly((readOnly) => !readOnly);
+        handleToggleReadOnly();
       }
       if ((event.ctrlKey || event.metaKey) && event.key === "d") {
         event.preventDefault();
@@ -606,7 +625,7 @@ const CrepeEditor = () => {
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [handleDownload]);
+  }, [handleToggleReadOnly, handleDownload]);
 
   const buttonStyle = React.useMemo(() => ({
     backgroundColor: "transparent",
@@ -632,7 +651,7 @@ const CrepeEditor = () => {
             <IconButton
               size="sm"
               variant="soft"
-              onClick={() => setReadOnly((readOnly) => !readOnly)}
+              onClick={handleToggleReadOnly}
               onMouseDown={(event) => event.preventDefault()}
               sx={buttonStyle}
             >
