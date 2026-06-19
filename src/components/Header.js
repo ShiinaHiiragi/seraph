@@ -77,6 +77,7 @@ const Header = (props) => {
 
   const handleToggleConfig = React.useCallback(() => {
     context.crepeRef.snapshot.current = context.crepeRef.getText();
+    context.crepeRef.select.current = context.crepeRef.getSelect();
     request("GET/config/copy")
       .then((data) => {
         setSetting((setting) => {

@@ -9,7 +9,12 @@ import IconButton from "@mui/joy/IconButton";
 import Typography from "@mui/joy/Typography";
 import { Milkdown, MilkdownProvider, useEditor } from "@milkdown/react";
 import { Crepe, CrepeFeature } from "@milkdown/crepe";
-import { editorViewCtx, editorViewOptionsCtx, commandsCtx } from "@milkdown/kit/core";
+import {
+  EditorStatus,
+  editorViewCtx,
+  editorViewOptionsCtx,
+  commandsCtx
+} from "@milkdown/kit/core";
 import { getMarkdown, replaceAll, $prose } from "@milkdown/kit/utils";
 import { listener, listenerCtx } from "@milkdown/kit/plugin/listener";
 import { imageBlockSchema } from "@milkdown/kit/component/image-block";
@@ -30,7 +35,7 @@ import {
 } from "@milkdown/kit/preset/commonmark";
 import { createTable, toggleStrikethroughCommand } from "@milkdown/kit/preset/gfm";
 import { keymap } from "@milkdown/kit/prose/keymap";
-import { Plugin } from "@milkdown/kit/prose/state";
+import { TextSelection, Plugin } from "@milkdown/kit/prose/state";
 // import { emoji } from "@milkdown/plugin-emoji";
 import EditOffOutlinedIcon from "@mui/icons-material/EditOffOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
@@ -206,6 +211,15 @@ const CrepeEditorInner = (props) => {
 
     crepe.setReadonly(readOnly);
     crepe.editor
+      .onStatusChange((status) => {
+        if (status === EditorStatus.Created) {
+          // recover caret selection after rebuilt
+          // triggers after saving / config changing
+          // fallback to autofocus for remaining situations
+          context.crepeRef.setSelect(context.crepeRef.select.current);
+          context.crepeRef.select.current = null;
+        }
+      })
       .config((ctx) => {
         // preserve some space for scrolling
         ctx.update(editorViewOptionsCtx, (prev) => ({
@@ -365,7 +379,20 @@ const CrepeEditorInner = (props) => {
     context.crepeRef.load(crepe.editor, {
       getMarkdown,
       replaceAll,
-      focus: () => (ctx) => ctx.get(editorViewCtx).focus(),
+      actionCaret: () => (ctx) => ctx.get(editorViewCtx).state.selection,
+      actionFocus: (select) => (ctx) => {
+        const editorView = ctx.get(editorViewCtx);
+        if (select) {
+          const transact = editorView.state.tr;
+          transact.setSelection(TextSelection.create(
+            transact.doc,
+            select.from,
+            select.to
+          ));
+          editorView.dispatch(transact);
+        }
+        editorView.focus();
+      },
       setReadOnly: crepe.setReadonly.bind(crepe)
     });
     return crepe;
@@ -434,7 +461,7 @@ const CrepeEditor = () => {
   React.useEffect(() => {
     context.crepeRef.setReadOnly(readOnly);
     if (!readOnly) {
-      context.crepeRef.setFocus();
+      context.crepeRef.setSelect();
     }
   }, [context, readOnly]);
 
@@ -528,7 +555,9 @@ const CrepeEditor = () => {
     URL.revokeObjectURL(url);
   }, [context, modified, fileContent, crepeTitle]);
 
+  const saveRef = React.useRef(null);
   const handleSave = React.useCallback(() => {
+    context.crepeRef.select.current = context.crepeRef.getSelect();
     toast.promise(new Promise((resolve, reject) => {
       const text = context.crepeRef.getText();
       request(
@@ -553,7 +582,6 @@ const CrepeEditor = () => {
     });
   }, [context, crepeType, crepePath, crepeTitle]);
 
-  const saveRef = React.useRef(null);
   React.useEffect(() => {
     const handler = (event) => {
       if ((event.ctrlKey || event.metaKey) && event.key === "e") {
