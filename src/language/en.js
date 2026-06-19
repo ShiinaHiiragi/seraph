@@ -337,6 +337,14 @@ const en = {
     },
     crepe: {
       placeholder: "Enter text here",
+      code: {
+        search: "Search for language",
+        noResult: "No result",
+        copy: "Copy",
+        hide: "Hide",
+        edit: "Edit",
+        preview: "Preview"
+      },
       popup: {
         slash: {
           text: {
@@ -406,13 +414,14 @@ const en = {
         logout: "Logged out successfully.",
         setting: "New setting has been saved.",
         salt: "Salt has been copied to clipboard.",
+        code: "",
         import: "New setting has been saved, and {0} out of {1} valid entries has been updated.",
         new: "{0} has been created.",
         upload: "{0} has been uploaded to {1}.",
         files: "All files",
         paste: "{0} has been pasted to {1}.",
         rename: "{0} has been renamed to {1}.",
-        copy: "{0} has been copied in clipboard.",
+        copy: "{0} has been copied to clipboard.",
         cut: "{0} has been cut to clipboard.",
         encrypt: "{0} has been encrypted to current directory.",
         decrypt: "{0} has been decrypt to current directory.",

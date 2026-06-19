@@ -164,7 +164,7 @@
   .expand-icon {
     transition: none !important;
   }
-  .copy-button {
+  .copy-button, .preview-toggle-button {
     border-radius: var(--joy-radius-sm) !important;
   }
   .list-wrapper {

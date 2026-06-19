@@ -337,6 +337,14 @@ const zhHans = {
     },
     crepe: {
       placeholder: "在此输入文本",
+      code: {
+        search: "搜索语言",
+        noResult: "无结果",
+        copy: "复制",
+        hide: "隐藏",
+        edit: "编辑",
+        preview: "预览"
+      },
       popup: {
         slash: {
           text: {
@@ -406,6 +414,7 @@ const zhHans = {
         logout: "退出成功。",
         setting: "设置已保存。",
         salt: "已复制盐到剪贴板。",
+        code: "已复制代码到剪贴板。",
         import: "设置已保存；总计 {1} 条有效项目中更新了 {0} 条。",
         new: "{0} 已创建。",
         upload: "{0} 已上传至 {1}。",

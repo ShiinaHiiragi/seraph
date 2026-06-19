@@ -259,10 +259,15 @@ const CrepeEditorInner = (props) => {
               ...foldKeymap
             ])
           ],
-          // TODO: finish config
+          searchPlaceholder: context.languagePicker("main.crepe.code.search"),
+          noResultText: context.languagePicker("main.crepe.code.noResult"),
           copyIcon: toSVG(ContentCopyOutlinedIcon),
-          copyText: "COPY",
-          onCopy: () => console.log("Y")
+          copyText: context.languagePicker("main.crepe.code.copy"),
+          onCopy: () => toast.success(context.languagePicker("modal.toast.success.code")),
+          previewToggleText: (previewOnlyMode) => previewOnlyMode
+            ? context.languagePicker("main.crepe.code.edit")
+            : context.languagePicker("main.crepe.code.hide"),
+          previewLabel: context.languagePicker("main.crepe.code.preview")
         }
       },
     });
