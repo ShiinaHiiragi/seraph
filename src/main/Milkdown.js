@@ -109,7 +109,7 @@ const MaildownField = styled(Box)(({ theme }) => ({
 }));
 
 const CrepeEditorInner = (props) => {
-  const { readOnly, fileContent, setModified } = props;
+  const { readOnly, editableKey, fileContent, setModified } = props;
   const context = React.useContext(GlobalContext);
   const normalizedFileContent = React.useRef(null);
 
@@ -418,7 +418,7 @@ const CrepeEditorInner = (props) => {
     return crepe;
   }, [
     fileContent,
-    readOnly,
+    editableKey,
     context.languagePicker
     // TODO: add config in context.setting
     // spell check, enable tool bar
@@ -442,6 +442,7 @@ const CrepeEditor = () => {
   const [fileContent, setFileContent] = React.useState(null);
 
   const [readOnly, setReadOnly] = React.useState(true);
+  const [editableKey, setEditableKey] = React.useState(0);
   const [modified, setModified] = React.useState(false);
 
   const { "*": rawFolderName } = useParams();
@@ -525,11 +526,10 @@ const CrepeEditor = () => {
   // - user has logged in
   // - text content is ready
   // - dest file exists
-  // - not read only
   // and save button is hidden without any modification
   const savable = React.useMemo(
-    () => context.isAuthority && crepeState === 1 && crepeRefer && !readOnly,
-    [context.isAuthority, crepeState, crepeRefer, readOnly]
+    () => context.isAuthority && crepeState === 1 && crepeRefer,
+    [context.isAuthority, crepeState, crepeRefer]
   );
 
   React.useEffect(() => {
@@ -565,10 +565,16 @@ const CrepeEditor = () => {
   ]);
 
   const handleToggleReadOnly = React.useCallback(() => {
-    context.crepeRef.snapshot.current = context.crepeRef.getText();
-    context.crepeRef.select.current = context.crepeRef.getSelect();
+    if (readOnly) {
+      console.log("HERE");
+      context.crepeRef.snapshot.current = context.crepeRef.getText();
+      context.crepeRef.select.current = context.crepeRef.getSelect();
+      setEditableKey((editableKey) => editableKey + 1);
+    }
+    // React 18 will make sure that
+    // editableKey & readOnly update at the same time
     setReadOnly((readOnly) => !readOnly);
-  }, [context]);
+  }, [context, readOnly]);
 
   const handleDownload = React.useCallback(() => {
     const text = modified ? context.crepeRef.getText() : fileContent;
@@ -693,6 +699,7 @@ const CrepeEditor = () => {
           <MilkdownProvider>
             <CrepeEditorInner
               readOnly={readOnly}
+              editableKey={editableKey}
               fileContent={fileContent}
               setModified={setModified}
             />
