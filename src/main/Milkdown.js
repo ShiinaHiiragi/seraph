@@ -480,13 +480,6 @@ const CrepeEditor = () => {
   );
 
   React.useEffect(() => {
-    context.crepeRef.setReadOnly(readOnly);
-    if (!readOnly) {
-      context.crepeRef.setSelect();
-    }
-  }, [context, readOnly]);
-
-  React.useEffect(() => {
     if (modified) {
       const handler = (event) => event.preventDefault();
       window.addEventListener("beforeunload", handler);
@@ -566,10 +559,11 @@ const CrepeEditor = () => {
 
   const handleToggleReadOnly = React.useCallback(() => {
     if (readOnly) {
-      console.log("HERE");
       context.crepeRef.snapshot.current = context.crepeRef.getText();
       context.crepeRef.select.current = context.crepeRef.getSelect();
       setEditableKey((editableKey) => editableKey + 1);
+    } else {
+      context.crepeRef.setReadOnly(true);
     }
     // React 18 will make sure that
     // editableKey & readOnly update at the same time
