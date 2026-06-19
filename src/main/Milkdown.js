@@ -549,6 +549,7 @@ const CrepeEditor = () => {
     });
   }, [context, crepeType, crepePath, crepeTitle]);
 
+  const saveRef = React.useRef(null);
   React.useEffect(() => {
     const handler = (event) => {
       if ((event.ctrlKey || event.metaKey) && event.key === "e") {
@@ -557,12 +558,12 @@ const CrepeEditor = () => {
       }
       if ((event.ctrlKey || event.metaKey) && event.key === "s") {
         event.preventDefault();
-        handleSave();
+        saveRef.current?.click();
       }
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [handleSave]);
+  }, []);
 
   const buttonStyle = React.useMemo(() => ({
     backgroundColor: "transparent",
@@ -606,6 +607,7 @@ const CrepeEditor = () => {
               variant="soft"
               onClick={handleSave}
               sx={buttonStyle}
+              ref={saveRef}
             >
               <SaveRoundedIcon />
             </IconButton>}
