@@ -36,7 +36,24 @@ import { imageBlockSchema } from "@milkdown/kit/component/image-block";
 import { toggleLinkCommand } from "@milkdown/kit/component/link-tooltip";
 import { keymap } from "@milkdown/kit/prose/keymap";
 import { TextSelection, Plugin } from "@milkdown/kit/prose/state";
-import { autocompletion } from "@codemirror/autocomplete";
+import {
+  lineNumbers,
+  dropCursor,
+  rectangularSelection,
+  crosshairCursor,
+  highlightActiveLine,
+  keymap as codeMirrorKeymap
+} from '@codemirror/view';
+import {
+  foldGutter,
+  indentOnInput,
+  bracketMatching,
+  foldKeymap
+} from '@codemirror/language';
+import { EditorState } from '@codemirror/state';
+import { closeBrackets, closeBracketsKeymap } from '@codemirror/autocomplete';
+import { defaultKeymap, historyKeymap } from '@codemirror/commands';
+import { highlightSelectionMatches } from '@codemirror/search';
 // import { emoji } from "@milkdown/plugin-emoji";
 import EditOffOutlinedIcon from "@mui/icons-material/EditOffOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
@@ -220,7 +237,23 @@ const CrepeEditorInner = (props) => {
         },
         [CrepeFeature.CodeMirror]: {
           extensions: [
-            autocompletion({ activateOnTyping: false, override: [] })
+            lineNumbers(),
+            highlightActiveLine(),
+            foldGutter(),
+            indentOnInput(),
+            closeBrackets(),
+            bracketMatching(),
+            dropCursor(),
+            crosshairCursor(),
+            rectangularSelection(),
+            highlightSelectionMatches(),
+            EditorState.allowMultipleSelections.of(true),
+            codeMirrorKeymap.of([
+              ...closeBracketsKeymap,
+              ...defaultKeymap,
+              ...historyKeymap,
+              ...foldKeymap
+            ])
           ],
           expandIcon: "",
           // copyIcon: "",

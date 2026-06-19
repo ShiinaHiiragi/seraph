@@ -77,9 +77,6 @@
     .cm-line, .cm-gutters {
       font-family: var(--crepe-font-code);
     }
-    .cm-activeLineGutter {
-      background-color: transparent;
-    }
     .cm-selectionBackground {
       background-color: var(--crepe-color-selected) !important;
     }
