@@ -13,7 +13,7 @@ import { editorViewCtx, editorViewOptionsCtx, commandsCtx } from "@milkdown/kit/
 import { getMarkdown, replaceAll, $prose } from "@milkdown/kit/utils";
 import { listener, listenerCtx } from "@milkdown/kit/plugin/listener";
 import { imageBlockSchema } from "@milkdown/kit/component/image-block";
-import { linkTooltipAPI } from "@milkdown/kit/component/link-tooltip";
+import { toggleLinkCommand } from "@milkdown/kit/component/link-tooltip";
 import {
   listItemSchema,
   codeBlockSchema,
@@ -324,19 +324,20 @@ const CrepeEditorInner = (props) => {
             .call(toggleInlineCodeCommand.key);
           return true;
         },
-        // TODO
-        // NULL      -> inline math
-        // Mod-l     -> inline link
-        "Mod-l": () => {
-          const { state } = ctx.get(editorViewCtx);
-          if (state.selection.empty) {
-            return false;
-          }
-          ctx.get(linkTooltipAPI.key)
-            .addLink(state.selection.from, state.selection.to);
+        // Mod-m     -> inline math
+        "Mod-m": () => {
+          // @milkdown/crepe/src/feature/latex/constants.ts
+          //   const toggleLatexCommandName = 'ToggleLatex'
+          ctx.get(commandsCtx)
+            .call("ToggleLatex");
           return true;
         },
-        // TODO: may be global shortcut
+        // Mod-l     -> inline link
+        "Mod-l": () => {
+          ctx.get(commandsCtx)
+            .call(toggleLinkCommand.key);
+          return true;
+        },
         // Mod-s     -> save to file
         "Mod-s": () => {
           saveRef.current?.click();
