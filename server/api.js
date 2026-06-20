@@ -478,7 +478,9 @@ const fileOperator = {
     }
 
     let folderInfo = fs.readdirSync(folderPath, { withFileTypes: true })
-    return folderInfo.map((item) => fileOperator.readFileInfo(folderPath, item.name, abstract));
+    return folderInfo
+      .map((item) => fileOperator.readFileInfo(folderPath, item.name, abstract))
+      .filter((item) => !abstract || item.type === 'directory');
   },
 
   encryptFile: (srcPath, dstPath) => {

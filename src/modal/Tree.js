@@ -93,40 +93,40 @@ export default function Tree(props) {
     }
   ]);
 
-  const [expandedItems, setExpandedItems] = React.useState(["/public", "/private"]);
+  const [expandedItem, setExpandedItem] = React.useState(["/public", "/private"]);
   const [loadingSet, setLoadingSet] = React.useState(new Set());
 
   // ref to read latest state inside async callback without stale closures
-  const itemsRef = React.useRef(folderList);
+  const folderListRef = React.useRef(folderList);
   const loadingSetRef = React.useRef(loadingSet);
-  itemsRef.current = folderList;
+  folderListRef.current = folderList;
   loadingSetRef.current = loadingSet;
 
   const handleExpansionToggle = React.useCallback(
-    async (_, itemID, needExpand) => {
+    (_, itemID, needExpand) => {
       if (loadingSetRef.current.has(itemID)) {
         return;
       }
 
       if (!needExpand) {
-        setExpandedItems((expandedItems) =>
-          expandedItems.filter(id => id !== itemID)
+        setExpandedItem((expandedItem) =>
+          expandedItem.filter(id => id !== itemID)
         );
         return;
       }
 
-      const node = findNode(itemsRef.current, itemID);
+      const node = findNode(folderListRef.current, itemID);
       if (node.children !== null) {
-        setExpandedItems((expandedItems) =>
-          [...expandedItems, itemID]
+        setExpandedItem((expandedItem) =>
+          [...expandedItem, itemID]
         );
         return;
       }
 
       setLoadingSet((loadingSet) => new Set([...loadingSet, itemID]));
       request(
-        `GET/folder/${itemID}`,
-        undefined,
+        `GET/folder${itemID}`,
+        { "abstract": "1" },
         { "": () => {
           setLoadingSet((loadingSet) => {
             const next = new Set(loadingSet);
@@ -147,7 +147,7 @@ export default function Tree(props) {
           itemID,
           (nodes) => ({ ...nodes, children })
         ));
-        setExpandedItems((expandedItems) => [...expandedItems, itemID]);
+        setExpandedItem((expandedItem) => [...expandedItem, itemID]);
       })
     },
     []
@@ -202,7 +202,7 @@ export default function Tree(props) {
         >
           <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
             <SimpleTreeView
-              expandedItems={expandedItems}
+              expandedItems={expandedItem}
               onItemExpansionToggle={handleExpansionToggle}
             >
               {renderItems(folderList, loadingSet)}
