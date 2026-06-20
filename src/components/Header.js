@@ -76,8 +76,6 @@ const Header = (props) => {
   const [resetButtonLoading, setResetButtonLoading] = React.useState(false);
 
   const handleToggleConfig = React.useCallback(() => {
-    context.crepeRef.snapshot.current = context.crepeRef.getText();
-    context.crepeRef.select.current = context.crepeRef.getSelect();
     request("GET/config/copy")
       .then((data) => {
         setSetting((setting) => {
@@ -98,6 +96,7 @@ const Header = (props) => {
 
   const handleCloseConfig = React.useCallback(() => {
     context.crepeRef.snapshot.current = null;
+    context.crepeRef.select.current = null;
     setModalConfigOpen(false);
     setMobileNavOpen(false);
     setActiveSection(settingField.general);
@@ -105,6 +104,8 @@ const Header = (props) => {
   }, []);
 
   const handleApplySetting = React.useCallback((key, value) => {
+    context.crepeRef.snapshot.current = context.crepeRef.getText();
+    context.crepeRef.select.current = context.crepeRef.getSelect();
     toast.promise(new Promise((resolve, reject) => {
       request("POST/config/set", { key: key, value: value }, undefined, reject)
         .then(() => {
