@@ -81,6 +81,7 @@ import FunctionsOutlinedIcon from "@mui/icons-material/FunctionsOutlined";
 import InsertLinkOutlinedIcon from "@mui/icons-material/InsertLinkOutlined";
 import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
 import Loading from "./Loading";
+import Tree from "../modal/Tree";
 import RouteField from "../interface/RouteField";
 import GlobalContext, { request, Status, toSVG } from "../interface/constants";
 import {
@@ -97,6 +98,7 @@ import {
   rubyHTMLInputRule,
   rubyPasteHandler
 } from "../interface/ruby";
+
 import "@milkdown/crepe/theme/common/style.css";
 import "../interface/milk.css";
 
@@ -785,6 +787,7 @@ const CrepeEditor = () => {
             />
           </MilkdownProvider>
         </MaildownField>}
+      <Tree />
     </RouteField>
   );
 }
