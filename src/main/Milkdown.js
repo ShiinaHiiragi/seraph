@@ -84,14 +84,19 @@ import Loading from "./Loading";
 import RouteField from "../interface/RouteField";
 import GlobalContext, { request, Status, toSVG } from "../interface/constants";
 import {
+  createImageObserver,
+  imageRemark,
+  imageBracketInputRule,
+  imageHTMLInputRule,
+  imagePasteHandler
+} from "../interface/image";
+import {
   rubyRemark,
   rubyNode,
   rubyBracketInputRule,
-  rubyHtmlInputRule,
+  rubyHTMLInputRule,
   rubyPasteHandler
 } from "../interface/ruby";
-import { createImageObserver } from "../interface/image";
-
 import "@milkdown/crepe/theme/common/style.css";
 import "../interface/milk.css";
 
@@ -454,10 +459,14 @@ const CrepeEditorInner = (props) => {
         }
       })))
       .use(listener)
+      .use(imageRemark)
+      .use(imageBracketInputRule)
+      .use(imageHTMLInputRule)
+      .use(imagePasteHandler)
       .use(rubyRemark)
       .use(rubyNode)
       .use(rubyBracketInputRule)
-      .use(rubyHtmlInputRule)
+      .use(rubyHTMLInputRule)
       .use(rubyPasteHandler);
 
     context.crepeRef.load(crepe.editor, {
@@ -468,19 +477,10 @@ const CrepeEditorInner = (props) => {
         const editorView = ctx.get(editorViewCtx);
         if (select) {
           const transact = editorView.state.tr;
-          // TEMP: try to catch error: position out of range
-          //       keep it until the error issued
-          console.log(
-            "docSize:",
-            transact.doc.content.size,
-            "from:", select.from,
-            "to:", select.to
-          );
-          transact.setSelection(TextSelection.create(
-            transact.doc,
-            select.from,
-            select.to
-          ));
+          const docSize = transact.doc.content.size;
+          const from = Math.min(select.from, docSize);
+          const to = Math.min(select.to, docSize);
+          transact.setSelection(TextSelection.create(transact.doc, from, to));
           editorView.dispatch(transact);
         }
         editorView.focus();

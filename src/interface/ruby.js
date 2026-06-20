@@ -306,7 +306,7 @@ export const rubyBracketInputRule = $inputRule(
 );
 
 // register input rule for <ruby>
-export const rubyHtmlInputRule = $inputRule(
+export const rubyHTMLInputRule = $inputRule(
   () => new InputRule(
     /<ruby>((?:(?:<rb>[^<]*<\/rb>|[^<]*)<rt>[^<]*<\/rt>)+[^<]*)<\/ruby>$/,
     (state, match, start, end) => {
