@@ -4,8 +4,9 @@ let router = express.Router();
 
 router.get('/public/*', (req, res) => {
   const { '0': folderName } = req.params;
+  const { abstract } = req.query;
   const folderPath = api.dataPath.publicDirFolderPath(folderName);
-  let folderInfo = api.fileOperator.readFolderInfo(folderPath);
+  let folderInfo = api.fileOperator.readFolderInfo(folderPath, abstract === '1');
 
   if (folderInfo === null) {
     // -> EF_RU: folder don't exist
@@ -37,8 +38,9 @@ router.get('/private/*', (req, res, next) => {
   }
 
   const { '0': folderName } = req.params;
+  const { abstract } = req.query;
   const folderPath = api.dataPath.privateDirFolderPath(folderName);
-  const folderInfo = api.fileOperator.readFolderInfo(folderPath);
+  const folderInfo = api.fileOperator.readFolderInfo(folderPath, abstract === '1');
 
   if (folderInfo === null) {
     // -> EF_RU: folder don't exist

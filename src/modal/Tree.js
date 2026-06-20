@@ -15,70 +15,40 @@ import { TreeItem } from "@mui/x-tree-view/TreeItem";
 import CircularProgress from "@mui/material/CircularProgress";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import GlobalContext, { request } from "../interface/constants";
 
 const materialTheme = materialExtendTheme();
+const SpinnerIcon = () =>
+  <CircularProgress size={16} sx={{ color: "inherit" }} />;
 
-const FAKE_CHILDREN = {
-  home: [
-    { id: "home-downloads", label: "Downloads", children: null },
-    { id: "home-desktop", label: "Desktop", children: [] },
-  ],
-  documents: [
-    { id: "documents-work", label: "Work", children: null },
-    { id: "documents-personal", label: "Personal", children: null },
-  ],
-  "documents-work": [
-    { id: "documents-work-q1", label: "Q1 Reports", children: [] },
-    { id: "documents-work-q2", label: "Q2 Reports", children: [] },
-  ],
-  "documents-personal": [],
-  "home-downloads": [
-    { id: "home-downloads-2024", label: "2024", children: [] },
-  ],
-  pictures: [
-    { id: "pictures-2023", label: "2023", children: [] },
-    { id: "pictures-2024", label: "2024", children: [] },
-  ],
-};
-
-const INITIAL_ITEMS = [
-  { id: "home", label: "Home", children: null },
-  { id: "documents", label: "Documents", children: null },
-  { id: "pictures", label: "Pictures", children: null },
-  { id: "music", label: "Music", children: [] },
-];
-
-function fakeLoad(id) {
-  return new Promise(resolve =>
-    setTimeout(() => resolve(FAKE_CHILDREN[id] ?? []), 800)
-  );
-}
-
-function mapTree(nodes, id, updater) {
-  return nodes.map(node => {
-    if (node.id === id) return updater(node);
-    if (node.children) return { ...node, children: mapTree(node.children, id, updater) };
-    return node;
-  });
-}
-
-function findNode(nodes, id) {
+const findNode = (nodes, id) => {
   for (const node of nodes) {
-    if (node.id === id) return node;
+    if (node.id === id) {
+      return node
+    };
     if (node.children) {
       const found = findNode(node.children, id);
-      if (found) return found;
+      if (found) {
+        return found;
+      }
     }
   }
   return null;
 }
 
-function SpinnerIcon() {
-  return <CircularProgress size={16} sx={{ color: "inherit" }} />;
-}
+const mapTree = (nodes, id, handleUpdate) => 
+  nodes.map((node) => node.id === id
+    ? handleUpdate(node)
+    : node.children
+    ? {
+      ...node,
+      children: mapTree(node.children, id, handleUpdate)
+    }
+    : node
+  )
 
-function renderItems(nodes, loadingSet) {
-  return nodes.map(node => {
+const renderItems = (nodes, loadingSet) => 
+  nodes.map((node) => {
     const isLoading = loadingSet.has(node.id);
     const isKnownLeaf = node.children !== null && node.children.length === 0;
     const hasChildren = node.children?.length > 0;
@@ -90,7 +60,6 @@ function renderItems(nodes, loadingSet) {
 
     return (
       <TreeItem key={node.id} itemId={node.id} label={node.label} slots={slots}>
-        {/* stub makes unloaded nodes expandable; hidden visually */}
         {node.children === null && (
           <TreeItem itemId={`${node.id}__stub`} label="" sx={{ display: "none" }} />
         )}
@@ -98,52 +67,91 @@ function renderItems(nodes, loadingSet) {
       </TreeItem>
     );
   });
-}
 
 export default function Tree(props) {
   const { open, handleClose } = props;
+  const context = React.useContext(GlobalContext);
 
-  const [items, setItems] = React.useState(INITIAL_ITEMS);
-  const [expandedItems, setExpandedItems] = React.useState([]);
+  const [folderList, setFolderList] = React.useState([
+    {
+      id: "/public",
+      label: "Public",
+      children: context.sortedPublicFolders.map((name) => ({
+        id: `/public/${name}`,
+        label: name,
+        children: null
+      }))
+    },
+    {
+      id: "/private",
+      label: "Private",
+      children: context.sortedPrivateFolders.map((name) => ({
+        id: `/private/${name}`,
+        label: name,
+        children: null
+      }))
+    }
+  ]);
+
+  const [expandedItems, setExpandedItems] = React.useState(["/public", "/private"]);
   const [loadingSet, setLoadingSet] = React.useState(new Set());
 
-  // Refs to read latest state inside async callback without stale closures
-  const itemsRef = React.useRef(items);
+  // ref to read latest state inside async callback without stale closures
+  const itemsRef = React.useRef(folderList);
   const loadingSetRef = React.useRef(loadingSet);
-  itemsRef.current = items;
+  itemsRef.current = folderList;
   loadingSetRef.current = loadingSet;
 
-  const handleExpansionToggle = React.useCallback(async (event, itemId, isExpanded) => {
-    if (loadingSetRef.current.has(itemId)) return;
+  const handleExpansionToggle = React.useCallback(
+    async (_, itemID, needExpand) => {
+      if (loadingSetRef.current.has(itemID)) {
+        return;
+      }
 
-    if (!isExpanded) {
-      setExpandedItems(prev => prev.filter(id => id !== itemId));
-      return;
-    }
+      if (!needExpand) {
+        setExpandedItems((expandedItems) =>
+          expandedItems.filter(id => id !== itemID)
+        );
+        return;
+      }
 
-    const node = findNode(itemsRef.current, itemId);
-    if (!node) return; // stub item or unknown id
+      const node = findNode(itemsRef.current, itemID);
+      if (node.children !== null) {
+        setExpandedItems((expandedItems) =>
+          [...expandedItems, itemID]
+        );
+        return;
+      }
 
-    if (node.children !== null) {
-      // Already loaded (even if empty) — expand immediately
-      setExpandedItems(prev => [...prev, itemId]);
-      return;
-    }
-
-    // Show spinner, fetch, then expand
-    setLoadingSet(prev => new Set([...prev, itemId]));
-    try {
-      const children = await fakeLoad(itemId);
-      setItems(prev => mapTree(prev, itemId, n => ({ ...n, children })));
-      setExpandedItems(prev => [...prev, itemId]);
-    } finally {
-      setLoadingSet(prev => {
-        const next = new Set(prev);
-        next.delete(itemId);
-        return next;
-      });
-    }
-  }, []);
+      setLoadingSet((loadingSet) => new Set([...loadingSet, itemID]));
+      request(
+        `GET/folder/${itemID}`,
+        undefined,
+        { "": () => {
+          setLoadingSet((loadingSet) => {
+            const next = new Set(loadingSet);
+            next.delete(itemID);
+            return next;
+          });
+        } }
+      ).then((data) => {
+        const children = data.info
+          .filter((item) => item.type === "directory")
+          .map((item) => ({
+            id: `${itemID}/${item.name}`,
+            label: item.name,
+            children: null
+          }));
+        setFolderList((folderList) => mapTree(
+          folderList,
+          itemID,
+          (nodes) => ({ ...nodes, children })
+        ));
+        setExpandedItems((expandedItems) => [...expandedItems, itemID]);
+      })
+    },
+    []
+  );
 
   return (
     <Modal
@@ -197,7 +205,7 @@ export default function Tree(props) {
               expandedItems={expandedItems}
               onItemExpansionToggle={handleExpansionToggle}
             >
-              {renderItems(items, loadingSet)}
+              {renderItems(folderList, loadingSet)}
             </SimpleTreeView>
           </MaterialCssVarsProvider>
         </Box>

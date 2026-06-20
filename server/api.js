@@ -452,14 +452,16 @@ const fileOperator = {
     return folderInfo.map((item) => item.name);
   },
 
-  readFileInfo: (folderPath, filename) => {
+  readFileInfo: (folderPath, filename, abstract) => {
     const filePath = path.join(folderPath, filename)
     const stat = fs.lstatSync(filePath);
     const isDir = stat.isDirectory();
 
     return {
       name: filename,
-      size: isDir
+      size: abstract
+        ? undefined
+        : isDir
         ? fs.readdirSync(filePath).length
         : stat.size,
       time: stat.birthtime,
@@ -470,13 +472,13 @@ const fileOperator = {
     }
   },
 
-  readFolderInfo: (folderPath) => {
+  readFolderInfo: (folderPath, abstract) => {
     if (!fs.existsSync(folderPath)) {
       return null;
     }
 
     let folderInfo = fs.readdirSync(folderPath, { withFileTypes: true })
-    return folderInfo.map((item) => fileOperator.readFileInfo(folderPath, item.name));
+    return folderInfo.map((item) => fileOperator.readFileInfo(folderPath, item.name, abstract));
   },
 
   encryptFile: (srcPath, dstPath) => {

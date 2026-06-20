@@ -149,8 +149,6 @@ const PanelLayout = () => {
   const {
     modalInitOpen,
     modalReconfirm,
-    sortedPublicFolders,
-    sortedPrivateFolders,
     setModalReconfirm,
     setModalInitOpen,
     setGlobalSwitch,
@@ -187,20 +185,12 @@ const PanelLayout = () => {
           </HeaderField>
           {drawerOpen && (
             <SideDrawer onClose={() => setDrawerOpen(false)}>
-              <Navigation
-                sortedPublicFolders={sortedPublicFolders}
-                sortedPrivateFolders={sortedPrivateFolders}
-                setDrawerOpen={setDrawerOpen}
-              />
+              <Navigation setDrawerOpen={setDrawerOpen} />
             </SideDrawer>
           )}
           <ContentField className="ContentField">
             <NavigationField className="NavigationField">
-              <Navigation
-                sortedPublicFolders={sortedPublicFolders}
-                sortedPrivateFolders={sortedPrivateFolders}
-                setDrawerOpen={setDrawerOpen}
-              />
+              <Navigation setDrawerOpen={setDrawerOpen} />
             </NavigationField>
             <MainField className="MainField">
               <React.Suspense fallback={<Loading />}>
@@ -373,6 +363,8 @@ const Panel = () => {
         metadata: metadata,
         setting: setting,
         modalReconfirm: modalReconfirm,
+        sortedPublicFolders: sortedPublicFolders,
+        sortedPrivateFolders: sortedPrivateFolders,
         languagePicker: languagePicker,
         setModalReconfirm: setModalReconfirm
       }}
@@ -382,8 +374,6 @@ const Panel = () => {
           modalInitOpen: modalInitOpen,
           modalReconfirm: modalReconfirm,
           clipboard: clipboard,
-          sortedPublicFolders: sortedPublicFolders,
-          sortedPrivateFolders: sortedPrivateFolders,
           setModalReconfirm: setModalReconfirm,
           setModalInitOpen: setModalInitOpen,
           setGlobalSwitch: setGlobalSwitch,
