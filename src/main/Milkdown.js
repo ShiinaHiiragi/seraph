@@ -788,7 +788,7 @@ const CrepeEditor = () => {
             />
           </MilkdownProvider>
         </MaildownField>}
-      <Tree />
+      <Tree open={false} />
     </RouteField>
   );
 }

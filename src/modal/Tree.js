@@ -65,8 +65,17 @@ const renderItems = (nodes, loadingSet) =>
         label={node.label}
         slots={slots}
         sx={{
+          marginTop: "1px",
+          marginBottom: "2px",
           wordBreak: "normal",
           overflowWrap: "anywhere",
+          borderRadius: "var(--ListItem-radius) !important",
+          "& .MuiTreeItem-content:hover": {
+            backgroundColor: "var(--joy-palette-neutral-plainHoverBg)"
+          },
+          "& .MuiTreeItem-content.Mui-selected": {
+            backgroundColor: "var(--joy-palette-neutral-plainActiveBg)"
+          }
         }}
       >
         {node.children === null && (
