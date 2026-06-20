@@ -137,11 +137,79 @@ const MaildownField = styled(Box)(({ theme }) => ({
 }));
 
 const CrepeEditorInner = (props) => {
-  const { foloderPath, fileContent, editableKey, readOnly, setModified } = props;
+  const {
+    foloderPath,
+    fileContent,
+    editableKey,
+    readOnly,
+    setModified,
+    handleToggleTree
+  } = props;
   const context = React.useContext(GlobalContext);
 
   const normalizedFileContent = React.useRef(null);
   const observerRef = React.useRef(null);
+
+  const handleProcessImage = React.useCallback((file) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event) => {
+        resolve(event.target.result);
+      };
+      reader.onerror = (event) => {
+        const error = event.target.error;
+        toast.error(
+          context.languagePicker("modal.toast.error.browserError")
+            .format(error.name, error.message)
+        );
+        reject();
+      }
+    }),
+    [context]
+  );
+
+  const handleUploadImage = React.useCallback((file) =>
+    new Promise((resolve, reject) => {
+      Promise.all([
+        handleToggleTree(),
+        handleProcessImage(file)
+      ])
+        .then(([folderPath, filebase]) => {
+          const filename = file.name;
+          const path = folderPath?.split("/")?.filter(Boolean)
+          const type = path[0];
+          const folderName = path.slice(1).join("/");
+
+          toast.promise(() => new Promise((innerResolve, innerReject) => {
+            request(
+              "POST/file/upload",
+              {
+                type: type,
+                folderName: folderName,
+                filename: filename,
+                base: filebase.split(",")[1]
+              },
+              { "": () => reject(new Error("canceled")) },
+              innerReject
+            )
+              .then(() => {
+                innerResolve();
+                resolve(["", ...path, filename].join("/"));
+              });
+          }), {
+            loading: context.languagePicker("modal.toast.plain.uploading"),
+            success: context.languagePicker("modal.toast.success.upload")
+              .format(filename, folderName),
+            error: (data) => data
+          })
+        })
+        .catch((err) => {
+          reject(new Error("canceled"));
+        })
+    }),
+    [context, handleToggleTree, handleProcessImage]
+  );
 
   useEditor((root) => {
     let regulatedInitValue = null;
@@ -163,7 +231,17 @@ const CrepeEditorInner = (props) => {
           inputPlaceholder: "URL"
         },
         [CrepeFeature.ImageBlock]: {
-          // TODO: upload images
+          inlineUploadButton: "上传喵",
+          inlineUploadPlaceholderText: "或者输入链接喵",
+          inlineImageIcon: toSVG(ImageOutlinedIcon),
+          inlineConfirmButton: toSVG(DoneIcon),
+          blockUploadButton: "还是上传喵",
+          blockUploadPlaceholderText: "还是输入链接喵",
+          blockConfirmButton: "确认喵",
+          blockCaptionIcon: "字幕喵",
+          blockCaptionPlaceholderText: "输入字幕喵",
+          blockImageIcon: toSVG(ImageOutlinedIcon),
+          onUpload: handleUploadImage,
         },
         [CrepeFeature.BlockEdit]: {
           textGroup: {
@@ -514,6 +592,23 @@ const CrepeEditor = () => {
   const navigate = useNavigate();
   const context = React.useContext(GlobalContext);
 
+  const [modalTree, setModalTree] = React.useState({
+    open: false,
+    handleAction: () => { },
+    handleCancel: () => { }
+  });
+
+  const handleToggleTree = React.useCallback(
+    () => new Promise((resolve, reject) => {
+      setModalTree({
+        open: true,
+        handleAction: resolve,
+        handleCancel: reject
+      });
+    }),
+    []
+  );
+
   const [crepeState, setCrepeState] = React.useState(0);
   const [crepeRefer, setCrepeRefer] = React.useState(false);
   const [fileContent, setFileContent] = React.useState(null);
@@ -785,10 +880,11 @@ const CrepeEditor = () => {
               editableKey={editableKey}
               readOnly={readOnly}
               setModified={setModified}
+              handleToggleTree={handleToggleTree}
             />
           </MilkdownProvider>
         </MaildownField>}
-      <Tree open={false} />
+      <Tree modalTree={modalTree} setModalTree={setModalTree} />
     </RouteField>
   );
 }

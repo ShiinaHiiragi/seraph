@@ -87,8 +87,12 @@ const renderItems = (nodes, loadingSet) =>
   });
 
 export default function Tree(props) {
-  const { open, handleClose } = props;
+  const { modalTree, setModalTree } = props;
   const context = React.useContext(GlobalContext);
+
+  const handleCloseModalTree = React.useCallback(() => {
+    setModalTree((modalTree) => ({ ...modalTree, open: false }));
+  }, [setModalTree]);
 
   const [folderList, setFolderList] = React.useState([
     {
@@ -111,6 +115,7 @@ export default function Tree(props) {
     }
   ]);
 
+  const [selectedItem, setSelectedItem] = React.useState(null);
   const [expandedItem, setExpandedItem] = React.useState(["/public", "/private"]);
   const [loadingSet, setLoadingSet] = React.useState(new Set());
 
@@ -174,8 +179,11 @@ export default function Tree(props) {
 
   return (
     <Modal
-      open={open}
-      onClose={handleClose}
+      open={modalTree.open}
+      onClose={() => {
+        modalTree.handleCancel();
+        handleCloseModalTree();
+      }}
       sx={{
         userSelect: "none",
         "& ::selection": {
@@ -206,7 +214,7 @@ export default function Tree(props) {
           id="alert-dialog-modal-title"
           level="h2"
         >
-          Select Directory
+          PLACEHOLDER
         </Typography>
         <Divider />
         <Box
@@ -223,13 +231,23 @@ export default function Tree(props) {
             <SimpleTreeView
               expandedItems={expandedItem}
               onItemExpansionToggle={handleExpansionToggle}
+              selectedItems={selectedItem}
+              onSelectedItemsChange={(_, itemId) => {
+                setSelectedItem(itemId);
+              }}
             >
               {renderItems(folderList, loadingSet)}
             </SimpleTreeView>
           </MaterialCssVarsProvider>
         </Box>
-        <Button onClick={handleClose}>
-          Confirm
+        <Button
+          disabled={selectedItem?.split("/")?.filter(Boolean)?.length < 2}
+          onClick={() => {
+            modalTree.handleAction(selectedItem);
+            handleCloseModalTree();
+          }}
+        >
+          PLACEHOLDER
         </Button>
       </ModalDialog>
     </Modal>

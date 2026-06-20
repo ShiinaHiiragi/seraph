@@ -1,0 +1,12 @@
+diff --git a/node_modules/@milkdown/plugin-upload/lib/index.js b/node_modules/@milkdown/plugin-upload/lib/index.js
+index 1359bb7..e235203 100644
+--- a/node_modules/@milkdown/plugin-upload/lib/index.js
++++ b/node_modules/@milkdown/plugin-upload/lib/index.js
+@@ -76,6 +76,7 @@ var uploadPlugin = $prose((ctx) => {
+ 			view.dispatch(view.state.tr.replaceWith(pos, pos, fragment).setMeta(pluginKey, { remove: { id } }));
+ 		}).catch((e) => {
+ 			console.error(e);
++			view.dispatch(view.state.tr.setMeta(pluginKey, { remove: { id } }));
+ 		});
+ 		return true;
+ 	};
