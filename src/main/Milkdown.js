@@ -90,6 +90,7 @@ import {
   rubyHtmlInputRule,
   rubyPasteHandler
 } from "../interface/ruby";
+import { createImageObserver } from "../interface/image";
 
 import "@milkdown/crepe/theme/common/style.css";
 import "../interface/milk.css";
@@ -129,9 +130,10 @@ const MaildownField = styled(Box)(({ theme }) => ({
 }));
 
 const CrepeEditorInner = (props) => {
-  const { readOnly, editableKey, fileContent, setModified } = props;
+  const { docDir, fileContent, editableKey, readOnly, setModified } = props;
   const context = React.useContext(GlobalContext);
   const normalizedFileContent = React.useRef(null);
+  const observerRef = React.useRef(null);
 
   useEditor((root) => {
     let regulatedInitValue = null;
@@ -309,6 +311,8 @@ const CrepeEditorInner = (props) => {
               normalizedFileContent.current = getMarkdown()(ctx).trimEnd();
             }
             regulatedInitValue = normalizedFileContent.current;
+            observerRef.current?.disconnect();
+            observerRef.current = createImageObserver(root, docDir);
           })
           .markdownUpdated((_, markdown) => {
             setModified(markdown.trimEnd() !== regulatedInitValue);
@@ -477,6 +481,7 @@ const CrepeEditorInner = (props) => {
     });
     return crepe;
   }, [
+    docDir,
     fileContent,
     editableKey,
     context.languagePicker
@@ -486,6 +491,7 @@ const CrepeEditorInner = (props) => {
 
   React.useEffect(() => {
     return () => {
+      observerRef.current?.disconnect();
       context.crepeRef.unload();
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -537,6 +543,13 @@ const CrepeEditor = () => {
   const breadLink = React.useMemo(
     () => folderName.length ? `/${folderName}` : undefined,
     [folderName]
+  );
+
+  const docDir = React.useMemo(
+    () => folderName.length
+      ? `/${[crepeType, ...crepePath].join("/")}/`
+      : null,
+    [folderName, crepeType, crepePath]
   );
 
   React.useEffect(() => {
@@ -631,7 +644,11 @@ const CrepeEditor = () => {
   }, [context, readOnly]);
 
   const handleDownload = React.useCallback(() => {
-    const text = modified ? context.crepeRef.getText() : fileContent;
+    // getText() != fileContent even if not modified
+    // because crepe will normalize markdown on load
+    const text = modified
+      ? context.crepeRef.getText()
+      : fileContent;
     const blob = new Blob([text], { type: "text/markdown" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -752,9 +769,10 @@ const CrepeEditor = () => {
         <MaildownField>
           <MilkdownProvider>
             <CrepeEditorInner
-              readOnly={readOnly}
-              editableKey={editableKey}
+              docDir={docDir}
               fileContent={fileContent}
+              editableKey={editableKey}
+              readOnly={readOnly}
               setModified={setModified}
             />
           </MilkdownProvider>
