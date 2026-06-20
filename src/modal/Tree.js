@@ -12,11 +12,138 @@ import {
 } from "@mui/material/styles";
 import { SimpleTreeView } from "@mui/x-tree-view/SimpleTreeView";
 import { TreeItem } from "@mui/x-tree-view/TreeItem";
+import CircularProgress from "@mui/material/CircularProgress";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const materialTheme = materialExtendTheme();
 
+const FAKE_CHILDREN = {
+  home: [
+    { id: "home-downloads", label: "Downloads", children: null },
+    { id: "home-desktop", label: "Desktop", children: [] },
+  ],
+  documents: [
+    { id: "documents-work", label: "Work", children: null },
+    { id: "documents-personal", label: "Personal", children: null },
+  ],
+  "documents-work": [
+    { id: "documents-work-q1", label: "Q1 Reports", children: [] },
+    { id: "documents-work-q2", label: "Q2 Reports", children: [] },
+  ],
+  "documents-personal": [],
+  "home-downloads": [
+    { id: "home-downloads-2024", label: "2024", children: [] },
+  ],
+  pictures: [
+    { id: "pictures-2023", label: "2023", children: [] },
+    { id: "pictures-2024", label: "2024", children: [] },
+  ],
+};
+
+const INITIAL_ITEMS = [
+  { id: "home", label: "Home", children: null },
+  { id: "documents", label: "Documents", children: null },
+  { id: "pictures", label: "Pictures", children: null },
+  { id: "music", label: "Music", children: [] },
+];
+
+function fakeLoad(id) {
+  return new Promise(resolve =>
+    setTimeout(() => resolve(FAKE_CHILDREN[id] ?? []), 800)
+  );
+}
+
+function mapTree(nodes, id, updater) {
+  return nodes.map(node => {
+    if (node.id === id) return updater(node);
+    if (node.children) return { ...node, children: mapTree(node.children, id, updater) };
+    return node;
+  });
+}
+
+function findNode(nodes, id) {
+  for (const node of nodes) {
+    if (node.id === id) return node;
+    if (node.children) {
+      const found = findNode(node.children, id);
+      if (found) return found;
+    }
+  }
+  return null;
+}
+
+function SpinnerIcon() {
+  return <CircularProgress size={16} sx={{ color: "inherit" }} />;
+}
+
+function renderItems(nodes, loadingSet) {
+  return nodes.map(node => {
+    const isLoading = loadingSet.has(node.id);
+    const isKnownLeaf = node.children !== null && node.children.length === 0;
+    const hasChildren = node.children?.length > 0;
+
+    const slots = isKnownLeaf ? {} : {
+      expandIcon: isLoading ? SpinnerIcon : ChevronRightIcon,
+      collapseIcon: ExpandMoreIcon,
+    };
+
+    return (
+      <TreeItem key={node.id} itemId={node.id} label={node.label} slots={slots}>
+        {/* stub makes unloaded nodes expandable; hidden visually */}
+        {node.children === null && (
+          <TreeItem itemId={`${node.id}__stub`} label="" sx={{ display: "none" }} />
+        )}
+        {hasChildren && renderItems(node.children, loadingSet)}
+      </TreeItem>
+    );
+  });
+}
+
 export default function Tree(props) {
   const { open, handleClose } = props;
+
+  const [items, setItems] = React.useState(INITIAL_ITEMS);
+  const [expandedItems, setExpandedItems] = React.useState([]);
+  const [loadingSet, setLoadingSet] = React.useState(new Set());
+
+  // Refs to read latest state inside async callback without stale closures
+  const itemsRef = React.useRef(items);
+  const loadingSetRef = React.useRef(loadingSet);
+  itemsRef.current = items;
+  loadingSetRef.current = loadingSet;
+
+  const handleExpansionToggle = React.useCallback(async (event, itemId, isExpanded) => {
+    if (loadingSetRef.current.has(itemId)) return;
+
+    if (!isExpanded) {
+      setExpandedItems(prev => prev.filter(id => id !== itemId));
+      return;
+    }
+
+    const node = findNode(itemsRef.current, itemId);
+    if (!node) return; // stub item or unknown id
+
+    if (node.children !== null) {
+      // Already loaded (even if empty) — expand immediately
+      setExpandedItems(prev => [...prev, itemId]);
+      return;
+    }
+
+    // Show spinner, fetch, then expand
+    setLoadingSet(prev => new Set([...prev, itemId]));
+    try {
+      const children = await fakeLoad(itemId);
+      setItems(prev => mapTree(prev, itemId, n => ({ ...n, children })));
+      setExpandedItems(prev => [...prev, itemId]);
+    } finally {
+      setLoadingSet(prev => {
+        const next = new Set(prev);
+        next.delete(itemId);
+        return next;
+      });
+    }
+  }, []);
 
   return (
     <Modal
@@ -52,15 +179,9 @@ export default function Tree(props) {
           id="alert-dialog-modal-title"
           level="h2"
         >
-          PLACEHOLDER_TITLE_NAME
+          Select Directory
         </Typography>
         <Divider />
-        <Typography
-          id="alert-dialog-modal-description"
-          textColor="text.tertiary"
-        >
-          PLACEHOLDER_CAPTION_TEXT
-        </Typography>
         <Box
           sx={{
             flex: 1,
@@ -72,31 +193,16 @@ export default function Tree(props) {
           }}
         >
           <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
-            <SimpleTreeView>
-              <TreeItem itemId="grid" label="Data Grid">
-                <TreeItem itemId="grid-community" label="@mui/x-data-grid" />
-                <TreeItem itemId="grid-pro" label="@mui/x-data-grid-pro" />
-                <TreeItem itemId="grid-premium" label="@mui/x-data-grid-premium" />
-              </TreeItem>
-              <TreeItem itemId="pickers" label="Date and Time Pickers">
-                <TreeItem itemId="pickers-community" label="@mui/x-date-pickers" />
-                <TreeItem itemId="pickers-pro" label="@mui/x-date-pickers-pro" />
-              </TreeItem>
-              <TreeItem itemId="charts" label="Charts">
-                <TreeItem itemId="charts-community" label="@mui/x-charts" />
-              </TreeItem>
-              <TreeItem itemId="tree-view" label="Tree View">
-                <TreeItem itemId="tree-view-community" label="@mui/x-tree-view" />
-              </TreeItem>
+            <SimpleTreeView
+              expandedItems={expandedItems}
+              onItemExpansionToggle={handleExpansionToggle}
+            >
+              {renderItems(items, loadingSet)}
             </SimpleTreeView>
           </MaterialCssVarsProvider>
         </Box>
-        <Button
-          loading={false}
-          disabled={false}
-          onClick={() => { }}
-        >
-          PLACEHOLDER_BUTTON_NAME
+        <Button onClick={handleClose}>
+          Confirm
         </Button>
       </ModalDialog>
     </Modal>
