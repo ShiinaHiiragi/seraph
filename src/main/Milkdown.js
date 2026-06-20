@@ -130,7 +130,7 @@ const MaildownField = styled(Box)(({ theme }) => ({
 }));
 
 const CrepeEditorInner = (props) => {
-  const { docDir, fileContent, editableKey, readOnly, setModified } = props;
+  const { foloderPath, fileContent, editableKey, readOnly, setModified } = props;
   const context = React.useContext(GlobalContext);
   const normalizedFileContent = React.useRef(null);
   const observerRef = React.useRef(null);
@@ -312,7 +312,7 @@ const CrepeEditorInner = (props) => {
             }
             regulatedInitValue = normalizedFileContent.current;
             observerRef.current?.disconnect();
-            observerRef.current = createImageObserver(root, docDir);
+            observerRef.current = createImageObserver(root, foloderPath);
           })
           .markdownUpdated((_, markdown) => {
             setModified(markdown.trimEnd() !== regulatedInitValue);
@@ -489,7 +489,7 @@ const CrepeEditorInner = (props) => {
     });
     return crepe;
   }, [
-    docDir,
+    foloderPath,
     fileContent,
     editableKey,
     context.languagePicker
@@ -553,7 +553,7 @@ const CrepeEditor = () => {
     [folderName]
   );
 
-  const docDir = React.useMemo(
+  const foloderPath = React.useMemo(
     () => folderName.length
       ? `/${[crepeType, ...crepePath].join("/")}/`
       : null,
@@ -777,7 +777,7 @@ const CrepeEditor = () => {
         <MaildownField>
           <MilkdownProvider>
             <CrepeEditorInner
-              docDir={docDir}
+              foloderPath={foloderPath}
               fileContent={fileContent}
               editableKey={editableKey}
               readOnly={readOnly}
