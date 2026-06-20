@@ -43,7 +43,7 @@ const resolveImage = (src, dirPath) => {
 
 // watch DOM and resolve relative img src attributes after rendered
 // WeakSet is used to avoid re-processing imgs already resolved
-const createImageObserver = (container, dirPath) => {
+export const createImageObserver = (container, dirPath) => {
   const processing = new WeakSet();
   function processImg(img) {
     if (processing.has(img)) {
@@ -95,20 +95,23 @@ const createImageObserver = (container, dirPath) => {
   return observer;
 }
 
-export { resolveImage, createImageObserver };
-
-// ─── Image parsing helpers ────────────────────────────────────────────────
-
-// Parse src and optional quoted caption from image URL part
-// e.g. 'image.jpg "My Caption"' → { src: "image.jpg", caption: "My Caption" }
-const parseSrcCaption = (inner) => {
-  const m = inner.match(/^(.*?)\s+"([^"]*)"$/);
-  if (m) return { src: m[1].trim(), caption: m[2] };
-  return { src: inner.trim(), caption: "" };
+// parse src and optional quoted caption from image URL part
+const parseCaption = (inner) => {
+  const matched = inner.match(/^(.*?)\s+"([^"]*)"$/);
+  if (matched) {
+    return {
+      src: matched[1].trim(),
+      caption: matched[2]
+    };
+  }
+  return {
+    src: inner.trim(),
+    caption: ""
+  };
 };
 
-// Parse src and alt from an <img> tag string (single or double quotes)
-const parseImgTag = (tag) => {
+// parse src and alt from <img> tag
+const parseTag = (tag) => {
   const srcM = tag.match(/\bsrc=(?:"([^"]*)"|'([^']*)')/);
   const altM = tag.match(/\balt=(?:"([^"]*)"|'([^']*)')/);
   return {
@@ -118,33 +121,34 @@ const parseImgTag = (tag) => {
 };
 
 // alt string is a valid scale when it represents a finite number in [0, 1]
-// used to distinguish "![0.75](...)" block images from "![alt text](...)"
+// used to distinguish "![0.75](...)" block images from "![](...)"
+const IMG_TAG_RE = /^<img\b[^>]*\/?>$/i;
 const SCALE_RE = /^(?:0(?:\.[0-9]{0,2})?|1(?:\.0{0,2})?)$/;
 const isScaleAlt = (alt) => alt != null && SCALE_RE.test(alt);
 
-const IMG_TAG_RE = /^<img\b[^>]*\/?>$/i;
-
-// Containers whose children are inline MDAST nodes (paragraph, heading, etc.)
-// — inside these, an <img> html node must stay as an inline image, not a block.
+// <img> must stay as inline inside these containers
 const INLINE_CONTAINERS = new Set([
-  "paragraph", "heading", "link", "emphasis", "strong", "delete", "tableCell"
+  "paragraph",
+  "heading",
+  "link",
+  "emphasis",
+  "strong",
+  "delete",
+  "tableCell"
 ]);
 
-// Walk MDAST and convert image patterns to image-block MDAST nodes.
-// image-block's parseMarkdown matches { type: "image-block" }, so we must emit
-// that custom type; standard { type: "image" } is picked up by the inline schema.
-//
-// Rules:
-//   block context:
-//     • paragraph whose sole child is an image with scale alt → image-block
-//     • html node that is a lone <img> tag → image-block
-//   inline context:
-//     • html node that is a lone <img> tag → inline image (type "image")
+// cruise MDAST and convert image patterns to image-block MDAST nodes.
+// block context:
+//   paragraph whose sole child is an image with scale alt → image-block
+//   html node that is a lone <img> tag → image-block
+// inline context:
+//   html node that is a lone <img> tag → inline image (type "image")
 const processImgNode = (node) => {
-  if (!node.children) return;
+  if (!node.children) {
+    return;
+  }
   const inlineCtx = INLINE_CONTAINERS.has(node.type);
   const result = [];
-
   for (const child of node.children) {
     if (!inlineCtx) {
       // paragraph wrapping a sole scale-image → lift to image-block
@@ -166,7 +170,7 @@ const processImgNode = (node) => {
 
       // block-level <img> html node → image-block
       if (child.type === "html" && IMG_TAG_RE.test(child.value.trim())) {
-        const { src, alt } = parseImgTag(child.value);
+        const { src, alt } = parseTag(child.value);
         result.push({
           type: "image-block",
           url: src,
@@ -175,44 +179,33 @@ const processImgNode = (node) => {
         });
         continue;
       }
-    } else {
-      // inline <img> html node → inline image node
-      if (child.type === "html" && IMG_TAG_RE.test(child.value.trim())) {
-        const { src, alt } = parseImgTag(child.value);
-        result.push({
-          type: "image",
-          url: src,
-          alt: "",
-          title: alt || undefined
-        });
-        continue;
-      }
+    // inline <img> html node → inline image node
+    } else if (child.type === "html" && IMG_TAG_RE.test(child.value.trim())) {
+      const { src, alt } = parseTag(child.value);
+      result.push({
+        type: "image",
+        url: src,
+        alt: "",
+        title: alt || undefined
+      });
+      continue;
     }
-
     result.push(child);
     processImgNode(child);
   }
-
   node.children = result;
 };
 
-const remarkImagePlugin = () => (tree) => processImgNode(tree);
-
-// register remark rule for <img> and ![scale]()
-export const imageRemark = $remark("imageRemark", () => remarkImagePlugin);
-
-// ─── Paste/input helpers ──────────────────────────────────────────────────
-
-// Find ![scale](src "caption") and <img ...> text patterns (for paste handler).
-// Milkdown already handles pasted markdown images natively; this catches
-// scale-bearing images that would otherwise become inline, and <img> text markup.
+// find ![scale](src "caption") and <img ...> text patterns (for paste handler)
+// milkdown already handles pasted markdown images natively; this catches
+// scale-bearing images that would otherwise become inline, and <img> text markup
 const findImagesInText = (text) => {
   const re = /!\[([0-9]*(?:\.[0-9]{1,2})?)\]\(([^)]*)\)|<img\b[^>]*\/?>/gi;
   const hits = [];
   let m;
   while ((m = re.exec(text)) !== null) {
     if (m[1] !== undefined) {
-      const { src, caption } = parseSrcCaption(m[2]);
+      const { src, caption } = parseCaption(m[2]);
       hits.push({
         from: m.index,
         to: m.index + m[0].length,
@@ -222,7 +215,7 @@ const findImagesInText = (text) => {
         isBlock: m[1].length > 0
       });
     } else {
-      const { src, alt } = parseImgTag(m[0]);
+      const { src, alt } = parseTag(m[0]);
       hits.push({
         from: m.index,
         to: m.index + m[0].length,
@@ -236,7 +229,7 @@ const findImagesInText = (text) => {
   return hits;
 };
 
-// Create a ProseMirror image node.
+// create a ProseMirror image node.
 // image-block attrs: { src, caption, ratio }  (ratio is a number)
 // inline image attrs: { src, alt, title }
 const makeImageNode = (schema, { scale, src, caption, isBlock }) => {
@@ -254,6 +247,15 @@ const makeImageNode = (schema, { scale, src, caption, isBlock }) => {
     ratio: (isNaN(ratio) || ratio === 0) ? 1 : ratio
   });
 };
+
+const remarkImagePlugin = () =>
+  (tree) => processImgNode(tree);
+
+// register remark rule for <img> and ![scale]()
+export const imageRemark = $remark(
+  "imageRemark",
+  () => remarkImagePlugin
+);
 
 // paste handler: replace image text patterns in pasted content with nodes
 export const imagePasteHandler = $prose(
@@ -291,7 +293,7 @@ export const imageBracketInputRule = $inputRule(
     /!\[([0-9]*(?:\.[0-9]{1,2})?)\]\(([^)\n]*)\)$/,
     (state, match, start, end) => {
       const scale = match[1];
-      const { src, caption } = parseSrcCaption(match[2]);
+      const { src, caption } = parseCaption(match[2]);
       const node = makeImageNode(state.schema, {
         scale,
         src,
@@ -309,7 +311,7 @@ export const imageHTMLInputRule = $inputRule(
   () => new InputRule(
     /<img\b[^>]*\/?>$/i,
     (state, match, start, end) => {
-      const { src, alt } = parseImgTag(match[0]);
+      const { src, alt } = parseTag(match[0]);
       const node = makeImageNode(state.schema, {
         scale: "1.00",
         src,
