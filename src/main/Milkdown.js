@@ -139,6 +139,7 @@ const MaildownField = styled(Box)(({ theme }) => ({
 const CrepeEditorInner = (props) => {
   const { foloderPath, fileContent, editableKey, readOnly, setModified } = props;
   const context = React.useContext(GlobalContext);
+
   const normalizedFileContent = React.useRef(null);
   const observerRef = React.useRef(null);
 

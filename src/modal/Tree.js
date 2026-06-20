@@ -59,7 +59,16 @@ const renderItems = (nodes, loadingSet) =>
     };
 
     return (
-      <TreeItem key={node.id} itemId={node.id} label={node.label} slots={slots}>
+      <TreeItem
+        key={node.id}
+        itemId={node.id}
+        label={node.label}
+        slots={slots}
+        sx={{
+          wordBreak: "normal",
+          overflowWrap: "anywhere",
+        }}
+      >
         {node.children === null && (
           <TreeItem itemId={`${node.id}__stub`} label="" sx={{ display: "none" }} />
         )}
@@ -126,29 +135,30 @@ export default function Tree(props) {
       setLoadingSet((loadingSet) => new Set([...loadingSet, itemID]));
       request(
         `GET/folder${itemID}`,
-        { "abstract": "1" },
-        { "": () => {
+        { "abstract": "1" }
+      )
+        .then((data) => {
+          const children = data.info
+            .filter((item) => item.type === "directory")
+            .map((item) => ({
+              id: `${itemID}/${item.name}`,
+              label: item.name,
+              children: null
+            }));
+          setFolderList((folderList) => mapTree(
+            folderList,
+            itemID,
+            (nodes) => ({ ...nodes, children })
+          ));
+          setExpandedItem((expandedItem) => [...expandedItem, itemID]);
+        })
+        .finally(() => {
           setLoadingSet((loadingSet) => {
             const next = new Set(loadingSet);
             next.delete(itemID);
             return next;
           });
-        } }
-      ).then((data) => {
-        const children = data.info
-          .filter((item) => item.type === "directory")
-          .map((item) => ({
-            id: `${itemID}/${item.name}`,
-            label: item.name,
-            children: null
-          }));
-        setFolderList((folderList) => mapTree(
-          folderList,
-          itemID,
-          (nodes) => ({ ...nodes, children })
-        ));
-        setExpandedItem((expandedItem) => [...expandedItem, itemID]);
-      })
+        })
     },
     []
   );
