@@ -36,8 +36,9 @@ const splitBracketRuby = (text) => {
 const parseRubyInner = (inner) => {
   let matched;
   const pairs = [];
+  const stripped = inner.replace(/<\/?rb>/g, "");
   const re = /([^<]*)<rt>([^<]*)<\/rt>/g;
-  while ((matched = re.exec(inner)) !== null) {
+  while ((matched = re.exec(stripped)) !== null) {
     pairs.push({ base: matched[1], reading: matched[2] });
   }
   return pairs;
@@ -45,7 +46,7 @@ const parseRubyInner = (inner) => {
 
 // split html string on <ruby> elements with possible multiple <rt>
 const splitHTMLRuby = (html) => {
-  const re = /<ruby>((?:[^<]*<rt>[^<]*<\/rt>)+[^<]*)<\/ruby>/g;
+  const re = /<ruby>((?:(?:<rb>[^<]*<\/rb>|[^<]*)<rt>[^<]*<\/rt>)+[^<]*)<\/ruby>/g;
   const parts = [];
   let matched, last = 0;
   while ((matched = re.exec(html)) !== null) {
@@ -77,7 +78,7 @@ const splitHTMLRuby = (html) => {
 
 // for paste: find all ruby patterns in a text node and return replacement specs.
 const findRubyInText = (text) => {
-  const re = /\{([^|{}\n]+)\|([^|{}\n]+)\}|<ruby>((?:[^<]*<rt>[^<]*<\/rt>)+[^<]*)<\/ruby>/g;
+  const re = /\{([^|{}\n]+)\|([^|{}\n]+)\}|<ruby>((?:(?:<rb>[^<]*<\/rb>|[^<]*)<rt>[^<]*<\/rt>)+[^<]*)<\/ruby>/g;
   const hits = [];
   let matched;
   while ((matched = re.exec(text)) !== null) {
@@ -123,8 +124,26 @@ const processChildren = (children) => {
 
         let base = "";
         let reading = "";
+
+        // skip optional <rb> wrapper
+        if (
+          children[subIndex].type === "html"
+            && /^<rb>$/.test(children[subIndex].value.trim())
+        ) {
+          subIndex++;
+        }
+
         if (children[subIndex].type === "text") {
           base = children[subIndex].value;
+          subIndex++;
+        }
+
+        // skip optional </rb> wrapper
+        if (
+          subIndex < children.length
+            && children[subIndex].type === "html"
+            && /^<\/rb>$/.test(children[subIndex].value.trim())
+        ) {
           subIndex++;
         }
 
@@ -289,14 +308,16 @@ export const rubyBracketInputRule = $inputRule(
 // register input rule for <ruby>
 export const rubyHtmlInputRule = $inputRule(
   () => new InputRule(
-    /<ruby>([^<]+)<rt>([^<]+)<\/rt><\/ruby>$/,
+    /<ruby>((?:(?:<rb>[^<]*<\/rb>|[^<]*)<rt>[^<]*<\/rt>)+[^<]*)<\/ruby>$/,
     (state, match, start, end) => {
       const type = state.schema.nodes["ruby"];
       if (!type) return null;
-      return state.tr.replaceWith(start, end, type.create({
-        base: match[1],
-        reading: match[2]
-      }));
+      const pairs = parseRubyInner(match[1]);
+      if (!pairs.length) return null;
+      return state.tr.replaceWith(
+        start, end,
+        pairs.map(({ base, reading }) => type.create({ base, reading }))
+      );
     }
   )
 );
