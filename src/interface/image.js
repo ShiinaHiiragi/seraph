@@ -2,14 +2,40 @@ import { serverBaseURL } from "./constants";
 
 // resolve image src to absolute URL
 // dirPath must have a leading & trailing slash, e.g. "/docs/subfolder/"
-const resolveImageSrc = (src, dirPath) => {
-  if (!src) {
+const resolveImage = (src, dirPath) => {
+  // keep it as it is when
+  //   - src is null or ""
+  //   - dest file not exists (dirPath is null)
+  if (!src || !dirPath) {
     return src;
-  } else if (/^(https?|data|blob):\/\//i.test(src)) {
-    return src;
-  } else {
-    return new URL(src, serverBaseURL + dirPath).href;
   }
+
+  // relative path: /private/... or  /public/...
+  if (src.startsWith("/")) {
+    return serverBaseURL + src;
+  }
+
+  // a valid url, e.g. http:, https:, data:, blob:, ...
+  try {
+    new URL(src);
+    return src;
+  } catch { }
+
+  // relative path: . & .. supported
+  const stack = dirPath.split("/").filter(Boolean);
+  for (const part of src.split("/")) {
+    if (!part || part === ".") {
+      continue;
+    } else if (part === "..") {
+      if (stack.length > 1) {
+        stack.pop();
+      }
+      continue;
+    } else {
+      stack.push(part);
+    }
+  }
+  return serverBaseURL + "/" + stack.join("/");
 }
 
 // watch DOM and resolve relative img src attributes after rendered
@@ -24,7 +50,7 @@ const createImageObserver = (container, dirPath) => {
     if (!src) {
       return;
     }
-    const resolved = resolveImageSrc(src, dirPath);
+    const resolved = resolveImage(src, dirPath);
     if (resolved === src) {
       return;
     }
@@ -66,4 +92,4 @@ const createImageObserver = (container, dirPath) => {
   return observer;
 }
 
-export { resolveImageSrc, createImageObserver };
+export { resolveImage, createImageObserver };

@@ -468,6 +468,14 @@ const CrepeEditorInner = (props) => {
         const editorView = ctx.get(editorViewCtx);
         if (select) {
           const transact = editorView.state.tr;
+          // TEMP: try to catch error: position out of range
+          //       keep it until the error issued
+          console.log(
+            "docSize:",
+            transact.doc.content.size,
+            "from:", select.from,
+            "to:", select.to
+          );
           transact.setSelection(TextSelection.create(
             transact.doc,
             select.from,
