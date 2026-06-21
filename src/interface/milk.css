@@ -61,6 +61,10 @@
   animation-delay: 0.25s;
 }
 
+.milkdown .ProseMirror:not(.ProseMirror-focused) .prosemirror-virtual-cursor {
+  display: none;
+}
+
 /* Markdown Elements */
 .milkdown .ProseMirror {
   h1, h2, h3, h4, h5, h6 {
