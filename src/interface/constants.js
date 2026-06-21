@@ -194,6 +194,15 @@ const defaultSetting = {
       reverse: false
     }
   },
+  crepe: {
+    edit: "auto",
+    toolbar: true,
+    spellCheck: false,
+    code: {
+      lineNumber: true,
+      lineGutter: false
+    }
+  },
   terminal: {
     enable: false,
     shell: {

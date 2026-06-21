@@ -43,6 +43,7 @@ import {
   rectangularSelection,
   crosshairCursor,
   highlightActiveLine,
+  highlightActiveLineGutter,
   keymap as codeMirrorKeymap
 } from "@codemirror/view";
 import {
@@ -233,7 +234,7 @@ const CrepeEditorInner = (props) => {
       root,
       defaultValue: context.crepeRef.snapshot.current ?? fileContentRef.current,
       features: {
-        [CrepeFeature.Toolbar]: true
+        [CrepeFeature.Toolbar]: context.setting.crepe.toolbar
       },
       featureConfigs: {
         [CrepeFeature.Cursor]: {
@@ -344,7 +345,8 @@ const CrepeEditorInner = (props) => {
           extensions: [
             // TODO: wrap / .milkdown .ProseMirror .milkdown-code-block { overflow: hidden; }
             EditorView.lineWrapping,
-            lineNumbers(),
+            ...(context.setting.crepe.code.lineNumbers ? [lineNumbers()] : []),
+            ...(context.setting.crepe.code.lineGutter ? [highlightActiveLineGutter()] : []),
             highlightActiveLine(),
             foldGutter(),
             indentOnInput(),
@@ -401,7 +403,7 @@ const CrepeEditorInner = (props) => {
         // preserve some space for scrolling
         ctx.update(editorViewOptionsCtx, (prev) => ({
           ...prev,
-          attributes: { spellcheck: "false" },
+          attributes: { spellcheck: String(context.setting.crepe.spellCheck) },
           scrollThreshold: { top: 0, right: 0, bottom: 64, left: 0 },
           scrollMargin: { top: 0, right: 0, bottom: 64, left: 0 }
         }));
@@ -590,8 +592,11 @@ const CrepeEditorInner = (props) => {
     // save text & select when loging in
     context.isAuthority,
     // save text & select when setting changes
-    context.languagePicker
-    // TODO: add more config e.g. spell check, enable tool bar
+    context.languagePicker,
+    context.setting.crepe.toolbar,
+    context.setting.crepe.spellCheck,
+    context.setting.crepe.code.lineNumbers,
+    context.setting.crepe.code.lineGutter
   ]);
 
   React.useEffect(() => {
@@ -632,7 +637,7 @@ const CrepeEditor = () => {
 
   const [crepeState, setCrepeState] = React.useState(0);
   const [editableKey, setEditableKey] = React.useState(0);
-  const [readOnly, setReadOnly] = React.useState(true);
+  const [readOnly, setReadOnly] = React.useState(false);
   const [modified, setModified] = React.useState(false);
 
   const fileContentRef = React.useRef(null);
@@ -703,10 +708,21 @@ const CrepeEditor = () => {
         navigate("/crepe");
       } })
         .then(({ text }) => {
+          if (
+            context.setting.crepe.edit === "false"
+              || (context.setting.crepe.edit === "auto" && text.length > 0)
+          ) {
+            context.crepeRef.setReadOnly(true);
+            setReadOnly((readOnly) => !readOnly);
+          }
           fileContentRef.current = text;
           setCrepeState(1);
         });
     } else {
+      if (context.setting.crepe.edit === "false") {
+        context.crepeRef.setReadOnly(true);
+        setReadOnly((readOnly) => !readOnly);
+      }
       fileContentRef.current = "";
       setCrepeState(1);
       setReadOnly(false);
