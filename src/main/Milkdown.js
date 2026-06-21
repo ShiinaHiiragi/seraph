@@ -777,6 +777,7 @@ const CrepeEditor = () => {
           type: crepeType,
           folderName: crepePath.join("/"),
           filename: crepeTitle,
+          create: false,
           text: text
         },
         undefined,

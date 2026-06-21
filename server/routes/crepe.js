@@ -45,20 +45,30 @@ router.get('/load', (req, res, next) => {
 });
 
 router.post('/save', (req, res, next) => {
-  const { type, folderName, filename, text } = req.body;
+  const { type, folderName, filename, create, text } = req.body;
   if (req.status.notAuthSuccess()) {
     // -> EF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }
 
-  const {
-    folderPath: _,
-    filePath
-  } = api.fileOperator.pathCombinator(type, folderName, filename);
+  const { folderPath, filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
+  const fileExists = !fs.existsSync(filePath);
 
-  if (!fs.existsSync(filePath)) {
+  if (!fs.existsSync(folderPath)) {
     // -> EF_RU: folder don't exist
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  if (fileExists && create) {
+    // -> EF_IC: file already exists
+    req.status.addExecStatus(api.Status.execErrCode.IdentifierConflict);
+    res.send({...req.status.generateReport(), 0: newDirName});
+    return;
+  } else if (!fileExists && !create) {
+    // -> EF_RU: file don't exist
     req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
     res.send(req.status.generateReport());
     return;
