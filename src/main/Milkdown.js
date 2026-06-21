@@ -196,7 +196,10 @@ const CrepeEditorInner = (props) => {
                 filename: filename,
                 base: filebase.split(",")[1]
               },
-              { "": () => reject(new Error("canceled")) },
+              { "": () => {
+                handleCloseModalTree();
+                reject(new Error("canceled"));
+              } },
               innerReject
             )
               .then(() => {
@@ -781,12 +784,13 @@ const CrepeEditor = () => {
       request(
         "POST/utility/crepe/save",
         { type, folderName, filename, create, text },        
-        undefined,
+        { "": handleCloseModalTree },
         reject
       ).then(() => {
         setModified(false);
         fileContentRef.current = text;
         if (create) {
+          context.crepeRef.select.current = context.crepeRef.getSelect();
           nextRef.current = `/crepe/${type}/${folderName}/${filename}`;
         }
         handleCloseModalTree();
