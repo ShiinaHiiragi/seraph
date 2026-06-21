@@ -143,7 +143,7 @@ const MaildownField = styled(Box)(({ theme }) => ({
 
 const CrepeEditorInner = (props) => {
   const {
-    foloderPath,
+    basePath,
     editableKey,
     readOnly,
     setModified,
@@ -180,7 +180,7 @@ const CrepeEditorInner = (props) => {
         handleToggleTree(),
         handleProcessImage(file)
       ])
-        .then(([folderPath, filebase]) => {
+        .then(([[folderPath, _], filebase]) => {
           const filename = file.name;
           const path = folderPath?.split("/")?.filter(Boolean)
           const type = path[0];
@@ -209,7 +209,7 @@ const CrepeEditorInner = (props) => {
             error: (data) => data
           })
         })
-        .catch((err) => {
+        .catch(() => {
           reject(new Error("canceled"));
         })
     }),
@@ -403,7 +403,7 @@ const CrepeEditorInner = (props) => {
             }
             regulatedInitValue = normalizedFileContent.current;
             observerRef.current?.disconnect();
-            observerRef.current = createImageObserver(root, foloderPath);
+            observerRef.current = createImageObserver(root, basePath);
           })
           .markdownUpdated((_, markdown) => {
             setModified(markdown.trimEnd() !== regulatedInitValue);
@@ -575,7 +575,7 @@ const CrepeEditorInner = (props) => {
     });
     return crepe;
   }, [
-    foloderPath,
+    basePath,
     editableKey,
     context.languagePicker
     // TODO: add config: spell check, enable tool bar etc.
@@ -612,11 +612,13 @@ const CrepeEditor = () => {
     []
   );
 
-  const fileContentRef = React.useRef(null);
   const [crepeState, setCrepeState] = React.useState(0);
   const [editableKey, setEditableKey] = React.useState(0);
   const [readOnly, setReadOnly] = React.useState(true);
   const [modified, setModified] = React.useState(false);
+
+  const fileContentRef = React.useRef(null);
+  const nextRef = React.useRef(null);
 
   const { "*": rawFolderName } = useParams();
   const folderName = React.useMemo(
@@ -637,7 +639,7 @@ const CrepeEditor = () => {
     [folderName, folderPart, context]
   );
 
-  const foloderPath = React.useMemo(
+  const basePath = React.useMemo(
     () => folderName.length
       ? `/${[crepeType, ...crepePath].join("/")}/`
       : null,
@@ -671,6 +673,7 @@ const CrepeEditor = () => {
   React.useEffect(() => {
     setCrepeState(0);
     setModified(false);
+    nextRef.current = null;
 
     if (folderName.length > 0) {
       request("GET/utility/crepe/load", {
@@ -731,6 +734,8 @@ const CrepeEditor = () => {
       const handler = (event) => event.preventDefault();
       window.addEventListener("beforeunload", handler);
       return () => window.removeEventListener("beforeunload", handler);
+    } else if (nextRef.current) {
+      navigate(nextRef.current);
     }
   }, [modified]);
 
@@ -763,23 +768,20 @@ const CrepeEditor = () => {
   }, [context, modified, crepeTitle]);
 
   const saveRef = React.useRef(null);
-  const handleSave = React.useCallback(() => {
+  const handleSave = React.useCallback((type, folderName, filename, create) => {
     toast.promise(new Promise((resolve, reject) => {
       const text = context.crepeRef.getText();
       request(
         "POST/utility/crepe/save",
-        {
-          type: crepeType,
-          folderName: crepePath.join("/"),
-          filename: crepeTitle,
-          create: false,
-          text: text
-        },
+        { type, folderName, filename, create, text },        
         undefined,
         reject
       ).then(() => {
-        fileContentRef.current = text;
         setModified(false);
+        fileContentRef.current = text;
+        if (create) {
+          nextRef.current = `/crepe/${type}/${folderName}/${filename}`;
+        }
         resolve();
       })
     }), {
@@ -787,7 +789,26 @@ const CrepeEditor = () => {
       success: context.languagePicker("modal.toast.success.saveText"),
       error: (data) => data
     });
-  }, [context, crepeType, crepePath, crepeTitle]);
+  }, [context]);
+
+  const handleToggleSave = React.useCallback(() => {
+    if (folderName.length === 0) {
+      setModalTree({
+        open: true,
+        initValue: `${context.languagePicker("modal.tree.untitled")}.md`,
+        handleAction: ([folderPath, filename]) => {
+          const path = folderPath?.split("/")?.filter(Boolean)
+          const type = path[0];
+          const folderName = path.slice(1).join("/");
+          handleSave(type, folderName, filename, true);
+        },
+        handleCancel: () => { }
+      });
+      return;
+    } else {
+      handleSave(crepeType, crepePath.join("/"), crepeTitle, false);
+    }
+  }, [handleSave, folderName, crepeType, crepePath, crepeTitle]);
 
   React.useEffect(() => {
     const handler = (event) => {
@@ -845,7 +866,7 @@ const CrepeEditor = () => {
             {savable && modified && <IconButton
               size="sm"
               variant="soft"
-              onClick={handleSave}
+              onClick={handleToggleSave}
               onMouseDown={(event) => event.preventDefault()}
               sx={buttonStyle}
               ref={saveRef}
@@ -868,7 +889,7 @@ const CrepeEditor = () => {
         <MaildownField>
           <MilkdownProvider>
             <CrepeEditorInner
-              foloderPath={foloderPath}
+              basePath={basePath}
               editableKey={editableKey}
               readOnly={readOnly}
               setModified={setModified}
@@ -877,7 +898,12 @@ const CrepeEditor = () => {
             />
           </MilkdownProvider>
         </MaildownField>}
-      <Tree modalTree={modalTree} setModalTree={setModalTree} />
+      {modalTree.open && (
+        <Tree
+          modalTree={modalTree}
+          setModalTree={setModalTree}
+        />
+      )}
     </RouteField>
   );
 }

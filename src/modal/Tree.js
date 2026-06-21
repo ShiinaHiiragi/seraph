@@ -1,5 +1,6 @@
 import * as React from "react";
-import Box from "@mui/joy/Stack";
+import Stack from "@mui/joy/Stack";
+import Input from "@mui/joy/Input";
 import Button from "@mui/joy/Button";
 import Divider from "@mui/joy/Divider";
 import Modal from "@mui/joy/Modal";
@@ -115,6 +116,7 @@ export default function Tree(props) {
     }
   ]);
 
+  const [localValue, setLocalValue] = React.useState(modalTree.initValue);
   const [selectedItem, setSelectedItem] = React.useState(null);
   const [expandedItem, setExpandedItem] = React.useState(["/public", "/private"]);
   const [loadingSet, setLoadingSet] = React.useState(new Set());
@@ -214,10 +216,11 @@ export default function Tree(props) {
           id="alert-dialog-modal-title"
           level="h2"
         >
-          PLACEHOLDER
+          {context.languagePicker("modal.tree.title")}
         </Typography>
         <Divider />
-        <Box
+        <Stack
+          spacing={1}
           sx={{
             flex: 1,
             minHeight: 0,
@@ -239,15 +242,23 @@ export default function Tree(props) {
               {renderItems(folderList, loadingSet)}
             </SimpleTreeView>
           </MaterialCssVarsProvider>
-        </Box>
+          {modalTree.initValue && (
+            <Input
+              value={localValue}
+              onChange={(event) => setLocalValue(event.target.value)}
+              placeholder={context.languagePicker("modal.tree.placeholder")}
+              // error={localError}
+            />
+          )}
+        </Stack>
         <Button
           disabled={selectedItem?.split("/")?.filter(Boolean)?.length < 2}
           onClick={() => {
-            modalTree.handleAction(selectedItem);
+            modalTree.handleAction([selectedItem, localValue]);
             handleCloseModalTree();
           }}
         >
-          PLACEHOLDER
+          {context.languagePicker("universal.button.submit")}
         </Button>
       </ModalDialog>
     </Modal>

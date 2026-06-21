@@ -65,7 +65,7 @@ router.post('/save', (req, res, next) => {
   if (fileExists && create) {
     // -> EF_IC: file already exists
     req.status.addExecStatus(api.Status.execErrCode.IdentifierConflict);
-    res.send({...req.status.generateReport(), 0: newDirName});
+    res.send({...req.status.generateReport(), 0: filename});
     return;
   } else if (!fileExists && !create) {
     // -> EF_RU: file don't exist

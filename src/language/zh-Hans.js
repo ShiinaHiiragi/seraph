@@ -519,6 +519,11 @@ const zhHans = {
         changeCipher: "请注意，即使修改了解密密码，在此之前加密的文件仍需要使用原密码解密。",
         enableTerminal: "点击「继续」表示您已知悉使用远程 PTY 的风险，并自行为一切可能造成的后果负责。"
       }
+    },
+    tree: {
+      title: "选择保存文件",
+      placeholder: "文件名",
+      untitled: "未命名"
     }
   },
   setting: {
