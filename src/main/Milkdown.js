@@ -344,9 +344,8 @@ const CrepeEditorInner = (props) => {
         },
         [CrepeFeature.CodeMirror]: {
           extensions: [
-            // TODO: wrap / .milkdown .ProseMirror .milkdown-code-block { overflow: hidden; }
             EditorView.lineWrapping,
-            ...(context.setting.crepe.code.lineNumbers ? [lineNumbers()] : []),
+            ...(context.setting.crepe.code.lineNumber ? [lineNumbers()] : []),
             ...(context.setting.crepe.code.lineGutter ? [highlightActiveLineGutter()] : []),
             highlightActiveLine(),
             foldGutter(),
@@ -598,7 +597,7 @@ const CrepeEditorInner = (props) => {
     context.setting.crepe.feature.blockEdit,
     context.setting.crepe.feature.toolbar,
     context.setting.crepe.feature.spellCheck,
-    context.setting.crepe.code.lineNumbers,
+    context.setting.crepe.code.lineNumber,
     context.setting.crepe.code.lineGutter
   ]);
 

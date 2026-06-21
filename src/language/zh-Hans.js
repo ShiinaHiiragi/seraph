@@ -27,7 +27,7 @@ const zhHans = {
         password: "更换登录密码"
       },
       welcome: {
-        title: "仪表盘",
+        title: "主页",
         enable: "启用仪表盘",
         enableTip: "CPU 温度与磁盘 I/O 数据可能由于平台或机种差异而无法获取",
         enableTemp: "在仪表盘显示 CPU 温度统计",
@@ -83,9 +83,9 @@ const zhHans = {
         cipher: "更换解密密码"
       },
       crepe: {
-        title: "编辑器",
+        title: "编辑",
         show: "对访客显示",
-        showTip: "即使选择不显示，未登录用户仍可通过 URL 访问 Crepe。",
+        showTip: "即使选择不显示，未登录用户仍可通过 URL 访问编辑器。",
         edit: "默认编辑模式",
         editOption: {
           true: "始终可编辑",
