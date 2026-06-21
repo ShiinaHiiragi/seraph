@@ -337,6 +337,11 @@ const zhHans = {
     },
     crepe: {
       placeholder: "在此输入文本",
+      image: {
+        upload: "上传",
+        link: "或输入链接",
+        caption: "在此输入标题",
+      },
       code: {
         search: "搜索语言",
         noResult: "无结果",

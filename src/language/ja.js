@@ -337,6 +337,11 @@ const ja = {
     },
     crepe: {
       placeholder: "ここにテキストを入力",
+      image: {
+        upload: "アップ",
+        link: "またはリンクを入力",
+        caption: "ここにキャプションを入力",
+      },
       code: {
         search: "ランゲージをサーチ",
         noResult: "結果なし",

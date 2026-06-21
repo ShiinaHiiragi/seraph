@@ -337,6 +337,11 @@ const en = {
     },
     crepe: {
       placeholder: "Enter text here",
+      image: {
+        upload: "Upload",
+        link: "or input link instead",
+        caption: "Input caption here",
+      },
       code: {
         search: "Search for language",
         noResult: "No result",
