@@ -88,12 +88,8 @@ const renderItems = (nodes, loadingSet) =>
   });
 
 export default function Tree(props) {
-  const { modalTree, setModalTree } = props;
+  const { modalTree, handleCloseModalTree } = props;
   const context = React.useContext(GlobalContext);
-
-  const handleCloseModalTree = React.useCallback(() => {
-    setModalTree((modalTree) => ({ ...modalTree, open: false }));
-  }, [setModalTree]);
 
   const [folderList, setFolderList] = React.useState([
     {
@@ -117,6 +113,8 @@ export default function Tree(props) {
   ]);
 
   const [localValue, setLocalValue] = React.useState(modalTree.initValue);
+  const [loading, setLoading] = React.useState(false);
+
   const [selectedItem, setSelectedItem] = React.useState(null);
   const [expandedItem, setExpandedItem] = React.useState(["/public", "/private"]);
   const [loadingSet, setLoadingSet] = React.useState(new Set());
@@ -178,6 +176,15 @@ export default function Tree(props) {
     },
     []
   );
+
+  const inputRef = React.useCallback((input) => {
+    if (input) {
+      const val = input.value;
+      const dot = val.lastIndexOf(".");
+      input.focus();
+      input.setSelectionRange(0, dot === -1 ? val.length : dot);
+    }
+  }, [modalTree.initValue]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Modal
@@ -247,15 +254,20 @@ export default function Tree(props) {
               value={localValue}
               onChange={(event) => setLocalValue(event.target.value)}
               placeholder={context.languagePicker("modal.tree.placeholder")}
-              // error={localError}
+              slotProps={{ input: { ref: inputRef } }}
             />
           )}
         </Stack>
         <Button
-          disabled={selectedItem?.split("/")?.filter(Boolean)?.length < 2}
+          loading={loading}
+          disabled={
+            selectedItem?.split("/")?.filter(Boolean)?.length < 2
+              || !selectedItem
+              || localValue.length === 0
+          }
           onClick={() => {
+            setLoading(true);
             modalTree.handleAction([selectedItem, localValue]);
-            handleCloseModalTree();
           }}
         >
           {context.languagePicker("universal.button.submit")}
