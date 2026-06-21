@@ -835,7 +835,7 @@ const CrepeEditor = () => {
             toast.dismiss(toastID);
             context.setModalReconfirm({
               open: true,
-              caption: "呜呜失败了喵只能覆盖了喵",
+              caption: context.languagePicker("modal.reconfirm.caption.overwrite"),
               handleAction: () =>
                 handleRewrite(type, folderName, filename, create, text)
             });
