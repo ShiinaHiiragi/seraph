@@ -376,6 +376,16 @@ export default function RowMenu(props) {
               {context.languagePicker("main.folder.rowMenu.epub")}
             </MenuItem>
           )}
+        {fileType.startsWith("image/") && (
+          <MenuItem
+            onClick={() => {
+              navigator.clipboard.writeText(`![1.00](/${type}/${folderName}/${filename})`)
+                .then(() => toast.success(context.languagePicker("modal.toast.success.image")));
+            }}
+          >
+            {context.languagePicker("main.folder.rowMenu.copyImage")}
+          </MenuItem>
+        )}
         <Divider />
         <MenuItem
           color="danger"

@@ -318,6 +318,7 @@ const en = {
         compress: "Compress",
         extract: "Extract",
         epub: "Convert",
+        copyImage: "Copy Element",
         delete: "Delete"
       },
       viewRegulate: {
@@ -419,7 +420,8 @@ const en = {
         logout: "Logged out successfully.",
         setting: "New setting has been saved.",
         salt: "Salt has been copied to clipboard.",
-        code: "",
+        code: "Code has been copied to clipboard.",
+        image: "Markdown element of the image has been copied to clipboard.",
         import: "New setting has been saved, and {0} out of {1} valid entries has been updated.",
         new: "{0} has been created.",
         upload: "{0} has been uploaded to {1}.",

@@ -318,6 +318,7 @@ const zhHans = {
         compress: "压缩",
         extract: "解压",
         epub: "转换",
+        copyImage: "复制元素",
         delete: "删除"
       },
       viewRegulate: {
@@ -420,6 +421,7 @@ const zhHans = {
         setting: "设置已保存。",
         salt: "已复制盐到剪贴板。",
         code: "已复制代码到剪贴板。",
+        image: "已复制图片的 Markdown 元素到剪贴板。",
         import: "设置已保存；总计 {1} 条有效项目中更新了 {0} 条。",
         new: "{0} 已创建。",
         upload: "{0} 已上传至 {1}。",

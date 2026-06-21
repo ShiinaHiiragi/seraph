@@ -587,11 +587,16 @@ const CrepeEditorInner = (props) => {
     });
     return crepe;
   }, [
-    context.isAuthority,
+    // save text | select when editor reload
+    // save text when creating new markdown
     basePath,
+    // save text & select when switch readonly -> editable
     editableKey,
+    // save text & select when loging in
+    context.isAuthority,
+    // save text & select when setting changes
     context.languagePicker
-    // TODO: add config: spell check, enable tool bar etc.
+    // TODO: add more config e.g. spell check, enable tool bar
   ]);
 
   React.useEffect(() => {
