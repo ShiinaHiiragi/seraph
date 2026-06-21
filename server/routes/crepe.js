@@ -53,7 +53,7 @@ router.post('/save', (req, res, next) => {
   }
 
   const { folderPath, filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
-  const fileExists = !fs.existsSync(filePath);
+  const fileExists = fs.existsSync(filePath);
 
   if (!fs.existsSync(folderPath)) {
     // -> EF_RU: folder don't exist
