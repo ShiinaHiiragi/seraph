@@ -102,6 +102,11 @@ import {
 import "@milkdown/crepe/theme/common/style.css";
 import "../interface/milk.css";
 
+const buttonStyle = {
+  backgroundColor: "transparent",
+  "&:hover": { backgroundColor: "transparent" }
+};
+
 const MaildownField = styled(Box)(({ theme }) => ({
   flex: 1,
   display: "flex",
@@ -139,11 +144,11 @@ const MaildownField = styled(Box)(({ theme }) => ({
 const CrepeEditorInner = (props) => {
   const {
     foloderPath,
-    fileContent,
     editableKey,
     readOnly,
     setModified,
-    handleToggleTree
+    handleToggleTree,
+    fileContentRef
   } = props;
   const context = React.useContext(GlobalContext);
 
@@ -216,7 +221,7 @@ const CrepeEditorInner = (props) => {
     const loadedFromSnapshot = context.crepeRef.snapshot.current !== null;
     const crepe = new Crepe({
       root,
-      defaultValue: context.crepeRef.snapshot.current ?? fileContent,
+      defaultValue: context.crepeRef.snapshot.current ?? fileContentRef.current,
       features: {
         [CrepeFeature.Toolbar]: true
       },
@@ -571,11 +576,9 @@ const CrepeEditorInner = (props) => {
     return crepe;
   }, [
     foloderPath,
-    fileContent,
     editableKey,
     context.languagePicker
-    // TODO: add config in context.setting
-    // spell check, enable tool bar
+    // TODO: add config: spell check, enable tool bar etc.
   ]);
 
   React.useEffect(() => {
@@ -610,11 +613,11 @@ const CrepeEditor = () => {
   );
 
   const [crepeState, setCrepeState] = React.useState(0);
-  const [crepeRefer, setCrepeRefer] = React.useState(false);
-  const [fileContent, setFileContent] = React.useState(null);
+  const fileContentRef = React.useRef(null);
 
-  const [readOnly, setReadOnly] = React.useState(true);
+  const [crepeRefer, setCrepeRefer] = React.useState(false);
   const [editableKey, setEditableKey] = React.useState(0);
+  const [readOnly, setReadOnly] = React.useState(true);
   const [modified, setModified] = React.useState(false);
 
   const { "*": rawFolderName } = useParams();
@@ -636,6 +639,13 @@ const CrepeEditor = () => {
     [folderName, folderPart, context]
   );
 
+  const foloderPath = React.useMemo(
+    () => folderName.length
+      ? `/${[crepeType, ...crepePath].join("/")}/`
+      : null,
+    [folderName, crepeType, crepePath]
+  );
+
   const breadcrumb = React.useMemo(() => folderName.length
     ? [
       context.languagePicker(`nav.${crepeType}`),
@@ -651,20 +661,47 @@ const CrepeEditor = () => {
     [folderName]
   );
 
-  const foloderPath = React.useMemo(
-    () => folderName.length
-      ? `/${[crepeType, ...crepePath].join("/")}/`
-      : null,
-    [folderName, crepeType, crepePath]
+  // a markdown is savable when
+  // - user has logged in
+  // - text content is ready
+  // - dest file exists
+  // and save button is hidden without any modification
+  const savable = React.useMemo(
+    () => context.isAuthority && crepeState === 1 && crepeRefer,
+    [context.isAuthority, crepeState, crepeRefer]
   );
 
   React.useEffect(() => {
-    if (modified) {
-      const handler = (event) => event.preventDefault();
-      window.addEventListener("beforeunload", handler);
-      return () => window.removeEventListener("beforeunload", handler);
+    setCrepeState(0);
+    setModified(false);
+
+    if (folderName.length > 0) {
+      request("GET/utility/crepe/load", {
+        type: crepeType,
+        folderName: crepePath.join("/"),
+        filename: crepeTitle
+      }, { [Status.execErrCode.ResourcesUnexist]: () => {
+        navigate("/crepe");
+      } })
+        .then(({ text }) => {
+          fileContentRef.current = text;
+          setCrepeState(1);
+          setCrepeRefer(true);
+        });
+    } else {
+      fileContentRef.current = "";
+      setCrepeState(1);
+      setCrepeRefer(false);
+      setReadOnly(false);
     }
-  }, [modified]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    // check if
+    // load with auth naturally
+    context.secondTick,
+    // url is changed directly
+    rawFolderName
+  ]);
 
   const blocker = useBlocker(modified);
   const blockerActiveRef = React.useRef(false);
@@ -694,47 +731,13 @@ const CrepeEditor = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [context.modalReconfirm?.open]);
 
-  // a markdown is savable when
-  // - user has logged in
-  // - text content is ready
-  // - dest file exists
-  // and save button is hidden without any modification
-  const savable = React.useMemo(
-    () => context.isAuthority && crepeState === 1 && crepeRefer,
-    [context.isAuthority, crepeState, crepeRefer]
-  );
-
   React.useEffect(() => {
-    setCrepeState(0);
-    setModified(false);
-
-    if (folderName.length > 0) {
-      request("GET/utility/crepe/load", {
-        type: crepeType,
-        folderName: crepePath.join("/"),
-        filename: crepeTitle
-      }, { [Status.execErrCode.ResourcesUnexist]: () => {
-        navigate("/crepe");
-      } })
-        .then(({ text }) => {
-          setCrepeState(1);
-          setCrepeRefer(true);
-          setFileContent(text);
-        });
-    } else {
-      setCrepeState(1);
-      setCrepeRefer(false);
-      setFileContent("");
-      setReadOnly(false);
+    if (modified) {
+      const handler = (event) => event.preventDefault();
+      window.addEventListener("beforeunload", handler);
+      return () => window.removeEventListener("beforeunload", handler);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    // check if
-    // load with auth naturally
-    context.secondTick,
-    // url is changed directly
-    rawFolderName
-  ]);
+  }, [modified]);
 
   const handleToggleReadOnly = React.useCallback(() => {
     if (readOnly) {
@@ -750,11 +753,11 @@ const CrepeEditor = () => {
   }, [context, readOnly]);
 
   const handleDownload = React.useCallback(() => {
-    // getText() != fileContent even if not modified
+    // getText() != fileContentRef.current even if not modified
     // because crepe will normalize markdown on load
     const text = modified
       ? context.crepeRef.getText()
-      : fileContent;
+      : fileContentRef.current;
     const blob = new Blob([text], { type: "text/markdown" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -762,11 +765,10 @@ const CrepeEditor = () => {
     a.download = crepeTitle;
     a.click();
     URL.revokeObjectURL(url);
-  }, [context, modified, fileContent, crepeTitle]);
+  }, [context, modified, crepeTitle]);
 
   const saveRef = React.useRef(null);
   const handleSave = React.useCallback(() => {
-    context.crepeRef.select.current = context.crepeRef.getSelect();
     toast.promise(new Promise((resolve, reject) => {
       const text = context.crepeRef.getText();
       request(
@@ -780,8 +782,8 @@ const CrepeEditor = () => {
         undefined,
         reject
       ).then(() => {
+        fileContentRef.current = text;
         setModified(false);
-        setFileContent(text);
         resolve();
       })
     }), {
@@ -809,11 +811,6 @@ const CrepeEditor = () => {
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, [handleToggleReadOnly, handleDownload]);
-
-  const buttonStyle = React.useMemo(() => ({
-    backgroundColor: "transparent",
-    "&:hover": { backgroundColor: "transparent" }
-  }), []);
 
   return (
     <RouteField
@@ -870,17 +867,17 @@ const CrepeEditor = () => {
         height: "auto"
       }}
     >
-      {(crepeState === 0 || fileContent === null) && <Loading pinned />}
-      {(crepeState === 1 && fileContent !== null) &&
+      {crepeState === 0 && <Loading pinned />}
+      {crepeState === 1 &&
         <MaildownField>
           <MilkdownProvider>
             <CrepeEditorInner
               foloderPath={foloderPath}
-              fileContent={fileContent}
               editableKey={editableKey}
               readOnly={readOnly}
               setModified={setModified}
               handleToggleTree={handleToggleTree}
+              fileContentRef={fileContentRef}
             />
           </MilkdownProvider>
         </MaildownField>}
