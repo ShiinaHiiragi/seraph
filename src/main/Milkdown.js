@@ -80,6 +80,7 @@ import CalendarViewMonthOutlinedIcon from "@mui/icons-material/CalendarViewMonth
 import FunctionsOutlinedIcon from "@mui/icons-material/FunctionsOutlined";
 import InsertLinkOutlinedIcon from "@mui/icons-material/InsertLinkOutlined";
 import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
+// import DiffMatchPatch from "diff-match-patch";
 import Loading from "./Loading";
 import Tree from "../modal/Tree";
 import RouteField from "../interface/RouteField";
@@ -149,11 +150,10 @@ const CrepeEditorInner = (props) => {
     setModified,
     handleToggleTree,
     handleCloseModalTree,
-    fileContentRef
+    fileContentRef,
+    normalizedRef
   } = props;
   const context = React.useContext(GlobalContext);
-
-  const normalizedFileContent = React.useRef(null);
   const observerRef = React.useRef(null);
 
   const handleProcessImage = React.useCallback((file) =>
@@ -229,8 +229,6 @@ const CrepeEditorInner = (props) => {
   );
 
   useEditor((root) => {
-    let regulatedInitValue = null;
-    const loadedFromSnapshot = context.crepeRef.snapshot.current !== null;
     const crepe = new Crepe({
       root,
       defaultValue: context.crepeRef.snapshot.current ?? fileContentRef.current,
@@ -410,15 +408,12 @@ const CrepeEditorInner = (props) => {
         // listener itself prevents jittering
         ctx.get(listenerCtx)
           .mounted(() => {
-            if (!loadedFromSnapshot) {
-              normalizedFileContent.current = getMarkdown()(ctx).trimEnd();
-            }
-            regulatedInitValue = normalizedFileContent.current;
+            normalizedRef.current = getMarkdown()(ctx).trimEnd();
             observerRef.current?.disconnect();
             observerRef.current = createImageObserver(root, basePath);
           })
           .markdownUpdated((_, markdown) => {
-            setModified(markdown.trimEnd() !== regulatedInitValue);
+            setModified(markdown.trimEnd() !== normalizedRef.current);
           });
       })
       .use($prose((ctx) => keymap({
@@ -641,6 +636,7 @@ const CrepeEditor = () => {
   const [modified, setModified] = React.useState(false);
 
   const fileContentRef = React.useRef(null);
+  const normalizedRef = React.useRef(null);
   const nextRef = React.useRef(null);
 
   const { "*": rawFolderName } = useParams();
@@ -802,6 +798,7 @@ const CrepeEditor = () => {
       ).then(() => {
         setModified(false);
         fileContentRef.current = text;
+        normalizedRef.current = text.trimEnd();
         if (create) {
           context.crepeRef.select.current = context.crepeRef.getSelect();
           nextRef.current = `/crepe/${type}/${folderName}/${filename}`;
@@ -921,6 +918,7 @@ const CrepeEditor = () => {
               handleToggleTree={handleToggleTree}
               handleCloseModalTree={handleCloseModalTree}
               fileContentRef={fileContentRef}
+              normalizedRef={normalizedRef}
             />
           </MilkdownProvider>
         </MaildownField>}
