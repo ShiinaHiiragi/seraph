@@ -846,7 +846,6 @@ const CrepeEditor = () => {
         success: context.languagePicker("modal.toast.success.saveText"),
         error: (data) => data
       });
-      // handleRewrite(type, folderName, filename, create, text);
     } else {
       handleRewrite(type, folderName, filename, create, text);
     }
