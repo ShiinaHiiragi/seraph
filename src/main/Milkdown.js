@@ -234,7 +234,8 @@ const CrepeEditorInner = (props) => {
       root,
       defaultValue: context.crepeRef.snapshot.current ?? fileContentRef.current,
       features: {
-        [CrepeFeature.Toolbar]: context.setting.crepe.toolbar
+        [CrepeFeature.BlockEdit]: context.setting.crepe.feature.blockEdit,
+        [CrepeFeature.Toolbar]: context.setting.crepe.feature.toolbar
       },
       featureConfigs: {
         [CrepeFeature.Cursor]: {
@@ -403,7 +404,7 @@ const CrepeEditorInner = (props) => {
         // preserve some space for scrolling
         ctx.update(editorViewOptionsCtx, (prev) => ({
           ...prev,
-          attributes: { spellcheck: String(context.setting.crepe.spellCheck) },
+          attributes: { spellcheck: String(context.setting.crepe.feature.spellCheck) },
           scrollThreshold: { top: 0, right: 0, bottom: 64, left: 0 },
           scrollMargin: { top: 0, right: 0, bottom: 64, left: 0 }
         }));
@@ -592,9 +593,11 @@ const CrepeEditorInner = (props) => {
     // save text & select when loging in
     context.isAuthority,
     // save text & select when setting changes
+    // languagePicker -> context.setting.meta.language
     context.languagePicker,
-    context.setting.crepe.toolbar,
-    context.setting.crepe.spellCheck,
+    context.setting.crepe.feature.blockEdit,
+    context.setting.crepe.feature.toolbar,
+    context.setting.crepe.feature.spellCheck,
     context.setting.crepe.code.lineNumbers,
     context.setting.crepe.code.lineGutter
   ]);

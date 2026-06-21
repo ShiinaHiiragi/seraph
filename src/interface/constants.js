@@ -195,9 +195,13 @@ const defaultSetting = {
     }
   },
   crepe: {
+    show: true,
     edit: "auto",
-    toolbar: true,
-    spellCheck: false,
+    feature: {
+      blockEdit: true,
+      toolbar: true,
+      spellCheck: false
+    },
     code: {
       lineNumber: true,
       lineGutter: false
@@ -369,6 +373,7 @@ const settingField = {
   account: "account",
   welcome: "welcome",
   file: "file",
+  crepe: "crepe",
   terminal: "terminal",
   todo: "todo",
   extension: "extension",

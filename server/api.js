@@ -156,9 +156,13 @@ const defaultConfig = {
       }
     },
     crepe: {
+      show: true,
       edit: "auto",
-      toolbar: true,
-      spellCheck: false,
+      feature: {
+        blockEdit: true,
+        toolbar: true,
+        spellCheck: false
+      },
       code: {
         lineNumber: true,
         lineGutter: false

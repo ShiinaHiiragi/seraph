@@ -10,7 +10,8 @@ const ja = {
         upload: "セッティングをインポート",
         uploadButton: "インポート",
         download: "セッティングをエクスポート",
-        downloadButton: "エクスポート"
+        downloadButton: "エクスポート",
+        width: 140
       },
       account: {
         title: "アカウント",
@@ -80,6 +81,24 @@ const ja = {
         saltTip: "デクリプションソルトはパスワードを変更しても変わりません。いったん失われると、それ以前にエンクリプトされたすべてのファイルはリカバーできなくなります。",
         saltUnexist: "(設定されていません)",
         cipher: "デクリプトパスワードを変更"
+      },
+      crepe: {
+        title: "エディター",
+        show: "ゲストに表示",
+        showTip: "非表示に設定しても、未ログインユーザーは URL からクレープにアクセスできます。",
+        edit: "デフォルトエディットモード",
+        editOption: {
+          true: "常にエディット可能",
+          false: "常にリードオンリー",
+          auto: "コンテンツが空でない場合のみエディット可能"
+        },
+        feature: "フィーチャ",
+        featureBlockEdit: "ブロックエディットを有効",
+        featureToolbar: "ツールバーを有効",
+        featureSpellCheck: "スペルチェックを有効",
+        code: "コードミラー",
+        codeLineNumber: "ライン番号を表示",
+        codeLineGutter: "アクティブラインのガターをハイライト"
       },
       terminal: {
         title: "ターミナル",

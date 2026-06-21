@@ -10,7 +10,8 @@ const en = {
         upload: "Import Setting",
         uploadButton: "Import",
         download: "Export Setting",
-        downloadButton: "Export"
+        downloadButton: "Export",
+        width: 100
       },
       account: {
         title: "Account",
@@ -80,6 +81,24 @@ const en = {
         saltTip: "Decryption salt does not change when password changes. All files encrypted before can no longer be recovered once the salt is lost.",
         saltUnexist: "(Not set)",
         cipher: "Change Decryption Password"
+      },
+      crepe: {
+        title: "Editor",
+        show: "Display for Guests",
+        showTip: "Unlogged users can still access Crepe via URL even if you choose not to display it.",
+        edit: "Default Editing Mode",
+        editOption: {
+          true: "Always editable",
+          false: "Always read-only",
+          auto: "Editable only if content is not empty"
+        },
+        feature: "Features",
+        featureBlockEdit: "Enable block edit",
+        featureToolbar: "Enable toolbar",
+        featureSpellCheck: "Enable spell check",
+        code: "Code Mirror",
+        codeLineNumber: "Show line numbers",
+        codeLineGutter: "Highlight active line gutter"
       },
       terminal: {
         title: "Terminal",

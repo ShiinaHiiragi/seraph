@@ -10,7 +10,8 @@ const zhHans = {
         upload: "导入设置",
         uploadButton: "导入",
         download: "导出设置",
-        downloadButton: "导出"
+        downloadButton: "导出",
+        width: 80
       },
       account: {
         title: "账号",
@@ -80,6 +81,24 @@ const zhHans = {
         saltTip: "解密盐不会随密码变换；一旦丢失，在此之前加密的所有文件都将无法恢复。",
         saltUnexist: "(未设置)",
         cipher: "更换解密密码"
+      },
+      crepe: {
+        title: "编辑器",
+        show: "对访客显示",
+        showTip: "即使选择不显示，未登录用户仍可通过 URL 访问 Crepe。",
+        edit: "默认编辑模式",
+        editOption: {
+          true: "始终可编辑",
+          false: "始终只读",
+          auto: "仅当内容非空时可编辑"
+        },
+        feature: "功能",
+        featureBlockEdit: "启用块编辑",
+        featureToolbar: "启用工具栏",
+        featureSpellCheck: "启用拼写检查",
+        code: "Code Mirror",
+        codeLineNumber: "显示行号",
+        codeLineGutter: "高亮当前行边栏"
       },
       terminal: {
         title: "终端",

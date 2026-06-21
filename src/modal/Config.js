@@ -321,7 +321,7 @@ const SECTIONS = (
               size="sm"
               color="neutral"
               variant="outlined"
-              sx={{ minWidth: 80 }}
+              sx={{ minWidth: context.languagePicker("header.config.general.width") }}
               onClick={handleReset}
               loading={resetButtonLoading}
               startDecorator={<RestartAltOutlinedIcon />}
@@ -338,7 +338,7 @@ const SECTIONS = (
               color="neutral"
               variant="outlined"
               component="label"
-              sx={{ minWidth: 80 }}
+              sx={{ minWidth: context.languagePicker("header.config.general.width") }}
               startDecorator={<FileUploadOutlinedIcon />}
             >
               {context.languagePicker("header.config.general.uploadButton")}
@@ -353,7 +353,7 @@ const SECTIONS = (
               size="sm"
               color="neutral"
               variant="outlined"
-              sx={{ minWidth: 80 }}
+              sx={{ minWidth: context.languagePicker("header.config.general.width") }}
               onClick={handleDownload}
               startDecorator={<FileDownloadOutlinedIcon />}
             >
@@ -692,6 +692,85 @@ const SECTIONS = (
                 salt: data.salt
               }))}
             />
+          )
+        }
+      ]
+    },
+    {
+      id: settingField.crepe,
+      label: context.languagePicker("header.config.crepe.title"),
+      items: [
+        {
+          key: context.languagePicker("header.config.crepe.show"),
+          tip: context.languagePicker("header.config.crepe.showTip"),
+          value: Turkey(context.setting.crepe.show, "crepe.show", handleApply)
+        },
+        {
+          key: context.languagePicker("header.config.crepe.edit"),
+          value: (
+            <RadioGroup
+              size="sm"
+              value={context.setting.crepe.edit}
+              onChange={(event) => handleApply("crepe.edit", event.target.value)}
+            >
+              <Radio
+                value="true"
+                label={context.languagePicker("header.config.crepe.editOption.true")}
+              />
+              <Radio
+                value="false"
+                label={context.languagePicker("header.config.crepe.editOption.false")}
+              />
+              <Radio
+                value="auto"
+                label={context.languagePicker("header.config.crepe.editOption.auto")}
+              />
+            </RadioGroup>
+          )
+        },
+        {
+          key: context.languagePicker("header.config.crepe.feature"),
+          value: (
+            <Stack spacing={1}>
+              {Bool(
+                context.languagePicker("header.config.crepe.featureBlockEdit"),
+                context.setting.crepe.feature.blockEdit,
+                "crepe.feature.blockEdit",
+                handleApply
+              )}
+              {Bool(
+                context.languagePicker("header.config.crepe.featureToolbar"),
+                context.setting.crepe.feature.toolbar,
+                "crepe.feature.toolbar",
+                handleApply
+              )}
+              {Bool(
+                context.languagePicker("header.config.crepe.featureSpellCheck"),
+                context.setting.crepe.feature.spellCheck,
+                "crepe.feature.spellCheck",
+                handleApply
+              )}
+            </Stack>
+          )
+        },
+        {
+          key: context.languagePicker("header.config.crepe.code"),
+          value: (
+            <Stack spacing={1}>
+              {Bool(
+                context.languagePicker("header.config.crepe.codeLineNumber"),
+                context.setting.crepe.code.lineNumber,
+                "crepe.code.lineNumber",
+                handleApply
+              )}
+              {Bool(
+                context.languagePicker("header.config.crepe.codeLineGutter"),
+                context.setting.crepe.code.lineGutter,
+                "crepe.code.lineGutter",
+                handleApply,
+                !context.setting.crepe.code.lineNumber
+              )}
+            </Stack>
           )
         }
       ]

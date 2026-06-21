@@ -136,66 +136,68 @@ export default function Navigation(props) {
             </List>
           </ListItem>}
 
-          <ListItem nested>
-            <ListSubheader>
-              {context.languagePicker("nav.utility.title")}
-            </ListSubheader>
-            <List
-              aria-labelledby="nav-list-browse"
-              sx={{
-                "& .JoyListItemButton-root": { p: "8px" },
-              }}
-            >
-              <ListItem>
-                <ListItemButton
-                  selected={pathStartWith("/crepe")}
-                  onClick={() => {
-                    if (window.location.pathname !== "/crepe") {
-                      navigateTo("/crepe");
-                    }
-                  }}
-                >
-                  <ListItemDecorator sx={{ color: "neutral.500" }}>
-                    <EventNoteOutlinedIcon fontSize="small" />
-                  </ListItemDecorator>
-                  <ListItemContent>{context.languagePicker("nav.utility.milkdown")}</ListItemContent>
-                </ListItemButton>
-              </ListItem>
-              {/* {context.isAuthority && <ListItem>
-                <ListItemButton
-                  selected={pathStartWith("/subscription")}
-                  onClick={() => navigateTo("/subscription")}
-                >
-                  <ListItemDecorator sx={{ color: "neutral.500" }}>
-                    <ForwardToInboxOutlinedIcon fontSize="small" />
-                  </ListItemDecorator>
-                  <ListItemContent>{context.languagePicker("nav.utility.subscription")}</ListItemContent>
-                </ListItemButton>
-              </ListItem>} */}
-              {context.isAuthority && <ListItem>
-                <ListItemButton
-                  selected={pathStartWith("/terminal")}
-                  onClick={() => navigateTo("/terminal")}
-                >
-                  <ListItemDecorator sx={{ color: "neutral.500" }}>
-                    <TerminalOutlinedIcon fontSize="small" />
-                  </ListItemDecorator>
-                  <ListItemContent>{context.languagePicker("nav.utility.terminal")}</ListItemContent>
-                </ListItemButton>
-              </ListItem>}
-              {context.isAuthority && <ListItem>
-                <ListItemButton
-                  selected={pathStartWith("/todo")}
-                  onClick={() => navigateTo("/todo")}
-                >
-                  <ListItemDecorator sx={{ color: "neutral.500" }}>
-                    <DoneIcon fontSize="small" />
-                  </ListItemDecorator>
-                  <ListItemContent>{context.languagePicker("nav.utility.todo")}</ListItemContent>
-                </ListItemButton>
-              </ListItem>}
-            </List>
-          </ListItem>
+          {(context.isAuthority || context.setting.crepe.show) && (
+            <ListItem nested>
+              <ListSubheader>
+                {context.languagePicker("nav.utility.title")}
+              </ListSubheader>
+              <List
+                aria-labelledby="nav-list-browse"
+                sx={{
+                  "& .JoyListItemButton-root": { p: "8px" },
+                }}
+              >
+                <ListItem>
+                  <ListItemButton
+                    selected={pathStartWith("/crepe")}
+                    onClick={() => {
+                      if (window.location.pathname !== "/crepe") {
+                        navigateTo("/crepe");
+                      }
+                    }}
+                  >
+                    <ListItemDecorator sx={{ color: "neutral.500" }}>
+                      <EventNoteOutlinedIcon fontSize="small" />
+                    </ListItemDecorator>
+                    <ListItemContent>{context.languagePicker("nav.utility.milkdown")}</ListItemContent>
+                  </ListItemButton>
+                </ListItem>
+                {/* {context.isAuthority && <ListItem>
+                  <ListItemButton
+                    selected={pathStartWith("/subscription")}
+                    onClick={() => navigateTo("/subscription")}
+                  >
+                    <ListItemDecorator sx={{ color: "neutral.500" }}>
+                      <ForwardToInboxOutlinedIcon fontSize="small" />
+                    </ListItemDecorator>
+                    <ListItemContent>{context.languagePicker("nav.utility.subscription")}</ListItemContent>
+                  </ListItemButton>
+                </ListItem>} */}
+                {context.isAuthority && <ListItem>
+                  <ListItemButton
+                    selected={pathStartWith("/terminal")}
+                    onClick={() => navigateTo("/terminal")}
+                  >
+                    <ListItemDecorator sx={{ color: "neutral.500" }}>
+                      <TerminalOutlinedIcon fontSize="small" />
+                    </ListItemDecorator>
+                    <ListItemContent>{context.languagePicker("nav.utility.terminal")}</ListItemContent>
+                  </ListItemButton>
+                </ListItem>}
+                {context.isAuthority && <ListItem>
+                  <ListItemButton
+                    selected={pathStartWith("/todo")}
+                    onClick={() => navigateTo("/todo")}
+                  >
+                    <ListItemDecorator sx={{ color: "neutral.500" }}>
+                      <DoneIcon fontSize="small" />
+                    </ListItemDecorator>
+                    <ListItemContent>{context.languagePicker("nav.utility.todo")}</ListItemContent>
+                  </ListItemButton>
+                </ListItem>}
+              </List>
+            </ListItem>
+          )}
         </List>}
     </React.Fragment>
   );
