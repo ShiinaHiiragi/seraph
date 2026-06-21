@@ -263,7 +263,7 @@ export default function Tree(props) {
           disabled={
             selectedItem?.split("/")?.filter(Boolean)?.length < 2
               || !selectedItem
-              || localValue.length === 0
+              || (localValue && localValue.length === 0)
           }
           onClick={() => {
             setLoading(true);

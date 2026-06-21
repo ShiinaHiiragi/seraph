@@ -178,10 +178,17 @@ const CrepeEditorInner = (props) => {
   const handleUploadImage = React.useCallback((file) =>
     new Promise((resolve, reject) => {
       Promise.all([
-        handleToggleTree(),
-        handleProcessImage(file)
+        context.isAuthority
+          ? handleToggleTree()
+          : Promise.resolve([]),
+        handleProcessImage(file),
       ])
-        .then(([[folderPath, _], filebase]) => {
+        .then(([[folderPath], filebase]) => {
+          if (!context.isAuthority || !folderPath) {
+            resolve(filebase);
+            return;
+          }
+
           const filename = file.name;
           const path = folderPath?.split("/")?.filter(Boolean)
           const type = path[0];
@@ -580,6 +587,7 @@ const CrepeEditorInner = (props) => {
     });
     return crepe;
   }, [
+    context.isAuthority,
     basePath,
     editableKey,
     context.languagePicker
@@ -672,8 +680,8 @@ const CrepeEditor = () => {
   );
 
   // a markdown is savable when
-  // - text content is ready
   // - user has logged in
+  // - text content is ready
   // save button will be hidden without any modification
   const savable = React.useMemo(
     () => context.isAuthority && crepeState === 1,

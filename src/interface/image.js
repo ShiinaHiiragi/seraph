@@ -9,7 +9,7 @@ const resolveImage = (src, dirPath) => {
   // keep it as it is when
   //   - src is null or ""
   //   - dest file not exists (dirPath is null)
-  if (!src || !dirPath) {
+  if (!src || (!dirPath && !src.startsWith("/"))) {
     return src;
   }
 
