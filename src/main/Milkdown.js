@@ -699,6 +699,7 @@ const CrepeEditor = () => {
   React.useEffect(() => {
     setCrepeState(0);
     setModified(false);
+    const nextActivated = nextRef.current !== null;
     nextRef.current = null;
 
     if (folderName.length > 0) {
@@ -710,10 +711,10 @@ const CrepeEditor = () => {
         navigate("/crepe");
       } })
         .then(({ text }) => {
-          if (
+          if (!nextActivated && (
             context.setting.crepe.edit === "false"
               || (context.setting.crepe.edit === "auto" && text.length > 0)
-          ) {
+          )) {
             context.crepeRef.setReadOnly(true);
             setReadOnly((readOnly) => !readOnly);
           }
