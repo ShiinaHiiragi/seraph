@@ -1,6 +1,6 @@
 let fs = require('fs');
-let path = require('path');
 let express = require('express');
+let { applyPatch } = require('diff');
 let api = require('../api');
 let router = express.Router();
 
@@ -26,10 +26,9 @@ router.get('/load', (req, res, next) => {
 
   let text;
   try {
-    const buffer = fs.readFileSync(filePath);
-    text = buffer.toString('utf-8');
+    text = fs.readFileSync(filePath).toString('utf-8');
   } catch (_) {
-    // -> EF_FME: fs.writeFileSync error
+    // -> EF_FME: fs.readFileSync error
     req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
     res.send(req.status.generateReport());
     return;
@@ -40,6 +39,50 @@ router.get('/load', (req, res, next) => {
   res.send({
     ...req.status.generateReport(),
     text: text
+  });
+  return;
+});
+
+router.post('/update', (req, res, next) => {
+  const { type, folderName, filename, diff } = req.body;
+  if (req.status.notAuthSuccess()) {
+    // -> EF_IT or abnormal request
+    next(api.errorStreamControl);
+    return;
+  }
+
+  const {
+    folderPath: _,
+    filePath
+  } = api.fileOperator.pathCombinator(type, folderName, filename);
+
+  if (!fs.existsSync(filePath)) {
+    // -> EF_RU: folder don't exist
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  let newText;
+  try {
+    const originText = fs.readFileSync(filePath).toString('utf-8');
+    newText = applyPatch(originText, diff, { fuzzFactor: 0 });
+    if (newText !== false) {
+      fs.writeFileSync(filePath, newText, 'utf-8');
+    }
+  } catch (_) {
+    console.log(_);
+    // -> EF_FME: read or write error
+    req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  // -> ES: return markdown text
+  req.status.addExecStatus();
+  res.send({
+    ...req.status.generateReport(),
+    success: newText !== false
   });
   return;
 });
@@ -75,7 +118,7 @@ router.post('/save', (req, res, next) => {
   }
 
   try {
-    fs.writeFileSync(filePath, text);
+    fs.writeFileSync(filePath, text, 'utf-8');
   } catch (_) {
     // -> EF_FME: fs.writeFileSync error
     req.status.addExecStatus(api.Status.execErrCode.FileModuleError);

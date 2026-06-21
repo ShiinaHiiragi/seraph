@@ -80,7 +80,7 @@ import CalendarViewMonthOutlinedIcon from "@mui/icons-material/CalendarViewMonth
 import FunctionsOutlinedIcon from "@mui/icons-material/FunctionsOutlined";
 import InsertLinkOutlinedIcon from "@mui/icons-material/InsertLinkOutlined";
 import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
-// import DiffMatchPatch from "diff-match-patch";
+import { createPatch } from "diff";
 import Loading from "./Loading";
 import Tree from "../modal/Tree";
 import RouteField from "../interface/RouteField";
@@ -787,31 +787,70 @@ const CrepeEditor = () => {
   }, [context, modified, crepeTitle]);
 
   const saveRef = React.useRef(null);
+  const handleRewrite = React.useCallback(
+    (type, folderName, filename, create, text) => {
+      toast.promise(new Promise((resolve, reject) => {
+        request(
+          "POST/utility/crepe/save",
+          { type, folderName, filename, create, text },
+          { "": handleCloseModalTree },
+          reject
+        ).then(() => {
+          setModified(false);
+          fileContentRef.current = text;
+          normalizedRef.current = text.trimEnd();
+          if (create) {
+            context.crepeRef.select.current = context.crepeRef.getSelect();
+            nextRef.current = `/crepe/${type}/${folderName}/${filename}`;
+          }
+          handleCloseModalTree();
+          resolve();
+        })
+      }), {
+        loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
+        success: context.languagePicker("modal.toast.success.saveText"),
+        error: (data) => data
+      });
+    },
+    [context, handleCloseModalTree]
+  );
+
   const handleSave = React.useCallback((type, folderName, filename, create) => {
-    toast.promise(new Promise((resolve, reject) => {
-      const text = context.crepeRef.getText();
-      request(
-        "POST/utility/crepe/save",
-        { type, folderName, filename, create, text },        
-        { "": handleCloseModalTree },
-        reject
-      ).then(() => {
-        setModified(false);
-        fileContentRef.current = text;
-        normalizedRef.current = text.trimEnd();
-        if (create) {
-          context.crepeRef.select.current = context.crepeRef.getSelect();
-          nextRef.current = `/crepe/${type}/${folderName}/${filename}`;
-        }
-        handleCloseModalTree();
-        resolve();
-      })
-    }), {
-      loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
-      success: context.languagePicker("modal.toast.success.saveText"),
-      error: (data) => data
-    });
-  }, [context, handleCloseModalTree]);
+    const text = context.crepeRef.getText();
+    if (!create) {
+      const diff = createPatch(filename, fileContentRef.current, text);
+      const toastID = toast.promise(new Promise((resolve, reject) => {
+        request(
+          "POST/utility/crepe/update",
+          { type, folderName, filename, diff },
+          undefined,
+          reject
+        ).then((data) => {
+          if (data.success) {
+            setModified(false);
+            fileContentRef.current = text;
+            normalizedRef.current = text.trimEnd();
+            resolve();
+          } else {
+            toast.dismiss(toastID);
+            context.setModalReconfirm({
+              open: true,
+              caption: "呜呜失败了喵只能覆盖了喵",
+              handleAction: () =>
+                handleRewrite(type, folderName, filename, create, text)
+            });
+          }
+        })
+      }), {
+        loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
+        success: context.languagePicker("modal.toast.success.saveText"),
+        error: (data) => data
+      });
+      // handleRewrite(type, folderName, filename, create, text);
+    } else {
+      handleRewrite(type, folderName, filename, create, text);
+    }
+  }, [context, handleRewrite]);
 
   const handleToggleSave = React.useCallback(() => {
     if (folderName.length === 0) {

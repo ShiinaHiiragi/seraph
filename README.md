@@ -177,6 +177,7 @@
 
 ## Log
 
+- 06/21/2026 ver 1.4.0: Add Milkdown Crepe as rich text editor
 - 06/18/2026 ver 1.3.0: Update dependencies from @mui/material and introduce @mui/x-tree-view v7
 - 06/18/2026 ver 1.2.2: Add salt manager for data safety
 - 06/17/2026 ver 1.2.1: Add encryption/decryption for files
