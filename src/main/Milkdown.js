@@ -612,10 +612,8 @@ const CrepeEditor = () => {
     []
   );
 
-  const [crepeState, setCrepeState] = React.useState(0);
   const fileContentRef = React.useRef(null);
-
-  const [crepeRefer, setCrepeRefer] = React.useState(false);
+  const [crepeState, setCrepeState] = React.useState(0);
   const [editableKey, setEditableKey] = React.useState(0);
   const [readOnly, setReadOnly] = React.useState(true);
   const [modified, setModified] = React.useState(false);
@@ -662,13 +660,12 @@ const CrepeEditor = () => {
   );
 
   // a markdown is savable when
-  // - user has logged in
   // - text content is ready
-  // - dest file exists
-  // and save button is hidden without any modification
+  // - user has logged in
+  // save button will be hidden without any modification
   const savable = React.useMemo(
-    () => context.isAuthority && crepeState === 1 && crepeRefer,
-    [context.isAuthority, crepeState, crepeRefer]
+    () => context.isAuthority && crepeState === 1,
+    [context.isAuthority, crepeState]
   );
 
   React.useEffect(() => {
@@ -686,12 +683,10 @@ const CrepeEditor = () => {
         .then(({ text }) => {
           fileContentRef.current = text;
           setCrepeState(1);
-          setCrepeRefer(true);
         });
     } else {
       fileContentRef.current = "";
       setCrepeState(1);
-      setCrepeRefer(false);
       setReadOnly(false);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
