@@ -81,6 +81,7 @@ import CalendarViewMonthOutlinedIcon from "@mui/icons-material/CalendarViewMonth
 import FunctionsOutlinedIcon from "@mui/icons-material/FunctionsOutlined";
 import InsertLinkOutlinedIcon from "@mui/icons-material/InsertLinkOutlined";
 import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
+import { countWords, countLines } from "alfaaz";
 import { createPatch } from "diff";
 import Loading from "./Loading";
 import Tree from "../modal/Tree";
@@ -425,13 +426,14 @@ const CrepeEditorInner = (props) => {
           .markdownUpdated((_, markdown) => {
             setModified(markdown.trimEnd() !== normalizedRef.current);
             setCounter({
-              lines: markdown.split("\n").length,
-              words: [...new Intl.Segmenter( "und", { granularity: "word" } )
-                .segment(markdown)]
-                .filter(item => item.isWordLike).length,
-              chars: [...new Intl.Segmenter( "und", { granularity: "grapheme" } )
-                .segment(markdown)]
-                .filter(item => item.isWordLike).length
+              lines: countLines(markdown),
+              words: countWords(markdown),
+              chars: [...new Intl.Segmenter(
+                "und",
+                { granularity: "grapheme" }
+              ).segment(markdown)]
+                .filter(({ segment }) => segment.trim())
+                .length
             })
           });
       })
@@ -1044,7 +1046,7 @@ const CrepeEditor = () => {
               fontVariantNumeric: "tabular-nums",
             }}
           >
-            {counter.lines} / {counter.words} / {counter.chars}
+            {counter.lines} Lines / {counter.words} Words / {counter.chars} Characters
           </Typography>
         </Box>
       </Box>
