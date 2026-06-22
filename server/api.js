@@ -161,6 +161,7 @@ const defaultConfig = {
       feature: {
         blockEdit: true,
         toolbar: true,
+        stat: true,
         spellCheck: false
       },
       code: {

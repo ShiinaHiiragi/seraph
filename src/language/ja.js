@@ -95,6 +95,7 @@ const ja = {
         feature: "フィーチャ",
         featureBlockEdit: "ブロックエディットを有効",
         featureToolbar: "ツールバーを有効",
+        featureStat: "ワードカウントを有効",
         featureSpellCheck: "スペルチェックを有効",
         code: "コードミラー",
         codeLineNumber: "ライン番号を表示",

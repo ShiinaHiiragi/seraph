@@ -200,6 +200,7 @@ const defaultSetting = {
     feature: {
       blockEdit: true,
       toolbar: true,
+      stat: true,
       spellCheck: false
     },
     code: {

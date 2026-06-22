@@ -745,6 +745,12 @@ const SECTIONS = (
                 handleApply
               )}
               {Bool(
+                context.languagePicker("header.config.crepe.featureStat"),
+                context.setting.crepe.feature.stat,
+                "crepe.feature.stat",
+                handleApply
+              )}
+              {Bool(
                 context.languagePicker("header.config.crepe.featureSpellCheck"),
                 context.setting.crepe.feature.spellCheck,
                 "crepe.feature.spellCheck",

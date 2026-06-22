@@ -95,6 +95,7 @@ const en = {
         feature: "Features",
         featureBlockEdit: "Enable block edit",
         featureToolbar: "Enable toolbar",
+        featureStat: "Enable word count",
         featureSpellCheck: "Enable spell check",
         code: "Code Mirror",
         codeLineNumber: "Show line numbers",
