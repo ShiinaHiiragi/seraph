@@ -556,6 +556,12 @@ const CrepeEditorInner = (props) => {
                 return true
               }
               return false
+            },
+            paste(view) {
+              requestAnimationFrame(() => {
+                view.dispatch(view.state.tr.scrollIntoView());
+              });
+              return false;
             }
           }
         }
