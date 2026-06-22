@@ -94,7 +94,7 @@ export default function Tree(props) {
   const [folderList, setFolderList] = React.useState([
     {
       id: "/public",
-      label: "Public",
+      label: context.languagePicker("nav.public"),
       children: context.sortedPublicFolders.map((name) => ({
         id: `/public/${name}`,
         label: name,
@@ -103,7 +103,7 @@ export default function Tree(props) {
     },
     {
       id: "/private",
-      label: "Private",
+      label: context.languagePicker("nav.private"),
       children: context.sortedPrivateFolders.map((name) => ({
         id: `/private/${name}`,
         label: name,
