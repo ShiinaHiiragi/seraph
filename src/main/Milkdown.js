@@ -7,6 +7,8 @@ import Box from "@mui/joy/Box";
 import Stack from "@mui/joy/Stack";
 import IconButton from "@mui/joy/IconButton";
 import Typography from "@mui/joy/Typography";
+import { Popper } from "@mui/base/Popper";
+import { ClickAwayListener } from "@mui/base/ClickAwayListener";
 import { Milkdown, MilkdownProvider, useEditor } from "@milkdown/react";
 import { Crepe, CrepeFeature } from "@milkdown/crepe";
 import {
@@ -110,6 +112,17 @@ const buttonStyle = {
   backgroundColor: "transparent",
   "&:hover": { backgroundColor: "transparent" }
 };
+
+const count = (markdown) => ({
+  lines: countLines(markdown),
+  words: countWords(markdown),
+  chars: [...new Intl.Segmenter(
+    "und",
+    { granularity: "grapheme" }
+  ).segment(markdown)]
+    .filter(({ segment }) => segment.trim())
+    .length
+});
 
 const MaildownField = styled(Box)(({ theme }) => ({
   flex: 1,
@@ -417,7 +430,9 @@ const CrepeEditorInner = (props) => {
         ctx.get(listenerCtx)
           .mounted(() => {
             if (isLoadedFromFile) {
-              normalizedRef.current = getMarkdown()(ctx).trimEnd();
+              const markdown = getMarkdown()(ctx);
+              setCounter(count(markdown));
+              normalizedRef.current = markdown.trimEnd();
             }
             observerRef.current?.disconnect();
             observerRef.current = createImageObserver(root, basePath);
@@ -426,16 +441,7 @@ const CrepeEditorInner = (props) => {
           })
           .markdownUpdated((_, markdown) => {
             setModified(markdown.trimEnd() !== normalizedRef.current);
-            setCounter({
-              lines: countLines(markdown),
-              words: countWords(markdown),
-              chars: [...new Intl.Segmenter(
-                "und",
-                { granularity: "grapheme" }
-              ).segment(markdown)]
-                .filter(({ segment }) => segment.trim())
-                .length
-            })
+            setCounter(count(markdown));
           });
       })
       .use($prose((ctx) => keymap({
@@ -675,6 +681,9 @@ const CrepeEditor = () => {
   const [readOnly, setReadOnly] = React.useState(false);
   const [modified, setModified] = React.useState(false);
   const [counter, setCounter] = React.useState({ lines: 0, words: 0, chars: 0 });
+
+  const [wordCountOpen, setWordCountOpen] = React.useState(false);
+  const wordCountAnchorRef = React.useRef(null);
 
   const fileContentRef = React.useRef(null);
   const normalizedRef = React.useRef(null);
@@ -1028,29 +1037,101 @@ const CrepeEditor = () => {
           height: "1.8rem"
         }}
       >
-        <Box
-          sx={{
-            px: 2.5,
-            height: "100%",
-            display: "flex",
-            alignItems: "center",
-            "&:hover": {
-              cursor: "pointer",
-              backgroundColor: "var(--joy-palette-neutral-softHoverBg)"
-            }
-          }}
-        >
-          <Typography
-            sx={{
-              fontSize: "0.9rem",
-              color: "var(--joy-palette-neutral-600)",
-              fontVariantNumeric: "tabular-nums",
-            }}
-          >
-            {counter.lines} Lines / {counter.words} Words / {counter.chars} Characters
-          </Typography>
-          <UnfoldMoreOutlinedIcon sx={{ ml: 0.5, fontSize: "0.9rem" }} />
-        </Box>
+        <ClickAwayListener onClickAway={() => setWordCountOpen(false)}>
+          <Box sx={{ height: "100%" }}>
+            <Box
+              ref={wordCountAnchorRef}
+              onClick={() => setWordCountOpen(prev => !prev)}
+              sx={{
+                px: 2.5,
+                height: "100%",
+                display: "flex",
+                alignItems: "center",
+                "&:hover": {
+                  cursor: "pointer",
+                  backgroundColor: "var(--joy-palette-neutral-softHoverBg)"
+                }
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: "0.9rem",
+                  color: "var(--joy-palette-neutral-600)",
+                  fontVariantNumeric: "tabular-nums",
+                }}
+              >
+                {counter.words} {context.languagePicker("main.crepe.stat.words")}
+              </Typography>
+              <UnfoldMoreOutlinedIcon sx={{ ml: 0.5, fontSize: "0.9rem" }} />
+            </Box>
+            <Popper
+              open={wordCountOpen}
+              anchorEl={wordCountAnchorRef.current}
+              placement="top-end"
+              style={{ zIndex: 1300 }}
+            >
+              <Box
+                sx={{
+                  pt: 1.5,
+                  pb: 1,
+                  minWidth: 160,
+                  bgcolor: "var(--joy-palette-background-popup)",
+                  border: "1px solid var(--joy-palette-neutral-outlinedBorder)",
+                  borderRadius: "sm",
+                  boxShadow: "xs"
+                }}
+              >
+                <Typography
+                  level="body-xs"
+                  sx={{
+                    pl: 2,
+                    pr: 2,
+                    mb: 0.5,
+                    fontSize: "0.85rem",
+                    color: "text.secondary"
+                  }}
+                >
+                  {context.languagePicker("main.crepe.stat.title")}
+                </Typography>
+                <Box
+                  sx={{
+                    display: "grid",
+                    gridTemplateColumns: "2fr 3fr",
+                    columnGap: 1.5,
+                  }}
+                >
+                  {["lines", "words", "chars"].map((key) => (
+                    <React.Fragment key={key}>
+                      <Typography
+                        sx={{
+                          pl: 2.5,
+                          py: 0.25,
+                          fontSize: "0.8rem",
+                          color: "text.secondary",
+                          fontVariantNumeric: "tabular-nums",
+                          textAlign: "right"
+                        }}
+                      >
+                        {counter[key]}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          pr: 1.5,
+                          py: 0.25,
+                          fontSize: "0.8rem",
+                          color: "text.secondary",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {context.languagePicker(`main.crepe.stat.${key}`)}
+                      </Typography>
+                    </React.Fragment>
+                  ))}
+                </Box>
+              </Box>
+            </Popper>
+          </Box>
+        </ClickAwayListener>
       </Box>
       {modalTree.open && (
         <Tree

@@ -370,6 +370,12 @@ const zhHans = {
         edit: "编辑",
         preview: "预览"
       },
+      stat: {
+        title: "字数统计",
+        lines: "行",
+        words: "词",
+        chars: "字符"
+      },
       popup: {
         slash: {
           text: {

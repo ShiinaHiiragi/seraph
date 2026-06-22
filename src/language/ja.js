@@ -370,6 +370,12 @@ const ja = {
         edit: "エディット",
         preview: "プレビュー"
       },
+      stat: {
+        title: "ワードカウント",
+        lines: "ライン",
+        words: "ワード",
+        chars: "キャラクター"
+      },
       popup: {
         slash: {
           text: {

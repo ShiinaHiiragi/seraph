@@ -370,6 +370,12 @@ const en = {
         edit: "Edit",
         preview: "Preview"
       },
+      stat: {
+        title: "Word Count",
+        lines: "Lines",
+        words: "Words",
+        chars: "Characters"
+      },
       popup: {
         slash: {
           text: {
