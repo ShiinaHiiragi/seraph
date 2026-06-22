@@ -697,11 +697,15 @@ const CrepeEditor = () => {
   );
 
   React.useEffect(() => {
+    // a new file is saved
+    const nextRefActivated = nextRef.current !== null;
+    nextRef.current = null;
+    if (nextRefActivated) {
+      return;
+    }
+
     setCrepeState(0);
     setModified(false);
-    const nextActivated = nextRef.current !== null;
-    nextRef.current = null;
-
     if (folderName.length > 0) {
       request("GET/utility/crepe/load", {
         type: crepeType,
@@ -711,10 +715,10 @@ const CrepeEditor = () => {
         navigate("/crepe");
       } })
         .then(({ text }) => {
-          if (!nextActivated && (
+          if (
             context.setting.crepe.edit === "false"
               || (context.setting.crepe.edit === "auto" && text.length > 0)
-          )) {
+          ) {
             context.crepeRef.setReadOnly(true);
             setReadOnly((readOnly) => !readOnly);
           }
@@ -815,13 +819,13 @@ const CrepeEditor = () => {
           { "": handleCloseModalTree },
           reject
         ).then(() => {
-          setModified(false);
-          fileContentRef.current = text;
-          normalizedRef.current = text.trimEnd();
           if (create) {
             context.crepeRef.select.current = context.crepeRef.getSelect();
             nextRef.current = `/crepe/${type}/${folderName}/${filename}`;
           }
+          fileContentRef.current = text;
+          normalizedRef.current = text.trimEnd();
+          setModified(false);
           handleCloseModalTree();
           resolve();
         })
