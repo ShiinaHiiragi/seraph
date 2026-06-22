@@ -149,6 +149,7 @@ const CrepeEditorInner = (props) => {
     editableKey,
     readOnly,
     setModified,
+    setCounter,
     handleToggleTree,
     handleCloseModalTree,
     fileContentRef,
@@ -423,6 +424,15 @@ const CrepeEditorInner = (props) => {
           })
           .markdownUpdated((_, markdown) => {
             setModified(markdown.trimEnd() !== normalizedRef.current);
+            setCounter({
+              lines: markdown.split("\n").length,
+              words: [...new Intl.Segmenter( "und", { granularity: "word" } )
+                .segment(markdown)]
+                .filter(item => item.isWordLike).length,
+              chars: [...new Intl.Segmenter( "und", { granularity: "grapheme" } )
+                .segment(markdown)]
+                .filter(item => item.isWordLike).length
+            })
           });
       })
       .use($prose((ctx) => keymap({
@@ -661,6 +671,7 @@ const CrepeEditor = () => {
   const [editableKey, setEditableKey] = React.useState(0);
   const [readOnly, setReadOnly] = React.useState(false);
   const [modified, setModified] = React.useState(false);
+  const [counter, setCounter] = React.useState({ lines: 0, words: 0, chars: 0 });
 
   const fileContentRef = React.useRef(null);
   const normalizedRef = React.useRef(null);
@@ -983,8 +994,9 @@ const CrepeEditor = () => {
       sx={{
         px: 0,
         pb: 0,
-        flexGrow: 1,
         minHeight: 0,
+        flexGrow: 1,
+        flexDirection: "column",
         height: "auto"
       }}
     >
@@ -997,6 +1009,7 @@ const CrepeEditor = () => {
               editableKey={editableKey}
               readOnly={readOnly}
               setModified={setModified}
+              setCounter={setCounter}
               handleToggleTree={handleToggleTree}
               handleCloseModalTree={handleCloseModalTree}
               fileContentRef={fileContentRef}
@@ -1004,6 +1017,37 @@ const CrepeEditor = () => {
             />
           </MilkdownProvider>
         </MaildownField>}
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "flex-end",
+          height: "1.8rem"
+        }}
+      >
+        <Box
+          sx={{
+            px: 2.5,
+            height: "100%",
+            display: "flex",
+            alignItems: "center",
+            "&:hover": {
+              cursor: "pointer",
+              backgroundColor: "var(--joy-palette-neutral-softHoverBg)"
+            }
+          }}
+        >
+          <Typography
+            sx={{
+              fontSize: "0.9rem",
+              color: "var(--joy-palette-neutral-600)",
+              fontVariantNumeric: "tabular-nums",
+            }}
+          >
+            {counter.lines} / {counter.words} / {counter.chars}
+          </Typography>
+        </Box>
+      </Box>
       {modalTree.open && (
         <Tree
           modalTree={modalTree}
