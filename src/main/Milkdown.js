@@ -598,14 +598,14 @@ const CrepeEditorInner = (props) => {
     });
     return crepe;
   }, [
-    // save text | select when editor reload
-    // save text when creating new markdown
+    // save text | select | scroll when editor reload
+    // save text & scroll when creating new markdown
     basePath,
     // save text & select when switch readonly -> editable
     editableKey,
-    // save text & select when loging in
+    // save text & select & scroll when loging in
     context.isAuthority,
-    // save text & select when setting changes
+    // save text & select & scroll when setting changes
     // languagePicker -> context.setting.meta.language
     context.languagePicker,
     context.setting.crepe.feature.blockEdit,
