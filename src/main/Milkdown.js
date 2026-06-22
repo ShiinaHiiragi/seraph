@@ -155,7 +155,9 @@ const CrepeEditorInner = (props) => {
     normalizedRef
   } = props;
   const context = React.useContext(GlobalContext);
+
   const observerRef = React.useRef(null);
+  const milkdownRef = React.useRef(null);
 
   const handleProcessImage = React.useCallback((file) =>
     new Promise((resolve, reject) => {
@@ -230,6 +232,7 @@ const CrepeEditorInner = (props) => {
   );
 
   useEditor((root) => {
+    const isLoadedFromFile = context.crepeRef.snapshot.current === null;
     const crepe = new Crepe({
       root,
       defaultValue: context.crepeRef.snapshot.current ?? fileContentRef.current,
@@ -410,9 +413,13 @@ const CrepeEditorInner = (props) => {
         // listener itself prevents jittering
         ctx.get(listenerCtx)
           .mounted(() => {
-            normalizedRef.current = getMarkdown()(ctx).trimEnd();
+            if (isLoadedFromFile) {
+              normalizedRef.current = getMarkdown()(ctx).trimEnd();
+            }
             observerRef.current?.disconnect();
             observerRef.current = createImageObserver(root, basePath);
+            milkdownRef.current = root.querySelector(".milkdown");
+            context.crepeRef.setScroll(context.crepeRef.scroll, milkdownRef);
           })
           .markdownUpdated((_, markdown) => {
             setModified(markdown.trimEnd() !== normalizedRef.current);
@@ -579,6 +586,13 @@ const CrepeEditorInner = (props) => {
           editorView.dispatch(transact);
         }
         editorView.focus();
+      },
+      getScroll: () => milkdownRef.current?.scrollTop ?? 0,
+      setScroll: (scrollRef, milkdownRef) => {
+        if (scrollRef.current !== null) {
+          milkdownRef.current.scrollTop = scrollRef.current;
+          scrollRef.current = null;
+        }
       },
       setReadOnly: crepe.setReadonly.bind(crepe)
     });
@@ -821,6 +835,7 @@ const CrepeEditor = () => {
         ).then(() => {
           if (create) {
             context.crepeRef.select.current = context.crepeRef.getSelect();
+            context.crepeRef.scroll.current = context.crepeRef.getScroll();
             nextRef.current = `/crepe/${type}/${folderName}/${filename}`;
           }
           fileContentRef.current = text;

@@ -320,6 +320,7 @@ const Panel = () => {
   const crepeUtils = React.useRef(null);
   const crepeSnapshot = React.useRef(null);
   const crepeSelect = React.useRef(null);
+  const crepeScroll = React.useRef(null);
 
   const switchAction = React.useCallback((actionName) => (...args) => {
     if (crepeEditor.current?.status === "Created") {
@@ -336,6 +337,7 @@ const Panel = () => {
     utils: crepeUtils,
     snapshot: crepeSnapshot,
     select: crepeSelect,
+    scroll: crepeScroll,
     load: (editor, utils) => {
       crepeEditor.current = editor;
       crepeUtils.current = utils;
@@ -350,6 +352,9 @@ const Panel = () => {
     setText: switchAction("replaceAll"),
     getSelect: switchAction("actionCaret"),
     setSelect: switchAction("actionFocus"),
+    getScroll: () => crepeUtils.current?.getScroll?.() ?? false,
+    setScroll: (scrollRef, milkdownRef) =>
+      crepeUtils.current?.setScroll?.(scrollRef, milkdownRef) ?? false,
     setReadOnly: (readOnly) => crepeUtils.current?.setReadOnly(readOnly)
   }), [switchAction]);
 

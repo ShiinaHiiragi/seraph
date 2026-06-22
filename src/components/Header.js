@@ -106,6 +106,7 @@ const Header = (props) => {
   const handleApplySetting = React.useCallback((key, value) => {
     context.crepeRef.snapshot.current = context.crepeRef.getText();
     context.crepeRef.select.current = context.crepeRef.getSelect();
+    context.crepeRef.scroll.current = context.crepeRef.getScroll();
     toast.promise(new Promise((resolve, reject) => {
       request("POST/config/set", { key: key, value: value }, undefined, reject)
         .then(() => {
@@ -227,6 +228,7 @@ const Header = (props) => {
   const handleLogin = React.useCallback(() => {
     context.crepeRef.snapshot.current = context.crepeRef.getText();
     context.crepeRef.select.current = context.crepeRef.getSelect();
+    context.crepeRef.scroll.current = context.crepeRef.getScroll();
     setButtonLoading(true);
     request(
       "POST/auth/login",
