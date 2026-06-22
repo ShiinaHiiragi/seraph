@@ -81,6 +81,7 @@ import CalendarViewMonthOutlinedIcon from "@mui/icons-material/CalendarViewMonth
 import FunctionsOutlinedIcon from "@mui/icons-material/FunctionsOutlined";
 import InsertLinkOutlinedIcon from "@mui/icons-material/InsertLinkOutlined";
 import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
+import UnfoldMoreOutlinedIcon from "@mui/icons-material/UnfoldMoreOutlined";
 import { countWords, countLines } from "alfaaz";
 import { createPatch } from "diff";
 import Loading from "./Loading";
@@ -1048,6 +1049,7 @@ const CrepeEditor = () => {
           >
             {counter.lines} Lines / {counter.words} Words / {counter.chars} Characters
           </Typography>
+          <UnfoldMoreOutlinedIcon sx={{ ml: 0.5, fontSize: "0.9rem" }} />
         </Box>
       </Box>
       {modalTree.open && (
