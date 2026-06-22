@@ -143,25 +143,32 @@
 
 #### Troubleshooting
 
-1. `EACCES: permission denied, open 'node_modules/.cache/.eslintcache'`: try running
+1. `npm error make: g++: No such file or directory`: try running
+
+    ```shell
+    sudo apt update
+    sudo apt install -y build-essential
+    ```
+
+2. `EACCES: permission denied, open 'node_modules/.cache/.eslintcache'`: try running
 
     ```shell
     sudo chown -R $USER:$USER node_modules/.cache
     ```
 
-2. `Port 80 requires elevated privileges`: try running
+3. `Port 80 requires elevated privileges`: try running
 
     ```shell
     sudo setcap 'cap_net_bind_service=+ep' $(which node)
     ```
 
-3. `sudo: node: command not found`: add path of node to visudo using
+4. `sudo: node: command not found`: add path of node to visudo using
 
     ```shell
     sudo visudo
     ```
 
-4. `Can't resolve @mui/material/utils`: try running
+5. `Can't resolve @mui/material/utils`: try running
 
     ```shell
     npm install @mui/material @emotion/react @emotion/styled
