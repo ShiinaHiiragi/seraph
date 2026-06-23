@@ -736,10 +736,11 @@ const CrepeEditor = () => {
   // a markdown is savable when
   // - user has logged in
   // - text content is ready
+  // - text is modified
   // save button will be hidden without any modification
   const savable = React.useMemo(
-    () => context.isAuthority && crepeState === 1,
-    [context.isAuthority, crepeState]
+    () => context.isAuthority && crepeState === 1 && modified,
+    [context.isAuthority, crepeState, modified]
   );
 
   React.useEffect(() => {
@@ -993,7 +994,7 @@ const CrepeEditor = () => {
             >
               <FileDownloadOutlinedIcon />
             </IconButton>
-            {savable && modified && <IconButton
+            {savable && <IconButton
               size="sm"
               variant="soft"
               onClick={handleToggleSave}
