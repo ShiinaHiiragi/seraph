@@ -165,10 +165,10 @@ const CrepeEditorInner = (props) => {
     basePath,
     editableKey,
     readOnly,
-    autoSave,
     setModified,
     setCounter,
     handleToggleTree,
+    handleToggleAutoSave,
     handleCloseModalTree,
     fileContentRef,
     normalizedRef
@@ -449,7 +449,7 @@ const CrepeEditorInner = (props) => {
             if (context.setting.crepe.feature.stat) {
               setCounter(count(markdown));
             }
-            autoSave(context.setting.crepe.save * 1000);
+            handleToggleAutoSave(context.setting.crepe.save * 1000);
           });
       })
       .use($prose((ctx) => keymap({
@@ -640,6 +640,7 @@ const CrepeEditorInner = (props) => {
     // save text & select & scroll when setting changes
     // languagePicker -> context.setting.meta.language
     context.languagePicker,
+    context.setting.crepe.save,
     context.setting.crepe.feature.blockEdit,
     context.setting.crepe.feature.toolbar,
     context.setting.crepe.feature.stat,
@@ -839,15 +840,15 @@ const CrepeEditor = () => {
   }, [setModalTree]);
 
   // § saving and auto saving
-  const saveRef = React.useRef(null);
-  const autoSaveRef = React.useRef(null);
-
+  const [autoSaveLock, setAutoSaveLock] = React.useState(false);
   const [autoSaveError, setAutoSaveError] = React.useState(false);
-  const [autoSaving, setAutoSaving] = React.useState(false);
+
+  // autoSaveLockRef is a more instant version of autoSaveLock
+  const autoSaveLockRef = React.useRef(false);
   const autoSaveTimerRef = React.useRef(null);
-  const autoSavingRef = React.useRef(false);
-  const autoSavableRef = React.useRef(false);
-  const autoSaveMode = React.useMemo(() => context.setting.crepe.save > 0, [context]);
+
+  const buttonSaveRef = React.useRef(null);
+  const buttonAutoSaveRef = React.useRef(null);
 
   // a markdown is savable when
   // - user has logged in
@@ -858,13 +859,18 @@ const CrepeEditor = () => {
     [context.isAuthority, crepeState, modified]
   );
 
+  const autoSavableRef = React.useRef(false);
+  const autoSaveMode = React.useMemo(
+    () => context.setting.crepe.save > 0,
+    [context]
+  );
+
   // a markdown is auto savable when
   // - markdown is savable
   // - auto save is on
   // - auto save doesn't encounter error
   // - file is loaded from server
   React.useEffect(() => {
-    console.log(savable, autoSaveMode, !autoSaveError, folderName.length > 0);
     autoSavableRef.current = savable
       && autoSaveMode
       && !autoSaveError
@@ -957,22 +963,22 @@ const CrepeEditor = () => {
 
   // autoSave will be executed in useEditor
   // so its deps array should be empty to avoid any remounting
-  const autoSave = React.useCallback((interval) => {
+  const handleToggleAutoSave = React.useCallback((interval) => {
     clearTimeout(autoSaveTimerRef.current);
     autoSaveTimerRef.current = setTimeout(() => {
       if (autoSavableRef.current) {
-        autoSaveRef.current?.click();
+        buttonAutoSaveRef.current?.click();
       }
     }, interval);
   }, []);
 
   const handleAutoSave = React.useCallback(() => {
     // double-check for user's manually clicking
-    if (autoSavingRef.current || !autoSavableRef.current) {
+    if (autoSaveLockRef.current || !autoSavableRef.current) {
       return;
     }
-    autoSavingRef.current = true;
-    setAutoSaving(true);
+    autoSaveLockRef.current = true;
+    setAutoSaveLock(true);
 
     const text = context.crepeRef.getText();
     const diff = createPatch(crepeTitle, fileContentRef.current, text);
@@ -986,8 +992,8 @@ const CrepeEditor = () => {
       },
       { "": () => {
         setAutoSaveError(true);
-        setAutoSaving(false);
-        autoSavingRef.current = false;
+        setAutoSaveLock(false);
+        autoSaveLockRef.current = false;
       } }
     ).then((data) => {
       if (data.success) {
@@ -999,8 +1005,8 @@ const CrepeEditor = () => {
         toast.error("AUTO SAVE FAILED, DISABLED.");
         setAutoSaveError(true);
       }
-      setAutoSaving(false);
-      autoSavingRef.current = false;
+      setAutoSaveLock(false);
+      autoSaveLockRef.current = false;
     })
   }, [context, crepeType, crepePath, crepeTitle]);
 
@@ -1036,7 +1042,7 @@ const CrepeEditor = () => {
       }
       if ((event.ctrlKey || event.metaKey) && event.key === "s") {
         event.preventDefault();
-        const buttonRef = (autoSaveMode && !autoSaveError) ? autoSaveRef : saveRef;
+        const buttonRef = (autoSaveMode && !autoSaveError) ? buttonAutoSaveRef : buttonSaveRef;
         buttonRef.current?.click();
       }
     };
@@ -1085,7 +1091,7 @@ const CrepeEditor = () => {
                 onClick={handleToggleSave}
                 onMouseDown={(event) => event.preventDefault()}
                 sx={buttonStyle}
-                ref={saveRef}
+                ref={buttonSaveRef}
               >
                 <SaveRoundedIcon />
               </IconButton>
@@ -1097,9 +1103,9 @@ const CrepeEditor = () => {
                 onClick={handleAutoSave}
                 onMouseDown={(event) => event.preventDefault()}
                 sx={buttonStyle}
-                ref={autoSaveRef}
+                ref={buttonAutoSaveRef}
               >
-                {autoSaving
+                {autoSaveLock
                   ? <CloudUploadOutlinedIcon />
                   : modified
                   ? <CloudOutlinedIcon />
@@ -1126,10 +1132,10 @@ const CrepeEditor = () => {
               basePath={basePath}
               editableKey={editableKey}
               readOnly={readOnly}
-              autoSave={autoSave}
               setModified={setModified}
               setCounter={setCounter}
               handleToggleTree={handleToggleTree}
+              handleToggleAutoSave={handleToggleAutoSave}
               handleCloseModalTree={handleCloseModalTree}
               fileContentRef={fileContentRef}
               normalizedRef={normalizedRef}
