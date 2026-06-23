@@ -880,7 +880,7 @@ const CrepeEditor = () => {
   // - auto save mode is switched on when
   React.useEffect(() => {
     autoSavableRef.current = savable && autoSaveMode;
-  }, [savable, autoSaveMode, autoSaveError, folderName]);
+  }, [savable, autoSaveMode]);
 
   const handleRewrite = React.useCallback(
     (type, folderName, filename, create, text) => {
