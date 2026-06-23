@@ -59,8 +59,10 @@ router.post('/init', (req, res, next) => {
         ...req.status.generateReport(),
         public: publicFolder,
         private: privateFolder,
+        metadata: api.configOperator.getMetadata(),
         clipboard: api.configOperator.config.clipboard,
-        setting: api.configOperator.config.setting
+        setting: api.configOperator.config.setting,
+        saltWarning: api.saltOperator.getSelfCheck()
       });
       return;
     }

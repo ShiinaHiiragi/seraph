@@ -19,7 +19,7 @@ import IconButton from "@mui/joy/IconButton";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { request, globalState } from "../interface/constants";
-import { languageMap } from "../interface/languagePicker";
+import { languageMap, languagePickerSpawner } from "../interface/languagePicker";
 import SemiInput from "../interface/SemiInput";
 
 const Aligned = styled("span")(({ theme }) => ({
@@ -42,6 +42,7 @@ export default function Init(props) {
     setGlobalSwitch,
     setClipboard,
     setSetting,
+    setMetadata,
     setPublicFolders,
     setPrivateFolders,
     modalInitOpen,
@@ -64,7 +65,16 @@ export default function Init(props) {
         setPrivateFolders(data.private);
         setClipboard(data.clipboard);
         setSetting(data.setting);
+        setMetadata(data.metadata);
         setGlobalSwitch(globalState.AUTHORITY);
+
+        if (data.saltWarning) {
+          toast.error(
+            languagePickerSpawner(data.setting.meta.language)("modal.toast.warning.saltMissing")
+              .format(data.metadata.appdata),
+            { duration: Infinity }
+          );
+        }
 
         setModalInitOpen(false);
         toast.success(context.languagePicker("modal.toast.success.init"));
@@ -79,7 +89,8 @@ export default function Init(props) {
     setPublicFolders,
     setPrivateFolders,
     setClipboard,
-    setSetting
+    setSetting,
+    setMetadata
   ]);
 
   return (

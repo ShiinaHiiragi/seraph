@@ -154,6 +154,8 @@ const globalState = {
 
 const defaultMetadata = {
   terminal: false,
+  salt: "",
+  appdata: "",
   platform: "linux"
 };
 

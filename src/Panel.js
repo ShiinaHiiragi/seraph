@@ -203,6 +203,7 @@ const PanelLayout = () => {
             setGlobalSwitch={setGlobalSwitch}
             setClipboard={setClipboard}
             setSetting={setSetting}
+            setMetadata={setMetadata}
             setPublicFolders={setPublicFolders}
             setPrivateFolders={setPrivateFolders}
             modalInitOpen={modalInitOpen}
