@@ -741,7 +741,7 @@ const CrepeEditor = () => {
   const saveRef = React.useRef(null);
   const autoSaveRef = React.useRef(null);
   const autoSavableRef = React.useRef(false);
-  const lastSaveRef = React.useRef(0);
+  const autoSaveTimerRef = React.useRef(null);
 
   const [autoSaving, setAutoSaving] = React.useState(false);
   const [autoSaveError, setAutoSaveError] = React.useState(false);
@@ -771,10 +771,12 @@ const CrepeEditor = () => {
   // autoSave will be executed in useEditor
   // so its deps array should be empty to avoid any remounting
   const autoSave = React.useCallback((autoSaveInterval) => {
-    if (autoSavableRef.current && Date.now() - lastSaveRef.current > autoSaveInterval) {
-      autoSaveRef.current?.click();
-      lastSaveRef.current = Date.now();
-    }
+    clearTimeout(autoSaveTimerRef.current);
+    autoSaveTimerRef.current = setTimeout(() => {
+      if (autoSavableRef.current) {
+        autoSaveRef.current?.click();
+      }
+    }, autoSaveInterval);
   }, []);
 
   const handleAutoSave = React.useCallback(() => {
@@ -820,6 +822,7 @@ const CrepeEditor = () => {
       return;
     }
 
+    clearTimeout(autoSaveTimerRef.current);
     setCrepeState(0);
     setModified(false);
     setAutoSaveError(false);
@@ -1022,7 +1025,8 @@ const CrepeEditor = () => {
       }
       if ((event.ctrlKey || event.metaKey) && event.key === "s") {
         event.preventDefault();
-        (autoSaveMode ? autoSaveRef : saveRef).current?.click();
+        const buttonRef = (autoSaveMode && !autoSaveError) ? autoSaveRef : saveRef;
+        buttonRef.current?.click();
       }
     };
     window.addEventListener("keydown", handler);
