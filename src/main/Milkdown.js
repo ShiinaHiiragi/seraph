@@ -264,7 +264,7 @@ const CrepeEditorInner = (props) => {
           editButton: toSVG(EditOutlinedIcon),
           removeButton: toSVG(DeleteOutlineOutlinedIcon),
           confirmButton: toSVG(DoneIcon),
-          inputPlaceholder: "URL"
+          inputPlaceholder: context.languagePicker("main.crepe.popup.url"),
         },
         [CrepeFeature.ImageBlock]: {
           inlineUploadButton: context.languagePicker("main.crepe.image.upload"),

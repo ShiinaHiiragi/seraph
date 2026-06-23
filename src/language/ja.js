@@ -381,6 +381,7 @@ const ja = {
         chars: "キャラクター"
       },
       popup: {
+        url: "URL",
         slash: {
           text: {
             title: "テキスト",

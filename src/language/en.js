@@ -381,6 +381,7 @@ const en = {
         chars: "Characters"
       },
       popup: {
+        url: "URL",
         slash: {
           text: {
             title: "Text",

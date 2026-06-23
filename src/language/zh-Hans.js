@@ -381,6 +381,7 @@ const zhHans = {
         chars: "字符"
       },
       popup: {
+        url: "URL",
         slash: {
           text: {
             title: "文本",
