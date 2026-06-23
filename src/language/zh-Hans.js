@@ -484,6 +484,7 @@ const zhHans = {
       warning: {
         invalidToken: "令牌无效或已过期，页面将在若干秒内自动刷新。",
         saltMissing: "服务器检测到盐被更改或删除，这会导致既有的加密文件无法恢复。您可以在下述路径找到服务器保存的所有本机备份： {0}",
+        autoSaveFailed: "同步失败；在切换到其他文件或重启编辑器前自动保存功能将暂时关闭。",
         illegalRename: "文件名预检查不通过。",
         invalidConfig: "备份文件预检查不通过。"
       },

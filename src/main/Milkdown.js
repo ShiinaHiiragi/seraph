@@ -1007,8 +1007,10 @@ const CrepeEditor = () => {
         fileContentRef.current = text;
         normalizedRef.current = text.trimEnd();
       } else {
-        // TODO change caption
-        toast.error("AUTO SAVE FAILED, DISABLED.");
+        toast.error(
+          context.languagePicker("modal.toast.warning.autoSaveFailed"),
+          { duration: Infinity }
+        );
         setAutoSaveError(true);
       }
       setAutoSaveLock(false);
@@ -1016,7 +1018,13 @@ const CrepeEditor = () => {
     })
   }, [context, crepeType, crepePath, crepeTitle]);
 
+  const firstTimeRef = React.useRef(true);
   React.useEffect(() => {
+    if (firstTimeRef.current) {
+      firstTimeRef.current = false;
+      return;
+    }
+
     if (!modified && autoSaveMode) {
       setAutoSaveTip(true);
       const timeoutID = setTimeout(
