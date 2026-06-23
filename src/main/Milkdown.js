@@ -778,6 +778,11 @@ const CrepeEditor = () => {
   }, []);
 
   const handleAutoSave = React.useCallback(() => {
+    // double-check for user's manually clicking
+    if (autoSaving || !autoSavableRef.current) {
+      return;
+    }
+
     const text = context.crepeRef.getText();
     const diff = createPatch(crepeTitle, fileContentRef.current, text);
     setAutoSaving(true);
@@ -805,7 +810,7 @@ const CrepeEditor = () => {
         setAutoSaveError(true);
       }
     })
-  }, [context, crepeType, crepePath, crepeTitle]);
+  }, [context, crepeType, crepePath, crepeTitle, autoSaving]);
 
   React.useEffect(() => {
     // a new file is saved
@@ -817,6 +822,7 @@ const CrepeEditor = () => {
 
     setCrepeState(0);
     setModified(false);
+    setAutoSaveError(false);
     if (folderName.length > 0) {
       request("GET/utility/crepe/load", {
         type: crepeType,
@@ -1057,7 +1063,7 @@ const CrepeEditor = () => {
             >
               <FileDownloadOutlinedIcon />
             </IconButton>
-            {(!autoSaveMode && savable) && (
+            {(!autoSaveMode || autoSaveError) && savable && (
               <IconButton
                 size="sm"
                 variant="soft"
@@ -1069,7 +1075,7 @@ const CrepeEditor = () => {
                 <SaveRoundedIcon />
               </IconButton>
             )}
-            {autoSaveMode && (
+            {(autoSaveMode && !autoSaveError) && (
               <IconButton
                 size="sm"
                 variant="soft"
