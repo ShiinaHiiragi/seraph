@@ -706,6 +706,22 @@ const SECTIONS = (
           value: Turkey(context.setting.crepe.show, "crepe.show", handleApply)
         },
         {
+          key: context.languagePicker("header.config.crepe.save"),
+          value: Literal(
+            context.setting.crepe.save,
+            [
+              { value: 1, label: context.languagePicker("header.config.crepe.saveOption.1") },
+              { value: 2, label: context.languagePicker("header.config.crepe.saveOption.2") },
+              { value: 3, label: context.languagePicker("header.config.crepe.saveOption.3") },
+              { value: 4, label: context.languagePicker("header.config.crepe.saveOption.4") },
+              { value: 5, label: context.languagePicker("header.config.crepe.saveOption.5") },
+              { value: 0, label: context.languagePicker("header.config.crepe.saveOption.0") }
+            ],
+            "crepe.save",
+            handleApply
+          )
+        },
+        {
           key: context.languagePicker("header.config.crepe.edit"),
           value: (
             <RadioGroup

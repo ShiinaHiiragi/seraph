@@ -84,6 +84,15 @@ const en = {
       },
       crepe: {
         title: "Editor",
+        save: "Auto Save Delay",
+        saveOption: {
+          1: "1 second",
+          2: "2 seconds",
+          3: "3 seconds",
+          4: "4 seconds",
+          5: "5 seconds",
+          0: "Disabled"
+        },
         show: "Display for Guests",
         showTip: "Unlogged users can still access Crepe via URL even if you choose not to display it.",
         edit: "Default Editing Mode",
