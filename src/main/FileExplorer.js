@@ -812,10 +812,16 @@ const FileExplorer = (props) => {
                       <MenuItem onClick={() => setModalNewFolderOpen(true)}>
                         {context.languagePicker("main.folder.addMenu.newFolder")}
                       </MenuItem>
-                      <MenuItem onClick={() => setModalNewLinkOpen(true)}>
+                      <MenuItem
+                        onClick={() => setModalNewLinkOpen(true)}
+                        disabled={folderName.length === 0}
+                      >
                         {context.languagePicker("main.folder.addMenu.newLink")}
                       </MenuItem>
-                      <MenuItem onClick={() => setModalNewMarkdownOpen(true)}>
+                      <MenuItem
+                        onClick={() => setModalNewMarkdownOpen(true)}
+                        disabled={folderName.length === 0}
+                      >
                         {context.languagePicker("main.folder.addMenu.newMarkdown")}
                       </MenuItem>
                       <MenuItem
@@ -829,7 +835,7 @@ const FileExplorer = (props) => {
                       <MenuItem
                         onClick={handlePaste}
                         disabled={
-                          (folderName.length === 0 && clipboard.directory === false)
+                          (folderName.length === 0 && !clipboard.directory)
                           || clipboard.path === null
                         }
                       >

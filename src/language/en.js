@@ -488,6 +488,7 @@ const en = {
         resourcesUnexist: "Resources requested do not exist.",
         typeCheckFailed: "Type check failed.",
         identifierConflict: "Naming identifiers conflicts; please rename or remove {0} first.",
+        fileUnderRoot: "Only folders are allowed to be created or pasted under root path.",
         linkNotFound: "Modification failed due to non-existence of URL link detected in the target file.",
         fileModuleError: "Exception occurred in file operation module.",
         passwordUnexist: "The decryption password has not been set.",

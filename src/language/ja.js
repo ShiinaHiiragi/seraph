@@ -488,6 +488,7 @@ const ja = {
         resourcesUnexist: "リクエストされたリソースは存在しません。",
         typeCheckFailed: "タイプチェックがフェイルしました。",
         identifierConflict: "ネーミング識別子競合なので先に {0} をリネームまたはデリートしてください。",
+        fileUnderRoot: "ルートパスの下にはフォルダのみを作成またはペーストできます。",
         linkNotFound: "ファイルに URL リンクが検出されなかったため、変更は失敗しました。",
         fileModuleError: "ファイルオペレーションモジュールでエクセプションが発生しました。",
         passwordUnexist: "デクリプトパスワードがセットされていません。",

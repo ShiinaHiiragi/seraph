@@ -1313,6 +1313,7 @@ Status.execErrCode = {
   ResourcesUnexist: "RU",
   TypeCheckFailed: "TCF",
   IdentifierConflict: "IC",
+  FileUnderRoot: "FUR",
   LinkNotFound: "LNF",
   FileModuleError: "FME",
   PasswordUnexist: "PU",

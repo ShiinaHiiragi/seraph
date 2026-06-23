@@ -83,6 +83,13 @@ router.post('/link', (req, res, next) => {
     return;
   }
 
+  if (folderName.length === 0) {
+    // EF_FUR: try to paste file to root path
+    req.status.addExecStatus(api.Status.execErrCode.FileUnderRoot);
+    res.send(req.status.generateReport());
+    return;
+  }
+
   try {
     api.fileOperator.writeURL(filePath, url);
     fs.chmodSync(filePath, api.Permission.auto(type));
@@ -128,6 +135,13 @@ router.post('/markdown', (req, res, next) => {
     return;
   }
 
+  if (folderName.length === 0) {
+    // EF_FUR: try to paste file to root path
+    req.status.addExecStatus(api.Status.execErrCode.FileUnderRoot);
+    res.send(req.status.generateReport());
+    return;
+  }
+
   try {
     fs.closeSync(fs.openSync(filePath, 'w'));
     fs.chmodSync(filePath, api.Permission.auto(type));
@@ -158,8 +172,9 @@ router.post('/upload', (req, res, next) => {
   const { folderPath, filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
 
   if (folderName.length === 0) {
-    // -> abnormal request
-    next(api.errorStreamControl);
+    // EF_FUR: try to paste file to root path
+    req.status.addExecStatus(api.Status.execErrCode.FileUnderRoot);
+    res.send(req.status.generateReport());
     return;
   }
 
@@ -244,9 +259,10 @@ router.post('/paste', (req, res, next) => {
     return;
   }
 
-  if (!directory && newFolderName.length === 0) {
-    // -> abnormal request: try to move file to public/ or private/
-    next(api.errorStreamControl);
+  if (newFolderName.length === 0 && !directory) {
+    // EF_FUR: try to paste file to root path
+    req.status.addExecStatus(api.Status.execErrCode.FileUnderRoot);
+    res.send(req.status.generateReport());
     return;
   }
 

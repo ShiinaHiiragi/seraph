@@ -488,6 +488,7 @@ const zhHans = {
         resourcesUnexist: "请求的资源不存在。",
         typeCheckFailed: "类型检查不通过。",
         identifierConflict: "命名标识符冲突；请先重命名或移除文件 {0}。",
+        fileUnderRoot: "根目录下只允许创建或粘贴文件夹。",
         linkNotFound: "由于目标文件未检出 URL 链接，修改失败。",
         fileModuleError: "文件操作模块产生异常。",
         passwordUnexist: "解密密码尚未设置。",
