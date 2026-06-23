@@ -233,7 +233,49 @@ const FileExplorer = (props) => {
   );
 
   const handleNewLink = React.useCallback(() => {
-  }, []);
+    if (!isValidFilename(formNewLinkNameText)) {
+      toast.error(context.languagePicker("modal.toast.warning.illegalRename"));
+      return;
+    }
+
+    setModalNewLinkLoading(true);
+    toast.promise(new Promise((resolve, reject) => {
+      request(
+        "POST/file/link",
+        {
+          type: type,
+          folderName: folderName,
+          filename: formNewLinkNameText,
+          url: formNewLinkURLText
+        },
+        { "": () => setModalNewLinkLoading(false) },
+        reject
+      )
+        .then((data) => {
+          const { statusCode, errorCode, ...newInfo } = data;
+          if (pathStartWith(`/${type}/${folderName}`)) {
+            setFilesList((filesList) => [
+              ...filesList,
+              newInfo
+            ]);
+          }
+          handleCloseNewLink();
+          resolve(newInfo.name);
+        })
+        .finally(() => setModalNewLinkLoading(false));
+    }), {
+      loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
+      success: (name) => context.languagePicker("modal.toast.success.new").format(name),
+      error: (data) => data
+    })
+  }, [
+    type,
+    context,
+    folderName,
+    formNewLinkNameText,
+    formNewLinkURLText,
+    handleCloseNewLink
+  ]);
 
   // uploading
   const uploadRef = React.useRef();

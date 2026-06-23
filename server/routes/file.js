@@ -54,6 +54,53 @@ router.post('/new', (req, res, next) => {
   return;
 });
 
+router.post('/link', (req, res, next) => {
+  if (req.status.notAuthSuccess()) {
+    // -> EF_IT or abnormal request
+    next(api.errorStreamControl);
+    return;
+  }
+
+  // directory file is a special kind of file
+  const { type, folderName, filename: rawFilename, url } = req.body;
+  const suffix = process.platform === 'win32'
+    ? '.url'
+    : '.desktop';
+  const filename = rawFilename + suffix;
+  const { folderPath, filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
+
+  if (!fs.existsSync(folderPath)) {
+    // -> EF_RU: folder don't exist
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  if (fs.existsSync(filePath)) {
+    // -> EF_IC: new filename already exists
+    req.status.addExecStatus(api.Status.execErrCode.IdentifierConflict);
+    res.send({...req.status.generateReport(), 0: filename});
+    return;
+  }
+
+  try {
+    api.fileOperator.writeURL(filePath, url);
+  } catch (_) {
+    // -> EF_FME: fs.writeFileSync error
+    req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  // -> ES: no extra info
+  req.status.addExecStatus();
+  res.send({
+    ...req.status.generateReport(),
+    ...api.fileOperator.readFileInfo(folderPath, filename)
+  });
+  return;
+});
+
 router.post('/upload', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
     // -> EF_IT or abnormal request
