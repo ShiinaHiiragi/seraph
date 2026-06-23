@@ -291,7 +291,12 @@ router.post('/relink', (req, res, next) => {
   }
 
   try {
-    api.fileOperator.modifyLink(filePath, url);
+    if (!api.fileOperator.modifyLink(filePath, url)) {
+      // -> EF_LNK: no link detected in target file
+      req.status.addExecStatus(api.Status.execErrCode.LinkNotFound);
+      res.send(req.status.generateReport());
+      return;
+    }
   } catch (_) {
     // -> EF_FME: fs.writeFileSync error
     req.status.addExecStatus(api.Status.execErrCode.FileModuleError);

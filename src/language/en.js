@@ -487,6 +487,7 @@ const en = {
         resourcesUnexist: "Resources requested do not exist.",
         typeCheckFailed: "Type check failed.",
         identifierConflict: "Naming identifiers conflicts; please rename or remove {0} first.",
+        linkNotFound: "Modification failed due to non-existence of URL link detected in the target file.",
         fileModuleError: "Exception occurred in file operation module.",
         passwordUnexist: "The decryption password has not been set.",
         invalidEncrypt: "Invalid .srph file format.",

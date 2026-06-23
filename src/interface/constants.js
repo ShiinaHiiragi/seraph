@@ -532,6 +532,7 @@ const Status = {
     ResourcesUnexist: "RU",
     TypeCheckFailed: "TCF",
     IdentifierConflict: "IC",
+    LinkNotFound: "LNF",
     FileModuleError: "FME",
     PasswordUnexist: "PU",
     InvalidEncrypt: "IE",

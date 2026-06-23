@@ -314,7 +314,7 @@ export default function RowMenu(props) {
         <MenuItem onClick={handleToggleRename}>
           {context.languagePicker("main.folder.rowMenu.rename")}
         </MenuItem>
-        {(filename.endsWith(".url") || filename.endsWith(".desktop")) && (
+        {fileLink && (
           <MenuItem onClick={handleToggleRelink}>
             {context.languagePicker("main.folder.rowMenu.relink")}
           </MenuItem>)}

@@ -203,7 +203,7 @@ export default function FileTable(props) {
                   <Typography level="body-xs">
                     {item.type === "directory"
                       ? context.languagePicker("main.folder.viewRegulate.directory")
-                      : (item.name.endsWith(".url") || item.name.endsWith(".desktop"))
+                      : item.link
                       ? context.languagePicker("main.folder.viewRegulate.link")
                       : item.name.endsWith(".srph")
                       ? context.languagePicker("main.folder.viewRegulate.encrypt")
