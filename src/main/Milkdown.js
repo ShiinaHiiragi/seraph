@@ -741,10 +741,12 @@ const CrepeEditor = () => {
   const saveRef = React.useRef(null);
   const autoSaveRef = React.useRef(null);
   const autoSavableRef = React.useRef(false);
+  const lastSaveTimeRef = React.useRef(0);
   const autoSaveTimerRef = React.useRef(null);
 
-  const [autoSaving, setAutoSaving] = React.useState(false);
   const [autoSaveError, setAutoSaveError] = React.useState(false);
+  const [autoSaving, setAutoSaving] = React.useState(false);
+  const autoSavingRef = React.useRef(false);
   const autoSaveMode = React.useMemo(() => context.setting.crepe.save > 0, [context]);
 
   // a markdown is savable when
@@ -762,6 +764,7 @@ const CrepeEditor = () => {
   // - auto save doesn't encounter error
   // - file is loaded from server
   React.useEffect(() => {
+    console.log(savable, autoSaveMode, !autoSaveError, folderName.length > 0);
     autoSavableRef.current = savable
       && autoSaveMode
       && !autoSaveError
@@ -776,18 +779,24 @@ const CrepeEditor = () => {
       if (autoSavableRef.current) {
         autoSaveRef.current?.click();
       }
-    }, autoSaveInterval);
+    }, 1000);
+
+    const waiting = Date.now() - lastSaveTimeRef.current;
+    if (autoSavableRef.current && waiting > autoSaveInterval) {
+      autoSaveRef.current?.click();
+    }
   }, []);
 
   const handleAutoSave = React.useCallback(() => {
     // double-check for user's manually clicking
-    if (autoSaving || !autoSavableRef.current) {
+    if (autoSavingRef.current || !autoSavableRef.current) {
       return;
     }
+    autoSavingRef.current = true;
+    setAutoSaving(true);
 
     const text = context.crepeRef.getText();
     const diff = createPatch(crepeTitle, fileContentRef.current, text);
-    setAutoSaving(true);
     request(
       "POST/utility/crepe/update",
       {
@@ -799,18 +808,21 @@ const CrepeEditor = () => {
       { "": () => {
         setAutoSaveError(true);
         setAutoSaving(false);
+        autoSavingRef.current = false;
       } }
     ).then((data) => {
-      setAutoSaving(false);
       if (data.success) {
         setModified(false);
         fileContentRef.current = text;
         normalizedRef.current = text.trimEnd();
+        lastSaveTimeRef.current = Date.now();
       } else {
         // TODO change caption
         toast.error("AUTO SAVE FAILED, DISABLED.");
         setAutoSaveError(true);
       }
+      setAutoSaving(false);
+      autoSavingRef.current = false;
     })
   }, [context, crepeType, crepePath, crepeTitle, autoSaving]);
 
