@@ -83,6 +83,9 @@ import FunctionsOutlinedIcon from "@mui/icons-material/FunctionsOutlined";
 import InsertLinkOutlinedIcon from "@mui/icons-material/InsertLinkOutlined";
 import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
 import UnfoldMoreOutlinedIcon from "@mui/icons-material/UnfoldMoreOutlined";
+import CloudOutlinedIcon from "@mui/icons-material/CloudOutlined";
+import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
+import CloudDoneOutlinedIcon from "@mui/icons-material/CloudDoneOutlined";
 import { countWords, countLines } from "alfaaz";
 import { createPatch } from "diff";
 import Loading from "./Loading";
@@ -162,6 +165,7 @@ const CrepeEditorInner = (props) => {
     basePath,
     editableKey,
     readOnly,
+    autoSave,
     setModified,
     setCounter,
     handleToggleTree,
@@ -445,6 +449,7 @@ const CrepeEditorInner = (props) => {
             if (context.setting.crepe.feature.stat) {
               setCounter(count(markdown));
             }
+            autoSave(context.setting.crepe.save * 1000);
           });
       })
       .use($prose((ctx) => keymap({
@@ -733,6 +738,15 @@ const CrepeEditor = () => {
     [folderName]
   );
 
+  const saveRef = React.useRef(null);
+  const autoSaveRef = React.useRef(null);
+  const autoSavableRef = React.useRef(false);
+  const lastSaveRef = React.useRef(0);
+
+  const [autoSaving, setAutoSaving] = React.useState(false);
+  const [autoSaveError, setAutoSaveError] = React.useState(false);
+  const autoSaveMode = React.useMemo(() => context.setting.crepe.save > 0, [context]);
+
   // a markdown is savable when
   // - user has logged in
   // - text content is ready
@@ -741,6 +755,57 @@ const CrepeEditor = () => {
     () => context.isAuthority && crepeState === 1 && modified,
     [context.isAuthority, crepeState, modified]
   );
+
+  // a markdown is auto savable when
+  // - markdown is savable
+  // - auto save is on
+  // - auto save doesn't encounter error
+  // - file is loaded from server
+  React.useEffect(() => {
+    autoSavableRef.current = savable
+      && autoSaveMode
+      && !autoSaveError
+      && folderName.length > 0;
+  }, [savable, autoSaveMode, autoSaveError, folderName]);
+
+  // autoSave will be executed in useEditor
+  // so its deps array should be empty to avoid any remounting
+  const autoSave = React.useCallback((autoSaveInterval) => {
+    if (autoSavableRef.current && Date.now() - lastSaveRef.current > autoSaveInterval) {
+      autoSaveRef.current?.click();
+      lastSaveRef.current = Date.now();
+    }
+  }, []);
+
+  const handleAutoSave = React.useCallback(() => {
+    const text = context.crepeRef.getText();
+    const diff = createPatch(crepeTitle, fileContentRef.current, text);
+    setAutoSaving(true);
+    request(
+      "POST/utility/crepe/update",
+      {
+        type: crepeType,
+        folderName: crepePath.join("/"),
+        filename: crepeTitle,
+        diff: diff
+      },
+      { "": () => {
+        setAutoSaveError(true);
+        setAutoSaving(false);
+      } }
+    ).then((data) => {
+      setAutoSaving(false);
+      if (data.success) {
+        setModified(false);
+        fileContentRef.current = text;
+        normalizedRef.current = text.trimEnd();
+      } else {
+        // TODO change caption
+        toast.error("AUTO SAVE FAILED, DISABLED.");
+        setAutoSaveError(true);
+      }
+    })
+  }, [context, crepeType, crepePath, crepeTitle]);
 
   React.useEffect(() => {
     // a new file is saved
@@ -855,7 +920,6 @@ const CrepeEditor = () => {
     URL.revokeObjectURL(url);
   }, [context, modified, crepeTitle]);
 
-  const saveRef = React.useRef(null);
   const handleRewrite = React.useCallback(
     (type, folderName, filename, create, text) => {
       toast.promise(new Promise((resolve, reject) => {
@@ -952,12 +1016,12 @@ const CrepeEditor = () => {
       }
       if ((event.ctrlKey || event.metaKey) && event.key === "s") {
         event.preventDefault();
-        saveRef.current?.click();
+        (autoSaveMode ? autoSaveRef : saveRef).current?.click();
       }
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [handleToggleReadOnly, handleDownload]);
+  }, [handleToggleReadOnly, handleDownload, autoSaveMode]);
 
   return (
     <RouteField
@@ -993,16 +1057,34 @@ const CrepeEditor = () => {
             >
               <FileDownloadOutlinedIcon />
             </IconButton>
-            {savable && <IconButton
-              size="sm"
-              variant="soft"
-              onClick={handleToggleSave}
-              onMouseDown={(event) => event.preventDefault()}
-              sx={buttonStyle}
-              ref={saveRef}
-            >
-              <SaveRoundedIcon />
-            </IconButton>}
+            {(!autoSaveMode && savable) && (
+              <IconButton
+                size="sm"
+                variant="soft"
+                onClick={handleToggleSave}
+                onMouseDown={(event) => event.preventDefault()}
+                sx={buttonStyle}
+                ref={saveRef}
+              >
+                <SaveRoundedIcon />
+              </IconButton>
+            )}
+            {autoSaveMode && (
+              <IconButton
+                size="sm"
+                variant="soft"
+                onClick={handleAutoSave}
+                onMouseDown={(event) => event.preventDefault()}
+                sx={buttonStyle}
+                ref={autoSaveRef}
+              >
+                {autoSaving
+                  ? <CloudUploadOutlinedIcon />
+                  : modified
+                  ? <CloudOutlinedIcon />
+                  : <CloudDoneOutlinedIcon />}
+              </IconButton>
+            )}
           </Stack>
         </Stack>
       }
@@ -1023,6 +1105,7 @@ const CrepeEditor = () => {
               basePath={basePath}
               editableKey={editableKey}
               readOnly={readOnly}
+              autoSave={autoSave}
               setModified={setModified}
               setCounter={setCounter}
               handleToggleTree={handleToggleTree}

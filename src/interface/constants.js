@@ -199,6 +199,7 @@ const defaultSetting = {
   crepe: {
     show: true,
     edit: "auto",
+    save: 0,
     feature: {
       blockEdit: true,
       toolbar: true,
