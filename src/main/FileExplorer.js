@@ -139,6 +139,7 @@ const FileExplorer = (props) => {
 
   // used by modal popup
   const [modalFilename, setModalFilename] = React.useState(null);
+  const [modalFileLink, setModalFileLink] = React.useState(null);
 
   // new folder
   const [modalNewOpen, setModalNewOpen] = React.useState(false);
@@ -532,8 +533,8 @@ const FileExplorer = (props) => {
   }, [ ]);
 
   const modalRelinkDisabled = React.useMemo(
-    () => formRelinkText.length === 0,
-    [formRelinkText]
+    () => formRelinkText === modalFileLink || formRelinkText.length === 0,
+    [formRelinkText, modalFileLink]
   );
 
   const handleRelink = React.useCallback(() => {
@@ -782,6 +783,7 @@ const FileExplorer = (props) => {
             filesList={filesList}
             sortedFilesList={sortedFilesList}
             setModalFilename={setModalFilename}
+            setModalFileLink={setModalFileLink}
             setModalRenameOpen={setModalRenameOpen}
             setModalRelinkOpen={setModalRelinkOpen}
             setModalDecryptOpen={setModalDecryptOpen}
@@ -801,6 +803,7 @@ const FileExplorer = (props) => {
             filesList={filesList}
             sortedFilesList={sortedFilesList}
             setModalFilename={setModalFilename}
+            setModalFileLink={setModalFileLink}
             setModalRenameOpen={setModalRenameOpen}
             setModalRelinkOpen={setModalRelinkOpen}
             setModalDecryptOpen={setModalDecryptOpen}

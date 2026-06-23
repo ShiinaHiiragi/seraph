@@ -23,6 +23,7 @@ export default function RowMenu(props) {
     filename,
     filesList,
     setModalFilename,
+    setModalFileLink,
     setModalRenameOpen,
     setModalRelinkOpen,
     setModalDecryptOpen,
@@ -45,9 +46,17 @@ export default function RowMenu(props) {
 
   const handleToggleRelink = React.useCallback(() => {
     setModalFilename(filename)
+    setModalFileLink(fileLink);
     setFormRelinkText(fileLink);
     setModalRelinkOpen(true);
-  }, [setModalFilename, setFormRelinkText, setModalRelinkOpen, filename, fileLink]);
+  }, [
+    setModalFilename,
+    setModalFileLink,
+    setFormRelinkText,
+    setModalRelinkOpen,
+    filename,
+    fileLink
+  ]);
 
   const handleToggleDecrypt = React.useCallback(() => {
     setModalFilename(filename);

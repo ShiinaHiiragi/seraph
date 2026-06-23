@@ -18,6 +18,7 @@ export default function FileList(props) {
     filesList,
     sortedFilesList,
     setModalFilename,
+    setModalFileLink,
     setModalRenameOpen,
     setModalRelinkOpen,
     setModalDecryptOpen,
@@ -131,6 +132,7 @@ export default function FileList(props) {
                   filename={item.name}
                   filesList={filesList}
                   setModalFilename={setModalFilename}
+                  setModalFileLink={setModalFileLink}
                   setModalRenameOpen={setModalRenameOpen}
                   setModalRelinkOpen={setModalRelinkOpen}
                   setModalDecryptOpen={setModalDecryptOpen}
