@@ -741,7 +741,6 @@ const CrepeEditor = () => {
   const saveRef = React.useRef(null);
   const autoSaveRef = React.useRef(null);
   const autoSavableRef = React.useRef(false);
-  const lastSaveTimeRef = React.useRef(0);
   const autoSaveTimerRef = React.useRef(null);
 
   const [autoSaveError, setAutoSaveError] = React.useState(false);
@@ -780,11 +779,6 @@ const CrepeEditor = () => {
         autoSaveRef.current?.click();
       }
     }, 1000);
-
-    const waiting = Date.now() - lastSaveTimeRef.current;
-    if (autoSavableRef.current && waiting > autoSaveInterval) {
-      autoSaveRef.current?.click();
-    }
   }, []);
 
   const handleAutoSave = React.useCallback(() => {
@@ -815,7 +809,6 @@ const CrepeEditor = () => {
         setModified(false);
         fileContentRef.current = text;
         normalizedRef.current = text.trimEnd();
-        lastSaveTimeRef.current = Date.now();
       } else {
         // TODO change caption
         toast.error("AUTO SAVE FAILED, DISABLED.");
