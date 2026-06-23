@@ -272,6 +272,42 @@ router.post('/rename', (req, res, next) => {
   return;
 });
 
+router.post('/relink', (req, res, next) => {
+  if (req.status.notAuthSuccess()) {
+    // -> EF_IT or abnormal request
+    next(api.errorStreamControl);
+    return;
+  }
+
+  // directory file is a special kind of file
+  const { type, folderName, filename, url } = req.body;
+  const { folderPath, filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
+
+  if (!fs.existsSync(filePath)) {
+    // -> EF_RU: file don't exist
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  try {
+    api.fileOperator.modifyLink(filePath, url);
+  } catch (_) {
+    // -> EF_FME: fs.writeFileSync error
+    req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  // -> ES: no extra info
+  req.status.addExecStatus();
+  res.send({
+    ...req.status.generateReport(),
+    ...api.fileOperator.readFileInfo(folderPath, filename)
+  });
+  return;
+});
+
 router.post('/copy', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
     // -> EF_IT or abnormal request

@@ -505,21 +505,24 @@ const fileOperator = {
     try {
       content = fs.readFileSync(filePath).toString('utf-8');
     } catch (err) {
-      return false;
+      return null;
     }
   
     // win32 .url: [InternetShortcut] with URL= key
     if (/\[InternetShortcut\]/i.test(content)) {
       const matched = content.match(/^URL=(.+)$/m);
-      return matched ? matched[1].trim() : false;
+      return matched ? matched[1].trim() : null;
     }
   
     // linux .desktop: [Desktop Entry] with Type=Link
-    if (/\[Desktop Entry\]/i.test(content) && /^Type=Link$/m.test(content)) {
+    if (
+      /\[Desktop Entry\]/i.test(content)
+        && /^Type=Link$/m.test(content)
+    ) {
       const matched = content.match(/^URL=(.+)$/m);
-      return matched ? matched[1].trim() : false;
+      return matched ? matched[1].trim() : null;
     }
-    return false;
+    return null;
   },
 
   writeURL: (filePath, url) => {
@@ -530,6 +533,35 @@ const fileOperator = {
       content = '[Desktop Entry]\nType=Link\nURL=' + url + '\n';
     }
     fs.writeFileSync(filePath, content, 'utf-8');
+  },
+
+  modifyLink: (filePath, url) => {
+    let content;
+    try {
+      content = fs.readFileSync(filePath).toString('utf-8');
+    } catch (err) {
+      return false;
+    }
+  
+    let found = false;
+    if (/\[InternetShortcut\]/i.test(content)) {
+      found = /^URL=(.+)$/m.test(content);
+    } else if (
+      /\[Desktop Entry\]/i.test(content)
+        && /^Type=Link$/m.test(content)
+    ) {
+      found = /^URL=(.+)$/m.test(content);
+    }
+    if (!found) {
+      return false;
+    }
+  
+    fs.writeFileSync(
+      filePath,
+      content.replace(/^URL=.+$/m, 'URL=' + url),
+      'utf-8'
+    );
+    return true;
   },
 
   encryptFile: (srcPath, dstPath) => {
