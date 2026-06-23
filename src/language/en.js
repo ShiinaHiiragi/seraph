@@ -362,6 +362,10 @@ const en = {
     },
     crepe: {
       placeholder: "Enter text here",
+      sync: {
+        saving: "Saving",
+        saved: "Saved"
+      },
       image: {
         upload: "Upload",
         link: "or input link instead",

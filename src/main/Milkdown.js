@@ -91,7 +91,12 @@ import { createPatch } from "diff";
 import Loading from "./Loading";
 import Tree from "../modal/Tree";
 import RouteField from "../interface/RouteField";
-import GlobalContext, { request, Status, toSVG } from "../interface/constants";
+import GlobalContext, {
+  request,
+  Status,
+  toSVG,
+  animeDuration
+} from "../interface/constants";
 import {
   createImageObserver,
   imageRemark,
@@ -840,12 +845,11 @@ const CrepeEditor = () => {
   }, [setModalTree]);
 
   // § saving and auto saving
-  const [autoSaveLock, setAutoSaveLock] = React.useState(false);
-  const [autoSaveError, setAutoSaveError] = React.useState(false);
-
   // autoSaveLockRef is a more instant version of autoSaveLock
   const autoSaveLockRef = React.useRef(false);
-  const autoSaveTimerRef = React.useRef(null);
+  const [autoSaveLock, setAutoSaveLock] = React.useState(false);
+  const [autoSaveError, setAutoSaveError] = React.useState(false);
+  const [autoSaveTip, setAutoSaveTip] = React.useState(false);
 
   const buttonSaveRef = React.useRef(null);
   const buttonAutoSaveRef = React.useRef(null);
@@ -859,22 +863,23 @@ const CrepeEditor = () => {
     [context.isAuthority, crepeState, modified]
   );
 
+  // auto save mode is used when
+  // - auto save setting is toggled
+  // - file is loaded from server
+  // - auto save doesn't encounter error
   const autoSavableRef = React.useRef(false);
   const autoSaveMode = React.useMemo(
-    () => context.setting.crepe.save > 0,
-    [context]
+    () => context.setting.crepe.save > 0
+      && folderName.length > 0
+      && !autoSaveError,
+    [context, folderName, autoSaveError]
   );
 
   // a markdown is auto savable when
   // - markdown is savable
-  // - auto save is on
-  // - auto save doesn't encounter error
-  // - file is loaded from server
+  // - auto save mode is switched on when
   React.useEffect(() => {
-    autoSavableRef.current = savable
-      && autoSaveMode
-      && !autoSaveError
-      && folderName.length > 0;
+    autoSavableRef.current = savable && autoSaveMode;
   }, [savable, autoSaveMode, autoSaveError, folderName]);
 
   const handleRewrite = React.useCallback(
@@ -963,6 +968,7 @@ const CrepeEditor = () => {
 
   // autoSave will be executed in useEditor
   // so its deps array should be empty to avoid any remounting
+  const autoSaveTimerRef = React.useRef(null);
   const handleToggleAutoSave = React.useCallback((interval) => {
     clearTimeout(autoSaveTimerRef.current);
     autoSaveTimerRef.current = setTimeout(() => {
@@ -1010,6 +1016,20 @@ const CrepeEditor = () => {
     })
   }, [context, crepeType, crepePath, crepeTitle]);
 
+  React.useEffect(() => {
+    if (!modified && autoSaveMode) {
+      setAutoSaveTip(true);
+      const timeoutID = setTimeout(
+        () => setAutoSaveTip(false),
+        animeDuration
+      );
+      return () => {
+        clearTimeout(timeoutID);
+        setAutoSaveTip(false);
+      }
+    }
+  }, [modified, autoSaveMode]);
+
   // § other features
   const [counter, setCounter] = React.useState({ lines: 0, words: 0, chars: 0 });
   const [wordCountOpen, setWordCountOpen] = React.useState(false);
@@ -1042,13 +1062,13 @@ const CrepeEditor = () => {
       }
       if ((event.ctrlKey || event.metaKey) && event.key === "s") {
         event.preventDefault();
-        const buttonRef = (autoSaveMode && !autoSaveError) ? buttonAutoSaveRef : buttonSaveRef;
+        const buttonRef = autoSaveMode ? buttonAutoSaveRef : buttonSaveRef;
         buttonRef.current?.click();
       }
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [handleToggleReadOnly, handleDownload, autoSaveMode, autoSaveError]);
+  }, [handleToggleReadOnly, handleDownload, autoSaveMode]);
 
   return (
     <RouteField
@@ -1084,7 +1104,7 @@ const CrepeEditor = () => {
             >
               <FileDownloadOutlinedIcon />
             </IconButton>
-            {(!autoSaveMode || autoSaveError) && savable && (
+            {!autoSaveMode && savable && (
               <IconButton
                 size="sm"
                 variant="soft"
@@ -1096,21 +1116,38 @@ const CrepeEditor = () => {
                 <SaveRoundedIcon />
               </IconButton>
             )}
-            {(autoSaveMode && !autoSaveError) && (
-              <IconButton
-                size="sm"
-                variant="soft"
-                onClick={handleAutoSave}
-                onMouseDown={(event) => event.preventDefault()}
-                sx={buttonStyle}
-                ref={buttonAutoSaveRef}
-              >
-                {autoSaveLock
-                  ? <CloudUploadOutlinedIcon />
-                  : modified
-                  ? <CloudOutlinedIcon />
-                  : <CloudDoneOutlinedIcon />}
-              </IconButton>
+            {autoSaveMode && (
+              <React.Fragment>
+                <IconButton
+                  size="sm"
+                  variant="soft"
+                  onClick={handleAutoSave}
+                  onMouseDown={(event) => event.preventDefault()}
+                  sx={buttonStyle}
+                  ref={buttonAutoSaveRef}
+                >
+                  {autoSaveLock
+                    ? <CloudUploadOutlinedIcon />
+                    : modified
+                    ? <CloudOutlinedIcon />
+                    : <CloudDoneOutlinedIcon />}
+                </IconButton>
+                <Typography
+                  level="body-sm"
+                  sx={{
+                    height: "var(--joy-fontSize-sm)",
+                    lineHeight: "var(--joy-fontSize-sm)",
+                    alignSelf: "center",
+                    ml: 0.5
+                  }}
+                >
+                  {autoSaveLock
+                    ? context.languagePicker("main.crepe.sync.saving")
+                    : autoSaveTip
+                    ? context.languagePicker("main.crepe.sync.saved")
+                    : ""}
+                </Typography>
+              </React.Fragment>
             )}
           </Stack>
         </Stack>

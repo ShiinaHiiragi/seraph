@@ -362,6 +362,10 @@ const ja = {
     },
     crepe: {
       placeholder: "ここにテキストを入力",
+      sync: {
+        saving: "セーブ中",
+        saved: "セーブ済み"
+      },
       image: {
         upload: "アップ",
         link: "またはリンクを入力",

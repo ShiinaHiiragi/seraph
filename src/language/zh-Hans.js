@@ -362,6 +362,10 @@ const zhHans = {
     },
     crepe: {
       placeholder: "在此输入文本",
+      sync: {
+        saving: "保存中",
+        saved: "已保存"
+      },
       image: {
         upload: "上传",
         link: "或输入链接",
