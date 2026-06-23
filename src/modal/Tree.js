@@ -17,7 +17,7 @@ import { TreeItem } from "@mui/x-tree-view/TreeItem";
 import CircularProgress from "@mui/material/CircularProgress";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import GlobalContext, { request } from "../interface/constants";
+import GlobalContext, { warningCooldown, request } from "../interface/constants";
 
 const materialTheme = materialExtendTheme();
 const SpinnerIcon = () =>
@@ -98,6 +98,7 @@ const renderItems = (nodes, loadingSet) =>
 export default function Tree(props) {
   const { modalTree, handleCloseModalTree } = props;
   const context = React.useContext(GlobalContext);
+  const lastWarningRef = React.useRef(0);
 
   const [folderList, setFolderList] = React.useState([
     {
@@ -257,8 +258,12 @@ export default function Tree(props) {
               onItemExpansionToggle={handleExpansionToggle}
               selectedItems={selectedItem}
               onSelectedItemsChange={(_, itemID) => {
-                if (itemID.split("/").length < 3) {
+                if (
+                  itemID.split("/").length < 3
+                    && Date.now() - lastWarningRef.current > warningCooldown
+                ) {
                   toast.error(context.languagePicker("modal.toast.exception.fileUnderRoot"));
+                  lastWarningRef.current = Date.now();
                 }
                 setSelectedItem(itemID);
               }}

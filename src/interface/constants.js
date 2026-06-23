@@ -514,7 +514,7 @@ export {
   serverWebSocketURL
 }
 
-
+const warningCooldown = 60 * 1000;
 const Status = {
   statusCode: {
     BeforeAuth: "BA",
@@ -676,7 +676,7 @@ const request = (query, params, todo, handleReject, handleInit) => {
   });
 }
 
-export { Status, request };
+export { warningCooldown, Status, request };
 
 
 // eslint-disable-next-line no-useless-escape
