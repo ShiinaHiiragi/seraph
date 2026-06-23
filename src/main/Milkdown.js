@@ -662,41 +662,7 @@ const CrepeEditor = () => {
   const navigate = useNavigate();
   const context = React.useContext(GlobalContext);
 
-  const [modalTree, setModalTree] = React.useState({
-    open: false,
-    handleAction: () => { },
-    handleCancel: () => { }
-  });
-
-  const handleToggleTree = React.useCallback(
-    () => new Promise((resolve, reject) => {
-      setModalTree({
-        open: true,
-        initValue: undefined,
-        handleAction: resolve,
-        handleCancel: reject
-      });
-    }),
-    []
-  );
-
-  const handleCloseModalTree = React.useCallback(() => {
-    setModalTree((modalTree) => ({ ...modalTree, open: false }));
-  }, [setModalTree]);
-
-  const [crepeState, setCrepeState] = React.useState(0);
-  const [editableKey, setEditableKey] = React.useState(0);
-  const [readOnly, setReadOnly] = React.useState(false);
-  const [modified, setModified] = React.useState(false);
-  const [counter, setCounter] = React.useState({ lines: 0, words: 0, chars: 0 });
-
-  const [wordCountOpen, setWordCountOpen] = React.useState(false);
-  const wordCountAnchorRef = React.useRef(null);
-
-  const fileContentRef = React.useRef(null);
-  const normalizedRef = React.useRef(null);
-  const nextRef = React.useRef(null);
-
+  // § url path analysis
   const { "*": rawFolderName } = useParams();
   const folderName = React.useMemo(
     () => rawFolderName
@@ -738,86 +704,15 @@ const CrepeEditor = () => {
     [folderName]
   );
 
-  const saveRef = React.useRef(null);
-  const autoSaveRef = React.useRef(null);
-  const autoSavableRef = React.useRef(false);
-  const autoSaveTimerRef = React.useRef(null);
+  // § core states & initialization
+  const [crepeState, setCrepeState] = React.useState(0);
+  const [editableKey, setEditableKey] = React.useState(0);
+  const [readOnly, setReadOnly] = React.useState(false);
+  const [modified, setModified] = React.useState(false);
 
-  const [autoSaveError, setAutoSaveError] = React.useState(false);
-  const [autoSaving, setAutoSaving] = React.useState(false);
-  const autoSavingRef = React.useRef(false);
-  const autoSaveMode = React.useMemo(() => context.setting.crepe.save > 0, [context]);
-
-  // a markdown is savable when
-  // - user has logged in
-  // - text content is ready
-  // - text is modified
-  const savable = React.useMemo(
-    () => context.isAuthority && crepeState === 1 && modified,
-    [context.isAuthority, crepeState, modified]
-  );
-
-  // a markdown is auto savable when
-  // - markdown is savable
-  // - auto save is on
-  // - auto save doesn't encounter error
-  // - file is loaded from server
-  React.useEffect(() => {
-    console.log(savable, autoSaveMode, !autoSaveError, folderName.length > 0);
-    autoSavableRef.current = savable
-      && autoSaveMode
-      && !autoSaveError
-      && folderName.length > 0;
-  }, [savable, autoSaveMode, autoSaveError, folderName]);
-
-  // autoSave will be executed in useEditor
-  // so its deps array should be empty to avoid any remounting
-  const autoSave = React.useCallback((autoSaveInterval) => {
-    clearTimeout(autoSaveTimerRef.current);
-    autoSaveTimerRef.current = setTimeout(() => {
-      if (autoSavableRef.current) {
-        autoSaveRef.current?.click();
-      }
-    }, 1000);
-  }, []);
-
-  const handleAutoSave = React.useCallback(() => {
-    // double-check for user's manually clicking
-    if (autoSavingRef.current || !autoSavableRef.current) {
-      return;
-    }
-    autoSavingRef.current = true;
-    setAutoSaving(true);
-
-    const text = context.crepeRef.getText();
-    const diff = createPatch(crepeTitle, fileContentRef.current, text);
-    request(
-      "POST/utility/crepe/update",
-      {
-        type: crepeType,
-        folderName: crepePath.join("/"),
-        filename: crepeTitle,
-        diff: diff
-      },
-      { "": () => {
-        setAutoSaveError(true);
-        setAutoSaving(false);
-        autoSavingRef.current = false;
-      } }
-    ).then((data) => {
-      if (data.success) {
-        setModified(false);
-        fileContentRef.current = text;
-        normalizedRef.current = text.trimEnd();
-      } else {
-        // TODO change caption
-        toast.error("AUTO SAVE FAILED, DISABLED.");
-        setAutoSaveError(true);
-      }
-      setAutoSaving(false);
-      autoSavingRef.current = false;
-    })
-  }, [context, crepeType, crepePath, crepeTitle, autoSaving]);
+  const fileContentRef = React.useRef(null);
+  const normalizedRef = React.useRef(null);
+  const nextRef = React.useRef(null);
 
   React.useEffect(() => {
     // a new file is saved
@@ -868,6 +763,20 @@ const CrepeEditor = () => {
     rawFolderName
   ]);
 
+  const handleToggleReadOnly = React.useCallback(() => {
+    if (readOnly) {
+      context.crepeRef.snapshot.current = context.crepeRef.getText();
+      context.crepeRef.select.current = context.crepeRef.getSelect();
+      setEditableKey((editableKey) => editableKey + 1);
+    } else {
+      context.crepeRef.setReadOnly(true);
+    }
+    // React 18 will make sure that
+    // editableKey & readOnly update at the same time
+    setReadOnly((readOnly) => !readOnly);
+  }, [context, readOnly]);
+
+  // § blocker
   const blocker = useBlocker(modified);
   const blockerActiveRef = React.useRef(false);
 
@@ -887,8 +796,8 @@ const CrepeEditor = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [blocker.state]);
 
-  // unblock the router when modal is cancelled
   React.useEffect(() => {
+    // unblock the router when modal is cancelled
     if (blockerActiveRef.current && !context.modalReconfirm?.open) {
       blockerActiveRef.current = false;
       blocker.reset();
@@ -906,33 +815,61 @@ const CrepeEditor = () => {
     }
   }, [modified, navigate]);
 
-  const handleToggleReadOnly = React.useCallback(() => {
-    if (readOnly) {
-      context.crepeRef.snapshot.current = context.crepeRef.getText();
-      context.crepeRef.select.current = context.crepeRef.getSelect();
-      setEditableKey((editableKey) => editableKey + 1);
-    } else {
-      context.crepeRef.setReadOnly(true);
-    }
-    // React 18 will make sure that
-    // editableKey & readOnly update at the same time
-    setReadOnly((readOnly) => !readOnly);
-  }, [context, readOnly]);
+  // § tree for saving file & image
+  const [modalTree, setModalTree] = React.useState({
+    open: false,
+    handleAction: () => { },
+    handleCancel: () => { }
+  });
 
-  const handleDownload = React.useCallback(() => {
-    // getText() != fileContentRef.current even if not modified
-    // because crepe will normalize markdown on load
-    const text = modified
-      ? context.crepeRef.getText()
-      : fileContentRef.current;
-    const blob = new Blob([text], { type: "text/markdown" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = crepeTitle;
-    a.click();
-    URL.revokeObjectURL(url);
-  }, [context, modified, crepeTitle]);
+  const handleToggleTree = React.useCallback(
+    () => new Promise((resolve, reject) => {
+      setModalTree({
+        open: true,
+        initValue: undefined,
+        handleAction: resolve,
+        handleCancel: reject
+      });
+    }),
+    []
+  );
+
+  const handleCloseModalTree = React.useCallback(() => {
+    setModalTree((modalTree) => ({ ...modalTree, open: false }));
+  }, [setModalTree]);
+
+  // § saving and auto saving
+  const saveRef = React.useRef(null);
+  const autoSaveRef = React.useRef(null);
+
+  const [autoSaveError, setAutoSaveError] = React.useState(false);
+  const [autoSaving, setAutoSaving] = React.useState(false);
+  const autoSaveTimerRef = React.useRef(null);
+  const autoSavingRef = React.useRef(false);
+  const autoSavableRef = React.useRef(false);
+  const autoSaveMode = React.useMemo(() => context.setting.crepe.save > 0, [context]);
+
+  // a markdown is savable when
+  // - user has logged in
+  // - text content is ready
+  // - text is modified
+  const savable = React.useMemo(
+    () => context.isAuthority && crepeState === 1 && modified,
+    [context.isAuthority, crepeState, modified]
+  );
+
+  // a markdown is auto savable when
+  // - markdown is savable
+  // - auto save is on
+  // - auto save doesn't encounter error
+  // - file is loaded from server
+  React.useEffect(() => {
+    console.log(savable, autoSaveMode, !autoSaveError, folderName.length > 0);
+    autoSavableRef.current = savable
+      && autoSaveMode
+      && !autoSaveError
+      && folderName.length > 0;
+  }, [savable, autoSaveMode, autoSaveError, folderName]);
 
   const handleRewrite = React.useCallback(
     (type, folderName, filename, create, text) => {
@@ -1018,6 +955,75 @@ const CrepeEditor = () => {
     }
   }, [handleSave, folderName, crepeType, crepePath, crepeTitle]);
 
+  // autoSave will be executed in useEditor
+  // so its deps array should be empty to avoid any remounting
+  const autoSave = React.useCallback((interval) => {
+    clearTimeout(autoSaveTimerRef.current);
+    autoSaveTimerRef.current = setTimeout(() => {
+      if (autoSavableRef.current) {
+        autoSaveRef.current?.click();
+      }
+    }, interval);
+  }, []);
+
+  const handleAutoSave = React.useCallback(() => {
+    // double-check for user's manually clicking
+    if (autoSavingRef.current || !autoSavableRef.current) {
+      return;
+    }
+    autoSavingRef.current = true;
+    setAutoSaving(true);
+
+    const text = context.crepeRef.getText();
+    const diff = createPatch(crepeTitle, fileContentRef.current, text);
+    request(
+      "POST/utility/crepe/update",
+      {
+        type: crepeType,
+        folderName: crepePath.join("/"),
+        filename: crepeTitle,
+        diff: diff
+      },
+      { "": () => {
+        setAutoSaveError(true);
+        setAutoSaving(false);
+        autoSavingRef.current = false;
+      } }
+    ).then((data) => {
+      if (data.success) {
+        setModified(false);
+        fileContentRef.current = text;
+        normalizedRef.current = text.trimEnd();
+      } else {
+        // TODO change caption
+        toast.error("AUTO SAVE FAILED, DISABLED.");
+        setAutoSaveError(true);
+      }
+      setAutoSaving(false);
+      autoSavingRef.current = false;
+    })
+  }, [context, crepeType, crepePath, crepeTitle]);
+
+  // § other features
+  const [counter, setCounter] = React.useState({ lines: 0, words: 0, chars: 0 });
+  const [wordCountOpen, setWordCountOpen] = React.useState(false);
+  const wordCountAnchorRef = React.useRef(null);
+
+  const handleDownload = React.useCallback(() => {
+    // getText() != fileContentRef.current even if not modified
+    // because crepe will normalize markdown on load
+    const text = modified
+      ? context.crepeRef.getText()
+      : fileContentRef.current;
+    const blob = new Blob([text], { type: "text/markdown" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = crepeTitle;
+    a.click();
+    URL.revokeObjectURL(url);
+  }, [context, modified, crepeTitle]);
+
   React.useEffect(() => {
     const handler = (event) => {
       if ((event.ctrlKey || event.metaKey) && event.key === "e") {
@@ -1036,7 +1042,7 @@ const CrepeEditor = () => {
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [handleToggleReadOnly, handleDownload, autoSaveMode]);
+  }, [handleToggleReadOnly, handleDownload, autoSaveMode, autoSaveError]);
 
   return (
     <RouteField
