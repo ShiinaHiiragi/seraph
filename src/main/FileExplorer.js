@@ -175,16 +175,11 @@ const FileExplorer = (props) => {
         reject
       )
         .then((data) => {
+          const { statusCode, errorCode, ...newInfo } = data;
           if (pathStartWith(`/${type}/${folderName}`)) {
             setFilesList((filesList) => [
               ...filesList,
-              {
-                name: newFolderName,
-                size: data.size,
-                time: data.time,
-                mtime: data.mtime,
-                type: data.type
-              }
+              newInfo
             ]);
           }
 
@@ -248,16 +243,11 @@ const FileExplorer = (props) => {
             reject
           )
             .then((data) => {
+              const { statusCode, errorCode, ...newInfo } = data;
               if (pathStartWith(`/${type}/${folderName}`)) {
                 setFilesList((filesList) => [
                   ...filesList,
-                  {
-                    name: data.name,
-                    size: data.size,
-                    time: data.time,
-                    mtime: data.mtime,
-                    type: data.type
-                  }
+                  newInfo
                 ]);
               }
               resolve();
@@ -333,16 +323,11 @@ const FileExplorer = (props) => {
         [Status.execErrCode.ResourcesUnexist]: () => setClipboard({ ...defaultClipboard })
       }, reject)
         .then((data) => {
+          const { statusCode, errorCode, ...newInfo } = data;
           if (pathStartWith(`/${type}/${folderName}`)) {
             setFilesList((filesList) => [
               ...filesList,
-              {
-                name: data.name,
-                size: data.size,
-                time: data.time,
-                mtime: data.mtime,
-                type: data.type
-              }
+              newInfo
             ]);
           }
 
@@ -434,14 +419,12 @@ const FileExplorer = (props) => {
         reject
       )
         .then((data) => {
+          const { statusCode, errorCode, ...newInfo } = data;
           if (pathStartWith(`/${type}/${folderName}`)) {
             setFilesList((filesList) => filesList.map((item) =>
               item.name === originFilename
-                ? {
-                  ...item,
-                  name: newFilename,
-                  type: data.type
-                } : item
+                ? newInfo
+                : item
             ));
           }
           if (folderName.length === 0) {

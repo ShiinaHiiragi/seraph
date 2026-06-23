@@ -220,7 +220,7 @@ router.post('/rename', (req, res, next) => {
   req.status.addExecStatus();
   res.send({
     ...req.status.generateReport(),
-    type: api.fileOperator.readFileInfo(folderPath, newFilename).type
+    ...api.fileOperator.readFileInfo(folderPath, newFilename)
   });
   return;
 });
