@@ -33,7 +33,7 @@ import {
 } from "@milkdown/kit/preset/commonmark";
 import { createTable, toggleStrikethroughCommand } from "@milkdown/kit/preset/gfm";
 import { getMarkdown, replaceAll, $prose } from "@milkdown/kit/utils";
-import { listener, listenerCtx } from "@milkdown/kit/plugin/listener";
+import { listenerCtx } from "@milkdown/kit/plugin/listener";
 import { imageBlockSchema } from "@milkdown/kit/component/image-block";
 import { toggleLinkCommand } from "@milkdown/kit/component/link-tooltip";
 import { keymap } from "@milkdown/kit/prose/keymap";
@@ -58,7 +58,6 @@ import { EditorState } from "@codemirror/state";
 import { closeBrackets, closeBracketsKeymap } from "@codemirror/autocomplete";
 import { defaultKeymap, historyKeymap } from "@codemirror/commands";
 import { highlightSelectionMatches } from "@codemirror/search";
-// import { emoji } from "@milkdown/plugin-emoji";
 import EditOffOutlinedIcon from "@mui/icons-material/EditOffOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
@@ -589,7 +588,6 @@ const CrepeEditorInner = (props) => {
           }
         }
       })))
-      .use(listener)
       .use(imageRemark)
       .use(imageBracketInputRule)
       .use(imageHTMLInputRule)
