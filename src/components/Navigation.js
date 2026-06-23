@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import List from "@mui/joy/List";
 import ListSubheader from "@mui/joy/ListSubheader";
 import ListItem from "@mui/joy/ListItem";

@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import Input from "@mui/joy/Input";
 import Textarea from "@mui/joy/Textarea";
 import { reactionInterval } from "./constants";

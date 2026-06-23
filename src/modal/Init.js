@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { styled } from "@mui/joy/styles";
 import { toast } from "sonner";
 import Button from "@mui/joy/Button";

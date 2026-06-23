@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import * as React from 'react';
+import React from 'react';
 import { Link as RouterLink } from "react-router-dom";
 import Box from '@mui/joy/Box';
 import Typography from '@mui/joy/Typography';

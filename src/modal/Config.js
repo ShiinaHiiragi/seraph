@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { toast } from "sonner";
 import Box from "@mui/joy/Box";
 import Chip from "@mui/joy/Chip";

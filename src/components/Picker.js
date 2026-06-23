@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import {
   experimental_extendTheme as materialExtendTheme,
   Experimental_CssVarsProvider as MaterialCssVarsProvider,

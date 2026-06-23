@@ -1,4 +1,5 @@
-import * as React from "react";
+import React from "react";
+import { toast } from "sonner";
 import Stack from "@mui/joy/Stack";
 import Input from "@mui/joy/Input";
 import Button from "@mui/joy/Button";
@@ -242,8 +243,11 @@ export default function Tree(props) {
               expandedItems={expandedItem}
               onItemExpansionToggle={handleExpansionToggle}
               selectedItems={selectedItem}
-              onSelectedItemsChange={(_, itemId) => {
-                setSelectedItem(itemId);
+              onSelectedItemsChange={(_, itemID) => {
+                if (itemID.split("/").length < 3) {
+                  toast.error(context.languagePicker("modal.toast.exception.fileUnderRoot"));
+                }
+                setSelectedItem(itemID);
               }}
             >
               {renderItems(folderList, loadingSet)}
