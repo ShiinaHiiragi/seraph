@@ -72,8 +72,15 @@ const renderItems = (nodes, loadingSet) =>
           wordBreak: "normal",
           overflowWrap: "anywhere",
           borderRadius: "var(--ListItem-radius) !important",
-          "& .MuiTreeItem-content:hover": {
+          "& .MuiTreeItem-content:hover:not(:has(.MuiTreeItem-iconContainer:hover))": {
             backgroundColor: "var(--joy-palette-neutral-plainHoverBg)"
+          },
+          "& .MuiTreeItem-content:has(.MuiTreeItem-iconContainer:hover)": {
+            backgroundColor: "transparent"
+          },
+          "& .MuiTreeItem-iconContainer:hover": {
+            backgroundColor: "var(--joy-palette-neutral-softHoverBg)",
+            borderRadius: "4px"
           },
           "& .MuiTreeItem-content.Mui-selected": {
             backgroundColor: "var(--joy-palette-neutral-plainActiveBg)"
@@ -246,6 +253,7 @@ export default function Tree(props) {
           <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
             <SimpleTreeView
               expandedItems={expandedItem}
+              expansionTrigger="iconContainer"
               onItemExpansionToggle={handleExpansionToggle}
               selectedItems={selectedItem}
               onSelectedItemsChange={(_, itemID) => {
