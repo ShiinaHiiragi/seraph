@@ -344,6 +344,7 @@ const ja = {
       viewRegulate: {
         all: "オール",
         unknown: "不明",
+        link: "URL リンク",
         encrypt: "エンクリプテッドファイル",
         directory: "ディレクトリ",
         search: "ファイル名で検索",

@@ -67,7 +67,9 @@ export default function FileList(props) {
               <ListItemContent sx={{ display: 'flex', gap: 2, alignItems: 'start' }}>
                 <div>
                   <Typography fontWeight={600} gutterBottom>
-                    {item.type === "directory"
+                    {item.link
+                      ? <Link target="_blank" component={RouterLink} to={item.link}>{item.name}</Link>
+                      : item.type === "directory"
                       ? <Link component={RouterLink} to={`/${type}${folderName.length ? "/" : ""}${encodePath(folderName)}/${encodeURIComponent(item.name)}`}>{item.name}</Link>
                       : item.type === "text/markdown"
                       ? <Link component={RouterLink} to={`/crepe/${type}${folderName.length ? "/" : ""}${encodePath(folderName)}/${encodeURIComponent(item.name)}`}>{item.name}</Link>
@@ -109,6 +111,8 @@ export default function FileList(props) {
                     <Typography level="body-xs">
                       {item.type === "directory"
                         ? context.languagePicker("main.folder.viewRegulate.directory")
+                        : (item.name.endsWith(".url") || item.name.endsWith(".desktop"))
+                        ? context.languagePicker("main.folder.viewRegulate.link")
                         : item.name.endsWith(".srph")
                         ? context.languagePicker("main.folder.viewRegulate.encrypt")
                         : item.type === "unknown"

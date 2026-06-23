@@ -344,6 +344,7 @@ const zhHans = {
       viewRegulate: {
         all: "所有类型",
         unknown: "未知",
+        link: "URL 链接",
         encrypt: "加密文件",
         directory: "目录",
         search: "按名称搜索",

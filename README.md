@@ -71,7 +71,7 @@
 
         ```
         sudo apt install -y nginx
-        sudo tee > /etc/nginx/sites-available/default <<'EOF'
+        sudo tee /etc/nginx/sites-available/default > /dev/null <<'EOF'
         server {
             listen 443 ssl;
             server_name ${YOUR_HOSTNAME};

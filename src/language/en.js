@@ -344,6 +344,7 @@ const en = {
       viewRegulate: {
         all: "All Type",
         unknown: "Unknown",
+        link: "URL Link",
         encrypt: "Encrypted File",
         directory: "Directory",
         search: "Search by Name",

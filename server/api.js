@@ -482,7 +482,10 @@ const fileOperator = {
       mtime: stat.mtime,
       type: isDir
         ? "directory"
-        : (mime.getType(filename) ?? "unknown")
+        : (mime.getType(filename) ?? "unknown"),
+      link: ["url", "desktop"].includes(filename.split('.').slice(-1)[0])
+        ? fileOperator.readURL(filePath)
+        : null
     }
   },
 
@@ -495,6 +498,38 @@ const fileOperator = {
     return folderInfo
       .map((item) => fileOperator.readFileInfo(folderPath, item.name, abstract))
       .filter((item) => !abstract || item.type === 'directory');
+  },
+
+  readURL: (filePath) => {
+    let content;
+    try {
+      content = fs.readFileSync(filePath).toString('utf-8');
+    } catch (err) {
+      return false;
+    }
+  
+    // win32 .url: [InternetShortcut] with URL= key
+    if (/\[InternetShortcut\]/i.test(content)) {
+      const matched = content.match(/^URL=(.+)$/m);
+      return matched ? matched[1].trim() : false;
+    }
+  
+    // linux .desktop: [Desktop Entry] with Type=Link
+    if (/\[Desktop Entry\]/i.test(content) && /^Type=Link$/m.test(content)) {
+      const matched = content.match(/^URL=(.+)$/m);
+      return matched ? matched[1].trim() : false;
+    }
+    return false;
+  },
+
+  writeURL: (filePath, url) => {
+    let content;
+    if (process.platform === 'win32') {
+      content = '[InternetShortcut]\r\nURL=' + url + '\r\n';
+    } else {
+      content = '[Desktop Entry]\nType=Link\nURL=' + url + '\n';
+    }
+    fs.writeFileSync(filePath, content, 'utf-8');
   },
 
   encryptFile: (srcPath, dstPath) => {
