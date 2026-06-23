@@ -521,6 +521,63 @@ const FileExplorer = (props) => {
     handleCloseRename
   ]);
 
+  // states and function for modifying link
+  const [modalRelinkOpen, setModalRelinkOpen] = React.useState(false);
+  const [modalRelinkLoading, setModalRelinkLoading] = React.useState(false);
+  const [formRelinkText, setFormRelinkText] = React.useState("");
+  const handleCloseRelink = React.useCallback(() => {
+    setModalFilename(null);
+    setModalRelinkOpen(false);
+    setModalRelinkLoading(false);
+  }, [ ]);
+
+  const modalRelinkDisabled = React.useMemo(
+    () => formRelinkText.length === 0,
+    [formRelinkText]
+  );
+
+  const handleRelink = React.useCallback(() => {
+    const filename = modalFilename;
+    setModalRelinkLoading(true);
+    toast.promise(new Promise((resolve, reject) => {
+      request(
+        "POST/file/relink",
+        {
+          type: type,
+          folderName: folderName,
+          filename: filename,
+          url: formRelinkText
+        },
+        { "": () => setModalRelinkLoading(false) },
+        reject
+      )
+        .then((data) => {
+          const { statusCode, errorCode, ...newInfo } = data;
+          if (pathStartWith(`/${type}/${folderName}`)) {
+            setFilesList((filesList) => filesList.map((item) =>
+              item.name === filename
+                ? newInfo
+                : item
+            ));
+          }
+          handleCloseRelink();
+          resolve();
+        })
+        .finally(() => setModalRelinkLoading(false));
+    }), {
+      loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
+      success: context.languagePicker("modal.toast.success.relink"),
+      error: (data) => data
+    })
+  }, [
+    context,
+    type,
+    folderName,
+    modalFilename,
+    formRelinkText,
+    handleCloseRelink
+  ]);
+
   // states and function for decrypt
   const [modalDecryptOpen, setModalDecryptOpen] = React.useState(false);
   const [modalDecryptLoading, setModalDecryptLoading] = React.useState(false);
@@ -726,8 +783,10 @@ const FileExplorer = (props) => {
             sortedFilesList={sortedFilesList}
             setModalFilename={setModalFilename}
             setModalRenameOpen={setModalRenameOpen}
+            setModalRelinkOpen={setModalRelinkOpen}
             setModalDecryptOpen={setModalDecryptOpen}
             setFormNewFilenameText={setFormNewFilenameText}
+            setFormRelinkText={setFormRelinkText}
             setFilesList={setFilesList}
             guard={guard}
             searcher={searcher}
@@ -743,8 +802,10 @@ const FileExplorer = (props) => {
             sortedFilesList={sortedFilesList}
             setModalFilename={setModalFilename}
             setModalRenameOpen={setModalRenameOpen}
+            setModalRelinkOpen={setModalRelinkOpen}
             setModalDecryptOpen={setModalDecryptOpen}
             setFormNewFilenameText={setFormNewFilenameText}
+            setFormRelinkText={setFormRelinkText}
             setFilesList={setFilesList}
             guard={guard}
             searcher={searcher}
@@ -851,6 +912,24 @@ const FileExplorer = (props) => {
           autoFocus
           autoComplete="off"
           placeholder={context.languagePicker("modal.form.rename.placeholder")}
+        />
+      </ModalForm>
+      <ModalForm
+        open={modalRelinkOpen}
+        loading={modalRelinkLoading}
+        disabled={modalRelinkDisabled}
+        handleClose={handleCloseRelink}
+        handleClick={handleRelink}
+        title={context.languagePicker("modal.form.relink.title")}
+        caption={context.languagePicker("modal.form.relink.caption")}
+        button={context.languagePicker("universal.button.submit")}
+      >
+        <SemiInput
+          initValue={formRelinkText}
+          setValue={setFormRelinkText}
+          autoFocus
+          autoComplete="off"
+          placeholder={context.languagePicker("modal.form.relink.placeholder")}
         />
       </ModalForm>
       <label role="button" ref={uploadRef}>

@@ -19,8 +19,10 @@ export default function FileList(props) {
     sortedFilesList,
     setModalFilename,
     setModalRenameOpen,
+    setModalRelinkOpen,
     setModalDecryptOpen,
     setFormNewFilenameText,
+    setFormRelinkText,
     setFilesList,
     guard,
     searcher,
@@ -130,13 +132,16 @@ export default function FileList(props) {
                   filesList={filesList}
                   setModalFilename={setModalFilename}
                   setModalRenameOpen={setModalRenameOpen}
+                  setModalRelinkOpen={setModalRelinkOpen}
                   setModalDecryptOpen={setModalDecryptOpen}
                   setFormNewFilenameText={setFormNewFilenameText}
+                  setFormRelinkText={setFormRelinkText}
                   setFilesList={setFilesList}
                   setClipboard={setClipboard}
                   setPublicFolders={setPublicFolders}
                   setPrivateFolders={setPrivateFolders}
                   fileType={item.type}
+                  fileLink={item.link}
                 />}
             </ListItem>
             {index !== self.length - 1 && <ListDivider />}

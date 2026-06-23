@@ -24,13 +24,16 @@ export default function RowMenu(props) {
     filesList,
     setModalFilename,
     setModalRenameOpen,
+    setModalRelinkOpen,
     setModalDecryptOpen,
     setFormNewFilenameText,
+    setFormRelinkText,
     setFilesList,
     setClipboard,
     setPublicFolders,
     setPrivateFolders,
-    fileType
+    fileType,
+    fileLink
   } = props;
   const context = React.useContext(GlobalContext);
 
@@ -39,6 +42,12 @@ export default function RowMenu(props) {
     setFormNewFilenameText(filename);
     setModalRenameOpen(true);
   }, [setModalFilename, setFormNewFilenameText, setModalRenameOpen, filename]);
+
+  const handleToggleRelink = React.useCallback(() => {
+    setModalFilename(filename)
+    setFormRelinkText(fileLink);
+    setModalRelinkOpen(true);
+  }, [setModalFilename, setFormRelinkText, setModalRelinkOpen, filename, fileLink]);
 
   const handleToggleDecrypt = React.useCallback(() => {
     setModalFilename(filename);
@@ -296,6 +305,10 @@ export default function RowMenu(props) {
         <MenuItem onClick={handleToggleRename}>
           {context.languagePicker("main.folder.rowMenu.rename")}
         </MenuItem>
+        {(filename.endsWith(".url") || filename.endsWith(".desktop")) && (
+          <MenuItem onClick={handleToggleRelink}>
+            {context.languagePicker("main.folder.rowMenu.relink")}
+          </MenuItem>)}
         <MenuItem onClick={handleCopy}>
           {context.languagePicker("main.folder.rowMenu.copy")}
         </MenuItem>

@@ -331,6 +331,7 @@ const zhHans = {
         open: "打开",
         download: "下载",
         rename: "重命名",
+        relink: "修改 URL",
         copy: "复制",
         cut: "剪切",
         encrypt: "加密",
@@ -456,6 +457,7 @@ const zhHans = {
         files: "所有文件",
         paste: "{0} 已粘贴至 {1}.",
         rename: "{0} 已更名为 {1}。",
+        relink: "URL 已修改。",
         copy: "{0} 已复制到剪贴板。",
         cut: "{0} 已剪切到剪贴板。",
         encrypt: "{0} 已加密到当前目录。",
@@ -521,12 +523,17 @@ const zhHans = {
         title: "创建新 URL 链接",
         caption: "命名限制与文件格式取决于服务器所在平台。",
         filename: "名称",
-        url: "URL 链接"
+        url: "URL"
       },
       rename: {
         title: "重命名",
         caption: "命名限制取决于服务器所在平台，尽量不要修改扩展名。",
         placeholder: "新文件名"
+      },
+      relink: {
+        title: "修改 URL",
+        caption: "仅检测到的第一个 URL 会被修改。",
+        placeholder: "新 URL"
       },
       decrypt: {
         title: "解密",

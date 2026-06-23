@@ -20,8 +20,10 @@ export default function FileTable(props) {
     sortedFilesList,
     setModalFilename,
     setModalRenameOpen,
+    setModalRelinkOpen,
     setModalDecryptOpen,
     setFormNewFilenameText,
+    setFormRelinkText,
     setFilesList,
     guard,
     searcher,
@@ -227,13 +229,16 @@ export default function FileTable(props) {
                       filesList={filesList}
                       setModalFilename={setModalFilename}
                       setModalRenameOpen={setModalRenameOpen}
+                      setModalRelinkOpen={setModalRelinkOpen}
                       setModalDecryptOpen={setModalDecryptOpen}
                       setFormNewFilenameText={setFormNewFilenameText}
+                      setFormRelinkText={setFormRelinkText}
                       setFilesList={setFilesList}
                       setClipboard={setClipboard}
                       setPublicFolders={setPublicFolders}
                       setPrivateFolders={setPrivateFolders}
                       fileType={item.type}
+                      fileLink={item.link}
                     />
                   </Box>
                 </td>}

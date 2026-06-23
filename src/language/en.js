@@ -331,6 +331,7 @@ const en = {
         open: "Open",
         download: "Download",
         rename: "Rename",
+        relink: "Modify URL",
         copy: "Copy",
         cut: "Cut",
         encrypt: "Encrypt",
@@ -456,6 +457,7 @@ const en = {
         files: "All files",
         paste: "{0} has been pasted to {1}.",
         rename: "{0} has been renamed to {1}.",
+        relink: "The link has been modified.",
         copy: "{0} has been copied to clipboard.",
         cut: "{0} has been cut to clipboard.",
         encrypt: "{0} has been encrypted to current directory.",
@@ -521,12 +523,17 @@ const en = {
         title: "Create New URL Link",
         caption: "Naming restrictions and file format depend on platform on which server locates.",
         filename: "Name",
-        url: "URL Link"
+        url: "URL"
       },
       rename: {
         title: "Renaming",
         caption: "Naming restrictions depend on platform on which server locates and try not to modify the extension name as much as possible.",
         placeholder: "New Filename"
+      },
+      relink: {
+        title: "Modify URL",
+        caption: "Only the first URL detected will be modified.",
+        placeholder: "New URL"
       },
       decrypt: {
         title: "Decrypting",
