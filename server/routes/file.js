@@ -85,8 +85,54 @@ router.post('/link', (req, res, next) => {
 
   try {
     api.fileOperator.writeURL(filePath, url);
+    fs.chmodSync(filePath, api.Permission.auto(type));
   } catch (_) {
     // -> EF_FME: fs.writeFileSync error
+    req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  // -> ES: no extra info
+  req.status.addExecStatus();
+  res.send({
+    ...req.status.generateReport(),
+    ...api.fileOperator.readFileInfo(folderPath, filename)
+  });
+  return;
+});
+
+router.post('/markdown', (req, res, next) => {
+  if (req.status.notAuthSuccess()) {
+    // -> EF_IT or abnormal request
+    next(api.errorStreamControl);
+    return;
+  }
+
+  // directory file is a special kind of file
+  const { type, folderName, filename: rawFilename } = req.body;
+  const filename = rawFilename + ".md";
+  const { folderPath, filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
+
+  if (!fs.existsSync(folderPath)) {
+    // -> EF_RU: folder don't exist
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  if (fs.existsSync(filePath)) {
+    // -> EF_IC: new filename already exists
+    req.status.addExecStatus(api.Status.execErrCode.IdentifierConflict);
+    res.send({...req.status.generateReport(), 0: filename});
+    return;
+  }
+
+  try {
+    fs.closeSync(fs.openSync(filePath, 'w'));
+    fs.chmodSync(filePath, api.Permission.auto(type));
+  } catch (_) {
+    // -> EF_FME: fs.openSync error
     req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
     res.send(req.status.generateReport());
     return;

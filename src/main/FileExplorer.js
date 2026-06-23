@@ -142,16 +142,16 @@ const FileExplorer = (props) => {
   const [modalFileLink, setModalFileLink] = React.useState(null);
 
   // new folder
-  const [modalNewOpen, setModalNewOpen] = React.useState(false);
-  const [modalNewLoading, setModalNewLoading] = React.useState(false);
+  const [modalNewFolderOpen, setModalNewFolderOpen] = React.useState(false);
+  const [modalNewFolderLoading, setModalNewFolderLoading] = React.useState(false);
   const [formNewFolderNameText, setFormNewFolderNameText] = React.useState("");
-  const handleCloseNew = React.useCallback(() => {
-    setModalNewOpen(false);
-    setModalNewLoading(false);
+  const handleCloseNewFolder = React.useCallback(() => {
+    setModalNewFolderOpen(false);
+    setModalNewFolderLoading(false);
     setFormNewFolderNameText("");
   }, [ ]);
 
-  const modalNewDisabled = React.useMemo(
+  const modalNewFolderDisabled = React.useMemo(
     () => filesList.some((item) => item.name === formNewFolderNameText)
       || formNewFolderNameText.length === 0,
     [filesList, formNewFolderNameText]
@@ -164,7 +164,7 @@ const FileExplorer = (props) => {
     }
 
     const newFolderName = formNewFolderNameText;
-    setModalNewLoading(true);
+    setModalNewFolderLoading(true);
     toast.promise(new Promise((resolve, reject) => {
       request(
         "POST/file/new",
@@ -173,7 +173,7 @@ const FileExplorer = (props) => {
           folderName: folderName,
           filename: newFolderName
         },
-        { "": () => setModalNewLoading(false) },
+        { "": () => setModalNewFolderLoading(false) },
         reject
       )
         .then((data) => {
@@ -193,10 +193,10 @@ const FileExplorer = (props) => {
               ]
             )
           };
-          handleCloseNew();
+          handleCloseNewFolder();
           resolve();
         })
-        .finally(() => setModalNewLoading(false));
+        .finally(() => setModalNewFolderLoading(false));
     }), {
       loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
       success: context
@@ -211,7 +211,7 @@ const FileExplorer = (props) => {
     formNewFolderNameText,
     setPublicFolders,
     setPrivateFolders,
-    handleCloseNew
+    handleCloseNewFolder
   ]);
 
   // new link
@@ -276,6 +276,67 @@ const FileExplorer = (props) => {
     formNewLinkNameText,
     formNewLinkURLText,
     handleCloseNewLink
+  ]);
+
+  // new markdown
+  const [modalNewMarkdownOpen, setModalNewMarkdownOpen] = React.useState(false);
+  const [modalNewMarkdownLoading, setModalNewMarkdownLoading] = React.useState(false);
+  const [formNewMarkdownText, setFormNewMarkdownText] = React.useState("");
+  const handleCloseNewMarkdown = React.useCallback(() => {
+    setModalNewMarkdownOpen(false);
+    setModalNewMarkdownLoading(false);
+    setFormNewMarkdownText("");
+  }, [ ]);
+
+  const modalNewMarkdownDisabled = React.useMemo(
+    () => filesList.some((item) => item.name === formNewMarkdownText + ".md"),
+    [filesList, formNewMarkdownText]
+  );
+
+  const handleNewMarkdown = React.useCallback(() => {
+    if (!isValidFilename(formNewMarkdownText)) {
+      toast.error(context.languagePicker("modal.toast.warning.illegalRename"));
+      return;
+    }
+
+    const newMarkdownName = formNewMarkdownText;
+    setModalNewMarkdownLoading(true);
+    toast.promise(new Promise((resolve, reject) => {
+      request(
+        "POST/file/markdown",
+        {
+          type: type,
+          folderName: folderName,
+          filename: newMarkdownName
+        },
+        { "": () => setModalNewMarkdownLoading(false) },
+        reject
+      )
+        .then((data) => {
+          const { statusCode, errorCode, ...newInfo } = data;
+          if (pathStartWith(`/${type}/${folderName}`)) {
+            setFilesList((filesList) => [
+              ...filesList,
+              newInfo
+            ]);
+          }
+          handleCloseNewMarkdown();
+          resolve();
+        })
+        .finally(() => setModalNewMarkdownLoading(false));
+    }), {
+      loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
+      success: context
+        .languagePicker("modal.toast.success.new")
+        .format(newMarkdownName),
+      error: (data) => data
+    })
+  }, [
+    type,
+    context,
+    folderName,
+    formNewMarkdownText,
+    handleCloseNewMarkdown
   ]);
 
   // uploading
@@ -748,11 +809,14 @@ const FileExplorer = (props) => {
                       placement="bottom-end"
                       sx={{ userSelect: "none" }}
                     >
-                      <MenuItem onClick={() => setModalNewOpen(true)}>
+                      <MenuItem onClick={() => setModalNewFolderOpen(true)}>
                         {context.languagePicker("main.folder.addMenu.newFolder")}
                       </MenuItem>
                       <MenuItem onClick={() => setModalNewLinkOpen(true)}>
                         {context.languagePicker("main.folder.addMenu.newLink")}
+                      </MenuItem>
+                      <MenuItem onClick={() => setModalNewMarkdownOpen(true)}>
+                        {context.languagePicker("main.folder.addMenu.newMarkdown")}
                       </MenuItem>
                       <MenuItem
                         onClick={() => uploadRef.current.click()}
@@ -823,10 +887,10 @@ const FileExplorer = (props) => {
           caption={context.languagePicker("universal.placeholder.unexist.caption")}
         />}
       <ModalForm
-        open={modalNewOpen}
-        disabled={modalNewDisabled}
-        loading={modalNewLoading}
-        handleClose={handleCloseNew}
+        open={modalNewFolderOpen}
+        disabled={modalNewFolderDisabled}
+        loading={modalNewFolderLoading}
+        handleClose={handleCloseNewFolder}
         handleClick={handleNewFolder}
         title={context.languagePicker("modal.form.new.title")}
         caption={context.languagePicker("modal.form.new.caption")}
@@ -838,6 +902,25 @@ const FileExplorer = (props) => {
           autoFocus
           autoComplete="off"
           placeholder={context.languagePicker("modal.form.new.placeholder")}
+        />
+      </ModalForm>
+      <ModalForm
+        open={modalNewMarkdownOpen}
+        disabled={modalNewMarkdownDisabled}
+        loading={modalNewMarkdownLoading}
+        handleClose={handleCloseNewMarkdown}
+        handleClick={handleNewMarkdown}
+        title={context.languagePicker("modal.form.newMarkdown.title")}
+        caption={context.languagePicker("modal.form.newMarkdown.caption")}
+        button={context.languagePicker("universal.button.submit")}
+      >
+        <SemiInput
+          initValue={formNewMarkdownText}
+          setValue={setFormNewMarkdownText}
+          autoFocus
+          autoComplete="off"
+          placeholder={context.languagePicker("modal.form.newMarkdown.placeholder")}
+          endDecorator=".md"
         />
       </ModalForm>
       <ModalForm
@@ -859,6 +942,7 @@ const FileExplorer = (props) => {
             autoFocus
             autoComplete="off"
             placeholder={context.languagePicker("universal.placeholder.instruction.required")}
+            endDecorator={context.metadata.platform === 'linux' ? '.desktop' : 'url'}
           />
         </FormControl>
         <FormControl>

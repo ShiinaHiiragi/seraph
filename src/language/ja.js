@@ -355,6 +355,7 @@ const ja = {
       addMenu: {
         newFolder: "ニューディレクトリ",
         newLink: "ニュー URL リンク",
+        newMarkdown: "ニューマークダウン",
         newFile: "ファイルのアップロード",
         paste: "ペースト"
       }
@@ -526,6 +527,11 @@ const ja = {
         caption: "ネーミング制限またはファイルフォーマットはサーバーが配置されているプラットフォームによって違いがあります。",
         filename: "ネーム",
         url: "URL"
+      },
+      newMarkdown: {
+        title: "ニューマークダウンを作成する",
+        caption: "ネーミング制限はサーバーが配置されているプラットフォームによって違いがあります。",
+        placeholder: "ニューマークダウンのファイル名"
       },
       rename: {
         title: "リネームする",

@@ -355,6 +355,7 @@ const zhHans = {
       addMenu: {
         newFolder: "新目录",
         newLink: "新 URL 链接",
+        newMarkdown: "新 Markdown",
         newFile: "上传文件",
         paste: "粘贴"
       }
@@ -526,6 +527,11 @@ const zhHans = {
         caption: "命名限制与文件格式取决于服务器所在平台。",
         filename: "名称",
         url: "URL"
+      },
+      newMarkdown: {
+        title: "创建新 Markdown",
+        caption: "命名限制取决于服务器所在平台。",
+        placeholder: "新 Markdown 文件名"
       },
       rename: {
         title: "重命名",

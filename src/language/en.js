@@ -355,6 +355,7 @@ const en = {
       addMenu: {
         newFolder: "New Directory",
         newLink: "New URL Link",
+        newMarkdown: "New Markdown",
         newFile: "Upload File",
         paste: "Paste"
       }
@@ -526,6 +527,11 @@ const en = {
         caption: "Naming restrictions and file format depend on platform on which server locates.",
         filename: "Name",
         url: "URL"
+      },
+      newMarkdown: {
+        title: "Create New Markdown",
+        caption: "Naming restrictions and file format depend on platform on which server locates.",
+        placeholder: "New Markdown Filename"
       },
       rename: {
         title: "Renaming",
