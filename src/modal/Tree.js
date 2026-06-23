@@ -218,7 +218,12 @@ export default function Tree(props) {
         role="alertdialog"
         aria-labelledby="alert-dialog-modal-title"
         aria-describedby="alert-dialog-modal-description"
-        sx={{ maxHeight: "90vh", display: "flex", flexDirection: "column" }}
+        sx={{
+          maxHeight: "90vh",
+          display: "flex",
+          flexDirection: "column",
+          minWidth: "min(480px, calc(100vw - 2.5rem))",
+        }}
       >
         <Typography
           id="alert-dialog-modal-title"

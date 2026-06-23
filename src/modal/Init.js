@@ -97,6 +97,7 @@ export default function Init(props) {
         role="alertdialog"
         aria-labelledby="alert-dialog-modal-title"
         aria-describedby="alert-dialog-modal-description"
+        sx={{ minWidth: "min(480px, calc(100vw - 2.5rem))" }}
       >
         <Typography
           id="alert-dialog-modal-title"

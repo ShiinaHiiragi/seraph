@@ -49,7 +49,12 @@ export default function ModalForm(props) {
         role="alertdialog"
         aria-labelledby="alert-dialog-modal-title"
         aria-describedby="alert-dialog-modal-description"
-        sx={{ maxHeight: "90vh", display: "flex", flexDirection: "column" }}
+        sx={{
+          maxHeight: "90vh",
+          minWidth: "min(480px, calc(100vw - 2.5rem))",
+          display: "flex",
+          flexDirection: "column"
+        }}
       >
         <Typography
           id="alert-dialog-modal-title"
