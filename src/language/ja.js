@@ -353,6 +353,7 @@ const ja = {
       },
       addMenu: {
         newFolder: "ニューディレクトリ",
+        newLink: "ニュー URL リンク",
         newFile: "ファイルのアップロード",
         paste: "ペースト"
       }
@@ -515,6 +516,12 @@ const ja = {
         title: "ニューディレクトリを作成する",
         caption: "ネーミング制限はサーバーが配置されているプラットフォームによって違いがあります。",
         placeholder: "ニューディレクトリ名"
+      },
+      newLink: {
+        title: "ニュー URL リンクを作成する",
+        caption: "ネーミング制限またはファイルフォーマットはサーバーが配置されているプラットフォームによって違いがあります。",
+        filename: "ネーム",
+        url: "URL リンク"
       },
       rename: {
         title: "リネームする",

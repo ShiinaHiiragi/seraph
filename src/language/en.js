@@ -353,6 +353,7 @@ const en = {
       },
       addMenu: {
         newFolder: "New Directory",
+        newLink: "New URL Link",
         newFile: "Upload File",
         paste: "Paste"
       }
@@ -515,6 +516,12 @@ const en = {
         title: "Create New Directory",
         caption: "Naming restrictions depend on platform on which server locates.",
         placeholder: "New Directory Name"
+      },
+      newLink: {
+        title: "Create New URL Link",
+        caption: "Naming restrictions and file format depend on platform on which server locates.",
+        filename: "Name",
+        url: "URL Link"
       },
       rename: {
         title: "Renaming",

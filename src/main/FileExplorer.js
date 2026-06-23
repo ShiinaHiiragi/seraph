@@ -5,6 +5,7 @@ import Fuse from "fuse.js";
 import isValidFilename from "valid-filename";
 import Box from "@mui/joy/Box";
 import FormControl from "@mui/joy/FormControl";
+import FormLabel from "@mui/joy/FormLabel";
 import Select from "@mui/joy/Select";
 import Option from "@mui/joy/Option";
 import MenuButton from '@mui/joy/MenuButton';
@@ -211,6 +212,28 @@ const FileExplorer = (props) => {
     setPrivateFolders,
     handleCloseNew
   ]);
+
+  // new link
+  const [modalNewLinkOpen, setModalNewLinkOpen] = React.useState(false);
+  const [modalNewLinkLoading, setModalNewLinkLoading] = React.useState(false);
+  const [formNewLinkNameText, setFormNewLinkNameText] = React.useState("");
+  const [formNewLinkURLText, setFormNewLinkURLText] = React.useState("");
+  const handleCloseNewLink = React.useCallback(() => {
+    setModalNewLinkOpen(false);
+    setModalNewLinkLoading(false);
+    setFormNewLinkNameText("");
+    setFormNewLinkURLText("");
+  }, [ ]);
+
+  const modalNewLinkDisabled = React.useMemo(
+    () => filesList.some((item) => item.name === formNewLinkNameText)
+      || formNewLinkNameText.length === 0
+      || formNewLinkURLText.length === 0,
+    [filesList, formNewLinkNameText, formNewLinkURLText]
+  );
+
+  const handleNewLink = React.useCallback(() => {
+  }, []);
 
   // uploading
   const uploadRef = React.useRef();
@@ -456,7 +479,7 @@ const FileExplorer = (props) => {
     handleCloseRename
   ]);
 
-  // states and function for rename
+  // states and function for decrypt
   const [modalDecryptOpen, setModalDecryptOpen] = React.useState(false);
   const [modalDecryptLoading, setModalDecryptLoading] = React.useState(false);
   const [formPrivateKeyText, setFormPrivateKeyText] = React.useState("");
@@ -628,6 +651,9 @@ const FileExplorer = (props) => {
                       <MenuItem onClick={() => setModalNewOpen(true)}>
                         {context.languagePicker("main.folder.addMenu.newFolder")}
                       </MenuItem>
+                      <MenuItem onClick={() => setModalNewLinkOpen(true)}>
+                        {context.languagePicker("main.folder.addMenu.newLink")}
+                      </MenuItem>
                       <MenuItem
                         onClick={() => uploadRef.current.click()}
                         component="label"
@@ -691,23 +717,53 @@ const FileExplorer = (props) => {
           caption={context.languagePicker("universal.placeholder.unexist.caption")}
         />}
       <ModalForm
-        open={modalRenameOpen}
-        loading={modalRenameLoading}
-        disabled={modalRenameDisabled}
-        handleClose={handleCloseRename}
-        handleClick={handleRename}
-        title={context.languagePicker("modal.form.rename.title")}
-        caption={context.languagePicker("modal.form.rename.caption")}
+        open={modalNewOpen}
+        disabled={modalNewDisabled}
+        loading={modalNewLoading}
+        handleClose={handleCloseNew}
+        handleClick={handleNewFolder}
+        title={context.languagePicker("modal.form.new.title")}
+        caption={context.languagePicker("modal.form.new.caption")}
         button={context.languagePicker("universal.button.submit")}
       >
         <SemiInput
-          initValue={formNewFilenameText}
-          setValue={setFormNewFilenameText}
-          selectBasename
+          initValue={formNewFolderNameText}
+          setValue={setFormNewFolderNameText}
           autoFocus
           autoComplete="off"
-          placeholder={context.languagePicker("modal.form.rename.placeholder")}
+          placeholder={context.languagePicker("modal.form.new.placeholder")}
         />
+      </ModalForm>
+      <ModalForm
+        open={modalNewLinkOpen}
+        disabled={modalNewLinkDisabled}
+        loading={modalNewLinkLoading}
+        handleClose={handleCloseNewLink}
+        handleClick={handleNewLink}
+        title={context.languagePicker("modal.form.newLink.title")}
+        caption={context.languagePicker("modal.form.newLink.caption")}
+        button={context.languagePicker("universal.button.submit")}
+        spacing={1}
+      >
+        <FormControl>
+          <FormLabel>{context.languagePicker("modal.form.newLink.filename")}</FormLabel>
+          <SemiInput
+            initValue={formNewLinkNameText}
+            setValue={setFormNewLinkNameText}
+            autoFocus
+            autoComplete="off"
+            placeholder={context.languagePicker("universal.placeholder.instruction.required")}
+          />
+        </FormControl>
+        <FormControl>
+          <FormLabel>{context.languagePicker("modal.form.newLink.url")}</FormLabel>
+          <SemiInput
+            initValue={formNewLinkURLText}
+            setValue={setFormNewLinkURLText}
+            autoComplete="off"
+            placeholder={context.languagePicker("universal.placeholder.instruction.required")}
+          />
+        </FormControl>
       </ModalForm>
       <ModalForm
         open={modalDecryptOpen}
@@ -737,21 +793,22 @@ const FileExplorer = (props) => {
         />
       </ModalForm>
       <ModalForm
-        open={modalNewOpen}
-        disabled={modalNewDisabled}
-        loading={modalNewLoading}
-        handleClose={handleCloseNew}
-        handleClick={handleNewFolder}
-        title={context.languagePicker("modal.form.new.title")}
-        caption={context.languagePicker("modal.form.new.caption")}
+        open={modalRenameOpen}
+        loading={modalRenameLoading}
+        disabled={modalRenameDisabled}
+        handleClose={handleCloseRename}
+        handleClick={handleRename}
+        title={context.languagePicker("modal.form.rename.title")}
+        caption={context.languagePicker("modal.form.rename.caption")}
         button={context.languagePicker("universal.button.submit")}
       >
         <SemiInput
-          initValue={formNewFolderNameText}
-          setValue={setFormNewFolderNameText}
+          initValue={formNewFilenameText}
+          setValue={setFormNewFilenameText}
+          selectBasename
           autoFocus
           autoComplete="off"
-          placeholder={context.languagePicker("modal.form.new.placeholder")}
+          placeholder={context.languagePicker("modal.form.rename.placeholder")}
         />
       </ModalForm>
       <label role="button" ref={uploadRef}>

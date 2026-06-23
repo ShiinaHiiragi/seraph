@@ -353,6 +353,7 @@ const zhHans = {
       },
       addMenu: {
         newFolder: "新目录",
+        newLink: "新 URL 链接",
         newFile: "上传文件",
         paste: "粘贴"
       }
@@ -515,6 +516,12 @@ const zhHans = {
         title: "创建新目录",
         caption: "命名限制取决于服务器所在平台。",
         placeholder: "新目录名"
+      },
+      newLink: {
+        title: "创建新 URL 链接",
+        caption: "命名限制与文件格式取决于服务器所在平台。",
+        filename: "名称",
+        url: "URL 链接"
       },
       rename: {
         title: "重命名",

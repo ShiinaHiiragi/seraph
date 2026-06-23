@@ -17,6 +17,7 @@ export default function ModalForm(props) {
     caption,
     button,
     children,
+    spacing,
     stackStyle
   } = props;
 
@@ -64,7 +65,7 @@ export default function ModalForm(props) {
           {caption}
         </Typography>}
         <Stack
-          spacing={2}
+          spacing={spacing ?? 2}
           sx={{
             flex: 1,
             minHeight: 0,
