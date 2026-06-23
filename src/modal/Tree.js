@@ -72,7 +72,7 @@ const renderItems = (nodes, loadingSet) =>
           wordBreak: "normal",
           overflowWrap: "anywhere",
           borderRadius: "var(--ListItem-radius) !important",
-          "& .MuiTreeItem-content:hover:not(:has(.MuiTreeItem-iconContainer:hover))": {
+          "& .MuiTreeItem-content:hover:not(:has(.MuiTreeItem-iconContainer:hover)):not(.Mui-selected)": {
             backgroundColor: "var(--joy-palette-neutral-plainHoverBg)"
           },
           "& .MuiTreeItem-content:has(.MuiTreeItem-iconContainer:hover)": {
