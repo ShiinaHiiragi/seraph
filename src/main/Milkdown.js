@@ -737,7 +737,6 @@ const CrepeEditor = () => {
   // - user has logged in
   // - text content is ready
   // - text is modified
-  // save button will be hidden without any modification
   const savable = React.useMemo(
     () => context.isAuthority && crepeState === 1 && modified,
     [context.isAuthority, crepeState, modified]
