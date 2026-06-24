@@ -17,7 +17,7 @@ router.get('/load', (req, res, next) => {
     filePath
   } = api.fileOperator.pathCombinator(type, folderName, filename);
 
-  if (!fs.existsSync(filePath)) {
+  if (!fs.existsSync(filePath) || fs.lstatSync(filePath).isDirectory()) {
     // -> EF_RU: folder don't exist
     req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
     res.send(req.status.generateReport());
