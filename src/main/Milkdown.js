@@ -718,7 +718,7 @@ const CrepeEditorInner = (props) => {
   }, [
     // save text & select & scroll when loging in
     // context.isAuthority,
-    // save text & scroll when creating new markdown
+    // save select & scroll when creating new markdown
     basePath,
     // save text & select when switch readonly -> editable
     editableKey,
@@ -827,6 +827,52 @@ const CrepeEditor = () => {
   const normalizedRef = React.useRef(null);
   const nextRef = React.useRef(null);
 
+  /**
+   * Milkdown Crepe 页面的主入口，useEffect 与 useEditor 的依赖必须相互配合
+   *   - 页面的重建条件有且仅有三项：初次进入、登录、切换文件
+   *     - 三者的共同点是都需要重新请求文件内容
+   *     - 登出不考虑，因为会自动切换到主页
+   *     - useEffect 重建一定会卸载并重装 Editor，因为开头有 setCrepeState(0)
+   *   - useEditor 的重建虽然项目繁多，但实际上只有三类：保存新文件、切换只读、更新设置
+   *     - 切换 path 中，保存新文件会设置 nextRef 导致 useEffect 立即退出，因此不会重建页面
+   *     - 另外两项的重建不会导致页面重建
+   *   - 请注意，两者的依赖项事实上是不重合的
+   *     - 因为部分 Editor 重建前会利用 crepeRef 保存状态（文本、光标等）并在重建后恢复
+   *     - 重建时若对应的 crepeRef 有值，则会使用保存的值，此时 Editor 能得知自己本次启动是重建
+   *     - 随后保存的值被立即使用，因此如果 Editor 在短期内被重建两次，则保存的值会丢失
+   *     - 用户做的每个改变要么重建整个页面，要么只重建 Editor
+   *     - 如果更新竞态导致重建 Editor 后又重建页面，那么保存的快照一定会丢失
+   *   - 保存不需要两者任意一个的重建
+   *     - fileContentRef 只在页面重建时 / 保存时读取最新值
+   *     - normalizedRef 只在编辑器非重建的初始化时 / 保存时读取值
+   *   - 对 useEditor 重建的逐项解释
+   *     - 更新设置时，handleApply 在请求前会保存文本、光标、滚动条
+   *       - handleApply 结束后，如果 Editor 被重建，则保存的快照被消费
+   *       - 如果 Editor 没有重建，关闭设置面板时，快照将被清空
+   *     - 切换只读 / 可编辑模式时
+   *       - 可编辑 -> 只读只需使用正常接口即可；只读 -> 可编辑的接口实现有误，代码块会无法编辑
+   *       - 仅在从只读 -> 可编辑切换前的瞬间保存文本、光标
+   *       - 无需保存滚动条，这样切换后的滚动条位置和切换时一致，不会出现突变
+   *     - 保存新文件时，保存光标与滚动条位置
+   *       - 设置 nextRef，于是在下面的 useEffect 中 early return，页面不重建
+   *       - 编辑器重建，fileContent 使用刚保存的最新版，使用保存的光标与滚动条快照
+   *   - 对 useEffect 重建的逐项解释
+   *     - 每次（包括初次）进入时不检查用户权限，直接请求文件内容并调节 crepeState
+   *       - state=0  认证失败：用户未登录且访问私有文件
+   *       - state=-1 没有文件：未认证失败但未找到文件，此时没有挂载 Editor
+   *       - state=1  返回内容：未认证失败且找到文件，此时没有挂载 Editor
+   *     - 登录导致页面重建包括三种情况
+   *       - Editor 未挂载 -> 未挂载，没有权限/资源不可用 -> 资源不可用
+   *       - Editor 未挂载 -> 已挂载，没有权限 -> 返回内容，用于访问私有文件
+   *       - Editor 已挂载 -> 已挂载，内容可能有修改 -> 保存内容快照并在重建时恢复
+   *         - handleLogin 会先保存之前的内容、光标、快照，并在重建后用于恢复
+   *         - 如果 Editor 未挂载，则 isCreated 为 false，不会保存快照
+   *         - autoSaveError 与 autoSaveTimerRef 在登陆前本就不可用，即使初始化也不影响
+   *         - 关于 modified，normalizedRef 会保存先前的内容，与 snapshot 做比对即可
+   *     - 切换页面导致页面重建
+   *       - 来到完全不同的文档，一切将从头初始化
+   *       - 关于 modified，normalizedRef 是前一篇内容，snapshot 为空，modified 为 false
+   */
   React.useEffect(() => {
     // a new file is saved
     const nextRefActivated = nextRef.current !== null;
