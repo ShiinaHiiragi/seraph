@@ -836,24 +836,32 @@ const CrepeEditor = () => {
     setModified(false);
     setAutoSaveError(false);
     if (folderName.length > 0) {
-      request("GET/utility/crepe/load", {
-        type: crepeType,
-        folderName: crepePath.join("/"),
-        filename: crepeTitle
-      }, { [Status.execErrCode.ResourcesUnexist]: () => {
-        navigate("/crepe");
-      } })
-        .then(({ text }) => {
-          if (
-            context.setting.crepe.edit === "false"
-              || (context.setting.crepe.edit === "auto" && text.length > 0)
-          ) {
-            context.crepeRef.setReadOnly(true);
-            setReadOnly((readOnly) => !readOnly);
+      request(
+        "GET/utility/crepe/load",
+        {
+          type: crepeType,
+          folderName: crepePath.join("/"),
+          filename: crepeTitle
+        },
+        {
+          [Status.authErrCode.InvalidToken]: () => {
+            navigate("/crepe");
+          },
+          [Status.execErrCode.ResourcesUnexist]: () => {
+            navigate("/crepe");
           }
-          fileContentRef.current = text;
-          setCrepeState(1);
-        });
+        })
+          .then(({ text }) => {
+            if (
+              context.setting.crepe.edit === "false"
+                || (context.setting.crepe.edit === "auto" && text.length > 0)
+            ) {
+              context.crepeRef.setReadOnly(true);
+              setReadOnly((readOnly) => !readOnly);
+            }
+            fileContentRef.current = text;
+            setCrepeState(1);
+          });
     } else {
       if (context.setting.crepe.edit === "false") {
         context.crepeRef.setReadOnly(true);

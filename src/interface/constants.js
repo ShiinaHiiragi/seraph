@@ -624,14 +624,19 @@ const request = (query, params, todo, handleReject, handleInit) => {
         } else if (res.data.statusCode === Status.statusCode.AuthFailed
           && res.data.errorCode === Status.authErrCode.InvalidToken
         ) {
-          toast.error(
-            ConstantContext
-              .languagePicker("modal.toast.warning.invalidToken"),
-            { duration: Infinity }
-          );
-          setTimeout(() => {
-            window.location.reload();
-          }, 4000);
+          const planned = todo?.[Status.authErrCode.InvalidToken]
+          if (planned instanceof Function) {
+            planned(res.data);
+          } else {
+            toast.error(
+              ConstantContext
+                .languagePicker("modal.toast.warning.invalidToken"),
+              { duration: Infinity }
+            );
+            setTimeout(() => {
+              window.location.reload();
+            }, 4000);
+          }
         // returning AF_NI, which is rather special
         } else if (res.data.statusCode === Status.statusCode.AuthFailed
           && res.data.errorCode === Status.authErrCode.NotInit) {
@@ -665,7 +670,7 @@ const request = (query, params, todo, handleReject, handleInit) => {
                 "modal.toast.exception."
                   + mathcedErrorState
               )
-            )
+            );
 
             ;(handleReject ?? toast.error)(errorInfo);
 
