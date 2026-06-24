@@ -227,7 +227,7 @@ export default function Tree(props) {
         aria-labelledby="alert-dialog-modal-title"
         aria-describedby="alert-dialog-modal-description"
         sx={{
-          maxHeight: "90vh",
+          height: "min(70vh, 600px)",
           display: "flex",
           flexDirection: "column",
           minWidth: "min(480px, calc(100vw - 2.5rem))",
@@ -246,9 +246,7 @@ export default function Tree(props) {
             flex: 1,
             minHeight: 0,
             overflowX: "hidden",
-            overflowY: "auto",
-            scrollbarWidth: "none",
-            "&::-webkit-scrollbar": { display: "none" }
+            overflowY: "auto"
           }}
         >
           <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
@@ -271,15 +269,15 @@ export default function Tree(props) {
               {renderItems(folderList, loadingSet)}
             </SimpleTreeView>
           </MaterialCssVarsProvider>
-          {modalTree.initValue && (
-            <Input
-              value={localValue}
-              onChange={(event) => setLocalValue(event.target.value)}
-              placeholder={context.languagePicker("modal.tree.placeholder")}
-              slotProps={{ input: { ref: inputRef } }}
-            />
-          )}
         </Stack>
+        {modalTree.initValue && (
+          <Input
+            value={localValue}
+            onChange={(event) => setLocalValue(event.target.value)}
+            placeholder={context.languagePicker("modal.tree.placeholder")}
+            slotProps={{ input: { ref: inputRef } }}
+          />
+        )}
         <Button
           loading={loading}
           disabled={
