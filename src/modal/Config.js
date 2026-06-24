@@ -282,6 +282,7 @@ const Password = (props) => {
 const Shortcut = (props) => {
   const { context, caption, value, field, pool, handleApply } = props;
   const prevValueRef = React.useRef(value);
+  const buttonRef = React.useRef(null);
 
   const [capturing, setCapturing] = React.useState(false);
   const [displayValue, setDisplayValue] = React.useState(value);
@@ -304,20 +305,15 @@ const Shortcut = (props) => {
   };
 
   const handleKeyDown = React.useCallback((event) => {
-    event.preventDefault();
-    if (event.key === "Escape") {
-      setCapturing(false);
-      return;
-    }
-
-    const parts = [];
     const noModifier = !event.ctrlKey && !event.metaKey && !event.altKey && !event.shiftKey;
     const onlyModifier = ["Control", "Alt", "Shift", "Meta"].includes(event.key);
 
     if (noModifier || onlyModifier) {
       return;
     }
+    event.preventDefault();
 
+    const parts = [];
     if (event.ctrlKey || event.metaKey) {
       parts.push("Mod");
     }
@@ -348,11 +344,21 @@ const Shortcut = (props) => {
   }, [value]);
 
   React.useEffect(() => {
-    if (capturing) {
-      window.addEventListener("keydown", handleKeyDown);
-      return () => window.removeEventListener("keydown", handleKeyDown);
-    }
+    if (!capturing) return;
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [capturing, handleKeyDown]);
+
+  React.useEffect(() => {
+    if (!capturing) return;
+    const handleMouseDown = (e) => {
+      if (buttonRef.current && !buttonRef.current.contains(e.target)) {
+        setCapturing(false);
+      }
+    };
+    document.addEventListener("mousedown", handleMouseDown);
+    return () => document.removeEventListener("mousedown", handleMouseDown);
+  }, [capturing]);
 
   return (
     <FormControl>
@@ -360,11 +366,13 @@ const Shortcut = (props) => {
         {caption}
       </FormLabel>
       <Button
+        ref={buttonRef}
         size="sm"
         variant="outlined"
         color={isConflict ? "danger" : "neutral"}
         sx={{
           width: 180,
+          fontWeight: "var(--joy-fontWeight-md)",
           fontFamily: "var(--joy-fontFamily-code)"
         }}
         onClick={() => setCapturing(true)}

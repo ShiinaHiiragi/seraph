@@ -110,7 +110,7 @@ const zhHans = {
         codeLineNumber: "显示行号",
         codeLineGutter: "高亮当前行边栏",
         shortcut: "编辑器快捷键",
-        shortcutNull: "(无)",
+        shortcutNull: "（无）",
         shortcutList: {
           save: "保存文件",
           edit: "只读 / 可编辑",

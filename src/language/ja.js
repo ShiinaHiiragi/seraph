@@ -109,8 +109,8 @@ const ja = {
         code: "コードミラー",
         codeLineNumber: "ライン番号を表示",
         codeLineGutter: "アクティブラインのガターをハイライト",
-        shortcut: "Editor Shortcuts",
-        shortcutNull: "(None)",
+        shortcut: "ショートカット",
+        shortcutNull: "（なし）",
         shortcutList: {
           save: "ファイルをセーブ",
           edit: "オンリー・エディット可能",
