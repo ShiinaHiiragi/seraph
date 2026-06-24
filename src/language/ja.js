@@ -108,7 +108,37 @@ const ja = {
         featureSpellCheck: "スペルチェックを有効",
         code: "コードミラー",
         codeLineNumber: "ライン番号を表示",
-        codeLineGutter: "アクティブラインのガターをハイライト"
+        codeLineGutter: "アクティブラインのガターをハイライト",
+        shortcut: "Editor Shortcuts",
+        shortcutNull: "(None)",
+        shortcutList: {
+          save: "ファイルをセーブ",
+          edit: "オンリー・エディット可能",
+          download: "ファイルをダウンロード",
+          blockText: "ブロックテキスト",
+          blockH1: "へーディング 1",
+          blockH2: "へーディング 2",
+          blockH3: "へーディング 3",
+          blockH4: "へーディング 4",
+          blockH5: "へーディング 5",
+          blockH6: "へーディング 6",
+          blockQuote: "クオート",
+          blockDivider: "ディバイダー",
+          blockBullet: "アンオーダードリスト",
+          blockOrdered: "オーダードリスト",
+          blockTask: "タスクリスト",
+          blockImage: "イメージブロック",
+          blockCode: "コードブロック",
+          blockTable: "テーブル",
+          blockLatex: "公式ブロック",
+          inlineBold: "ボールド体",
+          inlineItalic: "イタリック体",
+          inlineStrike: "ストライクスルー",
+          inlineImage: "インラインイメージ",
+          inlineCode: "インラインコード",
+          inlineLatex: "インライン公式",
+          inlineLink: "リンク"
+        }
       },
       terminal: {
         title: "ターミナル",
@@ -420,7 +450,7 @@ const ja = {
             image: "イメージ",
             codeBlock: "コード",
             table: "テーブル",
-            math: "フォーミュラ"
+            math: "公式"
           }
         }
       }

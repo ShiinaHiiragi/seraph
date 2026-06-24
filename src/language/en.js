@@ -108,7 +108,37 @@ const en = {
         featureSpellCheck: "Enable spell check",
         code: "Code Mirror",
         codeLineNumber: "Show line numbers",
-        codeLineGutter: "Highlight active line gutter"
+        codeLineGutter: "Highlight active line gutter",
+        shortcut: "Editor Shortcuts",
+        shortcutNull: "(None)",
+        shortcutList: {
+          save: "Save File",
+          edit: "Readonly / Editable",
+          download: "Download File",
+          blockText: "Paragraph",
+          blockH1: "Heading 1",
+          blockH2: "Heading 2",
+          blockH3: "Heading 3",
+          blockH4: "Heading 4",
+          blockH5: "Heading 5",
+          blockH6: "Heading 6",
+          blockQuote: "Quote",
+          blockDivider: "Divider",
+          blockBullet: "Unordered list",
+          blockOrdered: "Ordered list",
+          blockTask: "Task list",
+          blockImage: "Image Block",
+          blockCode: "Code Block",
+          blockTable: "Table",
+          blockLatex: "Block math",
+          inlineBold: "Bold text",
+          inlineItalic: "Italic text",
+          inlineStrike: "Strike through",
+          inlineImage: "Inline image",
+          inlineCode: "Inline code",
+          inlineLatex: "Inline math",
+          inlineLink: "Link"
+        }
       },
       terminal: {
         title: "Terminal",
@@ -420,7 +450,7 @@ const en = {
             image: "Image",
             codeBlock: "Code",
             table: "Table",
-            math: "Formula"
+            math: "Math"
           }
         }
       }
