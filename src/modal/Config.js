@@ -290,11 +290,6 @@ const Shortcut = (props) => {
   const isApple = /Mac|iPhone|iPad|iPod/.test(navigator.userAgent);
   const isConflict = pool.filter((item) => item === displayValue).length > 1;
 
-  React.useEffect(() => {
-    setDisplayValue(value);
-    prevValueRef.current = value;
-  }, [value]);
-
   const formatDisplay = (val) => {
     if (!val) {
       return context.languagePicker("header.config.crepe.shortcutNull")
@@ -315,11 +310,14 @@ const Shortcut = (props) => {
       return;
     }
 
-    if (["Control", "Alt", "Shift", "Meta"].includes(event.key)) {
+    const parts = [];
+    const noModifier = !event.ctrlKey && !event.metaKey && !event.altKey && !event.shiftKey;
+    const onlyModifier = ["Control", "Alt", "Shift", "Meta"].includes(event.key);
+
+    if (noModifier || onlyModifier) {
       return;
     }
 
-    const parts = [];
     if (event.ctrlKey || event.metaKey) {
       parts.push("Mod");
     }
@@ -329,15 +327,25 @@ const Shortcut = (props) => {
     if (event.shiftKey) {
       parts.push("Shift");
     }
-    parts.push(event.key.toLowerCase());
+    parts.push(
+      event.key === "~" ? "`"
+        : event.key.toLowerCase()
+    );
 
     const newCombo = parts.join("-");
     const oldValue = prevValueRef.current;
     setDisplayValue(newCombo);
-    Promise.resolve(handleApply(field, newCombo))
+
+    Promise
+      .resolve(handleApply(field, newCombo))
       .catch(() => setDisplayValue(oldValue));
     setCapturing(false);
   }, [field, handleApply]);
+
+  React.useEffect(() => {
+    setDisplayValue(value);
+    prevValueRef.current = value;
+  }, [value]);
 
   React.useEffect(() => {
     if (capturing) {
