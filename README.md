@@ -184,6 +184,7 @@
 
 ## Log
 
+- 06/25/2026 ver 1.4.4: Add setting for shortcuts and fix states of Crepe editor
 - 06/24/2026 ver 1.4.3: Add feature of auto save for Crepe editor
 - 06/23/2026 ver 1.4.2: Add link shortcut for file explorer
 - 06/22/2026 ver 1.4.1: Fix file content and scrollbar during editor rebuilding
