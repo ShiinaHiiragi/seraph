@@ -18,18 +18,23 @@ import {
   commandsCtx
 } from "@milkdown/kit/core";
 import {
+  paragraphSchema,
+  headingSchema,
   listItemSchema,
   codeBlockSchema,
-  insertHrCommand,
-  insertImageCommand,
+  addBlockTypeCommand,
+  setBlockTypeCommand,
+  wrapInBlockTypeCommand,
   wrapInBlockquoteCommand,
   wrapInBulletListCommand,
   wrapInOrderedListCommand,
-  wrapInBlockTypeCommand,
-  addBlockTypeCommand,
-  selectTextNearPosCommand,
+  insertHrCommand,
+  insertImageCommand,
+  toggleStrongCommand,
+  toggleEmphasisCommand,
   toggleInlineCodeCommand,
-  createCodeBlockCommand
+  createCodeBlockCommand,
+  selectTextNearPosCommand
 } from "@milkdown/kit/preset/commonmark";
 import { createTable, toggleStrikethroughCommand } from "@milkdown/kit/preset/gfm";
 import { getMarkdown, replaceAll, $prose } from "@milkdown/kit/utils";
@@ -459,41 +464,103 @@ const CrepeEditorInner = (props) => {
       })
       .use($prose((ctx) => keymap({
         // Mod-Alt-0 -> block text (default)
+        "Mod-Alt-0": () => false,
+        [context.setting.crepe.shortcut.blockText]: () => {
+          ctx.get(commandsCtx)
+            .call(setBlockTypeCommand.key, {
+              nodeType: paragraphSchema.type(ctx)
+            });
+          return true;
+        },
         // Mod-Alt-1 -> block h1 (default)
+        "Mod-Alt-1": () => false,
+        [context.setting.crepe.shortcut.blockH1]: () => {
+          ctx.get(commandsCtx)
+            .call(setBlockTypeCommand.key, {
+              nodeType: headingSchema.type(ctx),
+              attrs: { level: 1 }
+            });
+          return true;
+        },
         // Mod-Alt-2 -> block h2 (default)
+        "Mod-Alt-2": () => false,
+        [context.setting.crepe.shortcut.blockH2]: () => {
+          ctx.get(commandsCtx)
+            .call(setBlockTypeCommand.key, {
+              nodeType: headingSchema.type(ctx),
+              attrs: { level: 2 }
+            });
+          return true;
+        },
         // Mod-Alt-3 -> block h3 (default)
+        "Mod-Alt-3": () => false,
+        [context.setting.crepe.shortcut.blockH3]: () => {
+          ctx.get(commandsCtx)
+            .call(setBlockTypeCommand.key, {
+              nodeType: headingSchema.type(ctx),
+              attrs: { level: 3 }
+            });
+          return true;
+        },
         // Mod-Alt-4 -> block h4 (default)
+        "Mod-Alt-4": () => false,
+        [context.setting.crepe.shortcut.blockH4]: () => {
+          ctx.get(commandsCtx)
+            .call(setBlockTypeCommand.key, {
+              nodeType: headingSchema.type(ctx),
+              attrs: { level: 4 }
+            });
+          return true;
+        },
         // Mod-Alt-5 -> block h5 (default)
+        "Mod-Alt-5": () => false,
+        [context.setting.crepe.shortcut.blockH5]: () => {
+          ctx.get(commandsCtx)
+            .call(setBlockTypeCommand.key, {
+              nodeType: headingSchema.type(ctx),
+              attrs: { level: 5 }
+            });
+          return true;
+        },
         // Mod-Alt-6 -> block h6 (default)
+        "Mod-Alt-6": () => false,
+        [context.setting.crepe.shortcut.blockH6]: () => {
+          ctx.get(commandsCtx)
+            .call(setBlockTypeCommand.key, {
+              nodeType: headingSchema.type(ctx),
+              attrs: { level: 6 }
+            });
+          return true;
+        },
         // Mod-Alt-q -> block quote
         "Mod-Shift-b": () => false,
-        "Mod-Alt-q": () => {
+        [context.setting.crepe.shortcut.blockQuote]: () => {
           ctx.get(commandsCtx)
             .call(wrapInBlockquoteCommand.key);
           return true;
         },
         // Mod-Alt-d -> block divider
-        "Mod-Alt-d": () => {
+        [context.setting.crepe.shortcut.blockDivider]: () => {
           ctx.get(commandsCtx)
             .call(insertHrCommand.key);
           return true;
         },
         // Mod-Alt-u -> block unordered list
         "Mod-Alt-8": () => false,
-        "Mod-Alt-u": () => {
+        [context.setting.crepe.shortcut.blockBullet]: () => {
           ctx.get(commandsCtx)
             .call(wrapInBulletListCommand.key);
           return true;
         },
         // Mod-Alt-o -> block ordered list
         "Mod-Alt-7": () => false,
-        "Mod-Alt-o": () => {
+        [context.setting.crepe.shortcut.blockOrdered]: () => {
           ctx.get(commandsCtx)
             .call(wrapInOrderedListCommand.key);
           return true;
         },
         // Mod-Alt-t -> block task list
-        "Mod-Alt-t": () => {
+        [context.setting.crepe.shortcut.blockTask]: () => {
           ctx.get(commandsCtx)
             .call(wrapInBlockTypeCommand.key, {
               nodeType: listItemSchema.type(ctx),
@@ -502,7 +569,7 @@ const CrepeEditorInner = (props) => {
           return true;
         },
         // Mod-Alt-g -> block images
-        "Mod-Alt-g": () => {
+        [context.setting.crepe.shortcut.blockImage]: () => {
           ctx.get(commandsCtx)
             .call(addBlockTypeCommand.key, {
               nodeType: imageBlockSchema.type(ctx)
@@ -511,13 +578,13 @@ const CrepeEditorInner = (props) => {
         },
         // Mod-Alt-` -> block code
         "Mod-Alt-c": () => false,
-        "Mod-Alt-`": () => {
+        [context.setting.crepe.shortcut.blockCode]: () => {
           ctx.get(commandsCtx)
             .call(createCodeBlockCommand.key);
           return true;
         },
         // Mod-Alt-p -> block tables
-        "Mod-Alt-p": () => {
+        [context.setting.crepe.shortcut.blockTable]: () => {
           ctx.get(commandsCtx)
             .call(addBlockTypeCommand.key, {
               nodeType: createTable(ctx, 3, 3),
@@ -529,7 +596,7 @@ const CrepeEditorInner = (props) => {
           return true;
         },
         // Mod-Alt-m -> block latex
-        "Mod-Alt-m": () => {
+        [context.setting.crepe.shortcut.blockLatex]: () => {
           ctx.get(commandsCtx)
             .call(addBlockTypeCommand.key, {
               nodeType: codeBlockSchema.type(ctx),
@@ -538,28 +605,40 @@ const CrepeEditorInner = (props) => {
           return true;
         },
         // Mod-b     -> inline bold text (default)
+        "Mod-b": () => false,
+        [context.setting.crepe.shortcut.inlineBold]: () => {
+          ctx.get(commandsCtx)
+            .call(toggleStrongCommand.key);
+          return true;
+        },
         // Mod-i     -> inline italic text (default)
+        "Mod-i": () => false,
+        [context.setting.crepe.shortcut.inlineItalic]: () => {
+          ctx.get(commandsCtx)
+            .call(toggleEmphasisCommand.key);
+          return true;
+        },
         // Mod-q     -> inline strike through
         "Mod-Alt-x": () => false,
-        "Mod-q": () => {
+        [context.setting.crepe.shortcut.inlineStrike]: () => {
           ctx.get(commandsCtx)
             .call(toggleStrikethroughCommand.key);
           return true;
         },
         // Mod-g     -> inline image (inaccessible via neither toolbar or slash)
-        "Mod-g": () => {
+        [context.setting.crepe.shortcut.inlineImage]: () => {
           ctx.get(commandsCtx)
             .call(insertImageCommand.key);
           return true;
         },
         // Mod-`     -> inline code (Mod-e was used for editable/read-only)
-        "Mod-`": () => {
+        [context.setting.crepe.shortcut.inlineCode]: () => {
           ctx.get(commandsCtx)
             .call(toggleInlineCodeCommand.key);
           return true;
         },
         // Mod-m     -> inline math
-        "Mod-m": () => {
+        [context.setting.crepe.shortcut.inlineLatex]: () => {
           // @milkdown/crepe/src/feature/latex/constants.ts
           //   const toggleLatexCommandName = "ToggleLatex"
           const { from, to } = ctx.get(editorViewCtx).state.selection;
@@ -571,7 +650,7 @@ const CrepeEditorInner = (props) => {
           return true;
         },
         // Mod-l     -> inline link
-        "Mod-l": () => {
+        [context.setting.crepe.shortcut.inlineLink]: () => {
           ctx.get(commandsCtx)
             .call(toggleLinkCommand.key);
           return true;
@@ -651,7 +730,30 @@ const CrepeEditorInner = (props) => {
     context.setting.crepe.feature.stat,
     context.setting.crepe.feature.spellCheck,
     context.setting.crepe.code.lineNumber,
-    context.setting.crepe.code.lineGutter
+    context.setting.crepe.code.lineGutter,
+    context.setting.crepe.shortcut.blockText,
+    context.setting.crepe.shortcut.blockH1,
+    context.setting.crepe.shortcut.blockH2,
+    context.setting.crepe.shortcut.blockH3,
+    context.setting.crepe.shortcut.blockH4,
+    context.setting.crepe.shortcut.blockH5,
+    context.setting.crepe.shortcut.blockH6,
+    context.setting.crepe.shortcut.blockQuote,
+    context.setting.crepe.shortcut.blockDivider,
+    context.setting.crepe.shortcut.blockBullet,
+    context.setting.crepe.shortcut.blockOrdered,
+    context.setting.crepe.shortcut.blockTask,
+    context.setting.crepe.shortcut.blockImage,
+    context.setting.crepe.shortcut.blockCode,
+    context.setting.crepe.shortcut.blockTable,
+    context.setting.crepe.shortcut.blockLatex,
+    context.setting.crepe.shortcut.inlineBold,
+    context.setting.crepe.shortcut.inlineItalic,
+    context.setting.crepe.shortcut.inlineStrike,
+    context.setting.crepe.shortcut.inlineImage,
+    context.setting.crepe.shortcut.inlineCode,
+    context.setting.crepe.shortcut.inlineLatex,
+    context.setting.crepe.shortcut.inlineLink
   ]);
 
   React.useEffect(() => {

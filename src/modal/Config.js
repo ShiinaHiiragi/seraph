@@ -279,6 +279,94 @@ const Password = (props) => {
   );
 };
 
+const Shortcut = (props) => {
+  const { context, caption, value, field, pool, handleApply } = props;
+  const prevValueRef = React.useRef(value);
+
+  const [capturing, setCapturing] = React.useState(false);
+  const [displayValue, setDisplayValue] = React.useState(value);
+
+  // I HATE APPLE
+  const isApple = /Mac|iPhone|iPad|iPod/.test(navigator.userAgent);
+  const isConflict = pool.filter((item) => item === displayValue).length > 1;
+
+  React.useEffect(() => {
+    setDisplayValue(value);
+    prevValueRef.current = value;
+  }, [value]);
+
+  const formatDisplay = (val) => {
+    if (!val) {
+      return context.languagePicker("header.config.crepe.shortcutNull")
+    } else {
+      return val.split("-").map((part) =>
+        part === "Mod" ? (isApple ? "Cmd" : "Ctrl")
+          : part === "Alt" ? (isApple ? "Option" : "Alt")
+          : part.length === 1 ? part.toUpperCase()
+          : part
+      ).join(" + ");
+    }
+  };
+
+  const handleKeyDown = React.useCallback((event) => {
+    event.preventDefault();
+    if (event.key === "Escape") {
+      setCapturing(false);
+      return;
+    }
+
+    if (["Control", "Alt", "Shift", "Meta"].includes(event.key)) {
+      return;
+    }
+
+    const parts = [];
+    if (event.ctrlKey || event.metaKey) {
+      parts.push("Mod");
+    }
+    if (event.altKey) {
+      parts.push("Alt");
+    }
+    if (event.shiftKey) {
+      parts.push("Shift");
+    }
+    parts.push(event.key.toLowerCase());
+
+    const newCombo = parts.join("-");
+    const oldValue = prevValueRef.current;
+    setDisplayValue(newCombo);
+    Promise.resolve(handleApply(field, newCombo))
+      .catch(() => setDisplayValue(oldValue));
+    setCapturing(false);
+  }, [field, handleApply]);
+
+  React.useEffect(() => {
+    if (capturing) {
+      window.addEventListener("keydown", handleKeyDown);
+      return () => window.removeEventListener("keydown", handleKeyDown);
+    }
+  }, [capturing, handleKeyDown]);
+
+  return (
+    <FormControl>
+      <FormLabel sx={{ mb: 0, color: "neutral.500" }}>
+        {caption}
+      </FormLabel>
+      <Button
+        size="sm"
+        variant="outlined"
+        color={isConflict ? "danger" : "neutral"}
+        sx={{
+          width: 180,
+          fontFamily: "var(--joy-fontFamily-code)"
+        }}
+        onClick={() => setCapturing(true)}
+      >
+        {capturing ? "···" : formatDisplay(displayValue)}
+      </Button>
+    </FormControl>
+  );
+};
+
 const SECTIONS = (
   context,
   setMetadata,
@@ -296,6 +384,7 @@ const SECTIONS = (
       .keys(context.setting.terminal.control.ctrl)
       .filter((item) => context.setting.terminal.control.ctrl[item])
   )
+  const shortcutPool = Object.values(context.setting.crepe.shortcut);
 
   return [
     {
@@ -561,7 +650,7 @@ const SECTIONS = (
                 "welcome.process.count",
                 handleApply,
                 !context.setting.welcome.enable.panel,
-                120
+                140
               )}
             </Stack>
           )
@@ -792,6 +881,47 @@ const SECTIONS = (
                 handleApply,
                 !context.setting.crepe.code.lineNumber
               )}
+            </Stack>
+          )
+        },
+        {
+          key: context.languagePicker("header.config.crepe.shortcut"),
+          value: (
+            <Stack spacing={1}>
+              {[
+                ["save", "edit"],
+                ["download", "blockText"],
+                ["blockH1", "blockH2"],
+                ["blockH3", "blockH4"],
+                ["blockH5", "blockH6"],
+                ["blockQuote", "blockDivider"],
+                ["blockBullet", "blockOrdered"],
+                ["blockTask", "blockImage"],
+                ["blockCode", "blockTable"],
+                ["blockLatex", "inlineBold"],
+                ["inlineItalic", "inlineStrike"],
+                ["inlineImage", "inlineCode"],
+                ["inlineLatex", "inlineLink"]
+              ].map(([keyLeft, keyRight]) => (
+                <Stack key={keyLeft} spacing={{ xs: 1, lg: 2, xl: 4 }} direction={{ xs: "column", lg: "row" }}>
+                  <Shortcut
+                    context={context}
+                    caption={context.languagePicker(`header.config.crepe.shortcutList.${keyLeft}`)}
+                    value={context.setting.crepe.shortcut[keyLeft]}
+                    field={`crepe.shortcut.${keyLeft}`}
+                    pool={shortcutPool}
+                    handleApply={handleApply}
+                  />
+                  <Shortcut
+                    context={context}
+                    caption={context.languagePicker(`header.config.crepe.shortcutList.${keyRight}`)}
+                    value={context.setting.crepe.shortcut[keyRight]}
+                    field={`crepe.shortcut.${keyRight}`}
+                    pool={shortcutPool}
+                    handleApply={handleApply}
+                  />
+                </Stack>
+              ))}
             </Stack>
           )
         }
