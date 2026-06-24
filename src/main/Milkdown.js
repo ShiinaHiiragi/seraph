@@ -1161,16 +1161,28 @@ const CrepeEditor = () => {
   }, [context, modified, crepeTitle]);
 
   React.useEffect(() => {
+    const matchShortcut = (shortcut, event) => {
+      const parts = shortcut.split("-");
+      const key = parts[parts.length - 1];
+      const modifiers = parts.slice(0, -1);
+      return (
+        modifiers.includes("Mod") === (event.ctrlKey || event.metaKey) &&
+        modifiers.includes("Alt") === event.altKey &&
+        modifiers.includes("Shift") === event.shiftKey &&
+        event.key.toLowerCase() === key.toLowerCase()
+      );
+    };
+
     const handler = (event) => {
-      if ((event.ctrlKey || event.metaKey) && event.key === "e") {
+      if (matchShortcut(context.setting.crepe.shortcut.edit, event)) {
         event.preventDefault();
         handleToggleReadOnly();
       }
-      if ((event.ctrlKey || event.metaKey) && event.key === "d") {
+      if (matchShortcut(context.setting.crepe.shortcut.download, event)) {
         event.preventDefault();
         handleDownload();
       }
-      if ((event.ctrlKey || event.metaKey) && event.key === "s") {
+      if (matchShortcut(context.setting.crepe.shortcut.save, event)) {
         event.preventDefault();
         const buttonRef = autoSaveMode ? buttonAutoSaveRef : buttonSaveRef;
         buttonRef.current?.click();
@@ -1178,7 +1190,14 @@ const CrepeEditor = () => {
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [handleToggleReadOnly, handleDownload, autoSaveMode]);
+  }, [
+    autoSaveMode,
+    context.setting.crepe.shortcut.save,
+    context.setting.crepe.shortcut.edit,
+    context.setting.crepe.shortcut.download,
+    handleDownload,
+    handleToggleReadOnly
+  ]);
 
   return (
     <RouteField
