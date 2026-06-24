@@ -716,13 +716,12 @@ const CrepeEditorInner = (props) => {
     });
     return crepe;
   }, [
-    // save text | select | scroll when editor reload
+    // save text & select & scroll when loging in
+    // context.isAuthority,
     // save text & scroll when creating new markdown
     basePath,
     // save text & select when switch readonly -> editable
     editableKey,
-    // save text & select & scroll when loging in
-    context.isAuthority,
     // save text & select & scroll when setting changes
     // languagePicker -> context.setting.meta.language
     context.languagePicker,
@@ -836,11 +835,11 @@ const CrepeEditor = () => {
       return;
     }
 
-    clearTimeout(autoSaveTimerRef.current);
-    setCrepeState(0);
-    setModified(false);
     setAutoSaveError(false);
+    setModified(context.crepeRef.snapshot.current !== normalizedRef.current);
+    clearTimeout(autoSaveTimerRef.current);
 
+    setCrepeState(0);
     if (folderName.length > 0) {
       request(
         "GET/utility/crepe/load",
@@ -1225,72 +1224,74 @@ const CrepeEditor = () => {
             level="h3"
             children={crepeTitle}
           />
-          <Stack direction="row" sx={{ position: "relative", top: "1px" }}>
-            <IconButton
-              size="sm"
-              variant="soft"
-              onClick={handleToggleReadOnly}
-              onMouseDown={(event) => event.preventDefault()}
-              sx={buttonStyle}
-            >
-              {readOnly ? <EditOffOutlinedIcon /> : <EditOutlinedIcon/>}
-            </IconButton>
-            <IconButton
-              size="sm"
-              variant="soft"
-              onClick={handleDownload}
-              onMouseDown={(event) => event.preventDefault()}
-              sx={buttonStyle}
-            >
-              <FileDownloadOutlinedIcon />
-            </IconButton>
-            {!autoSaveMode && context.isAuthority && crepeState === 1 && (
+          {crepeState === 1 && (
+            <Stack direction="row" sx={{ position: "relative", top: "1px" }}>
               <IconButton
                 size="sm"
                 variant="soft"
-                onClick={handleToggleSave}
+                onClick={handleToggleReadOnly}
                 onMouseDown={(event) => event.preventDefault()}
                 sx={buttonStyle}
-                ref={buttonSaveRef}
-                disabled={!modified}
               >
-                <SaveRoundedIcon />
+                {readOnly ? <EditOffOutlinedIcon /> : <EditOutlinedIcon/>}
               </IconButton>
-            )}
-            {autoSaveMode && (
-              <React.Fragment>
+              <IconButton
+                size="sm"
+                variant="soft"
+                onClick={handleDownload}
+                onMouseDown={(event) => event.preventDefault()}
+                sx={buttonStyle}
+              >
+                <FileDownloadOutlinedIcon />
+              </IconButton>
+              {!autoSaveMode && context.isAuthority && crepeState === 1 && (
                 <IconButton
                   size="sm"
                   variant="soft"
-                  onClick={handleAutoSave}
+                  onClick={handleToggleSave}
                   onMouseDown={(event) => event.preventDefault()}
                   sx={buttonStyle}
-                  ref={buttonAutoSaveRef}
+                  ref={buttonSaveRef}
+                  disabled={!modified}
                 >
-                  {autoSaveLock
-                    ? <CloudUploadOutlinedIcon />
-                    : modified
-                    ? <CloudOutlinedIcon />
-                    : <CloudDoneOutlinedIcon />}
+                  <SaveRoundedIcon />
                 </IconButton>
-                <Typography
-                  level="body-sm"
-                  sx={{
-                    height: "var(--joy-fontSize-sm)",
-                    lineHeight: "var(--joy-fontSize-sm)",
-                    alignSelf: "center",
-                    ml: 0.5
-                  }}
-                >
-                  {autoSaveLock
-                    ? context.languagePicker("main.crepe.sync.saving")
-                    : autoSaveTip
-                    ? context.languagePicker("main.crepe.sync.saved")
-                    : ""}
-                </Typography>
-              </React.Fragment>
-            )}
-          </Stack>
+              )}
+              {autoSaveMode && (
+                <React.Fragment>
+                  <IconButton
+                    size="sm"
+                    variant="soft"
+                    onClick={handleAutoSave}
+                    onMouseDown={(event) => event.preventDefault()}
+                    sx={buttonStyle}
+                    ref={buttonAutoSaveRef}
+                  >
+                    {autoSaveLock
+                      ? <CloudUploadOutlinedIcon />
+                      : modified
+                      ? <CloudOutlinedIcon />
+                      : <CloudDoneOutlinedIcon />}
+                  </IconButton>
+                  <Typography
+                    level="body-sm"
+                    sx={{
+                      height: "var(--joy-fontSize-sm)",
+                      lineHeight: "var(--joy-fontSize-sm)",
+                      alignSelf: "center",
+                      ml: 0.5
+                    }}
+                  >
+                    {autoSaveLock
+                      ? context.languagePicker("main.crepe.sync.saving")
+                      : autoSaveTip
+                      ? context.languagePicker("main.crepe.sync.saved")
+                      : ""}
+                  </Typography>
+                </React.Fragment>
+              )}
+            </Stack>
+          )}
         </Stack>
       }
       sx={{
