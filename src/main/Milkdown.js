@@ -94,6 +94,7 @@ import CloudDoneOutlinedIcon from "@mui/icons-material/CloudDoneOutlined";
 import { countWords, countLines } from "alfaaz";
 import { createPatch } from "diff";
 import Loading from "./Loading";
+import Caption from "../components/Caption";
 import Tree from "../modal/Tree";
 import RouteField from "../interface/RouteField";
 import GlobalContext, {
@@ -849,8 +850,8 @@ const CrepeEditor = () => {
           filename: crepeTitle
         },
         {
-          [Status.authErrCode.InvalidToken]: () => navigate("/crepe"),
-          [Status.execErrCode.ResourcesUnexist]: () => navigate("/crepe")
+          [Status.authErrCode.InvalidToken]: () => setCrepeState(0),
+          [Status.execErrCode.ResourcesUnexist]: () => setCrepeState(-1)
         })
           .then(({ text }) => {
             if (
@@ -1319,6 +1320,12 @@ const CrepeEditor = () => {
             />
           </MilkdownProvider>
         </MaildownField>}
+      {crepeState === -1 && (
+        <Caption
+          title={context.languagePicker("universal.placeholder.unexist.title")}
+          caption={context.languagePicker("universal.placeholder.unexist.caption")}
+        />
+      )}
       {context.setting.crepe.feature.stat && (
         <Box
           sx={{

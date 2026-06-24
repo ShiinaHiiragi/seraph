@@ -151,7 +151,7 @@ export default function Navigation(props) {
                   <ListItemButton
                     selected={pathStartWith("/crepe")}
                     onClick={() => {
-                      if (window.location.pathname !== "/crepe") {
+                      if (!pathStartWith("/crepe")) {
                         navigateTo("/crepe");
                       }
                     }}

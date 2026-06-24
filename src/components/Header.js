@@ -228,9 +228,11 @@ const Header = (props) => {
   ]);
 
   const handleLogin = React.useCallback(() => {
-    context.crepeRef.snapshot.current = context.crepeRef.getText();
-    context.crepeRef.select.current = context.crepeRef.getSelect();
-    context.crepeRef.scroll.current = context.crepeRef.getScroll();
+    if (context.crepeRef.isCreated()) {
+      context.crepeRef.snapshot.current = context.crepeRef.getText();
+      context.crepeRef.select.current = context.crepeRef.getSelect();
+      context.crepeRef.scroll.current = context.crepeRef.getScroll();
+    }
     setButtonLoading(true);
     request(
       "POST/auth/login",
