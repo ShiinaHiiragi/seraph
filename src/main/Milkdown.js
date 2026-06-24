@@ -813,6 +813,10 @@ const CrepeEditor = () => {
     [folderName]
   );
 
+  const display = React.useMemo(() => {
+    return crepeType !== "private" || context.isAuthority;
+  }, [crepeType, context.isAuthority]);
+
   // § core states & initialization
   const [crepeState, setCrepeState] = React.useState(0);
   const [editableKey, setEditableKey] = React.useState(0);
@@ -835,6 +839,7 @@ const CrepeEditor = () => {
     setCrepeState(0);
     setModified(false);
     setAutoSaveError(false);
+
     if (folderName.length > 0) {
       request(
         "GET/utility/crepe/load",
@@ -844,12 +849,8 @@ const CrepeEditor = () => {
           filename: crepeTitle
         },
         {
-          [Status.authErrCode.InvalidToken]: () => {
-            navigate("/crepe");
-          },
-          [Status.execErrCode.ResourcesUnexist]: () => {
-            navigate("/crepe");
-          }
+          [Status.authErrCode.InvalidToken]: () => navigate("/crepe"),
+          [Status.execErrCode.ResourcesUnexist]: () => navigate("/crepe")
         })
           .then(({ text }) => {
             if (
@@ -875,7 +876,7 @@ const CrepeEditor = () => {
   }, [
     // check if
     // load with auth naturally
-    context.secondTick,
+    context.isAuthority,
     // url is changed directly
     rawFolderName
   ]);
@@ -1210,7 +1211,7 @@ const CrepeEditor = () => {
 
   return (
     <RouteField
-      display
+      display={display}
       path={breadcrumb}
       link={breadLink}
       title={
