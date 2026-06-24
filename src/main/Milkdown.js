@@ -122,7 +122,8 @@ import "../interface/milk.css";
 
 const buttonStyle = {
   backgroundColor: "transparent",
-  "&:hover": { backgroundColor: "transparent" }
+  "&:hover": { backgroundColor: "transparent" },
+  "&:disabled": { backgroundColor: "transparent" }
 };
 
 const count = (markdown) => ({
@@ -1233,7 +1234,7 @@ const CrepeEditor = () => {
             >
               <FileDownloadOutlinedIcon />
             </IconButton>
-            {!autoSaveMode && savable && (
+            {!autoSaveMode && context.isAuthority && crepeState === 1 && (
               <IconButton
                 size="sm"
                 variant="soft"
@@ -1241,6 +1242,7 @@ const CrepeEditor = () => {
                 onMouseDown={(event) => event.preventDefault()}
                 sx={buttonStyle}
                 ref={buttonSaveRef}
+                disabled={!modified}
               >
                 <SaveRoundedIcon />
               </IconButton>
