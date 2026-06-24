@@ -107,13 +107,14 @@ const Header = (props) => {
     context.crepeRef.snapshot.current = context.crepeRef.getText();
     context.crepeRef.select.current = context.crepeRef.getSelect();
     context.crepeRef.scroll.current = context.crepeRef.getScroll();
-    toast.promise(new Promise((resolve, reject) => {
+    const promise = new Promise((resolve, reject) => {
       request("POST/config/set", { key: key, value: value }, undefined, reject)
         .then(() => {
           setSettingPair(key, value);
           resolve();
         })
-    }), {
+    });
+    toast.promise(promise, {
       loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
       success: () => (
         key === "meta.language"
@@ -122,6 +123,7 @@ const Header = (props) => {
         )("modal.toast.success.setting"),
       error: (data) => data
     });
+    return promise;
   }, [context, setSettingPair]);
 
   const handleResetSetting = React.useCallback(() => {
