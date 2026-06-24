@@ -858,9 +858,9 @@ const CrepeEditor = () => {
    *       - 编辑器重建，fileContent 使用刚保存的最新版，使用保存的光标与滚动条快照
    *   - 对 useEffect 重建的逐项解释
    *     - 每次（包括初次）进入时不检查用户权限，直接请求文件内容并调节 crepeState
-   *       - state=0  认证失败：用户未登录且访问私有文件
+   *       - state=0  认证失败：用户未登录且访问私有文件，此时没有挂载 Editor
    *       - state=-1 没有文件：未认证失败但未找到文件，此时没有挂载 Editor
-   *       - state=1  返回内容：未认证失败且找到文件，此时没有挂载 Editor
+   *       - state=1  返回内容：未认证失败且找到文件
    *     - 登录导致页面重建包括三种情况
    *       - Editor 未挂载 -> 未挂载，没有权限/资源不可用 -> 资源不可用
    *       - Editor 未挂载 -> 已挂载，没有权限 -> 返回内容，用于访问私有文件
@@ -868,10 +868,11 @@ const CrepeEditor = () => {
    *         - handleLogin 会先保存之前的内容、光标、快照，并在重建后用于恢复
    *         - 如果 Editor 未挂载，则 isCreated 为 false，不会保存快照
    *         - autoSaveError 与 autoSaveTimerRef 在登陆前本就不可用，即使初始化也不影响
-   *         - 关于 modified，normalizedRef 会保存先前的内容，与 snapshot 做比对即可
-   *     - 切换页面导致页面重建
-   *       - 来到完全不同的文档，一切将从头初始化
-   *       - 关于 modified，normalizedRef 是前一篇内容，snapshot 为空，modified 为 false
+   *     - 切换页面导致页面重建：来到完全不同的文档，一切将从头初始化
+   *     - 关于 modified
+   *       - 初次进入时，snapshot 为空，normalizedRef 为空 -> setModified(false)
+   *       - 切换页面时，snapshot 为空，normalizedRef 是前一篇内容 -> setModified(false)
+   *       - 登录时，snapshot 为当前内容，normalizedRef 为最后一次保存的内容，根据两者关系设置
    */
   React.useEffect(() => {
     // a new file is saved
@@ -881,8 +882,13 @@ const CrepeEditor = () => {
       return;
     }
 
+    const snapshot = context.crepeRef.snapshot.current;
+    setModified(
+      snapshot === null
+        ? false
+        : snapshot !== normalizedRef.current
+    );
     setAutoSaveError(false);
-    setModified(context.crepeRef.snapshot.current !== normalizedRef.current);
     clearTimeout(autoSaveTimerRef.current);
 
     setCrepeState(0);
