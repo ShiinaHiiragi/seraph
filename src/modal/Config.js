@@ -298,6 +298,7 @@ const Shortcut = (props) => {
       return val.split("-").map((part) =>
         part === "Mod" ? (isApple ? "Cmd" : "Ctrl")
           : part === "Alt" ? (isApple ? "Option" : "Alt")
+          : part === "`" ? "~"
           : part.length === 1 ? part.toUpperCase()
           : part
       ).join(" + ");
