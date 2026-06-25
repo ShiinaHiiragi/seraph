@@ -906,10 +906,10 @@ const CrepeEditor = () => {
           [Status.execErrCode.ResourcesUnexist]: () => setCrepeState(-1)
         })
           .then(({ text }) => {
-            if (
+            if (context.crepeRef.snapshot.current === null && (
               context.setting.crepe.edit === "false"
                 || (context.setting.crepe.edit === "auto" && text.length > 0)
-            ) {
+            )) {
               context.crepeRef.setReadOnly(true);
               setReadOnly((readOnly) => !readOnly);
             }
@@ -917,7 +917,10 @@ const CrepeEditor = () => {
             setCrepeState(1);
           });
     } else {
-      if (context.setting.crepe.edit === "false") {
+      if (
+        context.crepeRef.snapshot.current === null
+          && context.setting.crepe.edit === "false"
+      ) {
         context.crepeRef.setReadOnly(true);
         setReadOnly((readOnly) => !readOnly);
       }
