@@ -139,7 +139,7 @@ const count = (markdown) => ({
     .length
 });
 
-const MaildownField = styled(Box)(({ theme }) => ({
+const MilkdownField = styled(Box)(({ theme }) => ({
   flex: 1,
   display: "flex",
   flexDirection: "column",
@@ -1363,7 +1363,7 @@ const CrepeEditor = () => {
     >
       {crepeState === 0 && <Loading pinned />}
       {crepeState === 1 &&
-        <MaildownField>
+        <MilkdownField>
           <MilkdownProvider>
             <CrepeEditorInner
               basePath={basePath}
@@ -1378,7 +1378,7 @@ const CrepeEditor = () => {
               normalizedRef={normalizedRef}
             />
           </MilkdownProvider>
-        </MaildownField>}
+        </MilkdownField>}
       {crepeState === -1 && (
         <Caption
           title={context.languagePicker("universal.placeholder.unexist.title")}
