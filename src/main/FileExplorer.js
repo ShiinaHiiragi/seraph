@@ -465,10 +465,16 @@ const FileExplorer = (props) => {
     if (!context.isAuthority || folderName.length === 0) {
       return;
     }
+    if ([...event.dataTransfer.items].some(item =>
+        item.webkitGetAsEntry?.()?.isDirectory
+    )) {
+      toast.error(context.languagePicker("modal.toast.warning.uploadFolder"));
+      return;
+    }
     if (event.dataTransfer.files.length > 0) {
       handleProprocessFile(event.dataTransfer.files);
     }
-  }, [context.isAuthority, folderName, handleProprocessFile]);
+  }, [context, folderName, handleProprocessFile]);
 
   // paste (original)
   const handlePaste = React.useCallback(() => {
