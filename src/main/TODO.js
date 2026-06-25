@@ -59,6 +59,7 @@ const Details = styled("div")(({ theme }) => ({
 const TODO = () => {
   const context = React.useContext(GlobalContext);
   const { minutes, seconds } = useTime();
+  const descriptionRef = React.useRef(null);
 
   const [taskState, setTaskState] = React.useState(0);
   const [task, setTask] = React.useState([ ]);
@@ -628,13 +629,13 @@ const TODO = () => {
             autoFocus
             autoComplete="off"
             placeholder={context.languagePicker("universal.placeholder.instruction.required")}
-            // TODO
-            handleEnter={undefined}
+            handleEnter={() => descriptionRef.current?.focus() }
           />
         </FormControl>
         <FormControl>
           <FormLabel>{context.languagePicker("main.todo.regulate.description")}</FormLabel>
           <SemiTextarea
+            ref={descriptionRef}
             initValue={modalTaskDesciption}
             setValue={setModalTaskDesciption}
             minRows={4}

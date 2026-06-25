@@ -46,6 +46,7 @@ export default function SemiInput(props) {
       }}
       onKeyDown={handleEnter ? (event) => {
         if (event.key === "Enter") {
+          event.preventDefault();
           handleEnter();
         }
       } : undefined}
@@ -53,7 +54,7 @@ export default function SemiInput(props) {
   );
 };
 
-function SemiTextarea(props) {
+const SemiTextarea = React.forwardRef((props, ref) => {
   const {
     initValue,
     setValue,
@@ -73,10 +74,11 @@ function SemiTextarea(props) {
   return (
     <Textarea
       {...inputProps}
+      slotProps={{ textarea: { ref: ref } }}
       value={localValue}
       onChange={(event) => setLocalValue(event.target.value)}
     />
   );
-};
+});
 
 export { SemiTextarea };
