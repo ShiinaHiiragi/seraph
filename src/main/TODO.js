@@ -625,6 +625,7 @@ const TODO = () => {
           <SemiInput
             initValue={modalTaskName}
             setValue={setModalTaskName}
+            autoFocus
             autoComplete="off"
             placeholder={context.languagePicker("universal.placeholder.instruction.required")}
           />
