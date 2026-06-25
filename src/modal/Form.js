@@ -6,7 +6,7 @@ import ModalDialog from "@mui/joy/ModalDialog";
 import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
 
-export default function ModalForm(props) {
+const ModalForm = React.forwardRef((props, ref) => {
   const {
     open,
     loading,
@@ -84,6 +84,7 @@ export default function ModalForm(props) {
           {children}
         </Stack>
         <Button
+          ref={ref}
           loading={loading}
           disabled={disabled}
           onClick={handleClick}
@@ -93,4 +94,6 @@ export default function ModalForm(props) {
       </ModalDialog>
     </Modal>
   );
-}
+});
+
+export default ModalForm;

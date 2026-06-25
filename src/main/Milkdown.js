@@ -787,7 +787,7 @@ const CrepeEditor = () => {
   const crepeTitle = React.useMemo(
     () => folderName.length
       ? folderPart.slice(-1)[0]
-      : `${context.languagePicker("modal.tree.untitled")}.md`,
+      : `${context.languagePicker("modal.tree.untitled")}`,
     [folderName, folderPart, context]
   );
 
@@ -1064,16 +1064,17 @@ const CrepeEditor = () => {
   const handleRewrite = React.useCallback(
     (type, folderName, filename, create, text) => {
       toast.promise(new Promise((resolve, reject) => {
+        const suffix = create ? ".md" : ""
         request(
           "POST/utility/crepe/save",
-          { type, folderName, filename, create, text },
+          { type, folderName, filename: filename + suffix, create, text },
           { "": handleCloseModalTree },
           reject
         ).then(() => {
           if (create) {
             context.crepeRef.select.current = context.crepeRef.getSelect();
             context.crepeRef.scroll.current = context.crepeRef.getScroll();
-            nextRef.current = `/crepe/${type}/${folderName}/${filename}`;
+            nextRef.current = `/crepe/${type}/${folderName}/${filename}${suffix}`;
           }
           fileContentRef.current = text;
           normalizedRef.current = text.trimEnd();

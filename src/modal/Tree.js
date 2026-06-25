@@ -98,7 +98,9 @@ const renderItems = (nodes, loadingSet) =>
 export default function Tree(props) {
   const { modalTree, handleCloseModalTree } = props;
   const context = React.useContext(GlobalContext);
+
   const lastWarningRef = React.useRef(0);
+  const buttonRef = React.useRef(null);
 
   const [folderList, setFolderList] = React.useState([
     {
@@ -188,10 +190,8 @@ export default function Tree(props) {
 
   const inputRef = React.useCallback((input) => {
     if (input) {
-      const val = input.value;
-      const dot = val.lastIndexOf(".");
       input.focus();
-      input.setSelectionRange(0, dot === -1 ? val.length : dot);
+      input.setSelectionRange(0, input.value.length);
     }
   }, [modalTree.initValue]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -276,15 +276,19 @@ export default function Tree(props) {
             onChange={(event) => setLocalValue(event.target.value)}
             placeholder={context.languagePicker("modal.tree.placeholder")}
             slotProps={{ input: { ref: inputRef } }}
+            endDecorator=".md"
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                event.preventDefault();
+                buttonRef.current?.click();
+              }
+            }}
           />
         )}
         <Button
+          ref={buttonRef}
           loading={loading}
-          disabled={
-            selectedItem?.split("/")?.filter(Boolean)?.length < 2
-              || !selectedItem
-              || (localValue && localValue.length === 0)
-          }
+          disabled={!selectedItem || selectedItem.split("/").filter(Boolean).length < 2}
           onClick={() => {
             setLoading(true);
             modalTree.handleAction([selectedItem, localValue]);
