@@ -1377,7 +1377,7 @@ const CrepeEditor = () => {
           caption={context.languagePicker("universal.placeholder.unexist.caption")}
         />
       )}
-      {context.setting.crepe.feature.stat && (
+      {crepeState === 1 && context.setting.crepe.feature.stat && (
         <Box
           sx={{
             display: "flex",
