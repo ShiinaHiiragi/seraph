@@ -876,6 +876,10 @@ const CrepeEditor = () => {
    *       - 初次进入时，snapshot 为空，normalizedRef 为空 -> setModified(false)
    *       - 切换页面时，snapshot 为空，normalizedRef 是前一篇内容 -> setModified(false)
    *       - 登录时，snapshot 为当前内容，normalizedRef 为最后一次保存的内容，根据两者关系设置
+   *     - readonly 不会在 useEffect 中初始化
+   *       - 初次进入时，readonly 默认为 true，然后根据用户设置的偏好选择性改为 false
+   *       - useEffect 重建时不会重设 readonly，因此只读/可编辑状态保持原状
+   *       - 根据 snapshot 的有无确定是否是重建，上述的 readonly 改变仅在初次进入时设置
    */
   React.useEffect(() => {
     // a new file is saved
@@ -884,6 +888,7 @@ const CrepeEditor = () => {
     }
 
     const snapshot = context.crepeRef.snapshot.current;
+    const isRebuilt = snapshot !== null;
     setModified(
       snapshot === null
         ? false
@@ -906,7 +911,7 @@ const CrepeEditor = () => {
           [Status.execErrCode.ResourcesUnexist]: () => setCrepeState(-1)
         })
           .then(({ text }) => {
-            if (context.crepeRef.snapshot.current === null && (
+            if (!isRebuilt && (
               context.setting.crepe.edit === "false"
                 || (context.setting.crepe.edit === "auto" && text.length > 0)
             )) {
@@ -917,10 +922,7 @@ const CrepeEditor = () => {
             setCrepeState(1);
           });
     } else {
-      if (
-        context.crepeRef.snapshot.current === null
-          && context.setting.crepe.edit === "false"
-      ) {
+      if (!isRebuilt && context.setting.crepe.edit === "false") {
         context.crepeRef.setReadOnly(true);
         setReadOnly((readOnly) => !readOnly);
       }
