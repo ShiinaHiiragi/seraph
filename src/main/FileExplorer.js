@@ -15,6 +15,7 @@ import MenuItem from '@mui/joy/MenuItem';
 import ListDivider from '@mui/joy/ListDivider';
 import SearchIcon from "@mui/icons-material/Search";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
+import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import GlobalContext, {
   Status,
   request,
@@ -342,6 +343,8 @@ const FileExplorer = (props) => {
 
   // uploading
   const uploadRef = React.useRef();
+  const [dragging, setDragging] = React.useState(false);
+
   const handleUploadFiles = React.useCallback((files) => {
     const total = files.length;
     const toastId = toast.loading(
@@ -403,8 +406,8 @@ const FileExplorer = (props) => {
       });
   }, [type, folderName, context]);
 
-  const handleProprocessFile = React.useCallback((event) => {
-    Promise.all([...event.target.files].map((targetFile) => new Promise((resolve, reject) => {
+  const handleProprocessFile = React.useCallback((files) => {
+    Promise.all([...files].map((targetFile) => new Promise((resolve, reject) => {
       const reader = new FileReader();
       if (!isValidFilename(targetFile.name)) {
         return reject(() =>
@@ -414,7 +417,10 @@ const FileExplorer = (props) => {
 
       if (filesList.some((item) => item.name === targetFile.name)) {
         return reject(() =>
-          toast.error(context.languagePicker("modal.toast.exception.identifierConflict"))
+          toast.error(
+            context.languagePicker("modal.toast.exception.identifierConflict")
+              .format(targetFile.name)
+          )
         );
       }
 
@@ -439,7 +445,32 @@ const FileExplorer = (props) => {
       .catch((handleReport) => handleReport())
   }, [context, filesList, handleUploadFiles]);
 
-  // paste
+  const handleDragOver = React.useCallback((event) => {
+    event.preventDefault();
+    if (!context.isAuthority || folderName.length === 0) {
+      return;
+    }
+    setDragging(true);
+  }, [context.isAuthority, folderName]);
+
+  const handleDragLeave = React.useCallback((event) => {
+    if (!event.currentTarget.contains(event.relatedTarget)) {
+      setDragging(false);
+    }
+  }, []);
+
+  const handleDrop = React.useCallback((event) => {
+    event.preventDefault();
+    setDragging(false);
+    if (!context.isAuthority || folderName.length === 0) {
+      return;
+    }
+    if (event.dataTransfer.files.length > 0) {
+      handleProprocessFile(event.dataTransfer.files);
+    }
+  }, [context.isAuthority, folderName, handleProprocessFile]);
+
+  // paste (original)
   const handlePaste = React.useCallback(() => {
     const originType = clipboard.path[0];
     const originFolderName = clipboard.path[1];
@@ -735,7 +766,18 @@ const FileExplorer = (props) => {
     >
       {folderState === 0 && <Loading pinned /> }
       {folderState === 1 &&
-        <React.Fragment>
+        <Box
+          sx={{
+            flex: 1,
+            position: "relative",
+            display: "flex",
+            flexDirection: "column",
+            minHeight: 0
+          }}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+        >
           <Box
             className="SearchAndFilters"
             sx={{
@@ -887,7 +929,31 @@ const FileExplorer = (props) => {
             setPublicFolders={setPublicFolders}
             setPrivateFolders={setPrivateFolders}
           />
-        </React.Fragment>}
+          {dragging && (
+            <Box
+              sx={{
+                position: "absolute",
+                inset: 0,
+                zIndex: 10,
+                border: "2px dashed",
+                borderColor: "neutral.400",
+                borderRadius: "sm",
+                bgcolor: "neutral.softBg",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                pointerEvents: "none",
+              }}
+            >
+              <FileUploadOutlinedIcon
+                sx={{
+                  fontSize: 64,
+                  color: "neutral.400"
+                }}
+              />
+            </Box>
+          )}
+        </Box>}
       {folderState === -1 &&
         <Caption
           title={context.languagePicker("universal.placeholder.unexist.title")}
@@ -1040,7 +1106,7 @@ const FileExplorer = (props) => {
           multiple
           type="file"
           onChange={(event) => {
-            handleProprocessFile(event);
+            handleProprocessFile(event.target.files);
             event.target.value = null;
           }}
         />
