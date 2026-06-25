@@ -1,4 +1,5 @@
 import React from "react";
+import { flushSync } from "react-dom";
 import { useParams } from "react-router";
 import { useNavigate, useBlocker, useLocation } from "react-router-dom";
 import { toast } from "sonner";
@@ -842,9 +843,10 @@ const CrepeEditor = () => {
    *     - 随后保存的值被立即使用，因此如果 Editor 在短期内被重建两次，则保存的值会丢失
    *     - 用户做的每个改变要么重建整个页面，要么只重建 Editor
    *     - 如果更新竞态导致重建 Editor 后又重建页面，那么保存的快照一定会丢失
-   *   - 保存不需要两者任意一个的重建
-   *     - fileContentRef 只在页面重建时 / 保存时读取最新值
-   *     - normalizedRef 只在编辑器非重建的初始化时 / 保存时读取值
+   *     - 保存不需要两者任意一个的重建
+   *       - 保存即更新 fileContentRef、normalizedRef 以及 modified 的值
+   *       - fileContentRef 只在页面重建时 / 保存时读取最新值
+   *       - normalizedRef 只在编辑器非重建的初始化时 / 保存时读取值
    *   - 对 useEditor 重建的逐项解释
    *     - 更新设置时，handleApply 在请求前会保存文本、光标、滚动条
    *       - handleApply 结束后，如果 Editor 被重建，则保存的快照被消费
@@ -865,6 +867,7 @@ const CrepeEditor = () => {
    *       - Editor 未挂载 -> 未挂载，没有权限/资源不可用 -> 资源不可用
    *       - Editor 未挂载 -> 已挂载，没有权限 -> 返回内容，用于访问私有文件
    *       - Editor 已挂载 -> 已挂载，内容可能有修改 -> 保存内容快照并在重建时恢复
+   *         - 由于 useEffect 使用了 flushSync，因此将强制卸载 Editor
    *         - handleLogin 会先保存之前的内容、光标、快照，并在重建后用于恢复
    *         - 如果 Editor 未挂载，则 isCreated 为 false，不会保存快照
    *         - autoSaveError 与 autoSaveTimerRef 在登陆前本就不可用，即使初始化也不影响
@@ -889,7 +892,7 @@ const CrepeEditor = () => {
     setAutoSaveError(false);
     clearTimeout(autoSaveTimerRef.current);
 
-    setCrepeState(0);
+    flushSync(() => setCrepeState(0));
     if (folderName.length > 0) {
       request(
         "GET/utility/crepe/load",
