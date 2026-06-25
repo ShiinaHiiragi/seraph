@@ -280,7 +280,7 @@ const Header = (props) => {
           )
           setGlobalSwitch(globalState.ANONYMOUS);
           resolve();
-          navigate("/");
+          navigate("/", { state: { logout: true } });
         })
     }), {
       loading: context.languagePicker("modal.toast.plain.generalReconfirm"),

@@ -947,7 +947,9 @@ const CrepeEditor = () => {
   }, [context, readOnly]);
 
   // § blocker
-  const blocker = useBlocker(modified);
+  const blocker = useBlocker(({ nextLocation }) =>
+    modified && !nextLocation.state?.logout
+  );
   const blockerActiveRef = React.useRef(false);
 
   React.useEffect(() => {
