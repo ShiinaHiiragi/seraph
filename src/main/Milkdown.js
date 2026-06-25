@@ -1,5 +1,4 @@
 import React from "react";
-import { flushSync } from "react-dom";
 import { useParams } from "react-router";
 import { useNavigate, useBlocker } from "react-router-dom";
 import { toast } from "sonner";
@@ -820,6 +819,7 @@ const CrepeEditor = () => {
 
   // § core states & initialization
   const [crepeState, setCrepeState] = React.useState(0);
+  const [loadKey, setLoadKey] = React.useState(0);
   const [editableKey, setEditableKey] = React.useState(0);
   const [readOnly, setReadOnly] = React.useState(false);
   const [modified, setModified] = React.useState(false);
@@ -867,7 +867,7 @@ const CrepeEditor = () => {
    *       - Editor 未挂载 -> 未挂载，没有权限/资源不可用 -> 资源不可用
    *       - Editor 未挂载 -> 已挂载，没有权限 -> 返回内容，用于访问私有文件
    *       - Editor 已挂载 -> 已挂载，内容可能有修改 -> 保存内容快照并在重建时恢复
-   *         - 由于 useEffect 使用了 flushSync，因此将强制卸载 Editor
+   *         - 由于 useEffect 使用了 loadKey，因此将强制卸载 Editor
    *         - handleLogin 会先保存之前的内容、光标、快照，并在重建后用于恢复
    *         - 如果 Editor 未挂载，则 isCreated 为 false，不会保存快照
    *         - autoSaveError 与 autoSaveTimerRef 在登陆前本就不可用，即使初始化也不影响
@@ -901,7 +901,10 @@ const CrepeEditor = () => {
     setAutoSaveError(false);
     clearTimeout(autoSaveTimerRef.current);
 
-    flushSync(() => setCrepeState(0));
+    // React will re-mount components forcibly when key attr changes
+    // because components with different key value will not be viewed as the one mounted before
+    setLoadKey((loadKey) => loadKey + 1);
+    setCrepeState(0);
     if (folderName.length > 0) {
       request(
         "GET/utility/crepe/load",
@@ -1369,7 +1372,7 @@ const CrepeEditor = () => {
     >
       {crepeState === 0 && <Loading pinned />}
       {crepeState === 1 &&
-        <MilkdownField>
+        <MilkdownField key={loadKey}>
           <MilkdownProvider>
             <CrepeEditorInner
               basePath={basePath}
@@ -1404,7 +1407,7 @@ const CrepeEditor = () => {
             <Box sx={{ height: "100%" }}>
               <Box
                 ref={wordCountAnchorRef}
-                onClick={() => setWordCountOpen(prev => !prev)}
+                onClick={() => setWordCountOpen((wordCountOpen) => !wordCountOpen)}
                 sx={{
                   px: 2.5,
                   height: "100%",
