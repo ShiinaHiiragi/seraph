@@ -66,6 +66,7 @@ const Header = (props) => {
   } = props;
   const context = React.useContext(GlobalContext);
   const navigate = useNavigate();
+  const buttonRef = React.useRef(null);
 
   // state for config
   const [modalConfigOpen, setModalConfigOpen] = React.useState(false);
@@ -374,6 +375,7 @@ const Header = (props) => {
         </React.Suspense>
       )}
       <ModalForm
+        ref={buttonRef}
         open={modalLoginOpen}
         loading={buttonLoading}
         disabled={formPasswordText.length === 0}
@@ -393,7 +395,7 @@ const Header = (props) => {
             slotProps={{ input: { type: "password" } }}
             placeholder={context.languagePicker("modal.form.login.placeholder")}
             error={formPasswordError}
-            handleEnter={handleLogin}
+            handleEnter={() => buttonRef.current?.click()}
           />
         </form>
       </ModalForm>

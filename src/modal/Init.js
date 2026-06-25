@@ -49,6 +49,8 @@ export default function Init(props) {
     setModalInitOpen
   } = props;
   const context = React.useContext(GlobalContext);
+  const buttonRef = React.useRef(null);
+
   const [formPasswordText, setFormPasswordText] = React.useState("");
   const [formPasswordType, setFormPasswordType] = React.useState("password");
   const [formPasswordLoading, setFormPasswordLoading] = React.useState(false);
@@ -168,11 +170,12 @@ export default function Init(props) {
                       : <VisibilityOffIcon />}
                   </IconButton>
                 }
-                handleEnter={handleClickSubmit}
+                handleEnter={() => buttonRef.current?.click()}
               />
             </FormControl>
           </form>
           <Button
+            ref={buttonRef}
             loading={formPasswordLoading}
             disabled={formPasswordText.length === 0}
             onClick={handleClickSubmit}

@@ -142,6 +142,14 @@ const FileExplorer = (props) => {
   const [modalFilename, setModalFilename] = React.useState(null);
   const [modalFileLink, setModalFileLink] = React.useState(null);
 
+  // used by onKeyDown
+  const buttonNewFolderRef = React.useRef(null);
+  const buttonNewMarkdownRef = React.useRef(null);
+  const buttonNewLinkRef = React.useRef(null);
+  const buttonDecryptRef = React.useRef(null);
+  const buttonRenameRef = React.useRef(null);
+  const buttonRelinkRef = React.useRef(null);
+
   // new folder
   const [modalNewFolderOpen, setModalNewFolderOpen] = React.useState(false);
   const [modalNewFolderLoading, setModalNewFolderLoading] = React.useState(false);
@@ -966,6 +974,7 @@ const FileExplorer = (props) => {
           caption={context.languagePicker("universal.placeholder.unexist.caption")}
         />}
       <ModalForm
+        ref={buttonNewFolderRef}
         open={modalNewFolderOpen}
         disabled={modalNewFolderDisabled}
         loading={modalNewFolderLoading}
@@ -981,10 +990,11 @@ const FileExplorer = (props) => {
           autoFocus
           autoComplete="off"
           placeholder={context.languagePicker("modal.form.new.placeholder")}
-          handleEnter={handleNewFolder}
+          handleEnter={() => buttonNewFolderRef.current?.click()}
         />
       </ModalForm>
       <ModalForm
+        ref={buttonNewMarkdownRef}
         open={modalNewMarkdownOpen}
         disabled={modalNewMarkdownDisabled}
         loading={modalNewMarkdownLoading}
@@ -1001,10 +1011,11 @@ const FileExplorer = (props) => {
           autoComplete="off"
           placeholder={context.languagePicker("modal.form.newMarkdown.placeholder")}
           endDecorator=".md"
-          handleEnter={handleNewMarkdown}
+          handleEnter={() => buttonNewMarkdownRef.current?.click()}
         />
       </ModalForm>
       <ModalForm
+        ref={buttonNewLinkRef}
         open={modalNewLinkOpen}
         disabled={modalNewLinkDisabled}
         loading={modalNewLinkLoading}
@@ -1035,11 +1046,12 @@ const FileExplorer = (props) => {
             setValue={setFormNewLinkURLText}
             autoComplete="off"
             placeholder={context.languagePicker("universal.placeholder.instruction.required")}
-            handleEnter={handleNewLink}
+            handleEnter={() => buttonNewLinkRef.current?.click()}
           />
         </FormControl>
       </ModalForm>
       <ModalForm
+        ref={buttonDecryptRef}
         open={modalDecryptOpen}
         loading={modalDecryptLoading}
         disabled={formPrivateKeyText.length === 0}
@@ -1064,10 +1076,11 @@ const FileExplorer = (props) => {
           }}
           placeholder={context.languagePicker("modal.form.decrypt.placeholder")}
           error={formPrivateKeyError}
-          handleEnter={handleDecrypt}
+          handleEnter={() => buttonDecryptRef.current?.click()}
         />
       </ModalForm>
       <ModalForm
+        ref={buttonRenameRef}
         open={modalRenameOpen}
         loading={modalRenameLoading}
         disabled={modalRenameDisabled}
@@ -1084,10 +1097,11 @@ const FileExplorer = (props) => {
           autoFocus
           autoComplete="off"
           placeholder={context.languagePicker("modal.form.rename.placeholder")}
-          handleEnter={handleRename}
+          handleEnter={() => buttonRenameRef.current?.click()}
         />
       </ModalForm>
       <ModalForm
+        ref={buttonRelinkRef}
         open={modalRelinkOpen}
         loading={modalRelinkLoading}
         disabled={modalRelinkDisabled}
@@ -1103,7 +1117,7 @@ const FileExplorer = (props) => {
           autoFocus
           autoComplete="off"
           placeholder={context.languagePicker("modal.form.relink.placeholder")}
-          handleEnter={handleRelink}
+          handleEnter={() => buttonRelinkRef.current?.click()}
         />
       </ModalForm>
       <label role="button" ref={uploadRef}>
