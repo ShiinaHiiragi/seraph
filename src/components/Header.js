@@ -393,6 +393,7 @@ const Header = (props) => {
             slotProps={{ input: { type: "password" } }}
             placeholder={context.languagePicker("modal.form.login.placeholder")}
             error={formPasswordError}
+            handleEnter={handleLogin}
           />
         </form>
       </ModalForm>

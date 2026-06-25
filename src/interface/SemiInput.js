@@ -9,6 +9,7 @@ export default function SemiInput(props) {
     setValue,
     offset,
     selectBasename,
+    handleEnter,
     ...inputProps
   } = props;
 
@@ -43,6 +44,11 @@ export default function SemiInput(props) {
           ...inputProps.slotProps?.input,
         },
       }}
+      onKeyDown={handleEnter ? (event) => {
+        if (event.key === "Enter") {
+          handleEnter();
+        }
+      } : undefined}
     />
   );
 };

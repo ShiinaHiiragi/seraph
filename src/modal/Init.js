@@ -168,6 +168,7 @@ export default function Init(props) {
                       : <VisibilityOffIcon />}
                   </IconButton>
                 }
+                handleEnter={handleClickSubmit}
               />
             </FormControl>
           </form>

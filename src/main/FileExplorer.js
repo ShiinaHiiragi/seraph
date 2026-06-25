@@ -908,6 +908,7 @@ const FileExplorer = (props) => {
           autoFocus
           autoComplete="off"
           placeholder={context.languagePicker("modal.form.new.placeholder")}
+          handleEnter={handleNewFolder}
         />
       </ModalForm>
       <ModalForm
@@ -927,6 +928,7 @@ const FileExplorer = (props) => {
           autoComplete="off"
           placeholder={context.languagePicker("modal.form.newMarkdown.placeholder")}
           endDecorator=".md"
+          handleEnter={handleNewMarkdown}
         />
       </ModalForm>
       <ModalForm
@@ -949,6 +951,8 @@ const FileExplorer = (props) => {
             autoComplete="off"
             placeholder={context.languagePicker("universal.placeholder.instruction.required")}
             endDecorator={context.metadata.platform === 'linux' ? '.desktop' : 'url'}
+            // TODO
+            handleEnter={undefined}
           />
         </FormControl>
         <FormControl>
@@ -958,6 +962,7 @@ const FileExplorer = (props) => {
             setValue={setFormNewLinkURLText}
             autoComplete="off"
             placeholder={context.languagePicker("universal.placeholder.instruction.required")}
+            handleEnter={handleNewLink}
           />
         </FormControl>
       </ModalForm>
@@ -986,6 +991,7 @@ const FileExplorer = (props) => {
           }}
           placeholder={context.languagePicker("modal.form.decrypt.placeholder")}
           error={formPrivateKeyError}
+          handleEnter={handleDecrypt}
         />
       </ModalForm>
       <ModalForm
@@ -1005,6 +1011,7 @@ const FileExplorer = (props) => {
           autoFocus
           autoComplete="off"
           placeholder={context.languagePicker("modal.form.rename.placeholder")}
+          handleEnter={handleRename}
         />
       </ModalForm>
       <ModalForm
@@ -1023,6 +1030,7 @@ const FileExplorer = (props) => {
           autoFocus
           autoComplete="off"
           placeholder={context.languagePicker("modal.form.relink.placeholder")}
+          handleEnter={handleRelink}
         />
       </ModalForm>
       <label role="button" ref={uploadRef}>
