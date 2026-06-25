@@ -1,7 +1,7 @@
 import React from "react";
 import { flushSync } from "react-dom";
 import { useParams } from "react-router";
-import { useNavigate, useBlocker, useLocation } from "react-router-dom";
+import { useNavigate, useBlocker } from "react-router-dom";
 import { toast } from "sonner";
 import { styled } from "@mui/joy/styles";
 import Box from "@mui/joy/Box";
@@ -770,7 +770,6 @@ const CrepeEditorInner = (props) => {
 
 const CrepeEditor = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const context = React.useContext(GlobalContext);
 
   // § url path analysis
@@ -827,6 +826,7 @@ const CrepeEditor = () => {
 
   const fileContentRef = React.useRef(null);
   const normalizedRef = React.useRef(null);
+  const nextRef = React.useRef(null);
 
   /**
    * Milkdown Crepe 页面的主入口，useEffect 与 useEditor 的依赖必须相互配合
@@ -835,7 +835,7 @@ const CrepeEditor = () => {
    *     - 登出不考虑，因为会自动切换到主页
    *     - useEffect 重建一定会卸载并重装 Editor，因为开头有 setCrepeState(0)
    *   - useEditor 的重建虽然项目繁多，但实际上只有三类：保存新文件、切换只读、更新设置
-   *     - 切换 path 中，保存新文件会设置 location state 导致 useEffect 立即退出，因此不会重建页面
+   *     - 切换 path 中，保存新文件会设置 nextRef 导致 useEffect 立即退出，因此不会重建页面
    *     - 另外两项的重建不会导致页面重建
    *   - 请注意，两者的依赖项事实上是不重合的
    *     - 因为部分 Editor 重建前会利用 crepeRef 保存状态（文本、光标等）并在重建后恢复
@@ -843,7 +843,7 @@ const CrepeEditor = () => {
    *     - 随后保存的值被立即使用，因此如果 Editor 在短期内被重建两次，则保存的值会丢失
    *     - 用户做的每个改变要么重建整个页面，要么只重建 Editor
    *     - 如果更新竞态导致重建 Editor 后又重建页面，那么保存的快照一定会丢失
-   *     - 保存不需要两者任意一个的重建
+   *     - 保存已有文件不需要两者任意一个的重建
    *       - 保存即更新 fileContentRef、normalizedRef 以及 modified 的值
    *       - fileContentRef 只在页面重建时 / 保存时读取最新值
    *       - normalizedRef 只在编辑器非重建的初始化时 / 保存时读取值
@@ -856,7 +856,7 @@ const CrepeEditor = () => {
    *       - 仅在从只读 -> 可编辑切换前的瞬间保存文本、光标
    *       - 无需保存滚动条，这样切换后的滚动条位置和切换时一致，不会出现突变
    *     - 保存新文件时，保存光标与滚动条位置
-   *       - 设置 location state，于是在下面的 useEffect 中 early return，页面不重建
+   *       - 设置 nextRef，于是在下面的 useEffect 中 early return，页面不重建
    *       - 编辑器重建，fileContent 使用刚保存的最新版，使用保存的光标与滚动条快照
    *   - 对 useEffect 重建的逐项解释
    *     - 每次（包括初次）进入时不检查用户权限，直接请求文件内容并调节 crepeState
@@ -882,8 +882,12 @@ const CrepeEditor = () => {
    *       - 根据 snapshot 的有无确定是否是重建，上述的 readonly 改变仅在初次进入时设置
    */
   React.useEffect(() => {
-    // a new file is saved
-    if (location.state?.newFile) {
+    // eatly return when a new file is saved
+    // cannot be replaced by location.state
+    // because useBlocker prevents navigate() with replace: true
+    const nextRefActivated = nextRef.current !== null;
+    nextRef.current = null;
+    if (nextRefActivated) {
       return;
     }
 
@@ -953,8 +957,8 @@ const CrepeEditor = () => {
   }, [context, readOnly]);
 
   // § blocker
-  const blocker = useBlocker(({ nextLocation }) =>
-    modified && !nextLocation.state?.logout && !nextLocation.state?.newFile
+  const blocker = useBlocker(({ nextLocation, historyAction }) =>
+    modified && !(historyAction !== 'POP' && nextLocation.state?.logout)
   );
   const blockerActiveRef = React.useRef(false);
 
@@ -988,8 +992,10 @@ const CrepeEditor = () => {
       const handler = (event) => event.preventDefault();
       window.addEventListener("beforeunload", handler);
       return () => window.removeEventListener("beforeunload", handler);
+    } else if (nextRef.current) {
+      navigate(nextRef.current);
     }
-  }, [modified]);
+  }, [modified, navigate]);
 
   // § tree for saving file & image
   const [modalTree, setModalTree] = React.useState({
@@ -1061,16 +1067,16 @@ const CrepeEditor = () => {
           { "": handleCloseModalTree },
           reject
         ).then(() => {
+          if (create) {
+            context.crepeRef.select.current = context.crepeRef.getSelect();
+            context.crepeRef.scroll.current = context.crepeRef.getScroll();
+            nextRef.current = `/crepe/${type}/${folderName}/${filename}`;
+          }
           fileContentRef.current = text;
           normalizedRef.current = text.trimEnd();
           setModified(false);
           handleCloseModalTree();
           resolve();
-          if (create) {
-            context.crepeRef.select.current = context.crepeRef.getSelect();
-            context.crepeRef.scroll.current = context.crepeRef.getScroll();
-            navigate(`/crepe/${type}/${folderName}/${filename}`, { state: { newFile: true } });
-          }
         })
       }), {
         loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
@@ -1078,7 +1084,7 @@ const CrepeEditor = () => {
         error: (data) => data
       });
     },
-    [context, navigate, handleCloseModalTree]
+    [context, handleCloseModalTree]
   );
 
   const handleSave = React.useCallback((type, folderName, filename, create) => {
