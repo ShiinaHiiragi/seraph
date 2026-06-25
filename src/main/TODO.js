@@ -629,7 +629,7 @@ const TODO = () => {
             autoFocus
             autoComplete="off"
             placeholder={context.languagePicker("universal.placeholder.instruction.required")}
-            handleEnter={() => descriptionRef.current?.focus() }
+            handleEnter={() => descriptionRef.current?.focus()}
           />
         </FormControl>
         <FormControl>

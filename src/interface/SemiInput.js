@@ -3,7 +3,7 @@ import Input from "@mui/joy/Input";
 import Textarea from "@mui/joy/Textarea";
 import { reactionInterval } from "./constants";
 
-export default function SemiInput(props) {
+const SemiInput = React.forwardRef((props, ref) => {
   const {
     initValue,
     setValue,
@@ -23,6 +23,15 @@ export default function SemiInput(props) {
   }, [localValue, offset, setValue]);
 
   const inputRef = React.useRef(null);
+  const mergedRef = React.useCallback((node) => {
+    inputRef.current = node;
+    if (typeof ref === "function") {
+      ref(node);
+    } else if (ref) {
+      ref.current = node;
+    }
+  }, [ref]);
+
   React.useEffect(() => {
     if (selectBasename && inputRef.current) {
       const val = inputRef.current.value;
@@ -40,7 +49,7 @@ export default function SemiInput(props) {
       slotProps={{
         ...inputProps.slotProps,
         input: {
-          ref: inputRef,
+          ref: mergedRef,
           ...inputProps.slotProps?.input,
         },
       }}
@@ -52,7 +61,9 @@ export default function SemiInput(props) {
       } : undefined}
     />
   );
-};
+});
+
+export default SemiInput;
 
 const SemiTextarea = React.forwardRef((props, ref) => {
   const {

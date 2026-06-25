@@ -215,6 +215,7 @@ const FileExplorer = (props) => {
   ]);
 
   // new link
+  const urlRef = React.useRef(null);
   const [modalNewLinkOpen, setModalNewLinkOpen] = React.useState(false);
   const [modalNewLinkLoading, setModalNewLinkLoading] = React.useState(false);
   const [formNewLinkNameText, setFormNewLinkNameText] = React.useState("");
@@ -951,13 +952,13 @@ const FileExplorer = (props) => {
             autoComplete="off"
             placeholder={context.languagePicker("universal.placeholder.instruction.required")}
             endDecorator={context.metadata.platform === 'linux' ? '.desktop' : 'url'}
-            // TODO
-            handleEnter={undefined}
+            handleEnter={() => urlRef.current?.focus()}
           />
         </FormControl>
         <FormControl>
           <FormLabel>{context.languagePicker("modal.form.newLink.url")}</FormLabel>
           <SemiInput
+            ref={urlRef}
             initValue={formNewLinkURLText}
             setValue={setFormNewLinkURLText}
             autoComplete="off"
