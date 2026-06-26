@@ -1,5 +1,4 @@
 import React from "react";
-import { toast } from "sonner";
 import Box from "@mui/joy/Box";
 import IconButton from "@mui/joy/IconButton";
 import Typography from "@mui/joy/Typography"
@@ -13,6 +12,7 @@ import GreyLogo from "../logo-grey.svg";
 import GlobalContext, {
   objectEquiv,
   globalState,
+  toast,
   request,
   Status,
   defaultSetting,

@@ -1,5 +1,4 @@
 import React from "react";
-import { toast } from "sonner";
 import Box from "@mui/joy/Box";
 import Chip from "@mui/joy/Chip";
 import Divider from "@mui/joy/Divider";
@@ -38,6 +37,7 @@ import GlobalContext, {
   reactionInterval,
   alphabet,
   monospaceFonts,
+  toast,
   request
 } from "../interface/constants";
 import { languageMap } from "../interface/languagePicker";

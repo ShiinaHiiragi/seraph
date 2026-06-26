@@ -1,5 +1,4 @@
 import React from "react";
-import { toast } from "sonner";
 import Divider from "@mui/joy/Divider";
 import Menu from "@mui/joy/Menu";
 import MenuButton from "@mui/joy/MenuButton";
@@ -9,6 +8,7 @@ import IconButton from "@mui/joy/IconButton";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
 import GlobalContext, {
+  toast,
   request,
   Status,
   pathStartWith,

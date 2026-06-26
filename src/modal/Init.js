@@ -1,6 +1,5 @@
 import React from "react";
 import { styled } from "@mui/joy/styles";
-import { toast } from "sonner";
 import Button from "@mui/joy/Button";
 import Divider from "@mui/joy/Divider";
 import Modal from "@mui/joy/Modal";
@@ -18,7 +17,7 @@ import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
 import IconButton from "@mui/joy/IconButton";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { request, globalState } from "../interface/constants";
+import { toast, request, globalState } from "../interface/constants";
 import { languageMap, languagePickerSpawner } from "../interface/languagePicker";
 import SemiInput from "../interface/SemiInput";
 

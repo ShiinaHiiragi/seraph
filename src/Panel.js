@@ -3,7 +3,7 @@ import CssBaseline from "@mui/joy/CssBaseline";
 import GlobalStyles from "@mui/joy/GlobalStyles";
 import { styled, CssVarsProvider } from "@mui/joy/styles";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
-import { Toaster, toast } from "sonner";
+import { Toaster } from "sonner";
 
 import Header from "./components/Header";
 import Navigation from "./components/Navigation";
@@ -22,6 +22,7 @@ import GlobalContext, {
   defaultSetting,
   setValue,
   request,
+  toast,
   toastTheme
 } from "./interface/constants";
 

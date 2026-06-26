@@ -3,7 +3,7 @@ import axios from "axios";
 import Box from "@mui/joy/Box";
 import Link from "@mui/joy/Link";
 import { styled } from '@mui/joy';
-import { toast } from "sonner";
+import { toast as rawToast } from "sonner";
 import { renderToStaticMarkup } from "react-dom/server";
 
 // eslint-disable-next-line no-extend-native
@@ -110,8 +110,30 @@ String.prototype.timeFormat = function(formatString) {
   return new Date(this).timeFormat(formatString);
 }
 
-const id = (x) => x;
+const formatToast = (msg) => {
+  console.log(msg);
+  return msg.split("\n").map((line, index) => <Box key={index}>{line}</Box>);
+}
 
+const toast = {
+  success: (msg, options) => rawToast.success(formatToast(msg), options),
+  error: (msg, options) => rawToast.error(formatToast(msg), options),
+  message: (msg, options) => rawToast(formatToast(msg), options),
+  promise: (promise, options) => rawToast.promise(promise, {
+    ...options,
+    loading: formatToast(options.loading),
+    success: typeof options.success === "function"
+      ? (data) => formatToast(options.success(data))
+      : formatToast(options.success),
+    error: typeof options.error === "function"
+      ? (err) => formatToast(options.error(err))
+      : formatToast(options.error),
+  })
+};
+
+export { formatToast, toast };
+
+const id = (x) => x;
 const objectEquiv = (left, right) => {
   if (left === right) {
     return true;

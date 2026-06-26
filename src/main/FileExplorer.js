@@ -1,5 +1,4 @@
 import React from "react";
-import { toast } from "sonner";
 import { useParams } from "react-router";
 import Fuse from "fuse.js";
 import isValidFilename from "valid-filename";
@@ -18,6 +17,7 @@ import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import GlobalContext, {
   Status,
+  toast,
   request,
   reactionInterval,
   toastDuration,
