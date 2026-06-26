@@ -110,10 +110,8 @@ String.prototype.timeFormat = function(formatString) {
   return new Date(this).timeFormat(formatString);
 }
 
-const formatToast = (msg) => {
-  console.log(msg);
-  return msg.split("\n").map((line, index) => <Box key={index}>{line}</Box>);
-}
+const formatToast = (msg) =>
+  msg.split("\n").map((line, index) => <Box key={index}>{line}</Box>)
 
 const toast = {
   success: (msg, options) => rawToast.success(formatToast(msg), options),
