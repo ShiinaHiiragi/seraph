@@ -82,7 +82,7 @@ const Header = (props) => {
         setSetting((setting) => {
           if (!objectEquiv(setting, data.setting)) {
             const languagePicker = languagePickerSpawner(data.setting.meta.language);
-            toast(languagePicker("modal.toast.plain.updateSetting"));
+            toast.message(languagePicker("modal.toast.plain.updateSetting"));
             return data.setting;
           } else {
             // avoid jittering of display
@@ -250,7 +250,7 @@ const Header = (props) => {
         setClipboard(data.clipboard);
         setGlobalSwitch(globalState.AUTHORITY);
         handleCloseLogin();
-        toast(context.languagePicker("modal.toast.plain.login"));
+        toast.message(context.languagePicker("modal.toast.plain.login"));
         if (data.saltWarning) {
           toast.error(
             context.languagePicker("modal.toast.warning.saltMissing")
