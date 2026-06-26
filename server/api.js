@@ -355,7 +355,7 @@ const fileOperator = {
     fs.promises.mkdtemp(path.join(os.tmpdir(), fileOperator.tempPrefix))
       .then((tempdir) =>
         Promise.resolve(handleOperate(tempdir))
-          .finally(() => console.log(`removed ${tempdir}`) || fs.promises.rm(tempdir, { recursive: true, force: true }))
+          .finally(() => fs.promises.rm(tempdir, { recursive: true, force: true }))
       ),
 
   operateInTempSync: (handleOperateSync) => {
@@ -976,7 +976,7 @@ const checkerOperator = {
       assert(version.versionGE(minVersion))
       return checkerOperator.pass()
     } catch (_) {
-      return checkerOperator.pass([{ id: `python (>=${minVersion})`, cat: "Packages" }]);
+      return checkerOperator.pass([{ id: `python (≥${minVersion})`, cat: "Packages" }]);
     }
   },
 

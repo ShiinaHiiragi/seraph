@@ -539,7 +539,7 @@ const zhHans = {
         passwordUnexist: "解密密码尚未设置。",
         invalidEncrypt: "无效的 .srph 文件格式。",
         invalidDecrypt: "由于密码错误或文件被篡改，解密失败。",
-        environmentMissing: "拓展模块环境事前检查不通过：请查阅控制台获得更多细节。",
+        environmentMissing: "由于以下的依赖项缺失，拓展模块环境事前检查不通过：\n{0}",
         extensionError: "拓展模块内部错误：请查阅控制台获得更多细节。",
         duplicateRequest: "重复请求：请降低操作频率。"
       },
@@ -628,9 +628,6 @@ const zhHans = {
     general: {
       language: "语言"
     }
-  },
-  console: {
-    dependencies: "缺失的依赖项："
   },
   universal: {
     time: {

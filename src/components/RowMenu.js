@@ -262,19 +262,7 @@ export default function RowMenu(props) {
       }, {
         [Status.execErrCode.ExtensionError]: (data) => {
           console.log(data.stderr);
-        },
-        [Status.execErrCode.EnvironmentMissing]: (data) => {
-          console.log(
-            Object
-              .keys(data.missing)
-              .map((key) => `${key}:\n  ${data.missing[key].join("\n  ")}`)
-              .reduce(
-                (prev, curr) => prev.concat(curr).concat("\n"),
-                `${context.languagePicker("console.dependencies")}\n`
-              )
-              .trim()
-          );
-        },
+        }
       }, reject)
         .then((data) => {
           const { statusCode, errorCode, ...newInfo } = data;

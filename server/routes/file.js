@@ -606,7 +606,10 @@ router.post('/epub', (req, res, next) => {
     req.status.addExecStatus(api.Status.execErrCode.EnvironmentMissing);
     res.send({
       ...req.status.generateReport(),
-      missing: missing
+      0: Object.keys(missing)
+        .map((key) => `${key}: ${missing[key].join(", ")}`)
+        .join("\n")
+        .trim()
     });
     return;
   }

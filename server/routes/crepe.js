@@ -71,7 +71,6 @@ router.post('/update', (req, res, next) => {
       fs.writeFileSync(filePath, newText, 'utf-8');
     }
   } catch (_) {
-    console.log(_);
     // -> EF_FME: read or write error
     req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
     res.send(req.status.generateReport());
