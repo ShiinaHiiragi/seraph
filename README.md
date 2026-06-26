@@ -184,6 +184,7 @@
 
 ## Log
 
+- 06/26/2026 ver 1.4.5: Add feature of drag & drop and styles of sonner toast
 - 06/25/2026 ver 1.4.4: Add setting for shortcuts and fix states of Crepe editor
 - 06/24/2026 ver 1.4.3: Add feature of auto save for Crepe editor
 - 06/23/2026 ver 1.4.2: Add link shortcut for file explorer
