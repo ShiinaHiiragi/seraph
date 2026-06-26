@@ -1989,7 +1989,7 @@ export default function Config(props) {
                                 title={item.tip}
                                 placement="right"
                                 sx={{
-                                  maxWidth: 300,
+                                  maxWidth: 320,
                                   py: 0.5,
                                   px: 0.75,
                                   cursor: "default"
