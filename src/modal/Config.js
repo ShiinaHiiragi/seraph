@@ -824,7 +824,10 @@ const SECTIONS = (
               { value: 0, label: context.languagePicker("header.config.crepe.saveOption.0") }
             ],
             "crepe.save",
-            handleApply
+            handleApply,
+            undefined,
+            undefined,
+            (value) => context.languagePicker("header.config.fallback.seconds").format(value)
           )
         },
         {
