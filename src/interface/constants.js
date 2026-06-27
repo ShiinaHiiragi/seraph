@@ -116,7 +116,8 @@ const formatToast = (msg) =>
 const toast = {
   success: (msg, options) => rawToast.success(formatToast(msg), options),
   error: (msg, options) => rawToast.error(formatToast(msg), options),
-  message: (msg, options) => rawToast(formatToast(msg), options),
+  loading: (msg, options) => rawToast.loading(formatToast(msg), options),
+  message: (msg, options) => rawToast.message(formatToast(msg), options),
   promise: (promise, options) => rawToast.promise(promise, {
     ...options,
     loading: formatToast(options.loading),
@@ -126,7 +127,8 @@ const toast = {
     error: typeof options.error === "function"
       ? (err) => formatToast(options.error(err))
       : formatToast(options.error),
-  })
+  }),
+  dismiss: rawToast.dismiss
 };
 
 export { formatToast, toast };
