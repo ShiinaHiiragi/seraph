@@ -873,11 +873,16 @@ exports.checkConfig = checkConfig;
 
 const expiredPeriod = () => configOperator.config.setting.meta.token * 60 * 1000;
 const cookieOperator = {
-  sessionName: "seraphSession",
+  sessionName: "seraph_auth",
   setSessionCookie: (res, session) => res.cookie(
     cookieOperator.sessionName,
     session,
-    { expires: new Date(Date.now() + expiredPeriod()) }
+    {
+      httpOnly: true,
+      secure: !isDev,
+      sameSite: "lax",
+      maxAge: expiredPeriod()
+    }
   ),
 
   deleteSessionCookie: (res) => res.clearCookie(
