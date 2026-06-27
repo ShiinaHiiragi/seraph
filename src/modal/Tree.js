@@ -147,7 +147,7 @@ export default function Tree(props) {
 
       if (!needExpand) {
         setExpandedItem((expandedItem) =>
-          expandedItem.filter(id => id !== itemID)
+          expandedItem.filter((id) => id !== itemID)
         );
         return;
       }

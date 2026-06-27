@@ -261,7 +261,7 @@ export const imageRemark = $remark(
 export const imagePasteHandler = $prose(
   () => new Plugin({
     appendTransaction(transactions, _old, newState) {
-      if (!transactions.some(tr => tr.getMeta("uiEvent") === "paste")) {
+      if (!transactions.some((tr) => tr.getMeta("uiEvent") === "paste")) {
         return null;
       }
       const replacements = [];

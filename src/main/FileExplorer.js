@@ -60,7 +60,7 @@ const FileExplorer = (props) => {
   // remove duplicate file entries
   const sortedFilesList = React.useMemo(() => 
     Object
-      .values(Object.fromEntries(filesList.map(item => [item.name, item])))
+      .values(Object.fromEntries(filesList.map((item) => [item.name, item])))
       .sortBy(...filesSorting),
     [filesList, filesSorting]
   );
@@ -473,7 +473,7 @@ const FileExplorer = (props) => {
     if (!context.isAuthority || folderName.length === 0) {
       return;
     }
-    if ([...event.dataTransfer.items].some(item =>
+    if ([...event.dataTransfer.items].some((item) =>
         item.webkitGetAsEntry?.()?.isDirectory
     )) {
       toast.error(context.languagePicker("modal.toast.warning.uploadFolder"));
