@@ -65,6 +65,7 @@ router.post('/reset', (req, res, next) => {
     ...config,
     setting: JSON.parse(JSON.stringify(api.defaultConfig.setting))
   }));
+  api.styleOperator.setStyle(() => "");
 
   // -> ES: no extra info
   req.status.addExecStatus();

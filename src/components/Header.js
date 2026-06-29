@@ -77,6 +77,22 @@ const Header = (props) => {
   const [resetButtonLoading, setResetButtonLoading] = React.useState(false);
 
   const handleToggleConfig = React.useCallback(() => {
+    Promise.all([
+      request("GET/config/copy"),
+      request("GET/utility/crepe/style")
+    ])
+      .then(([{ setting: latestSetting }, { style: latestStyle }]) => {
+        if (
+          !objectEquiv(context.setting, latestSetting)
+            || (context.crepeStyle && context.crepeStyle !== latestStyle)
+        ) {
+          const languagePicker = languagePickerSpawner(latestSetting.meta.language);
+          toast.message(languagePicker("modal.toast.plain.updateSetting"));
+          setSetting(latestSetting);
+        }
+        context.crepeRef.setStyle(latestStyle);
+      });
+
     request("GET/config/copy")
       .then((data) => {
         setSetting((setting) => {
@@ -93,7 +109,7 @@ const Header = (props) => {
     setModalConfigLoading(true);
     setModalConfigOpen(true);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [context]);
 
   const handleCloseConfig = React.useCallback(() => {
     context.crepeRef.snapshot.current = null;
@@ -143,6 +159,7 @@ const Header = (props) => {
             .then(() => {
               setResetButtonLoading(false)
               setSetting(defaultSetting)
+              context.crepeRef.setStyle("");
               resolve()
             })
         }), {
