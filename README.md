@@ -184,6 +184,7 @@
 
 ## Log
 
+- 06/27/2026 ver 1.4.7: Add CSS supports for Milkdown Crepe
 - 06/27/2026 ver 1.4.6: Fix cookie session and raw toast functions
 - 06/26/2026 ver 1.4.5: Add feature of drag & drop and styles of sonner toast
 - 06/25/2026 ver 1.4.4: Add setting for shortcuts and fix states of Crepe editor
