@@ -1152,7 +1152,7 @@ const taskOperator = {
 const styleOperator = {
   style: fileOperator.readStyle(),
 
-  setSalt: (handle) => {
+  setStyle: (handle) => {
     const newStyle = handle(styleOperator.style);
     fileOperator.saveStyle(newStyle);
     styleOperator.style = newStyle;

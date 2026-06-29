@@ -10,8 +10,7 @@ const ja = {
         upload: "セッティングをインポート",
         uploadButton: "インポート",
         download: "セッティングをエクスポート",
-        downloadButton: "エクスポート",
-        width: 140
+        downloadButton: "エクスポート"
       },
       account: {
         title: "アカウント",
@@ -138,7 +137,11 @@ const ja = {
           inlineCode: "インラインコード",
           inlineLatex: "インライン公式",
           inlineLink: "リンク"
-        }
+        },
+        upload: "CSS をインポート",
+        uploadButton: "インポート",
+        download: "CSS をエクスポート",
+        downloadButton: "エクスポート"
       },
       terminal: {
         title: "ターミナル",
@@ -289,6 +292,9 @@ const ja = {
       fallback: {
         seconds: "{0} 秒",
         minutes: "{0} 分"
+      },
+      attrs: {
+        width: 140
       }
     }
   },

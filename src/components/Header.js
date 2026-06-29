@@ -210,6 +210,58 @@ const Header = (props) => {
     ).click();
   }, [context]);
 
+  const handleUploadStyle = React.useCallback((event) => {
+    const file = event.target.files[0];
+    if (!file.type.startsWith("text/")) {
+      toast.error(context.languagePicker("modal.toast.warning.invalidConfig"));
+      event.target.value = null;
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.readAsText(file, "utf-8");
+    reader.onload = (event) => {
+      try {
+        toast.promise(new Promise((resolve, reject) => {
+          request(
+            "POST/config/style",
+            { style: event.target.result },
+            undefined,
+            reject
+          ).then(() => {
+            context.crepeRef.setStyle(event.target.result);
+            resolve();
+          });
+        }), {
+          loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
+          success: context.languagePicker("modal.toast.success.setting"),
+          error: (data) => data
+        });
+      } catch {
+        toast.error(context.languagePicker("modal.toast.warning.invalidConfig"));
+      }
+    };
+    reader.onerror = (event) => {
+      const error = event.target.error;
+      toast.error(
+        context.languagePicker("modal.toast.error.browserError")
+          .format(error.name, error.message)
+      );
+    }
+    event.target.value = null;
+  }, [context]);
+
+  const handleDownloadStyle = React.useCallback(() => {
+    const url = URL.createObjectURL(new Blob(
+      [context.crepeStyle],
+      { type: "text/css" }
+    ));
+    Object.assign(
+      document.createElement("a"),
+      { href: url, download: `style.css` }
+    ).click();
+  }, [context]);
+
   // function and states for login
   const [modalLoginOpen, setModalLoginOpen] = React.useState(false);
   const [buttonLoading, setButtonLoading] = React.useState(false);
@@ -365,6 +417,8 @@ const Header = (props) => {
             handleResetSetting={handleResetSetting}
             handleUpload={handleUpload}
             handleDownload={handleDownload}
+            handleUploadStyle={handleUploadStyle}
+            handleDownloadStyle={handleDownloadStyle}
             mobileNavOpen={mobileNavOpen}
             setMetadata={setMetadata}
             setMobileNavOpen={setMobileNavOpen}

@@ -392,7 +392,9 @@ const SECTIONS = (
   handleApply,
   handleReset,
   handleUpload,
-  handleDownload
+  handleDownload,
+  handleUploadStyle,
+  handleDownloadStyle
 ) => {
   const escList = context.setting.terminal.control.esc ? ["esc"] : [];
   const controlLists = escList.concat(
@@ -426,7 +428,7 @@ const SECTIONS = (
               size="sm"
               color="neutral"
               variant="outlined"
-              sx={{ minWidth: context.languagePicker("header.config.general.width") }}
+              sx={{ minWidth: context.languagePicker("header.config.attrs.width") }}
               onClick={handleReset}
               loading={resetButtonLoading}
               startDecorator={<RestartAltOutlinedIcon />}
@@ -443,7 +445,7 @@ const SECTIONS = (
               color="neutral"
               variant="outlined"
               component="label"
-              sx={{ minWidth: context.languagePicker("header.config.general.width") }}
+              sx={{ minWidth: context.languagePicker("header.config.attrs.width") }}
               startDecorator={<FileUploadOutlinedIcon />}
             >
               {context.languagePicker("header.config.general.uploadButton")}
@@ -458,7 +460,7 @@ const SECTIONS = (
               size="sm"
               color="neutral"
               variant="outlined"
-              sx={{ minWidth: context.languagePicker("header.config.general.width") }}
+              sx={{ minWidth: context.languagePicker("header.config.attrs.width") }}
               onClick={handleDownload}
               startDecorator={<FileDownloadOutlinedIcon />}
             >
@@ -942,6 +944,37 @@ const SECTIONS = (
                 </Stack>
               ))}
             </Stack>
+          )
+        },
+        {
+          key: context.languagePicker("header.config.crepe.upload"),
+          value: (
+            <Button
+              size="sm"
+              color="neutral"
+              variant="outlined"
+              component="label"
+              sx={{ minWidth: context.languagePicker("header.config.attrs.width") }}
+              startDecorator={<FileUploadOutlinedIcon />}
+            >
+              {context.languagePicker("header.config.crepe.uploadButton")}
+              <HiddenInput type="file" onChange={handleUploadStyle} />
+            </Button>
+          )
+        },
+        {
+          key: context.languagePicker("header.config.crepe.download"),
+          value: (
+            <Button
+              size="sm"
+              color="neutral"
+              variant="outlined"
+              sx={{ minWidth: context.languagePicker("header.config.attrs.width") }}
+              onClick={handleDownloadStyle}
+              startDecorator={<FileDownloadOutlinedIcon />}
+            >
+              {context.languagePicker("header.config.crepe.downloadButton")}
+            </Button>
           )
         }
       ]
@@ -1732,6 +1765,8 @@ export default function Config(props) {
     handleResetSetting,
     handleUpload,
     handleDownload,
+    handleUploadStyle,
+    handleDownloadStyle,
     mobileNavOpen,
     setMetadata,
     setMobileNavOpen,
@@ -1755,7 +1790,9 @@ export default function Config(props) {
     handleApplySetting,
     handleResetSetting,
     handleUpload,
-    handleDownload
+    handleDownload,
+    handleUploadStyle,
+    handleDownloadStyle
   ), [
     context,
     setMetadata,
@@ -1764,7 +1801,9 @@ export default function Config(props) {
     handleApplySetting,
     handleResetSetting,
     handleUpload,
-    handleDownload
+    handleDownload,
+    handleUploadStyle,
+    handleDownloadStyle
   ])
 
   const scrollToSection = React.useCallback((id) => {

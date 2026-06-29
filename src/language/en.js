@@ -11,7 +11,6 @@ const en = {
         uploadButton: "Import",
         download: "Export Setting",
         downloadButton: "Export",
-        width: 100
       },
       account: {
         title: "Account",
@@ -138,7 +137,11 @@ const en = {
           inlineCode: "Inline code",
           inlineLatex: "Inline math",
           inlineLink: "Link"
-        }
+        },
+        upload: "Import CSS",
+        uploadButton: "Import",
+        download: "Export CSS",
+        downloadButton: "Export"
       },
       terminal: {
         title: "Terminal",
@@ -289,6 +292,9 @@ const en = {
       fallback: {
         seconds: "{0} seconds",
         minutes: "{0} minutes"
+      },
+      attrs: {
+        width: 100
       }
     }
   },

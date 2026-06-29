@@ -37,6 +37,22 @@ router.post('/set', (req, res, next) => {
   return;
 });
 
+router.post('/style', (req, res, next) => {
+  if (req.status.notAuthSuccess()) {
+    // -> EF_IT or abnormal request
+    next(api.errorStreamControl);
+    return;
+  }
+
+  const { style } = req.body;
+  api.styleOperator.setStyle((_) => style);
+
+  // -> ES: no extra info
+  req.status.addExecStatus();
+  res.send(req.status.generateReport());
+  return;
+});
+
 router.post('/reset', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
     // -> EF_IT or abnormal request

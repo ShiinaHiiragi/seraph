@@ -10,8 +10,7 @@ const zhHans = {
         upload: "导入设置",
         uploadButton: "导入",
         download: "导出设置",
-        downloadButton: "导出",
-        width: 80
+        downloadButton: "导出"
       },
       account: {
         title: "账号",
@@ -138,7 +137,11 @@ const zhHans = {
           inlineCode: "行内代码",
           inlineLatex: "行内公式",
           inlineLink: "链接"
-        }
+        },
+        upload: "导入 CSS",
+        uploadButton: "导入",
+        download: "导出 CSS",
+        downloadButton: "导出"
       },
       terminal: {
         title: "终端",
@@ -289,6 +292,9 @@ const zhHans = {
       fallback: {
         seconds: "{0} 秒",
         minutes: "{0} 分钟"
+      },
+      attrs: {
+        width: 80
       }
     }
   },
