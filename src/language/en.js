@@ -139,6 +139,7 @@ const en = {
           inlineLink: "Link"
         },
         upload: "Import CSS",
+        uploadTip: "The CSS uploaded will be wrapped in .milkdown { } block.",
         uploadButton: "Import",
         download: "Export CSS",
         downloadButton: "Export"

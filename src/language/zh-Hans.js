@@ -139,6 +139,7 @@ const zhHans = {
           inlineLink: "链接"
         },
         upload: "导入 CSS",
+        uploadTip: "上传的 CSS 将被包围在 .milkdown { } 块内。",
         uploadButton: "导入",
         download: "导出 CSS",
         downloadButton: "导出"

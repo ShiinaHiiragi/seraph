@@ -948,6 +948,7 @@ const SECTIONS = (
         },
         {
           key: context.languagePicker("header.config.crepe.upload"),
+          tip: context.languagePicker("header.config.crepe.uploadTip"),
           value: (
             <Button
               size="sm"

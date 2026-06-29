@@ -139,6 +139,7 @@ const ja = {
           inlineLink: "リンク"
         },
         upload: "CSS をインポート",
+        uploadTip: "アップロードされた CSS は .milkdown { } ブロックで囲まれます。",
         uploadButton: "インポート",
         download: "CSS をエクスポート",
         downloadButton: "エクスポート"
