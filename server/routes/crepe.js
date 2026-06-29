@@ -4,6 +4,18 @@ let { applyPatch } = require('diff');
 let api = require('../api');
 let router = express.Router();
 
+router.get('/style', (req, res, next) => {
+  style = api.styleOperator.style;
+
+  // -> ES: return markdown text
+  req.status.addExecStatus();
+  res.send({
+    ...req.status.generateReport(),
+    style: style
+  });
+  return;
+});
+
 router.get('/load', (req, res, next) => {
   const { type, folderName, filename } = req.query;
   if (type === 'private' && req.status.notAuthSuccess()) {

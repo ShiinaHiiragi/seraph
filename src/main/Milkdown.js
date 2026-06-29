@@ -262,6 +262,15 @@ const CrepeEditorInner = (props) => {
     [context, handleToggleTree, handleCloseModalTree, handleProcessImage]
   );
 
+  React.useEffect(() => {
+    if (context.crepeStyle) {
+      const style = document.createElement("style");
+      style.textContent = `.milkdown {\n${context.crepeStyle}\n}`;
+      document.head.appendChild(style);
+      return () => style.remove();
+    }
+  }, [context.crepeStyle]);
+
   useEditor((root) => {
     const isLoadedFromFile = context.crepeRef.snapshot.current === null;
     const crepe = new Crepe({
@@ -945,6 +954,13 @@ const CrepeEditor = () => {
     // url is changed directly
     rawFolderName
   ]);
+
+  React.useEffect(() => {
+    if (context.crepeStyle === null) {
+      request("GET/utility/crepe/style")
+        .then(({ style }) => context.crepeRef.setStyle(style));
+    }
+  }, [context.crepeStyle, context.crepeRef]);
 
   const handleToggleReadOnly = React.useCallback(() => {
     if (readOnly) {

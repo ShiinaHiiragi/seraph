@@ -318,6 +318,7 @@ const Panel = () => {
   // crepeEditor.current !== null when crepe is loaded
   // crepeSnapshot save current text every time setting is toggled
   // and act as init value for re-construction when setting changed
+  const [crepeStyle, setCrepeStyle] = React.useState(null);
   const crepeEditor = React.useRef(null);
   const crepeUtils = React.useRef(null);
   const crepeSnapshot = React.useRef(null);
@@ -357,6 +358,7 @@ const Panel = () => {
     getScroll: () => crepeUtils.current?.getScroll?.() ?? false,
     setScroll: (scrollRef, milkdownRef) =>
       crepeUtils.current?.setScroll?.(scrollRef, milkdownRef) ?? false,
+    setStyle: setCrepeStyle,
     setReadOnly: (readOnly) => crepeUtils.current?.setReadOnly(readOnly)
   }), [switchAction]);
 
@@ -367,6 +369,7 @@ const Panel = () => {
         firstTick: firstTick,
         secondTick: secondTick,
         crepeRef: crepeRef,
+        crepeStyle: crepeStyle,
         metadata: metadata,
         setting: setting,
         modalReconfirm: modalReconfirm,

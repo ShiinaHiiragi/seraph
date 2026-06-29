@@ -89,6 +89,7 @@ const dataPath = {
   configFilePath: path.join(__dirname, "./data/config.json"),
   tokenFilePath: path.join(__dirname, "./data/token.json"),
   taskFilePath: path.join(__dirname, "./data/task.json"),
+  styleFilePath: path.join(__dirname, "./data/crepe.css"),
   authFilePath: path.join(__dirname, "./401.html"),
   extensionDirPath: path.join(__dirname, "../extensions"),
   appdataDirPath: process.platform === 'win32'
@@ -445,6 +446,18 @@ const fileOperator = {
     );
   },
 
+  readStyle: () => {
+    if (!fs.existsSync(dataPath.styleFilePath)) {
+      fs.closeSync(fs.openSync(dataPath.styleFilePath, 'w'));
+      fs.chmodSync(dataPath.styleFilePath, Permission.lowSecurity);
+    }
+    return fs.readFileSync(dataPath.styleFilePath).toString('utf-8');
+  },
+
+  saveStyle: (style) => {
+    fs.writeFileSync(dataPath.styleFilePath, style);
+  },
+
   readSalt: () => {
     if (!fs.existsSync(fileOperator.saltFilePath)) {
       fs.writeFileSync(
@@ -719,6 +732,7 @@ exports.fileOperator = fileOperator;
   fileOperator.readConfig();
   fileOperator.readToken();
   fileOperator.readTask();
+  fileOperator.readStyle();
   fileOperator.readSalt();
 })();
 
@@ -1135,6 +1149,16 @@ const taskOperator = {
   }
 };
 
+const styleOperator = {
+  style: fileOperator.readStyle(),
+
+  setSalt: (handle) => {
+    const newStyle = handle(styleOperator.style);
+    fileOperator.saveStyle(newStyle);
+    styleOperator.style = newStyle;
+  },
+};
+
 const saltOperator = {
   salt: fileOperator.readSalt(),
   selfCheckOnStart: false,
@@ -1196,6 +1220,7 @@ exports.tokenOperator = tokenOperator;
 exports.checkerOperator = checkerOperator;
 exports.checkerParam = checkerParam;
 exports.taskOperator = taskOperator;
+exports.styleOperator = styleOperator;
 exports.saltOperator = saltOperator;
 
 
