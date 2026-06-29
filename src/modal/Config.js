@@ -373,8 +373,7 @@ const Shortcut = (props) => {
         color={isConflict ? "danger" : "neutral"}
         sx={{
           width: 180,
-          fontWeight: "var(--joy-fontWeight-md)",
-          fontFamily: "var(--joy-fontFamily-code)"
+          fontWeight: "var(--joy-fontWeight-md)"
         }}
         onClick={() => setCapturing(true)}
       >
