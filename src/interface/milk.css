@@ -35,6 +35,7 @@
 
 /* Editor */
 .milkdown .ProseMirror {
+  user-select: text;
   caret-color: transparent;
   --prosemirror-virtual-cursor-color: var(--crepe-color-on-background);
 }
