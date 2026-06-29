@@ -591,6 +591,7 @@ const Status = {
     PasswordUnexist: "PU",
     InvalidEncrypt: "IE",
     InvalidDecrypt: "ID",
+    MaliceDetected: "MD",
     EnvironmentMissing: "EM",
     ExtensionError: "EE",
     DuplicateRequest: "DR",

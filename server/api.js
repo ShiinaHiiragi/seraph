@@ -23,7 +23,7 @@ String.prototype.versionGE = function (min) {
   const left = this.split('.').map(Number);
   const right = min.split('.').map(Number);
   const len = Math.max(left.length, right.length);
-  for (let i = 0; i < len; i++) {
+  for (let i = 0; i < len; i += 1) {
     const padLeft = left[i] ?? 0;
     const padRight = right[i] ?? 0;
     if (padLeft !== padRight) {
@@ -1157,6 +1157,54 @@ const styleOperator = {
     fileOperator.saveStyle(newStyle);
     styleOperator.style = newStyle;
   },
+
+  isValid: (css) => {
+    let depth = 1, index = 0;
+    while (index < css.length) {
+      const ch = css[index];
+      if (ch === '/' && css[index + 1] === '*') {
+        const end = css.indexOf('*/', index + 2);
+        if (end === -1) {
+          return false;
+        }
+        index = end + 2;
+        continue;
+      }
+
+      if (ch === '"' || ch === "'") {
+        index += 1;
+        const quote = ch;
+        let closed = false;
+        while (index < css.length) {
+          if (css[index] === '\\') {
+            index += 2;
+            continue;
+          }
+          if (css[index] === quote) {
+            index += 1;
+            closed = true;
+            break;
+          }
+          index += 1;
+        }
+        if (!closed) {
+          return false;
+        }
+        continue;
+      }
+
+      if (ch === '{') {
+        depth += 1;
+      } else if (ch === '}') {
+        depth--;
+        if (depth <= 0) {
+          return false;
+        }
+      }
+      index += 1;
+    }
+    return depth === 1;
+  }
 };
 
 const saltOperator = {
@@ -1378,6 +1426,7 @@ Status.execErrCode = {
   PasswordUnexist: "PU",
   InvalidEncrypt: "IE",
   InvalidDecrypt: "ID",
+  MaliceDetected: "MD",
   EnvironmentMissing: "EM",
   ExtensionError: "EE",
   DuplicateRequest: "DR",

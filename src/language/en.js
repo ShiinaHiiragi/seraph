@@ -546,6 +546,7 @@ const en = {
         passwordUnexist: "The decryption password has not been set.",
         invalidEncrypt: "Invalid .srph file format.",
         invalidDecrypt: "Decryption failed due to invalid password or file tampering.",
+        maliceDetected: "The submission has been rejected due to the detection of malicious code.",
         environmentMissing: "Pre-check for extension module environment failed due to following missing dependencies: \n{0}",
         extensionError: "Exception occurred in inner extension module. Please check console for more details.",
         duplicateRequest: "Duplicate Request: Please decrease operation frequency."

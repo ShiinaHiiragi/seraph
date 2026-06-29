@@ -546,6 +546,7 @@ const zhHans = {
         passwordUnexist: "解密密码尚未设置。",
         invalidEncrypt: "无效的 .srph 文件格式。",
         invalidDecrypt: "由于密码错误或文件被篡改，解密失败。",
+        maliceDetected: "检测到恶意代码，本次提交已被拒绝。",
         environmentMissing: "由于以下的依赖项缺失，拓展模块环境事前检查不通过：\n{0}",
         extensionError: "拓展模块内部错误：请查阅控制台获得更多细节。",
         duplicateRequest: "重复请求：请降低操作频率。"

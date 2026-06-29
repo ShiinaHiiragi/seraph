@@ -45,7 +45,14 @@ router.post('/style', (req, res, next) => {
   }
 
   const { style } = req.body;
-  api.styleOperator.setStyle((_) => style);
+  if (api.styleOperator.isValid(style)) {
+    api.styleOperator.setStyle((_) => style);
+  } else {
+    // -> EF_MD: escaping scope
+    req.status.addExecStatus(api.Status.execErrCode.MaliceDetected);
+    res.send(req.status.generateReport());
+    return;
+  }
 
   // -> ES: no extra info
   req.status.addExecStatus();
