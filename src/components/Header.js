@@ -93,19 +93,6 @@ const Header = (props) => {
         context.crepeRef.setStyle(latestStyle);
       });
 
-    request("GET/config/copy")
-      .then((data) => {
-        setSetting((setting) => {
-          if (!objectEquiv(setting, data.setting)) {
-            const languagePicker = languagePickerSpawner(data.setting.meta.language);
-            toast.message(languagePicker("modal.toast.plain.updateSetting"));
-            return data.setting;
-          } else {
-            // avoid jittering of display
-            return setting;
-          }
-        });
-      });
     setModalConfigLoading(true);
     setModalConfigOpen(true);
   // eslint-disable-next-line react-hooks/exhaustive-deps
