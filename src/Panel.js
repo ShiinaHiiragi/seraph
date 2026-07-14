@@ -12,7 +12,7 @@ import SideDrawer from "./components/SideDrawer";
 import Init from "./modal/Init";
 import Reconfirm from "./modal/Reconfirm";
 
-import { languagePickerSpawner } from "./interface/languagePicker";
+import { loadLanguage, languagePickerSpawner } from "./interface/languagePicker";
 import GlobalTheme from "./interface/theme";
 import GlobalContext, {
   ConstantContext,
@@ -23,8 +23,7 @@ import GlobalContext, {
   setValue,
   request,
   toast,
-  toastTheme,
-  loadLanguage
+  toastTheme
 } from "./interface/constants";
 
 import Loading from "./main/Loading";

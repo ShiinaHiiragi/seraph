@@ -1,5 +1,5 @@
 import en from "../language/en";
-import { defaultSetting } from "./constants";
+import { defaultSetting, toast, reactionInterval } from "./constants";
 
 const languageMap = {
   "en": {
@@ -22,7 +22,7 @@ const languageLoaders = {
   "ja": () => import("../language/ja")
 };
 
-const loadLanguage = (language, toast) => {
+const loadLanguage = (language) => {
   const entry = languageMap[language];
   if (entry.object) {
     return Promise.resolve(entry.object);
@@ -34,9 +34,11 @@ const loadLanguage = (language, toast) => {
       return object;
     })
     .catch(() => {
-      delete loadingLanguages[language];
+      setTimeout(() => {
+        delete loadingLanguages[language];
+      }, reactionInterval.slow);
       const picker = languagePickerSpawner(window.loadedLanguage);
-      (toast ?? console).error(picker("modal.toast.warning.languagePanic").format(language));
+      toast.error(picker("modal.toast.warning.languagePanic").format(language));
       return languageMap[defaultSetting.meta.language].object;
     });
 
