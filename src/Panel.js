@@ -12,7 +12,10 @@ import SideDrawer from "./components/SideDrawer";
 import Init from "./modal/Init";
 import Reconfirm from "./modal/Reconfirm";
 
-import { languagePickerSpawner } from "./interface/languagePicker";
+import {
+  loadLanguage,
+  languagePickerSpawner
+} from "./interface/languagePicker";
 import GlobalTheme from "./interface/theme";
 import GlobalContext, {
   ConstantContext,
@@ -270,12 +273,30 @@ const Panel = () => {
   const [secondTick, setSecondTick] = React.useState(false);
 
   // language related
-  const languagePicker = React.useMemo(() => {
-    ConstantContext.languagePicker = languagePickerSpawner(setting.meta.language);
-    document.title = ConstantContext.languagePicker("nav.title");
-    document.documentElement.lang = setting.meta.language
-    return languagePickerSpawner(setting.meta.language);
+  const [loadedLanguage, setLoadedLanguage] = React.useState(
+    defaultSetting.meta.language
+  );
+
+  React.useEffect(() => {
+    let active = true;
+    loadLanguage(setting.meta.language)
+      .then(() => {
+        if (active) {
+          setLoadedLanguage(setting.meta.language);
+        }
+      })
+      .catch(console.error);
+    return () => {
+      active = false;
+    };
   }, [setting.meta.language]);
+
+  const languagePicker = React.useMemo(() => {
+    ConstantContext.languagePicker = languagePickerSpawner(loadedLanguage);
+    document.title = ConstantContext.languagePicker("nav.title");
+    document.documentElement.lang = loadedLanguage;
+    return ConstantContext.languagePicker;
+  }, [loadedLanguage]);
 
   // first tick starts on page loaded, ends after receiving metadata
   React.useEffect(() => {
