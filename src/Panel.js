@@ -215,7 +215,16 @@ const PanelLayout = () => {
             modalReconfirm={modalReconfirm}
             setModalReconfirm={setModalReconfirm}
           />
-          <Toaster position="top-center" richColors closeButton />
+          <Toaster
+            position="top-center"
+            richColors
+            closeButton
+            style={{
+              "--toast-close-button-start": "unset",
+              "--toast-close-button-end": "0",
+              "--toast-close-button-transform": "translate(35%, -35%)",
+            }}
+          />
         </CssVarsProvider>
       </Root>
     </React.Fragment>
