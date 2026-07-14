@@ -5,6 +5,7 @@ import Link from "@mui/joy/Link";
 import { styled } from '@mui/joy';
 import { toast as rawToast } from "sonner";
 import { renderToStaticMarkup } from "react-dom/server";
+import { loadLanguage as rawLoadLanguage } from "./languagePicker";
 
 // eslint-disable-next-line no-extend-native
 Boolean.prototype.assert = function (message) {
@@ -130,8 +131,9 @@ const toast = {
   }),
   dismiss: rawToast.dismiss
 };
+const loadLanguage = (language) => rawLoadLanguage(language, toast);
 
-export { formatToast, toast };
+export { toast, formatToast, loadLanguage };
 
 const id = (x) => x;
 const objectEquiv = (left, right) => {

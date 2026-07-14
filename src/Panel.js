@@ -12,10 +12,7 @@ import SideDrawer from "./components/SideDrawer";
 import Init from "./modal/Init";
 import Reconfirm from "./modal/Reconfirm";
 
-import {
-  loadLanguage,
-  languagePickerSpawner
-} from "./interface/languagePicker";
+import { languagePickerSpawner } from "./interface/languagePicker";
 import GlobalTheme from "./interface/theme";
 import GlobalContext, {
   ConstantContext,
@@ -26,7 +23,8 @@ import GlobalContext, {
   setValue,
   request,
   toast,
-  toastTheme
+  toastTheme,
+  loadLanguage
 } from "./interface/constants";
 
 import Loading from "./main/Loading";
@@ -284,8 +282,7 @@ const Panel = () => {
         if (active) {
           setLoadedLanguage(setting.meta.language);
         }
-      })
-      .catch(console.error);
+      });
     return () => {
       active = false;
     };

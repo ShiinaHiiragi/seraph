@@ -13,16 +13,14 @@ import GlobalContext, {
   objectEquiv,
   globalState,
   toast,
+  loadLanguage,
   request,
   Status,
   defaultSetting,
   settingField,
   OnMounted
 } from "../interface/constants";
-import {
-  loadLanguage,
-  languagePickerSpawner
-} from "../interface/languagePicker";
+import { languagePickerSpawner } from "../interface/languagePicker";
 import SemiInput from "../interface/SemiInput";
 import ModalForm from "../modal/Form";
 

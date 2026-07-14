@@ -22,7 +22,7 @@ const languageLoaders = {
   "ja": () => import("../language/ja")
 };
 
-const loadLanguage = (language) => {
+const loadLanguage = (language, toast) => {
   const entry = languageMap[language];
   if (entry.object) {
     return Promise.resolve(entry.object);
@@ -35,7 +35,8 @@ const loadLanguage = (language) => {
     })
     .catch((error) => {
       delete loadingLanguages[language];
-      throw error;
+      (toast ?? console).error(error);
+      return languageMap[defaultSetting.meta.language].object;
     });
 
   return loadingLanguages[language];
