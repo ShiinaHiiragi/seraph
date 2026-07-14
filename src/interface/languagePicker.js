@@ -33,9 +33,10 @@ const loadLanguage = (language, toast) => {
       entry.object = object;
       return object;
     })
-    .catch((error) => {
+    .catch(() => {
       delete loadingLanguages[language];
-      (toast ?? console).error(error);
+      const picker = languagePickerSpawner(window.loadedLanguage);
+      (toast ?? console).error(picker("modal.toast.warning.languagePanic").format(language));
       return languageMap[defaultSetting.meta.language].object;
     });
 

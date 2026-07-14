@@ -528,6 +528,7 @@ const zhHans = {
         untick: "变更已回滚。"
       },
       warning: {
+        languagePanic: "{0} 的语言文件请求失败。",
         invalidToken: "令牌无效或已过期，页面将在若干秒内自动刷新。",
         saltMissing: "服务器检测到盐被更改或删除，这会导致既有的加密文件无法恢复。您可以在下述路径找到服务器保存的所有本机备份：\n{0}",
         autoSaveFailed: "同步失败；在切换到其他文件或重启编辑器前自动保存功能将暂时关闭。",

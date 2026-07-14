@@ -298,6 +298,7 @@ const Panel = () => {
   }, [setting.meta.language]);
 
   const languagePicker = React.useMemo(() => {
+    window.loadedLanguage = loadedLanguage;
     ConstantContext.languagePicker = languagePickerSpawner(loadedLanguage);
     document.title = ConstantContext.languagePicker("nav.title");
     document.documentElement.lang = loadedLanguage;
