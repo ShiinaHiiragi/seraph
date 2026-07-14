@@ -301,6 +301,7 @@ const Panel = () => {
   // first tick starts on page loaded, ends after receiving metadata
   React.useEffect(() => {
     request("GET/auth/meta", undefined, undefined, undefined, setModalInitOpen)
+      .then((data) => loadLanguage(data.setting.meta.language).then(() => data))
       .then((data) => {
         setSetting(data.setting);
         setPublicFolders(data.public);

@@ -19,7 +19,10 @@ import GlobalContext, {
   settingField,
   OnMounted
 } from "../interface/constants";
-import { languagePickerSpawner } from "../interface/languagePicker";
+import {
+  loadLanguage,
+  languagePickerSpawner
+} from "../interface/languagePicker";
 import SemiInput from "../interface/SemiInput";
 import ModalForm from "../modal/Form";
 
@@ -86,9 +89,12 @@ const Header = (props) => {
           !objectEquiv(context.setting, latestSetting)
             || (context.crepeStyle && context.crepeStyle !== latestStyle)
         ) {
-          const languagePicker = languagePickerSpawner(latestSetting.meta.language);
-          toast.message(languagePicker("modal.toast.plain.updateSetting"));
-          setSetting(latestSetting);
+          loadLanguage(latestSetting.meta.language)
+            .then(() => {
+              const languagePicker = languagePickerSpawner(latestSetting.meta.language);
+              toast.message(languagePicker("modal.toast.plain.updateSetting"));
+              setSetting(latestSetting);
+            });
         }
         context.crepeRef.setStyle(latestStyle);
       });
@@ -113,6 +119,10 @@ const Header = (props) => {
     context.crepeRef.scroll.current = context.crepeRef.getScroll();
     const promise = new Promise((resolve, reject) => {
       request("POST/config/set", { key: key, value: value }, undefined, reject)
+        .then(() => key === "meta.language"
+          ? loadLanguage(value)
+          : Promise.resolve()
+        )
         .then(() => {
           setSettingPair(key, value);
           resolve();
@@ -143,6 +153,7 @@ const Header = (props) => {
             { "": () => setResetButtonLoading(false) },
             reject
           )
+            .then(() => loadLanguage(defaultSetting.meta.language))
             .then(() => {
               setResetButtonLoading(false)
               setSetting(defaultSetting)
@@ -174,6 +185,7 @@ const Header = (props) => {
         (typeof obj === "object").assert();
         toast.promise(new Promise((resolve, reject) => {
           request("POST/config/file", { setting: obj }, undefined, reject)
+            .then((data) => loadLanguage(data.setting.meta.language).then(() => data))
             .then((data) => {
               const { counter, setting } = data;
               setSetting(setting);
