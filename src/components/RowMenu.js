@@ -11,7 +11,7 @@ import GlobalContext, {
   toast,
   request,
   Status,
-  pathStartWith,
+  pathEqual,
   encodePath,
   serverBaseURL
 } from "../interface/constants";
@@ -131,7 +131,7 @@ export default function RowMenu(props) {
         filename: filename
       }, undefined, reject)
         .then(() => {
-          if (pathStartWith(`/${type}/${folderName}`)) {
+          if (pathEqual(`/${type}/${folderName}`)) {
             setFilesList((filesList) => filesList.filter(
               (item) => item.name !== filename
             ));
@@ -166,7 +166,7 @@ export default function RowMenu(props) {
       }, undefined, reject)
         .then((data) => {
           const { statusCode, errorCode, ...newInfo } = data;
-          if (pathStartWith(`/${type}/${folderName}`)) {
+          if (pathEqual(`/${type}/${folderName}`)) {
             setFilesList((filesList) => [
               ...filesList,
               newInfo
@@ -198,7 +198,7 @@ export default function RowMenu(props) {
       }, undefined, reject)
         .then((data) => {
           const { statusCode, errorCode, ...newInfo } = data;
-          if (pathStartWith(`/${type}/${folderName}`)) {
+          if (pathEqual(`/${type}/${folderName}`)) {
             setFilesList((filesList) => [
               ...filesList,
               newInfo
@@ -230,7 +230,7 @@ export default function RowMenu(props) {
       }, undefined, reject)
         .then((data) => {
           const { statusCode, errorCode, ...newInfo } = data;
-          if (pathStartWith(`/${type}/${folderName}`)) {
+          if (pathEqual(`/${type}/${folderName}`)) {
             setFilesList((filesList) => [
               ...filesList,
               newInfo
@@ -266,7 +266,7 @@ export default function RowMenu(props) {
       }, reject)
         .then((data) => {
           const { statusCode, errorCode, ...newInfo } = data;
-          if (pathStartWith(`/${type}/${folderName}`)) {
+          if (pathEqual(`/${type}/${folderName}`)) {
             setFilesList((filesList) => [
               ...filesList,
               newInfo

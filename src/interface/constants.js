@@ -535,6 +535,14 @@ const pathStartWith = (prefix) => {
   return new RegExp(`^${prefix}$`).test(pathname) ||
     new RegExp(`^${prefix}/`).test(pathname)
 }
+const pathEqual = (path) => {
+  const normalize = (value) =>
+    decodeURIComponent(value)
+      .replace(/\/+/g, "/")
+      .replace(/^\//, '')
+      .replace(/\/$/, '');
+  return normalize(window.location.pathname) === normalize(path);
+}
 const isLoopback = (hostname) => {
   const h = hostname.toLowerCase();
   return h === "localhost" || h === "::1" || /^127(\.\d{1,3}){3}$/.test(h);
@@ -562,6 +570,7 @@ const serverWebSocketURL = serverBaseURL.replace("http", "ws");
 export {
   encodePath,
   pathStartWith,
+  pathEqual,
   generateBaseURL,
   serverBaseURL,
   serverWebSocketURL
