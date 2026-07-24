@@ -1307,6 +1307,7 @@ const CrepeEditor = () => {
           <Typography
             level="h3"
             sx={{
+              maxWidth: { md: "calc(100% - 200px)" },
               overflow: "hidden",
               whiteSpace: "nowrap",
               textOverflow: "ellipsis"
@@ -1365,6 +1366,7 @@ const CrepeEditor = () => {
                   <Typography
                     level="body-sm"
                     sx={{
+                      display: { xs: "none", md: "block" },
                       height: "var(--joy-fontSize-sm)",
                       lineHeight: "var(--joy-fontSize-sm)",
                       alignSelf: "center",
