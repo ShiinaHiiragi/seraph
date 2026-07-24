@@ -79,18 +79,32 @@ const RouteField = (props) => {
               fontWeight={500}
               fontSize={12}
               color={"neutral"}
-              sx={{ cursor: link ? "pointer" : "default" }}
+              sx={{
+                cursor: link ? "pointer" : "default",
+                maxWidth: "20vw",
+                overflow: "hidden",
+                whiteSpace: "nowrap",
+                textOverflow: "ellipsis"
+              }}
             >
               {item}
             </Link>
           ))}
-          {path.length > 0 && <Typography
-            color={"primary"}
-            fontWeight={500}
-            fontSize={12}
-          >
-            {breadcrumb.slice(-1)[0]}
-          </Typography>}
+          {path.length > 0 && (
+            <Typography
+              color={"primary"}
+              fontWeight={500}
+              fontSize={12}
+              sx={{
+                maxWidth: "30vw",
+                overflow: "hidden",
+                whiteSpace: "nowrap",
+                textOverflow: "ellipsis"
+              }}
+            >
+              {breadcrumb.slice(-1)[0]}
+            </Typography>
+          )}
         </Breadcrumbs>
       }
       {
