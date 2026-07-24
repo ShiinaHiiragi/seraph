@@ -184,6 +184,7 @@
 
 ## Log
 
+- 07/24/2026 ver 1.4.9: Fix text overflow & unzip
 - 07/14/2026 ver 1.4.8: Split language chunks as lazy loading
 - 06/27/2026 ver 1.4.7: Add CSS supports for Milkdown Crepe
 - 06/27/2026 ver 1.4.6: Fix cookie session and raw toast functions
