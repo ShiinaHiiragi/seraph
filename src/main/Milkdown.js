@@ -1306,6 +1306,11 @@ const CrepeEditor = () => {
         >
           <Typography
             level="h3"
+            sx={{
+              overflow: "hidden",
+              whiteSpace: "nowrap",
+              textOverflow: "ellipsis"
+            }}
             children={crepeTitle}
           />
           {crepeState === 1 && (
