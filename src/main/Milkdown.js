@@ -1334,7 +1334,7 @@ const CrepeEditor = () => {
               >
                 <FileDownloadOutlinedIcon />
               </IconButton>
-              {!autoSaveMode && context.isAuthority && crepeState === 1 && (
+              {context.isAuthority && crepeState === 1 && !autoSaveMode && (
                 <IconButton
                   size="sm"
                   variant="soft"
@@ -1347,7 +1347,7 @@ const CrepeEditor = () => {
                   <SaveRoundedIcon />
                 </IconButton>
               )}
-              {autoSaveMode && (
+              {context.isAuthority && crepeState === 1 && autoSaveMode && (
                 <React.Fragment>
                   <IconButton
                     size="sm"
