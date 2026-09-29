@@ -48,6 +48,8 @@ export default function Init(props) {
     setModalInitOpen
   } = props;
   const context = React.useContext(GlobalContext);
+
+  const passwordRef = React.useRef(null);
   const buttonRef = React.useRef(null);
 
   const [formPasswordText, setFormPasswordText] = React.useState("");
@@ -58,7 +60,7 @@ export default function Init(props) {
     setFormPasswordLoading(true);
     request("POST/auth/init", {
       language: context.setting.meta.language,
-      password: formPasswordText
+      password: passwordRef.current.value
     })
       .then((data) => {
         setFirstTick(true);
@@ -83,7 +85,6 @@ export default function Init(props) {
       .finally(() => setFormPasswordLoading(false));
   }, [
     context,
-    formPasswordText,
     setGlobalSwitch,
     setModalInitOpen,
     setFirstTick,
@@ -148,6 +149,7 @@ export default function Init(props) {
             <FormControl>
               <FormLabel>{context.languagePicker("modal.init.password.label")}</FormLabel>
               <SemiInput
+                ref={passwordRef}
                 initValue={formPasswordText}
                 setValue={setFormPasswordText}
                 autoFocus

@@ -58,6 +58,8 @@ const Details = styled("div")(({ theme }) => ({
 const TODO = () => {
   const context = React.useContext(GlobalContext);
   const { minutes, seconds } = useTime();
+
+  const nameRef = React.useRef(null);
   const descriptionRef = React.useRef(null);
 
   const [taskState, setTaskState] = React.useState(0);
@@ -610,8 +612,8 @@ const TODO = () => {
             return;
           }
           handleModTask(
-            modalTaskName,
-            modalTaskDesciption,
+            nameRef.current.value,
+            descriptionRef.current.value,
             modalTaskType,
             modalTaskDueTime?.valueOf() ?? null
           );
@@ -623,6 +625,7 @@ const TODO = () => {
         <FormControl>
           <FormLabel>{context.languagePicker("main.todo.regulate.name")}</FormLabel>
           <SemiInput
+            ref={nameRef}
             initValue={modalTaskName}
             setValue={setModalTaskName}
             autoFocus

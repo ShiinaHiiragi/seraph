@@ -66,6 +66,8 @@ const Header = (props) => {
   } = props;
   const context = React.useContext(GlobalContext);
   const navigate = useNavigate();
+
+  const passwordRef = React.useRef(null);
   const buttonRef = React.useRef(null);
 
   // state for config
@@ -302,7 +304,7 @@ const Header = (props) => {
     setButtonLoading(true);
     request(
       "POST/auth/login",
-      { password: formPasswordText },
+      { password: passwordRef.current.value },
       {
         "": () => setButtonLoading(false),
         [Status.execErrCode.IncorrectPassword]: () => setFormPasswordError(true)
@@ -332,7 +334,6 @@ const Header = (props) => {
     setPrivateFolders,
     setMetadata,
     setClipboard,
-    formPasswordText,
     handleCloseLogin
   ]);
 
@@ -455,6 +456,7 @@ const Header = (props) => {
         <form>
           <Input type="text" autoComplete="username" sx={{ display: "none" }} />
           <SemiInput
+            ref={passwordRef}
             initValue={formPasswordText}
             setValue={setFormPasswordText}
             autoFocus
