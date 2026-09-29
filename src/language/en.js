@@ -404,7 +404,8 @@ const en = {
         newMarkdown: "New Markdown",
         newFile: "Upload File",
         paste: "Paste"
-      }
+      },
+      previewUnavailable: "Preview Unavailable"
     },
     crepe: {
       placeholder: "Enter text here",

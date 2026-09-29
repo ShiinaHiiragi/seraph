@@ -7,8 +7,13 @@ import Link from "@mui/joy/Link";
 import Typography from "@mui/joy/Typography";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import GlobalContext, { serverBaseURL, encodePath } from "../interface/constants";
+import GlobalContext, {
+  serverBaseURL,
+  encodePath,
+  reactionInterval
+} from "../interface/constants";
 import RowMenu from "./RowMenu";
+import ImagePreview from "./Preview"
 
 export default function FileTable(props) {
   const {
@@ -33,6 +38,67 @@ export default function FileTable(props) {
     setPrivateFolders
   } = props;
   const context = React.useContext(GlobalContext);
+
+  const [preview, setPreview] = React.useState(null);
+  const previewTimer = React.useRef(null);
+
+  const closePreview = React.useCallback(() => {
+    clearTimeout(previewTimer.current);
+    previewTimer.current = null;
+    setPreview(null);
+  }, []);
+
+  const handlePreview = React.useCallback((event, item) => {
+    closePreview();
+    if (
+      event.pointerType !== "mouse"
+        || item.link
+        || !item.type?.startsWith("image/")
+    ) {
+      return;
+    }
+
+    const anchorEl = event.currentTarget;
+    previewTimer.current = setTimeout(() => {
+      previewTimer.current = null;
+      if (anchorEl.isConnected) {
+        setPreview({ anchorEl, src: anchorEl.href, name: item.name });
+      }
+    }, reactionInterval.medium);
+  }, [closePreview]);
+
+  React.useEffect(() => {
+    closePreview();
+  }, [
+    type,
+    folderName,
+    guard,
+    sortedFilesList,
+    filesSorting,
+    context.isAuthority,
+    closePreview
+  ]);
+
+  React.useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        closePreview();
+      }
+    };
+
+    window.addEventListener("scroll", closePreview, true);
+    window.addEventListener("resize", closePreview);
+    window.addEventListener("blur", closePreview);
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      clearTimeout(previewTimer.current);
+      window.removeEventListener("scroll", closePreview, true);
+      window.removeEventListener("resize", closePreview);
+      window.removeEventListener("blur", closePreview);
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [closePreview]);
 
   return (
     <Sheet
@@ -177,8 +243,8 @@ export default function FileTable(props) {
                     `^(${guard[1].toLowerCase()}/|${guard[1].toLowerCase()}$)`
                   ).test(item.type)
             )
-            .map((item, index) => (
-              <tr key={index}>
+            .map((item) => (
+              <tr key={item.name}>
                 <td>
                 </td>
                 <td>
@@ -189,7 +255,14 @@ export default function FileTable(props) {
                       ? <Link component={RouterLink} to={`/${type}${folderName.length ? "/" : ""}${encodePath(folderName)}/${encodeURIComponent(item.name)}`}>{item.name}</Link>
                       : item.type === "text/markdown"
                       ? <Link component={RouterLink} to={`/crepe/${type}${folderName.length ? "/" : ""}${encodePath(folderName)}/${encodeURIComponent(item.name)}`}>{item.name}</Link>
-                      : <Link target="_blank" href={new URL(`/${type}${folderName.length ? "/" : ""}${encodePath(folderName)}/${encodeURIComponent(item.name)}`, serverBaseURL).href}>{item.name}</Link>}
+                      : <Link
+                          target="_blank"
+                          href={new URL(`/${type}${folderName.length ? "/" : ""}${encodePath(folderName)}/${encodeURIComponent(item.name)}`, serverBaseURL).href}
+                          onPointerEnter={(event) => handlePreview(event, item)}
+                          onPointerLeave={closePreview}
+                          onPointerDown={closePreview}
+                          onClick={closePreview}
+                        >{item.name}</Link>}
                   </Typography>
                 </td>
                 <td>
@@ -249,6 +322,7 @@ export default function FileTable(props) {
           }
         </tbody>
       </Table>
+      {preview && <ImagePreview key={preview.src} {...preview} />}
     </Sheet>
   );
 }

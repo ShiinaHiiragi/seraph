@@ -404,7 +404,8 @@ const ja = {
         newMarkdown: "ニューマークダウン",
         newFile: "ファイルのアップロード",
         paste: "ペースト"
-      }
+      },
+      previewUnavailable: "プレビューできません",
     },
     crepe: {
       placeholder: "ここにテキストを入力",

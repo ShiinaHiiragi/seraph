@@ -404,7 +404,8 @@ const zhHans = {
         newMarkdown: "新 Markdown",
         newFile: "上传文件",
         paste: "粘贴"
-      }
+      },
+      previewUnavailable: "无法预览"
     },
     crepe: {
       placeholder: "在此输入文本",
