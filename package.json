@@ -1,6 +1,6 @@
 {
   "name": "seraph",
-  "version": "1.4.16",
+  "version": "1.4.17",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.14.0",

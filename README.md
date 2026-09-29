@@ -184,6 +184,7 @@
 
 ## Log
 
+- 10/06/2026 ver 1.4.17: Fix logs and size limit for Express server
 - 10/05/2026 ver 1.4.16: Fix popup padding for Milkdown Crepe
 - 10/04/2026 ver 1.4.15: Fix .env for production and table width of Milkdown Crepe
 - 10/03/2026 ver 1.4.14: Add size progress indicator for files uploading
