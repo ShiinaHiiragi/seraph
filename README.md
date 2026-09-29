@@ -184,6 +184,7 @@
 
 ## Log
 
+- 10/05/2026 ver 1.4.16: Fix popup padding for Milkdown Crepe
 - 10/04/2026 ver 1.4.15: Fix .env for production and table width of Milkdown Crepe
 - 10/03/2026 ver 1.4.14: Add size progress indicator for files uploading
 - 10/02/2026 ver 1.4.13: Add image preview for FileTable
