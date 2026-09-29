@@ -863,7 +863,6 @@ const CrepeEditor = () => {
    *     - 切换只读 / 可编辑模式时
    *       - 可编辑 -> 只读只需使用正常接口即可；只读 -> 可编辑的接口实现有误，代码块会无法编辑
    *       - 仅在从只读 -> 可编辑切换前的瞬间保存文本、光标
-   *       - 无需保存滚动条，这样切换后的滚动条位置和切换时一致，不会出现突变
    *     - 保存新文件时，保存光标与滚动条位置
    *       - 设置 nextRef，于是在下面的 useEffect 中 early return，页面不重建
    *       - 编辑器重建，fileContent 使用刚保存的最新版，使用保存的光标与滚动条快照
@@ -905,7 +904,7 @@ const CrepeEditor = () => {
     setModified(
       snapshot === null
         ? false
-        : snapshot !== normalizedRef.current
+        : snapshot.trimEnd() !== normalizedRef.current
     );
     setAutoSaveError(false);
     clearTimeout(autoSaveTimerRef.current);
@@ -966,6 +965,7 @@ const CrepeEditor = () => {
     if (readOnly) {
       context.crepeRef.snapshot.current = context.crepeRef.getText();
       context.crepeRef.select.current = context.crepeRef.getSelect();
+      context.crepeRef.scroll.current = context.crepeRef.getScroll();
       setEditableKey((editableKey) => editableKey + 1);
     } else {
       context.crepeRef.setReadOnly(true);
