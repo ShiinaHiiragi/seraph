@@ -184,34 +184,35 @@
 
 ## Log
 
-- 07/24/2026 ver 1.4.9: Fix text overflow & unzip
-- 07/14/2026 ver 1.4.8: Split language chunks as lazy loading
-- 06/27/2026 ver 1.4.7: Add CSS supports for Milkdown Crepe
-- 06/27/2026 ver 1.4.6: Fix cookie session and raw toast functions
-- 06/26/2026 ver 1.4.5: Add feature of drag & drop and styles of sonner toast
-- 06/25/2026 ver 1.4.4: Add setting for shortcuts and fix states of Crepe editor
-- 06/24/2026 ver 1.4.3: Add feature of auto save for Crepe editor
-- 06/23/2026 ver 1.4.2: Add link shortcut for file explorer
-- 06/22/2026 ver 1.4.1: Fix file content and scrollbar during editor rebuilding
-- 06/21/2026 ver 1.4.0: Add Milkdown Crepe as rich text editor
-- 06/18/2026 ver 1.3.0: Update dependencies from @mui/material and introduce @mui/x-tree-view v7
-- 06/18/2026 ver 1.2.2: Add salt manager for data safety
-- 06/17/2026 ver 1.2.1: Add encryption/decryption for files
-- 06/16/2026 ver 1.2.0: Refactor base components to data router
-- 06/15/2026 ver 1.1.4: Change links properties inside web pages
-- 06/13/2026 ver 1.1.3: Add import/export for config
-- 06/09/2026 ver 1.1.2: Add several config options
-- 06/08/2026 ver 1.1.1: Fix permission problem and input field
-- 06/07/2026 ver 1.1.0: Refactor welcome page into system dashboard
-- 06/05/2026 ver 1.0.1: Add loading animation and fix words wrap
-- 06/04/2026 ver 1.0.0: Update dependencies from @mui/joy and split build bundles
-- 06/03/2026 ver 0.4.1: Fix plaintext cipher
-- 06/02/2026 ver 0.4.0: Add terminal
-- 06/01/2026 ver 0.3.0: Add setting popup
-- 05/29/2026 ver 0.2.4: Add multiple files uploading
-- 05/27/2026 ver 0.2.3: Add converter for epub files fix i18n text
-- 05/26/2026 ver 0.2.2: Add supports for dot files and fix several bugs
-- 10/17/2023 ver 0.2.1: Add extractor for zip files and fix several bugs
-- 10/16/2023 ver 0.2.0: Add TODO list
-- 09/19/2023 ver 0.1.1: Fix several bugs
-- 09/18/2023 ver 0.1.0: Complete folder page
+- 09/29/2026 ver 1.4.10: Fix scroll bar and auto save for Milkdown Crepe
+- 07/24/2026  ver 1.4.9: Fix text overflow & unzip
+- 07/14/2026  ver 1.4.8: Split language chunks as lazy loading
+- 06/27/2026  ver 1.4.7: Add CSS supports for Milkdown Crepe
+- 06/27/2026  ver 1.4.6: Fix cookie session and raw toast functions
+- 06/26/2026  ver 1.4.5: Add feature of drag & drop and styles of sonner toast
+- 06/25/2026  ver 1.4.4: Add setting for shortcuts and fix states of Crepe editor
+- 06/24/2026  ver 1.4.3: Add feature of auto save for Crepe editor
+- 06/23/2026  ver 1.4.2: Add link shortcut for file explorer
+- 06/22/2026  ver 1.4.1: Fix file content and scrollbar during editor rebuilding
+- 06/21/2026  ver 1.4.0: Add Milkdown Crepe as rich text editor
+- 06/18/2026  ver 1.3.0: Update dependencies from @mui/material and introduce @mui/x-tree-view v7
+- 06/18/2026  ver 1.2.2: Add salt manager for data safety
+- 06/17/2026  ver 1.2.1: Add encryption/decryption for files
+- 06/16/2026  ver 1.2.0: Refactor base components to data router
+- 06/15/2026  ver 1.1.4: Change links properties inside web pages
+- 06/13/2026  ver 1.1.3: Add import/export for config
+- 06/09/2026  ver 1.1.2: Add several config options
+- 06/08/2026  ver 1.1.1: Fix permission problem and input field
+- 06/07/2026  ver 1.1.0: Refactor welcome page into system dashboard
+- 06/05/2026  ver 1.0.1: Add loading animation and fix words wrap
+- 06/04/2026  ver 1.0.0: Update dependencies from @mui/joy and split build bundles
+- 06/03/2026  ver 0.4.1: Fix plaintext cipher
+- 06/02/2026  ver 0.4.0: Add terminal
+- 06/01/2026  ver 0.3.0: Add setting popup
+- 05/29/2026  ver 0.2.4: Add multiple files uploading
+- 05/27/2026  ver 0.2.3: Add converter for epub files fix i18n text
+- 05/26/2026  ver 0.2.2: Add supports for dot files and fix several bugs
+- 10/17/2023  ver 0.2.1: Add extractor for zip files and fix several bugs
+- 10/16/2023  ver 0.2.0: Add TODO list
+- 09/19/2023  ver 0.1.1: Fix several bugs
+- 09/18/2023  ver 0.1.0: Complete folder page
