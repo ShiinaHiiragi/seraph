@@ -60,10 +60,12 @@ const Permission = {
 exports.isDev = isDev;
 exports.Permission = Permission;
 
-// copy .env in react directory
-// use .env to build base URL
+// try .env.production.local first under production
+// use .env as fallback
 fs.copyFileSync(
-  path.join(__dirname, '../.env'),
+  !isDev && fs.existsSync(path.join(__dirname, '../.env.production.local'))
+    ? path.join(__dirname, '../.env.production.local')
+    : path.join(__dirname, '../.env'),
   path.join(__dirname, '/.env')
 );
 fs.chmodSync(path.join(__dirname, '/.env'), Permission.lowSecurity);
