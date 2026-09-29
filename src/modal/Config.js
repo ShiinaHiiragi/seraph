@@ -719,6 +719,27 @@ const SECTIONS = (
           )
         },
         {
+          key: context.languagePicker("header.config.file.upload"),
+          value: (
+            <RadioGroup
+              size="sm"
+              orientation="horizontal"
+              sx={{ gap: 1.5 }}
+              value={String(context.setting.file.uploadSize)}
+              onChange={(event) => handleApply("file.uploadSize", event.target.value === "true")}
+            >
+              <Radio
+                value="true"
+                label={context.languagePicker("header.config.file.uploadSize")}
+              />
+              <Radio
+                value="false"
+                label={context.languagePicker("header.config.file.uploadCount")}
+              />
+            </RadioGroup>
+          )
+        },
+        {
           key: context.languagePicker("header.config.file.preview"),
           value: (
             <Stack spacing={2}>

@@ -76,6 +76,9 @@ const ja = {
           asc: "昇順",
           desc: "降順"
         },
+        upload: "アップロードプログレス",
+        uploadSize: "サイズ別",
+        uploadCount: "ファイル数別",
         preview: "イメージプレビュー",
         previewMaxWidth: "ポップアップの最大幅",
         previewMaxHeight: "ポップアップの最大高さ",

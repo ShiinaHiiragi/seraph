@@ -76,6 +76,9 @@ const zhHans = {
           asc: "升序",
           desc: "降序"
         },
+        upload: "上传进度",
+        uploadSize: "按大小",
+        uploadCount: "按数量",
         preview: "图片预览",
         previewMaxWidth: "最大浮窗宽度",
         previewMaxHeight: "最大浮窗高度",

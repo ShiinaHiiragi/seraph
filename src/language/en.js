@@ -76,6 +76,9 @@ const en = {
           asc: "Ascending",
           desc: "Descending"
         },
+        upload: "Upload Progress",
+        uploadSize: "By size",
+        uploadCount: "By file count",
         preview: "Image Preview",
         previewMaxWidth: "Max popup width",
         previewMaxHeight: "Max popup height",
