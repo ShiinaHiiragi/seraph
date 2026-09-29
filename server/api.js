@@ -804,6 +804,38 @@ const configOperator = {
     }));
   },
 
+  renameClipboard: (type, folderName, filename, newFilename) => {
+    const clipboard = configOperator.config.clipboard;
+    if (clipboard.path === null || clipboard.path[0] !== type) {
+      return;
+    }
+
+    let newClipboardPath;
+    const [_, oldClipboardFolderName, newClipboardFilename] = clipboard.path;
+    const oldFullPath = folderName.length ? `${folderName}/${filename}` : filename;
+    const newFullPath = folderName.length ? `${folderName}/${newFilename}` : newFilename;
+
+    if (oldClipboardFolderName === folderName && newClipboardFilename === filename) {
+      newClipboardPath = [type, folderName, newFilename];
+    } else if (
+      oldClipboardFolderName === oldFullPath
+        || oldClipboardFolderName.startsWith(`${oldFullPath}/`)
+    ) {
+      newClipboardPath = [
+        type,
+        newFullPath + oldClipboardFolderName.slice(oldFullPath.length),
+        newClipboardFilename
+      ];
+    } else {
+      return;
+    }
+
+    configOperator.setConfig((config) => ({
+      ...config,
+      clipboard: { ...config.clipboard, path: newClipboardPath }
+    }));
+  },
+
   clearConfigClipboard: () => {
     configOperator.setConfig((config) => ({
       ...config,

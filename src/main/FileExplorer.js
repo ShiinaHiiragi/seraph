@@ -596,7 +596,9 @@ const FileExplorer = (props) => {
         reject
       )
         .then((data) => {
-          const { statusCode, errorCode, ...newInfo } = data;
+          const { statusCode, errorCode, clipboard, ...newInfo } = data;
+          setClipboard(clipboard);
+
           if (pathStartWith(`/${type}/${folderName}`)) {
             setFilesList((filesList) => filesList.map((item) =>
               item.name === originFilename
@@ -629,6 +631,7 @@ const FileExplorer = (props) => {
     modalFilename,
     setPublicFolders,
     setPrivateFolders,
+    setClipboard,
     handleCloseRename
   ]);
 

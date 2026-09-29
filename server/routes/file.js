@@ -325,10 +325,18 @@ router.post('/rename', (req, res, next) => {
     return;
   }
 
-  // -> ES: return type info
+  api.configOperator.renameClipboard(
+    type,
+    folderName,
+    filename,
+    newFilename
+  );
+
+  // -> ES: return file and clipboard info
   req.status.addExecStatus();
   res.send({
     ...req.status.generateReport(),
+    clipboard: api.configOperator.config.clipboard,
     ...api.fileOperator.readFileInfo(folderPath, newFilename)
   });
   return;
