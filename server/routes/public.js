@@ -6,7 +6,7 @@ let router = express.Router();
 
 router.get('/*/:filename', (req, res, next) => {
   const { '0': folderName, filename } = req.params;
-  const { download } = req.query;
+  const { download, thumbnail } = req.query;
 
   const folderPath = api.dataPath.publicDirFolderPath(folderName);
   const filePath = path.join(folderPath, filename);
@@ -21,6 +21,10 @@ router.get('/*/:filename', (req, res, next) => {
     // -> next: is a directory
     next();
     return;
+  }
+
+  if (thumbnail === '1') {
+    return api.fileOperator.sendThumbnail(res, filePath);
   }
 
   // -> no code: return file directly

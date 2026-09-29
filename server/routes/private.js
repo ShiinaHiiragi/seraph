@@ -6,7 +6,7 @@ let router = express.Router();
 
 router.get('/*/:filename', (req, res, next) => {
   const { '0': folderName, filename } = req.params;
-  const { download } = req.query;
+  const { download, thumbnail } = req.query;
 
   const folderPath = api.dataPath.privateDirFolderPath(folderName);
   const filePath = path.join(folderPath, filename);
@@ -28,6 +28,10 @@ router.get('/*/:filename', (req, res, next) => {
     // send home-made 401 page instead of strange json
     res.sendFile(api.dataPath.authFilePath);
     return;
+  }
+
+  if (thumbnail === '1') {
+    return api.fileOperator.sendThumbnail(res, filePath);
   }
 
   // -> no code: return file directly

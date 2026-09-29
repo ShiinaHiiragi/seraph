@@ -63,7 +63,9 @@ export default function FileTable(props) {
     previewTimer.current = setTimeout(() => {
       previewTimer.current = null;
       if (anchorEl.isConnected) {
-        setPreview({ anchorEl, src: anchorEl.href, name: item.name });
+        const previewURL = new URL(anchorEl.href);
+        previewURL.searchParams.set("thumbnail", "1");
+        setPreview({ anchorEl, src: previewURL.href, name: item.name });
       }
     }, reactionInterval.medium);
   }, [context.setting.file.preview.enable, closePreview]);

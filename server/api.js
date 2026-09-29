@@ -6,6 +6,7 @@ const mime = require('mime');
 const child = require('child_process');
 const assert = require('assert');
 const crypto = require('crypto');
+const sharp = require('sharp');
 const checkDiskSpace = require('check-disk-space').default
 const si = require('systeminformation')
 
@@ -725,6 +726,27 @@ const fileOperator = {
     } catch {
       return false;
     }
+  },
+
+  sendThumbnail: (res, filePath) => {
+    res.setHeader('Cache-Control', 'no-store');
+    return Promise.resolve().then(() => {
+      const { maxWidth, maxHeight } = configOperator.config.setting.file.preview;
+      return sharp(filePath, { animated: false })
+        .rotate()
+        .resize({
+          width: maxWidth,
+          height: maxHeight,
+          fit: 'inside',
+          withoutEnlargement: true
+        })
+        .webp()
+        .toBuffer();
+    }).then((image) => {
+      res.type('image/webp').send(image);
+    }).catch(() => {
+      res.status(422).end();
+    });
   }
 };
 exports.fileOperator = fileOperator;
