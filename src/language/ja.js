@@ -496,8 +496,8 @@ const ja = {
     toast: {
       plain: {
         login: "セラフへようこそ。",
-        generalReconfirm: "オペレーション中です。しばらくお待ちください。",
-        uploading: "アップロード中です。しばらくお待ちください。",
+        generalReconfirm: "オペレーション中……",
+        uploading: "アップロード中……",
         updateSetting: "最新のセッティングがアップデートされました。"
       },
       success: {

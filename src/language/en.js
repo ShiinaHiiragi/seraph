@@ -496,8 +496,8 @@ const en = {
     toast: {
       plain: {
         login: "Welcome back to Seraph.",
-        generalReconfirm: "Operation is in progress. Please wait for a second.",
-        uploading: "The file is being uploaded. Please wait for a second.",
+        generalReconfirm: "Operation in progress…",
+        uploading: "Uploading…",
         updateSetting: "Latest setting has been synchronized."
       },
       success: {

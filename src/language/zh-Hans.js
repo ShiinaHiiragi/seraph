@@ -496,8 +496,8 @@ const zhHans = {
     toast: {
       plain: {
         login: "欢迎回到 SERAPH。",
-        generalReconfirm: "操作正在进行，请稍等。",
-        uploading: "文件正在上传，请稍等。",
+        generalReconfirm: "操作进行中……",
+        uploading: "上传中……",
         updateSetting: "最新设置已同步。"
       },
       success: {

@@ -151,6 +151,7 @@ const defaultConfig = {
       }
     },
     file: {
+      uploadSize: true,
       sort: {
         field: "name",
         reverse: false

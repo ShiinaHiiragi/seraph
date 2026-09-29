@@ -358,22 +358,54 @@ const FileExplorer = (props) => {
   const [dragging, setDragging] = React.useState(false);
 
   const handleUploadFiles = React.useCallback((files) => {
+    let completedSize = 0;
     const total = files.length;
-    const toastId = toast.loading(
-      context.languagePicker("modal.toast.plain.uploading") + ` (0/${total})`,
-      { duration: Infinity }
+    const totalSize = files.reduce((sum, file) => sum + file.size, 0);
+    if (total === 0) {
+      return;
+    }
+
+    const renderProgress = (completed, uploadedSize) => (
+      <Box sx={{
+        textAlign: "right",
+        fontVariantNumeric: "tabular-nums",
+        whiteSpace: "nowrap",
+        fontSize: "0.75rem",
+        opacity: 0.75
+      }}>
+        {context.setting.file.uploadSize
+          ? `${uploadedSize.sizeFormat(2)} / ${totalSize.sizeFormat(2)}`
+          : `${completed} / ${total}`}
+      </Box>
     );
 
-    files.reduce((chain, { filename, filebase }, index) =>
+    const toastId = toast.loading(
+      context.languagePicker("modal.toast.plain.uploading"),
+      {
+        duration: Infinity,
+        className: "sonner-toast-upload",
+        description: renderProgress(0, 0)
+      }
+    );
+    const updateProgress = (completed, uploadedSize) => {
+      toast.loading(
+        context.languagePicker("modal.toast.plain.uploading"),
+        {
+          id: toastId,
+          className: "sonner-toast-upload",
+          description: renderProgress(completed, uploadedSize)
+        }
+      );
+    };
+
+    files.reduce((chain, { filename, filebase, size }, index) =>
       chain.then(() => {
         if (index > 0) {
-          toast.loading(
-            `${context.languagePicker("modal.toast.plain.uploading")} (${index}/${total})`,
-            { id: toastId }
-          );
+          updateProgress(index, completedSize);
         }
 
         return new Promise((resolve, reject) => {
+          let settled = false;
           request(
             "POST/file/upload",
             {
@@ -383,18 +415,35 @@ const FileExplorer = (props) => {
               base: filebase.split(",")[1]
             },
             undefined,
-            reject
-          )
-            .then((data) => {
-              const { statusCode, errorCode, ...newInfo } = data;
-              if (pathStartWith(`/${type}/${folderName}`)) {
-                setFilesList((filesList) => [
-                  ...filesList,
-                  newInfo
-                ]);
+            (error) => {
+              settled = true;
+              reject(error);
+            },
+            undefined,
+            ({ loaded, total: requestSize }) => {
+              if (
+                !settled
+                  && requestSize
+                  && context.setting.file.uploadSize
+              ) {
+                // The request contains Base64 JSON
+                // map its ratio to file bytes.
+                const progress = Math.min(1, Math.max(0, loaded / requestSize));
+                updateProgress(index, completedSize + size * progress);
               }
-              resolve();
-            });
+            }
+          ).then((data) => {
+            settled = true;
+            completedSize += size;
+            const { statusCode, errorCode, ...newInfo } = data;
+            if (pathStartWith(`/${type}/${folderName}`)) {
+              setFilesList((filesList) => [
+                ...filesList,
+                newInfo
+              ]);
+            }
+            resolve();
+          });
         });
       }),
       Promise.resolve()
@@ -407,13 +456,13 @@ const FileExplorer = (props) => {
                 ? context.languagePicker("modal.toast.success.files")
                 : files[0].filename,
               folderName
-            ) + ` (${total}/${total})`,
-          { id: toastId }
+            ),
+          { id: toastId, className: "", description: null }
         );
         setTimeout(() => toast.dismiss(toastId), toastDuration)
       })
       .catch((error) => {
-        toast.error(error, { id: toastId });
+        toast.error(error, { id: toastId, className: "", description: null });
         setTimeout(() => toast.dismiss(toastId), toastDuration)
       });
   }, [type, folderName, context]);
@@ -440,6 +489,7 @@ const FileExplorer = (props) => {
       reader.onload = (event) => {
         resolve({
           filename: targetFile.name,
+          size: targetFile.size,
           filebase: event.target.result
         });
       };

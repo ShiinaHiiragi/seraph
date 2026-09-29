@@ -213,6 +213,7 @@ const defaultSetting = {
     }
   },
   file: {
+    uploadSize: true,
     sort: {
       field: "name",
       reverse: false
@@ -639,7 +640,7 @@ const Status = {
  *      须务必保持除了服务器内部错误 ISE 外其他所有错误名字相同（除了首字母）
  */
 axios.defaults.withCredentials = true;
-const request = (query, params, todo, handleReject, handleInit) => {
+const request = (query, params, todo, handleReject, handleInit, handleUpload) => {
   const [method, path] = query.match(/(GET|POST)(.+)/).slice(1);
   const universalPlanned = todo?.[""];
 
@@ -648,7 +649,10 @@ const request = (query, params, todo, handleReject, handleInit) => {
   return new Promise((resolve) => {
     axios[method.toLowerCase()](
       new URL(path, serverBaseURL).href,
-      method === "POST" ? params : { params: params }
+      method === "POST" ? params : { params: params },
+      ...(method === "POST" && handleUpload
+        ? [{ onUploadProgress: handleUpload }]
+        : [])
     )
       .then((res) => {
         window.lastResponse = res
@@ -813,6 +817,29 @@ const toastTheme = (theme) => `
   [data-sonner-toast][data-styled=true] {
     box-shadow: none;
     cursor: default;
+  }
+
+  [data-sonner-toast].sonner-toast-upload [data-content] {
+    flex: 1;
+    min-width: 0;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  [data-sonner-toast].sonner-toast-upload [data-title] {
+    min-width: 0;
+  }
+
+  [data-sonner-toast].sonner-toast-upload [data-title] > div {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  [data-sonner-toast].sonner-toast-upload [data-description] {
+    flex-shrink: 0;
   }
 
   &.sonner-toast-warn {
