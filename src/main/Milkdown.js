@@ -164,7 +164,7 @@ const MilkdownField = styled(Box)(({ theme }) => ({
       padding: theme.spacing(0, 3)
     }
   },
-  "& .milkdown .ProseMirror": {
+  "& .milkdown >.ProseMirror": {
     wordBreak: "normal",
     overflowWrap: "anywhere",
     [theme.breakpoints.down("md")]: {
