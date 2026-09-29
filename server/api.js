@@ -154,6 +154,11 @@ const defaultConfig = {
       sort: {
         field: "name",
         reverse: false
+      },
+      preview: {
+        enable: true,
+        maxWidth: 320,
+        maxHeight: 240
       }
     },
     crepe: {

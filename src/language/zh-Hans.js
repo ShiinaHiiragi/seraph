@@ -76,6 +76,9 @@ const zhHans = {
           asc: "升序",
           desc: "降序"
         },
+        preview: "图片预览",
+        previewMaxWidth: "最大浮窗宽度",
+        previewMaxHeight: "最大浮窗高度",
         salt: "盐",
         saltTip: "解密盐不会随密码变换；一旦丢失，在此之前加密的所有文件都将无法恢复。",
         saltUnexist: "(未设置)",

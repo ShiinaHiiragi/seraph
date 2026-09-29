@@ -719,6 +719,46 @@ const SECTIONS = (
           )
         },
         {
+          key: context.languagePicker("header.config.file.preview"),
+          value: (
+            <Stack spacing={2}>
+              <Box>
+                {Turkey(
+                  context.setting.file.preview.enable,
+                  "file.preview.enable",
+                  handleApply
+                )}
+              </Box>
+              <Stack spacing={1}>
+                <StringInput
+                  disabled={!context.setting.file.preview.enable}
+                  caption={context.languagePicker("header.config.file.previewMaxWidth")}
+                  value={context.setting.file.preview.maxWidth}
+                  width={160}
+                  type="number"
+                  field="file.preview.maxWidth"
+                  handleCheck={(value) => !isNaN(value) && Number(value) > 0}
+                  handleApply={handleApply}
+                  end="px"
+                  translate={(value) => Number(value)}
+                />
+                <StringInput
+                  disabled={!context.setting.file.preview.enable}
+                  caption={context.languagePicker("header.config.file.previewMaxHeight")}
+                  value={context.setting.file.preview.maxHeight}
+                  width={160}
+                  type="number"
+                  field="file.preview.maxHeight"
+                  handleCheck={(value) => !isNaN(value) && Number(value) > 0}
+                  handleApply={handleApply}
+                  end="px"
+                  translate={(value) => Number(value)}
+                />
+              </Stack>
+            </Stack>
+          )
+        },
+        {
           key: context.languagePicker("header.config.file.salt"),
           tip: context.metadata.salt.length > 0
             ? context.languagePicker("header.config.file.saltTip")

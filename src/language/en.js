@@ -76,6 +76,9 @@ const en = {
           asc: "Ascending",
           desc: "Descending"
         },
+        preview: "Image Preview",
+        previewMaxWidth: "Max popup width",
+        previewMaxHeight: "Max popup height",
         salt: "Decryption Salt",
         saltTip: "Decryption salt does not change when password changes. All files encrypted before can no longer be recovered once the salt is lost.",
         saltUnexist: "(Not set)",

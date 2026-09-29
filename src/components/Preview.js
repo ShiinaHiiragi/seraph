@@ -55,8 +55,8 @@ export default function ImagePreview({ anchorEl, src, name }) {
               display: status === "loaded" ? "block" : "none",
               width: "auto",
               height: "auto",
-              maxWidth: 320,
-              maxHeight: 240,
+              maxWidth: context.setting.file.preview.maxWidth,
+              maxHeight: context.setting.file.preview.maxHeight,
               objectFit: "contain"
             }}
           />

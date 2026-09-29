@@ -51,7 +51,8 @@ export default function FileTable(props) {
   const handlePreview = React.useCallback((event, item) => {
     closePreview();
     if (
-      event.pointerType !== "mouse"
+      !context.setting.file.preview.enable
+        || event.pointerType !== "mouse"
         || item.link
         || !item.type?.startsWith("image/")
     ) {
@@ -65,7 +66,7 @@ export default function FileTable(props) {
         setPreview({ anchorEl, src: anchorEl.href, name: item.name });
       }
     }, reactionInterval.medium);
-  }, [closePreview]);
+  }, [context.setting.file.preview.enable, closePreview]);
 
   React.useEffect(() => {
     closePreview();
