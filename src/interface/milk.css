@@ -273,6 +273,21 @@
 
 /* Table Structure */
 .milkdown .milkdown-table-block {
+  min-width: 0;
+  max-width: 100%;
+
+  .table-wrapper {
+    max-width: 100%;
+    overflow-x: auto;
+
+    > table {
+      table-layout: auto;
+      width: max-content;
+      min-width: 100%;
+      overflow-wrap: normal;
+    }
+  }
+
   .button-group {
     border-radius: var(--joy-radius-sm) !important;
   }

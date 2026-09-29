@@ -142,16 +142,20 @@ const MilkdownField = styled(Box)(({ theme }) => ({
   flex: 1,
   display: "flex",
   flexDirection: "column",
+  minWidth: 0,
   minHeight: 0,
   "& [data-milkdown-root]": {
     flex: 1,
     display: "flex",
     flexDirection: "column",
+    minWidth: 0,
     minHeight: 0
   },
   "& .milkdown": {
     flex: 1,
+    overflowX: "hidden",
     overflowY: "auto",
+    minWidth: 0,
     minHeight: 0,
     [theme.breakpoints.down("md")]: {
       padding: theme.spacing(0, 2.5)
