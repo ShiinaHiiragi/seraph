@@ -1,7 +1,7 @@
 let express = require('express');
 let compression = require('compression');
 let cookieParser = require('cookie-parser');
-let logger = require('morgan');
+let accessLog = require('./log');
 let cors = require('cors');
 let path = require('path');
 
@@ -20,12 +20,23 @@ let todoRouter = require('./routes/todo');
 let api = require('./api');
 let app = express();
 
+// find real IP under nginx forwarding
+if (process.env.TRUST_PROXY) {
+  app.set(
+    'trust proxy',
+    process.env.TRUST_PROXY
+      .split(',')
+      .map((value) => value.trim())
+      .filter(Boolean)
+  );
+}
+
 // init middleware
+app.use(accessLog());
 app.use(compression());
-app.use(logger('dev'));
-app.use(express.json({ limit: '512mb' }));
-app.use(express.urlencoded({ limit: '512mb', extended: true }));
-app.use(express.static(api.dataPath.buildDirPath));
+app.use(express.static(api.dataPath.buildDirPath, {
+  setHeaders: (res) => { res.locals.accessHandler = 'static'; },
+}));
 app.use(cookieParser());
 
 // reinforce setting
@@ -59,6 +70,28 @@ app.use((req, res, next) => {
   next();
 });
 
+// body size limit for paths
+const bodyParsers = (limit) => [
+  express.json({ limit }),
+  express.urlencoded({ limit, extended: true }),
+];
+
+const requireBodyAuth = (req, res, next) => {
+  if (req.status.notAuthSuccess()) {
+    res.status(401).send(req.status.generateReport());
+    return;
+  }
+  next();
+};
+
+app.post([
+  '/utility/crepe/save',
+  '/utility/crepe/update',
+  '/file/upload'
+], requireBodyAuth, ...bodyParsers('1024mb'));
+app.use('/auth', ...bodyParsers('16kb'));
+app.use(...bodyParsers('1mb'));
+
 // express-router
 app.use('/public', publicRouter);
 app.use('/private', privateRouter);
@@ -78,6 +111,7 @@ app.use('/utility', utilityRouter);
 // redirect all other pages to react-router
 app.use((req, res) => {
   if (api.isLoopback(process.env.REACT_APP_HOSTNAME)) {
+    res.locals.accessHandler = 'fallback_front';
     const reactBaseURL = api.generateBaseURL(
       "http",
       process.env.REACT_APP_HOSTNAME,
@@ -85,6 +119,7 @@ app.use((req, res) => {
     );
     res.redirect(new URL(req.originalUrl, reactBaseURL).href);
   } else {
+    res.locals.accessHandler = 'fallback_spa';
     res.sendFile(path.join(api.dataPath.buildDirPath, 'index.html'));
   }
 });
