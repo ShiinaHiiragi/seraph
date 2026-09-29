@@ -142,6 +142,15 @@ const FileExplorer = (props) => {
   const [modalFilename, setModalFilename] = React.useState(null);
   const [modalFileLink, setModalFileLink] = React.useState(null);
 
+  // used by submit
+  const newFolderNameRef = React.useRef(null);
+  const newMarkdownRef = React.useRef(null);
+  const newLinkNameRef = React.useRef(null);
+  const newLinkURLRef = React.useRef(null);
+  const privateKeyRef = React.useRef(null);
+  const newFilenameRef = React.useRef(null);
+  const relinkRef = React.useRef(null);
+
   // used by onKeyDown
   const buttonNewFolderRef = React.useRef(null);
   const buttonNewMarkdownRef = React.useRef(null);
@@ -167,12 +176,12 @@ const FileExplorer = (props) => {
   );
 
   const handleNewFolder = React.useCallback(() => {
-    if (!isValidFilename(formNewFolderNameText)) {
+    if (!isValidFilename(newFolderNameRef.current.value)) {
       toast.error(context.languagePicker("modal.toast.warning.illegalRename"));
       return;
     }
 
-    const newFolderName = formNewFolderNameText;
+    const newFolderName = newFolderNameRef.current.value;
     setModalNewFolderLoading(true);
     toast.promise(new Promise((resolve, reject) => {
       request(
@@ -217,14 +226,12 @@ const FileExplorer = (props) => {
     type,
     context,
     folderName,
-    formNewFolderNameText,
     setPublicFolders,
     setPrivateFolders,
     handleCloseNewFolder
   ]);
 
   // new link
-  const urlRef = React.useRef(null);
   const [modalNewLinkOpen, setModalNewLinkOpen] = React.useState(false);
   const [modalNewLinkLoading, setModalNewLinkLoading] = React.useState(false);
   const [formNewLinkNameText, setFormNewLinkNameText] = React.useState("");
@@ -244,7 +251,7 @@ const FileExplorer = (props) => {
   );
 
   const handleNewLink = React.useCallback(() => {
-    if (!isValidFilename(formNewLinkNameText)) {
+    if (!isValidFilename(newLinkNameRef.current.value)) {
       toast.error(context.languagePicker("modal.toast.warning.illegalRename"));
       return;
     }
@@ -256,8 +263,8 @@ const FileExplorer = (props) => {
         {
           type: type,
           folderName: folderName,
-          filename: formNewLinkNameText,
-          url: formNewLinkURLText
+          filename: newLinkNameRef.current.value,
+          url: newLinkURLRef.current.value
         },
         { "": () => setModalNewLinkLoading(false) },
         reject
@@ -283,8 +290,6 @@ const FileExplorer = (props) => {
     type,
     context,
     folderName,
-    formNewLinkNameText,
-    formNewLinkURLText,
     handleCloseNewLink
   ]);
 
@@ -304,12 +309,12 @@ const FileExplorer = (props) => {
   );
 
   const handleNewMarkdown = React.useCallback(() => {
-    if (!isValidFilename(formNewMarkdownText)) {
+    if (!isValidFilename(newMarkdownRef.current.value)) {
       toast.error(context.languagePicker("modal.toast.warning.illegalRename"));
       return;
     }
 
-    const newMarkdownName = formNewMarkdownText;
+    const newMarkdownName = newMarkdownRef.current.value;
     setModalNewMarkdownLoading(true);
     toast.promise(new Promise((resolve, reject) => {
       request(
@@ -345,7 +350,6 @@ const FileExplorer = (props) => {
     type,
     context,
     folderName,
-    formNewMarkdownText,
     handleCloseNewMarkdown
   ]);
 
@@ -572,12 +576,12 @@ const FileExplorer = (props) => {
   );
 
   const handleRename = React.useCallback(() => {
-    if (!isValidFilename(formNewFilenameText)) {
+    if (!isValidFilename(newFilenameRef.current.value)) {
       toast.error(context.languagePicker("modal.toast.warning.illegalRename"));
       return;
     }
 
-    const originFilename = modalFilename, newFilename = formNewFilenameText;
+    const originFilename = modalFilename, newFilename = newFilenameRef.current.value;
     setModalRenameLoading(true);
     toast.promise(new Promise((resolve, reject) => {
       request(
@@ -623,7 +627,6 @@ const FileExplorer = (props) => {
     type,
     folderName,
     modalFilename,
-    formNewFilenameText,
     setPublicFolders,
     setPrivateFolders,
     handleCloseRename
@@ -654,7 +657,7 @@ const FileExplorer = (props) => {
           type: type,
           folderName: folderName,
           filename: filename,
-          url: formRelinkText
+          url: relinkRef.current.value
         },
         { "": () => setModalRelinkLoading(false) },
         reject
@@ -682,7 +685,6 @@ const FileExplorer = (props) => {
     type,
     folderName,
     modalFilename,
-    formRelinkText,
     handleCloseRelink
   ]);
 
@@ -708,7 +710,7 @@ const FileExplorer = (props) => {
           type: type,
           folderName: folderName,
           filename: modalFilename,
-          privateKey: formPrivateKeyText
+          privateKey: privateKeyRef.current.value
         },
         {
           "": () => setModalDecryptLoading(false),
@@ -740,7 +742,6 @@ const FileExplorer = (props) => {
     type,
     folderName,
     modalFilename,
-    formPrivateKeyText,
     handleCloseDecrypt
   ]);
 
@@ -985,6 +986,7 @@ const FileExplorer = (props) => {
         button={context.languagePicker("universal.button.submit")}
       >
         <SemiInput
+          ref={newFolderNameRef}
           initValue={formNewFolderNameText}
           setValue={setFormNewFolderNameText}
           autoFocus
@@ -1005,6 +1007,7 @@ const FileExplorer = (props) => {
         button={context.languagePicker("universal.button.submit")}
       >
         <SemiInput
+          ref={newMarkdownRef}
           initValue={formNewMarkdownText}
           setValue={setFormNewMarkdownText}
           autoFocus
@@ -1029,19 +1032,20 @@ const FileExplorer = (props) => {
         <FormControl>
           <FormLabel>{context.languagePicker("modal.form.newLink.filename")}</FormLabel>
           <SemiInput
+            ref={newLinkNameRef}
             initValue={formNewLinkNameText}
             setValue={setFormNewLinkNameText}
             autoFocus
             autoComplete="off"
             placeholder={context.languagePicker("universal.placeholder.instruction.required")}
             endDecorator={context.metadata.platform === 'linux' ? '.desktop' : 'url'}
-            handleEnter={() => urlRef.current?.focus()}
+            handleEnter={() => newLinkURLRef.current?.focus()}
           />
         </FormControl>
         <FormControl>
           <FormLabel>{context.languagePicker("modal.form.newLink.url")}</FormLabel>
           <SemiInput
-            ref={urlRef}
+            ref={newLinkURLRef}
             initValue={formNewLinkURLText}
             setValue={setFormNewLinkURLText}
             autoComplete="off"
@@ -1062,6 +1066,7 @@ const FileExplorer = (props) => {
         button={context.languagePicker("universal.button.submit")}
       >
         <SemiInput
+          ref={privateKeyRef}
           initValue={formPrivateKeyText}
           setValue={setFormPrivateKeyText}
           autoFocus
@@ -1091,6 +1096,7 @@ const FileExplorer = (props) => {
         button={context.languagePicker("universal.button.submit")}
       >
         <SemiInput
+          ref={newFilenameRef}
           initValue={formNewFilenameText}
           setValue={setFormNewFilenameText}
           selectBasename
@@ -1112,6 +1118,7 @@ const FileExplorer = (props) => {
         button={context.languagePicker("universal.button.submit")}
       >
         <SemiInput
+          ref={relinkRef}
           initValue={formRelinkText}
           setValue={setFormRelinkText}
           autoFocus
