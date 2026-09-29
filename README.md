@@ -184,6 +184,7 @@
 
 ## Log
 
+- 10/02/2026 ver 1.4.14: Add size progress indicator for files uploading
 - 10/02/2026 ver 1.4.13: Add image preview for FileTable
 - 10/01/2026 ver 1.4.12: Fix copy/cut problems when renaming/delete files
 - 09/30/2026 ver 1.4.11: Fix sync problem of SemiInput components
