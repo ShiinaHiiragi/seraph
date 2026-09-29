@@ -8,6 +8,7 @@ import IconButton from "@mui/joy/IconButton";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
 import GlobalContext, {
+  defaultClipboard,
   toast,
   request,
   Status,
@@ -130,7 +131,11 @@ export default function RowMenu(props) {
         folderName: folderName,
         filename: filename
       }, undefined, reject)
-        .then(() => {
+        .then((data) => {
+          if (data.clear) {
+            setClipboard({ ...defaultClipboard });
+          }
+
           if (pathEqual(`/${type}/${folderName}`)) {
             setFilesList((filesList) => filesList.filter(
               (item) => item.name !== filename
@@ -154,7 +159,8 @@ export default function RowMenu(props) {
     context,
     setFilesList,
     setPublicFolders,
-    setPrivateFolders
+    setPrivateFolders,
+    setClipboard
   ])
 
   const handleEncrypt = React.useCallback(() => {

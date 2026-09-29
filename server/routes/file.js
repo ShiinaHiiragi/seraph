@@ -465,9 +465,14 @@ router.post('/delete', (req, res, next) => {
     return;
   }
 
-  // -> ES: no extra info
+  const deleteClipboard = api.configOperator.deleteClipboard();
+
+  // -> ES: return clipboard info
   req.status.addExecStatus();
-  res.send(req.status.generateReport());
+  res.send({
+    ...req.status.generateReport(),
+    clear: deleteClipboard
+  });
   return;
 });
 

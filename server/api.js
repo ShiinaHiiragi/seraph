@@ -836,6 +836,20 @@ const configOperator = {
     }));
   },
 
+  deleteClipboard: () => {
+    if (configOperator.config.clipboard.path !== null) {
+      const { filePath } = fileOperator.pathCombinator(
+        ...configOperator.config.clipboard.path
+      );
+
+      if (!fs.existsSync(filePath)) {
+        configOperator.clearConfigClipboard();
+        return true;
+      }
+    }
+    return false;
+  },
+
   clearConfigClipboard: () => {
     configOperator.setConfig((config) => ({
       ...config,
