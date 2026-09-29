@@ -184,6 +184,7 @@
 
 ## Log
 
+- 10/01/2026 ver 1.4.12: Fix copy/cut problems when renaming/delete files
 - 09/30/2026 ver 1.4.11: Fix sync problem of SemiInput components
 - 09/29/2026 ver 1.4.10: Fix scroll bar and auto save for Milkdown Crepe
 - 07/24/2026  ver 1.4.9: Fix text overflow & unzip
