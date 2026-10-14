@@ -35,6 +35,7 @@ const Milkdown = React.lazy(() => import("./main/Milkdown"));
 const Subscription = React.lazy(() => import("./main/Subscription"));
 const Terminal = React.lazy(() => import("./main/Terminal"));
 const TODO = React.lazy(() => import("./main/TODO"));
+const Chat = React.lazy(() => import("./main/Chat"));
 
 const RouterBridgeContext = React.createContext(null);
 
@@ -246,6 +247,7 @@ const Panel = () => {
         { path: "subscription", element: <Subscription /> },
         { path: "terminal", element: <Terminal /> },
         { path: "todo", element: <TODO /> },
+        { path: "chat", element: <Chat /> },
         { path: "*", element: <Error /> },
       ],
     }]);
