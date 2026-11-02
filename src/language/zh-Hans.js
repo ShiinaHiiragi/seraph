@@ -314,6 +314,7 @@ const zhHans = {
       subscription: "订阅",
       milkdown: "编辑",
       terminal: "终端",
+      card: "卡片",
       todo: "待办"
     }
   },

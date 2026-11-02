@@ -314,6 +314,7 @@ const ja = {
       subscription: "サブスクリプション",
       milkdown: "クレープ",
       terminal: "ターミナル",
+      card: "カード",
       todo: "タスク"
     }
   },

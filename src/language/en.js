@@ -314,6 +314,7 @@ const en = {
       subscription: "Subscription",
       milkdown: "Crepe",
       terminal: "Terminal",
+      card: "Card",
       todo: "Task"
     }
   },

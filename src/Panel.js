@@ -34,6 +34,7 @@ const FileExplorer = React.lazy(() => import("./main/FileExplorer"));
 const Milkdown = React.lazy(() => import("./main/Milkdown"));
 const Subscription = React.lazy(() => import("./main/Subscription"));
 const Terminal = React.lazy(() => import("./main/Terminal"));
+const Card = React.lazy(() => import("./main/Card"));
 const TODO = React.lazy(() => import("./main/TODO"));
 
 const RouterBridgeContext = React.createContext(null);
@@ -245,6 +246,7 @@ const Panel = () => {
         { path: "crepe/*", element: <Milkdown /> },
         { path: "subscription", element: <Subscription /> },
         { path: "terminal", element: <Terminal /> },
+        { path: "card", element: <Card /> },
         { path: "todo", element: <TODO /> },
         { path: "*", element: <Error /> },
       ],

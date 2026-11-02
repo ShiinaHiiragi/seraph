@@ -13,6 +13,7 @@ import NavigateNextOutlinedIcon from "@mui/icons-material/NavigateNextOutlined";
 import EventNoteOutlinedIcon from "@mui/icons-material/EventNoteOutlined";
 // import ForwardToInboxOutlinedIcon from "@mui/icons-material/ForwardToInboxOutlined";
 import TerminalOutlinedIcon from "@mui/icons-material/TerminalOutlined";
+import StyleOutlinedIcon from "@mui/icons-material/StyleOutlined";
 import DoneIcon from "@mui/icons-material/Done";
 import GlobalContext from "../interface/constants";
 import { pathStartWith } from "../interface/constants";
@@ -182,6 +183,17 @@ export default function Navigation(props) {
                       <TerminalOutlinedIcon fontSize="small" />
                     </ListItemDecorator>
                     <ListItemContent>{context.languagePicker("nav.utility.terminal")}</ListItemContent>
+                  </ListItemButton>
+                </ListItem>}
+                {context.isAuthority && <ListItem>
+                  <ListItemButton
+                    selected={pathStartWith("/card")}
+                    onClick={() => navigateTo("/card")}
+                  >
+                    <ListItemDecorator sx={{ color: "neutral.500" }}>
+                      <StyleOutlinedIcon fontSize="small" />
+                    </ListItemDecorator>
+                    <ListItemContent>{context.languagePicker("nav.utility.card")}</ListItemContent>
                   </ListItemButton>
                 </ListItem>}
                 {context.isAuthority && <ListItem>
