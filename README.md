@@ -186,6 +186,7 @@
 
 ## Log
 
+- 11/18/2026 ver 1.4.19: Fix permissions of private folders
 - 10/07/2026 ver 1.4.18: Add thumbnails support for image preview
 - 10/06/2026 ver 1.4.17: Fix logs and size limit for Express server
 - 10/05/2026 ver 1.4.16: Fix popup padding for Milkdown Crepe
