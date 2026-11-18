@@ -1157,12 +1157,127 @@ const checkerParam = {
 
 const cardOperator = function (filePath) {
   this.card = fileOperator.readCard(filePath);
+  this.valid = cardOperator.isValid(this.card);
+
   this.setCard = (handle) => {
+    if (!this.valid) {
+      return false;
+    }
+
     const newCard = handle(this.card);
     fileOperator.saveCard(filePath, newCard);
     this.card = newCard;
   }
+
+  this.addCard = (query, key) => {
+    if (!this.valid) {
+      return false;
+    }
+
+    let id;
+    do {
+      id = crypto.randomBytes(16).toString('hex');
+    } while (this.card.findIndex((item) => item.id === id) !== -1);
+
+    const newCard = {
+      id: id,
+      query: query,
+      key: key,
+      time: Date.now(),
+      point: Array(this.card.length ? this.card[0].point.length : 0).fill(-1)
+    };
+    this.setCard((card) => [...card, newCard]);
+    return newCard;
+  };
+
+  this.editCard = (index, query, key) => {
+    if (!this.valid) {
+      return false;
+    }
+
+    this.setCard((card) => card.map((item, card_index) => card_index === index
+      ? { ...item, query: query, key: key }
+      : item
+    ));
+  };
+
+  this.deleteCard = (index) => {
+    if (!this.valid) {
+      return false;
+    }
+
+    this.setCard((card) => card.filter((_, card_index) => card_index !== index));
+  };
+
+  this.syncCard = (start, index, update) => {
+    if (!this.valid) {
+      return false;
+    }
+
+    if (start === true) {
+      this.setCard((card) => card.map((item) => ({
+        ...item,
+        point: [...item.point, -1]
+      })));
+      return true;
+    }
+
+    if (
+      start !== false
+        || !Number.isInteger(index)
+        || index < 0
+        || this.card.length === 0
+        || update === null
+        || typeof update !== 'object'
+        || Array.isArray(update)
+        || Object.keys(update).length !== this.card.length
+        || !this.card.every((item) =>
+          index === item.point.length - 1
+            && Object.prototype.hasOwnProperty.call(update, item.id)
+            && [-1, 0, 1].includes(update[item.id])
+        )
+    ) {
+      return false;
+    }
+
+    this.setCard((card) => card.map((item) => ({
+      ...item,
+      point: [...item.point.slice(0, index), update[item.id]]
+    })));
+    return true;
+  };
 }
+
+cardOperator.isValid = (hare) => {
+  if (!Array.isArray(hare)) {
+    return false;
+  }
+
+  const ids = new Set();
+  let pointLength;
+  return hare.every((item) => {
+    if (
+      item === null
+        || typeof item !== 'object'
+        || Array.isArray(item)
+        || typeof item.id !== 'string'
+        || item.id.length === 0
+        || ids.has(item.id)
+        || typeof item.query !== 'string'
+        || typeof item.key !== 'string'
+        || !Number.isFinite(item.time)
+        || !Array.isArray(item.point)
+        || !item.point.every((point) => [-1, 0, 1].includes(point))
+        || (pointLength !== undefined && item.point.length !== pointLength)
+    ) {
+      return false;
+    }
+
+    ids.add(item.id);
+    pointLength = item.point.length;
+    return true;
+  });
+};
 
 const taskDelay = () => configOperator.config.setting.task.delay >= 0
   ? Date.now() + configOperator.config.setting.task.delay * 1000
