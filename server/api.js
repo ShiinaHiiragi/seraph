@@ -386,45 +386,29 @@ const fileOperator = {
 
     if (
       !['public', 'private'].includes(type)
-        || typeof folderName !== 'string'
         || /[\\:\0]/.test(folderName)
         || path.isAbsolute(folderName)
     ) {
       throw invalid();
     }
 
-    const rootPath = type === 'private'
-      ? dataPath.privateDirPath
-      : dataPath.publicDirPath;
+    const rootPath = type === 'private' ? dataPath.privateDirPath : dataPath.publicDirPath;
     const folderPath = path.resolve(rootPath, folderName);
     const relative = path.relative(rootPath, folderPath);
-
-    if (
-      relative === '..'
-        || relative.startsWith(`..${path.sep}`)
-        || path.isAbsolute(relative)
-    ) {
+    if (relative === '..' || relative.startsWith(`..${path.sep}`) || path.isAbsolute(relative)) {
       throw invalid();
     }
 
     if (filename === undefined) {
-      return { folderPath }
-    };
-
-    if (
-      typeof filename !== 'string'
-        || !filename
-        || filename === '.'
-        || filename === '..'
-        || /[/\\:\0]/.test(filename)
-    ) {
+      return { folderPath: folderPath };
+    } else if (!filename || ['.', '..'].includes(filename) || /[/\\:\0]/.test(filename)) {
       throw invalid();
+    } else {
+      return {
+        folderPath: folderPath,
+        filePath: path.join(folderPath, filename)
+      };
     }
-
-    return {
-      folderPath: folderPath,
-      filePath: path.join(folderPath, filename)
-    };
   },
 
   probeDir: (dirPath, mode) => {
