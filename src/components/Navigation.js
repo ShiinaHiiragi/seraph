@@ -185,7 +185,7 @@ export default function Navigation(props) {
                     <ListItemContent>{context.languagePicker("nav.utility.terminal")}</ListItemContent>
                   </ListItemButton>
                 </ListItem>}
-                {context.isAuthority && <ListItem>
+                {/* {context.isAuthority && <ListItem>
                   <ListItemButton
                     selected={pathStartWith("/card")}
                     onClick={() => navigateTo("/card")}
@@ -195,7 +195,7 @@ export default function Navigation(props) {
                     </ListItemDecorator>
                     <ListItemContent>{context.languagePicker("nav.utility.card")}</ListItemContent>
                   </ListItemButton>
-                </ListItem>}
+                </ListItem>} */}
                 {context.isAuthority && <ListItem>
                   <ListItemButton
                     selected={pathStartWith("/todo")}
