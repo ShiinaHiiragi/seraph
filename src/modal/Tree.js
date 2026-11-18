@@ -273,13 +273,13 @@ export default function Tree(props) {
             </SimpleTreeView>
           </MaterialCssVarsProvider>
         </Stack>
-        {modalTree.initValue && (
+        {modalTree.initValue !== undefined && (
           <Input
             value={localValue}
             onChange={(event) => setLocalValue(event.target.value)}
             placeholder={context.languagePicker("modal.tree.placeholder")}
             slotProps={{ input: { ref: inputRef } }}
-            endDecorator=".md"
+            endDecorator={modalTree.endDecorator}
             onKeyDown={(event) => {
               if (event.key === "Enter") {
                 event.preventDefault();
@@ -291,7 +291,11 @@ export default function Tree(props) {
         <Button
           ref={buttonRef}
           loading={loading}
-          disabled={!selectedItem || selectedItem.split("/").filter(Boolean).length < 2}
+          disabled={
+            !selectedItem
+              || selectedItem.split("/").filter(Boolean).length < 2
+              || (modalTree.initValue !== undefined && !modalTree.endDecorator && !localValue?.trim())
+          }
           onClick={() => {
             setLoading(true);
             modalTree.handleAction([selectedItem, localValue]);

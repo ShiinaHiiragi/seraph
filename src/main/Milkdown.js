@@ -217,17 +217,16 @@ const CrepeEditorInner = (props) => {
     new Promise((resolve, reject) => {
       Promise.all([
         context.isAuthority
-          ? handleToggleTree()
+          ? handleToggleTree(file.name)
           : Promise.resolve([]),
         handleProcessImage(file),
       ])
-        .then(([[folderPath], filebase]) => {
+        .then(([[folderPath, filename], filebase]) => {
           if (!context.isAuthority || !folderPath) {
             resolve(filebase);
             return;
           }
 
-          const filename = file.name;
           const path = folderPath?.split("/")?.filter(Boolean)
           const type = path[0];
           const folderName = path.slice(1).join("/");
@@ -1028,10 +1027,11 @@ const CrepeEditor = () => {
   });
 
   const handleToggleTree = React.useCallback(
-    () => new Promise((resolve, reject) => {
+    (filename) => new Promise((resolve, reject) => {
       setModalTree({
         open: true,
-        initValue: undefined,
+        initValue: filename,
+        endDecorator: undefined,
         handleAction: resolve,
         handleCancel: reject
       });
@@ -1152,6 +1152,7 @@ const CrepeEditor = () => {
       setModalTree({
         open: true,
         initValue: crepeTitle,
+        endDecorator: ".md",
         handleAction: ([folderPath, filename]) => {
           const path = folderPath?.split("/")?.filter(Boolean)
           const type = path[0];
