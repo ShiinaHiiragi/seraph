@@ -99,8 +99,6 @@ const dataPath = {
     ? path.join(process.env.APPDATA || path.join(os.homedir(), 'AppData', 'Roaming'), APP_NAME)
     : path.join(process.env.XDG_CONFIG_HOME || path.join(os.homedir(), '.config'), APP_NAME),
   appdataFilePath: (filename) => path.join(dataPath.appdataDirPath, filename),
-  publicDirFolderPath: (folderName) => path.join(__dirname, "./data/public", folderName),
-  privateDirFolderPath: (folderName) => path.join(__dirname, "./data/private", folderName),
 };
 
 const extentPath = {
@@ -381,15 +379,51 @@ const fileOperator = {
   },
 
   pathCombinator: (type, folderName, filename) => {
-    const folderPath = dataPath[
-      type === "private"
-        ? "privateDirFolderPath"
-        : "publicDirFolderPath"
-    ](folderName);
-    const filePath = path.join(folderPath, filename);
+    const invalid = () => Object.assign(
+      new Error('Invalid file path'),
+      { code: 'INVALID_FILE_PATH' }
+    );
+
+    if (
+      !['public', 'private'].includes(type)
+        || typeof folderName !== 'string'
+        || /[\\:\0]/.test(folderName)
+        || path.isAbsolute(folderName)
+    ) {
+      throw invalid();
+    }
+
+    const rootPath = type === 'private'
+      ? dataPath.privateDirPath
+      : dataPath.publicDirPath;
+    const folderPath = path.resolve(rootPath, folderName);
+    const relative = path.relative(rootPath, folderPath);
+
+    if (
+      relative === '..'
+        || relative.startsWith(`..${path.sep}`)
+        || path.isAbsolute(relative)
+    ) {
+      throw invalid();
+    }
+
+    if (filename === undefined) {
+      return { folderPath }
+    };
+
+    if (
+      typeof filename !== 'string'
+        || !filename
+        || filename === '.'
+        || filename === '..'
+        || /[/\\:\0]/.test(filename)
+    ) {
+      throw invalid();
+    }
+
     return {
       folderPath: folderPath,
-      filePath: filePath
+      filePath: path.join(folderPath, filename)
     };
   },
 

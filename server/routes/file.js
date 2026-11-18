@@ -300,7 +300,7 @@ router.post('/rename', (req, res, next) => {
 
   const { type, folderName, filename, newFilename } = req.body;
   const { folderPath, filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
-  const newFilePath = path.join(folderPath, newFilename);
+  const { filePath: newFilePath } = api.fileOperator.pathCombinator(type, folderName, newFilename);
 
   if (!fs.existsSync(filePath)) {
     // -> EF_RU: folder don't exist
@@ -560,7 +560,7 @@ router.post('/unzip', (req, res, next) => {
   const pureFilename = filename.split(".").slice(0, -1).join(".");
   const extractName = zipEntries.length === 1 ? "." : pureFilename;
   const newDirName = zipEntries.length === 1 ? zipEntries[0].replace("/", "") : pureFilename;
-  const newDirPath = path.join(folderPath, newDirName);
+  const { filePath: newDirPath } = api.fileOperator.pathCombinator(type, folderName, newDirName);
 
   if (fs.existsSync(newDirPath)) {
     // -> EF_IC: filename already exists
@@ -570,7 +570,7 @@ router.post('/unzip', (req, res, next) => {
   }
 
   try {
-    zip.extractAllTo(path.join(folderPath, extractName));
+    zip.extractAllTo(extractName === '.' ? folderPath : newDirPath);
     api.Permission.chmodSyncR(newDirPath, api.Permission.auto(type));
   } catch (_) {
     // -> EF_FME: unzip error
@@ -606,7 +606,7 @@ router.post('/epub', (req, res, next) => {
   }
 
   const newDirName = filename.split(".").slice(0, -1).join(".");
-  const newDirPath = path.join(folderPath, newDirName);
+  const { filePath: newDirPath } = api.fileOperator.pathCombinator(type, folderName, newDirName);
   if (fs.existsSync(newDirPath)) {
     // -> EF_IC: filename already exists
     req.status.addExecStatus(api.Status.execErrCode.IdentifierConflict);
@@ -772,7 +772,7 @@ router.post('/decrypt', (req, res, next) => {
   }
 
   const newFilename = filename.split(".").slice(0, -1).join(".");
-  const newFilePath = path.join(folderPath, newFilename);
+  const { filePath: newFilePath } = api.fileOperator.pathCombinator(type, folderName, newFilename);
   if (fs.existsSync(newFilePath)) {
     // -> EF_IC: filename already exists
     req.status.addExecStatus(api.Status.execErrCode.IdentifierConflict);

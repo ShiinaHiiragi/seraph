@@ -5,7 +5,7 @@ let router = express.Router();
 router.get('/public/*', (req, res) => {
   const { '0': folderName } = req.params;
   const { abstract } = req.query;
-  const folderPath = api.dataPath.publicDirFolderPath(folderName);
+  const { folderPath } = api.fileOperator.pathCombinator('public', folderName);
   let folderInfo = api.fileOperator.readFolderInfo(folderPath, abstract === '1');
 
   if (folderInfo === null) {
@@ -39,7 +39,7 @@ router.get('/private/*', (req, res, next) => {
 
   const { '0': folderName } = req.params;
   const { abstract } = req.query;
-  const folderPath = api.dataPath.privateDirFolderPath(folderName);
+  const { folderPath } = api.fileOperator.pathCombinator('private', folderName);
   const folderInfo = api.fileOperator.readFolderInfo(folderPath, abstract === '1');
 
   if (folderInfo === null) {

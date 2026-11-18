@@ -128,6 +128,12 @@ app.use((req, res) => {
 // `if (!cond) { next(api.errorStreamControl); return; }` act as `assert(cond)`;
 // which means we believe that `!cond` should not happen
 app.use((err, req, res, _) => {
+  if (err.code === 'INVALID_FILE_PATH') {
+    req.status.addExecStatus(api.Status.execErrCode.TypeCheckFailed);
+    res.status(400).send(req.status.generateReport());
+    return;
+  }
+
   if (!err.validity) {
     console.error(err);
     req.status.addExecStatus(api.Status.execErrCode.InternalServerError);
