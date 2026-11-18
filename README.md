@@ -122,8 +122,6 @@
 4. (OPTIONAL) If you have fetched submodules, more dependencies are needed
 
     ```shell
-    # if submodules have not been fetched
-    git submodule update --init --recursive
     # install pandoc
     sudo apt install -y pandoc
     # install python3
@@ -131,6 +129,13 @@
     # install pip packages
     # sudo is needed because express is executed under sudo
     sudo pip3 install tqdm beautifulsoup4 lxml markdown-it-py pillow numpy
+    ```
+
+    use `git submodule` to update / sync changes of submodules
+
+    ```shell
+    git submodule update --remote
+    git submodule update --init --recursive
     ```
 
 5. Start the server (make sure `.env` is created before executing following command)
