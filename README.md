@@ -191,6 +191,7 @@
 
 ## Log
 
+- 11/19/2026 ver 1.4.20: Fix renaming for Milkdown image uploading
 - 11/18/2026 ver 1.4.19: Fix permissions of private folders
 - 10/07/2026 ver 1.4.18: Add thumbnails support for image preview
 - 10/06/2026 ver 1.4.17: Fix logs and size limit for Express server
