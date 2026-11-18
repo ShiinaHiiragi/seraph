@@ -455,6 +455,12 @@ const fileOperator = {
     );
   },
 
+  readCard: (filePath) => {
+  },
+
+  saveCard: (filePath, card) => {
+  },
+
   readTask: () => {
     if (!fs.existsSync(dataPath.taskFilePath)) {
       fs.writeFileSync(
@@ -1144,6 +1150,15 @@ const checkerParam = {
   ]
 }
 
+const cardOperator = function (filePath) {
+  this.card = fileOperator.readCard(filePath);
+  this.setCard = (handle) => {
+    const newCard = handle(this.card);
+    fileOperator.saveCard(filePath, newCard);
+    this.card = newCard;
+  }
+}
+
 const taskDelay = () => configOperator.config.setting.task.delay >= 0
   ? Date.now() + configOperator.config.setting.task.delay * 1000
   : -1;
@@ -1361,6 +1376,7 @@ exports.taskDelay = taskDelay;
 exports.tokenOperator = tokenOperator;
 exports.checkerOperator = checkerOperator;
 exports.checkerParam = checkerParam;
+exports.cardOperator = cardOperator;
 exports.taskOperator = taskOperator;
 exports.styleOperator = styleOperator;
 exports.saltOperator = saltOperator;
