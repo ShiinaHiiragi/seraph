@@ -456,9 +456,14 @@ const fileOperator = {
   },
 
   readCard: (filePath) => {
+    return JSON.parse(fs.readFileSync(filePath));
   },
 
   saveCard: (filePath, card) => {
+    fs.writeFileSync(
+      filePath,
+      JSON.stringify(card, null, 2)
+    );
   },
 
   readTask: () => {
