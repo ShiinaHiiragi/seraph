@@ -25,24 +25,28 @@ import GlobalContext from "../interface/constants";
 
 const initialCards = [
   {
+    id: "84d875da8b8f97c5501cd8a8240a5918",
     query: "抜粋",
     key: "ばっすい\n[名·他动·サ变] 摘录，集锦",
     time: 1793596082531,
     point: [1, 0, 0, -1]
   },
   {
+    id: "edd8a7514d8211c077c9f9cad4523320",
     query: "落胆",
     key: "らくたん\n[名·自动·サ变] 灰心，气馁，消沉",
     time: 1793596084387,
     point: [1, 1, 1, -1]
   },
   {
+    id: "37a3c4c1cd1fdd4ff5c300e732c932a6",
     query: "頓珍漢",
     key: "とんちんかん\n[名·形动] (说话做事)前后不符,前后矛盾傻事笨事",
     time: 1793596084949,
     point: [0, 0, 0, 1]
   },
   {
+    id: "efc28f2a1a5aadeede9ceddadb323990",
     query: "我楽多",
     key: "がらくた\n[名] 値打ちのない、または役に立たない雑多な品物。",
     time: 1793596085404,
