@@ -15,7 +15,7 @@ let folderRouter = require('./routes/folder');
 let configRouter = require('./routes/config');
 
 let crepeRouter = require('./routes/crepe');
-let cardRouter = require('./routes/card');
+let hareRouter = require('./routes/hare');
 let todoRouter = require('./routes/todo');
 
 let api = require('./api');
@@ -105,7 +105,7 @@ app.use('/config', configRouter)
 
 let utilityRouter = express.Router();
 utilityRouter.use('/crepe', crepeRouter);
-utilityRouter.use('/card', cardRouter);
+utilityRouter.use('/hare', hareRouter);
 utilityRouter.use('/todo', todoRouter);
 
 app.use('/utility', utilityRouter);

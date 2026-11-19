@@ -256,7 +256,7 @@ const Card = () => {
               <tr key={item.time}>
                 <td></td>
                 <td><Typography level="body-xs">{item.query}</Typography></td>
-                <td>{renderAnswer(item)}</td>
+                <td><Box sx={{ mx: -1 }}>{renderAnswer(item)}</Box></td>
                 <td>
                   <Typography level="body-xs">
                     {new Date(item.time).toLocaleString("zh-CN", { hour12: false })}
