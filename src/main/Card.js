@@ -79,6 +79,9 @@ const Card = () => {
   const [search, setSearch] = React.useState("");
   const [memorizing, setMemorizing] = React.useState(false);
 
+  const loadedPathRef = React.useRef(null);
+  const authorityRef = React.useRef(context.isAuthority);
+
   const [modalTree, setModalTree] = React.useState({
     open: false,
     handleAction: () => { },
@@ -109,8 +112,8 @@ const Card = () => {
         }
 
         request(
-          "POST/utility/hare/create",
-          { type, folderName, filename, hare: cards },
+          "POST/utility/hare/save",
+          { type, folderName, filename, create: true, hare: cards },
           { "": handleCloseModalTree }
         ).then(() => {
           handleCloseModalTree();
@@ -133,32 +136,56 @@ const Card = () => {
   }, [cardType, context.isAuthority]);
 
   React.useEffect(() => {
-    setCardState(0);
-    setCards([]);
-    setSearch("");
-    setMemorizing(false);
+    const loggedIn = !authorityRef.current && context.isAuthority;
+    authorityRef.current = context.isAuthority;
 
-    // after second tick, the globalSwitch were set properly
-    if (context.secondTick && display) {
-      if (folderName.length) {
+    // same file or same temp page
+    if (loadedPathRef.current === folderName) {
+      // logged in to the same file
+      if (loggedIn && folderName.length) {
         request(
-          "GET/utility/hare/list",
+          "POST/utility/hare/save",
           {
             type: cardType,
             folderName: cardPath,
-            filename: cardTitle
-          },
-          {
-            [Status.execErrCode.ResourcesUnexist]: () => setCardState(-1),
-            [Status.execErrCode.FileModuleError]: () => setCardState(-2),
-            [Status.execErrCode.TypeCheckFailed]: () => setCardState(-2)
+            filename: cardTitle,
+            create: false,
+            hare: cards
           }
-        ).then(({ hare }) => {
-          setCards(hare);
+        );
+      }
+    // different file
+    } else {
+      loadedPathRef.current = null;
+      setCardState(0);
+      setCards([]);
+      setSearch("");
+      setMemorizing(false);
+
+      // after second tick, the globalSwitch were set properly
+      if (context.secondTick && display) {
+        if (folderName.length) {
+          request(
+            "GET/utility/hare/list",
+            {
+              type: cardType,
+              folderName: cardPath,
+              filename: cardTitle
+            },
+            {
+              [Status.execErrCode.ResourcesUnexist]: () => setCardState(-1),
+              [Status.execErrCode.FileModuleError]: () => setCardState(-2),
+              [Status.execErrCode.TypeCheckFailed]: () => setCardState(-2)
+            }
+          ).then(({ hare }) => {
+            loadedPathRef.current = folderName;
+            setCards(hare);
+            setCardState(1);
+          });
+        } else {
+          loadedPathRef.current = folderName;
           setCardState(1);
-        });
-      } else {
-        setCardState(1);
+        }
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -166,6 +193,7 @@ const Card = () => {
     // check if
     // load with auth naturally
     context.secondTick,
+    // login in same page
     context.isAuthority,
     // url is changed directly
     rawFolderName

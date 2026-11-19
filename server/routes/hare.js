@@ -225,8 +225,8 @@ router.post('/delete', (req, res, next) => {
   return;
 });
 
-router.post('/create', (req, res, next) => {
-  const { type, folderName, filename, hare } = req.body;
+router.post('/save', (req, res, next) => {
+  const { type, folderName, filename, create, hare } = req.body;
   if (req.status.notAuthSuccess()) {
     // -> EF_IT or abnormal request
     next(api.errorStreamControl);
@@ -245,15 +245,22 @@ router.post('/create', (req, res, next) => {
     return;
   }
 
-  if (fs.existsSync(filePath)) {
-    // -> EF_IC: file already exists
+  if (create && fs.existsSync(filePath)) {
+    // -> EF_IC: file already exists when create is true
     req.status.addExecStatus(api.Status.execErrCode.IdentifierConflict);
     res.send({ ...req.status.generateReport(), 0: filename });
     return;
   }
 
+  if (!create && !(fs.existsSync(filePath) && fs.statSync(filePath).isFile())) {
+    // -> EF_RU: file does not exist or is not a regular file when create is false
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
+
   if (!api.cardOperator.isValid(hare)) {
-    // -> EF_TCF: invalid request parameters
+    // -> EF_TCF: invalid hare format
     req.status.addExecStatus(api.Status.execErrCode.TypeCheckFailed);
     res.send(req.status.generateReport());
     return;

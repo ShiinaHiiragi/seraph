@@ -955,6 +955,7 @@ const CrepeEditor = () => {
     // check if
     // load with auth naturally
     context.secondTick,
+    // login in same page
     context.isAuthority,
     // url is changed directly
     rawFolderName
