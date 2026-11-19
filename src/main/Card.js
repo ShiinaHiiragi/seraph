@@ -1,5 +1,7 @@
 import React from "react";
 import { useParams } from "react-router";
+import { useNavigate } from "react-router-dom";
+import isValidFilename from "valid-filename";
 import Box from "@mui/joy/Box";
 import Button from "@mui/joy/Button";
 import DoneOutlinedIcon from "@mui/icons-material/DoneOutlined";
@@ -25,15 +27,16 @@ import RouteField from "../interface/RouteField";
 import GlobalContext, {
   request,
   Status,
-  encodePath
+  encodePath,
+  toast
 } from "../interface/constants";
 import Loading from "./Loading";
 import Caption from "../components/Caption";
+import Tree from "../modal/Tree";
 
 const CardRowMenu = () => (
   <Dropdown>
     <MenuButton
-      aria-label="操作"
       slots={{ root: IconButton }}
       slotProps={{ root: { variant: "plain", color: "neutral", size: "sm" } }}
     >
@@ -49,6 +52,7 @@ const CardRowMenu = () => (
 );
 
 const Card = () => {
+  const navigate = useNavigate();
   const context = React.useContext(GlobalContext);
   const { "*": rawFolderName } = useParams();
 
@@ -74,6 +78,55 @@ const Card = () => {
   const [cards, setCards] = React.useState([]);
   const [search, setSearch] = React.useState("");
   const [memorizing, setMemorizing] = React.useState(false);
+
+  const [modalTree, setModalTree] = React.useState({
+    open: false,
+    handleAction: () => { },
+    handleCancel: () => { }
+  });
+
+  const handleCloseModalTree = React.useCallback(() => {
+    setModalTree((modalTree) => ({ ...modalTree, open: false }));
+  }, []);
+
+  const handleToggleSave = React.useCallback(() => {
+    if (!context.isAuthority || folderName.length) {
+      return;
+    }
+    setModalTree({
+      open: true,
+      initValue: "未命名",
+      endDecorator: ".hare",
+      handleAction: ([folderPath, name]) => {
+        const path = folderPath.split("/").filter(Boolean);
+        const type = path[0];
+        const folderName = path.slice(1).join("/");
+        const filename = `${name}.hare`;
+        if (!name.trim() || !isValidFilename(name)) {
+          toast.error("文件名无效");
+          handleCloseModalTree();
+          return;
+        }
+
+        request(
+          "POST/utility/hare/create",
+          { type, folderName, filename, hare: cards },
+          { "": handleCloseModalTree }
+        ).then(() => {
+          handleCloseModalTree();
+          toast.success("保存成功");
+          navigate(`/card/${type}/${encodePath(folderName)}/${encodeURIComponent(filename)}`);
+        });
+      },
+      handleCancel: () => { }
+    });
+  }, [
+    context.isAuthority,
+    folderName,
+    cards,
+    navigate,
+    handleCloseModalTree
+  ]);
 
   const display = React.useMemo(() => {
     return cardType !== "private" || context.isAuthority;
@@ -159,7 +212,6 @@ const Card = () => {
         component={memorizing ? "button" : "div"}
         type={memorizing ? "button" : undefined}
         onClick={memorizing ? () => handleAnswer(item.time) : undefined}
-        aria-label={hidden ? `显示 ${item.query} 的答案` : undefined}
         sx={{
           display: "block",
           width: "100%",
@@ -203,9 +255,11 @@ const Card = () => {
   return (
     <RouteField
       display={display}
-      path={folderName.length
-        ? [cardType === "private" ? "私有文件" : "公共文件", ...folderPart.slice(1)]
-        : ["实用工具", "记忆卡片"]}
+      path={
+        folderName.length
+          ? [cardType === "private" ? "私有文件" : "公共文件", ...folderPart.slice(1)]
+          : ["实用工具", "记忆卡片"]
+      }
       link={folderName.length ? `/${encodePath(folderName)}` : undefined}
       title={cardTitle}
       sxRaw={{ overflowY: "hidden" }}
@@ -253,6 +307,12 @@ const Card = () => {
               操作
             </MenuButton>
             <Menu size="sm" placement="bottom-end" sx={{ minWidth: 140 }}>
+              {folderName.length === 0 && <React.Fragment>
+                <MenuItem disabled={!context.isAuthority} onClick={handleToggleSave}>
+                  保存
+                </MenuItem>
+                <Divider />
+              </React.Fragment>}
               <MenuItem onClick={handleStart}>
                 开始
               </MenuItem>
@@ -349,6 +409,10 @@ const Card = () => {
           ))}
         </Box>
       </React.Fragment>}
+      {modalTree.open && <Tree
+        modalTree={modalTree}
+        handleCloseModalTree={handleCloseModalTree}
+      />}
     </RouteField>
   )
 }

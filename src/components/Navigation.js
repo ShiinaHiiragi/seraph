@@ -185,7 +185,7 @@ export default function Navigation(props) {
                     <ListItemContent>{context.languagePicker("nav.utility.terminal")}</ListItemContent>
                   </ListItemButton>
                 </ListItem>}
-                {context.isAuthority && <ListItem>
+                {(context.isAuthority || true) && <ListItem>
                   <ListItemButton
                     selected={pathStartWith("/card")}
                     onClick={() => navigateTo("/card")}
