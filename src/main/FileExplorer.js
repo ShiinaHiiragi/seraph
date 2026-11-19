@@ -79,20 +79,28 @@ const FileExplorer = (props) => {
 
   // after second tick, the globalSwitch were set properly
   React.useEffect(() => {
+    let active = true;
     setFolderState(0);
     if (context.secondTick && display) {
       request(
         `GET/folder/${type}/${folderName}`,
         undefined,
         { [Status.execErrCode.ResourcesUnexist]: () => {
-          setFolderState(-1);
+          if (active) {
+            setFolderState(-1);
+          }
         } }
       )
         .then((data) => {
-          setFolderState(1);
-          setFilesList(data.info);
+          if (active) {
+            setFolderState(1);
+            setFilesList(data.info);
+          }
         })
     }
+    return () => {
+      active = false;
+    };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     // check if
