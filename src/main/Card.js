@@ -308,12 +308,18 @@ const Card = () => {
             </MenuButton>
             <Menu size="sm" placement="bottom-end" sx={{ minWidth: 140 }}>
               {folderName.length === 0 && <React.Fragment>
-                <MenuItem disabled={!context.isAuthority} onClick={handleToggleSave}>
+                <MenuItem
+                  disabled={!context.isAuthority}
+                  onClick={handleToggleSave}
+                >
                   保存
                 </MenuItem>
                 <Divider />
               </React.Fragment>}
-              <MenuItem onClick={handleStart}>
+              <MenuItem
+                disabled={!cards.length}
+                onClick={handleStart}
+              >
                 开始
               </MenuItem>
               <MenuItem
@@ -323,7 +329,15 @@ const Card = () => {
                 继续
               </MenuItem>
               <Divider />
-              <MenuItem>查看报告</MenuItem>
+              <MenuItem>
+                添加
+              </MenuItem>
+              <MenuItem>
+                上传
+              </MenuItem>
+              <MenuItem>
+                下载
+              </MenuItem>
             </Menu>
           </Dropdown>}
         </Box>
