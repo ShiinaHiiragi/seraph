@@ -266,6 +266,11 @@ const Panel = () => {
   const [clipboard, setClipboard] = React.useState(defaultClipboard);
   const [metadata, setMetadata] = React.useState(defaultMetadata);
   const [setting, setSetting] = React.useState(defaultSetting);
+
+  React.useLayoutEffect(() => {
+    const handleInvalidToken = () => setGlobalSwitch(globalState.ANONYMOUS);
+    ConstantContext.onInvalidToken = handleInvalidToken;
+  }, []);
   const setSettingPair = React.useCallback((key, value) => {
     setSetting((setting) => setValue(setting, key, value))
   }, []);

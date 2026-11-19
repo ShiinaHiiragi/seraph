@@ -42,7 +42,7 @@ const RouteField = (props) => {
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [context.secondTick]);
+  }, [context.secondTick, display]);
 
   return (
     <RouteFieldRaw
