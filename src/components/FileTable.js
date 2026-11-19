@@ -283,6 +283,8 @@ export default function FileTable(props) {
                       ? context.languagePicker("main.folder.viewRegulate.link")
                       : item.name.endsWith(".srph")
                       ? context.languagePicker("main.folder.viewRegulate.encrypt")
+                      : item.name.endsWith(".hare")
+                      ? context.languagePicker("main.folder.viewRegulate.card")
                       : item.type === "unknown"
                       ? context.languagePicker("main.folder.viewRegulate.unknown")
                       : item.type}

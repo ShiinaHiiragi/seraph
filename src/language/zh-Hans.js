@@ -400,6 +400,7 @@ const zhHans = {
         unknown: "未知",
         link: "URL 链接",
         encrypt: "加密文件",
+        card: "记忆卡片",
         directory: "目录",
         search: "按名称搜索",
         filter: "按类型过滤",

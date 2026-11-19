@@ -400,6 +400,7 @@ const en = {
         unknown: "Unknown",
         link: "URL Link",
         encrypt: "Encrypted File",
+        card: "Memory Card",
         directory: "Directory",
         search: "Search by Name",
         filter: "Filter by Type",
