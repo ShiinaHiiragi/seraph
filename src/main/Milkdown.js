@@ -916,41 +916,45 @@ const CrepeEditor = () => {
     // because components with different key value will not be viewed as the one mounted before
     setLoadKey((loadKey) => loadKey + 1);
     setCrepeState(0);
-    if (folderName.length > 0) {
-      request(
-        "GET/utility/crepe/load",
-        {
-          type: crepeType,
-          folderName: crepePath.join("/"),
-          filename: crepeTitle
-        },
-        {
-          [Status.execErrCode.ResourcesUnexist]: () => setCrepeState(-1)
-        })
-          .then(({ text }) => {
-            if (!isRebuilt && (
-              context.setting.crepe.edit === "false"
-                || (context.setting.crepe.edit === "auto" && text.length > 0)
-            )) {
-              context.crepeRef.setReadOnly(true);
-              setReadOnly((readOnly) => !readOnly);
-            }
-            fileContentRef.current = text;
-            setCrepeState(1);
-          });
-    } else {
-      if (!isRebuilt && context.setting.crepe.edit === "false") {
-        context.crepeRef.setReadOnly(true);
-        setReadOnly((readOnly) => !readOnly);
+    // after second tick, the globalSwitch were set properly
+    if (context.secondTick && display) {
+      if (folderName.length > 0) {
+        request(
+          "GET/utility/crepe/load",
+          {
+            type: crepeType,
+            folderName: crepePath.join("/"),
+            filename: crepeTitle
+          },
+          {
+            [Status.execErrCode.ResourcesUnexist]: () => setCrepeState(-1)
+          })
+            .then(({ text }) => {
+              if (!isRebuilt && (
+                context.setting.crepe.edit === "false"
+                  || (context.setting.crepe.edit === "auto" && text.length > 0)
+              )) {
+                context.crepeRef.setReadOnly(true);
+                setReadOnly((readOnly) => !readOnly);
+              }
+              fileContentRef.current = text;
+              setCrepeState(1);
+            });
+      } else {
+        if (!isRebuilt && context.setting.crepe.edit === "false") {
+          context.crepeRef.setReadOnly(true);
+          setReadOnly((readOnly) => !readOnly);
+        }
+        fileContentRef.current = "";
+        setCrepeState(1);
+        setReadOnly(false);
       }
-      fileContentRef.current = "";
-      setCrepeState(1);
-      setReadOnly(false);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     // check if
     // load with auth naturally
+    context.secondTick,
     context.isAuthority,
     // url is changed directly
     rawFolderName

@@ -75,36 +75,44 @@ const Card = () => {
   const [search, setSearch] = React.useState("");
   const [memorizing, setMemorizing] = React.useState(false);
 
+  const display = React.useMemo(() => {
+    return cardType !== "private" || context.isAuthority;
+  }, [type, context.isAuthority]);
+
   React.useEffect(() => {
     setCardState(0);
     setCards([]);
     setSearch("");
     setMemorizing(false);
 
-    if (folderName.length) {
-      request(
-        "GET/utility/hare/list",
-        {
-          type: cardType,
-          folderName: cardPath,
-          filename: cardTitle
-        },
-        {
-          [Status.execErrCode.ResourcesUnexist]: () => setCardState(-1),
-          [Status.execErrCode.FileModuleError]: () => setCardState(-2),
-          [Status.execErrCode.TypeCheckFailed]: () => setCardState(-2)
-        }
-      ).then(({ hare }) => {
-        setCards(hare);
+    // after second tick, the globalSwitch were set properly
+    if (context.secondTick && display) {
+      if (folderName.length) {
+        request(
+          "GET/utility/hare/list",
+          {
+            type: cardType,
+            folderName: cardPath,
+            filename: cardTitle
+          },
+          {
+            [Status.execErrCode.ResourcesUnexist]: () => setCardState(-1),
+            [Status.execErrCode.FileModuleError]: () => setCardState(-2),
+            [Status.execErrCode.TypeCheckFailed]: () => setCardState(-2)
+          }
+        ).then(({ hare }) => {
+          setCards(hare);
+          setCardState(1);
+        });
+      } else {
         setCardState(1);
-      });
-    } else {
-      setCardState(1);
+      }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     // check if
     // load with auth naturally
+    context.secondTick,
     context.isAuthority,
     // url is changed directly
     rawFolderName
@@ -194,7 +202,7 @@ const Card = () => {
 
   return (
     <RouteField
-      display={cardType !== "private" || context.isAuthority}
+      display={display}
       path={folderName.length
         ? [cardType === "private" ? "私有文件" : "公共文件", ...folderPart.slice(1)]
         : ["实用工具", "记忆卡片"]}

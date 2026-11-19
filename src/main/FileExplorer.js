@@ -66,7 +66,7 @@ const FileExplorer = (props) => {
   );
 
   const display = React.useMemo(() => {
-    return type === "public" || context.isAuthority;
+    return type !== "private" || context.isAuthority;
   }, [type, context.isAuthority]);
 
   const handleClickSort = React.useCallback((target) => {
