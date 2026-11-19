@@ -268,8 +268,8 @@ const Card = () => {
     setMemorizing(true);
   };
 
-  const handleAnswer = (time) => {
-    setCards((cards) => cards.map((item) => item.time === time
+  const handleAnswer = (id) => {
+    setCards((cards) => cards.map((item) => item.id === id
       ? {
         ...item,
         point: [
@@ -289,7 +289,7 @@ const Card = () => {
       <Box
         component={memorizing ? "button" : "div"}
         type={memorizing ? "button" : undefined}
-        onClick={memorizing ? () => handleAnswer(item.time) : undefined}
+        onClick={memorizing ? () => handleAnswer(item.id) : undefined}
         sx={{
           display: "block",
           width: "100%",
@@ -454,7 +454,7 @@ const Card = () => {
             </thead>
             <tbody>
               {filteredCards.map((item) => (
-                <tr key={item.time}>
+                <tr key={item.id}>
                   <td></td>
                   <td><Typography level="body-xs">{item.query}</Typography></td>
                   <td><Box sx={{ mx: -1 }}>{renderAnswer(item)}</Box></td>
@@ -475,7 +475,7 @@ const Card = () => {
         </Sheet>
         <Box sx={{ display: { xs: "block", sm: "none" }, overflowY: "visible" }}>
           {filteredCards.map((item, index, self) => (
-            <List key={item.time} size="sm" sx={{ "--ListItem-paddingX": 0 }}>
+            <List key={item.id} size="sm" sx={{ "--ListItem-paddingX": 0 }}>
               <ListItem
                 sx={{
                   display: "flex",
