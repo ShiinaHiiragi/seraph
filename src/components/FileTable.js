@@ -256,6 +256,8 @@ export default function FileTable(props) {
                       ? <Link target="_blank" component={RouterLink} to={item.link}>{item.name}</Link>
                       : item.type === "directory"
                       ? <Link component={RouterLink} to={`/${type}${folderName.length ? "/" : ""}${encodePath(folderName)}/${encodeURIComponent(item.name)}`}>{item.name}</Link>
+                      : item.name.endsWith(".hare")
+                      ? <Link component={RouterLink} to={`/card/${type}${folderName.length ? "/" : ""}${encodePath(folderName)}/${encodeURIComponent(item.name)}`}>{item.name}</Link>
                       : item.type === "text/markdown"
                       ? <Link component={RouterLink} to={`/crepe/${type}${folderName.length ? "/" : ""}${encodePath(folderName)}/${encodeURIComponent(item.name)}`}>{item.name}</Link>
                       : <Link

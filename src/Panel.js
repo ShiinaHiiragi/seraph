@@ -246,7 +246,7 @@ const Panel = () => {
         { path: "crepe/*", element: <Milkdown /> },
         { path: "subscription", element: <Subscription /> },
         { path: "terminal", element: <Terminal /> },
-        { path: "card", element: <Card /> },
+        { path: "card/*", element: <Card /> },
         { path: "todo", element: <TODO /> },
         { path: "*", element: <Error /> },
       ],

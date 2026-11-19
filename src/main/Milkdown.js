@@ -925,7 +925,6 @@ const CrepeEditor = () => {
           filename: crepeTitle
         },
         {
-          [Status.authErrCode.InvalidToken]: () => setCrepeState(0),
           [Status.execErrCode.ResourcesUnexist]: () => setCrepeState(-1)
         })
           .then(({ text }) => {

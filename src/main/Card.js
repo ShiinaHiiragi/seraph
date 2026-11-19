@@ -1,4 +1,5 @@
 import React from "react";
+import { useParams } from "react-router";
 import Box from "@mui/joy/Box";
 import Button from "@mui/joy/Button";
 import DoneOutlinedIcon from "@mui/icons-material/DoneOutlined";
@@ -21,38 +22,13 @@ import IconButton from "@mui/joy/IconButton";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
 import RouteField from "../interface/RouteField";
-import GlobalContext from "../interface/constants";
-
-const initialCards = [
-  {
-    id: "84d875da8b8f97c5501cd8a8240a5918",
-    query: "抜粋",
-    key: "ばっすい\n[名·他动·サ变] 摘录，集锦",
-    time: 1793596082531,
-    point: [1, 0, 0, -1]
-  },
-  {
-    id: "edd8a7514d8211c077c9f9cad4523320",
-    query: "落胆",
-    key: "らくたん\n[名·自动·サ变] 灰心，气馁，消沉",
-    time: 1793596084387,
-    point: [1, 1, 1, -1]
-  },
-  {
-    id: "37a3c4c1cd1fdd4ff5c300e732c932a6",
-    query: "頓珍漢",
-    key: "とんちんかん\n[名·形动] (说话做事)前后不符,前后矛盾傻事笨事",
-    time: 1793596084949,
-    point: [0, 0, 0, 1]
-  },
-  {
-    id: "efc28f2a1a5aadeede9ceddadb323990",
-    query: "我楽多",
-    key: "がらくた\n[名] 値打ちのない、または役に立たない雑多な品物。",
-    time: 1793596085404,
-    point: [0, 1, -1, 0]
-  }
-];
+import GlobalContext, {
+  request,
+  Status,
+  encodePath
+} from "../interface/constants";
+import Loading from "./Loading";
+import Caption from "../components/Caption";
 
 const CardRowMenu = () => (
   <Dropdown>
@@ -74,11 +50,71 @@ const CardRowMenu = () => (
 
 const Card = () => {
   const context = React.useContext(GlobalContext);
-  const [cards, setCards] = React.useState(initialCards);
-  const [memorizing, setMemorizing] = React.useState(false);
-  const [search, setSearch] = React.useState("");
+  const { "*": rawFolderName } = useParams();
 
-  const unfinished = cards.some((item) => item.point[item.point.length - 1] === -1);
+  const folderName = React.useMemo(
+    () => rawFolderName
+      .replace(/\/+/g, "/")
+      .replace(/^\//, "")
+      .replace(/\/$/, ""),
+    [rawFolderName]
+  );
+  const folderPart = React.useMemo(
+    () => folderName.split("/"),
+    [folderName]
+  );
+
+  const cardType = folderPart[0];
+  const cardPath = folderPart.slice(1, -1).join("/");
+  const cardTitle = folderName.length
+    ? folderPart.slice(-1)[0]
+    : "记忆卡片";
+
+  const [cardState, setCardState] = React.useState(0);
+  const [cards, setCards] = React.useState([]);
+  const [search, setSearch] = React.useState("");
+  const [memorizing, setMemorizing] = React.useState(false);
+
+  React.useEffect(() => {
+    setCardState(0);
+    setCards([]);
+    setSearch("");
+    setMemorizing(false);
+
+    if (folderName.length) {
+      request(
+        "GET/utility/hare/list",
+        {
+          type: cardType,
+          folderName: cardPath,
+          filename: cardTitle
+        },
+        {
+          [Status.execErrCode.ResourcesUnexist]: () => setCardState(-1),
+          [Status.execErrCode.FileModuleError]: () => setCardState(-2),
+          [Status.execErrCode.TypeCheckFailed]: () => setCardState(-2)
+        }
+      ).then(({ hare }) => {
+        setCards(hare);
+        setCardState(1);
+      });
+    } else {
+      setCardState(1);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    // check if
+    // load with auth naturally
+    context.isAuthority,
+    // url is changed directly
+    rawFolderName
+  ]);
+
+  const unfinished = cards.some(
+    (item) =>
+      item.point[item.point.length - 1] === -1
+  );
+
   const filteredCards = cards.filter(
     (item) => `${item.query}\n${item.key}`
       .toLowerCase()
@@ -158,9 +194,12 @@ const Card = () => {
 
   return (
     <RouteField
-      display={context.isAuthority}
-      path={["实用工具", "记忆卡片"]}
-      title="记忆卡片"
+      display={cardType !== "private" || context.isAuthority}
+      path={folderName.length
+        ? [cardType === "private" ? "私有文件" : "公共文件", ...folderPart.slice(1)]
+        : ["实用工具", "记忆卡片"]}
+      link={folderName.length ? `/${encodePath(folderName)}` : undefined}
+      title={cardTitle}
       sxRaw={{ overflowY: "hidden" }}
       sx={{
         flexDirection: "column",
@@ -170,133 +209,138 @@ const Card = () => {
         height: { xs: "auto", sm: "100%" }
       }}
     >
-      <Box
-        className="SearchAndFilters"
-        sx={{ display: "flex", flexWrap: "nowrap", gap: 1.5, pb: 2, borderRadius: "sm" }}
-      >
-        <Input
-          size="sm"
-          placeholder="搜索"
-          aria-label="搜索卡片"
-          autoComplete="off"
-          startDecorator={<SearchIcon />}
-          value={search}
-          onChange={(event) => setSearch(event.target.value)}
-          sx={{ flex: 1, minWidth: 0 }}
-        />
-        {memorizing ? <Button
-          size="sm"
-          startDecorator={<CloseOutlinedIcon />}
-          onClick={() => setMemorizing(false)}
-          sx={{ flexShrink: 0 }}
+      {cardState === 0 && <Loading pinned />}
+      {cardState === -1 && <Caption title="资源不存在" />}
+      {cardState === -2 && <Caption title="无效的 hare 格式" />}
+      {cardState === 1 && <React.Fragment>
+        <Box
+          className="SearchAndFilters"
+          sx={{ display: "flex", flexWrap: "nowrap", gap: 1.5, pb: 2, borderRadius: "sm" }}
         >
-          结束
-        </Button> : <Dropdown>
-          <MenuButton
+          <Input
             size="sm"
-            variant="solid"
-            color="primary"
-            startDecorator={<DoneOutlinedIcon />}
+            placeholder="搜索"
+            aria-label="搜索卡片"
+            autoComplete="off"
+            startDecorator={<SearchIcon />}
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            sx={{ flex: 1, minWidth: 0 }}
+          />
+          {memorizing ? <Button
+            size="sm"
+            startDecorator={<CloseOutlinedIcon />}
+            onClick={() => setMemorizing(false)}
             sx={{ flexShrink: 0 }}
           >
-            操作
-          </MenuButton>
-          <Menu size="sm" placement="bottom-end" sx={{ minWidth: 140 }}>
-            <MenuItem onClick={handleStart}>
-              开始
-            </MenuItem>
-            <MenuItem
-              disabled={!unfinished}
-              onClick={() => setMemorizing(true)}
+            结束
+          </Button> : <Dropdown>
+            <MenuButton
+              size="sm"
+              variant="solid"
+              color="primary"
+              startDecorator={<DoneOutlinedIcon />}
+              sx={{ flexShrink: 0 }}
             >
-              继续
-            </MenuItem>
-            <Divider />
-            <MenuItem>查看报告</MenuItem>
-          </Menu>
-        </Dropdown>}
-      </Box>
-      <Sheet
-        className="OrderTableContainer"
-        variant="outlined"
-        sx={{
-          display: { xs: "none", sm: "initial" },
-          width: "100%",
-          height: "100%",
-          borderRadius: "sm",
-          flexShrink: 1,
-          minHeight: 0,
-          overflowY: "auto",
-          overflowX: "auto"
-        }}
-      >
-        <Table
-          aria-label="记忆卡片"
-          stickyHeader
-          hoverRow
+              操作
+            </MenuButton>
+            <Menu size="sm" placement="bottom-end" sx={{ minWidth: 140 }}>
+              <MenuItem onClick={handleStart}>
+                开始
+              </MenuItem>
+              <MenuItem
+                disabled={!unfinished}
+                onClick={() => setMemorizing(true)}
+              >
+                继续
+              </MenuItem>
+              <Divider />
+              <MenuItem>查看报告</MenuItem>
+            </Menu>
+          </Dropdown>}
+        </Box>
+        <Sheet
+          className="OrderTableContainer"
+          variant="outlined"
           sx={{
-            "--TableCell-headBackground": "var(--joy-palette-background-level1)",
-            "--Table-headerUnderlineThickness": "1px",
-            "--TableRow-hoverBackground": "var(--joy-palette-background-level1)",
-            "--TableCell-paddingY": "4px",
-            "--TableCell-paddingX": "8px"
+            display: { xs: "none", sm: "initial" },
+            width: "100%",
+            height: "100%",
+            borderRadius: "sm",
+            flexShrink: 1,
+            minHeight: 0,
+            overflowY: "auto",
+            overflowX: "auto"
           }}
         >
-          <thead>
-            <tr>
-              <th style={{ width: 24 }}></th>
-              <th style={{ width: 100, padding: "12px 6px" }}>问题</th>
-              <th style={{ width: 200, padding: "12px 6px" }}>答案</th>
-              <th style={{ width: 100, padding: "12px 6px" }}>创建时间</th>
-              <th style={{ width: 100, padding: "12px 6px" }}>操作</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredCards.map((item) => (
-              <tr key={item.time}>
-                <td></td>
-                <td><Typography level="body-xs">{item.query}</Typography></td>
-                <td><Box sx={{ mx: -1 }}>{renderAnswer(item)}</Box></td>
-                <td>
-                  <Typography level="body-xs">
-                    {new Date(item.time).toLocaleString("zh-CN", { hour12: false })}
-                  </Typography>
-                </td>
-                <td>
-                  <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-                    <CardRowMenu />
-                  </Box>
-                </td>
+          <Table
+            aria-label="记忆卡片"
+            stickyHeader
+            hoverRow
+            sx={{
+              "--TableCell-headBackground": "var(--joy-palette-background-level1)",
+              "--Table-headerUnderlineThickness": "1px",
+              "--TableRow-hoverBackground": "var(--joy-palette-background-level1)",
+              "--TableCell-paddingY": "4px",
+              "--TableCell-paddingX": "8px"
+            }}
+          >
+            <thead>
+              <tr>
+                <th style={{ width: 24 }}></th>
+                <th style={{ width: 100, padding: "12px 6px" }}>问题</th>
+                <th style={{ width: 200, padding: "12px 6px" }}>答案</th>
+                <th style={{ width: 100, padding: "12px 6px" }}>创建时间</th>
+                <th style={{ width: 100, padding: "12px 6px" }}>操作</th>
               </tr>
-            ))}
-          </tbody>
-        </Table>
-      </Sheet>
-      <Box sx={{ display: { xs: "block", sm: "none" }, overflowY: "visible" }}>
-        {filteredCards.map((item, index, self) => (
-          <List key={item.time} size="sm" sx={{ "--ListItem-paddingX": 0 }}>
-            <ListItem
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "start"
-              }}
-            >
-              <ListItemContent sx={{ display: "flex", gap: 2, alignItems: "start" }}>
-                <Box sx={{ width: "100%", minWidth: 0 }}>
-                  <Typography fontWeight={600} gutterBottom>{item.query}</Typography>
-                  <Typography level="body-xs" gutterBottom>
-                    创建于 {new Date(item.time).toLocaleString("zh-CN", { hour12: false })}
-                  </Typography>
-                  <Box sx={{ mx: -1, mb: 1 }}>{renderAnswer(item)}</Box>
-                </Box>
-              </ListItemContent>
-              <CardRowMenu />
-            </ListItem>
-            {index !== self.length - 1 && <ListDivider />}
-          </List>
-        ))}
-      </Box>
+            </thead>
+            <tbody>
+              {filteredCards.map((item) => (
+                <tr key={item.time}>
+                  <td></td>
+                  <td><Typography level="body-xs">{item.query}</Typography></td>
+                  <td><Box sx={{ mx: -1 }}>{renderAnswer(item)}</Box></td>
+                  <td>
+                    <Typography level="body-xs">
+                      {new Date(item.time).toLocaleString("zh-CN", { hour12: false })}
+                    </Typography>
+                  </td>
+                  <td>
+                    <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+                      <CardRowMenu />
+                    </Box>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </Sheet>
+        <Box sx={{ display: { xs: "block", sm: "none" }, overflowY: "visible" }}>
+          {filteredCards.map((item, index, self) => (
+            <List key={item.time} size="sm" sx={{ "--ListItem-paddingX": 0 }}>
+              <ListItem
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "start"
+                }}
+              >
+                <ListItemContent sx={{ display: "flex", gap: 2, alignItems: "start" }}>
+                  <Box sx={{ width: "100%", minWidth: 0 }}>
+                    <Typography fontWeight={600} gutterBottom>{item.query}</Typography>
+                    <Typography level="body-xs" gutterBottom>
+                      创建于 {new Date(item.time).toLocaleString("zh-CN", { hour12: false })}
+                    </Typography>
+                    <Box sx={{ mx: -1, mb: 1 }}>{renderAnswer(item)}</Box>
+                  </Box>
+                </ListItemContent>
+                <CardRowMenu />
+              </ListItem>
+              {index !== self.length - 1 && <ListDivider />}
+            </List>
+          ))}
+        </Box>
+      </React.Fragment>}
     </RouteField>
   )
 }
