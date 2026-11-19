@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams } from "react-router";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useBlocker } from "react-router-dom";
 import isValidFilename from "valid-filename";
 import Box from "@mui/joy/Box";
 import Button from "@mui/joy/Button";
@@ -78,7 +78,9 @@ const Card = () => {
   const [cards, setCards] = React.useState([]);
   const [search, setSearch] = React.useState("");
   const [memorizing, setMemorizing] = React.useState(false);
+  const [modified, setModified] = React.useState(false);
 
+  const savedPathRef = React.useRef(null);
   const loadedPathRef = React.useRef(null);
   const authorityRef = React.useRef(context.isAuthority);
 
@@ -118,7 +120,13 @@ const Card = () => {
         ).then(() => {
           handleCloseModalTree();
           toast.success("保存成功");
-          navigate(`/card/${type}/${encodePath(folderName)}/${encodeURIComponent(filename)}`);
+          setModified(false);
+          const savedPath = `/card/${type}/${encodePath(folderName)}/${encodeURIComponent(filename)}`;
+          if (modified) {
+            savedPathRef.current = savedPath;
+          } else {
+            navigate(savedPath);
+          }
         });
       },
       handleCancel: () => { }
@@ -127,6 +135,7 @@ const Card = () => {
     context.isAuthority,
     folderName,
     cards,
+    modified,
     navigate,
     handleCloseModalTree
   ]);
@@ -142,7 +151,7 @@ const Card = () => {
     // same file or same temp page
     if (loadedPathRef.current === folderName) {
       // logged in to the same file
-      if (loggedIn && folderName.length) {
+      if (loggedIn && folderName.length && modified) {
         request(
           "POST/utility/hare/save",
           {
@@ -152,7 +161,7 @@ const Card = () => {
             create: false,
             hare: cards
           }
-        );
+        ).then(() => setModified(false));
       }
     // different file
     } else {
@@ -161,6 +170,7 @@ const Card = () => {
       setCards([]);
       setSearch("");
       setMemorizing(false);
+      setModified(false);
 
       // after second tick, the globalSwitch were set properly
       if (context.secondTick && display) {
@@ -198,6 +208,54 @@ const Card = () => {
     // url is changed directly
     rawFolderName
   ]);
+
+  const blocker = useBlocker(({ nextLocation, historyAction }) =>
+    modified && !(historyAction !== 'POP' && nextLocation.state?.logout)
+  );
+  const blockerActiveRef = React.useRef(false);
+
+  React.useEffect(() => {
+    if (blocker.state === "blocked") {
+      blockerActiveRef.current = true;
+      context.setModalReconfirm({
+        open: true,
+        caption: "修改尚未保存，是否放弃并离开？",
+        handleAction: () => {
+          blockerActiveRef.current = false;
+          setModified(false);
+          blocker.proceed();
+        }
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [blocker.state]);
+
+  React.useEffect(() => {
+    if (blockerActiveRef.current && !context.modalReconfirm?.open) {
+      blockerActiveRef.current = false;
+      blocker.reset();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [context.modalReconfirm?.open]);
+
+  React.useEffect(() => {
+    if (modified) {
+      const handler = (event) => {
+        event.preventDefault();
+        event.returnValue = "";
+      };
+      window.addEventListener("beforeunload", handler);
+      return () => window.removeEventListener("beforeunload", handler);
+    }
+  }, [modified]);
+
+  React.useEffect(() => {
+    if (!modified && savedPathRef.current) {
+      const savedPath = savedPathRef.current;
+      savedPathRef.current = null;
+      navigate(savedPath);
+    }
+  }, [modified, navigate]);
 
   const unfinished = cards.some(
     (item) =>
