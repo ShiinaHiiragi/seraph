@@ -77,7 +77,7 @@ const Card = () => {
 
   const display = React.useMemo(() => {
     return cardType !== "private" || context.isAuthority;
-  }, [type, context.isAuthority]);
+  }, [cardType, context.isAuthority]);
 
   React.useEffect(() => {
     setCardState(0);
