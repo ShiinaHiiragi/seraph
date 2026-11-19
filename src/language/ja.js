@@ -150,6 +150,11 @@ const ja = {
         download: "CSS をエクスポート",
         downloadButton: "エクスポート"
       },
+      hare: {
+        title: "カード",
+        show: "ゲストに表示",
+        showTip: "非表示に設定しても、未ログインユーザーは URL からカードにアクセスできます。"
+      },
       terminal: {
         title: "ターミナル",
         enable: "ターミナルを有効",

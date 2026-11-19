@@ -185,10 +185,14 @@ export default function Navigation(props) {
                     <ListItemContent>{context.languagePicker("nav.utility.terminal")}</ListItemContent>
                   </ListItemButton>
                 </ListItem>}
-                {(context.isAuthority || true) && <ListItem>
+                {(context.isAuthority || context.setting.hare.show) && <ListItem>
                   <ListItemButton
                     selected={pathStartWith("/card")}
-                    onClick={() => navigateTo("/card")}
+                    onClick={() => {
+                      if (!pathStartWith("/card")) {
+                        navigateTo("/card");
+                      }
+                    }}
                   >
                     <ListItemDecorator sx={{ color: "neutral.500" }}>
                       <StyleOutlinedIcon fontSize="small" />

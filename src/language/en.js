@@ -150,6 +150,11 @@ const en = {
         download: "Export CSS",
         downloadButton: "Export"
       },
+      hare: {
+        title: "Cards",
+        show: "Display for Guests",
+        showTip: "Unlogged users can still access Cards via URL even if you choose not to display it."
+      },
       terminal: {
         title: "Terminal",
         enable: "Enable Terminal",

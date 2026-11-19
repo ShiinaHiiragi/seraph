@@ -206,6 +206,9 @@ const defaultConfig = {
         inlineLink: "Mod-l",
       }
     },
+    hare: {
+      show: true
+    },
     terminal: {
       enable: false,
       shell: {

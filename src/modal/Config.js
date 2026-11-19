@@ -1042,6 +1042,17 @@ const SECTIONS = (
       ]
     },
     {
+      id: settingField.hare,
+      label: context.languagePicker("header.config.hare.title"),
+      items: [
+        {
+          key: context.languagePicker("header.config.hare.show"),
+          tip: context.languagePicker("header.config.hare.showTip"),
+          value: Turkey(context.setting.hare.show, "hare.show", handleApply)
+        }
+      ]
+    },
+    {
       id: settingField.terminal,
       label: context.languagePicker("header.config.terminal.title"),
       items: [

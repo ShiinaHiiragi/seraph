@@ -267,6 +267,9 @@ const defaultSetting = {
       inlineLink: "Mod-l"
     }
   },
+  hare: {
+    show: true
+  },
   terminal: {
     enable: false,
     shell: {
@@ -434,6 +437,7 @@ const settingField = {
   welcome: "welcome",
   file: "file",
   crepe: "crepe",
+  hare: "hare",
   terminal: "terminal",
   todo: "todo",
   extension: "extension",

@@ -150,6 +150,11 @@ const zhHans = {
         download: "导出 CSS",
         downloadButton: "导出"
       },
+      hare: {
+        title: "卡片",
+        show: "对访客显示",
+        showTip: "即使选择不显示，未登录用户仍可通过 URL 访问卡片。"
+      },
       terminal: {
         title: "终端",
         enable: "启用终端",

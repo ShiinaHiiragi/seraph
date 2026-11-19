@@ -72,7 +72,7 @@ const Card = () => {
   const cardPath = folderPart.slice(1, -1).join("/");
   const cardTitle = folderName.length
     ? folderPart.slice(-1)[0]
-    : "记忆卡片";
+    : "卡片";
 
   const [cardState, setCardState] = React.useState(0);
   const [cards, setCards] = React.useState([]);
@@ -258,7 +258,7 @@ const Card = () => {
       path={
         folderName.length
           ? [cardType === "private" ? "私有文件" : "公共文件", ...folderPart.slice(1)]
-          : ["实用工具", "记忆卡片"]
+          : ["实用", "卡片"]
       }
       link={folderName.length ? `/${encodePath(folderName)}` : undefined}
       title={cardTitle}
@@ -282,7 +282,6 @@ const Card = () => {
           <Input
             size="sm"
             placeholder="搜索"
-            aria-label="搜索卡片"
             autoComplete="off"
             startDecorator={<SearchIcon />}
             value={search}
@@ -356,7 +355,6 @@ const Card = () => {
           }}
         >
           <Table
-            aria-label="记忆卡片"
             stickyHeader
             hoverRow
             sx={{
