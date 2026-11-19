@@ -835,6 +835,7 @@ const CrepeEditor = () => {
   const [editableKey, setEditableKey] = React.useState(0);
   const [readOnly, setReadOnly] = React.useState(false);
   const [modified, setModified] = React.useState(false);
+  const [savedPath, setSavedPath] = React.useState(null);
 
   const fileContentRef = React.useRef(null);
   const normalizedRef = React.useRef(null);
@@ -867,11 +868,12 @@ const CrepeEditor = () => {
    *       - 可编辑 -> 只读只需使用正常接口即可；只读 -> 可编辑的接口实现有误，代码块会无法编辑
    *       - 仅在从只读 -> 可编辑切换前的瞬间保存文本、光标
    *     - 保存新文件时，保存光标与滚动条位置
-   *       - 设置 nextRef，于是在下面的 useEffect 中 early return，页面不重建
+   *       - savedPath 在 modified 从 true 变为 false 时触发跳转
+   *       - nextRef 在下面的 useEffect 中触发 early return，页面不重建
    *       - 编辑器重建，fileContent 使用刚保存的最新版，使用保存的光标与滚动条快照
    *   - 对 useEffect 重建的逐项解释
-   *     - 每次（包括初次）进入时不检查用户权限，直接请求文件内容并调节 crepeState
-   *       - state=0  认证失败：用户未登录且访问私有文件，此时没有挂载 Editor
+   *     - 每次进入先设置 state=0，只有 secondTick && display 时才读取文件或初始化空白页
+   *       - state=0  等待初始化、没有访问权限或正在读取内容，此时没有挂载 Editor
    *       - state=-1 没有文件：未认证失败但未找到文件，此时没有挂载 Editor
    *       - state=1  返回内容：未认证失败且找到文件
    *     - 登录导致页面重建包括三种情况
@@ -1018,10 +1020,11 @@ const CrepeEditor = () => {
       const handler = (event) => event.preventDefault();
       window.addEventListener("beforeunload", handler);
       return () => window.removeEventListener("beforeunload", handler);
-    } else if (nextRef.current) {
-      navigate(nextRef.current);
+    } else if (savedPath) {
+      navigate(savedPath);
+      setSavedPath(null);
     }
-  }, [modified, navigate]);
+  }, [modified, savedPath, navigate]);
 
   // § tree for saving file & image
   const [modalTree, setModalTree] = React.useState({
@@ -1060,10 +1063,10 @@ const CrepeEditor = () => {
   // a markdown is savable when
   // - user has logged in
   // - text content is ready
-  // - text is modified
+  // - text is modified for non-temp file
   const savable = React.useMemo(
-    () => context.isAuthority && crepeState === 1 && modified,
-    [context.isAuthority, crepeState, modified]
+    () => context.isAuthority && crepeState === 1 && (!folderName.length || modified),
+    [context.isAuthority, crepeState, folderName, modified]
   );
 
   // auto save mode is used when
@@ -1099,6 +1102,7 @@ const CrepeEditor = () => {
             context.crepeRef.select.current = context.crepeRef.getSelect();
             context.crepeRef.scroll.current = context.crepeRef.getScroll();
             nextRef.current = `/crepe/${type}/${folderName}/${filename}${suffix}`;
+            setSavedPath(nextRef.current);
           }
           fileContentRef.current = text;
           normalizedRef.current = text.trimEnd();
@@ -1351,7 +1355,7 @@ const CrepeEditor = () => {
                   onMouseDown={(event) => event.preventDefault()}
                   sx={buttonStyle}
                   ref={buttonSaveRef}
-                  disabled={!modified}
+                  disabled={!savable}
                 >
                   <SaveRoundedIcon />
                 </IconButton>

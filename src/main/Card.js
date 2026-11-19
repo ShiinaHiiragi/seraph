@@ -79,8 +79,8 @@ const Card = () => {
   const [search, setSearch] = React.useState("");
   const [memorizing, setMemorizing] = React.useState(false);
   const [modified, setModified] = React.useState(false);
+  const [savedPath, setSavedPath] = React.useState(null);
 
-  const savedPathRef = React.useRef(null);
   const loadedPathRef = React.useRef(null);
   const authorityRef = React.useRef(context.isAuthority);
 
@@ -121,12 +121,7 @@ const Card = () => {
           handleCloseModalTree();
           toast.success("保存成功");
           setModified(false);
-          const savedPath = `/card/${type}/${encodePath(folderName)}/${encodeURIComponent(filename)}`;
-          if (modified) {
-            savedPathRef.current = savedPath;
-          } else {
-            navigate(savedPath);
-          }
+          setSavedPath(`/card/${type}/${encodePath(folderName)}/${encodeURIComponent(filename)}`);
         });
       },
       handleCancel: () => { }
@@ -135,8 +130,6 @@ const Card = () => {
     context.isAuthority,
     folderName,
     cards,
-    modified,
-    navigate,
     handleCloseModalTree
   ]);
 
@@ -250,12 +243,11 @@ const Card = () => {
   }, [modified]);
 
   React.useEffect(() => {
-    if (!modified && savedPathRef.current) {
-      const savedPath = savedPathRef.current;
-      savedPathRef.current = null;
+    if (!modified && savedPath) {
+      setSavedPath(null);
       navigate(savedPath);
     }
-  }, [modified, navigate]);
+  }, [modified, savedPath, navigate]);
 
   const unfinished = cards.some(
     (item) =>
