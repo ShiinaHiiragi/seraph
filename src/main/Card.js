@@ -347,8 +347,10 @@ const Card = () => {
 
   // § modified & blocker
   const [modified, setModified] = React.useState(false);
+  const unsaved = modified || (!folderName.length && cards.length > 0 && !savedPath);
   const blocker = useBlocker(({ nextLocation, historyAction }) =>
-    modified && !(historyAction !== 'POP' && nextLocation.state?.logout)
+    unsaved
+      && !(historyAction !== 'POP' && nextLocation.state?.logout)
   );
   const blockerActiveRef = React.useRef(false);
 
@@ -377,7 +379,7 @@ const Card = () => {
   }, [context.modalReconfirm?.open]);
 
   React.useEffect(() => {
-    if (modified) {
+    if (unsaved) {
       const handler = (event) => {
         event.preventDefault();
         event.returnValue = "";
@@ -385,7 +387,7 @@ const Card = () => {
       window.addEventListener("beforeunload", handler);
       return () => window.removeEventListener("beforeunload", handler);
     }
-  }, [modified]);
+  }, [unsaved]);
 
   React.useEffect(() => {
     if (!modified && savedPath) {
