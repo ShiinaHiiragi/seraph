@@ -543,6 +543,7 @@ const zhHans = {
         import: "设置已保存；总计 {1} 条有效项目中更新了 {0} 条。",
         new: "{0} 已创建。",
         upload: "{0} 已上传至 {1}。",
+        itemsUpload: "所有词条已上传至文件。",
         files: "所有文件",
         paste: "{0} 已粘贴至 {1}.",
         rename: "{0} 已更名为 {1}。",
@@ -576,6 +577,7 @@ const zhHans = {
         autoSaveFailed: "同步失败；在切换到其他文件或重启编辑器前自动保存功能将暂时关闭。",
         uploadFolder: "不支持上传文件夹。",
         illegalRename: "文件名预检查不通过。",
+        illegalFormat: "文件格式预检查不通过。",
         invalidConfig: "备份文件预检查不通过。"
       },
       exception: {

@@ -529,7 +529,7 @@ const Card = () => {
               && !Array.isArray(item)
               && isValid([{ id: "pending", ...item }])
           )) {
-            reject("上传的 hare 格式无效，请检查字段和历史记录");
+            reject(context.languagePicker("modal.toast.warning.illegalFormat"));
             return;
           }
 
@@ -593,7 +593,7 @@ const Card = () => {
     if (syncable) {
       toast.promise(upload, {
         loading: context.languagePicker("modal.toast.plain.uploading"),
-        success: "已上传",
+        success: context.languagePicker("modal.toast.success.itemsUpload"),
         error: (data) => data
       });
     } else {
@@ -1233,7 +1233,7 @@ const Card = () => {
           />
         </FormControl>
       </ModalForm>}
-      <input ref={uploadRef} hidden type="file" accept=".hare" onChange={handleUpload} />
+      <input ref={uploadRef} hidden type="file" accept=".hare,.json" onChange={handleUpload} />
       {modalTree.open && <Tree
         modalTree={modalTree}
         handleCloseModalTree={handleCloseModalTree}

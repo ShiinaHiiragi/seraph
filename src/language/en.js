@@ -543,6 +543,7 @@ const en = {
         import: "New setting has been saved, and {0} out of {1} valid entries has been updated.",
         new: "{0} has been created.",
         upload: "{0} has been uploaded to {1}.",
+        itemsUpload: "All items has been uploaded to the file.",
         files: "All files",
         paste: "{0} has been pasted to {1}.",
         rename: "{0} has been renamed to {1}.",
@@ -576,6 +577,7 @@ const en = {
         autoSaveFailed: "Synchronization failed. The auto-save feature will be temporarily disabled before switching to another file or restarting the editor.",
         uploadFolder: "Uploading folders is not supported.",
         illegalRename: "Filename pre-check failed.",
+        illegalFormat: "File format pre-check failed.",
         invalidConfig: "Backup file pre-check failed."
       },
       exception: {
