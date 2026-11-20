@@ -38,21 +38,28 @@ const attachTerminal = (server, api) => {
       return;
     }
 
-    const pty = spawn(
-      terminalSetting.shell[process.platform],
-      [],
-      {
-        name: 'xterm-color',
-        cols: 80,
-        rows: 24,
-        cwd: process.env.HOME,
-        env: {
-          ...process.env,
-          SERAPH_PATH: path.join(__dirname, '..'),
-          SERAPH_DATA: path.join(__dirname, './data'),
-        },
-      }
-    );
+    let pty;
+    try {
+      pty = spawn(
+        terminalSetting.shell[process.platform],
+        [],
+        {
+          name: 'xterm-color',
+          cols: 80,
+          rows: 24,
+          cwd: process.env.HOME,
+          env: {
+            ...process.env,
+            SERAPH_PATH: path.join(__dirname, '..'),
+            SERAPH_DATA: path.join(__dirname, './data'),
+          },
+        }
+      );
+    } catch (err) {
+      console.error(err);
+      ws.close(1011, 'startup failed');
+      return;
+    }
 
     ptyLog('CONNECT', pty.pid);
     let pingInterval = terminalSetting.lifecycle.ping > 0
@@ -91,16 +98,26 @@ const attachTerminal = (server, api) => {
           pty.resize(parsed.cols, parsed.rows);
           ptyLog('RESIZE', pty.pid, `${parsed.cols}x${parsed.rows}`);
         }
-      } catch {
-        pty.write(msg.toString());
+      } catch (err) {
+        console.error(err);
+        ws.close(1011, 'operation failed');
       }
     });
 
+    let cleaned = false;
     const cleanup = (reason) => {
+      if (cleaned) {
+        return;
+      }
+      cleaned = true;
       clearTimeout(idleTimer);
       clearInterval(pingInterval);
       ptyLog('CLOSE', pty.pid, `${reason}`);
-      pty.kill();
+      try {
+        pty.kill();
+      } catch (err) {
+        console.error(err);
+      }
     };
 
     ws.on('close', () => cleanup('exited'));

@@ -30,7 +30,7 @@ router.get('/os', (req, res, next) => {
       uptime: os.uptime()
     });
     return;
-  });
+  }).catch(next);
 });
 
 router.get('/stat', (req, res, next) => {
