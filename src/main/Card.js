@@ -115,8 +115,8 @@ const Card = () => {
   const [search, setSearch] = React.useState("");
   const [memorizing, setMemorizing] = React.useState(false);
 
-  const [memoryLoading, setMemoryLoading] = React.useState(false);
-  const [syncLoading, setSyncLoading] = React.useState(false);
+  const [operationLock, setOperationLock] = React.useState(false);
+  const [syncLock, setSyncLock] = React.useState(false);
   const [syncError, setSyncError] = React.useState(false);
 
   const loadedPathRef = React.useRef(null);
@@ -134,9 +134,9 @@ const Card = () => {
   React.useEffect(() => {
     syncRef.current = { count: 0, saved: 0, lastClick: 0, promise: null };
     memoryLockRef.current = false;
-    setSyncLoading(false);
+    setSyncLock(false);
     setSyncError(false);
-    setMemoryLoading(false);
+    setOperationLock(false);
     return () => {
       clearTimeout(syncTimerRef.current);
       syncRef.current = { count: 0, saved: 0, lastClick: 0, promise: null };
@@ -263,11 +263,16 @@ const Card = () => {
   ]);
 
   // § cards' CRUD
-  const [modalCardOpen, setModalCardOpen] = React.useState(false);
-  const [modalCardLoading, setModalCardLoading] = React.useState(false);
   const [editingCard, setEditingCard] = React.useState(null);
   const [formQuery, setFormQuery] = React.useState("");
   const [formKey, setFormKey] = React.useState("");
+  const [modalCardOpen, setModalCardOpen] = React.useState(false);
+  const [modalCardLoading, setModalCardLoading] = React.useState(false);
+  const [modalTree, setModalTree] = React.useState({
+    open: false,
+    handleAction: () => { },
+    handleCancel: () => { }
+  });
 
   const handleToggleCard = React.useCallback((item = null) => {
     setEditingCard(item);
@@ -411,13 +416,6 @@ const Card = () => {
     });
   }, [context, folderName, cardType, cardPath, cardTitle]);
 
-  // § cards' saving
-  const [modalTree, setModalTree] = React.useState({
-    open: false,
-    handleAction: () => { },
-    handleCancel: () => { }
-  });
-
   const handleCloseModalTree = React.useCallback(() => {
     setModalTree((modalTree) => ({ ...modalTree, open: false }));
   }, []);
@@ -483,8 +481,8 @@ const Card = () => {
       if (loggedIn && folderName.length && modified) {
         const session = syncRef.current;
         memoryLockRef.current = true;
-        setMemoryLoading(true);
-        setSyncLoading(true);
+        setOperationLock(true);
+        setSyncLock(true);
         session.promise = new Promise((resolve, reject) => {
           request(
             "POST/utility/hare/save",
@@ -512,8 +510,8 @@ const Card = () => {
           session.promise = null;
           if (syncRef.current === session) {
             memoryLockRef.current = false;
-            setMemoryLoading(false);
-            setSyncLoading(false);
+            setOperationLock(false);
+            setSyncLock(false);
           }
         });
         toast.promise(session.promise, {
@@ -660,7 +658,7 @@ const Card = () => {
         [item.id, item.point[index]]
     ));
 
-    setSyncLoading(true);
+    setSyncLock(true);
     setSyncError(false);
     session.promise = new Promise((resolve, reject) => {
       request(
@@ -689,7 +687,7 @@ const Card = () => {
     }).finally(() => {
       session.promise = null;
       if (syncRef.current === session) {
-        setSyncLoading(false);
+        setSyncLock(false);
       }
     });
     return session.promise;
@@ -707,8 +705,8 @@ const Card = () => {
       !context.isAuthority
         || !folderName.length
         || !memorizing
-        || memoryLoading
-        || syncLoading
+        || operationLock
+        || syncLock
         || syncError
         || session.count === session.saved
     ) {
@@ -730,8 +728,8 @@ const Card = () => {
     context.isAuthority,
     cards,
     memorizing,
-    memoryLoading,
-    syncLoading,
+    operationLock,
+    syncLock,
     syncError,
     folderName,
     handleSync
@@ -759,7 +757,7 @@ const Card = () => {
     };
     if (context.isAuthority && folderName.length) {
       memoryLockRef.current = true;
-      setMemoryLoading(true);
+      setOperationLock(true);
       Promise.resolve().then(() => {
         if (syncRef.current !== session) {
           return Promise.reject();
@@ -787,7 +785,7 @@ const Card = () => {
         .finally(() => {
           if (syncRef.current === session) {
             memoryLockRef.current = false;
-            setMemoryLoading(false);
+            setOperationLock(false);
           }
         });
     } else {
@@ -798,8 +796,7 @@ const Card = () => {
     folderName,
     cardType,
     cardPath,
-    cardTitle,
-    handleSync
+    cardTitle
   ]);
 
   const handleContinue = React.useCallback(() => {
@@ -826,7 +823,7 @@ const Card = () => {
 
     const session = syncRef.current;
     memoryLockRef.current = true;
-    setMemoryLoading(true);
+    setOperationLock(true);
 
     toast.promise(handleSync().then(() => {
       if (syncRef.current === session) {
@@ -839,7 +836,7 @@ const Card = () => {
     }).finally(() => {
       if (syncRef.current === session) {
         memoryLockRef.current = false;
-        setMemoryLoading(false);
+        setOperationLock(false);
       }
     }), {
       loading: "正在保存记忆结果…",
@@ -969,7 +966,7 @@ const Card = () => {
           {memorizing ? <Button
             size="sm"
             startDecorator={<CloseOutlinedIcon />}
-            loading={memoryLoading}
+            loading={operationLock}
             onClick={handleEnd}
             sx={{ flexShrink: 0 }}
           >
@@ -980,7 +977,7 @@ const Card = () => {
               variant="solid"
               color="primary"
               startDecorator={<DoneOutlinedIcon />}
-              disabled={memoryLoading}
+              disabled={operationLock}
               sx={{ flexShrink: 0 }}
             >
               操作
@@ -1068,7 +1065,7 @@ const Card = () => {
                   <td>
                     <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
                       <CardRowMenu
-                        disabled={memorizing || memoryLoading}
+                        disabled={memorizing || operationLock}
                         handleEdit={() => handleToggleCard(item)}
                         handleDelete={() => handleDeleteCard(item)}
                       />
@@ -1099,7 +1096,7 @@ const Card = () => {
                   </Box>
                 </ListItemContent>
                 <CardRowMenu
-                  disabled={memorizing || memoryLoading}
+                  disabled={memorizing || operationLock}
                   handleEdit={() => handleToggleCard(item)}
                   handleDelete={() => handleDeleteCard(item)}
                 />
