@@ -543,7 +543,7 @@ const en = {
       },
       warning: {
         languagePanic: "Fail to request language file of {0}.",
-        invalidToken: "Token is invalid or expired. The page will be refreshed automatically in seconds.",
+        invalidToken: "Token is invalid or expired. Please re-login.",
         saltMissing: "The server has detected that the decryption salt was changed or deleted, which may make previously encrypted files unrecoverable. You can find all local salt backups saved under \n{0}.",
         autoSaveFailed: "Synchronization failed. The auto-save feature will be temporarily disabled before switching to another file or restarting the editor.",
         uploadFolder: "Uploading folders is not supported.",
