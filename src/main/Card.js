@@ -111,7 +111,7 @@ const Card = () => {
   const cardPath = folderPart.slice(1, -1).join("/");
   const cardTitle = folderName.length
     ? folderPart.slice(-1)[0]
-    : "卡片";
+    : context.languagePicker("nav.utility.card");
 
   // § core states & initialization
   const [cardState, setCardState] = React.useState(0);
@@ -385,7 +385,9 @@ const Card = () => {
   const handleDeleteCard = React.useCallback((item) => {
     context.setModalReconfirm({
       open: true,
-      captionFirstHalf: `正在删除「${item.query}」。`,
+      captionFirstHalf: context
+        .languagePicker("modal.reconfirm.captionFirstHalf.deleteCard")
+        .format(item.query),
       handleAction: () => {
         const removeCard = () => setCards(
           (cards) =>
@@ -960,9 +962,15 @@ const Card = () => {
     <RouteField
       display={display}
       path={
-        folderName.length
-          ? [cardType === "private" ? "私有文件" : "公共文件", ...folderPart.slice(1)]
-          : ["实用", "卡片"]
+        folderName.length ? [
+          cardType === "private"
+            ? context.languagePicker("nav.private")
+            : context.languagePicker("nav.public"),
+          ...folderPart.slice(1)
+        ] : [
+          context.languagePicker("nav.utility.title"),
+          context.languagePicker("nav.utility.card")
+        ]
       }
       link={folderName.length ? `/${encodePath(folderName)}` : undefined}
       title={cardTitle}
@@ -993,7 +1001,7 @@ const Card = () => {
         >
           <Input
             size="sm"
-            placeholder="搜索"
+            placeholder={context.languagePicker("main.card.search")}
             autoComplete="off"
             startDecorator={<SearchIcon />}
             value={search}
@@ -1005,9 +1013,12 @@ const Card = () => {
             startDecorator={<CloseOutlinedIcon />}
             loading={operationLock}
             onClick={handleEnd}
-            sx={{ flexShrink: 0 }}
+            sx={{
+              flexShrink: 0,
+              minWidth: context.languagePicker("main.card.rowMenu.width")
+            }}
           >
-            结束
+            {context.languagePicker("main.card.rowMenu.end")}
           </Button> : <Dropdown>
             <MenuButton
               size="sm"
@@ -1015,7 +1026,10 @@ const Card = () => {
               color="primary"
               startDecorator={<DoneOutlinedIcon />}
               disabled={operationLock}
-              sx={{ flexShrink: 0 }}
+              sx={{
+                flexShrink: 0,
+                minWidth: context.languagePicker("main.card.rowMenu.width")
+              }}
             >
               {context.languagePicker("main.card.rowMenu.action")}
             </MenuButton>
@@ -1104,7 +1118,11 @@ const Card = () => {
                   <td><Box sx={{ ml: -1, mr: 1 }}>{renderAnswer(item)}</Box></td>
                   <td>
                     <Typography level="body-xs">
-                      {new Date(item.time).toLocaleString("zh-CN", { hour12: false })}
+                      {new Date(item.time).timeFormat(
+                        context.languagePicker("universal.time.dateFormat")
+                          + " "
+                          + context.languagePicker("universal.time.timeFormat")
+                      )}
                     </Typography>
                   </td>
                   <td>
@@ -1135,8 +1153,14 @@ const Card = () => {
                 <ListItemContent sx={{ display: "flex", gap: 2, alignItems: "start" }}>
                   <Box sx={{ width: "100%", minWidth: 0 }}>
                     <Typography fontWeight={600} gutterBottom>{item.query}</Typography>
-                    <Typography level="body-xs" gutterBottom>
-                      创建于 {new Date(item.time).toLocaleString("zh-CN", { hour12: false })}
+                    <Typography level="body-xs">
+                      {context
+                        .languagePicker("main.card.createTime")
+                        .format(new Date(item.time).timeFormat(
+                          context.languagePicker("universal.time.dateFormat")
+                            + " "
+                            + context.languagePicker("universal.time.timeFormat")
+                        ))}
                     </Typography>
                     <Box sx={{ mx: -1, mb: 1 }}>{renderAnswer(item)}</Box>
                   </Box>

@@ -480,6 +480,8 @@ const en = {
       send: "Send Control Characters"
     },
     card: {
+      search: "Search by Contents",
+      createTime: "Created at {0}",
       tableColumn: {
         query: "Question",
         key: "Answer",
@@ -487,7 +489,9 @@ const en = {
         operation: "Operations"
       },
       rowMenu: {
+        width: 120,
         action: "Action",
+        end: "Terminate",
         save: "Save",
         start: "Start",
         resume: "Resume",
@@ -651,6 +655,7 @@ const en = {
         logout: "You are logging out Seraph. ",
         deleteFile: "You are deleting file {0}. ",
         deleteTask: "You are deleting task {0}. ",
+        deleteCard: "You are deleting item {0}. ",
         resetConfig: "You are resetting configs. "
       },
       caption: {

@@ -480,6 +480,8 @@ const zhHans = {
       send: "发送控制字符"
     },
     card: {
+      search: "按内容搜索",
+      createTime: "创建于 {0}",
       tableColumn: {
         query: "问题",
         key: "答案",
@@ -487,7 +489,9 @@ const zhHans = {
         operation: "操作"
       },
       rowMenu: {
+        width: 80,
         action: "操作",
+        end: "终止",
         save: "保存",
         start: "开始",
         resume: "继续",
@@ -651,6 +655,7 @@ const zhHans = {
         logout: "即将退出 SERAPH。",
         deleteFile: "正在删除文件 {0}。",
         deleteTask: "正在删除任务 {0}。",
+        deleteCard: "正在删除条目 {0}。",
         resetConfig: "正在恢复默认设置。"
       },
       caption: {

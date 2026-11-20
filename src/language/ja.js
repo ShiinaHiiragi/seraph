@@ -480,6 +480,8 @@ const ja = {
       send: "制御コードを送信"
     },
     card: {
+      search: "コンテンツで検索",
+      createTime: "{0} に作成",
       tableColumn: {
         query: "問い",
         key: "答え",
@@ -487,7 +489,9 @@ const ja = {
         operation: "オペレーション"
       },
       rowMenu: {
+        width: 130,
         action: "アクション",
+        end: "ターミネート",
         save: "セーブ",
         start: "スタート",
         resume: "レジューム",
@@ -651,6 +655,7 @@ const ja = {
         logout: "セラフからログアウトしようとしています。",
         deleteFile: "ファイル {0} をデリートしようとしています。",
         deleteTask: "タスク {0} をデリートしようとしています。",
+        deleteCard: "アイテム {0} をデリートしようとしています。",
         resetConfig: "コンフィグをリセットしています。"
       },
       caption: {
