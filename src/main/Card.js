@@ -205,7 +205,7 @@ const Card = () => {
         });
         toast.promise(session.promise, {
           loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
-          success: "保存成功",
+          success: context.languagePicker("modal.toast.success.syncCard"),
           error: (data) => data
         });
       }
@@ -346,7 +346,9 @@ const Card = () => {
         });
       }), {
         loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
-        success: editingCard ? "修改成功" : "添加成功",
+        success: editingCard
+          ? context.languagePicker("modal.toast.success.modCard")
+          : context.languagePicker("modal.toast.success.new").format(query),
         error: (data) => data
       });
     } else {
@@ -445,18 +447,13 @@ const Card = () => {
     }
     setModalTree({
       open: true,
-      initValue: "未命名",
+      initValue: context.languagePicker("modal.tree.untitled"),
       endDecorator: ".hare",
       handleAction: ([folderPath, name]) => {
         const path = folderPath.split("/").filter(Boolean);
         const type = path[0];
         const folderName = path.slice(1).join("/");
         const filename = `${name}.hare`;
-        if (!name.trim() || !isValidFilename(name)) {
-          toast.error("文件名无效");
-          handleCloseModalTree();
-          return;
-        }
 
         toast.promise(new Promise((resolve, reject) => {
           request(
@@ -472,7 +469,7 @@ const Card = () => {
           });
         }), {
           loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
-          success: "保存成功",
+          success: context.languagePicker("modal.toast.success.saveCard"),
           error: (data) => data
         });
       },
