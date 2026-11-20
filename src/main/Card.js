@@ -109,7 +109,7 @@ const Card = () => {
     ? folderPart.slice(-1)[0]
     : "卡片";
 
-  // § general states
+  // § core states & initialization
   const [cardState, setCardState] = React.useState(0);
   const [cards, setCards] = React.useState([]);
   const [search, setSearch] = React.useState("");
@@ -143,7 +143,6 @@ const Card = () => {
     };
   }, [context.isAuthority, folderName]);
 
-  // § initialization
   const loadedPathRef = React.useRef(null);
   const authorityRef = React.useRef(context.isAuthority);
   const display = React.useMemo(() => {
@@ -247,7 +246,7 @@ const Card = () => {
     rawFolderName
   ]);
 
-  // § cards' CRUD
+  // § cards CRUD
   const [editingCard, setEditingCard] = React.useState(null);
   const [formQuery, setFormQuery] = React.useState("");
   const [formKey, setFormKey] = React.useState("");
@@ -577,11 +576,11 @@ const Card = () => {
   // § modification & blocker
   const [modified, setModified] = React.useState(false);
   const [savedPath, setSavedPath] = React.useState(null);
-  const unsaved = modified || (
+  const unsaved = React.useMemo(() => modified || (
     !savedPath
       && !folderName.length
       && cards.length > 0
-  );
+  ), [modified, savedPath, cards, folderName]);
 
   const blocker = useBlocker(({ nextLocation, historyAction }) =>
     unsaved
