@@ -122,6 +122,7 @@ const Card = () => {
   const uploadRef = React.useRef(null);
   const [uploadLoading, setUploadLoading] = React.useState(false);
 
+  // § import & export
   const handleDownload = React.useCallback(() => {
     const blob = new Blob(
       [JSON.stringify(cards, null, 2)],
@@ -146,92 +147,91 @@ const Card = () => {
     }
 
     setUploadLoading(true);
-    const toastId = toast.loading("正在上传…");
-    file
-      .text()
-      .then((text) => JSON.parse(text))
-      .then((uploaded) => {
-        if (loadedPathRef.current !== folderName) {
-          setUploadLoading(false);
-          toast.dismiss(toastId);
-          return;
-        }
-        if (Array.isArray(uploaded)) {
-          uploaded = uploaded.map((item) =>
-            item !== null && typeof item === "object" && !Array.isArray(item)
-              ? { time: 0, point: [], ...item }
-              : item
-          );
-        }
-        if (!Array.isArray(uploaded) || !uploaded.every((item) =>
-          item !== null
-            && typeof item === "object"
-            && !Array.isArray(item)
-            && isValid([{ id: "pending", ...item }])
-        )) {
-          setUploadLoading(false);
-          toast.error("上传的 hare 格式无效，请检查字段和历史记录", { id: toastId });
-          return;
-        }
-
-        const ids = new Set(cards.map((item) => item.id));
-        const reservedIds = new Set([
-          ...ids,
-          ...uploaded.map((item) => item.id)
-        ]);
-        const imported = uploaded.map((item) => {
-          let id = item.id;
-          if (id === undefined || ids.has(id)) {
-            do {
-              id = Array.from(crypto.getRandomValues(new Uint8Array(16)),
-                (value) => value.toString(16).padStart(2, "0")
-              ).join("");
-            } while (reservedIds.has(id));
-            reservedIds.add(id);
+    toast.promise(new Promise((resolve, reject) => {
+      file
+        .text()
+        .then((text) => JSON.parse(text))
+        .then((uploaded) => {
+          if (loadedPathRef.current !== folderName) {
+            return;
           }
-          ids.add(id);
-          return { ...item, id };
-        });
-        const merged = [...cards, ...imported];
-        const pointLength = merged.reduce(
-          (length, item) => Math.max(length, item.point.length),
-          0
-        );
-        const hare = merged.map((item) => ({...item, point: [
-          ...Array(pointLength - item.point.length).fill(-1),
-          ...item.point
-        ]}));
+          if (Array.isArray(uploaded)) {
+            uploaded = uploaded.map((item) =>
+              item !== null && typeof item === "object" && !Array.isArray(item)
+                ? { time: 0, point: [], ...item }
+                : item
+            );
+          }
+          if (!Array.isArray(uploaded) || !uploaded.every((item) =>
+            item !== null
+              && typeof item === "object"
+              && !Array.isArray(item)
+              && isValid([{ id: "pending", ...item }])
+          )) {
+            reject("上传的 hare 格式无效，请检查字段和历史记录");
+            return;
+          }
 
-        if (folderName.length && context.isAuthority) {
-          request(
-            "POST/utility/hare/save",
-            {
-              type: cardType,
-              folderName: cardPath,
-              filename: cardTitle,
-              create: false,
-              hare: hare
-            },
-            { "": (data) => setUploadLoading(false) },
-            (error) => toast.error(error, { id: toastId })
-          ).then(() => {
-            setUploadLoading(false);
-            if (loadedPathRef.current === folderName) {
-              setCards(hare);
+          const ids = new Set(cards.map((item) => item.id));
+          const reservedIds = new Set([
+            ...ids,
+            ...uploaded.map((item) => item.id)
+          ]);
+          const imported = uploaded.map((item) => {
+            let id = item.id;
+            if (id === undefined || ids.has(id)) {
+              do {
+                id = Array.from(crypto.getRandomValues(new Uint8Array(16)),
+                  (value) => value.toString(16).padStart(2, "0")
+                ).join("");
+              } while (reservedIds.has(id));
+              reservedIds.add(id);
             }
-            toast.success(`已上传「${file.name}」`, { id: toastId });
+            ids.add(id);
+            return { ...item, id };
           });
-        } else {
-          setCards(hare);
-          setUploadLoading(false);
-          toast.success(`已导入「${file.name}」`, { id: toastId });
-          if (folderName.length && uploaded.length) {
-            setModified(true);
+          const merged = [...cards, ...imported];
+          const pointLength = merged.reduce(
+            (length, item) => Math.max(length, item.point.length),
+            0
+          );
+          const hare = merged.map((item) => ({...item, point: [
+            ...Array(pointLength - item.point.length).fill(-1),
+            ...item.point
+          ]}));
+
+          if (folderName.length && context.isAuthority) {
+            request(
+              "POST/utility/hare/save",
+              {
+                type: cardType,
+                folderName: cardPath,
+                filename: cardTitle,
+                create: false,
+                hare: hare
+              },
+              undefined,
+              reject
+            ).then(() => {
+              if (loadedPathRef.current === folderName) {
+                setCards(hare);
+              }
+              resolve();
+            });
+          } else {
+            setCards(hare);
+            if (folderName.length && uploaded.length) {
+              setModified(true);
+            }
+            resolve();
           }
-        }
-    }, () => {
-      setUploadLoading(false);
-      toast.error("JSON 解析失败。", { id: toastId });
+        }, () => {
+          reject("无法读取文件或 JSON 解析失败");
+        }).catch(reject);
+    }).finally(() => setUploadLoading(false)), {
+      loading: "正在上传…",
+      success: "已上传",
+      error: (data) => data
     });
   }, [
     context.isAuthority,
@@ -293,21 +293,29 @@ const Card = () => {
           setModalCardLoading(false);
         }
       };
-      request(
-        editingCard ? "POST/utility/hare/edit" : "POST/utility/hare/add",
-        {
-          type: cardType,
-          folderName: cardPath,
-          filename: cardTitle,
-          ...(editingCard ? { id: editingCard.id } : {}),
-          query,
-          key
-        },
-        { "": handleFailure }
-      ).then(({ statusCode, errorCode, ...item }) => {
-        if (loadedPathRef.current === folderName) {
-          applyCard(item);
-        }
+      toast.promise(new Promise((resolve, reject) => {
+        request(
+          editingCard ? "POST/utility/hare/edit" : "POST/utility/hare/add",
+          {
+            type: cardType,
+            folderName: cardPath,
+            filename: cardTitle,
+            ...(editingCard ? { id: editingCard.id } : {}),
+            query,
+            key
+          },
+          { "": handleFailure },
+          reject
+        ).then(({ statusCode, errorCode, ...item }) => {
+          if (loadedPathRef.current === folderName) {
+            applyCard(item);
+          }
+          resolve();
+        });
+      }), {
+        loading: editingCard ? "正在修改…" : "正在添加…",
+        success: editingCard ? "修改成功" : "添加成功",
+        error: (data) => data
       });
     } else {
       let id, item;
@@ -352,18 +360,27 @@ const Card = () => {
         );
 
         if (context.isAuthority && folderName.length) {
-          request(
-            "POST/utility/hare/delete",
-            {
-              type: cardType,
-              folderName: cardPath,
-              filename: cardTitle,
-              id: item.id
-            }
-          ).then(() => {
-            if (loadedPathRef.current === folderName) {
-              removeCard();
-            }
+          toast.promise(new Promise((resolve, reject) => {
+            request(
+              "POST/utility/hare/delete",
+              {
+                type: cardType,
+                folderName: cardPath,
+                filename: cardTitle,
+                id: item.id
+              },
+              undefined,
+              reject
+            ).then(() => {
+              if (loadedPathRef.current === folderName) {
+                removeCard();
+              }
+              resolve();
+            });
+          }), {
+            loading: "正在删除…",
+            success: "删除成功",
+            error: (data) => data
           });
         } else {
           removeCard();
@@ -405,15 +422,22 @@ const Card = () => {
           return;
         }
 
-        request(
-          "POST/utility/hare/save",
-          { type, folderName, filename, create: true, hare: cards },
-          { "": handleCloseModalTree }
-        ).then(() => {
-          handleCloseModalTree();
-          toast.success("保存成功");
-          setModified(false);
-          setSavedPath(`/card/${type}/${encodePath(folderName)}/${encodeURIComponent(filename)}`);
+        toast.promise(new Promise((resolve, reject) => {
+          request(
+            "POST/utility/hare/save",
+            { type, folderName, filename, create: true, hare: cards },
+            { "": handleCloseModalTree },
+            reject
+          ).then(() => {
+            handleCloseModalTree();
+            setModified(false);
+            setSavedPath(`/card/${type}/${encodePath(folderName)}/${encodeURIComponent(filename)}`);
+            resolve();
+          });
+        }), {
+          loading: "正在保存…",
+          success: "保存成功",
+          error: (data) => data
         });
       },
       handleCancel: () => { }
@@ -438,16 +462,29 @@ const Card = () => {
     if (loadedPathRef.current === folderName) {
       // logged in to the same file
       if (loggedIn && folderName.length && modified) {
-        request(
-          "POST/utility/hare/save",
-          {
-            type: cardType,
-            folderName: cardPath,
-            filename: cardTitle,
-            create: false,
-            hare: cards
-          }
-        ).then(() => setModified(false));
+        toast.promise(new Promise((resolve, reject) => {
+          request(
+            "POST/utility/hare/save",
+            {
+              type: cardType,
+              folderName: cardPath,
+              filename: cardTitle,
+              create: false,
+              hare: cards
+            },
+            undefined,
+            reject
+          ).then(() => {
+            if (loadedPathRef.current === folderName) {
+              setModified(false);
+            }
+            resolve();
+          });
+        }), {
+          loading: "正在保存…",
+          success: "保存成功",
+          error: (data) => data
+        });
       }
     // different file
     } else {

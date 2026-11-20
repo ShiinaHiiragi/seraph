@@ -670,21 +670,23 @@ const request = (query, params, todo, handleReject, handleInit, handleUpload) =>
           && res.data.errorCode === Status.authErrCode.InvalidToken
         ) {
           ConstantContext.onInvalidToken?.();
-          if (universalPlanned instanceof Function) {
-            universalPlanned(res.data);
-          }
           const planned = todo?.[Status.authErrCode.InvalidToken]
           if (planned instanceof Function) {
             planned(res.data);
-          } else {
-            toast.error(
-              ConstantContext
-                .languagePicker("modal.toast.warning.invalidToken")
+          }
+          if (universalPlanned instanceof Function) {
+            universalPlanned(res.data);
+          }
+          if (!(planned instanceof Function) || handleReject) {
+            (handleReject ?? toast.error)(
+              ConstantContext.languagePicker("modal.toast.warning.invalidToken")
             );
           }
         // returning AF_NI, which is rather special
-        } else if (res.data.statusCode === Status.statusCode.AuthFailed
-          && res.data.errorCode === Status.authErrCode.NotInit) {
+        } else if (
+          res.data.statusCode === Status.statusCode.AuthFailed
+            && res.data.errorCode === Status.authErrCode.NotInit
+        ) {
             handleInit(true);
         } else {
           const exceptions = Object.keys(
