@@ -365,7 +365,8 @@ const fileOperator = {
   operateInTemp: (handleOperate) =>
     fs.promises.mkdtemp(path.join(os.tmpdir(), fileOperator.tempPrefix))
       .then((tempdir) =>
-        Promise.resolve(handleOperate(tempdir))
+        Promise.resolve()
+          .then(() => handleOperate(tempdir))
           .finally(() => fs.promises.rm(tempdir, { recursive: true, force: true }))
       ),
 
@@ -1576,24 +1577,20 @@ const infoOperator = {
   }),
 
   // unrelated  to time
-  cpuUsage: () => new Promise((resolve) =>
-    si.currentLoad()
-      .then(({ currentLoad }) => resolve(currentLoad / 100))
-  ),
-  cpuTemp: () => new Promise((resolve) =>
-    si.cpuTemperature()
-      .then((result) => resolve(result?.main ?? 0))
-  ),
+  cpuUsage: () => si.currentLoad()
+    .then(({ currentLoad }) => currentLoad / 100),
+  cpuTemp: () => si.cpuTemperature()
+    .then((result) => result?.main ?? 0),
   memoryUsage: () => os.freemem(),
-  diskUsage: () => new Promise((resolve) => Promise.all([
+  diskUsage: () => Promise.all([
     checkDiskSpace(dataPath.dataDirPath),
     si.fsStats()
-  ]).then(([{ free, size }, res]) => resolve({
+  ]).then(([{ free, size }, res]) => ({
     free: free,
     size: size,
     rx: res?.rx_sec ?? 0,
     wx: res?.wx_sec ?? 0
-  }))),
+  })),
 
   physicalInterface: /^(eth|ens|enp|em|wlan|wlp)/,
   netUsage: () => si.networkStats()
@@ -1619,13 +1616,16 @@ const infoOperator = {
 };
 
 setInterval(() => {
-  Promise.all([
-    infoOperator.cpuUsage(),
-    infoOperator.cpuTemp(),
-    new Promise((resolve) => resolve(infoOperator.memoryUsage())),
-    infoOperator.diskUsage(),
-    infoOperator.netUsage()
-  ]).then(infoOperator.push);
+  Promise.resolve()
+    .then(() => Promise.all([
+      infoOperator.cpuUsage(),
+      infoOperator.cpuTemp(),
+      infoOperator.memoryUsage(),
+      infoOperator.diskUsage(),
+      infoOperator.netUsage()
+    ]))
+    .then(infoOperator.push)
+    .catch(console.error);
 }, infoOperator.recordInterval);
 
 exports.infoOperator = infoOperator;

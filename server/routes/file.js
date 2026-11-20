@@ -670,10 +670,12 @@ router.post('/epub', (req, res, next) => {
         resolve();
         return;
       } else {
+        let fileInfo;
         try {
           const tempDirPath = path.join(tempdir, fs.readdirSync(tempdir)[0]);
           fse.moveSync(tempDirPath, newDirPath);
           api.Permission.chmodSyncR(newDirPath, api.Permission.auto(type))
+          fileInfo = api.fileOperator.readFileInfo(folderPath, newDirName);
         } catch (_) {
           // -> EF_FME: fse.moveSync error
           req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
@@ -686,13 +688,19 @@ router.post('/epub', (req, res, next) => {
         req.status.addExecStatus();
         res.send({
           ...req.status.generateReport(),
-          ...api.fileOperator.readFileInfo(folderPath, newDirName)
+          ...fileInfo
         });
         resolve();
         return;
       }
     });
-  }));
+  })).catch((err) => {
+    if (res.headersSent) {
+      console.error(err);
+    } else {
+      next(err);
+    }
+  });
 });
 
 router.post('/encrypt', (req, res, next) => {
