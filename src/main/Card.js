@@ -115,7 +115,6 @@ const Card = () => {
   const [search, setSearch] = React.useState("");
   const [memorizing, setMemorizing] = React.useState(false);
 
-  const [uploadLoading, setUploadLoading] = React.useState(false);
   const [memoryLoading, setMemoryLoading] = React.useState(false);
   const [syncLoading, setSyncLoading] = React.useState(false);
   const [syncError, setSyncError] = React.useState(false);
@@ -164,11 +163,10 @@ const Card = () => {
   const handleUpload = React.useCallback((event) => {
     const file = event.target.files?.[0];
     event.target.value = "";
-    if (!file || uploadLoading) {
+    if (!file) {
       return;
     }
 
-    setUploadLoading(true);
     toast.promise(new Promise((resolve, reject) => {
       file
         .text()
@@ -250,7 +248,7 @@ const Card = () => {
         }, () => {
           reject("无法读取文件或 JSON 解析失败");
         }).catch(reject);
-    }).finally(() => setUploadLoading(false)), {
+    }), {
       loading: "正在上传…",
       success: "已上传",
       error: (data) => data
@@ -261,8 +259,7 @@ const Card = () => {
     cardType,
     cardPath,
     cardTitle,
-    folderName,
-    uploadLoading
+    folderName
   ]);
 
   // § cards' CRUD
@@ -983,7 +980,7 @@ const Card = () => {
               variant="solid"
               color="primary"
               startDecorator={<DoneOutlinedIcon />}
-              disabled={memoryLoading || uploadLoading}
+              disabled={memoryLoading}
               sx={{ flexShrink: 0 }}
             >
               操作
@@ -1014,7 +1011,7 @@ const Card = () => {
               <MenuItem onClick={() => handleToggleCard()}>
                 添加
               </MenuItem>
-              <MenuItem disabled={uploadLoading} onClick={() => uploadRef.current?.click()}>
+              <MenuItem onClick={() => uploadRef.current?.click()}>
                 上传
               </MenuItem>
               <MenuItem onClick={handleDownload}>
