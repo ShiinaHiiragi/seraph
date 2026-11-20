@@ -1,7 +1,6 @@
 import React from "react";
 import { useParams } from "react-router";
 import { useNavigate, useBlocker } from "react-router-dom";
-import isValidFilename from "valid-filename";
 import Box from "@mui/joy/Box";
 import Button from "@mui/joy/Button";
 import DoneOutlinedIcon from "@mui/icons-material/DoneOutlined";
@@ -374,6 +373,7 @@ const Card = () => {
       }
     }
   }, [
+    context,
     syncable,
     cardType,
     cardPath,
@@ -478,7 +478,7 @@ const Card = () => {
       handleCancel: () => { }
     });
   }, [
-    context.isAuthority,
+    context,
     folderName,
     cards,
     handleCloseModalTree
@@ -586,8 +586,11 @@ const Card = () => {
             }
             resolve();
           }
-        }, () => {
-          reject("无法读取文件或 JSON 解析失败");
+        }, (error) => {
+          reject(
+            context.languagePicker("modal.toast.error.browserError")
+              .format(error.name, error.message)
+          );
         }).catch(reject);
     });
     if (syncable) {
@@ -600,6 +603,7 @@ const Card = () => {
       upload.catch((error) => toast.error(error));
     }
   }, [
+    context,
     syncable,
     cards,
     cardType,
@@ -887,7 +891,7 @@ const Card = () => {
       success: message,
       error: (error) => error
     });
-  }, [syncable, handleSync]);
+  }, [context, syncable, handleSync]);
 
   const handleAnswer = React.useCallback((id) => {
     if (!memorizing || operationLockRef.current) {
@@ -1204,7 +1208,6 @@ const Card = () => {
             ? context.languagePicker("modal.form.card.edit")
             : context.languagePicker("modal.form.card.new")
         }
-        caption={context.languagePicker("modal.form.card.caption")}
         button={context.languagePicker("universal.button.submit")}
       >
         <FormControl>
