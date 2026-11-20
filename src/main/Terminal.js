@@ -23,38 +23,79 @@ const Terminal = () => {
   const fitAddonRef = React.useRef(null);
   const wsRef = React.useRef(null);
 
-  React.useEffect(() => {
-    const id = "terminal-monospace";
-    let link = document.getElementById(id);
+  const fontStylesheetRef = React.useRef(Promise.resolve());
+  const [fontReady, setFontReady] = React.useState(false);
 
-    if (!link) {
-      link = document.createElement("link");
-      link.id = id;
-      link.rel = "stylesheet";
-      document.head.appendChild(link);
+  React.useEffect(() => {
+    if (!context.secondTick) {
+      return;
     }
-    link.href = monospaceFonts
-      .filter((item) => item.name === context.setting.terminal.font.family)
-      ?.[0]
-      ?.url;
+    const url = monospaceFonts.find(
+      (item) => item.name === context.setting.terminal.font.family
+    )?.url;
+    if (!url) {
+      fontStylesheetRef.current = Promise.resolve();
+      return;
+    }
+    const link = document.createElement("link");
+    link.id = "terminal-monospace";
+    link.rel = "stylesheet";
+    let finish;
+    fontStylesheetRef.current = new Promise((resolve) => {
+      finish = resolve;
+      link.onload = resolve;
+      link.onerror = resolve;
+    });
+    link.href = url;
+    document.head.appendChild(link);
     return () => {
-      document.getElementById(id)?.remove();
+      link.onload = null;
+      link.onerror = null;
+      link.remove();
+      finish();
     };
-  }, [context.setting.terminal.font.family]);
+  }, [context.secondTick, context.setting.terminal.font.family]);
 
   React.useEffect(() => {
-    if (xtermRef.current) {
-      Object.assign(xtermRef.current.options, {
-        fontSize: context.setting.terminal.font.size,
-        fontFamily: `"${context.setting.terminal.font.family}", monospace`,
-        fontWeight: context.setting.terminal.font.weight,
-        fontWeightBold: context.setting.terminal.font.weightBold,
-        letterSpacing: context.setting.terminal.text.space,
-        lineHeight: context.setting.terminal.text.height,
-      });
-      fitAddonRef.current?.fit();
+    if (!context.secondTick) {
+      return;
     }
+    let cancelled = false;
+    const family = context.setting.terminal.font.family;
+    const size = context.setting.terminal.font.size;
+    const weight = context.setting.terminal.font.weight;
+    const weightBold = context.setting.terminal.font.weightBold;
+    fontStylesheetRef.current
+      .then(() => {
+        if (cancelled || !document.fonts) {
+          return;
+        }
+        return Promise.allSettled([weight, weightBold].map(
+          (fontWeight) => document.fonts.load(`${fontWeight} ${size}px "${family}"`)
+        ));
+      })
+      .then(() => {
+        if (cancelled) {
+          return;
+        }
+        if (xtermRef.current) {
+          Object.assign(xtermRef.current.options, {
+            fontSize: size,
+            fontFamily: `"${family}", monospace`,
+            fontWeight: weight,
+            fontWeightBold: weightBold,
+            letterSpacing: context.setting.terminal.text.space,
+            lineHeight: context.setting.terminal.text.height,
+          });
+          fitAddonRef.current?.fit();
+        }
+        setFontReady(true);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [
+    context.secondTick,
     context.setting.terminal.font.size,
     context.setting.terminal.font.family,
     context.setting.terminal.font.weight,
@@ -108,6 +149,7 @@ const Terminal = () => {
         && context.isAuthority
         && containerRef.current
         && context.setting.terminal.enable
+        && fontReady
     ) {
       const fitAddon = new FitAddon();
       const xterm = new XTerminal({
@@ -268,6 +310,7 @@ const Terminal = () => {
 
       return () => {
         xtermRef.current = null;
+        fitAddonRef.current = null;
         wsRef.current = null;
         webSocket.close();
         observer.disconnect();
@@ -283,6 +326,8 @@ const Terminal = () => {
     // check if
     // load with auth naturally
     context.secondTick,
+    // initial font is loaded
+    fontReady,
     // login in same page
     context.isAuthority,
     // terminal is enabled
