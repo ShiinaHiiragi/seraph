@@ -493,7 +493,7 @@ const TODO = () => {
                         level="body-sm"
                         key={index}
                       >
-                        {paragraph.annotateLink()}
+                        {paragraph.annotateLink().annotateEmphasis()}
                       </Typography>
                     ))}
                     <Box

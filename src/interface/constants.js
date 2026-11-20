@@ -767,7 +767,28 @@ const linkReg = /((?:(http|https|Http|Https|rtsp|Rtsp):\/\/(?:(?:[a-zA-Z0-9\$\-\
 
 // eslint-disable-next-line no-extend-native
 String.prototype.annotateLink = function() {
-  let formatted = this, result = [], matched = undefined, index = 0;
+  return [String(this)].annotateLink();
+};
+
+// eslint-disable-next-line no-extend-native
+Array.prototype.annotateLink = function() {
+  return React.Children.map(this, (part) => {
+    if (React.isValidElement(part) && (part.type === "em" || part.type === "strong")) {
+      return React.cloneElement(part, {}, [part.props.children].annotateLink());
+    }
+    if (typeof part !== "string") {
+      return part;
+    }
+    return renderLink(part);
+  }) ?? [];
+};
+
+const renderLink = (text) => {
+  let formatted = text,
+    result = [],
+    matched = undefined,
+    index = 0;
+
   while ((matched = formatted.match(linkReg)) !== null) {
     if (matched.index > 0) {
       result.push(formatted.slice(0, matched.index));
@@ -788,6 +809,43 @@ String.prototype.annotateLink = function() {
   result.push(formatted);
   return result;
 }
+
+// eslint-disable-next-line no-extend-native
+Array.prototype.annotateEmphasis = function() {
+  return React.Children.map(this, (part) => {
+    if (React.isValidElement(part) && (part.type === "em" || part.type === "strong")) {
+      return React.cloneElement(part, {}, [part.props.children].annotateEmphasis());
+    }
+    return typeof part === "string" ? renderEmphasis(part) : part;
+  }) ?? [];
+};
+
+// eslint-disable-next-line no-extend-native
+String.prototype.annotateEmphasis = function() {
+  return [String(this)].annotateEmphasis();
+};
+
+const renderEmphasis = (text) => {
+  const pattern = /\\([\\*])|(?<!\*)(\*{1,3})(?!\*)([^\s*](?:[^*\n]*?[^\s*])?)\2(?!\*)/g;
+  const parts = [];
+  let offset = 0;
+  for (const match of text.matchAll(pattern)) {
+    parts.push(text.slice(offset, match.index));
+    if (match[1]) {
+      parts.push(match[1]);
+    } else {
+      const content = match[3];
+      parts.push(match[2].length === 1
+        ? <em key={match.index}>{content}</em>
+        : <strong key={match.index}>
+          {match[2].length === 3 ? <em>{content}</em> : content}
+        </strong>);
+    }
+    offset = match.index + match[0].length;
+  }
+  parts.push(text.slice(offset));
+  return parts;
+};
 
 export { linkReg };
 

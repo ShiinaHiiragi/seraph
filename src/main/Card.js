@@ -37,7 +37,7 @@ import Tree from "../modal/Tree";
 import ModalForm from "../modal/Form";
 import { SemiTextarea } from "../interface/SemiInput";
 
-const isValid = (hare) => {
+const isValidCard = (hare) => {
   if (!Array.isArray(hare)) {
     return false;
   }
@@ -527,7 +527,7 @@ const Card = () => {
             item !== null
               && typeof item === "object"
               && !Array.isArray(item)
-              && isValid([{ id: "pending", ...item }])
+              && isValidCard([{ id: "pending", ...item }])
           )) {
             reject(context.languagePicker("modal.toast.warning.illegalFormat"));
             return;
@@ -964,7 +964,7 @@ const Card = () => {
             visibility: hidden ? "hidden" : "visible"
           }}
         >
-          {item.key}
+          {item.key.annotateEmphasis()}
         </Typography>
       </Box>
     );
@@ -1133,7 +1133,7 @@ const Card = () => {
               {filteredCards.map((item) => (
                 <tr key={item.id}>
                   <td></td>
-                  <td><Typography level="body-xs">{item.query}</Typography></td>
+                  <td><Typography level="body-xs">{item.query.annotateEmphasis()}</Typography></td>
                   <td><Box sx={{ ml: -1, mr: 1 }}>{renderAnswer(item)}</Box></td>
                   <td>
                     <Typography level="body-xs">
@@ -1171,7 +1171,7 @@ const Card = () => {
               >
                 <ListItemContent sx={{ display: "flex", gap: 2, alignItems: "start" }}>
                   <Box sx={{ width: "100%", minWidth: 0 }}>
-                    <Typography fontWeight={600} gutterBottom>{item.query}</Typography>
+                    <Typography fontWeight={600} gutterBottom>{item.query.annotateEmphasis()}</Typography>
                     <Typography level="body-xs">
                       {context
                         .languagePicker("main.card.createTime")
