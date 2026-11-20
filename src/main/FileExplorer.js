@@ -1099,7 +1099,7 @@ const FileExplorer = (props) => {
             autoFocus
             autoComplete="off"
             placeholder={context.languagePicker("universal.placeholder.instruction.required")}
-            endDecorator={context.metadata.platform === 'linux' ? '.desktop' : 'url'}
+            endDecorator={context.metadata.platform === 'linux' ? '.desktop' : '.url'}
             handleEnter={() => newLinkURLRef.current?.focus()}
           />
         </FormControl>

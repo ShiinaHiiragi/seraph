@@ -646,6 +646,12 @@ const en = {
         caption: "Tasks of permanent type have no due time specified. Due time is attached to tasks of async or sync type, and the former can be completed in advance, while the latter must be completed at that very time exactly.",
         helperFirstHalf: "The due time is earlier than now{0}.",
         helperSecondHalf: ", but the task can still be created or edited"
+      },
+      card: {
+        new: "Create New Item",
+        edit: "Edit Item",
+        query: "Question",
+        key: "Answer"
       }
     },
     reconfirm: {

@@ -646,6 +646,12 @@ const zhHans = {
         caption: "「常驻」类型的任务没有截止时间；「异步」或「同步」类型的任务有截止时间且前者可以提前完成，后者必须在指定时间点完成任务。",
         helperFirstHalf: "截止时间早于现在时间{0}。",
         helperSecondHalf: "，但该任务仍能被创建或编辑"
+      },
+      card: {
+        new: "创建新条目",
+        edit: "编辑条目",
+        query: "问题",
+        key: "回答"
       }
     },
     reconfirm: {

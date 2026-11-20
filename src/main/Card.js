@@ -204,7 +204,7 @@ const Card = () => {
           }
         });
         toast.promise(session.promise, {
-          loading: "正在保存…",
+          loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
           success: "保存成功",
           error: (data) => data
         });
@@ -345,7 +345,7 @@ const Card = () => {
           resolve();
         });
       }), {
-        loading: editingCard ? "正在修改…" : "正在添加…",
+        loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
         success: editingCard ? "修改成功" : "添加成功",
         error: (data) => data
       });
@@ -413,7 +413,7 @@ const Card = () => {
               resolve();
             });
           }), {
-            loading: "正在删除…",
+            loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
             success: "删除成功",
             error: (data) => data
           });
@@ -471,7 +471,7 @@ const Card = () => {
             resolve();
           });
         }), {
-          loading: "正在保存…",
+          loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
           success: "保存成功",
           error: (data) => data
         });
@@ -593,7 +593,7 @@ const Card = () => {
     });
     if (syncable) {
       toast.promise(upload, {
-        loading: "正在上传…",
+        loading: context.languagePicker("modal.toast.plain.uploading"),
         success: "已上传",
         error: (data) => data
       });
@@ -874,7 +874,7 @@ const Card = () => {
         setOperationLock(false);
       }
     }), {
-      loading: "正在保存记忆结果…",
+      loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
       success: message,
       error: (error) => error
     });
@@ -1190,11 +1190,16 @@ const Card = () => {
         }
         handleClose={handleCloseCard}
         handleClick={handleSubmitCard}
-        title={editingCard ? "编辑条目" : "添加条目"}
-        button="提交"
+        title={
+          editingCard
+            ? context.languagePicker("modal.form.card.edit")
+            : context.languagePicker("modal.form.card.new")
+        }
+        caption={context.languagePicker("modal.form.card.caption")}
+        button={context.languagePicker("universal.button.submit")}
       >
         <FormControl>
-          <FormLabel>问题</FormLabel>
+          <FormLabel>{context.languagePicker("modal.form.card.query")}</FormLabel>
           <SemiTextarea
             ref={queryRef}
             initValue={formQuery}
@@ -1203,10 +1208,11 @@ const Card = () => {
             maxRows={6}
             autoFocus
             disabled={modalCardLoading}
+            placeholder={context.languagePicker("universal.placeholder.instruction.required")}
           />
         </FormControl>
         <FormControl>
-          <FormLabel>答案</FormLabel>
+          <FormLabel>{context.languagePicker("modal.form.card.key")}</FormLabel>
           <SemiTextarea
             ref={keyRef}
             initValue={formKey}
@@ -1214,6 +1220,7 @@ const Card = () => {
             minRows={4}
             maxRows={8}
             disabled={modalCardLoading}
+            placeholder={context.languagePicker("universal.placeholder.instruction.required")}
           />
         </FormControl>
       </ModalForm>}
