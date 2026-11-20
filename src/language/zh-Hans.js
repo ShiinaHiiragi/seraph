@@ -479,6 +479,25 @@ const zhHans = {
     terminal: {
       send: "发送控制字符"
     },
+    card: {
+      tableColumn: {
+        query: "问题",
+        key: "答案",
+        time: "创建时间",
+        operation: "操作"
+      },
+      rowMenu: {
+        action: "操作",
+        save: "保存",
+        start: "开始",
+        resume: "继续",
+        add: "添加",
+        edit: "编辑",
+        import: "导入",
+        export: "导出",
+        delete: "删除"
+      }
+    },
     todo: {
       regulate: {
         createTime: "创建时间",
@@ -676,6 +695,10 @@ const zhHans = {
       unexist: {
         title: "资源不可用",
         caption: "URL 中可能存在拼写错误，请重新检查输入并重试。"
+      },
+      unparsable: {
+        title: "资源不可用",
+        caption: "文件无法解析或采用了错误的读取方式。"
       },
       inDevelopment: {
         title: "开发中",

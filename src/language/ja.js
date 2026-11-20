@@ -479,6 +479,25 @@ const ja = {
     terminal: {
       send: "制御コードを送信"
     },
+    card: {
+      tableColumn: {
+        query: "問い",
+        key: "答え",
+        time: "作成日時",
+        operation: "オペレーション"
+      },
+      rowMenu: {
+        action: "アクション",
+        save: "セーブ",
+        start: "スタート",
+        resume: "レジューム",
+        add: "追加",
+        edit: "エディット",
+        import: "インポート",
+        export: "エクスポート",
+        delete: "デリート"
+      }
+    },
     todo: {
       regulate: {
         createTime: "作成日時",
@@ -676,6 +695,10 @@ const ja = {
       unexist: {
         title: "リソース不在",
         caption: "URL にタイプミスのある可能性がありますので、入力を再確認してリトライしてください。"
+      },
+      unparsable: {
+        title: "解析不能",
+        caption: "ファイルをパースできないか、読み取りメソッドが間違っています。"
       },
       inDevelopment: {
         title: "イン・ディベロップメント",

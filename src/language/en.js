@@ -479,6 +479,25 @@ const en = {
     terminal: {
       send: "Send Control Characters"
     },
+    card: {
+      tableColumn: {
+        query: "Question",
+        key: "Answer",
+        time: "Created Time",
+        operation: "Operations"
+      },
+      rowMenu: {
+        action: "Action",
+        save: "Save",
+        start: "Start",
+        resume: "Resume",
+        add: "Add",
+        edit: "Edit",
+        import: "Import",
+        export: "Export",
+        delete: "Delete"
+      }
+    },
     todo: {
       regulate: {
         createTime: "Time Created",
@@ -676,6 +695,10 @@ const en = {
       unexist: {
         title: "Resources Unavailable",
         caption: "A typo may be made in URL. Re-check your input and try again."
+      },
+      unparsable: {
+        title: "Resources Unavailable",
+        caption: "The file could not be parsed or an incorrect reading method was used."
       },
       inDevelopment: {
         title: "In Development",

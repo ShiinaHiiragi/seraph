@@ -67,7 +67,7 @@ const isValid = (hare) => {
   });
 };
 
-const CardRowMenu = ({ handleEdit, handleDelete, disabled }) => (
+const CardRowMenu = ({ context, handleEdit, handleDelete, disabled }) => (
   <Dropdown>
     <MenuButton
       disabled={disabled}
@@ -78,9 +78,13 @@ const CardRowMenu = ({ handleEdit, handleDelete, disabled }) => (
       <MoreVertRoundedIcon sx={{ display: { xs: "inline-flex", sm: "none" } }} />
     </MenuButton>
     <Menu size="sm" sx={{ minWidth: 140 }}>
-      <MenuItem onClick={handleEdit}>编辑</MenuItem>
+      <MenuItem onClick={handleEdit}>
+        {context.languagePicker("main.card.rowMenu.edit")}
+      </MenuItem>
       <Divider />
-      <MenuItem color="danger" onClick={handleDelete}>删除</MenuItem>
+      <MenuItem color="danger" onClick={handleDelete}>
+        {context.languagePicker("main.card.rowMenu.delete")}
+      </MenuItem>
     </Menu>
   </Dropdown>
 );
@@ -972,8 +976,16 @@ const Card = () => {
       }}
     >
       {cardState === 0 && <Loading pinned />}
-      {cardState === -1 && <Caption title="资源不存在" />}
-      {cardState === -2 && <Caption title="无效的 hare 格式" />}
+      {cardState === -1 &&
+        <Caption
+          title={context.languagePicker("universal.placeholder.unexist.title")}
+          caption={context.languagePicker("universal.placeholder.unexist.caption")}
+        />}
+      {cardState === -2 &&
+        <Caption
+          title={context.languagePicker("universal.placeholder.unparsable.title")}
+          caption={context.languagePicker("universal.placeholder.unparsable.caption")}
+        />}
       {cardState === 1 && <React.Fragment>
         <Box
           className="SearchAndFilters"
@@ -1005,7 +1017,7 @@ const Card = () => {
               disabled={operationLock}
               sx={{ flexShrink: 0 }}
             >
-              操作
+              {context.languagePicker("main.card.rowMenu.action")}
             </MenuButton>
             <Menu size="sm" placement="bottom-end" sx={{ minWidth: 140 }}>
               {folderName.length === 0 && <React.Fragment>
@@ -1013,7 +1025,7 @@ const Card = () => {
                   disabled={!context.isAuthority}
                   onClick={handleToggleSave}
                 >
-                  保存
+                  {context.languagePicker("main.card.rowMenu.save")}
                 </MenuItem>
                 <Divider />
               </React.Fragment>}
@@ -1021,23 +1033,23 @@ const Card = () => {
                 disabled={!cards.length}
                 onClick={handleStart}
               >
-                开始
+                {context.languagePicker("main.card.rowMenu.start")}
               </MenuItem>
               <MenuItem
                 disabled={!unfinished}
                 onClick={handleContinue}
               >
-                继续
+                {context.languagePicker("main.card.rowMenu.resume")}
               </MenuItem>
               <Divider />
               <MenuItem onClick={() => handleToggleCard()}>
-                添加
+                {context.languagePicker("main.card.rowMenu.add")}
               </MenuItem>
               <MenuItem onClick={() => uploadRef.current?.click()}>
-                上传
+                {context.languagePicker("main.card.rowMenu.import")}
               </MenuItem>
               <MenuItem onClick={handleDownload}>
-                下载
+                {context.languagePicker("main.card.rowMenu.export")}
               </MenuItem>
             </Menu>
           </Dropdown>}
@@ -1070,10 +1082,18 @@ const Card = () => {
             <thead>
               <tr>
                 <th style={{ width: 24 }}></th>
-                <th style={{ width: 100, padding: "12px 6px" }}>问题</th>
-                <th style={{ width: 200, padding: "12px 6px" }}>答案</th>
-                <th style={{ width: 100, padding: "12px 6px" }}>创建时间</th>
-                <th style={{ width: 100, padding: "12px 6px" }}>操作</th>
+                <th style={{ width: 100, padding: "12px 6px" }}>
+                  {context.languagePicker("main.card.tableColumn.query")}
+                </th>
+                <th style={{ width: 200, padding: "12px 6px" }}>
+                  {context.languagePicker("main.card.tableColumn.key")}
+                </th>
+                <th style={{ width: 100, padding: "12px 6px" }}>
+                  {context.languagePicker("main.card.tableColumn.time")}
+                </th>
+                <th style={{ width: 100, padding: "12px 6px" }}>
+                  {context.languagePicker("main.card.tableColumn.operation")}
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -1090,6 +1110,7 @@ const Card = () => {
                   <td>
                     <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
                       <CardRowMenu
+                        context={context}
                         disabled={memorizing || operationLock}
                         handleEdit={() => handleToggleCard(item)}
                         handleDelete={() => handleDeleteCard(item)}
@@ -1121,6 +1142,7 @@ const Card = () => {
                   </Box>
                 </ListItemContent>
                 <CardRowMenu
+                  context={context}
                   disabled={memorizing || operationLock}
                   handleEdit={() => handleToggleCard(item)}
                   handleDelete={() => handleDeleteCard(item)}
