@@ -115,25 +115,25 @@ const Card = () => {
   const [search, setSearch] = React.useState("");
   const [memorizing, setMemorizing] = React.useState(false);
 
+  const cardsRef = React.useRef(cards);
+  cardsRef.current = cards;
+
   const [operationLock, setOperationLock] = React.useState(false);
   const [syncLock, setSyncLock] = React.useState(false);
   const [syncError, setSyncError] = React.useState(false);
 
-  const loadedPathRef = React.useRef(null);
-  const authorityRef = React.useRef(context.isAuthority);
-  const queryRef = React.useRef(null);
-  const keyRef = React.useRef(null);
-  const uploadRef = React.useRef(null);
-
-  const cardsRef = React.useRef(cards);
-  const memoryLockRef = React.useRef(false);
-  const syncRef = React.useRef({ count: 0, saved: 0, lastClick: 0, promise: null });
+  const operationLockRef = React.useRef(false);
+  const syncRef = React.useRef({
+    count: 0,
+    saved: 0,
+    lastClick: 0,
+    promise: null
+  });
   const syncTimerRef = React.useRef(null);
-  cardsRef.current = cards;
 
   React.useEffect(() => {
     syncRef.current = { count: 0, saved: 0, lastClick: 0, promise: null };
-    memoryLockRef.current = false;
+    operationLockRef.current = false;
     setSyncLock(false);
     setSyncError(false);
     setOperationLock(false);
@@ -266,6 +266,10 @@ const Card = () => {
   const [editingCard, setEditingCard] = React.useState(null);
   const [formQuery, setFormQuery] = React.useState("");
   const [formKey, setFormKey] = React.useState("");
+  const queryRef = React.useRef(null);
+  const keyRef = React.useRef(null);
+  const uploadRef = React.useRef(null);
+
   const [modalCardOpen, setModalCardOpen] = React.useState(false);
   const [modalCardLoading, setModalCardLoading] = React.useState(false);
   const [modalTree, setModalTree] = React.useState({
@@ -467,6 +471,8 @@ const Card = () => {
   ]);
 
   // § initialization
+  const loadedPathRef = React.useRef(null);
+  const authorityRef = React.useRef(context.isAuthority);
   const display = React.useMemo(() => {
     return cardType !== "private" || context.isAuthority;
   }, [cardType, context.isAuthority]);
@@ -480,7 +486,7 @@ const Card = () => {
       // logged in to the same file
       if (loggedIn && folderName.length && modified) {
         const session = syncRef.current;
-        memoryLockRef.current = true;
+        operationLockRef.current = true;
         setOperationLock(true);
         setSyncLock(true);
         session.promise = new Promise((resolve, reject) => {
@@ -509,7 +515,7 @@ const Card = () => {
         }).finally(() => {
           session.promise = null;
           if (syncRef.current === session) {
-            memoryLockRef.current = false;
+            operationLockRef.current = false;
             setOperationLock(false);
             setSyncLock(false);
           }
@@ -718,7 +724,7 @@ const Card = () => {
     syncTimerRef.current = setTimeout(() => {
       handleSync()
         .catch((error) => {
-          if (syncRef.current === session && !memoryLockRef.current) {
+          if (syncRef.current === session && !operationLockRef.current) {
             toast.error(error);
           }
         });
@@ -736,7 +742,7 @@ const Card = () => {
   ]);
 
   const handleStart = React.useCallback(() => {
-    if (!cardsRef.current.length || memoryLockRef.current) {
+    if (!cardsRef.current.length || operationLockRef.current) {
       return;
     }
     const session = syncRef.current;
@@ -756,7 +762,7 @@ const Card = () => {
       }
     };
     if (context.isAuthority && folderName.length) {
-      memoryLockRef.current = true;
+      operationLockRef.current = true;
       setOperationLock(true);
       Promise.resolve().then(() => {
         if (syncRef.current !== session) {
@@ -784,7 +790,7 @@ const Card = () => {
         })
         .finally(() => {
           if (syncRef.current === session) {
-            memoryLockRef.current = false;
+            operationLockRef.current = false;
             setOperationLock(false);
           }
         });
@@ -800,13 +806,13 @@ const Card = () => {
   ]);
 
   const handleContinue = React.useCallback(() => {
-    if (unfinished && !memoryLockRef.current) {
+    if (unfinished && !operationLockRef.current) {
       setMemorizing(true);
     }
   }, [unfinished]);
 
   const handleEnd = React.useCallback(() => {
-    if (memoryLockRef.current) {
+    if (operationLockRef.current) {
       return;
     }
     const message = cardsRef.current.some(
@@ -822,7 +828,7 @@ const Card = () => {
     }
 
     const session = syncRef.current;
-    memoryLockRef.current = true;
+    operationLockRef.current = true;
     setOperationLock(true);
 
     toast.promise(handleSync().then(() => {
@@ -835,7 +841,7 @@ const Card = () => {
       }
     }).finally(() => {
       if (syncRef.current === session) {
-        memoryLockRef.current = false;
+        operationLockRef.current = false;
         setOperationLock(false);
       }
     }), {
@@ -846,7 +852,7 @@ const Card = () => {
   }, [folderName, context.isAuthority, handleSync]);
 
   const handleAnswer = React.useCallback((id) => {
-    if (!memorizing || memoryLockRef.current) {
+    if (!memorizing || operationLockRef.current) {
       return;
     }
     const next = cardsRef.current.map((item) => item.id === id
