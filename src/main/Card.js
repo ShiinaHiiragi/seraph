@@ -7,6 +7,8 @@ import Button from "@mui/joy/Button";
 import DoneOutlinedIcon from "@mui/icons-material/DoneOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import Input from "@mui/joy/Input";
+import FormControl from "@mui/joy/FormControl";
+import FormLabel from "@mui/joy/FormLabel";
 import SearchIcon from "@mui/icons-material/Search";
 import Table from "@mui/joy/Table";
 import Sheet from "@mui/joy/Sheet";
@@ -33,8 +35,10 @@ import GlobalContext, {
 import Loading from "./Loading";
 import Caption from "../components/Caption";
 import Tree from "../modal/Tree";
+import ModalForm from "../modal/Form";
+import { SemiTextarea } from "../interface/SemiInput";
 
-const CardRowMenu = () => (
+const CardRowMenu = ({ handleEdit, handleDelete }) => (
   <Dropdown>
     <MenuButton
       slots={{ root: IconButton }}
@@ -44,9 +48,9 @@ const CardRowMenu = () => (
       <MoreVertRoundedIcon sx={{ display: { xs: "inline-flex", sm: "none" } }} />
     </MenuButton>
     <Menu size="sm" sx={{ minWidth: 140 }}>
-      <MenuItem>编辑</MenuItem>
+      <MenuItem onClick={handleEdit}>编辑</MenuItem>
       <Divider />
-      <MenuItem color="danger">删除</MenuItem>
+      <MenuItem color="danger" onClick={handleDelete}>删除</MenuItem>
     </Menu>
   </Dropdown>
 );
@@ -54,8 +58,9 @@ const CardRowMenu = () => (
 const Card = () => {
   const navigate = useNavigate();
   const context = React.useContext(GlobalContext);
-  const { "*": rawFolderName } = useParams();
 
+  // § url path analysis
+  const { "*": rawFolderName } = useParams();
   const folderName = React.useMemo(
     () => rawFolderName
       .replace(/\/+/g, "/")
@@ -63,27 +68,162 @@ const Card = () => {
       .replace(/\/$/, ""),
     [rawFolderName]
   );
+
   const folderPart = React.useMemo(
     () => folderName.split("/"),
     [folderName]
   );
-
   const cardType = folderPart[0];
   const cardPath = folderPart.slice(1, -1).join("/");
   const cardTitle = folderName.length
     ? folderPart.slice(-1)[0]
     : "卡片";
 
+  // § general states
   const [cardState, setCardState] = React.useState(0);
   const [cards, setCards] = React.useState([]);
   const [search, setSearch] = React.useState("");
   const [memorizing, setMemorizing] = React.useState(false);
-  const [modified, setModified] = React.useState(false);
   const [savedPath, setSavedPath] = React.useState(null);
 
   const loadedPathRef = React.useRef(null);
   const authorityRef = React.useRef(context.isAuthority);
+  const queryRef = React.useRef(null);
+  const keyRef = React.useRef(null);
 
+  // § cards' CRUD
+  const [modalCardOpen, setModalCardOpen] = React.useState(false);
+  const [modalCardLoading, setModalCardLoading] = React.useState(false);
+  const [editingCard, setEditingCard] = React.useState(null);
+  const [formQuery, setFormQuery] = React.useState("");
+  const [formKey, setFormKey] = React.useState("");
+
+  const handleToggleCard = React.useCallback((item = null) => {
+    setEditingCard(item);
+    setFormQuery(item?.query ?? "");
+    setFormKey(item?.key ?? "");
+    setModalCardOpen(true);
+  }, []);
+
+  const handleCloseCard = React.useCallback(() => {
+    if (!modalCardLoading) {
+      setModalCardOpen(false);
+    }
+  }, [modalCardLoading]);
+
+  const handleSubmitCard = React.useCallback(() => {
+    const query = queryRef.current.value;
+    const key = keyRef.current.value;
+    if (
+      (editingCard && query === editingCard.query && key === editingCard.key)
+        || !query.trim()
+        || !key.trim()
+    ) {
+      return;
+    }
+
+    const applyCard = (item) => {
+      setCards((cards) => editingCard
+        ? cards.map((card) => card.id === editingCard.id
+          ? { ...card, query, key }
+          : card
+        )
+        : [...cards, item]
+      );
+      setModalCardOpen(false);
+      setModalCardLoading(false);
+    };
+
+    if (folderName.length && context.isAuthority) {
+      setModalCardLoading(true);
+      const handleFailure = () => {
+        if (loadedPathRef.current === folderName) {
+          setModalCardLoading(false);
+        }
+      };
+      request(
+        editingCard ? "POST/utility/hare/edit" : "POST/utility/hare/add",
+        {
+          type: cardType,
+          folderName: cardPath,
+          filename: cardTitle,
+          ...(editingCard ? { id: editingCard.id } : {}),
+          query,
+          key
+        },
+        { "": handleFailure }
+      ).then(({ statusCode, errorCode, ...item }) => {
+        if (loadedPathRef.current === folderName) {
+          applyCard(item);
+        }
+      });
+    } else {
+      let id, item;
+      if (!editingCard) {
+        const ids = new Set(cards.map((card) => card.id));
+        do {
+          id = Array.from(crypto.getRandomValues(new Uint8Array(16)),
+            (value) => value.toString(16).padStart(2, "0")
+          ).join("");
+        } while (ids.has(id));
+        item = {
+          id,
+          query,
+          key,
+          time: Date.now(),
+          point: Array(cards.length ? cards[0].point.length : 0).fill(-1)
+        };
+      }
+      applyCard(item);
+      if (folderName.length) {
+        setModified(true);
+      }
+    }
+  }, [
+    context.isAuthority,
+    cardType,
+    cardPath,
+    cardTitle,
+    cards,
+    folderName,
+    editingCard
+  ]);
+
+  const handleDeleteCard = React.useCallback((item) => {
+    context.setModalReconfirm({
+      open: true,
+      captionFirstHalf: `正在删除「${item.query}」。`,
+      handleAction: () => {
+        const removeCard = () => setCards(
+          (cards) =>
+            cards.filter((card) => card.id !== item.id)
+        );
+
+        if (context.isAuthority && folderName.length) {
+          request(
+            "POST/utility/hare/delete",
+            {
+              type: cardType,
+              folderName: cardPath,
+              filename: cardTitle,
+              id: item.id
+            }
+          ).then(() => {
+            if (loadedPathRef.current === folderName) {
+              removeCard();
+            }
+          });
+        } else {
+          removeCard();
+          if (folderName.length) {
+            setModified(true);
+          }
+        }
+      }
+    });
+  }, [context, folderName, cardType, cardPath, cardTitle]);
+
+  // § cards' saving
   const [modalTree, setModalTree] = React.useState({
     open: false,
     handleAction: () => { },
@@ -133,6 +273,7 @@ const Card = () => {
     handleCloseModalTree
   ]);
 
+  // § initialization
   const display = React.useMemo(() => {
     return cardType !== "private" || context.isAuthority;
   }, [cardType, context.isAuthority]);
@@ -164,6 +305,8 @@ const Card = () => {
       setSearch("");
       setMemorizing(false);
       setModified(false);
+      setModalCardOpen(false);
+      setModalCardLoading(false);
 
       // after second tick, the globalSwitch were set properly
       if (context.secondTick && display) {
@@ -202,6 +345,8 @@ const Card = () => {
     rawFolderName
   ]);
 
+  // § modified & blocker
+  const [modified, setModified] = React.useState(false);
   const blocker = useBlocker(({ nextLocation, historyAction }) =>
     modified && !(historyAction !== 'POP' && nextLocation.state?.logout)
   );
@@ -249,26 +394,21 @@ const Card = () => {
     }
   }, [modified, savedPath, navigate]);
 
+  // § start & continue
   const unfinished = cards.some(
     (item) =>
       item.point[item.point.length - 1] === -1
   );
 
-  const filteredCards = cards.filter(
-    (item) => `${item.query}\n${item.key}`
-      .toLowerCase()
-      .includes(search.trim().toLowerCase())
-  );
-
-  const handleStart = () => {
+  const handleStart = React.useCallback(() => {
     setCards((cards) => cards.map((item) => ({
       ...item,
       point: [...item.point, -1]
     })));
     setMemorizing(true);
-  };
+  }, []);
 
-  const handleAnswer = (id) => {
+  const handleAnswer = React.useCallback((id) => {
     setCards((cards) => cards.map((item) => item.id === id
       ? {
         ...item,
@@ -279,9 +419,9 @@ const Card = () => {
       }
       : item
     ));
-  };
+  }, []);
 
-  const renderAnswer = (item) => {
+  const renderAnswer = React.useCallback((item) => {
     const point = item.point[item.point.length - 1];
     const hidden = memorizing && point === -1;
 
@@ -328,7 +468,14 @@ const Card = () => {
         </Typography>
       </Box>
     );
-  };
+  }, [memorizing, handleAnswer]);
+
+  // § search & sort
+  const filteredCards = cards.filter(
+    (item) => `${item.query}\n${item.key}`
+      .toLowerCase()
+      .includes(search.trim().toLowerCase())
+  );
 
   return (
     <RouteField
@@ -406,7 +553,7 @@ const Card = () => {
                 继续
               </MenuItem>
               <Divider />
-              <MenuItem>
+              <MenuItem onClick={() => handleToggleCard()}>
                 添加
               </MenuItem>
               <MenuItem>
@@ -465,7 +612,10 @@ const Card = () => {
                   </td>
                   <td>
                     <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-                      <CardRowMenu />
+                      <CardRowMenu
+                        handleEdit={() => handleToggleCard(item)}
+                        handleDelete={() => handleDeleteCard(item)}
+                      />
                     </Box>
                   </td>
                 </tr>
@@ -492,13 +642,52 @@ const Card = () => {
                     <Box sx={{ mx: -1, mb: 1 }}>{renderAnswer(item)}</Box>
                   </Box>
                 </ListItemContent>
-                <CardRowMenu />
+                <CardRowMenu
+                  handleEdit={() => handleToggleCard(item)}
+                  handleDelete={() => handleDeleteCard(item)}
+                />
               </ListItem>
               {index !== self.length - 1 && <ListDivider />}
             </List>
           ))}
         </Box>
       </React.Fragment>}
+      {modalCardOpen && <ModalForm
+        open={modalCardOpen}
+        loading={modalCardLoading}
+        disabled={
+          !formQuery.trim() || !formKey.trim()
+            || (editingCard && formQuery === editingCard.query && formKey === editingCard.key)
+        }
+        handleClose={handleCloseCard}
+        handleClick={handleSubmitCard}
+        title={editingCard ? "编辑条目" : "添加条目"}
+        button="提交"
+      >
+        <FormControl>
+          <FormLabel>问题</FormLabel>
+          <SemiTextarea
+            ref={queryRef}
+            initValue={formQuery}
+            setValue={setFormQuery}
+            minRows={3}
+            maxRows={6}
+            autoFocus
+            disabled={modalCardLoading}
+          />
+        </FormControl>
+        <FormControl>
+          <FormLabel>答案</FormLabel>
+          <SemiTextarea
+            ref={keyRef}
+            initValue={formKey}
+            setValue={setFormKey}
+            minRows={4}
+            maxRows={8}
+            disabled={modalCardLoading}
+          />
+        </FormControl>
+      </ModalForm>}
       {modalTree.open && <Tree
         modalTree={modalTree}
         handleCloseModalTree={handleCloseModalTree}
