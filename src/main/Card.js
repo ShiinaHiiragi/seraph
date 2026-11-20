@@ -38,6 +38,35 @@ import Tree from "../modal/Tree";
 import ModalForm from "../modal/Form";
 import { SemiTextarea } from "../interface/SemiInput";
 
+const isValid = (hare) => {
+  if (!Array.isArray(hare)) {
+    return false;
+  }
+  const ids = new Set();
+  let pointLength;
+  return hare.every((item) => {
+    if (
+      item === null
+        || typeof item !== "object"
+        || Array.isArray(item)
+        || typeof item.id !== "string"
+        || item.id.length === 0
+        || ids.has(item.id)
+        || typeof item.query !== "string"
+        || typeof item.key !== "string"
+        || !Number.isFinite(item.time)
+        || !Array.isArray(item.point)
+        || !item.point.every((point) => [-1, 0, 1].includes(point))
+        || (pointLength !== undefined && item.point.length !== pointLength)
+    ) {
+      return false;
+    }
+    ids.add(item.id);
+    pointLength = item.point.length;
+    return true;
+  });
+};
+
 const CardRowMenu = ({ handleEdit, handleDelete }) => (
   <Dropdown>
     <MenuButton
@@ -90,6 +119,129 @@ const Card = () => {
   const authorityRef = React.useRef(context.isAuthority);
   const queryRef = React.useRef(null);
   const keyRef = React.useRef(null);
+  const uploadRef = React.useRef(null);
+  const [uploadLoading, setUploadLoading] = React.useState(false);
+
+  const handleDownload = React.useCallback(() => {
+    const blob = new Blob(
+      [JSON.stringify(cards, null, 2)],
+      { type: "application/json;charset=utf-8" }
+    );
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = cardTitle.endsWith(".hare") ? cardTitle : `${cardTitle}.hare`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }, [cards, cardTitle]);
+
+  const handleUpload = React.useCallback((event) => {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file || uploadLoading) {
+      return;
+    }
+
+    setUploadLoading(true);
+    const toastId = toast.loading("正在上传…");
+    file
+      .text()
+      .then((text) => JSON.parse(text))
+      .then((uploaded) => {
+        if (loadedPathRef.current !== folderName) {
+          setUploadLoading(false);
+          toast.dismiss(toastId);
+          return;
+        }
+        if (Array.isArray(uploaded)) {
+          uploaded = uploaded.map((item) =>
+            item !== null && typeof item === "object" && !Array.isArray(item)
+              ? { time: 0, point: [], ...item }
+              : item
+          );
+        }
+        if (!Array.isArray(uploaded) || !uploaded.every((item) =>
+          item !== null
+            && typeof item === "object"
+            && !Array.isArray(item)
+            && isValid([{ id: "pending", ...item }])
+        )) {
+          setUploadLoading(false);
+          toast.error("上传的 hare 格式无效，请检查字段和历史记录", { id: toastId });
+          return;
+        }
+
+        const ids = new Set(cards.map((item) => item.id));
+        const reservedIds = new Set([
+          ...ids,
+          ...uploaded.map((item) => item.id)
+        ]);
+        const imported = uploaded.map((item) => {
+          let id = item.id;
+          if (id === undefined || ids.has(id)) {
+            do {
+              id = Array.from(crypto.getRandomValues(new Uint8Array(16)),
+                (value) => value.toString(16).padStart(2, "0")
+              ).join("");
+            } while (reservedIds.has(id));
+            reservedIds.add(id);
+          }
+          ids.add(id);
+          return { ...item, id };
+        });
+        const merged = [...cards, ...imported];
+        const pointLength = merged.reduce(
+          (length, item) => Math.max(length, item.point.length),
+          0
+        );
+        const hare = merged.map((item) => ({...item, point: [
+          ...Array(pointLength - item.point.length).fill(-1),
+          ...item.point
+        ]}));
+
+        if (folderName.length && context.isAuthority) {
+          request(
+            "POST/utility/hare/save",
+            {
+              type: cardType,
+              folderName: cardPath,
+              filename: cardTitle,
+              create: false,
+              hare: hare
+            },
+            { "": (data) => setUploadLoading(false) },
+            (error) => toast.error(error, { id: toastId })
+          ).then(() => {
+            setUploadLoading(false);
+            if (loadedPathRef.current === folderName) {
+              setCards(hare);
+            }
+            toast.success(`已上传「${file.name}」`, { id: toastId });
+          });
+        } else {
+          setCards(hare);
+          setUploadLoading(false);
+          toast.success(`已导入「${file.name}」`, { id: toastId });
+          if (folderName.length && uploaded.length) {
+            setModified(true);
+          }
+        }
+    }, () => {
+      setUploadLoading(false);
+      toast.error("JSON 解析失败。", { id: toastId });
+    });
+  }, [
+    context.isAuthority,
+    cards,
+    cardType,
+    cardPath,
+    cardTitle,
+    folderName,
+    uploadLoading
+  ]);
 
   // § cards' CRUD
   const [modalCardOpen, setModalCardOpen] = React.useState(false);
@@ -558,10 +710,10 @@ const Card = () => {
               <MenuItem onClick={() => handleToggleCard()}>
                 添加
               </MenuItem>
-              <MenuItem>
+              <MenuItem disabled={uploadLoading} onClick={() => uploadRef.current?.click()}>
                 上传
               </MenuItem>
-              <MenuItem>
+              <MenuItem onClick={handleDownload}>
                 下载
               </MenuItem>
             </Menu>
@@ -690,6 +842,7 @@ const Card = () => {
           />
         </FormControl>
       </ModalForm>}
+      <input ref={uploadRef} hidden type="file" accept=".hare" onChange={handleUpload} />
       {modalTree.open && <Tree
         modalTree={modalTree}
         handleCloseModalTree={handleCloseModalTree}
