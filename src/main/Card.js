@@ -131,30 +131,33 @@ const Card = () => {
   });
   const syncTimerRef = React.useRef(null);
 
-  React.useEffect(() => {
-    syncRef.current = { count: 0, saved: 0, lastClick: 0, promise: null };
-    operationLockRef.current = false;
-    setSyncLock(false);
-    setSyncError(false);
-    setOperationLock(false);
-    return () => {
-      clearTimeout(syncTimerRef.current);
-      syncRef.current = { count: 0, saved: 0, lastClick: 0, promise: null };
-    };
-  }, [context.isAuthority, folderName]);
-
   const loadedPathRef = React.useRef(null);
   const authorityRef = React.useRef(context.isAuthority);
   const display = React.useMemo(() => {
     return cardType !== "private" || context.isAuthority;
-  }, [cardType, context.isAuthority]);
+  }, [context.isAuthority, cardType]);
+  const isSamePage = React.useCallback(
+    () => loadedPathRef.current === folderName,
+    [folderName]
+  );
 
   React.useEffect(() => {
     const loggedIn = !authorityRef.current && context.isAuthority;
     authorityRef.current = context.isAuthority;
 
+    setOperationLock(false);
+    setSyncLock(false);
+    setSyncError(false);
+    operationLockRef.current = false;
+    syncRef.current = {
+      count: 0,
+      saved: 0,
+      lastClick: 0,
+      promise: null
+    };
+
     // same file or same temp page
-    if (loadedPathRef.current === folderName) {
+    if (isSamePage()) {
       // logged in to the same file
       if (loggedIn && folderName.length && modified) {
         const session = syncRef.current;
@@ -235,6 +238,15 @@ const Card = () => {
         }
       }
     }
+    return () => {
+      clearTimeout(syncTimerRef.current);
+      syncRef.current = {
+        count: 0,
+        saved: 0,
+        lastClick: 0,
+        promise: null
+      };
+    };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     // check if
@@ -301,7 +313,7 @@ const Card = () => {
     if (folderName.length && context.isAuthority) {
       setModalCardLoading(true);
       const handleFailure = () => {
-        if (loadedPathRef.current === folderName) {
+        if (isSamePage()) {
           setModalCardLoading(false);
         }
       };
@@ -319,7 +331,7 @@ const Card = () => {
           { "": handleFailure },
           reject
         ).then(({ statusCode, errorCode, ...item }) => {
-          if (loadedPathRef.current === folderName) {
+          if (isSamePage()) {
             applyCard(item);
           }
           resolve();
@@ -358,7 +370,8 @@ const Card = () => {
     cardTitle,
     cards,
     folderName,
-    editingCard
+    editingCard,
+    isSamePage
   ]);
 
   const handleDeleteCard = React.useCallback((item) => {
@@ -384,7 +397,7 @@ const Card = () => {
               undefined,
               reject
             ).then(() => {
-              if (loadedPathRef.current === folderName) {
+              if (isSamePage()) {
                 removeCard();
               }
               resolve();
@@ -402,7 +415,7 @@ const Card = () => {
         }
       }
     });
-  }, [context, folderName, cardType, cardPath, cardTitle]);
+  }, [context, folderName, cardType, cardPath, cardTitle, isSamePage]);
 
   const handleCloseModalTree = React.useCallback(() => {
     setModalTree((modalTree) => ({ ...modalTree, open: false }));
@@ -483,7 +496,7 @@ const Card = () => {
         .text()
         .then((text) => JSON.parse(text))
         .then((uploaded) => {
-          if (loadedPathRef.current !== folderName) {
+          if (!isSamePage()) {
             return;
           }
           if (Array.isArray(uploaded)) {
@@ -544,7 +557,7 @@ const Card = () => {
               undefined,
               reject
             ).then(() => {
-              if (loadedPathRef.current === folderName) {
+              if (isSamePage()) {
                 setCards(hare);
               }
               resolve();
@@ -570,7 +583,8 @@ const Card = () => {
     cardType,
     cardPath,
     cardTitle,
-    folderName
+    folderName,
+    isSamePage
   ]);
 
   // § modification & blocker
