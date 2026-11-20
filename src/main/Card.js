@@ -114,18 +114,17 @@ const Card = () => {
   const [cards, setCards] = React.useState([]);
   const [search, setSearch] = React.useState("");
   const [memorizing, setMemorizing] = React.useState(false);
-  const [savedPath, setSavedPath] = React.useState(null);
+
+  const [uploadLoading, setUploadLoading] = React.useState(false);
+  const [memoryLoading, setMemoryLoading] = React.useState(false);
+  const [syncLoading, setSyncLoading] = React.useState(false);
+  const [syncError, setSyncError] = React.useState(false);
 
   const loadedPathRef = React.useRef(null);
   const authorityRef = React.useRef(context.isAuthority);
   const queryRef = React.useRef(null);
   const keyRef = React.useRef(null);
   const uploadRef = React.useRef(null);
-
-  const [uploadLoading, setUploadLoading] = React.useState(false);
-  const [memoryLoading, setMemoryLoading] = React.useState(false);
-  const [syncLoading, setSyncLoading] = React.useState(false);
-  const [syncError, setSyncError] = React.useState(false);
 
   const cardsRef = React.useRef(cards);
   const memoryLockRef = React.useRef(false);
@@ -574,9 +573,15 @@ const Card = () => {
     rawFolderName
   ]);
 
-  // § modified & blocker
+  // § modification & blocker
   const [modified, setModified] = React.useState(false);
-  const unsaved = modified || (!folderName.length && cards.length > 0 && !savedPath);
+  const [savedPath, setSavedPath] = React.useState(null);
+  const unsaved = modified || (
+    !savedPath
+      && !folderName.length
+      && cards.length > 0
+  );
+
   const blocker = useBlocker(({ nextLocation, historyAction }) =>
     unsaved
       && !(historyAction !== 'POP' && nextLocation.state?.logout)
