@@ -143,123 +143,108 @@ const Card = () => {
     };
   }, [context.isAuthority, folderName]);
 
-  // § import & export
-  const handleDownload = React.useCallback(() => {
-    const blob = new Blob(
-      [JSON.stringify(cards, null, 2)],
-      { type: "application/json;charset=utf-8" }
-    );
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
+  // § initialization
+  const loadedPathRef = React.useRef(null);
+  const authorityRef = React.useRef(context.isAuthority);
+  const display = React.useMemo(() => {
+    return cardType !== "private" || context.isAuthority;
+  }, [cardType, context.isAuthority]);
 
-    link.href = url;
-    link.download = cardTitle.endsWith(".hare") ? cardTitle : `${cardTitle}.hare`;
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-  }, [cards, cardTitle]);
+  React.useEffect(() => {
+    const loggedIn = !authorityRef.current && context.isAuthority;
+    authorityRef.current = context.isAuthority;
 
-  const handleUpload = React.useCallback((event) => {
-    const file = event.target.files?.[0];
-    event.target.value = "";
-    if (!file) {
-      return;
-    }
-
-    toast.promise(new Promise((resolve, reject) => {
-      file
-        .text()
-        .then((text) => JSON.parse(text))
-        .then((uploaded) => {
-          if (loadedPathRef.current !== folderName) {
-            return;
-          }
-          if (Array.isArray(uploaded)) {
-            uploaded = uploaded.map((item) =>
-              item !== null && typeof item === "object" && !Array.isArray(item)
-                ? { time: 0, point: [], ...item }
-                : item
-            );
-          }
-          if (!Array.isArray(uploaded) || !uploaded.every((item) =>
-            item !== null
-              && typeof item === "object"
-              && !Array.isArray(item)
-              && isValid([{ id: "pending", ...item }])
-          )) {
-            reject("上传的 hare 格式无效，请检查字段和历史记录");
-            return;
-          }
-
-          const ids = new Set(cards.map((item) => item.id));
-          const reservedIds = new Set([
-            ...ids,
-            ...uploaded.map((item) => item.id)
-          ]);
-          const imported = uploaded.map((item) => {
-            let id = item.id;
-            if (id === undefined || ids.has(id)) {
-              do {
-                id = Array.from(crypto.getRandomValues(new Uint8Array(16)),
-                  (value) => value.toString(16).padStart(2, "0")
-                ).join("");
-              } while (reservedIds.has(id));
-              reservedIds.add(id);
-            }
-            ids.add(id);
-            return { ...item, id };
-          });
-          const merged = [...cards, ...imported];
-          const pointLength = merged.reduce(
-            (length, item) => Math.max(length, item.point.length),
-            0
-          );
-          const hare = merged.map((item) => ({...item, point: [
-            ...Array(pointLength - item.point.length).fill(-1),
-            ...item.point
-          ]}));
-
-          if (folderName.length && context.isAuthority) {
-            request(
-              "POST/utility/hare/save",
-              {
-                type: cardType,
-                folderName: cardPath,
-                filename: cardTitle,
-                create: false,
-                hare: hare
-              },
-              undefined,
-              reject
-            ).then(() => {
-              if (loadedPathRef.current === folderName) {
-                setCards(hare);
-              }
-              resolve();
-            });
-          } else {
-            setCards(hare);
-            if (folderName.length && uploaded.length) {
-              setModified(true);
+    // same file or same temp page
+    if (loadedPathRef.current === folderName) {
+      // logged in to the same file
+      if (loggedIn && folderName.length && modified) {
+        const session = syncRef.current;
+        operationLockRef.current = true;
+        setOperationLock(true);
+        setSyncLock(true);
+        session.promise = new Promise((resolve, reject) => {
+          request(
+            "POST/utility/hare/save",
+            {
+              type: cardType,
+              folderName: cardPath,
+              filename: cardTitle,
+              create: false,
+              hare: cards
+            },
+            undefined,
+            reject
+          ).then(() => {
+            if (syncRef.current === session) {
+              setModified(false);
             }
             resolve();
+          });
+        }).catch((error) => {
+          if (syncRef.current === session) {
+            setSyncError(true);
           }
-        }, () => {
-          reject("无法读取文件或 JSON 解析失败");
-        }).catch(reject);
-    }), {
-      loading: "正在上传…",
-      success: "已上传",
-      error: (data) => data
-    });
+          throw error;
+        }).finally(() => {
+          session.promise = null;
+          if (syncRef.current === session) {
+            operationLockRef.current = false;
+            setOperationLock(false);
+            setSyncLock(false);
+          }
+        });
+        toast.promise(session.promise, {
+          loading: "正在保存…",
+          success: "保存成功",
+          error: (data) => data
+        });
+      }
+    // different file
+    } else {
+      loadedPathRef.current = null;
+      setCardState(0);
+      setCards([]);
+      setSearch("");
+      setMemorizing(false);
+      setModified(false);
+      setModalCardOpen(false);
+      setModalCardLoading(false);
+
+      // after second tick, the globalSwitch were set properly
+      if (context.secondTick && display) {
+        if (folderName.length) {
+          request(
+            "GET/utility/hare/list",
+            {
+              type: cardType,
+              folderName: cardPath,
+              filename: cardTitle
+            },
+            {
+              [Status.execErrCode.ResourcesUnexist]: () => setCardState(-1),
+              [Status.execErrCode.FileModuleError]: () => setCardState(-2),
+              [Status.execErrCode.TypeCheckFailed]: () => setCardState(-2)
+            }
+          ).then(({ hare }) => {
+            loadedPathRef.current = folderName;
+            setCards(hare);
+            setCardState(1);
+          });
+        } else {
+          loadedPathRef.current = folderName;
+          setCardState(1);
+        }
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
+    // check if
+    // load with auth naturally
+    context.secondTick,
+    // login in same page
     context.isAuthority,
-    cards,
-    cardType,
-    cardPath,
-    cardTitle,
-    folderName
+    // url is changed directly
+    rawFolderName
   ]);
 
   // § cards' CRUD
@@ -470,108 +455,123 @@ const Card = () => {
     handleCloseModalTree
   ]);
 
-  // § initialization
-  const loadedPathRef = React.useRef(null);
-  const authorityRef = React.useRef(context.isAuthority);
-  const display = React.useMemo(() => {
-    return cardType !== "private" || context.isAuthority;
-  }, [cardType, context.isAuthority]);
+  // § import & export
+  const handleDownload = React.useCallback(() => {
+    const blob = new Blob(
+      [JSON.stringify(cards, null, 2)],
+      { type: "application/json;charset=utf-8" }
+    );
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
 
-  React.useEffect(() => {
-    const loggedIn = !authorityRef.current && context.isAuthority;
-    authorityRef.current = context.isAuthority;
+    link.href = url;
+    link.download = cardTitle.endsWith(".hare") ? cardTitle : `${cardTitle}.hare`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }, [cards, cardTitle]);
 
-    // same file or same temp page
-    if (loadedPathRef.current === folderName) {
-      // logged in to the same file
-      if (loggedIn && folderName.length && modified) {
-        const session = syncRef.current;
-        operationLockRef.current = true;
-        setOperationLock(true);
-        setSyncLock(true);
-        session.promise = new Promise((resolve, reject) => {
-          request(
-            "POST/utility/hare/save",
-            {
-              type: cardType,
-              folderName: cardPath,
-              filename: cardTitle,
-              create: false,
-              hare: cards
-            },
-            undefined,
-            reject
-          ).then(() => {
-            if (syncRef.current === session) {
-              setModified(false);
+  const handleUpload = React.useCallback((event) => {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) {
+      return;
+    }
+
+    toast.promise(new Promise((resolve, reject) => {
+      file
+        .text()
+        .then((text) => JSON.parse(text))
+        .then((uploaded) => {
+          if (loadedPathRef.current !== folderName) {
+            return;
+          }
+          if (Array.isArray(uploaded)) {
+            uploaded = uploaded.map((item) =>
+              item !== null && typeof item === "object" && !Array.isArray(item)
+                ? { time: 0, point: [], ...item }
+                : item
+            );
+          }
+          if (!Array.isArray(uploaded) || !uploaded.every((item) =>
+            item !== null
+              && typeof item === "object"
+              && !Array.isArray(item)
+              && isValid([{ id: "pending", ...item }])
+          )) {
+            reject("上传的 hare 格式无效，请检查字段和历史记录");
+            return;
+          }
+
+          const ids = new Set(cards.map((item) => item.id));
+          const reservedIds = new Set([
+            ...ids,
+            ...uploaded.map((item) => item.id)
+          ]);
+          const imported = uploaded.map((item) => {
+            let id = item.id;
+            if (id === undefined || ids.has(id)) {
+              do {
+                id = Array.from(crypto.getRandomValues(new Uint8Array(16)),
+                  (value) => value.toString(16).padStart(2, "0")
+                ).join("");
+              } while (reservedIds.has(id));
+              reservedIds.add(id);
+            }
+            ids.add(id);
+            return { ...item, id };
+          });
+          const merged = [...cards, ...imported];
+          const pointLength = merged.reduce(
+            (length, item) => Math.max(length, item.point.length),
+            0
+          );
+          const hare = merged.map((item) => ({...item, point: [
+            ...Array(pointLength - item.point.length).fill(-1),
+            ...item.point
+          ]}));
+
+          if (folderName.length && context.isAuthority) {
+            request(
+              "POST/utility/hare/save",
+              {
+                type: cardType,
+                folderName: cardPath,
+                filename: cardTitle,
+                create: false,
+                hare: hare
+              },
+              undefined,
+              reject
+            ).then(() => {
+              if (loadedPathRef.current === folderName) {
+                setCards(hare);
+              }
+              resolve();
+            });
+          } else {
+            setCards(hare);
+            if (folderName.length && uploaded.length) {
+              setModified(true);
             }
             resolve();
-          });
-        }).catch((error) => {
-          if (syncRef.current === session) {
-            setSyncError(true);
           }
-          throw error;
-        }).finally(() => {
-          session.promise = null;
-          if (syncRef.current === session) {
-            operationLockRef.current = false;
-            setOperationLock(false);
-            setSyncLock(false);
-          }
-        });
-        toast.promise(session.promise, {
-          loading: "正在保存…",
-          success: "保存成功",
-          error: (data) => data
-        });
-      }
-    // different file
-    } else {
-      loadedPathRef.current = null;
-      setCardState(0);
-      setCards([]);
-      setSearch("");
-      setMemorizing(false);
-      setModified(false);
-      setModalCardOpen(false);
-      setModalCardLoading(false);
-
-      // after second tick, the globalSwitch were set properly
-      if (context.secondTick && display) {
-        if (folderName.length) {
-          request(
-            "GET/utility/hare/list",
-            {
-              type: cardType,
-              folderName: cardPath,
-              filename: cardTitle
-            },
-            {
-              [Status.execErrCode.ResourcesUnexist]: () => setCardState(-1),
-              [Status.execErrCode.FileModuleError]: () => setCardState(-2),
-              [Status.execErrCode.TypeCheckFailed]: () => setCardState(-2)
-            }
-          ).then(({ hare }) => {
-            loadedPathRef.current = folderName;
-            setCards(hare);
-            setCardState(1);
-          });
-        } else {
-          loadedPathRef.current = folderName;
-          setCardState(1);
-        }
-      }
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+        }, () => {
+          reject("无法读取文件或 JSON 解析失败");
+        }).catch(reject);
+    }), {
+      loading: "正在上传…",
+      success: "已上传",
+      error: (data) => data
+    });
   }, [
-    // check if
-    // load with auth naturally
-    context.secondTick,
-    // login in same page
     context.isAuthority,
-    // url is changed directly
-    rawFolderName
+    cards,
+    cardType,
+    cardPath,
+    cardTitle,
+    folderName
   ]);
 
   // § modification & blocker
