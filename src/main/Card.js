@@ -67,9 +67,10 @@ const isValid = (hare) => {
   });
 };
 
-const CardRowMenu = ({ handleEdit, handleDelete }) => (
+const CardRowMenu = ({ handleEdit, handleDelete, disabled }) => (
   <Dropdown>
     <MenuButton
+      disabled={disabled}
       slots={{ root: IconButton }}
       slotProps={{ root: { variant: "plain", color: "neutral", size: "sm" } }}
     >
@@ -120,7 +121,29 @@ const Card = () => {
   const queryRef = React.useRef(null);
   const keyRef = React.useRef(null);
   const uploadRef = React.useRef(null);
+
   const [uploadLoading, setUploadLoading] = React.useState(false);
+  const [memoryLoading, setMemoryLoading] = React.useState(false);
+  const [syncLoading, setSyncLoading] = React.useState(false);
+  const [syncError, setSyncError] = React.useState(false);
+
+  const cardsRef = React.useRef(cards);
+  const memoryLockRef = React.useRef(false);
+  const syncRef = React.useRef({ count: 0, saved: 0, lastClick: 0, promise: null });
+  const syncTimerRef = React.useRef(null);
+  cardsRef.current = cards;
+
+  React.useEffect(() => {
+    syncRef.current = { count: 0, saved: 0, lastClick: 0, promise: null };
+    memoryLockRef.current = false;
+    setSyncLoading(false);
+    setSyncError(false);
+    setMemoryLoading(false);
+    return () => {
+      clearTimeout(syncTimerRef.current);
+      syncRef.current = { count: 0, saved: 0, lastClick: 0, promise: null };
+    };
+  }, [context.isAuthority, folderName]);
 
   // § import & export
   const handleDownload = React.useCallback(() => {
@@ -462,7 +485,11 @@ const Card = () => {
     if (loadedPathRef.current === folderName) {
       // logged in to the same file
       if (loggedIn && folderName.length && modified) {
-        toast.promise(new Promise((resolve, reject) => {
+        const session = syncRef.current;
+        memoryLockRef.current = true;
+        setMemoryLoading(true);
+        setSyncLoading(true);
+        session.promise = new Promise((resolve, reject) => {
           request(
             "POST/utility/hare/save",
             {
@@ -475,12 +502,25 @@ const Card = () => {
             undefined,
             reject
           ).then(() => {
-            if (loadedPathRef.current === folderName) {
+            if (syncRef.current === session) {
               setModified(false);
             }
             resolve();
           });
-        }), {
+        }).catch((error) => {
+          if (syncRef.current === session) {
+            setSyncError(true);
+          }
+          throw error;
+        }).finally(() => {
+          session.promise = null;
+          if (syncRef.current === session) {
+            memoryLockRef.current = false;
+            setMemoryLoading(false);
+            setSyncLoading(false);
+          }
+        });
+        toast.promise(session.promise, {
           loading: "正在保存…",
           success: "保存成功",
           error: (data) => data
@@ -591,16 +631,226 @@ const Card = () => {
       item.point[item.point.length - 1] === -1
   );
 
+  const handleSync = React.useCallback(() => {
+    const session = syncRef.current;
+    if (session.promise) {
+      return session.promise;
+    }
+    if (
+      session.count === session.saved
+      || !context.isAuthority
+      || !folderName.length
+    ) {
+      return Promise.resolve();
+    }
+
+    clearTimeout(syncTimerRef.current);
+    const snapshot = cardsRef.current;
+    const count = session.count;
+    if (!snapshot.length) {
+      session.saved = count;
+      setModified(false);
+      return Promise.resolve();
+    }
+    const index = snapshot[0]?.point.length - 1;
+    const update = Object.fromEntries(snapshot.map(
+      (item) =>
+        [item.id, item.point[index]]
+    ));
+
+    setSyncLoading(true);
+    setSyncError(false);
+    session.promise = new Promise((resolve, reject) => {
+      request(
+        "POST/utility/hare/sync",
+        {
+          type: cardType,
+          folderName: cardPath,
+          filename: cardTitle,
+          start: false,
+          index: index,
+          update: update
+        },
+        undefined,
+        reject
+      ).then(resolve);
+    }).then(() => {
+      if (syncRef.current === session) {
+        session.saved = count;
+        setModified(session.count !== session.saved);
+      }
+    }).catch((error) => {
+      if (syncRef.current === session) {
+        setSyncError(true);
+      }
+      throw error;
+    }).finally(() => {
+      session.promise = null;
+      if (syncRef.current === session) {
+        setSyncLoading(false);
+      }
+    });
+    return session.promise;
+  }, [
+    context.isAuthority,
+    folderName,
+    cardType,
+    cardPath,
+    cardTitle
+  ]);
+
+  React.useEffect(() => {
+    const session = syncRef.current;
+    if (
+      !context.isAuthority
+        || !folderName.length
+        || !memorizing
+        || memoryLoading
+        || syncLoading
+        || syncError
+        || session.count === session.saved
+    ) {
+      return;
+    }
+
+    const remains = session.lastClick + 2000 - Date.now();
+    const delay = session.count - session.saved >= 10 ? 0 : Math.max(0, remains);
+    syncTimerRef.current = setTimeout(() => {
+      handleSync()
+        .catch((error) => {
+          if (syncRef.current === session && !memoryLockRef.current) {
+            toast.error(error);
+          }
+        });
+    }, delay);
+    return () => clearTimeout(syncTimerRef.current);
+  }, [
+    context.isAuthority,
+    cards,
+    memorizing,
+    memoryLoading,
+    syncLoading,
+    syncError,
+    folderName,
+    handleSync
+  ]);
+
   const handleStart = React.useCallback(() => {
-    setCards((cards) => cards.map((item) => ({
-      ...item,
-      point: [...item.point, -1]
-    })));
-    setMemorizing(true);
-  }, []);
+    if (!cardsRef.current.length || memoryLockRef.current) {
+      return;
+    }
+    const session = syncRef.current;
+    const start = () => {
+      if (syncRef.current !== session) {
+        return;
+      }
+      const next = cardsRef.current.map((item) => ({ ...item, point: [...item.point, -1] }));
+      cardsRef.current = next;
+      setCards(next);
+      session.count = 0;
+      session.saved = 0;
+      setSyncError(false);
+      setMemorizing(true);
+      if (folderName.length && !context.isAuthority) {
+        setModified(true);
+      }
+    };
+    if (context.isAuthority && folderName.length) {
+      memoryLockRef.current = true;
+      setMemoryLoading(true);
+      Promise.resolve().then(() => {
+        if (syncRef.current !== session) {
+          return Promise.reject();
+        }
+        return new Promise((resolve, reject) => {
+          request(
+            "POST/utility/hare/sync",
+            {
+              type: cardType,
+              folderName: cardPath,
+              filename: cardTitle,
+              start: true
+            },
+            undefined,
+            reject
+          ).then(resolve);
+        });
+      })
+        .then(start)
+        .catch((error) => {
+          if (syncRef.current === session) {
+            toast.error(error);
+          }
+        })
+        .finally(() => {
+          if (syncRef.current === session) {
+            memoryLockRef.current = false;
+            setMemoryLoading(false);
+          }
+        });
+    } else {
+      start();
+    }
+  }, [
+    context.isAuthority,
+    folderName,
+    cardType,
+    cardPath,
+    cardTitle,
+    handleSync
+  ]);
+
+  const handleContinue = React.useCallback(() => {
+    if (unfinished && !memoryLockRef.current) {
+      setMemorizing(true);
+    }
+  }, [unfinished]);
+
+  const handleEnd = React.useCallback(() => {
+    if (memoryLockRef.current) {
+      return;
+    }
+    const message = cardsRef.current.some(
+      (item) =>
+        item.point[item.point.length - 1] === -1
+    ) ? "已中止" : "已结束";
+    clearTimeout(syncTimerRef.current);
+
+    if (!folderName.length || !context.isAuthority) {
+      setMemorizing(false);
+      toast.success(message);
+      return;
+    }
+
+    const session = syncRef.current;
+    memoryLockRef.current = true;
+    setMemoryLoading(true);
+
+    toast.promise(handleSync().then(() => {
+      if (syncRef.current === session) {
+        return handleSync();
+      }
+    }).then(() => {
+      if (syncRef.current === session) {
+        setMemorizing(false);
+      }
+    }).finally(() => {
+      if (syncRef.current === session) {
+        memoryLockRef.current = false;
+        setMemoryLoading(false);
+      }
+    }), {
+      loading: "正在保存记忆结果…",
+      success: message,
+      error: (error) => error
+    });
+  }, [folderName, context.isAuthority, handleSync]);
 
   const handleAnswer = React.useCallback((id) => {
-    setCards((cards) => cards.map((item) => item.id === id
+    if (!memorizing || memoryLockRef.current) {
+      return;
+    }
+    const next = cardsRef.current.map((item) => item.id === id
       ? {
         ...item,
         point: [
@@ -609,8 +859,18 @@ const Card = () => {
         ]
       }
       : item
-    ));
-  }, []);
+    );
+    cardsRef.current = next;
+    setCards(next);
+    if (folderName.length) {
+      setModified(true);
+    }
+    if (folderName.length && context.isAuthority) {
+      syncRef.current.count += 1;
+      syncRef.current.lastClick = Date.now();
+      setSyncError(false);
+    }
+  }, [memorizing, folderName, context.isAuthority]);
 
   const renderAnswer = React.useCallback((item) => {
     const point = item.point[item.point.length - 1];
@@ -707,7 +967,8 @@ const Card = () => {
           {memorizing ? <Button
             size="sm"
             startDecorator={<CloseOutlinedIcon />}
-            onClick={() => setMemorizing(false)}
+            loading={memoryLoading}
+            onClick={handleEnd}
             sx={{ flexShrink: 0 }}
           >
             结束
@@ -717,6 +978,7 @@ const Card = () => {
               variant="solid"
               color="primary"
               startDecorator={<DoneOutlinedIcon />}
+              disabled={memoryLoading || uploadLoading}
               sx={{ flexShrink: 0 }}
             >
               操作
@@ -739,7 +1001,7 @@ const Card = () => {
               </MenuItem>
               <MenuItem
                 disabled={!unfinished}
-                onClick={() => setMemorizing(true)}
+                onClick={handleContinue}
               >
                 继续
               </MenuItem>
@@ -795,7 +1057,7 @@ const Card = () => {
                 <tr key={item.id}>
                   <td></td>
                   <td><Typography level="body-xs">{item.query}</Typography></td>
-                  <td><Box sx={{ mx: -1 }}>{renderAnswer(item)}</Box></td>
+                  <td><Box sx={{ ml: -1, mr: 1 }}>{renderAnswer(item)}</Box></td>
                   <td>
                     <Typography level="body-xs">
                       {new Date(item.time).toLocaleString("zh-CN", { hour12: false })}
@@ -804,6 +1066,7 @@ const Card = () => {
                   <td>
                     <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
                       <CardRowMenu
+                        disabled={memorizing || memoryLoading}
                         handleEdit={() => handleToggleCard(item)}
                         handleDelete={() => handleDeleteCard(item)}
                       />
@@ -834,6 +1097,7 @@ const Card = () => {
                   </Box>
                 </ListItemContent>
                 <CardRowMenu
+                  disabled={memorizing || memoryLoading}
                   handleEdit={() => handleToggleCard(item)}
                   handleDelete={() => handleDeleteCard(item)}
                 />
