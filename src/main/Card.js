@@ -509,7 +509,7 @@ const Card = () => {
       return;
     }
 
-    toast.promise(new Promise((resolve, reject) => {
+    const upload = new Promise((resolve, reject) => {
       file
         .text()
         .then((text) => JSON.parse(text))
@@ -590,11 +590,16 @@ const Card = () => {
         }, () => {
           reject("无法读取文件或 JSON 解析失败");
         }).catch(reject);
-    }), {
-      loading: "正在上传…",
-      success: "已上传",
-      error: (data) => data
     });
+    if (syncable) {
+      toast.promise(upload, {
+        loading: "正在上传…",
+        success: "已上传",
+        error: (data) => data
+      });
+    } else {
+      upload.catch((error) => toast.error(error));
+    }
   }, [
     syncable,
     cards,
@@ -848,7 +853,6 @@ const Card = () => {
 
     if (!syncable) {
       setMemorizing(false);
-      toast.success(message);
       return;
     }
 
