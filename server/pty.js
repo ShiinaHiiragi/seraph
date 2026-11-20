@@ -100,7 +100,7 @@ const attachTerminal = (server, api) => {
         }
       } catch (err) {
         console.error(err);
-        ws.close(1011, 'operation failed');
+        ws.close(1011, 'message error');
       }
     });
 
@@ -120,6 +120,11 @@ const attachTerminal = (server, api) => {
       }
     };
 
+    pty.on('error', (err) => {
+      console.error(err);
+      cleanup(`error: ${err.message}`);
+      ws.close(1011, 'PTY error');
+    });
     ws.on('close', () => cleanup('exited'));
     ws.on('error', (err) => cleanup(`error: ${err.message}`));
   });
