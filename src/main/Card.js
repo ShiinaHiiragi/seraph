@@ -623,8 +623,10 @@ const Card = () => {
   ), [modified, savedPath, cards, folderName]);
 
   const blocker = useBlocker(({ nextLocation, historyAction }) =>
-    unsaved
-      && !(historyAction !== 'POP' && nextLocation.state?.logout)
+    unsaved && !(
+      historyAction !== 'POP'
+        && nextLocation.state?.logout
+    )
   );
   const blockerActiveRef = React.useRef(false);
 
