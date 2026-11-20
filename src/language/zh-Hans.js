@@ -493,8 +493,8 @@ const zhHans = {
         action: "操作",
         end: "终止",
         save: "保存",
-        start: "开始",
-        resume: "继续",
+        start: "开始回忆",
+        resume: "继续回忆",
         add: "添加",
         edit: "编辑",
         import: "导入",
@@ -560,6 +560,8 @@ const zhHans = {
         syncCard: "未同步修改已保存。",
         modCard: "词条已修改。",
         modTask: "任务已修改。",
+        pauseCard: "回忆中止。",
+        finishCard: "回忆结束，正确率为 {0}%。",
         modTime: "任务删除时间已更新。",
         tick: "任务将在 {0} 秒后被删除，可通过在倒计时结束前重新勾选复选框来取消该任务。",
         tickSync: "任务将在截止时间后被删除。",
@@ -668,7 +670,7 @@ const zhHans = {
         resetConfig: "正在恢复默认设置。"
       },
       caption: {
-        discardDraft: "即将离开 Crepe，点击「继续」以丢弃未保存更改。",
+        discardDraft: "即将离开当前页面，点击「继续」以丢弃未保存更改。",
         overwrite: "检测到源文件已被修改，点击「继续」以强制覆盖文本。",
         changeCipher: "请注意，即使修改了解密密码，在此之前加密的文件仍需要使用原密码解密。",
         enableTerminal: "点击「继续」表示您已知悉使用远程 PTY 的风险，并自行为一切可能造成的后果负责。"

@@ -493,8 +493,8 @@ const en = {
         action: "Action",
         end: "Terminate",
         save: "Save",
-        start: "Start",
-        resume: "Resume",
+        start: "Start Recall",
+        resume: "Resume Recall",
         add: "Add",
         edit: "Edit",
         import: "Import",
@@ -560,6 +560,8 @@ const en = {
         syncCard: "Unsynced changes have been saved.",
         modCard: "The item has been modified",
         modTask: "The task has been modified.",
+        pauseCard: "Recall paused.",
+        finishCard: "Recall completed with an accuracy of {0}%.",
         modTime: "Delete time of the task has been updated.",
         tick: "The task will be deleted in {0} seconds, which can be cancelled by re-ticking the checkbox before the end of its countdown.",
         tickSync: "The task will be deleted after due time.",
@@ -668,7 +670,7 @@ const en = {
         resetConfig: "You are resetting configs. "
       },
       caption: {
-        discardDraft: "You are leaving Crepe without saving. Click 'Continue' to discard unsaved changes.",
+        discardDraft: "You are leaving this page without saving. Click 'Continue' to discard unsaved changes.",
         overwrite: "The source file has been modified. Click 'Continue' to overwrite text forcibly.",
         changeCipher: "Please note that even if you change the decryption password, files encrypted before the change must still be decrypted using the original password.",
         enableTerminal: "By clicking 'Continue', you acknowledge the risks of using remote PTY and accept full responsibility for any consequences that may result."

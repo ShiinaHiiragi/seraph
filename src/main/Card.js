@@ -416,7 +416,9 @@ const Card = () => {
             });
           }), {
             loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
-            success: "删除成功",
+            success: context
+              .languagePicker("modal.toast.success.delete")
+              .format(item.query),
             error: (data) => data
           });
         } else {
@@ -627,7 +629,7 @@ const Card = () => {
       blockerActiveRef.current = true;
       context.setModalReconfirm({
         open: true,
-        caption: "修改尚未保存，是否放弃并离开？",
+        caption: context.languagePicker("modal.reconfirm.caption.discardDraft"),
         handleAction: () => {
           blockerActiveRef.current = false;
           setModified(false);
@@ -845,7 +847,17 @@ const Card = () => {
     const message = cardsRef.current.some(
       (item) =>
         item.point[item.point.length - 1] === -1
-    ) ? "已中止" : "已结束";
+    )
+      ? context.languagePicker("modal.toast.success.pauseCard")
+      : context
+        .languagePicker("modal.toast.success.finishCard")
+        .format((cardsRef.current.length
+          ? cardsRef.current.filter(
+            (item) =>
+              item.point[item.point.length - 1] === 1
+          ).length / cardsRef.current.length * 100
+          : 0
+        ).toFixed(2));
     clearTimeout(syncTimerRef.current);
 
     if (!syncable) {
