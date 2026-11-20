@@ -130,6 +130,10 @@ const Card = () => {
     promise: null
   });
   const syncTimerRef = React.useRef(null);
+  const syncable = React.useMemo(
+    () => context.isAuthority && folderName.length,
+    [context.isAuthority, folderName]
+  );
 
   const loadedPathRef = React.useRef(null);
   const authorityRef = React.useRef(context.isAuthority);
@@ -310,7 +314,7 @@ const Card = () => {
       setModalCardLoading(false);
     };
 
-    if (folderName.length && context.isAuthority) {
+    if (syncable) {
       setModalCardLoading(true);
       const handleFailure = () => {
         if (isSamePage()) {
@@ -364,7 +368,7 @@ const Card = () => {
       }
     }
   }, [
-    context.isAuthority,
+    syncable,
     cardType,
     cardPath,
     cardTitle,
@@ -384,7 +388,7 @@ const Card = () => {
             cards.filter((card) => card.id !== item.id)
         );
 
-        if (context.isAuthority && folderName.length) {
+        if (syncable) {
           toast.promise(new Promise((resolve, reject) => {
             request(
               "POST/utility/hare/delete",
@@ -415,7 +419,15 @@ const Card = () => {
         }
       }
     });
-  }, [context, folderName, cardType, cardPath, cardTitle, isSamePage]);
+  }, [
+    syncable,
+    context,
+    folderName,
+    cardType,
+    cardPath,
+    cardTitle,
+    isSamePage
+  ]);
 
   const handleCloseModalTree = React.useCallback(() => {
     setModalTree((modalTree) => ({ ...modalTree, open: false }));
@@ -544,7 +556,7 @@ const Card = () => {
             ...item.point
           ]}));
 
-          if (folderName.length && context.isAuthority) {
+          if (syncable) {
             request(
               "POST/utility/hare/save",
               {
@@ -578,7 +590,7 @@ const Card = () => {
       error: (data) => data
     });
   }, [
-    context.isAuthority,
+    syncable,
     cards,
     cardType,
     cardPath,
@@ -655,11 +667,7 @@ const Card = () => {
     if (session.promise) {
       return session.promise;
     }
-    if (
-      session.count === session.saved
-      || !context.isAuthority
-      || !folderName.length
-    ) {
+    if (session.count === session.saved || !syncable) {
       return Promise.resolve();
     }
 
@@ -711,8 +719,7 @@ const Card = () => {
     });
     return session.promise;
   }, [
-    context.isAuthority,
-    folderName,
+    syncable,
     cardType,
     cardPath,
     cardTitle
@@ -721,8 +728,7 @@ const Card = () => {
   React.useEffect(() => {
     const session = syncRef.current;
     if (
-      !context.isAuthority
-        || !folderName.length
+      !syncable
         || !memorizing
         || operationLock
         || syncLock
@@ -744,13 +750,12 @@ const Card = () => {
     }, delay);
     return () => clearTimeout(syncTimerRef.current);
   }, [
-    context.isAuthority,
+    syncable,
     cards,
     memorizing,
     operationLock,
     syncLock,
     syncError,
-    folderName,
     handleSync
   ]);
 
@@ -774,7 +779,7 @@ const Card = () => {
         setModified(true);
       }
     };
-    if (context.isAuthority && folderName.length) {
+    if (syncable) {
       operationLockRef.current = true;
       setOperationLock(true);
       Promise.resolve().then(() => {
@@ -811,6 +816,7 @@ const Card = () => {
       start();
     }
   }, [
+    syncable,
     context.isAuthority,
     folderName,
     cardType,
@@ -834,7 +840,7 @@ const Card = () => {
     ) ? "已中止" : "已结束";
     clearTimeout(syncTimerRef.current);
 
-    if (!folderName.length || !context.isAuthority) {
+    if (!syncable) {
       setMemorizing(false);
       toast.success(message);
       return;
@@ -862,7 +868,7 @@ const Card = () => {
       success: message,
       error: (error) => error
     });
-  }, [folderName, context.isAuthority, handleSync]);
+  }, [syncable, handleSync]);
 
   const handleAnswer = React.useCallback((id) => {
     if (!memorizing || operationLockRef.current) {
@@ -883,12 +889,12 @@ const Card = () => {
     if (folderName.length) {
       setModified(true);
     }
-    if (folderName.length && context.isAuthority) {
+    if (syncable) {
       syncRef.current.count += 1;
       syncRef.current.lastClick = Date.now();
       setSyncError(false);
     }
-  }, [memorizing, folderName, context.isAuthority]);
+  }, [syncable, memorizing, folderName]);
 
   const renderAnswer = React.useCallback((item) => {
     const point = item.point[item.point.length - 1];
