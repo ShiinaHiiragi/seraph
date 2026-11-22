@@ -837,7 +837,10 @@ const renderEmphasis = (text) => {
       const content = match[3];
       parts.push(match[2].length === 1
         ? <em key={match.index}>{content}</em>
-        : <strong key={match.index}>
+        : <strong
+          key={match.index}
+          style={{ color: "color-mix(in srgb, currentColor 75%, black)" }}
+        >
           {match[2].length === 3 ? <em>{content}</em> : content}
         </strong>);
     }
