@@ -957,6 +957,7 @@ const Card = () => {
         <Typography
           component="span"
           level="body-xs"
+          fontWeight={500}
           sx={{
             display: "block",
             whiteSpace: "pre-wrap",
