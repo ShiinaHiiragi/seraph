@@ -415,6 +415,7 @@ const en = {
         newFolder: "New Directory",
         newLink: "New URL Link",
         newMarkdown: "New Markdown",
+        newCard: "New Card",
         newFile: "Upload File",
         paste: "Paste"
       },
@@ -631,6 +632,11 @@ const en = {
         title: "Create New Markdown",
         caption: "Naming restrictions and file format depend on platform on which server locates.",
         placeholder: "New Markdown Filename"
+      },
+      newCard: {
+        title: "Create New Card",
+        caption: "Naming restrictions and file format depend on platform on which server locates.",
+        placeholder: "New Card Filename"
       },
       rename: {
         title: "Renaming",

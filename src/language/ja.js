@@ -415,6 +415,7 @@ const ja = {
         newFolder: "ニューディレクトリ",
         newLink: "ニュー URL リンク",
         newMarkdown: "ニューマークダウン",
+        newCard: "ニューカード",
         newFile: "ファイルのアップロード",
         paste: "ペースト"
       },
@@ -631,6 +632,11 @@ const ja = {
         title: "ニューマークダウンを作成する",
         caption: "ネーミング制限はサーバーが配置されているプラットフォームによって違いがあります。",
         placeholder: "ニューマークダウンのファイル名"
+      },
+      newCard: {
+        title: "ニューカードを作成する",
+        caption: "ネーミング制限はサーバーが配置されているプラットフォームによって違いがあります。",
+        placeholder: "ニューカードのファイル名"
       },
       rename: {
         title: "リネームする",

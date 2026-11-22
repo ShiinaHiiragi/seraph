@@ -415,6 +415,7 @@ const zhHans = {
         newFolder: "新目录",
         newLink: "新 URL 链接",
         newMarkdown: "新 Markdown",
+        newCard: "新卡片",
         newFile: "上传文件",
         paste: "粘贴"
       },
@@ -631,6 +632,11 @@ const zhHans = {
         title: "创建新 Markdown",
         caption: "命名限制取决于服务器所在平台。",
         placeholder: "新 Markdown 文件名"
+      },
+      newCard: {
+        title: "创建新卡片",
+        caption: "命名限制取决于服务器所在平台。",
+        placeholder: "新卡片文件名"
       },
       rename: {
         title: "重命名",

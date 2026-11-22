@@ -153,6 +153,7 @@ const FileExplorer = (props) => {
   // used by submit
   const newFolderNameRef = React.useRef(null);
   const newMarkdownRef = React.useRef(null);
+  const newHareRef = React.useRef(null);
   const newLinkNameRef = React.useRef(null);
   const newLinkURLRef = React.useRef(null);
   const privateKeyRef = React.useRef(null);
@@ -162,6 +163,7 @@ const FileExplorer = (props) => {
   // used by onKeyDown
   const buttonNewFolderRef = React.useRef(null);
   const buttonNewMarkdownRef = React.useRef(null);
+  const buttonNewHareRef = React.useRef(null);
   const buttonNewLinkRef = React.useRef(null);
   const buttonDecryptRef = React.useRef(null);
   const buttonRenameRef = React.useRef(null);
@@ -359,6 +361,68 @@ const FileExplorer = (props) => {
     context,
     folderName,
     handleCloseNewMarkdown
+  ]);
+
+  // new HARE
+  const [modalNewHareOpen, setModalNewHareOpen] = React.useState(false);
+  const [modalNewHareLoading, setModalNewHareLoading] = React.useState(false);
+  const [formNewHareText, setFormNewHareText] = React.useState("");
+  const handleCloseNewHare = React.useCallback(() => {
+    setModalNewHareOpen(false);
+    setModalNewHareLoading(false);
+    setFormNewHareText("");
+  }, [ ]);
+
+  const modalNewHareDisabled = React.useMemo(
+    () => formNewHareText.trim().length === 0
+      || filesList.some((item) => item.name === formNewHareText + ".hare"),
+    [filesList, formNewHareText]
+  );
+
+  const handleNewHare = React.useCallback(() => {
+    if (!isValidFilename(newHareRef.current.value)) {
+      toast.error(context.languagePicker("modal.toast.warning.illegalRename"));
+      return;
+    }
+
+    const newHareName = newHareRef.current.value + ".hare";
+    setModalNewHareLoading(true);
+    toast.promise(new Promise((resolve, reject) => {
+      request(
+        "POST/file/upload",
+        {
+          type: type,
+          folderName: folderName,
+          filename: newHareName,
+          base: btoa("[]")
+        },
+        { "": () => setModalNewHareLoading(false) },
+        reject
+      )
+        .then((data) => {
+          const { statusCode, errorCode, ...newInfo } = data;
+          if (pathStartWith(`/${type}/${folderName}`)) {
+            setFilesList((filesList) => [
+              ...filesList,
+              newInfo
+            ]);
+          }
+          handleCloseNewHare();
+          resolve();
+        })
+        .finally(() => setModalNewHareLoading(false));
+    }), {
+      loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
+      success: context
+        .languagePicker("modal.toast.success.new")
+        .format(newHareName),
+      error: (data) => data
+    })
+  }, [
+    context,
+    type,
+    folderName,
+    handleCloseNewHare
   ]);
 
   // uploading
@@ -944,6 +1008,12 @@ const FileExplorer = (props) => {
                         {context.languagePicker("main.folder.addMenu.newMarkdown")}
                       </MenuItem>
                       <MenuItem
+                        onClick={() => setModalNewHareOpen(true)}
+                        disabled={folderName.length === 0}
+                      >
+                        {context.languagePicker("main.folder.addMenu.newCard")}
+                      </MenuItem>
+                      <MenuItem
                         onClick={() => uploadRef.current.click()}
                         component="label"
                         disabled={folderName.length === 0}
@@ -1076,6 +1146,28 @@ const FileExplorer = (props) => {
           placeholder={context.languagePicker("modal.form.newMarkdown.placeholder")}
           endDecorator=".md"
           handleEnter={() => buttonNewMarkdownRef.current?.click()}
+        />
+      </ModalForm>
+      <ModalForm
+        ref={buttonNewHareRef}
+        open={modalNewHareOpen}
+        disabled={modalNewHareDisabled}
+        loading={modalNewHareLoading}
+        handleClose={handleCloseNewHare}
+        handleClick={handleNewHare}
+        title={context.languagePicker("modal.form.newCard.title")}
+        caption={context.languagePicker("modal.form.newCard.caption")}
+        button={context.languagePicker("universal.button.submit")}
+      >
+        <SemiInput
+          ref={newHareRef}
+          initValue={formNewHareText}
+          setValue={setFormNewHareText}
+          autoFocus
+          autoComplete="off"
+          placeholder={context.languagePicker("modal.form.newCard.placeholder")}
+          endDecorator=".hare"
+          handleEnter={() => buttonNewHareRef.current?.click()}
         />
       </ModalForm>
       <ModalForm
