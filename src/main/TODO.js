@@ -391,7 +391,13 @@ const TODO = () => {
                   size="sm"
                   value={sort}
                   placeholder={context.languagePicker("main.todo.form.sort")}
-                  slotProps={{ button: { sx: { whiteSpace: "wrap" } } }}
+                  slotProps={{
+                    button: { sx: { whiteSpace: "wrap" } },
+                    listbox: {
+                      popperOptions: { strategy: "fixed" },
+                      modifiers: [{ name: "computeStyles", options: { adaptive: false } }]
+                    }
+                  }}
                 >
                   <Option value="dueTime" onClick={() => setSort("dueTime")}>
                     {context.languagePicker("main.todo.regulate.dueTime")}
@@ -427,7 +433,13 @@ const TODO = () => {
                   size="sm"
                   value={filter}
                   placeholder={context.languagePicker("main.todo.form.filter")}
-                  slotProps={{ button: { sx: { whiteSpace: "wrap" } } }}
+                  slotProps={{
+                    button: { sx: { whiteSpace: "wrap" } },
+                    listbox: {
+                      popperOptions: { strategy: "fixed" },
+                      modifiers: [{ name: "computeStyles", options: { adaptive: false } }]
+                    }
+                  }}
                 >
                   <Option value="all" onClick={() => setFilter("all")}>
                     {context.languagePicker("main.todo.type.all")}

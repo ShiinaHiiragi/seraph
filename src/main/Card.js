@@ -1454,6 +1454,13 @@ const Card = () => {
                         dragCardRef.current = item.id;
                         event.dataTransfer.effectAllowed = "move";
                         event.dataTransfer.setData("text/plain", item.id);
+                        const row = event.currentTarget.closest("tr");
+                        const bounds = row.getBoundingClientRect();
+                        event.dataTransfer.setDragImage(
+                          row,
+                          event.clientX - bounds.left,
+                          event.clientY - bounds.top
+                        );
                       }}
                       onDragEnd={() => {
                         stopDragScroll();
