@@ -191,6 +191,7 @@
 
 ## Log
 
+- 11/23/2026  ver 1.5.2: Fix unified authentication for unsaved contents
 - 11/22/2026  ver 1.5.1: Change styles of the card page
 - 11/21/2026  ver 1.5.0: Add card page as alternatives to HARE
 - 11/19/2026 ver 1.4.20: Fix renaming for Milkdown image uploading
