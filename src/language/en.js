@@ -491,7 +491,7 @@ const en = {
         operation: "Operations"
       },
       rowMenu: {
-        width: 120,
+        width: 115,
         action: "Action",
         end: "Terminate",
         save: "Save",

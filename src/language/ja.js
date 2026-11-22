@@ -493,7 +493,7 @@ const ja = {
       rowMenu: {
         width: 130,
         action: "アクション",
-        end: "ターミネート",
+        end: "クイット",
         save: "セーブ",
         start: "リコールをスタート",
         resume: "リコールをレジューム",
