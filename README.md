@@ -191,7 +191,8 @@
 
 ## Log
 
-- 11/23/2026  ver 1.5.3: Add drag & drop for Card page
+- 11/25/2026  ver 1.5.4: Add config for auto save
+- 11/24/2026  ver 1.5.3: Add drag & drop for Card page
 - 11/23/2026  ver 1.5.2: Fix unified authentication for unsaved contents
 - 11/22/2026  ver 1.5.1: Change styles of the card page
 - 11/21/2026  ver 1.5.0: Add card page as alternatives to HARE
