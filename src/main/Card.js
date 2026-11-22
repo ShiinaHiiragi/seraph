@@ -1092,6 +1092,8 @@ const Card = () => {
     event.preventDefault();
     stopDragScroll();
     const dragged = dragCardRef.current;
+    dragCardRef.current = null;
+    setDragTarget(null);
     if (
       dragged
         && dragged !== id
@@ -1105,6 +1107,9 @@ const Card = () => {
       const index = order.indexOf(id);
       if (index !== -1 && cards.some((item) => item.id === dragged)) {
         const targetIndex = index + (after ? 1 : 0);
+        if (targetIndex === cardsRef.current.findIndex((item) => item.id === dragged)) {
+          return;
+        }
         const applySort = () => {
           const next = [...cardsRef.current];
           const sourceIndex = next.findIndex((item) => item.id === dragged);
@@ -1158,8 +1163,6 @@ const Card = () => {
         }
       }
     }
-    dragCardRef.current = null;
-    setDragTarget(null);
   };
 
   const handleClickSort = (field) => {

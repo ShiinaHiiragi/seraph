@@ -510,6 +510,7 @@ const zhHans = {
     },
     todo: {
       regulate: {
+        natural: "自然排序",
         createTime: "创建时间",
         name: "任务名",
         description: "描述",

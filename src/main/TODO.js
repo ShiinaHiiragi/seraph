@@ -74,6 +74,13 @@ const TODO = () => {
   const [task, setTask] = React.useState([ ]);
   const [sort, setSort] = React.useState(undefined);
   const [reverse, setReverse] = React.useState(false);
+  const [sortLock, setSortLock] = React.useState(false);
+  
+  const [dragTarget, setDragTarget] = React.useState(null);
+  const sortLockRef = React.useRef(false);
+  const dragTaskRef = React.useRef(null);
+
+  const naturalSort = !sort || sort === "natural";
   const [filter, setFilter] = React.useState(undefined);
   const [checkboxDisabled, setCheckboxDisabled] = React.useState(false);
   const [history, setHistory] = React.useState({ });
@@ -114,6 +121,11 @@ const TODO = () => {
   ]);
 
   const processedTask = React.useMemo(() => {
+    if (!sort || sort === "natural") {
+      return task.filter((item) =>
+        ["permanent", "async", "sync"].includes(filter) ? item.type === filter : true
+      );
+    }
     return task
       .map((item) => ({
         ...item,
@@ -131,6 +143,52 @@ const TODO = () => {
         dueTime: item.dueTime === Infinity ? null : item.dueTime
       }))
   }, [task, filter, sort, reverse]);
+
+  const handleDropTask = (event, targetId, insertAfter) => {
+    event.preventDefault();
+    const id = dragTaskRef.current;
+    dragTaskRef.current = null;
+    setDragTarget(null);
+    if (!naturalSort || sortLockRef.current || !id || id === targetId) {
+      return;
+    }
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const order = task.filter((item) => item.id !== id);
+    const targetIndex = order.findIndex((item) => item.id === targetId);
+    if (targetIndex === -1 || !task.some((item) => item.id === id)) {
+      return;
+    }
+    const after = insertAfter ?? event.clientY >= bounds.top + bounds.height / 2;
+    const index = targetIndex + (after ? 1 : 0);
+    if (index === task.findIndex((item) => item.id === id)) {
+      return;
+    }
+    sortLockRef.current = true;
+    setSortLock(true);
+    toast.promise(new Promise((resolve, reject) => {
+      request("POST/utility/todo/sort", { id, index }, undefined, reject)
+        .then(() => {
+          setTask((task) => {
+            const next = [...task];
+            const sourceIndex = next.findIndex((item) => item.id === id);
+            if (sourceIndex === -1) {
+              return task;
+            }
+            const [item] = next.splice(sourceIndex, 1);
+            next.splice(index, 0, item);
+            return next;
+          });
+          resolve();
+        });
+    }).finally(() => {
+      sortLockRef.current = false;
+      setSortLock(false);
+    }), {
+      loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
+      success: context.languagePicker("modal.toast.success.sort"),
+      error: (error) => error
+    });
+  };
 
   const checkExpired = React.useCallback(() => {
     const dueTime = modalTaskDueTime?.valueOf();
@@ -391,7 +449,12 @@ const TODO = () => {
             }}
           >
             <Box sx={{ display: "flex", flexGrow: 2, gap: 1.5 }}>
-              <IconButton size="sm" variant="outlined" onClick={() => setReverse((reverse) => !reverse)}>
+              <IconButton
+                size="sm"
+                variant="outlined"
+                disabled={naturalSort}
+                onClick={() => setReverse((reverse) => !reverse)}
+              >
                 {reverse ? <KeyboardArrowDownOutlinedIcon /> : <KeyboardArrowUpOutlinedIcon />}
               </IconButton>
               <FormControl sx={{ flexGrow: 1 }} size="sm">
@@ -402,6 +465,9 @@ const TODO = () => {
                   placeholder={context.languagePicker("main.todo.form.sort")}
                   slotProps={selectSlotProps}
                 >
+                  <Option value="natural">
+                    {context.languagePicker("main.todo.regulate.natural")}
+                  </Option>
                   <Option value="dueTime">
                     {context.languagePicker("main.todo.regulate.dueTime")}
                   </Option>
@@ -474,7 +540,40 @@ const TODO = () => {
           <List>
             {processedTask.map((item, index, self) => (
               <React.Fragment key={item.id}>
-                <Item sx={{ gap: { xs: "0.5rem", sm: "var(--ListItem-gap)" } }}>
+                {index === 0 && <ListDivider
+                  inset="startDecorator"
+                  sx={{
+                    visibility: dragTarget === 0 ? "visible" : "hidden",
+                    transform: "scaleY(1.5)",
+                    bgcolor: "primary.500"
+                  }}
+                  onDragOver={(event) => {
+                    if (naturalSort && dragTaskRef.current) {
+                      event.preventDefault();
+                      setDragTarget(0);
+                    }
+                  }}
+                  onDrop={(event) => handleDropTask(event, item.id, false)}
+                />}
+                <Item
+                  onDragOver={(event) => {
+                    if (!naturalSort || !dragTaskRef.current || dragTaskRef.current === item.id) {
+                      return;
+                    }
+                    event.preventDefault();
+                    event.dataTransfer.dropEffect = "move";
+                    const bounds = event.currentTarget.getBoundingClientRect();
+                    setDragTarget(
+                      index + (event.clientY >= bounds.top + bounds.height / 2
+                        ? 1
+                        : 0)
+                    );
+                  }}
+                  onDrop={(event) => handleDropTask(event, item.id)}
+                  sx={{
+                    gap: { xs: "0.5rem", sm: "var(--ListItem-gap)" }
+                  }}
+                >
                   <Box sx={{ pt: 0.5 }} >
                     <Checkbox
                       variant="outlined"
@@ -493,7 +592,34 @@ const TODO = () => {
                   <Details>
                     <Typography
                       level="title-md"
-                      sx={{ textDecoration: item.deleteTime ? "line-through" : "unset" }}
+                      draggable={naturalSort && !sortLock}
+                      onDragStart={(event) => {
+                        if (!naturalSort || sortLockRef.current) {
+                          event.preventDefault();
+                          return;
+                        }
+                        dragTaskRef.current = item.id;
+                        event.dataTransfer.effectAllowed = "move";
+                        event.dataTransfer.setData("text/plain", item.id);
+                        const row = event.currentTarget.closest("li");
+                        if (row) {
+                          const bounds = row.getBoundingClientRect();
+                          event.dataTransfer.setDragImage(
+                            row,
+                            event.clientX - bounds.left,
+                            event.clientY - bounds.top
+                          );
+                        }
+                      }}
+                      onDragEnd={() => {
+                        dragTaskRef.current = null;
+                        setDragTarget(null);
+                      }}
+                      sx={{
+                        textDecoration: item.deleteTime ? "line-through" : "unset",
+                        cursor: naturalSort && !sortLock ? "grab" : "default",
+                        "&:active": { cursor: naturalSort && !sortLock ? "grabbing" : "default" }
+                      }}
                       color={item.deleteTime ? "neutral" : "secondary"}
                     >
                       {item.name}
@@ -600,7 +726,23 @@ const TODO = () => {
                       />}
                   </Box>
                 </Item>
-                {index !== self.length - 1 && <ListDivider inset="startDecorator" />}
+                <ListDivider
+                  inset="startDecorator"
+                  sx={{
+                    visibility: index !== self.length - 1 || dragTarget === index + 1
+                      ? "visible"
+                      : "hidden",
+                    transform: dragTarget === index + 1 ? "scaleY(1.5)" : undefined,
+                    bgcolor: dragTarget === index + 1 ? "primary.500" : undefined
+                  }}
+                  onDragOver={(event) => {
+                    if (naturalSort && dragTaskRef.current) {
+                      event.preventDefault();
+                      setDragTarget(index + 1);
+                    }
+                  }}
+                  onDrop={(event) => handleDropTask(event, item.id, true)}
+                />
               </React.Fragment>
             ))}
           </List>

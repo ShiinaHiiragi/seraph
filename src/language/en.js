@@ -510,6 +510,7 @@ const en = {
     },
     todo: {
       regulate: {
+        natural: "Natural Sort",
         createTime: "Time Created",
         name: "Task Name",
         description: "Description",

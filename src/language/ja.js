@@ -510,6 +510,7 @@ const ja = {
     },
     todo: {
       regulate: {
+        natural: "ナチュラルソート",
         createTime: "作成日時",
         name: "タスク名",
         description: "ディスクリプション",

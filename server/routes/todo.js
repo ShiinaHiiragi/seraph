@@ -172,4 +172,40 @@ router.post('/delete', (req, res, next) => {
   return;
 });
 
+router.post('/sort', (req, res, next) => {
+  if (req.status.notAuthSuccess()) {
+    // -> EF_IT or abnormal request
+    next(api.errorStreamControl);
+    return;
+  }
+
+  const { id, index } = req.body;
+  const tasks = api.taskOperator.accessTask();
+  const sourceIndex = tasks.findIndex((item) => item.id === id);
+  if (sourceIndex === -1) {
+    // -> EF_RU: task does not exist
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  try {
+    api.taskOperator.setTask((task) => {
+      const next = [...task];
+      const [item] = next.splice(sourceIndex, 1);
+      next.splice(index, 0, item);
+      return next;
+    });
+  } catch (_) {
+    // -> EF_FME: file write error
+    req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  // -> ES: no extra info
+  req.status.addExecStatus();
+  res.send(req.status.generateReport());
+});
+
 module.exports = router;
