@@ -782,6 +782,7 @@ const CrepeEditorInner = (props) => {
 const CrepeEditor = () => {
   const navigate = useNavigate();
   const context = React.useContext(GlobalContext);
+  const { setGlobalModified } = context;
 
   // § url path analysis
   const { "*": rawFolderName } = useParams();
@@ -837,9 +838,9 @@ const CrepeEditor = () => {
   const [modified, setModified] = React.useState(false);
 
   React.useLayoutEffect(() => {
-    context.setGlobalModified(modified);
-    return () => context.setGlobalModified(false);
-  }, [modified, context.setGlobalModified]);
+    setGlobalModified(modified);
+    return () => setGlobalModified(false);
+  }, [modified, setGlobalModified]);
   const [savedPath, setSavedPath] = React.useState(null);
 
   const fileContentRef = React.useRef(null);

@@ -91,6 +91,7 @@ const CardRowMenu = ({ context, handleEdit, handleDelete, disabled }) => (
 const Card = () => {
   const navigate = useNavigate();
   const context = React.useContext(GlobalContext);
+  const { setGlobalModified } = context;
 
   // § url path analysis
   const { "*": rawFolderName } = useParams();
@@ -623,9 +624,9 @@ const Card = () => {
   ), [modified, savedPath, cards, folderName]);
 
   React.useLayoutEffect(() => {
-    context.setGlobalModified(unsaved);
-    return () => context.setGlobalModified(false);
-  }, [unsaved, context.setGlobalModified]);
+    setGlobalModified(unsaved);
+    return () => setGlobalModified(false);
+  }, [unsaved, setGlobalModified]);
 
   const blocker = useBlocker(({ nextLocation, historyAction }) =>
     unsaved && !(
