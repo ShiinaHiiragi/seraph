@@ -928,7 +928,15 @@ const Card = () => {
       return;
     }
     confirmDiscard();
-  }, [blocker, syncable, memorizing, operationLock, unsaved, handleEnd, context]);
+  }, [
+    context,
+    blocker,
+    syncable,
+    memorizing,
+    operationLock,
+    unsaved,
+    handleEnd
+  ]);
 
   const handleAnswer = React.useCallback((id) => {
     if (!memorizing || operationLockRef.current) {
