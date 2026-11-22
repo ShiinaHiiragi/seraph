@@ -1423,7 +1423,7 @@ const Card = () => {
           >
             <thead>
               <tr>
-                <th style={{ width: 24 }}></th>
+                <th style={{ width: 20 }}></th>
                 <th style={{ width: 120, padding: "12px 6px" }}>
                   {renderSortHeader("query")}
                 </th>
