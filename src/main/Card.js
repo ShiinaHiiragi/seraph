@@ -28,6 +28,7 @@ import IconButton from "@mui/joy/IconButton";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
+import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import RouteField from "../interface/RouteField";
 import GlobalContext, {
   request,
@@ -275,6 +276,7 @@ const Card = () => {
   const [editingCard, setEditingCard] = React.useState(null);
   const [formQuery, setFormQuery] = React.useState("");
   const [formKey, setFormKey] = React.useState("");
+  const [draggingFile, setDraggingFile] = React.useState(false);
   const queryRef = React.useRef(null);
   const keyRef = React.useRef(null);
   const uploadRef = React.useRef(null);
@@ -507,9 +509,7 @@ const Card = () => {
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }, [cards, cardTitle]);
 
-  const handleUpload = React.useCallback((event) => {
-    const file = event.target.files?.[0];
-    event.target.value = "";
+  const handleUpload = React.useCallback((file) => {
     if (!file) {
       return;
     }
@@ -1213,6 +1213,48 @@ const Card = () => {
   return (
     <RouteField
       display={display}
+      onDragOver={(event) => {
+        if (!Array.from(event.dataTransfer.types).includes("Files")) {
+          return;
+        }
+        event.preventDefault();
+        const allowed = display && cardState === 1 && !memorizing && !operationLock;
+        event.dataTransfer.dropEffect = allowed ? "copy" : "none";
+        setDraggingFile(allowed);
+      }}
+      onDragLeave={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) {
+          setDraggingFile(false);
+        }
+      }}
+      onDrop={(event) => {
+        if (!Array.from(event.dataTransfer.types).includes("Files")) {
+          return;
+        }
+        event.preventDefault();
+        setDraggingFile(false);
+        if (!display || cardState !== 1 || memorizing || operationLock) {
+          return;
+        }
+        const files = Array.from(event.dataTransfer.files);
+        if (files.length !== 1) {
+          toast.error(context.languagePicker("modal.toast.warning.uploadMultiple"));
+          return;
+        }
+        if (
+          Array
+            .from(event.dataTransfer.items)
+            .some((item) => item.webkitGetAsEntry?.()?.isDirectory)
+        ) {
+          toast.error(context.languagePicker("modal.toast.warning.uploadFolder"));
+          return;
+        }
+        if (!/\.(hare|json)$/i.test(files[0].name)) {
+          toast.error(context.languagePicker("modal.toast.warning.illegalFormat"));
+          return;
+        }
+        handleUpload(files[0]);
+      }}
       path={
         folderName.length ? [
           cardType === "private"
@@ -1228,6 +1270,7 @@ const Card = () => {
       title={cardTitle}
       sxRaw={{ overflowY: "hidden" }}
       sx={{
+        position: "relative",
         flexDirection: "column",
         minHeight: 0,
         overflowY: { xs: "auto", sm: "hidden" },
@@ -1558,7 +1601,26 @@ const Card = () => {
           />
         </FormControl>
       </ModalForm>}
-      <input ref={uploadRef} hidden type="file" accept=".hare,.json" onChange={handleUpload} />
+      {draggingFile && <Box sx={{
+        position: "absolute",
+        inset: 0,
+        zIndex: 10,
+        border: "2px dashed",
+        borderColor: "neutral.400",
+        borderRadius: "sm",
+        bgcolor: "neutral.softBg",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        pointerEvents: "none"
+      }}>
+        <FileUploadOutlinedIcon sx={{ fontSize: 64, color: "neutral.400" }} />
+      </Box>}
+      <input ref={uploadRef} hidden type="file" accept=".hare,.json" onChange={(event) => {
+        const file = event.target.files?.[0];
+        event.target.value = "";
+        handleUpload(file);
+      }} />
       {modalTree.open && <Tree
         modalTree={modalTree}
         handleCloseModalTree={handleCloseModalTree}
