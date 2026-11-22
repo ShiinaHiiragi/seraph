@@ -1186,7 +1186,7 @@ const Card = () => {
                     >
                       {item.query.annotateEmphasis()}
                     </Typography>
-                    <Box sx={{ mx: -1, mb: 1 }}>{renderAnswer(item)}</Box>
+                    <Box sx={{ mb: 1 }}>{renderAnswer(item)}</Box>
                   </Box>
                 </ListItemContent>
                 <CardRowMenu
