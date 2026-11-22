@@ -69,6 +69,7 @@ import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import DoneIcon from "@mui/icons-material/Done";
 import NotesOutlinedIcon from "@mui/icons-material/NotesOutlined";
+import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import LooksOneOutlinedIcon from "@mui/icons-material/LooksOneOutlined";
 import LooksTwoOutlinedIcon from "@mui/icons-material/LooksTwoOutlined";
 import Looks3OutlinedIcon from "@mui/icons-material/Looks3Outlined";
@@ -307,6 +308,7 @@ const CrepeEditorInner = (props) => {
           onUpload: handleUploadImage,
         },
         [CrepeFeature.BlockEdit]: {
+          handleDragIcon: toSVG(MenuRoundedIcon),
           textGroup: {
             label: context.languagePicker("main.crepe.popup.slash.text.title"),
             text: {

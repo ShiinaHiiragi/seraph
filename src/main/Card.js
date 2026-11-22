@@ -24,6 +24,7 @@ import MenuItem from "@mui/joy/MenuItem";
 import IconButton from "@mui/joy/IconButton";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
+import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import RouteField from "../interface/RouteField";
 import GlobalContext, {
   request,
@@ -1023,7 +1024,94 @@ const Card = () => {
   }, [memorizing, handleAnswer]);
 
   // § search & sort
-  const filteredCards = cards.filter(
+  const [cardOrder, setCardOrder] = React.useState([]);
+  const [dragTarget, setDragTarget] = React.useState(null);
+  const dragCardRef = React.useRef(null);
+  const dragScrollRef = React.useRef({ frame: null, speed: 0 });
+  const tableContainerRef = React.useRef(null);
+
+  const stopDragScroll = React.useCallback(() => {
+    cancelAnimationFrame(dragScrollRef.current.frame);
+    dragScrollRef.current = { frame: null, speed: 0 };
+  }, []);
+
+  const handleDragScroll = (event) => {
+    if (!dragCardRef.current) {
+      return;
+    }
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "move";
+    const container = tableContainerRef.current;
+    const bounds = container.getBoundingClientRect();
+    const top = Math.max(0, bounds.top);
+    const bottom = Math.min(window.innerHeight, bounds.bottom);
+    const edge = Math.min(64, (bottom - top) / 3);
+    const y = event.clientY;
+    const speed = y < top + edge
+      ? -12 * Math.min(1, Math.max(0, (top + edge - y) / edge))
+      : y > bottom - edge
+      ? 12 * Math.min(1, Math.max(0, (y - bottom + edge) / edge))
+      : 0;
+    if (!speed) {
+      stopDragScroll();
+      return;
+    }
+    dragScrollRef.current.speed = speed;
+    if (dragScrollRef.current.frame === null) {
+      let previous;
+      const scroll = (time) => {
+        if (!dragCardRef.current || !tableContainerRef.current) {
+          stopDragScroll();
+          return;
+        }
+        const elapsed = previous === undefined
+          ? 16.67
+          : Math.min(time - previous, 32);
+        previous = time;
+        tableContainerRef.current.scrollTop += dragScrollRef.current.speed * elapsed / 16.67;
+        dragScrollRef.current.frame = requestAnimationFrame(scroll);
+      };
+      dragScrollRef.current.frame = requestAnimationFrame(scroll);
+    }
+  };
+
+  React.useEffect(() => {
+    setCardOrder([]);
+    setDragTarget(null);
+    dragCardRef.current = null;
+    stopDragScroll();
+    return stopDragScroll;
+  }, [folderName, stopDragScroll]);
+
+  const orderedCards = React.useMemo(() => {
+    const positions = new Map(cardOrder.map((id, index) => [id, index]));
+    return [...cards].sort((left, right) =>
+      (positions.get(left.id) ?? cardOrder.length)
+        - (positions.get(right.id) ?? cardOrder.length)
+    );
+  }, [cards, cardOrder]);
+
+  const handleDropCard = (event, id) => {
+    event.preventDefault();
+    stopDragScroll();
+    const dragged = dragCardRef.current;
+    if (dragged && dragged !== id) {
+      const bounds = event.currentTarget.getBoundingClientRect();
+      const after = event.clientY >= bounds.top + bounds.height / 2;
+      const order = orderedCards
+        .map((item) => item.id)
+        .filter((item) => item !== dragged);
+      const index = order.indexOf(id);
+      if (index !== -1 && cards.some((item) => item.id === dragged)) {
+        order.splice(index + (after ? 1 : 0), 0, dragged);
+        setCardOrder(order);
+      }
+    }
+    dragCardRef.current = null;
+    setDragTarget(null);
+  };
+
+  const filteredCards = orderedCards.filter(
     (item) => `${item.query}\n${item.key}`
       .toLowerCase()
       .includes(search.trim().toLowerCase())
@@ -1141,6 +1229,19 @@ const Card = () => {
         </Box>
         <Sheet
           className="OrderTableContainer"
+          ref={tableContainerRef}
+          onDragOver={handleDragScroll}
+          onDragLeave={(event) => {
+            if (!event.currentTarget.contains(event.relatedTarget)) {
+              stopDragScroll();
+              setDragTarget(null);
+            }
+          }}
+          onDrop={() => {
+            stopDragScroll();
+            dragCardRef.current = null;
+            setDragTarget(null);
+          }}
           variant="outlined"
           sx={{
             display: { xs: "none", sm: "initial" },
@@ -1183,8 +1284,57 @@ const Card = () => {
             </thead>
             <tbody>
               {filteredCards.map((item) => (
-                <tr key={item.id}>
-                  <td></td>
+                <tr
+                  key={item.id}
+                  onDragOver={(event) => {
+                    if (!dragCardRef.current || dragCardRef.current === item.id) {
+                      return;
+                    }
+                    event.preventDefault();
+                    event.dataTransfer.dropEffect = "move";
+                    const bounds = event.currentTarget.getBoundingClientRect();
+                    setDragTarget({
+                      id: item.id,
+                      after: event.clientY >= bounds.top + bounds.height / 2
+                    });
+                  }}
+                  onDrop={(event) => handleDropCard(event, item.id)}
+                  style={dragTarget?.id === item.id ? {
+                    boxShadow: `inset 0 ${dragTarget.after ? "-2px" : "2px"} 0 var(--joy-palette-primary-500)`
+                  } : undefined}
+                >
+                  <td>
+                    <IconButton
+                      size="sm"
+                      variant="plain"
+                      color="neutral"
+                      draggable
+                      onDragStart={(event) => {
+                        dragCardRef.current = item.id;
+                        event.dataTransfer.effectAllowed = "move";
+                        event.dataTransfer.setData("text/plain", item.id);
+                      }}
+                      onDragEnd={() => {
+                        stopDragScroll();
+                        dragCardRef.current = null;
+                        setDragTarget(null);
+                      }}
+                      sx={{
+                        display: "flex",
+                        mx: "auto",
+                        cursor: "grab",
+                        WebkitTapHighlightColor: "transparent",
+                        "&:hover": { bgcolor: "transparent" },
+                        "&:active": {
+                          cursor: "grabbing",
+                          bgcolor: "transparent",
+                          boxShadow: "none"
+                        }
+                      }}
+                    >
+                      <MenuRoundedIcon />
+                    </IconButton>
+                  </td>
                   <td>
                     <Typography
                       level="body-xs"
