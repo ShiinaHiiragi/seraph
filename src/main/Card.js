@@ -940,6 +940,8 @@ const Card = () => {
           py: 0.75,
           textAlign: "left",
           cursor: memorizing ? "pointer" : "default",
+          WebkitTapHighlightColor: "transparent",
+          transition: "background-color 80ms ease-out",
           bgcolor: !memorizing
             ? "transparent"
             : hidden
