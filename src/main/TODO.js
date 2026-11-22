@@ -35,6 +35,14 @@ import Loading from "./Loading";
 import ModalForm from "../modal/Form";
 import Picker from "../components/Picker";
 
+const selectSlotProps = {
+  button: { sx: { whiteSpace: "wrap" } },
+  listbox: {
+    popperOptions: { strategy: "fixed" },
+    modifiers: [{ name: "computeStyles", options: { adaptive: false } }]
+  }
+};
+
 const Item = styled(ListItem)(({ theme }) => ({
   display: "flex",
   alignItems: "flex-start"
@@ -389,26 +397,21 @@ const TODO = () => {
               <FormControl sx={{ flexGrow: 1 }} size="sm">
                 <Select
                   size="sm"
-                  value={sort}
+                  value={sort ?? null}
+                  onChange={(_, value) => setSort(value)}
                   placeholder={context.languagePicker("main.todo.form.sort")}
-                  slotProps={{
-                    button: { sx: { whiteSpace: "wrap" } },
-                    listbox: {
-                      popperOptions: { strategy: "fixed" },
-                      modifiers: [{ name: "computeStyles", options: { adaptive: false } }]
-                    }
-                  }}
+                  slotProps={selectSlotProps}
                 >
-                  <Option value="dueTime" onClick={() => setSort("dueTime")}>
+                  <Option value="dueTime">
                     {context.languagePicker("main.todo.regulate.dueTime")}
                   </Option>
-                  <Option value="createTime" onClick={() => setSort("createTime")}>
+                  <Option value="createTime">
                     {context.languagePicker("main.todo.regulate.createTime")}
                   </Option>
-                  <Option value="name" onClick={() => setSort("name")}>
+                  <Option value="name">
                     {context.languagePicker("main.todo.regulate.name")}
                   </Option>
-                  <Option value="description" onClick={() => setSort("description")}>
+                  <Option value="description">
                     {context.languagePicker("main.todo.regulate.description")}
                   </Option>
                 </Select>
@@ -431,26 +434,21 @@ const TODO = () => {
               >
                 <Select
                   size="sm"
-                  value={filter}
+                  value={filter ?? null}
+                  onChange={(_, value) => setFilter(value)}
                   placeholder={context.languagePicker("main.todo.form.filter")}
-                  slotProps={{
-                    button: { sx: { whiteSpace: "wrap" } },
-                    listbox: {
-                      popperOptions: { strategy: "fixed" },
-                      modifiers: [{ name: "computeStyles", options: { adaptive: false } }]
-                    }
-                  }}
+                  slotProps={selectSlotProps}
                 >
-                  <Option value="all" onClick={() => setFilter("all")}>
+                  <Option value="all">
                     {context.languagePicker("main.todo.type.all")}
                   </Option>
-                  <Option value="permanent" onClick={() => setFilter("permanent")}>
+                  <Option value="permanent">
                     {context.languagePicker("main.todo.type.permanent")}
                   </Option>
-                  <Option value="async" onClick={() => setFilter("async")}>
+                  <Option value="async">
                     {context.languagePicker("main.todo.type.async")}
                   </Option>
-                  <Option value="sync" onClick={() => setFilter("sync")}>
+                  <Option value="sync">
                     {context.languagePicker("main.todo.type.sync")}
                   </Option>
                 </Select>
