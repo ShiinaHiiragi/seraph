@@ -88,6 +88,9 @@ const attachTerminal = (server, api) => {
     });
 
     ws.on('message', (msg) => {
+      if (cleaned) {
+        return;
+      }
       try {
         const parsed = JSON.parse(msg);
         if (parsed.type === 'input') {
@@ -105,7 +108,7 @@ const attachTerminal = (server, api) => {
     });
 
     let cleaned = false;
-    const cleanup = (reason) => {
+    const cleanup = (reason, exited = false) => {
       if (cleaned) {
         return;
       }
@@ -113,6 +116,9 @@ const attachTerminal = (server, api) => {
       clearTimeout(idleTimer);
       clearInterval(pingInterval);
       ptyLog('CLOSE', pty.pid, `${reason}`);
+      if (exited) {
+        return;
+      }
       try {
         pty.kill();
       } catch (err) {
@@ -120,7 +126,17 @@ const attachTerminal = (server, api) => {
       }
     };
 
+    pty.onExit(({ exitCode, signal }) => {
+      if (cleaned) {
+        return;
+      }
+      cleanup(`exited: ${exitCode}, signal: ${signal ?? 0}`, true);
+      ws.close(1000, 'normal exit');
+    });
     pty.on('error', (err) => {
+      if (cleaned || /EIO|EAGAIN|errno 5/.test(err.code ?? '')) {
+        return;
+      }
       console.error(err);
       cleanup(`error: ${err.message}`);
       ws.close(1011, 'PTY error');
