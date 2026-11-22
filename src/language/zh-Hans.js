@@ -155,6 +155,7 @@ const zhHans = {
         show: "对访客显示",
         showTip: "即使选择不显示，未登录用户仍可通过 URL 访问卡片。",
         autoSave: "自动保存",
+        autoSaveNoDelay: "无延迟",
         autoSaveTime: "时间延迟",
         autoSaveTimeOption: {
           1: "1 秒",

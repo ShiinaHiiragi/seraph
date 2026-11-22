@@ -757,9 +757,11 @@ const Card = () => {
     const remains = session.lastClick
       + context.setting.hare.save.time * 1000
       - Date.now();
-    const delay = session.count - session.saved >= context.setting.hare.save.ops
-      ? 0
-      : Math.max(0, remains);
+    const delay = session.count - session.saved >= (
+      context.setting.hare.save.noDelay
+        ? 0
+        : context.setting.hare.save.ops
+      ) ? 0 : Math.max(0, remains);
     syncTimerRef.current = setTimeout(() => {
       handleSync()
         .catch((error) => {

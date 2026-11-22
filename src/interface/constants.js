@@ -270,6 +270,7 @@ const defaultSetting = {
   hare: {
     show: true,
     save: {
+      noDelay: false,
       time: 2,
       ops: 8,
     }
