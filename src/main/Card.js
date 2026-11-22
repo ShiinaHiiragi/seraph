@@ -622,6 +622,11 @@ const Card = () => {
       && cards.length > 0
   ), [modified, savedPath, cards, folderName]);
 
+  React.useLayoutEffect(() => {
+    context.setGlobalModified(unsaved);
+    return () => context.setGlobalModified(false);
+  }, [unsaved, context.setGlobalModified]);
+
   const blocker = useBlocker(({ nextLocation, historyAction }) =>
     unsaved && !(
       historyAction !== 'POP'

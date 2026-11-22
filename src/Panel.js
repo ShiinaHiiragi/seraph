@@ -271,9 +271,19 @@ const Panel = () => {
   const [metadata, setMetadata] = React.useState(defaultMetadata);
   const [setting, setSetting] = React.useState(defaultSetting);
 
+  const globalModified = React.useRef(false);
+  const setGlobalModified = React.useCallback((modified) => {
+    globalModified.current = modified;
+  }, []);
+
   React.useLayoutEffect(() => {
     const handleInvalidToken = () => setGlobalSwitch(globalState.ANONYMOUS);
     ConstantContext.onInvalidToken = handleInvalidToken;
+    ConstantContext.globalModified = globalModified;
+    return () => {
+      ConstantContext.onInvalidToken = undefined;
+      ConstantContext.globalModified = undefined;
+    };
   }, []);
   const setSettingPair = React.useCallback((key, value) => {
     setSetting((setting) => setValue(setting, key, value))
@@ -408,6 +418,7 @@ const Panel = () => {
         firstTick: firstTick,
         secondTick: secondTick,
         crepeRef: crepeRef,
+        setGlobalModified: setGlobalModified,
         crepeStyle: crepeStyle,
         metadata: metadata,
         setting: setting,

@@ -835,6 +835,11 @@ const CrepeEditor = () => {
   const [editableKey, setEditableKey] = React.useState(0);
   const [readOnly, setReadOnly] = React.useState(false);
   const [modified, setModified] = React.useState(false);
+
+  React.useLayoutEffect(() => {
+    context.setGlobalModified(modified);
+    return () => context.setGlobalModified(false);
+  }, [modified, context.setGlobalModified]);
   const [savedPath, setSavedPath] = React.useState(null);
 
   const fileContentRef = React.useRef(null);
@@ -1082,11 +1087,7 @@ const CrepeEditor = () => {
         request(
           "POST/utility/crepe/save",
           { type, folderName, filename: filename + suffix, create, text },
-          {
-            [Status.authErrCode.InvalidToken]: () =>
-              context.languagePicker("modal.toast.warning.unauthorizedDraft"),
-            "": handleCloseModalTree
-          },
+          { "": handleCloseModalTree },
           reject
         ).then(() => {
           if (create) {
@@ -1118,9 +1119,7 @@ const CrepeEditor = () => {
         request(
           "POST/utility/crepe/update",
           { type, folderName, filename, diff },
-          { [Status.authErrCode.InvalidToken]: () =>
-            context.languagePicker("modal.toast.warning.unauthorizedDraft")
-          },
+          undefined,
           reject
         ).then((data) => {
           if (data.success) {
@@ -1199,9 +1198,6 @@ const CrepeEditor = () => {
         diff: diff
       },
       {
-        [Status.authErrCode.InvalidToken]: () => {
-          toast.error(context.languagePicker("modal.toast.warning.unauthorizedDraft"));
-        },
         "": () => {
           setAutoSaveError(true);
           setAutoSaveLock(false);

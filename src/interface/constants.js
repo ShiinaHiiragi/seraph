@@ -670,10 +670,13 @@ const request = (query, params, todo, handleReject, handleInit, handleUpload) =>
           && res.data.errorCode === Status.authErrCode.InvalidToken
         ) {
           const planned = todo?.[Status.authErrCode.InvalidToken]
-          let message;
+          const hasDraft = ConstantContext.globalModified?.current;
+          let message = hasDraft
+            ? ConstantContext.languagePicker("modal.toast.warning.unauthorizedDraft")
+            : undefined;
           if (planned instanceof Function) {
-            message = planned(res.data);
-          } else {
+            message = planned(res.data) ?? message;
+          } else if (!hasDraft) {
             ConstantContext.onInvalidToken?.();
           }
           if (universalPlanned instanceof Function) {
