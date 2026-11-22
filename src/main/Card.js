@@ -1180,19 +1180,9 @@ const Card = () => {
                   <Box sx={{ width: "100%", minWidth: 0 }}>
                     <Typography
                       fontWeight={600}
-                      gutterBottom
                       sx={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}
                     >
                       {item.query.annotateEmphasis()}
-                    </Typography>
-                    <Typography level="body-xs">
-                      {context
-                        .languagePicker("main.card.createTime")
-                        .format(new Date(item.time).timeFormat(
-                          context.languagePicker("universal.time.dateFormat")
-                            + " "
-                            + context.languagePicker("universal.time.timeFormat")
-                        ))}
                     </Typography>
                     <Box sx={{ mx: -1, mb: 1 }}>{renderAnswer(item)}</Box>
                   </Box>
