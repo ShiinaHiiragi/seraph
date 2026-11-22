@@ -522,7 +522,7 @@ const zhHans = {
     },
     todo: {
       regulate: {
-        natural: "自然排序",
+        natural: "自然顺序",
         createTime: "创建时间",
         name: "任务名",
         description: "描述",
@@ -575,7 +575,7 @@ const zhHans = {
         extract: "{0} 已解压到当前目录。",
         epub: "{0} 已转换到当前目录。",
         delete: "{0} 已删除。",
-        sort: "自然排序已保存。",
+        sort: "自然顺序已更改。",
         saveText: "文件已保存。",
         saveCard: "文件已保存。",
         syncCard: "未同步修改已保存。",

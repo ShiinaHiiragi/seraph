@@ -131,7 +131,6 @@ const TODO = () => {
         ...item,
         dueTime: item.dueTime === null ? Infinity : item.dueTime
       }))
-      .sortBy("dueTime", reverse)
       .sortBy(sort ?? "dueTime", reverse)
       .filter((item) =>
         ["permanent", "async", "sync"].includes(filter)
@@ -439,8 +438,8 @@ const TODO = () => {
           <Box
             className="SearchAndFilters"
             sx={{
+              pb: 0,
               borderRadius: "sm",
-              pb: 1,
               display: "flex",
               flexWrap: "no-wrap",
               flexDirection: { xs: "column", sm: "row" },
@@ -537,7 +536,7 @@ const TODO = () => {
               </FormControl>
             </Box>
           </Box>
-          <List>
+          <List sx={{ pt: 0 }} >
             {processedTask.map((item, index, self) => (
               <React.Fragment key={item.id}>
                 {index === 0 && <ListDivider

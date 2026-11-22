@@ -522,7 +522,7 @@ const en = {
     },
     todo: {
       regulate: {
-        natural: "Natural Sort",
+        natural: "Natural Order",
         createTime: "Time Created",
         name: "Task Name",
         description: "Description",
@@ -575,7 +575,7 @@ const en = {
         extract: "{0} has been extracted to current directory.",
         epub: "{0} has been converted to current directory.",
         delete: "{0} has been deleted.",
-        sort: "Natural sort order saved.",
+        sort: "Natural order saved.",
         saveText: "The file has been saved.",
         saveCard: "The file has been saved.",
         syncCard: "Unsynced changes have been saved.",
