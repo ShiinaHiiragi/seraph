@@ -10,6 +10,9 @@ import FormControl from "@mui/joy/FormControl";
 import FormLabel from "@mui/joy/FormLabel";
 import SearchIcon from "@mui/icons-material/Search";
 import Table from "@mui/joy/Table";
+import Link from "@mui/joy/Link";
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import Sheet from "@mui/joy/Sheet";
 import Typography from "@mui/joy/Typography";
 import List from "@mui/joy/List";
@@ -1026,6 +1029,7 @@ const Card = () => {
   }, [memorizing, handleAnswer]);
 
   // § search & sort
+  const [cardsSorting, setCardsSorting] = React.useState(null);
   const [dragTarget, setDragTarget] = React.useState(null);
   const dragCardRef = React.useRef(null);
   const dragScrollRef = React.useRef({ frame: null, speed: 0 });
@@ -1077,6 +1081,7 @@ const Card = () => {
   };
 
   React.useEffect(() => {
+    setCardsSorting(null);
     setDragTarget(null);
     dragCardRef.current = null;
     stopDragScroll();
@@ -1087,7 +1092,11 @@ const Card = () => {
     event.preventDefault();
     stopDragScroll();
     const dragged = dragCardRef.current;
-    if (dragged && dragged !== id && !operationLockRef.current) {
+    if (
+      dragged
+        && dragged !== id
+        && !operationLockRef.current && !cardsSorting
+    ) {
       const bounds = event.currentTarget.getBoundingClientRect();
       const after = event.clientY >= bounds.top + bounds.height / 2;
       const order = cardsRef.current
@@ -1153,7 +1162,49 @@ const Card = () => {
     setDragTarget(null);
   };
 
-  const filteredCards = cards.filter(
+  const handleClickSort = (field) => {
+    setCardsSorting((sorting) => sorting?.field !== field
+      ? { field, descending: false }
+      : sorting.descending
+      ? null
+      : { field, descending: true }
+    );
+  };
+
+  const renderSortHeader = (field) => (
+    <Link
+      underline="none"
+      color="primary"
+      component="button"
+      onClick={() => handleClickSort(field)}
+      fontWeight="lg"
+      endDecorator={cardsSorting?.field === field
+        ? cardsSorting.descending
+        ? <ArrowDropDownIcon />
+        : <ArrowDropUpIcon />
+        : null}
+    >
+      {context.languagePicker(`main.card.tableColumn.${field}`)}
+    </Link>
+  );
+
+  const sortedCards = React.useMemo(() => {
+    if (!cardsSorting) {
+      return cards;
+    }
+    const { field, descending } = cardsSorting;
+    return cards.map((item, index) => ({ item, index }))
+      .sort((left, right) => {
+        const comparison = field === "time"
+          ? left.item.time - right.item.time
+          : left.item[field].localeCompare(right.item[field]);
+        return (descending ? -comparison : comparison)
+          || left.index - right.index;
+      })
+      .map(({ item }) => item);
+  }, [cards, cardsSorting]);
+
+  const filteredCards = sortedCards.filter(
     (item) => `${item.query}\n${item.key}`
       .toLowerCase()
       .includes(search.trim().toLowerCase())
@@ -1311,13 +1362,13 @@ const Card = () => {
               <tr>
                 <th style={{ width: 24 }}></th>
                 <th style={{ width: 120, padding: "12px 6px" }}>
-                  {context.languagePicker("main.card.tableColumn.query")}
+                  {renderSortHeader("query")}
                 </th>
                 <th style={{ width: 120, padding: "12px 6px" }}>
-                  {context.languagePicker("main.card.tableColumn.key")}
+                  {renderSortHeader("key")}
                 </th>
                 <th style={{ width: 80, padding: "12px 6px" }}>
-                  {context.languagePicker("main.card.tableColumn.time")}
+                  {renderSortHeader("time")}
                 </th>
                 <th style={{ width: 80, padding: "12px 6px" }}>
                   {context.languagePicker("main.card.tableColumn.operation")}
@@ -1350,10 +1401,10 @@ const Card = () => {
                       size="sm"
                       variant="plain"
                       color="neutral"
-                      draggable={!operationLock && !sortLock}
-                      disabled={operationLock || sortLock}
+                      draggable={!operationLock && !sortLock && !cardsSorting}
+                      disabled={operationLock || sortLock || Boolean(cardsSorting)}
                       onDragStart={(event) => {
-                        if (operationLockRef.current) {
+                        if (operationLockRef.current || cardsSorting) {
                           event.preventDefault();
                           return;
                         }
