@@ -483,6 +483,7 @@ const zhHans = {
     card: {
       search: "按内容搜索",
       createTime: "创建于 {0}",
+      unknown: "未知",
       tableColumn: {
         query: "问题",
         key: "答案",

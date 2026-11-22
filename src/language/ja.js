@@ -483,6 +483,7 @@ const ja = {
     card: {
       search: "コンテンツで検索",
       createTime: "{0} に作成",
+      unknown: "不明",
       tableColumn: {
         query: "問い",
         key: "答え",

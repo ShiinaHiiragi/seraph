@@ -483,6 +483,7 @@ const en = {
     card: {
       search: "Search by Contents",
       createTime: "Created at {0}",
+      unknown: "Unknown",
       tableColumn: {
         query: "Question",
         key: "Answer",

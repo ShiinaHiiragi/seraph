@@ -1115,16 +1115,16 @@ const Card = () => {
             <thead>
               <tr>
                 <th style={{ width: 24 }}></th>
-                <th style={{ width: 100, padding: "12px 6px" }}>
+                <th style={{ width: 120, padding: "12px 6px" }}>
                   {context.languagePicker("main.card.tableColumn.query")}
                 </th>
-                <th style={{ width: 200, padding: "12px 6px" }}>
+                <th style={{ width: 120, padding: "12px 6px" }}>
                   {context.languagePicker("main.card.tableColumn.key")}
                 </th>
-                <th style={{ width: 100, padding: "12px 6px" }}>
+                <th style={{ width: 80, padding: "12px 6px" }}>
                   {context.languagePicker("main.card.tableColumn.time")}
                 </th>
-                <th style={{ width: 100, padding: "12px 6px" }}>
+                <th style={{ width: 80, padding: "12px 6px" }}>
                   {context.languagePicker("main.card.tableColumn.operation")}
                 </th>
               </tr>
@@ -1144,11 +1144,11 @@ const Card = () => {
                   <td><Box sx={{ ml: -1, mr: 1 }}>{renderAnswer(item)}</Box></td>
                   <td>
                     <Typography level="body-xs">
-                      {new Date(item.time).timeFormat(
+                      {item.time > 0 ? new Date(item.time).timeFormat(
                         context.languagePicker("universal.time.dateFormat")
                           + " "
                           + context.languagePicker("universal.time.timeFormat")
-                      )}
+                      ) : context.languagePicker("main.card.unknown")}
                     </Typography>
                   </td>
                   <td>
