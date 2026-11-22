@@ -1082,7 +1082,11 @@ const CrepeEditor = () => {
         request(
           "POST/utility/crepe/save",
           { type, folderName, filename: filename + suffix, create, text },
-          { "": handleCloseModalTree },
+          {
+            [Status.authErrCode.InvalidToken]: () =>
+              context.languagePicker("modal.toast.warning.unauthorizedDraft"),
+            "": handleCloseModalTree
+          },
           reject
         ).then(() => {
           if (create) {
@@ -1114,9 +1118,9 @@ const CrepeEditor = () => {
         request(
           "POST/utility/crepe/update",
           { type, folderName, filename, diff },
-          { [Status.authErrCode.InvalidToken]: () => {
-            toast.error(context.languagePicker("modal.toast.warning.unauthorizedDraft"));
-          } },
+          { [Status.authErrCode.InvalidToken]: () =>
+            context.languagePicker("modal.toast.warning.unauthorizedDraft")
+          },
           reject
         ).then((data) => {
           if (data.success) {
