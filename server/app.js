@@ -79,7 +79,7 @@ const bodyParsers = (limit) => [
 
 const requireBodyAuth = (req, res, next) => {
   if (req.status.notAuthSuccess()) {
-    res.status(401).send(req.status.generateReport());
+    next(api.errorStreamControl);
     return;
   }
   next();

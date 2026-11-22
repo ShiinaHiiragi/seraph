@@ -669,10 +669,11 @@ const request = (query, params, todo, handleReject, handleInit, handleUpload) =>
         } else if (res.data.statusCode === Status.statusCode.AuthFailed
           && res.data.errorCode === Status.authErrCode.InvalidToken
         ) {
-          ConstantContext.onInvalidToken?.();
           const planned = todo?.[Status.authErrCode.InvalidToken]
           if (planned instanceof Function) {
             planned(res.data);
+          } else {
+            ConstantContext.onInvalidToken?.();
           }
           if (universalPlanned instanceof Function) {
             universalPlanned(res.data);

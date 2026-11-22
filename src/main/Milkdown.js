@@ -1114,7 +1114,9 @@ const CrepeEditor = () => {
         request(
           "POST/utility/crepe/update",
           { type, folderName, filename, diff },
-          undefined,
+          { [Status.authErrCode.InvalidToken]: () => {
+            toast.error(context.languagePicker("modal.toast.warning.unauthorizedDraft"));
+          } },
           reject
         ).then((data) => {
           if (data.success) {
@@ -1192,11 +1194,16 @@ const CrepeEditor = () => {
         filename: crepeTitle,
         diff: diff
       },
-      { "": () => {
-        setAutoSaveError(true);
-        setAutoSaveLock(false);
-        autoSaveLockRef.current = false;
-      } }
+      {
+        [Status.authErrCode.InvalidToken]: () => {
+          toast.error(context.languagePicker("modal.toast.warning.unauthorizedDraft"));
+        },
+        "": () => {
+          setAutoSaveError(true);
+          setAutoSaveLock(false);
+          autoSaveLockRef.current = false;
+        }
+      }
     ).then((data) => {
       if (data.success) {
         setModified(context.crepeRef.getText().trimEnd() !== text.trimEnd());
