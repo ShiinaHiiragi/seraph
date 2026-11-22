@@ -207,7 +207,11 @@ const defaultConfig = {
       }
     },
     hare: {
-      show: true
+      show: true,
+      save: {
+        time: 2,
+        ops: 8,
+      }
     },
     terminal: {
       enable: false,

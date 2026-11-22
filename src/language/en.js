@@ -153,7 +153,17 @@ const en = {
       hare: {
         title: "Cards",
         show: "Display for Guests",
-        showTip: "Unlogged users can still access Cards via URL even if you choose not to display it."
+        showTip: "Unlogged users can still access Cards via URL even if you choose not to display it.",
+        autoSave: "Auto Save",
+        autoSaveTime: "Time Delay",
+        autoSaveTimeOption: {
+          1: "1 second",
+          2: "2 seconds",
+          3: "3 seconds",
+          4: "4 seconds",
+          5: "5 seconds"
+        },
+        autoSaveOps: "Operations Delay"
       },
       terminal: {
         title: "Terminal",

@@ -153,7 +153,17 @@ const zhHans = {
       hare: {
         title: "卡片",
         show: "对访客显示",
-        showTip: "即使选择不显示，未登录用户仍可通过 URL 访问卡片。"
+        showTip: "即使选择不显示，未登录用户仍可通过 URL 访问卡片。",
+        autoSave: "自动保存",
+        autoSaveTime: "时间延迟",
+        autoSaveTimeOption: {
+          1: "1 秒",
+          2: "2 秒",
+          3: "3 秒",
+          4: "4 秒",
+          5: "5 秒"
+        },
+        autoSaveOps: "操作次数延迟"
       },
       terminal: {
         title: "终端",

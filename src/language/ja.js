@@ -153,7 +153,17 @@ const ja = {
       hare: {
         title: "カード",
         show: "ゲストに表示",
-        showTip: "非表示に設定しても、未ログインユーザーは URL からカードにアクセスできます。"
+        showTip: "非表示に設定しても、未ログインユーザーは URL からカードにアクセスできます。",
+        autoSave: "オートセーブ",
+        autoSaveTime: "タイムディレイ",
+        autoSaveTimeOption: {
+          1: "1 秒",
+          2: "2 秒",
+          3: "3 秒",
+          4: "4 秒",
+          5: "5 秒"
+        },
+        autoSaveOps: "オペレーションディレイ"
       },
       terminal: {
         title: "ターミナル",

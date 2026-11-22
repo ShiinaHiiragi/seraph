@@ -1049,6 +1049,36 @@ const SECTIONS = (
           key: context.languagePicker("header.config.hare.show"),
           tip: context.languagePicker("header.config.hare.showTip"),
           value: Turkey(context.setting.hare.show, "hare.show", handleApply)
+        },
+        {
+          key: context.languagePicker("header.config.hare.autoSave"),
+          value: (
+            <Stack spacing={1}>
+              {LabeledLiteral(
+                context.languagePicker("header.config.hare.autoSaveTime"),
+                context.setting.hare.save.time,
+                [
+                  { value: 1, label: context.languagePicker("header.config.hare.autoSaveTimeOption.1") },
+                  { value: 2, label: context.languagePicker("header.config.hare.autoSaveTimeOption.2") },
+                  { value: 3, label: context.languagePicker("header.config.hare.autoSaveTimeOption.3") },
+                  { value: 4, label: context.languagePicker("header.config.hare.autoSaveTimeOption.4") },
+                  { value: 5, label: context.languagePicker("header.config.hare.autoSaveTimeOption.5") },
+                ],
+                "hare.save.time",
+                handleApply,
+                undefined,
+                undefined,
+                (value) => context.languagePicker("header.config.fallback.seconds").format(value)
+              )}
+              {LabeledLiteral(
+                context.languagePicker("header.config.hare.autoSaveOps"),
+                context.setting.hare.save.ops,
+                [4, 8, 12, 16, 20, 24].map((num) => ({ value: num, label: num })),
+                "hare.save.ops",
+                handleApply
+              )}
+            </Stack>
+          )
         }
       ]
     },
