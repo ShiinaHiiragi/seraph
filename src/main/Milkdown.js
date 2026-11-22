@@ -991,7 +991,10 @@ const CrepeEditor = () => {
 
   // § blocker
   const blocker = useBlocker(({ nextLocation, historyAction }) =>
-    modified && !(historyAction !== 'POP' && nextLocation.state?.logout)
+    modified && !(historyAction !== 'POP' && (
+      nextLocation.state?.logout
+        || (savedPath && nextLocation.pathname === savedPath)
+    ))
   );
   const blockerActiveRef = React.useRef(false);
 
@@ -1012,11 +1015,15 @@ const CrepeEditor = () => {
       const handler = (event) => event.preventDefault();
       window.addEventListener("beforeunload", handler);
       return () => window.removeEventListener("beforeunload", handler);
-    } else if (savedPath) {
+    }
+  }, [modified]);
+
+  React.useEffect(() => {
+    if (savedPath) {
       navigate(savedPath);
       setSavedPath(null);
     }
-  }, [modified, savedPath, navigate]);
+  }, [savedPath, navigate]);
 
   // § tree for saving file & image
   const [modalTree, setModalTree] = React.useState({
@@ -1091,6 +1098,7 @@ const CrepeEditor = () => {
           reject
         ).then(() => {
           if (create) {
+            context.crepeRef.snapshot.current = context.crepeRef.getText();
             context.crepeRef.select.current = context.crepeRef.getSelect();
             context.crepeRef.scroll.current = context.crepeRef.getScroll();
             nextRef.current = `/crepe/${type}/${folderName}/${filename}${suffix}`;
@@ -1098,7 +1106,7 @@ const CrepeEditor = () => {
           }
           fileContentRef.current = text;
           normalizedRef.current = text.trimEnd();
-          setModified(false);
+          setModified(context.crepeRef.getText().trimEnd() !== text.trimEnd());
           handleCloseModalTree();
           resolve();
         })
@@ -1123,7 +1131,7 @@ const CrepeEditor = () => {
           reject
         ).then((data) => {
           if (data.success) {
-            setModified(false);
+            setModified(context.crepeRef.getText().trimEnd() !== text.trimEnd());
             fileContentRef.current = text;
             normalizedRef.current = text.trimEnd();
             resolve();
