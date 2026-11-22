@@ -1179,7 +1179,8 @@ const Card = () => {
                 <ListItemContent sx={{ display: "flex", gap: 2, alignItems: "start" }}>
                   <Box sx={{ width: "100%", minWidth: 0 }}>
                     <Typography
-                      fontWeight={600}
+                      level="body-sm"
+                      fontWeight={500}
                       sx={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}
                     >
                       {item.query.annotateEmphasis()}
