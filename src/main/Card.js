@@ -1052,8 +1052,9 @@ const Card = () => {
       return;
     }
     event.preventDefault();
+    event.stopPropagation();
     event.dataTransfer.dropEffect = "move";
-    const container = tableContainerRef.current;
+    const container = event.currentTarget;
     const bounds = container.getBoundingClientRect();
     const top = Math.max(0, bounds.top);
     const bottom = Math.min(window.innerHeight, bounds.bottom);
@@ -1072,7 +1073,7 @@ const Card = () => {
     if (dragScrollRef.current.frame === null) {
       let previous;
       const scroll = (time) => {
-        if (!dragCardRef.current || !tableContainerRef.current) {
+        if (!dragCardRef.current || !container.isConnected) {
           stopDragScroll();
           return;
         }
@@ -1080,7 +1081,7 @@ const Card = () => {
           ? 16.67
           : Math.min(time - previous, 32);
         previous = time;
-        tableContainerRef.current.scrollTop += dragScrollRef.current.speed * elapsed / 16.67;
+        container.scrollTop += dragScrollRef.current.speed * elapsed / 16.67;
         dragScrollRef.current.frame = requestAnimationFrame(scroll);
       };
       dragScrollRef.current.frame = requestAnimationFrame(scroll);
@@ -1095,7 +1096,7 @@ const Card = () => {
     return stopDragScroll;
   }, [folderName, stopDragScroll]);
 
-  const handleDropCard = (event, id) => {
+  const handleDropCard = (event, id, insertAfter) => {
     event.preventDefault();
     stopDragScroll();
     const dragged = dragCardRef.current;
@@ -1107,7 +1108,7 @@ const Card = () => {
         && !operationLockRef.current && !cardsSorting
     ) {
       const bounds = event.currentTarget.getBoundingClientRect();
-      const after = event.clientY >= bounds.top + bounds.height / 2;
+      const after = insertAfter ?? event.clientY >= bounds.top + bounds.height / 2;
       const order = cardsRef.current
         .map((item) => item.id)
         .filter((item) => item !== dragged);
@@ -1224,6 +1225,10 @@ const Card = () => {
     <RouteField
       display={display}
       onDragOver={(event) => {
+        if (dragCardRef.current) {
+          handleDragScroll(event);
+          return;
+        }
         if (!Array.from(event.dataTransfer.types).includes("Files")) {
           return;
         }
@@ -1235,9 +1240,14 @@ const Card = () => {
       onDragLeave={(event) => {
         if (!event.currentTarget.contains(event.relatedTarget)) {
           setDraggingFile(false);
+          stopDragScroll();
+          setDragTarget(null);
         }
       }}
       onDrop={(event) => {
+        stopDragScroll();
+        dragCardRef.current = null;
+        setDragTarget(null);
         if (!Array.from(event.dataTransfer.types).includes("Files")) {
           return;
         }
@@ -1529,7 +1539,34 @@ const Card = () => {
         <Box sx={{ display: { xs: "block", sm: "none" }, overflowY: "visible" }}>
           {filteredCards.map((item, index, self) => (
             <List key={item.id} size="sm" sx={{ "--ListItem-paddingX": 0 }}>
+              {index === 0 && <ListDivider
+                sx={{
+                  visibility: dragTarget?.id === item.id && !dragTarget.after ? "visible" : "hidden",
+                  bgcolor: "primary.500",
+                  transform: "scaleY(1.5)"
+                }}
+                onDragOver={(event) => {
+                  if (dragCardRef.current) {
+                    event.preventDefault();
+                    setDragTarget({ id: item.id, after: false });
+                  }
+                }}
+                onDrop={(event) => handleDropCard(event, item.id, false)}
+              />}
               <ListItem
+                onDragOver={(event) => {
+                  if (!dragCardRef.current || dragCardRef.current === item.id) {
+                    return;
+                  }
+                  event.preventDefault();
+                  event.dataTransfer.dropEffect = "move";
+                  const bounds = event.currentTarget.getBoundingClientRect();
+                  setDragTarget({
+                    id: item.id,
+                    after: event.clientY >= bounds.top + bounds.height / 2
+                  });
+                }}
+                onDrop={(event) => handleDropCard(event, item.id)}
                 sx={{
                   display: "flex",
                   justifyContent: "space-between",
@@ -1542,7 +1579,36 @@ const Card = () => {
                       level="body-sm"
                       fontWeight={500}
                       gutterBottom
-                      sx={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}
+                      draggable={!operationLock && !sortLock && !cardsSorting}
+                      onDragStart={(event) => {
+                        if (operationLockRef.current || cardsSorting) {
+                          event.preventDefault();
+                          return;
+                        }
+                        dragCardRef.current = item.id;
+                        event.dataTransfer.effectAllowed = "move";
+                        event.dataTransfer.setData("text/plain", item.id);
+                        const row = event.currentTarget.closest("li");
+                        const bounds = row.getBoundingClientRect();
+                        event.dataTransfer.setDragImage(
+                          row,
+                          event.clientX - bounds.left,
+                          event.clientY - bounds.top
+                        );
+                      }}
+                      onDragEnd={() => {
+                        stopDragScroll();
+                        dragCardRef.current = null;
+                        setDragTarget(null);
+                      }}
+                      sx={{
+                        whiteSpace: "pre-wrap",
+                        overflowWrap: "anywhere",
+                        cursor: !operationLock && !sortLock && !cardsSorting ? "grab" : "default",
+                        "&:active": {
+                          cursor: !operationLock && !sortLock && !cardsSorting ? "grabbing" : "default"
+                        }
+                      }}
                     >
                       {item.query.annotateEmphasis()}
                     </Typography>
@@ -1571,7 +1637,23 @@ const Card = () => {
                   handleDelete={() => handleDeleteCard(item)}
                 />
               </ListItem>
-              {index !== self.length - 1 && <ListDivider />}
+              <ListDivider
+                sx={{
+                  visibility: index !== self.length - 1 || (dragTarget?.id === item.id && dragTarget.after)
+                    ? "visible" : "hidden",
+                  ...((dragTarget?.id === item.id && dragTarget.after)
+                    || (dragTarget?.id === self[index + 1]?.id && dragTarget && !dragTarget.after)
+                    ? { bgcolor: "primary.500", transform: "scaleY(1.5)" }
+                    : {})
+                }}
+                onDragOver={(event) => {
+                  if (dragCardRef.current) {
+                    event.preventDefault();
+                    setDragTarget({ id: item.id, after: true });
+                  }
+                }}
+                onDrop={(event) => handleDropCard(event, item.id, true)}
+              />
             </List>
           ))}
         </Box>
