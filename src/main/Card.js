@@ -155,6 +155,7 @@ const Card = () => {
     authorityRef.current = context.isAuthority;
 
     setOperationLock(false);
+    setSortLock(false);
     setSyncLock(false);
     setSyncError(false);
     operationLockRef.current = false;
@@ -617,6 +618,7 @@ const Card = () => {
 
   // § modification & blocker
   const [modified, setModified] = React.useState(false);
+  const [sortLock, setSortLock] = React.useState(false);
   const [savedPath, setSavedPath] = React.useState(null);
   const unsaved = React.useMemo(() => modified || (
     !savedPath
@@ -1024,7 +1026,6 @@ const Card = () => {
   }, [memorizing, handleAnswer]);
 
   // § search & sort
-  const [cardOrder, setCardOrder] = React.useState([]);
   const [dragTarget, setDragTarget] = React.useState(null);
   const dragCardRef = React.useRef(null);
   const dragScrollRef = React.useRef({ frame: null, speed: 0 });
@@ -1076,42 +1077,83 @@ const Card = () => {
   };
 
   React.useEffect(() => {
-    setCardOrder([]);
     setDragTarget(null);
     dragCardRef.current = null;
     stopDragScroll();
     return stopDragScroll;
   }, [folderName, stopDragScroll]);
 
-  const orderedCards = React.useMemo(() => {
-    const positions = new Map(cardOrder.map((id, index) => [id, index]));
-    return [...cards].sort((left, right) =>
-      (positions.get(left.id) ?? cardOrder.length)
-        - (positions.get(right.id) ?? cardOrder.length)
-    );
-  }, [cards, cardOrder]);
-
   const handleDropCard = (event, id) => {
     event.preventDefault();
     stopDragScroll();
     const dragged = dragCardRef.current;
-    if (dragged && dragged !== id) {
+    if (dragged && dragged !== id && !operationLockRef.current) {
       const bounds = event.currentTarget.getBoundingClientRect();
       const after = event.clientY >= bounds.top + bounds.height / 2;
-      const order = orderedCards
+      const order = cardsRef.current
         .map((item) => item.id)
         .filter((item) => item !== dragged);
       const index = order.indexOf(id);
       if (index !== -1 && cards.some((item) => item.id === dragged)) {
-        order.splice(index + (after ? 1 : 0), 0, dragged);
-        setCardOrder(order);
+        const targetIndex = index + (after ? 1 : 0);
+        const applySort = () => {
+          const next = [...cardsRef.current];
+          const sourceIndex = next.findIndex((item) => item.id === dragged);
+          if (sourceIndex === -1) {
+            return;
+          }
+          const [item] = next.splice(sourceIndex, 1);
+          next.splice(targetIndex, 0, item);
+          cardsRef.current = next;
+          setCards(next);
+        };
+        if (syncable) {
+          const session = syncRef.current;
+          operationLockRef.current = true;
+          setOperationLock(true);
+          setSortLock(true);
+          toast.promise(new Promise((resolve, reject) => {
+            request(
+              "POST/utility/hare/sort",
+              {
+                type: cardType,
+                folderName: cardPath,
+                filename: cardTitle,
+                id: dragged,
+                index: targetIndex
+              },
+              undefined,
+              reject
+            ).then(() => {
+              if (syncRef.current === session) {
+                applySort();
+              }
+              resolve();
+            });
+          }).finally(() => {
+            if (syncRef.current === session) {
+              operationLockRef.current = false;
+              setOperationLock(false);
+              setSortLock(false);
+            }
+          }), {
+            loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
+            success: context.languagePicker("modal.toast.success.sort"),
+            error: (error) => error
+          });
+        } else {
+          applySort();
+          if (folderName.length) {
+            setModified(true);
+          }
+        }
       }
     }
     dragCardRef.current = null;
     setDragTarget(null);
   };
 
-  const filteredCards = orderedCards.filter(
+  const filteredCards = cards.filter(
     (item) => `${item.query}\n${item.key}`
       .toLowerCase()
       .includes(search.trim().toLowerCase())
@@ -1308,8 +1350,13 @@ const Card = () => {
                       size="sm"
                       variant="plain"
                       color="neutral"
-                      draggable
+                      draggable={!operationLock && !sortLock}
+                      disabled={operationLock || sortLock}
                       onDragStart={(event) => {
+                        if (operationLockRef.current) {
+                          event.preventDefault();
+                          return;
+                        }
                         dragCardRef.current = item.id;
                         event.dataTransfer.effectAllowed = "move";
                         event.dataTransfer.setData("text/plain", item.id);

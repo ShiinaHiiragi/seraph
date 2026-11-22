@@ -225,6 +225,59 @@ router.post('/delete', (req, res, next) => {
   return;
 });
 
+router.post('/sort', (req, res, next) => {
+  const { type, folderName, filename, id, index } = req.body;
+  if (req.status.notAuthSuccess()) {
+    // -> EF_IT or abnormal request
+    next(api.errorStreamControl);
+    return;
+  }
+
+  const { filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
+  if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
+    // -> EF_RU: file does not exist or is not a regular file
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  let card;
+  try {
+    card = new api.cardOperator(filePath);
+  } catch (_) {
+    // -> EF_FME: file read or JSON parse error
+    req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  const target_index = card.card.findIndex((item) => item.id === id);
+  if (target_index === -1) {
+    // -> EF_RU: card does not exist
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  if (target_index !== index) {
+    const [item] = card.card.splice(target_index, 1);
+    card.card.splice(index, 0, item);
+    try {
+      api.fileOperator.saveCard(filePath, card.card);
+    } catch (_) {
+      // -> EF_FME: file write error
+      req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
+      res.send(req.status.generateReport());
+      return;
+    }
+  }
+
+  // -> ES: no extra info
+  req.status.addExecStatus();
+  res.send(req.status.generateReport());
+  return;
+});
+
 router.post('/save', (req, res, next) => {
   const { type, folderName, filename, create, hare } = req.body;
   if (req.status.notAuthSuccess()) {

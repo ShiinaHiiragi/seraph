@@ -562,6 +562,7 @@ const en = {
         extract: "{0} has been extracted to current directory.",
         epub: "{0} has been converted to current directory.",
         delete: "{0} has been deleted.",
+        sort: "Natural sort order saved.",
         saveText: "The file has been saved.",
         saveCard: "The file has been saved.",
         syncCard: "Unsynced changes have been saved.",
