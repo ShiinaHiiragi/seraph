@@ -1182,11 +1182,27 @@ const Card = () => {
                     <Typography
                       level="body-sm"
                       fontWeight={500}
+                      gutterBottom
                       sx={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}
                     >
                       {item.query.annotateEmphasis()}
                     </Typography>
-                    <Box sx={{ mb: 1 }}>{renderAnswer(item)}</Box>
+                    <Box sx={{
+                      mb: 1,
+                      position: "relative",
+                      "&::before": {
+                        content: memorizing ? "none" : '""',
+                        position: "absolute",
+                        top: 4,
+                        bottom: 4,
+                        left: 0,
+                        width: 3,
+                        bgcolor: "divider",
+                        borderRadius: 2
+                      }
+                    }}>
+                      {renderAnswer(item)}
+                    </Box>
                   </Box>
                 </ListItemContent>
                 <CardRowMenu
