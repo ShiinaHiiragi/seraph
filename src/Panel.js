@@ -27,7 +27,8 @@ import GlobalContext, {
 } from "./interface/constants";
 
 import Loading from "./main/Loading";
-import Error from "./main/Error";
+import RouterError from "./main/RouterError";
+import ChunkError from "./main/ChunkError";
 
 const Welcome = React.lazy(() => import("./main/Welcome"));
 const FileExplorer = React.lazy(() => import("./main/FileExplorer"));
@@ -239,17 +240,20 @@ const Panel = () => {
     routerRef.current = createBrowserRouter([{
       path: "/",
       element: <PanelLayout />,
-      children: [
-        { index: true, element: <Welcome /> },
-        { path: "public/*", element: <PublicExplorer /> },
-        { path: "private/*", element: <PrivateExplorer /> },
-        { path: "crepe/*", element: <Milkdown /> },
-        { path: "subscription", element: <Subscription /> },
-        { path: "terminal", element: <Terminal /> },
-        { path: "card/*", element: <Card /> },
-        { path: "todo", element: <TODO /> },
-        { path: "*", element: <Error /> },
-      ],
+      children: [{
+        errorElement: <ChunkError />,
+        children: [
+          { index: true, element: <Welcome /> },
+          { path: "public/*", element: <PublicExplorer /> },
+          { path: "private/*", element: <PrivateExplorer /> },
+          { path: "crepe/*", element: <Milkdown /> },
+          { path: "subscription", element: <Subscription /> },
+          { path: "terminal", element: <Terminal /> },
+          { path: "card/*", element: <Card /> },
+          { path: "todo", element: <TODO /> },
+          { path: "*", element: <RouterError /> },
+        ],
+      }],
     }]);
   }
 

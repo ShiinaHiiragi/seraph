@@ -372,6 +372,10 @@ const zhHans = {
       title: "404",
       caption: "请求的页面不存在。"
     },
+    chunk: {
+      title: "Chunk 错误",
+      caption: "请尝试刷新页面。"
+    },
     folder: {
       tableColumn: {
         name: "文件名",

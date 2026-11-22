@@ -372,6 +372,10 @@ const ja = {
       title: "404",
       caption: "リクエストされたページが存在しません。"
     },
+    chunk: {
+      title: "チャンクエラー",
+      caption: "ページをリフレシュしてみてください。"
+    },
     folder: {
       tableColumn: {
         name: "ファイル名",

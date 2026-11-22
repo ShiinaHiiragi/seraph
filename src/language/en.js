@@ -372,6 +372,10 @@ const en = {
       title: "404",
       caption: "The requested page does not exist."
     },
+    chunk: {
+      title: "Chunk Error",
+      caption: "Try to refresh the page."
+    },
     folder: {
       tableColumn: {
         name: "Name",

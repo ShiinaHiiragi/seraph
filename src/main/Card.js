@@ -629,26 +629,14 @@ const Card = () => {
     )
   );
   const blockerActiveRef = React.useRef(false);
+  const blockerSyncRef = React.useRef(false);
 
   React.useEffect(() => {
-    if (blocker.state === "blocked") {
-      blockerActiveRef.current = true;
-      context.setModalReconfirm({
-        open: true,
-        caption: context.languagePicker("modal.reconfirm.caption.discardDraft"),
-        handleAction: () => {
-          blockerActiveRef.current = false;
-          setModified(false);
-          blocker.proceed();
-        }
-      });
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [blocker.state]);
-
-  React.useEffect(() => {
-    if (blockerActiveRef.current && !context.modalReconfirm?.open) {
-      blockerActiveRef.current = false;
+    if (
+      blockerActiveRef.current
+        && !context.modalReconfirm?.open
+        && blocker.state === "blocked"
+    ) {
       blocker.reset();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -875,7 +863,7 @@ const Card = () => {
     operationLockRef.current = true;
     setOperationLock(true);
 
-    toast.promise(handleSync().then(() => {
+    const ending = handleSync().then(() => {
       if (syncRef.current === session) {
         return handleSync();
       }
@@ -888,12 +876,59 @@ const Card = () => {
         operationLockRef.current = false;
         setOperationLock(false);
       }
-    }), {
+    });
+    toast.promise(ending, {
       loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
       success: message,
       error: (error) => error
     });
+    return ending;
   }, [context, syncable, handleSync]);
+
+  React.useEffect(() => {
+    if (blocker.state !== "blocked") {
+      blockerActiveRef.current = false;
+      return;
+    }
+    if (blockerSyncRef.current || blockerActiveRef.current) {
+      return;
+    }
+    if (syncable && operationLock) {
+      return;
+    }
+    if (!unsaved) {
+      blocker.proceed();
+      return;
+    }
+    const confirmDiscard = () => {
+      blockerActiveRef.current = true;
+      context.setModalReconfirm({
+        open: true,
+        caption: context.languagePicker("modal.reconfirm.caption.discardDraft"),
+        handleAction: () => {
+          setModified(false);
+          blocker.proceed();
+        }
+      });
+    };
+    if (syncable && memorizing) {
+      const session = syncRef.current;
+      blockerSyncRef.current = true;
+      handleEnd().then(() => {
+        if (syncRef.current === session) {
+          blocker.proceed();
+        }
+      }).catch(() => {
+        if (syncRef.current === session) {
+          confirmDiscard();
+        }
+      }).finally(() => {
+        blockerSyncRef.current = false;
+      });
+      return;
+    }
+    confirmDiscard();
+  }, [blocker, syncable, memorizing, operationLock, unsaved, handleEnd, context]);
 
   const handleAnswer = React.useCallback((id) => {
     if (!memorizing || operationLockRef.current) {
