@@ -79,6 +79,54 @@ const TODO = () => {
   const [dragTarget, setDragTarget] = React.useState(null);
   const sortLockRef = React.useRef(false);
   const dragTaskRef = React.useRef(null);
+  const dragScrollRef = React.useRef({ frame: null, speed: 0 });
+
+  const stopDragScroll = React.useCallback(() => {
+    cancelAnimationFrame(dragScrollRef.current.frame);
+    dragScrollRef.current = { frame: null, speed: 0 };
+  }, []);
+
+  React.useEffect(() => stopDragScroll, [stopDragScroll]);
+
+  const handleDragScroll = (event) => {
+    if (!dragTaskRef.current) {
+      return;
+    }
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "move";
+    const container = event.currentTarget;
+    const bounds = container.getBoundingClientRect();
+    const top = Math.max(0, bounds.top);
+    const bottom = Math.min(window.innerHeight, bounds.bottom);
+    const edge = Math.min(64, (bottom - top) / 3);
+    const y = event.clientY;
+    const speed = y < top + edge
+      ? -12 * Math.min(1, Math.max(0, (top + edge - y) / edge))
+      : y > bottom - edge
+      ? 12 * Math.min(1, Math.max(0, (y - bottom + edge) / edge))
+      : 0;
+    if (!speed) {
+      stopDragScroll();
+      return;
+    }
+    dragScrollRef.current.speed = speed;
+    if (dragScrollRef.current.frame === null) {
+      let previous;
+      const scroll = (time) => {
+        if (!dragTaskRef.current || !container.isConnected) {
+          stopDragScroll();
+          return;
+        }
+        const elapsed = previous === undefined
+          ? 16.67
+          : Math.min(time - previous, 32);
+        previous = time;
+        container.scrollTop += dragScrollRef.current.speed * elapsed / 16.67;
+        dragScrollRef.current.frame = requestAnimationFrame(scroll);
+      };
+      dragScrollRef.current.frame = requestAnimationFrame(scroll);
+    }
+  };
 
   const naturalSort = !sort || sort === "natural";
   const [filter, setFilter] = React.useState(undefined);
@@ -145,6 +193,7 @@ const TODO = () => {
 
   const handleDropTask = (event, targetId, insertAfter) => {
     event.preventDefault();
+    stopDragScroll();
     const id = dragTaskRef.current;
     dragTaskRef.current = null;
     setDragTarget(null);
@@ -421,6 +470,17 @@ const TODO = () => {
 
   return (
     <RouteField
+      onDragOver={handleDragScroll}
+      onDragLeave={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) {
+          stopDragScroll();
+        }
+      }}
+      onDrop={() => {
+        stopDragScroll();
+        dragTaskRef.current = null;
+        setDragTarget(null);
+      }}
       display={context.isAuthority}
       path={[
         context.languagePicker("nav.utility.title"),
@@ -611,6 +671,7 @@ const TODO = () => {
                         }
                       }}
                       onDragEnd={() => {
+                        stopDragScroll();
                         dragTaskRef.current = null;
                         setDragTarget(null);
                       }}
