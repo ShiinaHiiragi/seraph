@@ -991,25 +991,12 @@ const CrepeEditor = () => {
   const blockerActiveRef = React.useRef(false);
 
   React.useEffect(() => {
-    if (blocker.state === "blocked") {
-      blockerActiveRef.current = true;
-      context.setModalReconfirm({
-        open: true,
-        caption: context.languagePicker("modal.reconfirm.caption.discardDraft"),
-        handleAction: () => {
-          blockerActiveRef.current = false;
-          setModified(false);
-          blocker.proceed();
-        }
-      });
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [blocker.state]);
-
-  React.useEffect(() => {
     // unblock the router when modal is cancelled
-    if (blockerActiveRef.current && !context.modalReconfirm?.open) {
-      blockerActiveRef.current = false;
+    if (
+      blockerActiveRef.current
+        && !context.modalReconfirm?.open
+        && blocker.state === "blocked"
+    ) {
       blocker.reset();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -1212,7 +1199,7 @@ const CrepeEditor = () => {
       } }
     ).then((data) => {
       if (data.success) {
-        setModified(false);
+        setModified(context.crepeRef.getText().trimEnd() !== text.trimEnd());
         fileContentRef.current = text;
         normalizedRef.current = text.trimEnd();
       } else {
@@ -1226,6 +1213,42 @@ const CrepeEditor = () => {
       autoSaveLockRef.current = false;
     })
   }, [context, crepeType, crepePath, crepeTitle]);
+
+  React.useEffect(() => {
+    if (blocker.state !== "blocked") {
+      blockerActiveRef.current = false;
+      return;
+    }
+    if (blockerActiveRef.current || autoSaveLockRef.current || autoSaveLock) {
+      return;
+    }
+    if (!modified) {
+      blocker.proceed();
+      return;
+    }
+    if (savable && autoSaveMode) {
+      clearTimeout(autoSaveTimerRef.current);
+      handleAutoSave();
+      return;
+    }
+    blockerActiveRef.current = true;
+    context.setModalReconfirm({
+      open: true,
+      caption: context.languagePicker("modal.reconfirm.caption.discardDraft"),
+      handleAction: () => {
+        setModified(false);
+        blocker.proceed();
+      }
+    });
+  }, [
+    context,
+    blocker,
+    modified,
+    savable,
+    autoSaveMode,
+    autoSaveLock,
+    handleAutoSave
+  ]);
 
   const firstTimeRef = React.useRef(true);
   React.useEffect(() => {
