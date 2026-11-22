@@ -155,6 +155,7 @@ const en = {
         show: "Display for Guests",
         showTip: "Unlogged users can still access Cards via URL even if you choose not to display it.",
         autoSave: "Auto Save",
+        autoSaveTip: "Data will be synchronized once the specified time or operations conditions are met if auto save delay presents.",
         autoSaveNoDelay: "No delay",
         autoSaveTime: "Time Delay",
         autoSaveTimeOption: {

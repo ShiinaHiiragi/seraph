@@ -772,6 +772,7 @@ const Card = () => {
     }, delay);
     return () => clearTimeout(syncTimerRef.current);
   }, [
+    context,
     syncable,
     cards,
     memorizing,

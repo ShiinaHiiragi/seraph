@@ -1052,6 +1052,7 @@ const SECTIONS = (
         },
         {
           key: context.languagePicker("header.config.hare.autoSave"),
+          tip: context.languagePicker("header.config.hare.autoSaveTip"),
           value: (
             <Stack spacing={2}>
               {Bool(

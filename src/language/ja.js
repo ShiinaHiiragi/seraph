@@ -155,6 +155,7 @@ const ja = {
         show: "ゲストに表示",
         showTip: "非表示に設定しても、未ログインユーザーは URL からカードにアクセスできます。",
         autoSave: "オートセーブ",
+        autoSaveTip: "オートセーブのディレイが設定されている場合、データが指定されたタイムまたはオペレーションが満たされた時点で同期されます。",
         autoSaveNoDelay: "ディレイなし",
         autoSaveTime: "タイムディレイ",
         autoSaveTimeOption: {
