@@ -1796,11 +1796,11 @@ const Card = () => {
                     </td>
                     <td sx={{ fontVariantNumeric: "tabular-nums" }}>{round.answered}</td>
                     <td>{round.rate === null ? "—"
-                      : round.rate === 100 ? "A"
-                      : round.rate >= 96 ? "B"
-                      : round.rate >= 92 ? "C"
-                      : round.rate >= 84 ? "D"
-                      : round.rate >= 72 ? "E"
+                      : round.rate >= context.setting.hare.grade.a ? "A"
+                      : round.rate >= context.setting.hare.grade.b ? "B"
+                      : round.rate >= context.setting.hare.grade.c ? "C"
+                      : round.rate >= context.setting.hare.grade.d ? "D"
+                      : round.rate >= context.setting.hare.grade.e ? "E"
                       : "F"}</td>
                     <td>
                       <IconButton size="sm" color="danger" variant="plain"
