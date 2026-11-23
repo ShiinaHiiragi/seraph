@@ -191,6 +191,7 @@
 
 ## Log
 
+- 11/27/2026  ver 1.5.6: Add TOC for Milkdown Crepe
 - 11/26/2026  ver 1.5.5: Add more drags for Card & TODO
 - 11/25/2026  ver 1.5.4: Add config for auto save
 - 11/24/2026  ver 1.5.3: Add drag & drop for Card page
