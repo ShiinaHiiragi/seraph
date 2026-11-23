@@ -724,12 +724,21 @@ const Card = () => {
         setOperationLock(true);
         const deletion = new Promise((resolve, reject) => {
           request(
-            "POST/utility/hare/history/delete",
-            { type: cardType, folderName: cardPath, filename: cardTitle, index: round.index, length },
+            "POST/utility/hare/forget",
+            {
+              type:
+              cardType,
+              folderName: cardPath,
+              filename: cardTitle,
+              index: round.index,
+              length: length
+            },
             undefined,
             reject
           ).then(({ hare }) => {
-            if (syncRef.current === session) applyHistory(hare);
+            if (syncRef.current === session) {
+              applyHistory(hare);
+            }
             resolve();
           });
         }).finally(() => {

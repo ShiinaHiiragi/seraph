@@ -225,7 +225,7 @@ router.post('/delete', (req, res, next) => {
   return;
 });
 
-router.post('/history/delete', (req, res, next) => {
+router.post('/forget', (req, res, next) => {
   const { type, folderName, filename, index, length } = req.body;
   if (req.status.notAuthSuccess()) {
     // -> EF_IT or abnormal request
@@ -251,13 +251,6 @@ router.post('/history/delete', (req, res, next) => {
     return;
   }
 
-  if (!card.valid || !Number.isInteger(index) || !Number.isInteger(length)
-    || index < 0 || index >= length || !card.card.length) {
-    // -> EF_TCF: invalid history index or hare array
-    req.status.addExecStatus(api.Status.execErrCode.TypeCheckFailed);
-    res.send(req.status.generateReport());
-    return;
-  }
   if (card.card[0].point.length !== length) {
     // -> EF_IC: history length changed
     req.status.addExecStatus(api.Status.execErrCode.IdentifierConflict);
