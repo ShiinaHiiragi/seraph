@@ -165,7 +165,15 @@ const ja = {
           4: "4 秒",
           5: "5 秒"
         },
-        autoSaveOps: "オペレーションディレイ"
+        autoSaveOps: "オペレーションディレイ",
+        grade: "評価ベースライン",
+        grades: {
+          a: "A ランク",
+          b: "B ランク",
+          c: "C ランク",
+          d: "D ランク",
+          e: "E ランク",
+        }
       },
       terminal: {
         title: "ターミナル",

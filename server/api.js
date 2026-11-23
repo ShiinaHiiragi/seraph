@@ -212,6 +212,13 @@ const defaultConfig = {
         noDelay: false,
         time: 2,
         ops: 8,
+      },
+      grade: {
+        a: 100,
+        b: 96,
+        c: 92,
+        d: 84,
+        e: 72
       }
     },
     terminal: {

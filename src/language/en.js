@@ -165,7 +165,15 @@ const en = {
           4: "4 seconds",
           5: "5 seconds"
         },
-        autoSaveOps: "Operations Delay"
+        autoSaveOps: "Operations Delay",
+        grade: "Grading Baseline",
+        grades: {
+          a: "Rank A",
+          b: "Rank B",
+          c: "Rank C",
+          d: "Rank D",
+          e: "Rank E",
+        }
       },
       terminal: {
         title: "Terminal",

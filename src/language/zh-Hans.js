@@ -165,7 +165,15 @@ const zhHans = {
           4: "4 秒",
           5: "5 秒"
         },
-        autoSaveOps: "操作次数延迟"
+        autoSaveOps: "操作次数延迟",
+        grade: "评级基准",
+        grades: {
+          a: "A 级",
+          b: "B 级",
+          c: "C 级",
+          d: "D 级",
+          e: "E 级",
+        }
       },
       terminal: {
         title: "终端",

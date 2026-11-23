@@ -1089,6 +1089,100 @@ const SECTIONS = (
               </Stack>
             </Stack>
           )
+        },
+        {
+          key: context.languagePicker("header.config.hare.grade"),
+          value: (
+            <Stack spacing={1}>
+              <StringInput
+                caption={context.languagePicker("header.config.hare.grades.a")}
+                value={context.setting.hare.grade.a}
+                width={160}
+                type="number"
+                field="hare.grade.a"
+                handleCheck={(value) =>
+                  !isNaN(value)
+                    && Number(value) <= 100
+                    && Number(value) > context.setting.hare.grade.b
+                    && Number(value) > context.setting.hare.grade.c
+                    && Number(value) > context.setting.hare.grade.d
+                    && Number(value) > context.setting.hare.grade.e
+                }
+                handleApply={handleApply}
+                end="%"
+                translate={(value) => Number(value)}
+              />
+              <StringInput
+                caption={context.languagePicker("header.config.hare.grades.b")}
+                value={context.setting.hare.grade.b}
+                width={160}
+                type="number"
+                field="hare.grade.b"
+                handleCheck={(value) =>
+                  !isNaN(value)
+                    && Number(value) < context.setting.hare.grade.a
+                    && Number(value) > context.setting.hare.grade.c
+                    && Number(value) > context.setting.hare.grade.d
+                    && Number(value) > context.setting.hare.grade.e
+                }
+                handleApply={handleApply}
+                end="%"
+                translate={(value) => Number(value)}
+              />
+              <StringInput
+                caption={context.languagePicker("header.config.hare.grades.c")}
+                value={context.setting.hare.grade.c}
+                width={160}
+                type="number"
+                field="hare.grade.c"
+                handleCheck={(value) =>
+                  !isNaN(value)
+                    && Number(value) < context.setting.hare.grade.a
+                    && Number(value) < context.setting.hare.grade.b
+                    && Number(value) > context.setting.hare.grade.d
+                    && Number(value) > context.setting.hare.grade.e
+                }
+                handleApply={handleApply}
+                end="%"
+                translate={(value) => Number(value)}
+              />
+              <StringInput
+                caption={context.languagePicker("header.config.hare.grades.d")}
+                value={context.setting.hare.grade.d}
+                width={160}
+                type="number"
+                field="hare.grade.d"
+                handleCheck={(value) =>
+                  !isNaN(value)
+                    && Number(value) < context.setting.hare.grade.a
+                    && Number(value) < context.setting.hare.grade.b
+                    && Number(value) < context.setting.hare.grade.c
+                    && Number(value) > context.setting.hare.grade.e
+                }
+                handleApply={handleApply}
+                end="%"
+                translate={(value) => Number(value)}
+              />
+              <StringInput
+                caption={context.languagePicker("header.config.hare.grades.e")}
+                value={context.setting.hare.grade.e}
+                width={160}
+                type="number"
+                field="hare.grade.e"
+                handleCheck={(value) =>
+                  !isNaN(value)
+                    && Number(value) < context.setting.hare.grade.a
+                    && Number(value) < context.setting.hare.grade.b
+                    && Number(value) < context.setting.hare.grade.c
+                    && Number(value) < context.setting.hare.grade.d
+                    && Number(value) >= 0
+                }
+                handleApply={handleApply}
+                end="%"
+                translate={(value) => Number(value)}
+              />
+            </Stack>
+          )
         }
       ]
     },
