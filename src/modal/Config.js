@@ -146,7 +146,9 @@ const StringInput = (props) => {
     end,
     translate,
     code,
-    startStyle
+    startStyle,
+    handleDraft,
+    error
   } = props;
 
   const [localValue, setLocalValue] = React.useState(value);
@@ -166,6 +168,9 @@ const StringInput = (props) => {
   }, [value]);
 
   React.useEffect(() => {
+    if (handleDraft) {
+      return;
+    }
     if (!isMounted.current) {
       isMounted.current = true;
       return;
@@ -183,7 +188,15 @@ const StringInput = (props) => {
       }
     }, reactionInterval.slow);
     return () => clearTimeout(id);
-  }, [localValue, localLastValid, field, handleApply, handleCheck, translate]);
+  }, [
+    localValue,
+    localLastValid,
+    field,
+    handleApply,
+    handleCheck,
+    handleDraft,
+    translate
+  ]);
 
   return (
     <FormControl>
@@ -195,11 +208,13 @@ const StringInput = (props) => {
         size="sm"
         type={type}
         sx={{ maxWidth: width, fontFamily: code ? "var(--joy-fontFamily-code)" : undefined }}
-        value={localValue}
+        value={handleDraft ? value : localValue}
         startDecorator={start}
         endDecorator={end}
-        onChange={(event) => setLocalValue(event.target.value)}
-        error={localError}
+        onChange={(event) => handleDraft
+          ? handleDraft(field, event.target.value)
+          : setLocalValue(event.target.value)}
+        error={error ?? localError}
         slotProps={{ startDecorator: { sx: startStyle ?? { mr: 0.25 } } }}
       />
     </FormControl>
@@ -394,7 +409,10 @@ const SECTIONS = (
   handleUpload,
   handleDownload,
   handleUploadStyle,
-  handleDownloadStyle
+  handleDownloadStyle,
+  gradeDraft,
+  gradeErrors,
+  handleGradeDraft
 ) => {
   const escList = context.setting.terminal.control.esc ? ["esc"] : [];
   const controlLists = escList.concat(
@@ -1094,93 +1112,19 @@ const SECTIONS = (
           key: context.languagePicker("header.config.hare.grade"),
           value: (
             <Stack spacing={1}>
-              <StringInput
-                caption={context.languagePicker("header.config.hare.grades.a")}
-                value={context.setting.hare.grade.a}
-                width={160}
-                type="number"
-                field="hare.grade.a"
-                handleCheck={(value) =>
-                  !isNaN(value)
-                    && Number(value) <= 100
-                    && Number(value) > context.setting.hare.grade.b
-                    && Number(value) > context.setting.hare.grade.c
-                    && Number(value) > context.setting.hare.grade.d
-                    && Number(value) > context.setting.hare.grade.e
-                }
-                handleApply={handleApply}
-                end="%"
-                translate={(value) => Number(value)}
-              />
-              <StringInput
-                caption={context.languagePicker("header.config.hare.grades.b")}
-                value={context.setting.hare.grade.b}
-                width={160}
-                type="number"
-                field="hare.grade.b"
-                handleCheck={(value) =>
-                  !isNaN(value)
-                    && Number(value) < context.setting.hare.grade.a
-                    && Number(value) > context.setting.hare.grade.c
-                    && Number(value) > context.setting.hare.grade.d
-                    && Number(value) > context.setting.hare.grade.e
-                }
-                handleApply={handleApply}
-                end="%"
-                translate={(value) => Number(value)}
-              />
-              <StringInput
-                caption={context.languagePicker("header.config.hare.grades.c")}
-                value={context.setting.hare.grade.c}
-                width={160}
-                type="number"
-                field="hare.grade.c"
-                handleCheck={(value) =>
-                  !isNaN(value)
-                    && Number(value) < context.setting.hare.grade.a
-                    && Number(value) < context.setting.hare.grade.b
-                    && Number(value) > context.setting.hare.grade.d
-                    && Number(value) > context.setting.hare.grade.e
-                }
-                handleApply={handleApply}
-                end="%"
-                translate={(value) => Number(value)}
-              />
-              <StringInput
-                caption={context.languagePicker("header.config.hare.grades.d")}
-                value={context.setting.hare.grade.d}
-                width={160}
-                type="number"
-                field="hare.grade.d"
-                handleCheck={(value) =>
-                  !isNaN(value)
-                    && Number(value) < context.setting.hare.grade.a
-                    && Number(value) < context.setting.hare.grade.b
-                    && Number(value) < context.setting.hare.grade.c
-                    && Number(value) > context.setting.hare.grade.e
-                }
-                handleApply={handleApply}
-                end="%"
-                translate={(value) => Number(value)}
-              />
-              <StringInput
-                caption={context.languagePicker("header.config.hare.grades.e")}
-                value={context.setting.hare.grade.e}
-                width={160}
-                type="number"
-                field="hare.grade.e"
-                handleCheck={(value) =>
-                  !isNaN(value)
-                    && Number(value) < context.setting.hare.grade.a
-                    && Number(value) < context.setting.hare.grade.b
-                    && Number(value) < context.setting.hare.grade.c
-                    && Number(value) < context.setting.hare.grade.d
-                    && Number(value) >= 0
-                }
-                handleApply={handleApply}
-                end="%"
-                translate={(value) => Number(value)}
-              />
+              {["a", "b", "c", "d", "e"].map((grade) => (
+                <StringInput
+                  key={grade}
+                  caption={context.languagePicker(`header.config.hare.grades.${grade}`)}
+                  value={gradeDraft[grade]}
+                  width={160}
+                  type="number"
+                  field={`hare.grade.${grade}`}
+                  handleDraft={handleGradeDraft}
+                  error={gradeErrors[grade]}
+                  end="%"
+                />
+              ))}
             </Stack>
           )
         }
@@ -1985,6 +1929,67 @@ export default function Config(props) {
 
   const [showSalt, setShowSalt] = React.useState(false);
   const [containerElement, setContainerElement] = React.useState(null);
+  const [gradeDraft, setGradeDraft] = React.useState(context.setting.hare.grade);
+  const [gradeSaving, setGradeSaving] = React.useState(false);
+  const gradePendingRef = React.useRef(null);
+  const gradeAttemptRef = React.useRef(null);
+  const [gradeErrors, setGradeErrors] = React.useState({});
+  const gradeValidation = React.useMemo(() => {
+    const keys = ["a", "b", "c", "d", "e"];
+    const valid = Object.fromEntries(keys.map((key) => [key,
+      String(gradeDraft[key]).trim() !== ""
+        && Number.isFinite(Number(gradeDraft[key]))
+        && Number(gradeDraft[key]) >= 0
+        && Number(gradeDraft[key]) <= 100
+    ]));
+    return Object.fromEntries(keys.map((key, index) => [key,
+      !valid[key] || keys.some((other, otherIndex) => valid[other]
+        && (otherIndex < index
+          ? Number(gradeDraft[other]) <= Number(gradeDraft[key])
+          : otherIndex > index && Number(gradeDraft[other]) >= Number(gradeDraft[key])))
+    ]));
+  }, [gradeDraft]);
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setGradeErrors(gradeValidation);
+    }, reactionInterval.slow);
+    return () => clearTimeout(timer);
+  }, [gradeValidation]);
+  const handleGradeDraft = React.useCallback((field, value) => {
+    gradeAttemptRef.current = null;
+    setGradeDraft((draft) => ({ ...draft, [field.split(".").pop()]: value }));
+  }, []);
+
+  React.useEffect(() => {
+    const grade = context.setting.hare.grade;
+    if (gradePendingRef.current && Object.keys(grade).every(
+      (key) => grade[key] === gradePendingRef.current[key]
+    )) return;
+    setGradeDraft(grade);
+    gradeAttemptRef.current = null;
+  }, [context.setting.hare.grade]);
+
+  React.useEffect(() => {
+    if (!open || gradeSaving || Object.values(gradeValidation).some(Boolean)) return;
+    const grade = Object.fromEntries(Object.entries(gradeDraft).map(
+      ([key, value]) => [key, Number(value)]
+    ));
+    const signature = JSON.stringify(grade);
+    if (signature === gradeAttemptRef.current || Object.keys(grade).every(
+      (key) => grade[key] === context.setting.hare.grade[key]
+    )) return;
+    const timer = setTimeout(() => {
+      gradeAttemptRef.current = signature;
+      gradePendingRef.current = grade;
+      setGradeSaving(true);
+      handleApplySetting("hare.grade", grade)
+        .catch(() => {})
+        .finally(() => {
+          setGradeSaving(false);
+        });
+    }, reactionInterval.slow);
+    return () => clearTimeout(timer);
+  }, [open, gradeDraft, gradeValidation, gradeSaving, context.setting.hare.grade, handleApplySetting]);
 
   const sectionRefs = React.useRef({});
   const isSystemScrolling = React.useRef(false);
@@ -1999,7 +2004,10 @@ export default function Config(props) {
     handleUpload,
     handleDownload,
     handleUploadStyle,
-    handleDownloadStyle
+    handleDownloadStyle,
+    gradeDraft,
+    gradeErrors,
+    handleGradeDraft
   ), [
     context,
     setMetadata,
@@ -2010,7 +2018,10 @@ export default function Config(props) {
     handleUpload,
     handleDownload,
     handleUploadStyle,
-    handleDownloadStyle
+    handleDownloadStyle,
+    gradeDraft,
+    gradeErrors,
+    handleGradeDraft
   ])
 
   const scrollToSection = React.useCallback((id) => {
