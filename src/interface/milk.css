@@ -211,7 +211,29 @@
   }
 
   .operation-item:nth-of-type(2) {
+    width: 39px;
+    border-radius: var(--joy-radius-sm);
     cursor: grab;
+    .milkdown-icon {
+      display: flex;
+      align-items: center;
+      gap: 1px;
+      width: 31px;
+      height: 24px;
+      pointer-events: none;
+    }
+    .block-type-icon {
+      display: flex;
+      align-items: center;
+    }
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+    .milkdown-icon > svg {
+      width: 10px;
+      height: 16px;
+    }
     &:active {
       cursor: grabbing;
     }

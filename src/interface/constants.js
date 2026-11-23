@@ -935,6 +935,7 @@ const toastTheme = (theme) => `
 export { toastTheme };
 
 const toSVG = (Icon) => renderToStaticMarkup(React.createElement(Icon));
+const handleDragIcon = '<svg viewBox="0 0 10 16" aria-hidden="true"><circle cx="3" cy="3" r="1.2"/><circle cx="7" cy="3" r="1.2"/><circle cx="3" cy="8" r="1.2"/><circle cx="7" cy="8" r="1.2"/><circle cx="3" cy="13" r="1.2"/><circle cx="7" cy="13" r="1.2"/></svg>';
 const HiddenInput = styled('input')`
   clip: rect(0 0 0 0);
   clip-path: inset(50%);
@@ -947,7 +948,7 @@ const HiddenInput = styled('input')`
   width: 1px;
 `;
 
-export { toSVG, HiddenInput };
+export { toSVG, handleDragIcon, HiddenInput };
 
 
 const OnMounted = ({ onLoad }) => {

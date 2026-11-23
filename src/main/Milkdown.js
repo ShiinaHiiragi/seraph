@@ -69,7 +69,6 @@ import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import DoneIcon from "@mui/icons-material/Done";
 import NotesOutlinedIcon from "@mui/icons-material/NotesOutlined";
-import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import LooksOneOutlinedIcon from "@mui/icons-material/LooksOneOutlined";
 import LooksTwoOutlinedIcon from "@mui/icons-material/LooksTwoOutlined";
 import Looks3OutlinedIcon from "@mui/icons-material/Looks3Outlined";
@@ -102,6 +101,7 @@ import GlobalContext, {
   request,
   Status,
   toSVG,
+  handleDragIcon,
   animeDuration
 } from "../interface/constants";
 import {
@@ -126,6 +126,59 @@ const buttonStyle = {
   backgroundColor: "transparent",
   "&:hover": { backgroundColor: "transparent" },
   "&:disabled": { backgroundColor: "transparent" }
+};
+
+const blockHandleIcons = {
+  paragraph: toSVG(NotesOutlinedIcon),
+  heading: [
+    LooksOneOutlinedIcon,
+    LooksTwoOutlinedIcon,
+    Looks3OutlinedIcon,
+    Looks4OutlinedIcon,
+    Looks5OutlinedIcon,
+    Looks6OutlinedIcon
+  ].map(toSVG),
+  blockquote: toSVG(FormatQuoteIcon),
+  hr: toSVG(HorizontalRuleOutlinedIcon),
+  bullet_list: toSVG(FormatListBulletedOutlinedIcon),
+  ordered_list: toSVG(FormatListNumberedOutlinedIcon),
+  task: toSVG(ChecklistOutlinedIcon),
+  image: toSVG(ImageOutlinedIcon),
+  image_block: toSVG(ImageOutlinedIcon),
+  code_block: toSVG(CodeOutlinedIcon),
+  table: toSVG(CalendarViewMonthOutlinedIcon),
+  math: toSVG(FunctionsOutlinedIcon)
+};
+
+const getBlockHandleIcon = ({ node, $pos }) => {
+  const type = node.type.name;
+  if (type === "heading") {
+    return blockHandleIcons.heading[node.attrs.level - 1];
+  }
+  if (type === "code_block" && node.attrs.language?.toLowerCase() === "latex") {
+    return blockHandleIcons.math;
+  }
+  if (["bullet_list", "ordered_list"].includes(type)) {
+    return node.firstChild?.attrs.checked != null
+      ? blockHandleIcons.task
+      : blockHandleIcons[type];
+  }
+  if (["paragraph", "list_item"].includes(type)) {
+    if (node.attrs.checked != null) return blockHandleIcons.task;
+    for (let depth = $pos.depth; depth > 0; depth--) {
+      const parent = $pos.node(depth);
+      if (parent.type.name === "list_item" && parent.attrs.checked != null) {
+        return blockHandleIcons.task;
+      }
+      if (["bullet_list", "ordered_list"].includes(parent.type.name)) {
+        return blockHandleIcons[parent.type.name];
+      }
+    }
+    if (node.childCount === 1 && node.firstChild.type.name === "image") {
+      return blockHandleIcons.image;
+    }
+  }
+  return blockHandleIcons[type] || blockHandleIcons.paragraph;
 };
 
 const count = (markdown) => ({
@@ -308,7 +361,17 @@ const CrepeEditorInner = (props) => {
           onUpload: handleUploadImage,
         },
         [CrepeFeature.BlockEdit]: {
-          handleDragIcon: toSVG(MenuRoundedIcon),
+          handleDragIcon: `<span class="block-type-icon">${blockHandleIcons.paragraph}</span>${handleDragIcon}`,
+          blockHandle: {
+            getOffset: ({ active, blockDom }) => {
+              const icon = blockDom.querySelector(".block-type-icon");
+              const markup = getBlockHandleIcon(active);
+              if (icon && icon.innerHTML !== markup) {
+                icon.innerHTML = markup;
+              }
+              return 8;
+            }
+          },
           textGroup: {
             label: context.languagePicker("main.crepe.popup.slash.text.title"),
             text: {
