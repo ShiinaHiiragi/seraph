@@ -129,6 +129,14 @@ const buttonStyle = {
   "&:disabled": { backgroundColor: "transparent" }
 };
 
+const popupOptions = {
+  strategy: "fixed",
+  modifiers: [{
+    name: "computeStyles",
+    options: { gpuAcceleration: false, adaptive: false }
+  }]
+};
+
 const blockHandleIcons = {
   paragraph: toSVG(NotesOutlinedIcon),
   heading: [
@@ -1420,6 +1428,14 @@ const CrepeEditor = () => {
   const currentHeading = outline.headings.find(({ pos }) => pos === outline.current);
   const outlineBaseLevel = outline.headings.reduce((level, heading) => Math.min(level, heading.level), 6);
 
+  const handleOutlineMount = React.useCallback((container) => {
+    const selected = container?.querySelector('[aria-current="location"]');
+    if (!selected) return;
+    const rect = selected.getBoundingClientRect();
+    container.scrollTop += rect.top - container.getBoundingClientRect().top
+      - container.clientTop + rect.height / 2 - container.clientHeight / 2;
+  }, []);
+
   React.useEffect(() => {
     setOutlineOpen(false);
     setOutline({ headings: [], current: null });
@@ -1671,11 +1687,13 @@ const CrepeEditor = () => {
               </Box>
               <Popper
                 open={outlineOpen && outline.headings.length > 0}
+                popperOptions={popupOptions}
                 anchorEl={outlineAnchorRef.current}
                 placement="top-start"
                 style={{ zIndex: 1300 }}
               >
                 <Box
+                  ref={handleOutlineMount}
                   sx={{
                     py: 1,
                     width: 320,
@@ -1767,6 +1785,7 @@ const CrepeEditor = () => {
               </Box>
               <Popper
                 open={wordCountOpen}
+                popperOptions={popupOptions}
                 anchorEl={wordCountAnchorRef.current}
                 placement="top-end"
                 style={{ zIndex: 1300 }}
