@@ -331,6 +331,7 @@ const ja = {
       subscription: "サブスクリプション",
       milkdown: "クレープ",
       terminal: "ターミナル",
+      code: "コード",
       card: "カード",
       todo: "タスク"
     }
