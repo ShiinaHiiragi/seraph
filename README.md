@@ -191,6 +191,7 @@
 
 ## Log
 
+- 11/29/2026  ver 1.5.8: Add configs for grading
 - 11/28/2026  ver 1.5.7: Add statistics popup for Card
 - 11/27/2026  ver 1.5.6: Add TOC for Milkdown Crepe
 - 11/26/2026  ver 1.5.5: Add more drags for Card & TODO
