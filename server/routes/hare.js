@@ -225,6 +225,64 @@ router.post('/delete', (req, res, next) => {
   return;
 });
 
+router.post('/history/delete', (req, res, next) => {
+  const { type, folderName, filename, index, length } = req.body;
+  if (req.status.notAuthSuccess()) {
+    // -> EF_IT or abnormal request
+    next(api.errorStreamControl);
+    return;
+  }
+
+  const { filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
+  if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
+    // -> EF_RU: file does not exist or is not a regular file
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  let card;
+  try {
+    card = new api.cardOperator(filePath);
+  } catch (_) {
+    // -> EF_FME: file read or JSON parse error
+    req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  if (!card.valid || !Number.isInteger(index) || !Number.isInteger(length)
+    || index < 0 || index >= length || !card.card.length) {
+    // -> EF_TCF: invalid history index or hare array
+    req.status.addExecStatus(api.Status.execErrCode.TypeCheckFailed);
+    res.send(req.status.generateReport());
+    return;
+  }
+  if (card.card[0].point.length !== length) {
+    // -> EF_IC: history length changed
+    req.status.addExecStatus(api.Status.execErrCode.IdentifierConflict);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  try {
+    card.setCard((cards) => cards.map((item) => ({
+      ...item,
+      point: item.point.filter((_, pointIndex) => pointIndex !== index)
+    })));
+  } catch (_) {
+    // -> EF_FME: file write error
+    req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  // -> ES: updated hare array
+  req.status.addExecStatus();
+  res.send({ ...req.status.generateReport(), hare: card.card });
+  return;
+});
+
 router.post('/sort', (req, res, next) => {
   const { type, folderName, filename, id, index } = req.body;
   if (req.status.notAuthSuccess()) {

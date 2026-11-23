@@ -514,11 +514,20 @@ const zhHans = {
         save: "保存",
         start: "开始回忆",
         resume: "继续回忆",
+        stat: "统计",
         add: "添加",
         edit: "编辑",
         import: "导入",
         export: "导出",
         delete: "删除"
+      },
+      stat: {
+        title: "统计",
+        round: "轮次",
+        accuracy: "正确率",
+        grade: "评级",
+        complete: "完成数",
+        operation: "操作",
       }
     },
     todo: {

@@ -14,6 +14,11 @@ import Link from "@mui/joy/Link";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import Sheet from "@mui/joy/Sheet";
+import Modal from "@mui/joy/Modal";
+import ModalDialog from "@mui/joy/ModalDialog";
+import ModalClose from "@mui/joy/ModalClose";
+import LinearProgress from "@mui/joy/LinearProgress";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import Typography from "@mui/joy/Typography";
 import List from "@mui/joy/List";
 import ListItem from "@mui/joy/ListItem";
@@ -222,6 +227,7 @@ const Card = () => {
       setCards([]);
       setSearch("");
       setMemorizing(false);
+      setHistoryOpen(false);
       setModified(false);
       setModalCardOpen(false);
       setModalCardLoading(false);
@@ -673,10 +679,72 @@ const Card = () => {
   }, [modified, savedPath, navigate]);
 
   // § start & continue
+  const [historyOpen, setHistoryOpen] = React.useState(false);
   const unfinished = cards.some(
     (item) =>
       item.point[item.point.length - 1] === -1
   );
+
+  const history = React.useMemo(() => Array.from(
+    { length: cards[0]?.point.length || 0 },
+    (_, index) => {
+      let answered = 0;
+      let correct = 0;
+      cards.forEach((item) => {
+        if (item.point[index] !== -1) answered++;
+        if (item.point[index] === 1) correct++;
+      });
+      return { index, answered, rate: cards.length ? correct / cards.length * 100 : null };
+    }
+  ).reverse(), [cards]);
+
+  const handleDeleteHistory = (round) => {
+    const session = syncRef.current;
+    const length = cardsRef.current[0]?.point.length;
+    context.setModalReconfirm({
+      open: true,
+      caption: `删除第 ${round.index + 1} 轮记录？${round.rate === null ? "" : `（正确率 ${round.rate.toFixed(1)}%）`}`,
+      handleAction: () => {
+        if (operationLockRef.current || memorizing || syncRef.current !== session
+          || cardsRef.current[0]?.point.length !== length) return;
+        const applyHistory = (hare) => {
+          cardsRef.current = hare;
+          setCards(hare);
+        };
+        if (!syncable) {
+          applyHistory(cardsRef.current.map((item) => ({
+            ...item,
+            point: item.point.filter((_, index) => index !== round.index)
+          })));
+          if (folderName.length) setModified(true);
+          return;
+        }
+        operationLockRef.current = true;
+        setOperationLock(true);
+        const deletion = new Promise((resolve, reject) => {
+          request(
+            "POST/utility/hare/history/delete",
+            { type: cardType, folderName: cardPath, filename: cardTitle, index: round.index, length },
+            undefined,
+            reject
+          ).then(({ hare }) => {
+            if (syncRef.current === session) applyHistory(hare);
+            resolve();
+          });
+        }).finally(() => {
+          if (syncRef.current === session) {
+            operationLockRef.current = false;
+            setOperationLock(false);
+          }
+        });
+        toast.promise(deletion, {
+          loading: "正在删除",
+          success: "已删除",
+          error: (error) => error
+        });
+      }
+    });
+  };
 
   const handleSync = React.useCallback(() => {
     const session = syncRef.current;
@@ -1370,6 +1438,9 @@ const Card = () => {
               >
                 {context.languagePicker("main.card.rowMenu.resume")}
               </MenuItem>
+              <MenuItem disabled={!history.length} onClick={() => setHistoryOpen(true)}>
+                {context.languagePicker("main.card.rowMenu.stat")}
+              </MenuItem>
               <Divider />
               <MenuItem onClick={() => handleToggleCard()}>
                 {context.languagePicker("main.card.rowMenu.add")}
@@ -1658,6 +1729,84 @@ const Card = () => {
           ))}
         </Box>
       </React.Fragment>}
+      <Modal open={historyOpen} sx={{
+        userSelect: "none",
+        zIndex: context.modalReconfirm?.open ? "calc(var(--joy-zIndex-modal) - 1)" : undefined
+      }} onClose={() => {
+        if (!operationLock) setHistoryOpen(false);
+      }}>
+        <ModalDialog aria-labelledby="card-history-title" sx={{ width: 480, maxWidth: "calc(100vw - 32px)" }}>
+          <Typography id="card-history-title" level="h2">
+            {context.languagePicker("main.card.stat.title")}
+          </Typography>
+          <Divider />
+          <Box sx={{
+            mr: "calc(-1 * var(--Card-padding))",
+            pr: "var(--Card-padding)",
+            mb: "calc(-1 * var(--Card-padding))",
+            pb: "var(--Card-padding)",
+            overflowY: "auto",
+            maxHeight: "60vh",
+            "&::-webkit-scrollbar": { width: "6px" },
+            "&::-webkit-scrollbar-thumb": { bgcolor: "var(--joy-palette-scrollbarThumb)" }
+          }}>
+            <Table size="sm" sx={{
+              "& th:nth-of-type(1), & td:nth-of-type(1), & th:nth-of-type(3), & td:nth-of-type(3), & th:nth-of-type(4), & td:nth-of-type(4), & th:nth-of-type(5), & td:nth-of-type(5)": {
+                textAlign: "center"
+              },
+              "& th:first-of-type": { width: 40 },
+              "& th:nth-of-type(3)": { width: 56 },
+              "& th:nth-of-type(4)": { width: 40 },
+              "& th:last-child": { width: 40 }
+            }}>
+              <thead>
+                <tr>
+                  <th>{context.languagePicker("main.card.stat.round")}</th>
+                  <th>{context.languagePicker("main.card.stat.accuracy")}</th>
+                  <th>{context.languagePicker("main.card.stat.complete")}</th>
+                  <th>{context.languagePicker("main.card.stat.grade")}</th>
+                  <th>{context.languagePicker("main.card.stat.operation")}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {history.map((round) => (
+                  <tr key={round.index}>
+                    <td sx={{ fontVariantNumeric: "tabular-nums" }}>{round.index + 1}</td>
+                    <td>
+                      <Typography level="body-xs">
+                        {round.rate === null ? "—" : `${round.rate.toFixed(2)}%`}
+                      </Typography>
+                      <LinearProgress determinate value={round.rate ?? 0} sx={{ mt: 0.25, "--LinearProgress-thickness": "3px" }} />
+                    </td>
+                    <td sx={{ fontVariantNumeric: "tabular-nums" }}>{round.answered}</td>
+                    <td>{round.rate === null ? "—"
+                      : round.rate === 100 ? "A"
+                      : round.rate >= 96 ? "B"
+                      : round.rate >= 92 ? "C"
+                      : round.rate >= 84 ? "D"
+                      : round.rate >= 72 ? "E"
+                      : "F"}</td>
+                    <td>
+                      <IconButton size="sm" color="danger" variant="plain"
+                        disabled={operationLock}
+                        onClick={() => handleDeleteHistory(round)}
+                        sx={{
+                          backgroundColor: "transparent",
+                          "&:hover": { backgroundColor: "transparent" },
+                          "&:active": { backgroundColor: "transparent" },
+                          "&:disabled": { backgroundColor: "transparent" }
+                        }}
+                      >
+                        <DeleteOutlineOutlinedIcon />
+                      </IconButton>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </Box>
+        </ModalDialog>
+      </Modal>
       {modalCardOpen && <ModalForm
         open={modalCardOpen}
         loading={modalCardLoading}

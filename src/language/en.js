@@ -514,11 +514,20 @@ const en = {
         save: "Save",
         start: "Start Recall",
         resume: "Resume Recall",
+        stat: "Statistics",
         add: "Add",
         edit: "Edit",
         import: "Import",
         export: "Export",
         delete: "Delete"
+      },
+      stat: {
+        title: "Statistics",
+        round: "RND",
+        accuracy: "ACC",
+        grade: "GRD",
+        complete: "DONE",
+        operation: "ACT",
       }
     },
     todo: {

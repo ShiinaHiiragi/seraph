@@ -514,11 +514,20 @@ const ja = {
         save: "セーブ",
         start: "リコールをスタート",
         resume: "リコールをレジューム",
+        stat: "統計",
         add: "追加",
         edit: "エディット",
         import: "インポート",
         export: "エクスポート",
         delete: "デリート"
+      },
+      stat: {
+        title: "統計",
+        round: "回数",
+        accuracy: "正答率",
+        grade: "評価",
+        complete: "完了数",
+        operation: "操作",
       }
     },
     todo: {
