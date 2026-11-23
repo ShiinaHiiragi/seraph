@@ -710,6 +710,9 @@ const Card = () => {
         const applyHistory = (hare) => {
           cardsRef.current = hare;
           setCards(hare);
+          if (!hare[0]?.point.length) {
+            setHistoryOpen(false);
+          }
         };
         if (!syncable) {
           applyHistory(cardsRef.current.map((item) => ({
