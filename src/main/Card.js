@@ -936,10 +936,10 @@ const Card = () => {
     if (operationLockRef.current) {
       return;
     }
-    const message = cardsRef.current.some(
-      (item) =>
-        item.point[item.point.length - 1] === -1
-    )
+    const hasUnanswered = cardsRef.current.some(
+      (item) => item.point[item.point.length - 1] === -1
+    );
+    const message = hasUnanswered
       ? context.languagePicker("modal.toast.success.pauseCard")
       : context
         .languagePicker("modal.toast.success.finishCard")
@@ -954,6 +954,9 @@ const Card = () => {
 
     if (!syncable) {
       setMemorizing(false);
+      if (!hasUnanswered) {
+        toast.success(message);
+      }
       return;
     }
 
