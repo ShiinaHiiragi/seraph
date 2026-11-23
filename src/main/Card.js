@@ -703,7 +703,8 @@ const Card = () => {
     const length = cardsRef.current[0]?.point.length;
     context.setModalReconfirm({
       open: true,
-      caption: `删除第 ${round.index + 1} 轮记录？${round.rate === null ? "" : `（正确率 ${round.rate.toFixed(1)}%）`}`,
+      caption: context.languagePicker("modal.reconfirm.captionFirstHalf.deleteRecord")
+        .format(round.index + 1),
       handleAction: () => {
         if (operationLockRef.current || memorizing || syncRef.current !== session
           || cardsRef.current[0]?.point.length !== length) return;
@@ -738,8 +739,9 @@ const Card = () => {
           }
         });
         toast.promise(deletion, {
-          loading: "正在删除",
-          success: "已删除",
+          loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
+          success: context.languagePicker("modal.toast.success.delete")
+            .format(context.languagePicker("modal.toast.success.round").format(round.index + 1)),
           error: (error) => error
         });
       }

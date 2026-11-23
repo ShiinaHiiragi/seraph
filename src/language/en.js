@@ -585,6 +585,7 @@ const en = {
         extract: "{0} has been extracted to current directory.",
         epub: "{0} has been converted to current directory.",
         delete: "{0} has been deleted.",
+        round: "The record of round {0}",
         sort: "Natural order saved.",
         saveText: "The file has been saved.",
         saveCard: "The file has been saved.",
@@ -703,9 +704,10 @@ const en = {
       captionSecondHalf: "Click 'Continue' to apply changes.",
       captionFirstHalf: {
         logout: "You are logging out Seraph. ",
-        deleteFile: "You are deleting file {0}. ",
-        deleteTask: "You are deleting task {0}. ",
-        deleteCard: "You are deleting item {0}. ",
+        deleteFile: "You are deleting the file {0}. ",
+        deleteTask: "You are deleting the task {0}. ",
+        deleteCard: "You are deleting the item {0}. ",
+        deleteRecord: "You are deleting the record of round {0}. ",
         resetConfig: "You are resetting configs. "
       },
       caption: {

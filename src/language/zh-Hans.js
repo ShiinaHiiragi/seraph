@@ -585,6 +585,7 @@ const zhHans = {
         extract: "{0} 已解压到当前目录。",
         epub: "{0} 已转换到当前目录。",
         delete: "{0} 已删除。",
+        round: "第 {0} 轮记录",
         sort: "自然顺序已更改。",
         saveText: "文件已保存。",
         saveCard: "文件已保存。",
@@ -706,6 +707,7 @@ const zhHans = {
         deleteFile: "正在删除文件 {0}。",
         deleteTask: "正在删除任务 {0}。",
         deleteCard: "正在删除条目 {0}。",
+        deleteRecord: "你正在删除第 {0} 轮记录。",
         resetConfig: "正在恢复默认设置。"
       },
       caption: {
