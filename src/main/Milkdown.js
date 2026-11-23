@@ -87,6 +87,7 @@ import FunctionsOutlinedIcon from "@mui/icons-material/FunctionsOutlined";
 import InsertLinkOutlinedIcon from "@mui/icons-material/InsertLinkOutlined";
 import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
 import UnfoldMoreOutlinedIcon from "@mui/icons-material/UnfoldMoreOutlined";
+import TocOutlinedIcon from "@mui/icons-material/TocOutlined";
 import CloudOutlinedIcon from "@mui/icons-material/CloudOutlined";
 import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 import CloudDoneOutlinedIcon from "@mui/icons-material/CloudDoneOutlined";
@@ -237,6 +238,7 @@ const CrepeEditorInner = (props) => {
     readOnly,
     setModified,
     setCounter,
+    setOutline,
     handleToggleTree,
     handleToggleAutoSave,
     handleCloseModalTree,
@@ -736,6 +738,62 @@ const CrepeEditorInner = (props) => {
         }
       })))
       .use($prose(() => new Plugin({
+        view: (view) => {
+          const container = view.dom.closest(".milkdown");
+          let headings = [];
+          let frame = null;
+          let dirty = true;
+          const update = () => {
+            frame = null;
+            const changed = dirty;
+            if (dirty) {
+              headings = [];
+              view.state.doc.descendants((node, pos) => {
+                if (node.type.name === "heading" && node.textContent.trim()) {
+                  headings.push({
+                    pos,
+                    level: node.attrs.level,
+                    text: node.textContent,
+                    element: view.nodeDOM(pos)
+                  });
+                }
+              });
+              dirty = false;
+            }
+            const top = container.getBoundingClientRect().top + container.clientTop;
+            let current = null;
+            for (const heading of headings) {
+              if (heading.element?.getBoundingClientRect().top <= top + 4) {
+                current = heading.pos;
+              }
+            }
+            setOutline((previous) => changed || previous.current !== current
+              ? { headings, current }
+              : previous);
+          };
+          const schedule = () => {
+            if (frame === null) frame = requestAnimationFrame(update);
+          };
+          const observer = new ResizeObserver(schedule);
+          observer.observe(container);
+          observer.observe(view.dom);
+          container.addEventListener("scroll", schedule, { passive: true });
+          container.addEventListener("load", schedule, true);
+          schedule();
+          return {
+            update: (nextView, previousState) => {
+              view = nextView;
+              if (previousState.doc !== view.state.doc) dirty = true;
+              schedule();
+            },
+            destroy: () => {
+              if (frame !== null) cancelAnimationFrame(frame);
+              observer.disconnect();
+              container.removeEventListener("scroll", schedule);
+              container.removeEventListener("load", schedule, true);
+            }
+          };
+        },
         props: {
           handleDOMEvents: {
             click(view, event) {
@@ -1356,6 +1414,29 @@ const CrepeEditor = () => {
   const [wordCountOpen, setWordCountOpen] = React.useState(false);
   const wordCountAnchorRef = React.useRef(null);
 
+  const [outline, setOutline] = React.useState({ headings: [], current: null });
+  const [outlineOpen, setOutlineOpen] = React.useState(false);
+  const outlineAnchorRef = React.useRef(null);
+  const currentHeading = outline.headings.find(({ pos }) => pos === outline.current);
+  const outlineBaseLevel = outline.headings.reduce((level, heading) => Math.min(level, heading.level), 6);
+
+  React.useEffect(() => {
+    setOutlineOpen(false);
+    setOutline({ headings: [], current: null });
+  }, [loadKey]);
+
+  const handleHeadingClick = (heading) => {
+    const container = heading.element?.closest(".milkdown");
+    if (container) {
+      container.scrollTo({
+        behavior: "smooth",
+        top: container.scrollTop + heading.element.getBoundingClientRect().top
+          - container.getBoundingClientRect().top - container.clientTop
+      });
+    }
+    setOutlineOpen(false);
+  };
+
   const handleDownload = React.useCallback(() => {
     // getText() != fileContentRef.current even if not modified
     // because crepe will normalize markdown on load
@@ -1521,6 +1602,7 @@ const CrepeEditor = () => {
               readOnly={readOnly}
               setModified={setModified}
               setCounter={setCounter}
+              setOutline={setOutline}
               handleToggleTree={handleToggleTree}
               handleToggleAutoSave={handleToggleAutoSave}
               handleCloseModalTree={handleCloseModalTree}
@@ -1535,17 +1617,129 @@ const CrepeEditor = () => {
           caption={context.languagePicker("universal.placeholder.unexist.caption")}
         />
       )}
-      {crepeState === 1 && context.setting.crepe.feature.stat && (
+      {crepeState === 1 && (
         <Box
           sx={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "flex-end",
+            justifyContent: "space-between",
+            flexShrink: 0,
+            minWidth: 0,
             height: "1.8rem"
           }}
         >
+          <ClickAwayListener onClickAway={() => setOutlineOpen(false)}>
+            <Box sx={{ height: "100%", minWidth: 0, maxWidth: "max(25%, 200px)", mr: "auto" }}>
+              <Box
+                component="button"
+                type="button"
+                ref={outlineAnchorRef}
+                disabled={!outline.headings.length}
+                aria-expanded={outlineOpen}
+                onClick={() => setOutlineOpen((open) => !open)}
+                sx={{
+                  px: 2.5,
+                  py: 0,
+                  border: 0,
+                  bgcolor: "transparent",
+                  color: "var(--joy-palette-neutral-600)",
+                  height: "100%",
+                  maxWidth: "100%",
+                  textAlign: "left",
+                  display: "flex",
+                  alignItems: "center",
+                  "&:hover:not(:disabled)": {
+                    cursor: "pointer",
+                    backgroundColor: "var(--joy-palette-neutral-softHoverBg)"
+                  }
+                }}
+              >
+                <TocOutlinedIcon sx={{ mr: 0.75, fontSize: "1rem", flexShrink: 0, transform: "translateY(1px)" }} />
+                <Typography
+                  sx={{
+                    fontSize: "0.9rem",
+                    color: "inherit",
+                    minWidth: 0,
+                    textAlign: "left",
+                    overflow: "hidden",
+                    whiteSpace: "nowrap",
+                    textOverflow: "ellipsis"
+                  }}
+                >
+                  {currentHeading?.text || crepeTitle}
+                </Typography>
+              </Box>
+              <Popper
+                open={outlineOpen && outline.headings.length > 0}
+                anchorEl={outlineAnchorRef.current}
+                placement="top-start"
+                style={{ zIndex: 1300 }}
+              >
+                <Box
+                  sx={{
+                    py: 1,
+                    width: 320,
+                    maxWidth: "calc(100vw - 32px)",
+                    maxHeight: "min(360px, 60vh)",
+                    overflowY: "auto",
+                    "&::-webkit-scrollbar": {
+                      width: "6px",
+                      height: "6px"
+                    },
+                    "&::-webkit-scrollbar-track": {
+                      borderRadius: 0,
+                      backgroundColor: "var(--joy-palette-background-body)"
+                    },
+                    "&::-webkit-scrollbar-thumb": {
+                      borderRadius: 0,
+                      backgroundColor: "var(--joy-palette-scrollbarThumb)"
+                    },
+                    "@supports not selector(::-webkit-scrollbar)": {
+                      scrollbarWidth: "thin",
+                      scrollbarColor: "var(--joy-palette-scrollbarThumb) var(--joy-palette-background-body)"
+                    },
+                    bgcolor: "var(--joy-palette-background-popup)",
+                    border: "1px solid var(--joy-palette-neutral-outlinedBorder)",
+                    borderRadius: "sm",
+                    boxShadow: "xs"
+                  }}
+                >
+                  {outline.headings.map((heading) => (
+                    <Box
+                      component="button"
+                      type="button"
+                      key={heading.pos}
+                      aria-current={heading.pos === outline.current ? "location" : undefined}
+                      onClick={() => handleHeadingClick(heading)}
+                      sx={{
+                        display: "block",
+                        width: "100%",
+                        pl: 2 + (heading.level - outlineBaseLevel) * 1.5,
+                        pr: 2,
+                        py: 0.75,
+                        border: 0,
+                        textAlign: "left",
+                        fontFamily: "inherit",
+                        fontSize: "0.85rem",
+                        overflowWrap: "anywhere",
+                        color: heading.pos === outline.current ? "primary.plainColor" : "text.secondary",
+                        bgcolor: heading.pos === outline.current ? "neutral.softBg" : "transparent",
+                        "&:hover": {
+                          cursor: "pointer",
+                          bgcolor: "neutral.softHoverBg"
+                        }
+                      }}
+                    >
+                      {heading.text}
+                    </Box>
+                  ))}
+                </Box>
+              </Popper>
+            </Box>
+          </ClickAwayListener>
+          {context.setting.crepe.feature.stat && (
           <ClickAwayListener onClickAway={() => setWordCountOpen(false)}>
-            <Box sx={{ height: "100%" }}>
+            <Box sx={{ height: "100%", flexShrink: 0 }}>
               <Box
                 ref={wordCountAnchorRef}
                 onClick={() => setWordCountOpen((wordCountOpen) => !wordCountOpen)}
@@ -1639,6 +1833,7 @@ const CrepeEditor = () => {
               </Popper>
             </Box>
           </ClickAwayListener>
+          )}
         </Box>
       )}
       {modalTree.open && (
