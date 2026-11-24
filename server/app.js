@@ -61,14 +61,18 @@ app.use((req, res, next) => {
   const auto = ["/info/stat"].includes(req.path);
 
   req.status = new api.Status();
-  req.pass = undefined
-  req.status.addAuthStatus(
-    api.configOperator.config.metadata.password.length
-      ? api.tokenOperator.validateUpdateSession(req, res, session, auto)
-      ? undefined
-      : api.Status.authErrCode.InvalidToken
-      : api.Status.authErrCode.NotInit
-  );
+  if (api.configOperator.config.metadata.password.length) {
+    const {
+      auth,
+      full
+    } = api.tokenOperator.validateUpdateSession(res, session, auto);
+    req.status.addAuthStatus(
+      auth ? undefined : api.Status.authErrCode.InvalidToken,
+      !full
+    );
+  } else {
+    req.status.addAuthStatus(api.Status.authErrCode.NotInit);
+  }
   next();
 });
 

@@ -1128,7 +1128,7 @@ const tokenOperator = {
     );
   },
 
-  validateUpdateSession: (req, res, session, isAuto) => {
+  validateUpdateSession: (res, session, isAuto) => {
     const __clearExpiredSessions = () => {
       const timeNow = Date.now();
       tokenOperator.setToken((token) => 
@@ -1139,7 +1139,6 @@ const tokenOperator = {
 
     let sessionIndex = tokenOperator.token.findIndex((item) => item.session === session)
     if (sessionIndex >= 0) {
-      req.pass = !tokenOperator.token[sessionIndex].full;
       // res is undefined when wssAuth() called
       if (res !== undefined && !isAuto) {
         cookieOperator.setSessionCookie(res, session);
@@ -1148,9 +1147,15 @@ const tokenOperator = {
           return token;
         });
       }
-      return true;
+      return {
+        auth: true,
+        full: tokenOperator.token[sessionIndex].full ?? false
+      };
     } else {
-      return false;
+      return {
+        auth: false,
+        full: false
+      };
     }
   }
 };
@@ -1758,12 +1763,13 @@ Status.execErrCode = {
 }
 
 Status.prototype.status = Status.statusCode.BeforeAuth;
+Status.prototype.pass = undefined;
 Status.prototype.err = null;
 
-Status.prototype.addAuthStatus = function (errorCode) {
-  [this.status, this.err] = errorCode
-    ? [Status.statusCode.AuthFailed, errorCode]
-    : [Status.statusCode.AuthSuccess, null];
+Status.prototype.addAuthStatus = function (errorCode, pass) {
+  [this.status, this.pass, this.err] = errorCode
+    ? [Status.statusCode.AuthFailed, null, errorCode]
+    : [Status.statusCode.AuthSuccess, pass, null];
 }
 
 Status.prototype.addExecStatus = function (errorCode) {
@@ -1772,8 +1778,12 @@ Status.prototype.addExecStatus = function (errorCode) {
     : [Status.statusCode.ExecSuccess, null];
 }
 
-Status.prototype.notAuthSuccess = function() {
+Status.prototype.notAuthSuccess = function () {
   return this.status !== Status.statusCode.AuthSuccess;
+}
+
+Status.prototype.isTempPass = function () {
+  return this.pass;
 }
 
 Status.prototype.generateReport = function () {
