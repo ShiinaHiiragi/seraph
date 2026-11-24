@@ -465,7 +465,10 @@ const fileOperator = {
       );
       fs.chmodSync(dataPath.tokenFilePath, Permission.highSecurity);
     }
-    return JSON.parse(fs.readFileSync(dataPath.tokenFilePath));
+    return JSON.parse(fs.readFileSync(dataPath.tokenFilePath)).map((item) => ({
+      full: false,
+      ...item
+    }));
   },
 
   saveToken: (token) => {
@@ -1042,6 +1045,7 @@ const tokenOperator = {
     cookieOperator.setSessionCookie(res, session);
     tokenOperator.setToken((token) => [...token, {
       session: session,
+      full: true,
       timestamp: Date.now() + expiredPeriod()
     }]);
     return session;

@@ -362,9 +362,16 @@ const Panel = () => {
   }, [firstTick, globalSwitch]);
 
   // hide some elements
-  const isAuthority = React.useMemo(() => {
-    return globalSwitch === globalState.AUTHORITY
-  }, [globalSwitch]);
+  const isAuthority = React.useMemo(
+    () => 
+      globalSwitch === globalState.PASS
+        || globalSwitch === globalState.AUTHORITY,
+    [globalSwitch]
+  );
+  const isTempPass = React.useMemo(
+    () => globalSwitch === globalState.PASS,
+    [globalSwitch]
+  );
 
   // crepeEditor.current !== null when crepe is loaded
   // crepeSnapshot save current text every time setting is toggled
@@ -417,6 +424,7 @@ const Panel = () => {
     <GlobalContext.Provider
       value={{
         isAuthority: isAuthority,
+        isTempPass: isTempPass,
         firstTick: firstTick,
         secondTick: secondTick,
         crepeRef: crepeRef,

@@ -171,6 +171,7 @@ const toastDuration = 4000
 const globalState = {
   INNOCENT: "innocent",
   ANONYMOUS: "anonymous",
+  PASS: "pass",
   AUTHORITY: "authority"
 };
 
