@@ -1129,12 +1129,12 @@ const tokenOperator = {
     tokenOperator.token = newToken;
   },
 
-  addNewSession: (res) => {
+  addNewSession: (res, full = true) => {
     const session = crypto.randomBytes(32).toString('hex');
     cookieOperator.setSessionCookie(res, session);
     tokenOperator.setToken((token) => [...token, {
       session: session,
-      full: true,
+      full: full,
       timestamp: Date.now() + expiredPeriod()
     }]);
     return session;

@@ -340,7 +340,7 @@ const Panel = () => {
           setPrivateFolders(data.private);
           setMetadata(data.metadata);
           setClipboard(data.clipboard);
-          setGlobalSwitch(globalState.AUTHORITY);
+          setGlobalSwitch(data.full ? globalState.AUTHORITY : globalState.PASS);
           if (data.saltWarning) {
             toast.error(
               languagePickerSpawner(data.setting.meta.language)("modal.toast.warning.saltMissing")

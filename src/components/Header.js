@@ -315,7 +315,7 @@ const Header = (props) => {
         setPrivateFolders(data.private);
         setMetadata(data.metadata);
         setClipboard(data.clipboard);
-        setGlobalSwitch(globalState.AUTHORITY);
+        setGlobalSwitch(data.full ? globalState.AUTHORITY : globalState.PASS);
         handleCloseLogin();
         toast.message(context.languagePicker("modal.toast.plain.login"));
         if (data.saltWarning) {

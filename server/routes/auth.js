@@ -25,12 +25,17 @@ router.get('/meta', (req, res, next) => {
     }
   } else {
     const publicFolder = api.fileOperator.readFoldersList(api.dataPath.publicDirPath);
-    const privateFolder = api.fileOperator.readFoldersList(api.dataPath.privateDirPath);
+    const privateFolder = api.fileOperator.readFoldersList(api.dataPath.privateDirPath)
+      .filter((item) => !(
+        req.status.authTempPass()
+          && api.secretOperator.secret.includes(item)
+      ));
 
     // -> ES: return all metadata except passwords
     req.status.addExecStatus();
     res.send({
       ...req.status.generateReport(),
+      full: !req.status.authTempPass(),
       public: publicFolder,
       private: privateFolder,
       metadata: api.configOperator.getMetadata(),
@@ -77,16 +82,23 @@ router.post('/login', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
     if (req.status.err === api.Status.authErrCode.InvalidToken) {
       const { password } = req.body;
-      if (api.configOperator.verifyPassword(password)) {
+      const full = api.configOperator.verifyPassword(password);
+      if (full || api.configOperator.verifyConfigPasscode(password)) {
+        req.status.addAuthStatus(undefined, !full);
         // public is neccesarry because files starts with dot are hidden
         const publicFolder = api.fileOperator.readFoldersList(api.dataPath.publicDirPath);
-        const privateFolder = api.fileOperator.readFoldersList(api.dataPath.privateDirPath);
-        api.tokenOperator.addNewSession(res);
+        const privateFolder = api.fileOperator.readFoldersList(api.dataPath.privateDirPath)
+          .filter((item) => !(
+            req.status.authTempPass()
+              && api.secretOperator.secret.includes(item)
+          ));
+        api.tokenOperator.addNewSession(res, full);
 
         // -> ES: return private folders list and clipboard
         req.status.addExecStatus();
         res.send({
           ...req.status.generateReport(),
+          full: !req.status.authTempPass(),
           public: publicFolder,
           private: privateFolder,
           metadata: api.configOperator.getMetadata(),
