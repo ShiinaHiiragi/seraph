@@ -91,6 +91,7 @@ const dataPath = {
   privateDirPath: path.join(__dirname, "./data/private"),
   configFilePath: path.join(__dirname, "./data/config.json"),
   tokenFilePath: path.join(__dirname, "./data/token.json"),
+  secretFilePath: path.join(__dirname, "./data/secret.json"),
   taskFilePath: path.join(__dirname, "./data/task.json"),
   styleFilePath: path.join(__dirname, "./data/crepe.css"),
   authFilePath: path.join(__dirname, "./401.html"),
@@ -487,6 +488,24 @@ const fileOperator = {
     fs.writeFileSync(
       filePath,
       JSON.stringify(card, null, 2)
+    );
+  },
+
+  readSecret: () => {
+    if (!fs.existsSync(dataPath.secretFilePath)) {
+      fs.writeFileSync(
+        dataPath.secretFilePath,
+        JSON.stringify([ ], null, 2)
+      );
+      fs.chmodSync(dataPath.secretFilePath, Permission.highSecurity);
+    }
+    return JSON.parse(fs.readFileSync(dataPath.secretFilePath));
+  },
+
+  saveSecret: (secret) => {
+    fs.writeFileSync(
+      dataPath.secretFilePath,
+      JSON.stringify(secret, null, 2)
     );
   },
 
@@ -1383,6 +1402,55 @@ const taskDelay = () => configOperator.config.setting.task.delay >= 0
   ? Date.now() + configOperator.config.setting.task.delay * 1000
   : -1;
 
+const secretOperator = {
+  secret: fileOperator.readSecret(),
+  setSecret: (handle) => {
+    const newSecret = handle(secretOperator.secret);
+    fileOperator.saveSecret(newSecret);
+    secretOperator.secret = newSecret;
+  },
+
+  isSecret: (filePath) => {
+    const relative = path.relative(dataPath.privateDirPath, filePath);
+    if (
+      relative === ''
+        || relative === '..'
+        || relative.startsWith(`..${path.sep}`)
+        || path.isAbsolute(relative)
+    ) {
+      return false;
+    }
+    return secretOperator.secret.includes(relative.split(path.sep)[0]);
+  },
+
+  markSecret: (folderName) => {
+    secretOperator.setSecret((secret) => secret.includes(folderName)
+      ? secret
+      : [...secret, folderName]
+    );
+  },
+
+  renameSecret: (oldFolderName, newFolderName) => {
+    if (!secretOperator.secret.includes(oldFolderName)) {
+      return;
+    }
+    secretOperator.setSecret((secret) => [...new Set(
+      secret.map(
+        (item) => item === oldFolderName
+          ? newFolderName
+          : item
+      )
+    )]);
+  },
+
+  removeSecret: (folderName) => {
+    secretOperator.setSecret(
+      (secret) =>
+        secret.filter((item) => item !== folderName)
+    );
+  }
+};
+
 const taskOperator = {
   task: fileOperator.readTask(),
   setTask: (handle) => {
@@ -1598,6 +1666,7 @@ exports.checkerOperator = checkerOperator;
 exports.checkerParam = checkerParam;
 exports.cardOperator = cardOperator;
 exports.taskOperator = taskOperator;
+exports.secretOperator = secretOperator;
 exports.styleOperator = styleOperator;
 exports.saltOperator = saltOperator;
 
