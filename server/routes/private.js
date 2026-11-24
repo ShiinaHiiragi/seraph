@@ -21,7 +21,7 @@ router.get('/*/:filename', (req, res, next) => {
   }
 
   if (req.status.notAuthSuccess()) {
-    // -> EF_IT: is a file but fail to authenticate
+    // -> AF_IT: is a file but fail to authenticate
     // send home-made 401 page instead of strange json
     res.sendFile(api.dataPath.authFilePath);
     return;

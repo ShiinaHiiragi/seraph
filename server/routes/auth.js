@@ -135,7 +135,7 @@ router.post('/code', (req, res, next) => {
 
 router.post('/reset', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
+    // -> AF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }
@@ -152,7 +152,7 @@ router.post('/reset', (req, res, next) => {
 
 router.post('/logout', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
+    // -> AF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }

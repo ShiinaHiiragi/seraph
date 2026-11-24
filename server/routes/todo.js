@@ -4,7 +4,7 @@ let router = express.Router();
 
 router.get('/list', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
+    // -> AF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }
@@ -22,7 +22,7 @@ router.get('/list', (req, res, next) => {
 
 router.post('/new', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
+    // -> AF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }
@@ -49,7 +49,7 @@ router.post('/new', (req, res, next) => {
 
 router.post('/tick', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
+    // -> AF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }
@@ -84,7 +84,7 @@ router.post('/tick', (req, res, next) => {
 
 router.post('/untick', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
+    // -> AF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }
@@ -115,7 +115,7 @@ router.post('/untick', (req, res, next) => {
 
 router.post('/edit', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
+    // -> AF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }
@@ -150,7 +150,7 @@ router.post('/edit', (req, res, next) => {
 
 router.post('/delete', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
+    // -> AF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }
@@ -174,7 +174,7 @@ router.post('/delete', (req, res, next) => {
 
 router.post('/sort', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
+    // -> AF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }

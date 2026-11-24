@@ -12,7 +12,7 @@ let router = express.Router();
 
 router.post('/new', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
+    // -> AF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }
@@ -56,7 +56,7 @@ router.post('/new', (req, res, next) => {
 
 router.post('/link', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
+    // -> AF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }
@@ -111,7 +111,7 @@ router.post('/link', (req, res, next) => {
 
 router.post('/markdown', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
+    // -> AF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }
@@ -163,7 +163,7 @@ router.post('/markdown', (req, res, next) => {
 
 router.post('/upload', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
+    // -> AF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }
@@ -214,7 +214,7 @@ router.post('/upload', (req, res, next) => {
 
 router.post('/paste', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
+    // -> AF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }
@@ -294,7 +294,7 @@ router.post('/paste', (req, res, next) => {
 
 router.post('/rename', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
+    // -> AF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }
@@ -345,7 +345,7 @@ router.post('/rename', (req, res, next) => {
 
 router.post('/relink', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
+    // -> AF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }
@@ -386,7 +386,7 @@ router.post('/relink', (req, res, next) => {
 
 router.post('/copy', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
+    // -> AF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }
@@ -414,7 +414,7 @@ router.post('/copy', (req, res, next) => {
 
 router.post('/cut', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
+    // -> AF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }
@@ -442,7 +442,7 @@ router.post('/cut', (req, res, next) => {
 
 router.post('/delete', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
+    // -> AF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }
@@ -479,7 +479,7 @@ router.post('/delete', (req, res, next) => {
 
 router.post('/zip', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
+    // -> AF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }
@@ -534,7 +534,7 @@ router.post('/zip', (req, res, next) => {
 
 router.post('/unzip', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
+    // -> AF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }
@@ -605,7 +605,7 @@ router.post('/unzip', (req, res, next) => {
 
 router.post('/epub', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
+    // -> AF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }
@@ -727,7 +727,7 @@ router.post('/epub', (req, res, next) => {
 
 router.post('/encrypt', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
+    // -> AF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }
@@ -786,7 +786,7 @@ router.post('/encrypt', (req, res, next) => {
 
 router.post('/decrypt', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
+    // -> AF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }
@@ -856,7 +856,7 @@ router.post('/decrypt', (req, res, next) => {
 
 router.post('/reset', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
+    // -> AF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }

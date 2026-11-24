@@ -19,7 +19,7 @@ router.get('/style', (req, res, next) => {
 router.get('/load', (req, res, next) => {
   const { type, folderName, filename } = req.query;
   if (type === 'private' && req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
+    // -> AF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }
@@ -58,7 +58,7 @@ router.get('/load', (req, res, next) => {
 router.post('/update', (req, res, next) => {
   const { type, folderName, filename, diff } = req.body;
   if (req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
+    // -> AF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }
@@ -101,7 +101,7 @@ router.post('/update', (req, res, next) => {
 router.post('/save', (req, res, next) => {
   const { type, folderName, filename, create, text } = req.body;
   if (req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
+    // -> AF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }

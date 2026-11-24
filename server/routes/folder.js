@@ -32,7 +32,7 @@ router.get('/public/*', (req, res) => {
 
 router.get('/private/*', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
+    // -> AF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }

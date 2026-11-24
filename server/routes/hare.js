@@ -6,7 +6,7 @@ let router = express.Router();
 router.get('/list', (req, res, next) => {
   const { type, folderName, filename } = req.query;
   if (type === 'private' && req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
+    // -> AF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }
@@ -52,7 +52,7 @@ router.get('/list', (req, res, next) => {
 router.post('/add', (req, res, next) => {
   const { type, folderName, filename, query, key } = req.body;
   if (req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
+    // -> AF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }
@@ -108,7 +108,7 @@ router.post('/add', (req, res, next) => {
 router.post('/edit', (req, res, next) => {
   const { type, folderName, filename, id, query, key } = req.body;
   if (req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
+    // -> AF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }
@@ -168,7 +168,7 @@ router.post('/edit', (req, res, next) => {
 router.post('/delete', (req, res, next) => {
   const { type, folderName, filename, id } = req.body;
   if (req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
+    // -> AF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }
@@ -228,7 +228,7 @@ router.post('/delete', (req, res, next) => {
 router.post('/forget', (req, res, next) => {
   const { type, folderName, filename, index, length } = req.body;
   if (req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
+    // -> AF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }
@@ -279,7 +279,7 @@ router.post('/forget', (req, res, next) => {
 router.post('/sort', (req, res, next) => {
   const { type, folderName, filename, id, index } = req.body;
   if (req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
+    // -> AF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }
@@ -332,7 +332,7 @@ router.post('/sort', (req, res, next) => {
 router.post('/save', (req, res, next) => {
   const { type, folderName, filename, create, hare } = req.body;
   if (req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
+    // -> AF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }
@@ -396,7 +396,7 @@ router.post('/save', (req, res, next) => {
 router.post('/sync', (req, res, next) => {
   const { type, folderName, filename, start, index, update } = req.body;
   if (req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
+    // -> AF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }

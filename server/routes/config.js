@@ -4,7 +4,7 @@ let router = express.Router();
 
 router.post('/set', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
+    // -> AF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }
@@ -39,7 +39,7 @@ router.post('/set', (req, res, next) => {
 
 router.post('/style', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
+    // -> AF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }
@@ -62,7 +62,7 @@ router.post('/style', (req, res, next) => {
 
 router.post('/reset', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
+    // -> AF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }
@@ -82,7 +82,7 @@ router.post('/reset', (req, res, next) => {
 
 router.get('/copy', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
+    // -> AF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }
@@ -98,7 +98,7 @@ router.get('/copy', (req, res, next) => {
 
 router.post('/file', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
-    // -> EF_IT or abnormal request
+    // -> AF_IT or abnormal request
     next(api.errorStreamControl);
     return;
   }
