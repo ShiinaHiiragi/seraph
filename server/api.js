@@ -117,6 +117,7 @@ exports.extentPath = extentPath;
 // change GET/auth/meta if metadata changes
 const defaultConfig = {
   metadata: {
+    passcode: [],
     password: "",
     cipher: "",
     terminal: false
@@ -865,13 +866,76 @@ const configOperator = {
   },
 
   getMetadata: () => {
-    const { password: _, cipher, ...metadata } = configOperator.config.metadata;
+    const {
+      passcode,
+      password,
+      cipher,
+      ...metadata
+    } = configOperator.config.metadata;
     return {
       ...metadata,
       salt: cipher.split(":")[0],
       appdata: dataPath.appdataDirPath,
       platform: process.platform
     };
+  },
+
+  addConfigPasscode: (code) => {
+    if (code === undefined) {
+      code = crypto.randomInt(0, 1000000).toString().padStart(6, '0');
+    } else if (typeof code === 'number') {
+      code = code.toString();
+    }
+    assert(typeof code === 'string' && /^[0-9]{6}$/.test(code));
+
+    // TEMP: new passcode valid in 15 min
+    const salt = crypto.randomBytes(16).toString('hex');
+    const hash = crypto.scryptSync(code, salt, 64).toString('hex');
+    configOperator.setConfigMetadata("passcode", [
+      ...configOperator.config.metadata.passcode,
+      {
+        code: `${salt}:${hash}`,
+        timestamp: Date.now() + 15 * 60 * 1000
+      }
+    ]);
+    return code;
+  },
+
+  verifyConfigPasscode: (code) => {
+    const timeNow = Date.now();
+    configOperator.setConfigMetadata("passcode",
+      configOperator.config.metadata.passcode.filter(
+        (item) =>
+          item.timestamp - timeNow > 0
+      )
+    );
+
+    if (typeof code === 'number') {
+      code = code.toString();
+    }
+    if (typeof code !== 'string' || !/^[0-9]{6}$/.test(code)) {
+      return false;
+    }
+
+    const passcodeIndex = configOperator.config.metadata.passcode.findIndex((item) => {
+      const [salt, hash] = item.code.split(':');
+      const candidate = crypto.scryptSync(code, salt, 64).toString('hex');
+      return crypto.timingSafeEqual(
+        Buffer.from(candidate, 'hex'),
+        Buffer.from(hash, 'hex')
+      );
+    });
+    if (passcodeIndex >= 0) {
+      configOperator.setConfigMetadata("passcode",
+        configOperator.config.metadata.passcode.filter(
+          (_, index) =>
+            index !== passcodeIndex
+        )
+      );
+      return true;
+    } else {
+      return false;
+    }
   },
 
   setConfigClipboard: (path, permanent) => {
@@ -996,6 +1060,12 @@ const checkConfig = (config, defaultConfig) => {
   default_config_keys.forEach((key) => {
     if (config[key] === undefined) {
       config[key] = defaultConfig[key]
+    }
+    if (Array.isArray(defaultConfig[key])) {
+      if (!Array.isArray(config[key])) {
+        config[key] = [...defaultConfig[key]];
+      }
+      return;
     }
     if (typeof defaultConfig[key] === 'object' && defaultConfig[key] !== null) {
       checkConfig(config[key], defaultConfig[key]);
