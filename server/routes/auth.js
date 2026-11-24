@@ -108,6 +108,31 @@ router.post('/login', (req, res, next) => {
   return;
 });
 
+router.post('/code', (req, res, next) => {
+  if (req.status.notAuthSuccess()) {
+    // -> AF_IT or abnormal request
+    next(api.errorStreamControl);
+    return;
+  }
+
+  if (req.status.authTempPass()) {
+    // -> EF_PD: temporary authorization is not allowed
+    req.status.addExecStatus(api.Status.execErrCode.PermissionDenied);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  const passcode = api.configOperator.addConfigPasscode();
+
+  // -> ES: return generated passcode
+  req.status.addExecStatus();
+  res.send({
+    ...req.status.generateReport(),
+    passcode: passcode
+  });
+  return;
+});
+
 router.post('/reset', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
     // -> EF_IT or abnormal request

@@ -613,6 +613,7 @@ const Status = {
     InvalidToken: "IT"
   },
   execErrCode: {
+    PermissionDenied: "PD",
     IncorrectPassword: "IP",
     ResourcesUnexist: "RU",
     TypeCheckFailed: "TCF",

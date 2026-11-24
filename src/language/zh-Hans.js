@@ -622,6 +622,7 @@ const zhHans = {
         invalidConfig: "备份文件预检查不通过。"
       },
       exception: {
+        permissionDenied: "权限不足，请使用主密码重新登录。",
         incorrectPassword: "密码错误。",
         resourcesUnexist: "请求的资源不存在。",
         typeCheckFailed: "类型检查不通过。",

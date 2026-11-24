@@ -622,6 +622,7 @@ const ja = {
         invalidConfig: "バックアップファイルの事前チェックがフェイルしました。"
       },
       exception: {
+        permissionDenied: "パーミッションが拒否されました。マスターパスワードで再ログインしてください。",
         incorrectPassword: "パスワードが間違っています。",
         resourcesUnexist: "リクエストされたリソースは存在しません。",
         typeCheckFailed: "タイプチェックがフェイルしました。",

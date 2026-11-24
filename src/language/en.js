@@ -622,6 +622,7 @@ const en = {
         invalidConfig: "Backup file pre-check failed."
       },
       exception: {
+        permissionDenied: "Permissions denied. Please re-login via master password.",
         incorrectPassword: "Incorrect password.",
         resourcesUnexist: "Resources requested do not exist.",
         typeCheckFailed: "Type check failed.",

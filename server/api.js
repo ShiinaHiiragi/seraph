@@ -1745,6 +1745,7 @@ Status.authErrCode = {
 }
 
 Status.execErrCode = {
+  PermissionDenied: "PD",
   IncorrectPassword: "IP",
   ResourcesUnexist: "RU",
   TypeCheckFailed: "TCF",
@@ -1782,7 +1783,7 @@ Status.prototype.notAuthSuccess = function () {
   return this.status !== Status.statusCode.AuthSuccess;
 }
 
-Status.prototype.isTempPass = function () {
+Status.prototype.authTempPass = function () {
   return this.pass;
 }
 
