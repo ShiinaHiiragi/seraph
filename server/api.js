@@ -1128,7 +1128,7 @@ const tokenOperator = {
     );
   },
 
-  validateUpdateSession: (res, session, isAuto) => {
+  validateUpdateSession: (req, res, session, isAuto) => {
     const __clearExpiredSessions = () => {
       const timeNow = Date.now();
       tokenOperator.setToken((token) => 
@@ -1139,6 +1139,7 @@ const tokenOperator = {
 
     let sessionIndex = tokenOperator.token.findIndex((item) => item.session === session)
     if (sessionIndex >= 0) {
+      req.pass = !tokenOperator.token[sessionIndex].full;
       // res is undefined when wssAuth() called
       if (res !== undefined && !isAuto) {
         cookieOperator.setSessionCookie(res, session);

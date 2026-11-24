@@ -15,6 +15,7 @@ const wssAuth = (api, req) => {
   const cookies = cookie.parse(req.headers.cookie || '');
   return api.configOperator.config.metadata.password.length > 0
     && api.tokenOperator.validateUpdateSession(
+      req,
       undefined,
       cookies[api.cookieOperator.sessionName]
     );

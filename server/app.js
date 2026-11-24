@@ -61,9 +61,10 @@ app.use((req, res, next) => {
   const auto = ["/info/stat"].includes(req.path);
 
   req.status = new api.Status();
+  req.pass = undefined
   req.status.addAuthStatus(
     api.configOperator.config.metadata.password.length
-      ? api.tokenOperator.validateUpdateSession(res, session, auto)
+      ? api.tokenOperator.validateUpdateSession(req, res, session, auto)
       ? undefined
       : api.Status.authErrCode.InvalidToken
       : api.Status.authErrCode.NotInit
