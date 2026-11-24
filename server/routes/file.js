@@ -67,7 +67,14 @@ router.post('/link', (req, res, next) => {
     ? '.url'
     : '.desktop';
   const filename = rawFilename + suffix;
-  const { folderPath, filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
+  const { folderPath, filePath, isRoot } = api.fileOperator.pathCombinator(type, folderName, filename);
+
+  if (isRoot) {
+    // -> EF_FUR: try to create file under root
+    req.status.addExecStatus(api.Status.execErrCode.FileUnderRoot);
+    res.send(req.status.generateReport());
+    return;
+  }
 
   if (!fs.existsSync(folderPath)) {
     // -> EF_RU: folder don't exist
@@ -80,13 +87,6 @@ router.post('/link', (req, res, next) => {
     // -> EF_IC: new filename already exists
     req.status.addExecStatus(api.Status.execErrCode.IdentifierConflict);
     res.send({...req.status.generateReport(), 0: filename});
-    return;
-  }
-
-  if (folderName.length === 0) {
-    // EF_FUR: try to paste file to root path
-    req.status.addExecStatus(api.Status.execErrCode.FileUnderRoot);
-    res.send(req.status.generateReport());
     return;
   }
 
@@ -119,7 +119,14 @@ router.post('/markdown', (req, res, next) => {
   // directory file is a special kind of file
   const { type, folderName, filename: rawFilename } = req.body;
   const filename = rawFilename + ".md";
-  const { folderPath, filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
+  const { folderPath, filePath, isRoot } = api.fileOperator.pathCombinator(type, folderName, filename);
+
+  if (isRoot) {
+    // -> EF_FUR: try to create file under root
+    req.status.addExecStatus(api.Status.execErrCode.FileUnderRoot);
+    res.send(req.status.generateReport());
+    return;
+  }
 
   if (!fs.existsSync(folderPath)) {
     // -> EF_RU: folder don't exist
@@ -132,13 +139,6 @@ router.post('/markdown', (req, res, next) => {
     // -> EF_IC: new filename already exists
     req.status.addExecStatus(api.Status.execErrCode.IdentifierConflict);
     res.send({...req.status.generateReport(), 0: filename});
-    return;
-  }
-
-  if (folderName.length === 0) {
-    // EF_FUR: try to paste file to root path
-    req.status.addExecStatus(api.Status.execErrCode.FileUnderRoot);
-    res.send(req.status.generateReport());
     return;
   }
 
@@ -169,10 +169,10 @@ router.post('/upload', (req, res, next) => {
   }
 
   const { type, folderName, filename, base } = req.body;
-  const { folderPath, filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
+  const { folderPath, filePath, isRoot } = api.fileOperator.pathCombinator(type, folderName, filename);
 
-  if (folderName.length === 0) {
-    // EF_FUR: try to paste file to root path
+  if (isRoot) {
+    // -> EF_FUR: try to upload file under root
     req.status.addExecStatus(api.Status.execErrCode.FileUnderRoot);
     res.send(req.status.generateReport());
     return;
@@ -233,7 +233,8 @@ router.post('/paste', (req, res, next) => {
   const { filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
   const {
     folderPath: newFolderPath,
-    filePath: newFilePath
+    filePath: newFilePath,
+    isRoot: newFolderIsRoot
   } = api.fileOperator.pathCombinator(newType, newFolderName, filename);
 
   if (!fs.existsSync(filePath)) {
@@ -241,6 +242,13 @@ router.post('/paste', (req, res, next) => {
 
     // -> EF_RU: origin file don't exist
     req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  if (newFolderIsRoot && !directory) {
+    // -> EF_FUR: try to paste file under root
+    req.status.addExecStatus(api.Status.execErrCode.FileUnderRoot);
     res.send(req.status.generateReport());
     return;
   }
@@ -256,13 +264,6 @@ router.post('/paste', (req, res, next) => {
     // -> EF_IC: new filename already exists
     req.status.addExecStatus(api.Status.execErrCode.IdentifierConflict);
     res.send({...req.status.generateReport(), 0: filename});
-    return;
-  }
-
-  if (newFolderName.length === 0 && !directory) {
-    // EF_FUR: try to paste file to root path
-    req.status.addExecStatus(api.Status.execErrCode.FileUnderRoot);
-    res.send(req.status.generateReport());
     return;
   }
 
@@ -484,7 +485,14 @@ router.post('/zip', (req, res, next) => {
   }
 
   const { type, folderName, filename } = req.body;
-  const { folderPath, filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
+  const { folderPath, filePath, isRoot } = api.fileOperator.pathCombinator(type, folderName, filename);
+
+  if (isRoot) {
+    // -> EF_FUR: try to create zip file under root
+    req.status.addExecStatus(api.Status.execErrCode.FileUnderRoot);
+    res.send(req.status.generateReport());
+    return;
+  }
 
   const newFilename = filename + ".zip"
   const { filePath: newFilePath } = api.fileOperator.pathCombinator(type, folderName, newFilename);
@@ -532,7 +540,14 @@ router.post('/unzip', (req, res, next) => {
   }
 
   const { type, folderName, filename } = req.body;
-  const { folderPath, filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
+  const { folderPath, filePath, isRoot } = api.fileOperator.pathCombinator(type, folderName, filename);
+
+  if (isRoot) {
+    // -> EF_FUR: try to extract archive under root
+    req.status.addExecStatus(api.Status.execErrCode.FileUnderRoot);
+    res.send(req.status.generateReport());
+    return;
+  }
 
   if (!fs.existsSync(filePath)) {
     // -> EF_RU: folder don't exist
@@ -596,7 +611,14 @@ router.post('/epub', (req, res, next) => {
   }
 
   const { type, folderName, filename } = req.body;
-  const { folderPath, filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
+  const { folderPath, filePath, isRoot } = api.fileOperator.pathCombinator(type, folderName, filename);
+
+  if (isRoot) {
+    // -> EF_FUR: try to convert epub under root
+    req.status.addExecStatus(api.Status.execErrCode.FileUnderRoot);
+    res.send(req.status.generateReport());
+    return;
+  }
 
   if (!fs.existsSync(filePath)) {
     // -> EF_RU: folder don't exist
@@ -711,7 +733,14 @@ router.post('/encrypt', (req, res, next) => {
   }
 
   const { type, folderName, filename } = req.body;
-  const { folderPath, filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
+  const { folderPath, filePath, isRoot } = api.fileOperator.pathCombinator(type, folderName, filename);
+
+  if (isRoot) {
+    // -> EF_FUR: try to encrypt file under root
+    req.status.addExecStatus(api.Status.execErrCode.FileUnderRoot);
+    res.send(req.status.generateReport());
+    return;
+  }
 
   const newFilename = filename + ".srph"
   const { filePath: newFilePath } = api.fileOperator.pathCombinator(type, folderName, newFilename);
@@ -763,7 +792,14 @@ router.post('/decrypt', (req, res, next) => {
   }
 
   const { type, folderName, filename, privateKey } = req.body;
-  const { folderPath, filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
+  const { folderPath, filePath, isRoot } = api.fileOperator.pathCombinator(type, folderName, filename);
+
+  if (isRoot) {
+    // -> EF_FUR: try to decrypt file under root
+    req.status.addExecStatus(api.Status.execErrCode.FileUnderRoot);
+    res.send(req.status.generateReport());
+    return;
+  }
 
   if (api.configOperator.config.metadata.cipher.length === 0) {
     // -> EF_PU: password has not been set

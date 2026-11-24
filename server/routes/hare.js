@@ -339,8 +339,16 @@ router.post('/save', (req, res, next) => {
 
   const {
     folderPath,
-    filePath
+    filePath,
+    isRoot
   } = api.fileOperator.pathCombinator(type, folderName, filename);
+
+  if (isRoot && create) {
+    // -> EF_FUR: try to create file under root
+    req.status.addExecStatus(api.Status.execErrCode.FileUnderRoot);
+    res.send(req.status.generateReport());
+    return;
+  }
 
   if (!fs.existsSync(folderPath) || !fs.statSync(folderPath).isDirectory()) {
     // -> EF_RU: folder does not exist or is not a directory

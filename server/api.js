@@ -416,13 +416,17 @@ const fileOperator = {
     }
 
     if (filename === undefined) {
-      return { folderPath: folderPath };
+      return {
+        folderPath: folderPath,
+        isRoot: relative === ''
+      };
     } else if (!filename || ['.', '..'].includes(filename) || /[/\\:\0]/.test(filename)) {
       throw invalid();
     } else {
       return {
         folderPath: folderPath,
-        filePath: path.join(folderPath, filename)
+        filePath: path.join(folderPath, filename),
+        isRoot: relative === ''
       };
     }
   },
