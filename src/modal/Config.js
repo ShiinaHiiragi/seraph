@@ -30,6 +30,7 @@ import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import RestartAltOutlinedIcon from "@mui/icons-material/RestartAltOutlined";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
+import KeyOutlinedIcon from "@mui/icons-material/KeyOutlined";
 import GlobalContext, {
   HiddenInput,
   animeDuration,
@@ -520,6 +521,24 @@ const SECTIONS = (
             />
           )
         },
+        {
+          key: "TEMP PASSCODE",
+          value: (
+            <Button
+              size="sm"
+              color="neutral"
+              variant="outlined"
+              onClick={() => {
+                request("POST/auth/code").then((data) => {
+                  toast.message(`临时代码：${data.passcode}`, { duration: Infinity });
+                });
+              }}
+              startDecorator={<KeyOutlinedIcon />}
+            >
+              GENERATE
+            </Button>
+          )
+        }
       ]
     },
     {
