@@ -69,6 +69,13 @@ router.post('/link', (req, res, next) => {
   const filename = rawFilename + suffix;
   const { folderPath, filePath, isRoot } = api.fileOperator.pathCombinator(type, folderName, filename);
 
+  if (req.status.authTempPass() && api.secretOperator.isSecret(folderPath)) {
+    // -> EF_RU: hide secret paths from temporary authorization
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
+
   if (isRoot) {
     // -> EF_FUR: try to create file under root
     req.status.addExecStatus(api.Status.execErrCode.FileUnderRoot);
@@ -121,6 +128,13 @@ router.post('/markdown', (req, res, next) => {
   const filename = rawFilename + ".md";
   const { folderPath, filePath, isRoot } = api.fileOperator.pathCombinator(type, folderName, filename);
 
+  if (req.status.authTempPass() && api.secretOperator.isSecret(folderPath)) {
+    // -> EF_RU: hide secret paths from temporary authorization
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
+
   if (isRoot) {
     // -> EF_FUR: try to create file under root
     req.status.addExecStatus(api.Status.execErrCode.FileUnderRoot);
@@ -170,6 +184,13 @@ router.post('/upload', (req, res, next) => {
 
   const { type, folderName, filename, base } = req.body;
   const { folderPath, filePath, isRoot } = api.fileOperator.pathCombinator(type, folderName, filename);
+
+  if (req.status.authTempPass() && api.secretOperator.isSecret(folderPath)) {
+    // -> EF_RU: hide secret paths from temporary authorization
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
 
   if (isRoot) {
     // -> EF_FUR: try to upload file under root
@@ -383,6 +404,13 @@ router.post('/relink', (req, res, next) => {
   const { type, folderName, filename, url } = req.body;
   const { folderPath, filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
 
+  if (req.status.authTempPass() && api.secretOperator.isSecret(filePath)) {
+    // -> EF_RU: hide secret paths from temporary authorization
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
+
   if (!fs.existsSync(filePath)) {
     // -> EF_RU: file don't exist
     req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
@@ -423,6 +451,13 @@ router.post('/copy', (req, res, next) => {
   const { type, folderName, filename } = req.body;
   const { filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
 
+  if (req.status.authTempPass() && api.secretOperator.isSecret(filePath)) {
+    // -> EF_RU: hide secret paths from temporary authorization
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
+
   if (!fs.existsSync(filePath)) {
     // -> EF_RU: folder don't exist
     req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
@@ -450,6 +485,13 @@ router.post('/cut', (req, res, next) => {
 
   const { type, folderName, filename } = req.body;
   const { filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
+
+  if (req.status.authTempPass() && api.secretOperator.isSecret(filePath)) {
+    // -> EF_RU: hide secret paths from temporary authorization
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
 
   if (!fs.existsSync(filePath)) {
     // -> EF_RU: folder don't exist
@@ -481,6 +523,13 @@ router.post('/delete', (req, res, next) => {
     filePath,
     isRoot
   } = api.fileOperator.pathCombinator(type, folderName, filename);
+
+  if (req.status.authTempPass() && api.secretOperator.isSecret(filePath)) {
+    // -> EF_RU: hide secret paths from temporary authorization
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
 
   if (!fs.existsSync(filePath)) {
     // -> EF_RU: folder don't exist
@@ -525,6 +574,13 @@ router.post('/zip', (req, res, next) => {
 
   const { type, folderName, filename } = req.body;
   const { folderPath, filePath, isRoot } = api.fileOperator.pathCombinator(type, folderName, filename);
+
+  if (req.status.authTempPass() && api.secretOperator.isSecret(filePath)) {
+    // -> EF_RU: hide secret paths from temporary authorization
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
 
   if (isRoot) {
     // -> EF_FUR: try to create zip file under root
@@ -580,6 +636,13 @@ router.post('/unzip', (req, res, next) => {
 
   const { type, folderName, filename } = req.body;
   const { folderPath, filePath, isRoot } = api.fileOperator.pathCombinator(type, folderName, filename);
+
+  if (req.status.authTempPass() && api.secretOperator.isSecret(filePath)) {
+    // -> EF_RU: hide secret paths from temporary authorization
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
 
   if (isRoot) {
     // -> EF_FUR: try to extract archive under root
@@ -651,6 +714,13 @@ router.post('/epub', (req, res, next) => {
 
   const { type, folderName, filename } = req.body;
   const { folderPath, filePath, isRoot } = api.fileOperator.pathCombinator(type, folderName, filename);
+
+  if (req.status.authTempPass() && api.secretOperator.isSecret(filePath)) {
+    // -> EF_RU: hide secret paths from temporary authorization
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
 
   if (isRoot) {
     // -> EF_FUR: try to convert epub under root
@@ -774,6 +844,13 @@ router.post('/encrypt', (req, res, next) => {
   const { type, folderName, filename } = req.body;
   const { folderPath, filePath, isRoot } = api.fileOperator.pathCombinator(type, folderName, filename);
 
+  if (req.status.authTempPass() && api.secretOperator.isSecret(filePath)) {
+    // -> EF_RU: hide secret paths from temporary authorization
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
+
   if (isRoot) {
     // -> EF_FUR: try to encrypt file under root
     req.status.addExecStatus(api.Status.execErrCode.FileUnderRoot);
@@ -832,6 +909,13 @@ router.post('/decrypt', (req, res, next) => {
 
   const { type, folderName, filename, privateKey } = req.body;
   const { folderPath, filePath, isRoot } = api.fileOperator.pathCombinator(type, folderName, filename);
+
+  if (req.status.authTempPass() && api.secretOperator.isSecret(filePath)) {
+    // -> EF_RU: hide secret paths from temporary authorization
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
 
   if (isRoot) {
     // -> EF_FUR: try to decrypt file under root

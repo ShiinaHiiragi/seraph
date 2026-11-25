@@ -8,6 +8,13 @@ router.get('/*/:filename', (req, res, next) => {
   const { download, thumbnail } = req.query;
   const { filePath } = api.fileOperator.pathCombinator('private', folderName, filename);
 
+  if (req.status.authTempPass() && api.secretOperator.isSecret(filePath)) {
+    // -> EF_RU: hide secret paths from temporary authorization
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
+
   if (!fs.existsSync(filePath)) {
     // -> next: folder don't exist
     next();
