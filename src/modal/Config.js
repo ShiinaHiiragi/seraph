@@ -2034,22 +2034,54 @@ export default function Config(props) {
 
   const sectionRefs = React.useRef({});
   const isSystemScrolling = React.useRef(false);
-  const sectionUncurry = React.useMemo(() => SECTIONS(
-    context,
-    setMetadata,
-    showSalt,
-    setShowSalt,
-    resetButtonLoading,
-    handleApplySetting,
-    handleResetSetting,
-    handleUpload,
-    handleDownload,
-    handleUploadStyle,
-    handleDownloadStyle,
-    gradeDraft,
-    gradeErrors,
-    handleGradeDraft
-  ), [
+  const sectionUncurry = React.useMemo(() => {
+    const sections = SECTIONS(
+      context,
+      setMetadata,
+      showSalt,
+      setShowSalt,
+      resetButtonLoading,
+      handleApplySetting,
+      handleResetSetting,
+      handleUpload,
+      handleDownload,
+      handleUploadStyle,
+      handleDownloadStyle,
+      gradeDraft,
+      gradeErrors,
+      handleGradeDraft
+    );
+    if (context.isTempPass) {
+      return sections
+        .filter((section) => ![
+          settingField.account,
+          settingField.terminal,
+          settingField.extension
+        ].includes(section.id))
+        .map((section) => {
+          if (section.id === settingField.general) {
+            return {
+              ...section,
+              items: section.items.filter((item) =>
+                item.key !== context.languagePicker("header.config.general.reset") &&
+                item.key !== context.languagePicker("header.config.general.upload")
+              )
+            };
+          }
+          if (section.id === settingField.file) {
+            return {
+              ...section,
+              items: section.items.filter((item) =>
+                item.key !== context.languagePicker("header.config.file.cipher")
+              )
+            };
+          }
+          return section;
+        });
+    } else {
+      return sections;
+    }
+  }, [
     context,
     setMetadata,
     showSalt,

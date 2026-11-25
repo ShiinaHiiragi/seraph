@@ -177,7 +177,7 @@ export default function Navigation(props) {
                     <ListItemContent>{context.languagePicker("nav.utility.subscription")}</ListItemContent>
                   </ListItemButton>
                 </ListItem>} */}
-                {context.isAuthority && <ListItem>
+                {context.isAuthority && !context.isTempPass && <ListItem>
                   <ListItemButton
                     selected={pathStartWith("/terminal")}
                     onClick={() => navigateTo("/terminal")}

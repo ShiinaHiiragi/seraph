@@ -27,7 +27,7 @@ const Terminal = () => {
   const [fontReady, setFontReady] = React.useState(false);
 
   React.useEffect(() => {
-    if (!context.secondTick) {
+    if (!context.secondTick || context.isTempPass) {
       return;
     }
     const url = monospaceFonts.find(
@@ -57,7 +57,7 @@ const Terminal = () => {
   }, [context.secondTick, context.setting.terminal.font.family]);
 
   React.useEffect(() => {
-    if (!context.secondTick) {
+    if (!context.secondTick || context.isTempPass) {
       return;
     }
     let cancelled = false;
@@ -105,6 +105,9 @@ const Terminal = () => {
   ]);
 
   React.useEffect(() => {
+    if (context.isTempPass) {
+      return;
+    }
     if (xtermRef.current) {
       const { transparency, ...themeColors } = context.setting.terminal.theme;
       Object.assign(xtermRef.current.options, {
@@ -147,6 +150,7 @@ const Terminal = () => {
     if (
       context.secondTick
         && context.isAuthority
+        && !context.isTempPass
         && containerRef.current
         && context.setting.terminal.enable
         && fontReady
@@ -330,13 +334,16 @@ const Terminal = () => {
     fontReady,
     // login in same page
     context.isAuthority,
+    // login with master password
+    context.isTempPass,
     // terminal is enabled
     context.setting.terminal.enable
   ]);
 
   return (
     <RouteField
-      display={context.isAuthority}
+      display={context.isAuthority && !context.isTempPass}
+      temp={context.isTempPass}
       path={[
         context.languagePicker("nav.utility.title"),
         context.languagePicker("nav.utility.terminal"),

@@ -26,6 +26,7 @@ const RouteField = (props) => {
     link,
     title,
     sxRaw,
+    temp,
     children,
     sx,
     ...otherProps
@@ -124,7 +125,11 @@ const RouteField = (props) => {
           ? children
           : <Caption
             title={context.languagePicker("universal.placeholder.deny.title")}
-            caption={context.languagePicker("universal.placeholder.deny.captionAnonymous")}
+            caption={
+              temp
+                ? context.languagePicker("universal.placeholder.deny.captionPass")
+                : context.languagePicker("universal.placeholder.deny.captionAnonymous")
+            }
           />}
       </RouteFieldRaw>
     </RouteFieldRaw>
