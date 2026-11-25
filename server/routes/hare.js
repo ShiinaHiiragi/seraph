@@ -16,6 +16,17 @@ router.get('/list', (req, res, next) => {
     filePath
   } = api.fileOperator.pathCombinator(type, folderName, filename);
 
+  if (
+    type === 'private'
+      && req.status.authTempPass()
+      && api.secretOperator.isSecret(filePath)
+  ) {
+    // -> EF_RU: hide secret paths from temporary authorization
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
+
   if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
     // -> EF_RU: file does not exist or is not a regular file
     req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
@@ -61,6 +72,17 @@ router.post('/add', (req, res, next) => {
     folderPath: _,
     filePath
   } = api.fileOperator.pathCombinator(type, folderName, filename);
+
+  if (
+    type === 'private'
+      && req.status.authTempPass()
+      && api.secretOperator.isSecret(filePath)
+  ) {
+    // -> EF_RU: hide secret paths from temporary authorization
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
 
   if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
     // -> EF_RU: file does not exist or is not a regular file
@@ -117,6 +139,17 @@ router.post('/edit', (req, res, next) => {
     folderPath: _,
     filePath
   } = api.fileOperator.pathCombinator(type, folderName, filename);
+
+  if (
+    type === 'private'
+      && req.status.authTempPass()
+      && api.secretOperator.isSecret(filePath)
+  ) {
+    // -> EF_RU: hide secret paths from temporary authorization
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
 
   if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
     // -> EF_RU: file does not exist or is not a regular file
@@ -178,6 +211,17 @@ router.post('/delete', (req, res, next) => {
     filePath
   } = api.fileOperator.pathCombinator(type, folderName, filename);
 
+  if (
+    type === 'private'
+      && req.status.authTempPass()
+      && api.secretOperator.isSecret(filePath)
+  ) {
+    // -> EF_RU: hide secret paths from temporary authorization
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
+
   if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
     // -> EF_RU: file does not exist or is not a regular file
     req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
@@ -234,6 +278,17 @@ router.post('/forget', (req, res, next) => {
   }
 
   const { filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
+
+  if (
+    type === 'private'
+      && req.status.authTempPass()
+      && api.secretOperator.isSecret(filePath)
+  ) {
+    // -> EF_RU: hide secret paths from temporary authorization
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
   if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
     // -> EF_RU: file does not exist or is not a regular file
     req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
@@ -285,6 +340,17 @@ router.post('/sort', (req, res, next) => {
   }
 
   const { filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
+
+  if (
+    type === 'private'
+      && req.status.authTempPass()
+      && api.secretOperator.isSecret(filePath)
+  ) {
+    // -> EF_RU: hide secret paths from temporary authorization
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
   if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
     // -> EF_RU: file does not exist or is not a regular file
     req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
@@ -342,6 +408,17 @@ router.post('/save', (req, res, next) => {
     filePath,
     isRoot
   } = api.fileOperator.pathCombinator(type, folderName, filename);
+
+  if (
+    type === 'private'
+      && req.status.authTempPass()
+      && api.secretOperator.isSecret(folderPath)
+  ) {
+    // -> EF_RU: hide secret paths from temporary authorization
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
 
   if (isRoot && create) {
     // -> EF_FUR: try to create file under root
@@ -405,6 +482,17 @@ router.post('/sync', (req, res, next) => {
     folderPath: _,
     filePath
   } = api.fileOperator.pathCombinator(type, folderName, filename);
+
+  if (
+    type === 'private'
+      && req.status.authTempPass()
+      && api.secretOperator.isSecret(filePath)
+  ) {
+    // -> EF_RU: hide secret paths from temporary authorization
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
 
   if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
     // -> EF_RU: file does not exist or is not a regular file
