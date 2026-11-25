@@ -124,7 +124,7 @@ const RouteField = (props) => {
           ? children
           : <Caption
             title={context.languagePicker("universal.placeholder.deny.title")}
-            caption={context.languagePicker("universal.placeholder.deny.caption")}
+            caption={context.languagePicker("universal.placeholder.deny.captionAnonymous")}
           />}
       </RouteFieldRaw>
     </RouteFieldRaw>

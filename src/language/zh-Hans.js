@@ -760,7 +760,8 @@ const zhHans = {
       },
       deny: {
         title: "没有权限",
-        caption: "登录以获得完全访问权限。"
+        captionAnonymous: "登录以获得完全访问权限。",
+        captionPass: "使用主密码重新登录以获得完全访问权限。"
       },
       unexist: {
         title: "资源不可用",

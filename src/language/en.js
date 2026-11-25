@@ -760,7 +760,8 @@ const en = {
       },
       deny: {
         title: "Permission Denied",
-        caption: "Log in to acquire full access."
+        captionAnonymous: "Log in to acquire full access.",
+        captionPass: "Re-login via master password to acquire full access."
       },
       unexist: {
         title: "Resources Unavailable",

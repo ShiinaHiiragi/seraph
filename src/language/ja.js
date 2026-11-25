@@ -760,7 +760,8 @@ const ja = {
       },
       deny: {
         title: "許可拒否",
-        caption: "フルアクセスを取得するにはログインしてください。"
+        captionAnonymous: "フルアクセスを取得するにはログインしてください。",
+        captionPass: "フルアクセスを取得するにはマスターパスワードで再ログインしてください。"
       },
       unexist: {
         title: "リソース不在",
