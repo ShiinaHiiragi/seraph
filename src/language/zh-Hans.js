@@ -16,12 +16,23 @@ const zhHans = {
         title: "账号",
         token: "令牌有效期限",
         tokenTip: "每次发起请求都将更新令牌有效期限（终端 WebSocket 传输除外）",
-        tokenOption: {
+        fullCaption: "完整权限",
+        fullOption: {
           15: "15 分钟",
           60: "1 小时",
+          360: "6 小时",
           720: "12 小时",
           1440: "1 天",
           2880: "2 天"
+        },
+        tempCaption: "临时权限",
+        tempOption: {
+          5: "5 分钟",
+          15: "15 分钟",
+          30: "30 分钟",
+          45: "45 分钟",
+          60: "1 小时",
+          360: "6 小时"
         },
         password: "更换登录密码"
       },

@@ -498,21 +498,43 @@ const SECTIONS = (
         {
           key: context.languagePicker("header.config.account.token"),
           tip: context.languagePicker("header.config.account.tokenTip"),
-          value: Literal(
-            context.setting.meta.token.full,
-            [
-              { value: 15, label: context.languagePicker("header.config.account.tokenOption.15") },
-              { value: 60, label: context.languagePicker("header.config.account.tokenOption.60") },
-              { value: 720, label: context.languagePicker("header.config.account.tokenOption.720") },
-              { value: 1440, label: context.languagePicker("header.config.account.tokenOption.1440") },
-              { value: 2880, label: context.languagePicker("header.config.account.tokenOption.2880") }
-            ],
-            "meta.token.full",
-            handleApply,
-            undefined,
-            undefined,
-            (value) => context.languagePicker("header.config.fallback.minutes").format(value)
-          )
+          value:
+          <Stack spacing={1}>
+            {LabeledLiteral(
+              context.languagePicker("header.config.account.fullCaption"),
+              context.setting.meta.token.full,
+              [
+                { value: 15, label: context.languagePicker("header.config.account.fullOption.15") },
+                { value: 60, label: context.languagePicker("header.config.account.fullOption.60") },
+                { value: 360, label: context.languagePicker("header.config.account.fullOption.360") },
+                { value: 720, label: context.languagePicker("header.config.account.fullOption.720") },
+                { value: 1440, label: context.languagePicker("header.config.account.fullOption.1440") },
+                { value: 2880, label: context.languagePicker("header.config.account.fullOption.2880") }
+              ],
+              "meta.token.full",
+              handleApply,
+              undefined,
+              undefined,
+              (value) => context.languagePicker("header.config.fallback.minutes").format(value)
+            )}
+            {LabeledLiteral(
+              context.languagePicker("header.config.account.tempCaption"),
+              context.setting.meta.token.temp,
+              [
+                { value: 5, label: context.languagePicker("header.config.account.tempOption.5") },
+                { value: 15, label: context.languagePicker("header.config.account.tempOption.15") },
+                { value: 30, label: context.languagePicker("header.config.account.tempOption.30") },
+                { value: 45, label: context.languagePicker("header.config.account.tempOption.45") },
+                { value: 60, label: context.languagePicker("header.config.account.tempOption.60") },
+                { value: 360, label: context.languagePicker("header.config.account.tempOption.360") },
+              ],
+              "meta.token.temp",
+              handleApply,
+              undefined,
+              undefined,
+              (value) => context.languagePicker("header.config.fallback.minutes").format(value)
+            )}
+          </Stack>
         },
         {
           key: context.languagePicker("header.config.account.password"),

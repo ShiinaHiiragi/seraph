@@ -16,12 +16,23 @@ const en = {
         title: "Account",
         token: "Token Expiry",
         tokenTip: "Each request extends the token expiration time (excluding terminal WebSocket connections).",
-        tokenOption: {
+        fullCaption: "Full access",
+        fullOption: {
           15: "15 minutes",
           60: "1 hour",
+          360: "6 hours",
           720: "12 hours",
           1440: "1 day",
           2880: "2 day"
+        },
+        tempCaption: "Temporary access",
+        tempOption: {
+          5: "5 minutes",
+          15: "15 minutes",
+          30: "30 minutes",
+          45: "45 minutes",
+          60: "1 hour",
+          360: "6 hours"
         },
         password: "Change Login Password"
       },
