@@ -59,6 +59,7 @@ const Header = (props) => {
     setDrawerOpen,
     setPublicFolders,
     setPrivateFolders,
+    setSecret,
     setMetadata,
     setClipboard,
     setSetting,
@@ -313,8 +314,10 @@ const Header = (props) => {
       .then((data) => {
         setPublicFolders(data.public);
         setPrivateFolders(data.private);
+        setSecret(data.secret);
         setMetadata(data.metadata);
         setClipboard(data.clipboard);
+        setSetting(data.setting);
         setGlobalSwitch(data.full ? globalState.AUTHORITY : globalState.PASS);
         handleCloseLogin();
         toast.message(context.languagePicker("modal.toast.plain.login"));
@@ -332,8 +335,10 @@ const Header = (props) => {
     setGlobalSwitch,
     setPublicFolders,
     setPrivateFolders,
+    setSecret,
     setMetadata,
     setClipboard,
+    setSetting,
     handleCloseLogin
   ]);
 

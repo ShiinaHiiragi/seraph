@@ -44,6 +44,7 @@ export default function Init(props) {
     setMetadata,
     setPublicFolders,
     setPrivateFolders,
+    setSecret,
     modalInitOpen,
     setModalInitOpen
   } = props;
@@ -66,6 +67,7 @@ export default function Init(props) {
         setFirstTick(true);
         setPublicFolders(data.public);
         setPrivateFolders(data.private);
+        setSecret(data.secret);
         setClipboard(data.clipboard);
         setSetting(data.setting);
         setMetadata(data.metadata);
@@ -90,6 +92,7 @@ export default function Init(props) {
     setFirstTick,
     setPublicFolders,
     setPrivateFolders,
+    setSecret,
     setClipboard,
     setSetting,
     setMetadata

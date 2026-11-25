@@ -162,6 +162,7 @@ const PanelLayout = () => {
     setSettingPair,
     setPublicFolders,
     setPrivateFolders,
+    setSecret,
     setFirstTick
   } = React.useContext(RouterBridgeContext);
   const [drawerOpen, setDrawerOpen] = React.useState(false);
@@ -181,6 +182,7 @@ const PanelLayout = () => {
               setDrawerOpen={setDrawerOpen}
               setPublicFolders={setPublicFolders}
               setPrivateFolders={setPrivateFolders}
+              setSecret={setSecret}
               setMetadata={setMetadata}
               setClipboard={setClipboard}
               setSetting={setSetting}
@@ -210,6 +212,7 @@ const PanelLayout = () => {
             setMetadata={setMetadata}
             setPublicFolders={setPublicFolders}
             setPrivateFolders={setPrivateFolders}
+            setSecret={setSecret}
             modalInitOpen={modalInitOpen}
             setModalInitOpen={setModalInitOpen}
           />
@@ -293,6 +296,7 @@ const Panel = () => {
 
   const [publicFolders, setPublicFolders] = React.useState([]);
   const [privateFolders, setPrivateFolders] = React.useState([]);
+  const [secret, setSecret] = React.useState([]);
   const sortedPublicFolders = React.useMemo(() => publicFolders.sortBy(), [publicFolders]);
   const sortedPrivateFolders = React.useMemo(() => privateFolders.sortBy(), [privateFolders]);
 
@@ -338,6 +342,7 @@ const Panel = () => {
 
         if (data.private) {
           setPrivateFolders(data.private);
+          setSecret(data.secret);
           setMetadata(data.metadata);
           setClipboard(data.clipboard);
           setGlobalSwitch(data.full ? globalState.AUTHORITY : globalState.PASS);
@@ -435,6 +440,7 @@ const Panel = () => {
         modalReconfirm: modalReconfirm,
         sortedPublicFolders: sortedPublicFolders,
         sortedPrivateFolders: sortedPrivateFolders,
+        secret: secret,
         languagePicker: languagePicker,
         setModalReconfirm: setModalReconfirm
       }}
@@ -453,6 +459,7 @@ const Panel = () => {
           setSettingPair: setSettingPair,
           setPublicFolders: setPublicFolders,
           setPrivateFolders: setPrivateFolders,
+          setSecret: setSecret,
           setFirstTick: setFirstTick
         }}
       >

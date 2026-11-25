@@ -36,6 +36,7 @@ router.get('/meta', (req, res, next) => {
     res.send({
       ...req.status.generateReport(),
       full: !req.status.authTempPass(),
+      secret: req.status.authTempPass() ? [] : api.secretOperator.secret,
       public: publicFolder,
       private: privateFolder,
       metadata: api.configOperator.getMetadata(),
@@ -62,6 +63,8 @@ router.post('/init', (req, res, next) => {
       req.status.addExecStatus();
       res.send({
         ...req.status.generateReport(),
+        full: true,
+        secret: api.secretOperator.secret,
         public: publicFolder,
         private: privateFolder,
         metadata: api.configOperator.getMetadata(),
@@ -99,10 +102,12 @@ router.post('/login', (req, res, next) => {
         res.send({
           ...req.status.generateReport(),
           full: !req.status.authTempPass(),
+          secret: req.status.authTempPass() ? [] : api.secretOperator.secret,
           public: publicFolder,
           private: privateFolder,
           metadata: api.configOperator.getMetadata(),
           clipboard: api.configOperator.config.clipboard,
+          setting: api.configOperator.config.setting,
           saltWarning: api.saltOperator.getSelfCheck()
         });
         return;

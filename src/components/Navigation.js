@@ -8,7 +8,8 @@ import ListItemContent from "@mui/joy/ListItemContent";
 import IconButton from "@mui/joy/IconButton";
 import Typography from "@mui/joy/Typography"
 import GreyLogo from "../logo-grey.svg";
-import FolderOpenIcon from "@mui/icons-material/FolderOpen";
+import FolderOutlinedIcon from "@mui/icons-material/FolderOutlined";
+import FolderSpecialOutlinedIcon from "@mui/icons-material/FolderSpecialOutlined";
 import NavigateNextOutlinedIcon from "@mui/icons-material/NavigateNextOutlined";
 import EventNoteOutlinedIcon from "@mui/icons-material/EventNoteOutlined";
 // import ForwardToInboxOutlinedIcon from "@mui/icons-material/ForwardToInboxOutlined";
@@ -84,7 +85,7 @@ export default function Navigation(props) {
                     onClick={() => navigateTo(`/public/${item}`)}
                   >
                     <ListItemDecorator>
-                      <FolderOpenIcon fontSize="small" />
+                      <FolderOutlinedIcon fontSize="small" />
                     </ListItemDecorator>
                     <ListItemContent>{item}</ListItemContent>
                   </ListItemButton>
@@ -128,7 +129,9 @@ export default function Navigation(props) {
                     onClick={() => navigateTo(`/private/${item}`)}
                   >
                     <ListItemDecorator>
-                      <FolderOpenIcon fontSize="small" />
+                      {context.secret.includes(item)
+                        ? <FolderSpecialOutlinedIcon fontSize="small" />
+                        : <FolderOutlinedIcon fontSize="small" />}
                     </ListItemDecorator>
                     <ListItemContent>{item}</ListItemContent>
                   </ListItemButton>
