@@ -113,7 +113,7 @@ const Header = (props) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleApplySetting = React.useCallback((key, value) => {
+  const handleApplySetting = React.useCallback((key, value, silent = false) => {
     context.crepeRef.snapshot.current = context.crepeRef.getText();
     context.crepeRef.select.current = context.crepeRef.getSelect();
     context.crepeRef.scroll.current = context.crepeRef.getScroll();
@@ -128,7 +128,7 @@ const Header = (props) => {
           resolve();
         })
     });
-    toast.promise(promise, {
+    if (!silent) toast.promise(promise, {
       loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
       success: () => (
         key === "meta.language"

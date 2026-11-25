@@ -369,7 +369,17 @@ const defaultConfig = {
     }
   }
 };
+
+const tempBlackList = [
+  'meta.token.full',
+  'meta.token.temp',
+  'meta.secret.expire',
+  'meta.secret.inherit',
+  'terminal.*'
+];
+
 exports.defaultConfig = defaultConfig;
+exports.tempBlackList = tempBlackList;
 
 function APIException(code) {
   const err = new Error();

@@ -10,25 +10,24 @@ router.post('/set', (req, res, next) => {
   }
 
   const { key, value } = req.body;
-  if (req.status.authTempPass()) {
-    const currentValue = api.configOperator.getValue(api.configOperator.config.setting, key);
-    const defaultValue = api.configOperator.getValue(api.defaultConfig.setting, key);
-    const nonLeaf = [currentValue, defaultValue].some((item) =>
-      item !== null && typeof item === 'object'
-    );
-    const blocked = [
-      'meta.token.full',
-      'meta.token.temp',
-      'meta.secret.expire',
-      'meta.secret.inherit'
-    ].includes(key) || key === 'terminal' || key.startsWith('terminal.');
+  const currentValue = api.configOperator.getValue(api.configOperator.config.setting, key);
+  const defaultValue = api.configOperator.getValue(api.defaultConfig.setting, key);
+  const nonLeaf = [currentValue, defaultValue].some((item) =>
+    item !== null
+      && typeof item === 'object'
+  );
+  const blocked = req.status.authTempPass()
+    && api.tempBlackList.some((pattern) =>
+      pattern.endsWith('.*')
+        ? key.startsWith(pattern.slice(0, -1))
+        : key === pattern
+  );
 
-    if (nonLeaf || blocked) {
-      // -> EF_PD: temporary authorization can only change allowed leaf keys
-      req.status.addExecStatus(api.Status.execErrCode.PermissionDenied);
-      res.send(req.status.generateReport());
-      return;
-    }
+  if (nonLeaf || blocked) {
+    // -> EF_PD: only leaf keys are allowed; temporary authorization has a blacklist
+    req.status.addExecStatus(api.Status.execErrCode.PermissionDenied);
+    res.send(req.status.generateReport());
+    return;
   }
 
   if (!api.configOperator.hasKey(api.configOperator.config.setting, key)) {

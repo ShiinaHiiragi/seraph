@@ -1980,13 +1980,14 @@ export default function Config(props) {
   }, []);
 
   React.useEffect(() => {
+    if (gradeSaving) return;
     const grade = context.setting.hare.grade;
     if (gradePendingRef.current && Object.keys(grade).every(
       (key) => grade[key] === gradePendingRef.current[key]
     )) return;
     setGradeDraft(grade);
     gradeAttemptRef.current = null;
-  }, [context.setting.hare.grade]);
+  }, [context.setting.hare.grade, gradeSaving]);
 
   React.useEffect(() => {
     if (!open || gradeSaving || Object.values(gradeValidation).some(Boolean)) return;
@@ -2001,14 +2002,35 @@ export default function Config(props) {
       gradeAttemptRef.current = signature;
       gradePendingRef.current = grade;
       setGradeSaving(true);
-      handleApplySetting("hare.grade", grade)
+      const changes = Object.entries(grade).filter(
+        ([key, value]) => value !== context.setting.hare.grade[key]
+      );
+      const promise = Promise.allSettled(changes.map(([key, value]) =>
+        handleApplySetting(`hare.grade.${key}`, value, true)
+      )).then((results) => {
+        const failed = results.find((result) => result.status === 'rejected');
+        if (failed) throw failed.reason;
+      });
+      toast.promise(promise, {
+        loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
+        success: () => context.languagePicker("modal.toast.success.setting"),
+        error: (data) => data
+      });
+      promise
         .catch(() => {})
         .finally(() => {
           setGradeSaving(false);
         });
     }, reactionInterval.slow);
     return () => clearTimeout(timer);
-  }, [open, gradeDraft, gradeValidation, gradeSaving, context.setting.hare.grade, handleApplySetting]);
+  }, [
+    context,
+    open,
+    gradeDraft,
+    gradeValidation,
+    gradeSaving,
+    handleApplySetting
+  ]);
 
   const sectionRefs = React.useRef({});
   const isSystemScrolling = React.useRef(false);
