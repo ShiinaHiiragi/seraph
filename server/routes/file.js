@@ -304,7 +304,7 @@ router.post('/paste', (req, res, next) => {
   req.status.addExecStatus();
   res.send({
     ...req.status.generateReport(),
-    secret: req.status.authTempPass() ? [] : api.secretOperator.secret,
+    secret: api.secretOperator.isSecret(newFilePath),
     ...api.fileOperator.readFileInfo(newFolderPath, filename)
   });
   return;
@@ -366,7 +366,7 @@ router.post('/rename', (req, res, next) => {
   res.send({
     ...req.status.generateReport(),
     clipboard: api.configOperator.config.clipboard,
-    secret: req.status.authTempPass() ? [] : api.secretOperator.secret,
+    secret: api.secretOperator.isSecret(newFilePath),
     ...api.fileOperator.readFileInfo(folderPath, newFilename)
   });
   return;
@@ -511,8 +511,7 @@ router.post('/delete', (req, res, next) => {
   req.status.addExecStatus();
   res.send({
     ...req.status.generateReport(),
-    clear: deleteClipboard,
-    secret: req.status.authTempPass() ? [] : api.secretOperator.secret
+    clear: deleteClipboard
   });
   return;
 });
@@ -943,11 +942,11 @@ router.post('/secret', (req, res, next) => {
     api.secretOperator.removeSecret(folderName);
   }
 
-  // -> ES: return updated secret folders
+  // -> ES: return updated secret flag
   req.status.addExecStatus();
   res.send({
     ...req.status.generateReport(),
-    secret: api.secretOperator.secret
+    secret: secret
   });
   return;
 });

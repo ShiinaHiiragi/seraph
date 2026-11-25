@@ -619,7 +619,10 @@ const FileExplorer = (props) => {
         secret: secret
       }, undefined, reject)
         .then((data) => {
-          context.setSecret(data.secret);
+          context.setSecret((secret) => {
+            const folders = secret.filter((item) => item !== folderName);
+            return data.secret ? [...folders, folderName] : folders;
+          });
           resolve();
         });
     }), {
@@ -646,7 +649,23 @@ const FileExplorer = (props) => {
       }, reject)
         .then((data) => {
           const { statusCode, errorCode, secret, ...newInfo } = data;
-          context.setSecret(secret);
+          context.setSecret((folders) => {
+            let updated = folders;
+            if (
+              !clipboard.permanent
+                && originType === "private"
+                && originFolderName.length === 0
+            ) {
+              updated = updated.filter((item) => item !== data.name);
+            }
+            if (type === "private" && folderName.length === 0) {
+              updated = updated.filter((item) => item !== data.name);
+              if (secret) {
+                updated = [...updated, data.name];
+              }
+            }
+            return updated;
+          });
           if (pathStartWith(`/${type}/${folderName}`)) {
             setFilesList((filesList) => [
               ...filesList,
@@ -743,7 +762,15 @@ const FileExplorer = (props) => {
       )
         .then((data) => {
           const { statusCode, errorCode, clipboard, secret, ...newInfo } = data;
-          context.setSecret(secret);
+          if (type === "private" && folderName.length === 0) {
+            context.setSecret((folders) => {
+              const updated = folders.filter(
+                (item) =>
+                  item !== originFilename && item !== newFilename
+              );
+              return secret ? [...updated, newFilename] : updated;
+            });
+          }
           setClipboard(clipboard);
 
           if (pathStartWith(`/${type}/${folderName}`)) {
