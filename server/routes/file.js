@@ -1029,6 +1029,13 @@ router.post('/reset', (req, res, next) => {
     return;
   }
 
+  if (req.status.authTempPass()) {
+    // -> EF_PD: temporary authorization is not allowed
+    req.status.addExecStatus(api.Status.execErrCode.PermissionDenied);
+    res.send(req.status.generateReport());
+    return;
+  }
+
   const { password: privateKey } = req.body;
   assert(privateKey.length > 0);
   api.configOperator.saveCipher(privateKey);

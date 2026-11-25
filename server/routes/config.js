@@ -10,6 +10,27 @@ router.post('/set', (req, res, next) => {
   }
 
   const { key, value } = req.body;
+  if (req.status.authTempPass()) {
+    const currentValue = api.configOperator.getValue(api.configOperator.config.setting, key);
+    const defaultValue = api.configOperator.getValue(api.defaultConfig.setting, key);
+    const nonLeaf = [currentValue, defaultValue].some((item) =>
+      item !== null && typeof item === 'object'
+    );
+    const blocked = [
+      'meta.token.full',
+      'meta.token.temp',
+      'meta.secret.expire',
+      'meta.secret.inherit'
+    ].includes(key) || key === 'terminal' || key.startsWith('terminal.');
+
+    if (nonLeaf || blocked) {
+      // -> EF_PD: temporary authorization can only change allowed leaf keys
+      req.status.addExecStatus(api.Status.execErrCode.PermissionDenied);
+      res.send(req.status.generateReport());
+      return;
+    }
+  }
+
   if (!api.configOperator.hasKey(api.configOperator.config.setting, key)) {
     // -> EF_RU: key doesn't exist
     req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
@@ -67,6 +88,13 @@ router.post('/reset', (req, res, next) => {
     return;
   }
 
+  if (req.status.authTempPass()) {
+    // -> EF_PD: temporary authorization is not allowed
+    req.status.addExecStatus(api.Status.execErrCode.PermissionDenied);
+    res.send(req.status.generateReport());
+    return;
+  }
+
   // deep copy for setting
   api.configOperator.setConfig((config) => ({
     ...config,
@@ -100,6 +128,13 @@ router.post('/file', (req, res, next) => {
   if (req.status.notAuthSuccess()) {
     // -> AF_IT or abnormal request
     next(api.errorStreamControl);
+    return;
+  }
+
+  if (req.status.authTempPass()) {
+    // -> EF_PD: temporary authorization is not allowed
+    req.status.addExecStatus(api.Status.execErrCode.PermissionDenied);
+    res.send(req.status.generateReport());
     return;
   }
 
