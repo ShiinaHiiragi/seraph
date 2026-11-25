@@ -375,6 +375,8 @@ const tempBlackList = [
   'meta.token.temp',
   'meta.secret.expire',
   'meta.secret.inherit',
+  'extension.python.*',
+  'extension.pandoc.*',
   'terminal.*'
 ];
 

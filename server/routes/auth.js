@@ -40,7 +40,9 @@ router.get('/meta', (req, res, next) => {
       public: publicFolder,
       private: privateFolder,
       metadata: api.configOperator.getMetadata(),
-      clipboard: api.configOperator.config.clipboard,
+      clipboard: req.status.authTempPass()
+        ? api.defaultConfig.clipboard
+        : api.configOperator.config.clipboard,
       setting: api.configOperator.config.setting,
       saltWarning: api.saltOperator.getSelfCheck()
     });
@@ -106,7 +108,9 @@ router.post('/login', (req, res, next) => {
           public: publicFolder,
           private: privateFolder,
           metadata: api.configOperator.getMetadata(),
-          clipboard: api.configOperator.config.clipboard,
+          clipboard: req.status.authTempPass()
+            ? api.defaultConfig.clipboard
+            : api.configOperator.config.clipboard,
           setting: api.configOperator.config.setting,
           saltWarning: api.saltOperator.getSelfCheck()
         });
