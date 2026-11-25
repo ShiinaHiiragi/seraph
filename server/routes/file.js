@@ -21,6 +21,20 @@ router.post('/new', (req, res, next) => {
   const { type, folderName, filename } = req.body;
   const { folderPath, filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
 
+  if (req.status.authTempPass() && api.secretOperator.isSecret(folderPath)) {
+    // -> EF_RU: hide secret paths from temporary authorization
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  if (req.status.authTempPass() && api.secretOperator.isSecret(filePath)) {
+    // -> EF_FME: conceal conflicts with hidden secret folders
+    req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
+    res.send(req.status.generateReport());
+    return;
+  }
+
   if (!fs.existsSync(folderPath)) {
     // -> EF_RU: folder don't exist
     req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
@@ -261,6 +275,23 @@ router.post('/paste', (req, res, next) => {
     isRoot: newFolderIsRoot
   } = api.fileOperator.pathCombinator(newType, newFolderName, filename);
 
+  if (req.status.authTempPass() && (
+    api.secretOperator.isSecret(filePath)
+      || api.secretOperator.isSecret(newFolderPath)
+  )) {
+    // -> EF_RU: hide secret paths from temporary authorization
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  if (req.status.authTempPass() && api.secretOperator.isSecret(newFilePath)) {
+    // -> EF_FME: conceal conflicts with hidden secret folders
+    req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
+    res.send(req.status.generateReport());
+    return;
+  }
+
   if (!fs.existsSync(filePath)) {
     api.configOperator.clearConfigClipboard();
 
@@ -347,6 +378,20 @@ router.post('/rename', (req, res, next) => {
   const {
     filePath: newFilePath
   } = api.fileOperator.pathCombinator(type, folderName, newFilename);
+
+  if (req.status.authTempPass() && api.secretOperator.isSecret(filePath)) {
+    // -> EF_RU: hide secret paths from temporary authorization
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  if (req.status.authTempPass() && api.secretOperator.isSecret(newFilePath)) {
+    // -> EF_FME: conceal conflicts with hidden secret folders
+    req.status.addExecStatus(api.Status.execErrCode.FileModuleError);
+    res.send(req.status.generateReport());
+    return;
+  }
 
   if (!fs.existsSync(filePath)) {
     // -> EF_RU: folder don't exist
