@@ -442,6 +442,8 @@ const en = {
         newMarkdown: "New Markdown",
         newCard: "New Card",
         newFile: "Upload File",
+        markSecret: "Raise Secret",
+        removeSecret: "Lower Secret",
         paste: "Paste"
       },
       previewUnavailable: "Preview Unavailable"
@@ -582,6 +584,8 @@ const en = {
         upload: "{0} has been uploaded to {1}.",
         itemsUpload: "All items has been uploaded to the file.",
         files: "All files",
+        markSecret: "Security level for {0} has been raised.",
+        removeSecret: "Security level for {0} has been lowered.",
         paste: "{0} has been pasted to {1}.",
         rename: "{0} has been renamed to {1}.",
         relink: "The link has been modified.",

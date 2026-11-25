@@ -441,6 +441,7 @@ const Panel = () => {
         sortedPublicFolders: sortedPublicFolders,
         sortedPrivateFolders: sortedPrivateFolders,
         secret: secret,
+        setSecret: setSecret,
         languagePicker: languagePicker,
         setModalReconfirm: setModalReconfirm
       }}

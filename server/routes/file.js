@@ -874,4 +874,42 @@ router.post('/reset', (req, res, next) => {
   return;
 });
 
+router.post('/secret', (req, res, next) => {
+  if (req.status.notAuthSuccess()) {
+    // -> AF_IT or abnormal request
+    next(api.errorStreamControl);
+    return;
+  }
+
+  if (req.status.authTempPass()) {
+    // -> EF_PD: temporary authorization is not allowed
+    req.status.addExecStatus(api.Status.execErrCode.PermissionDenied);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  const { folderName, secret } = req.body;
+  const { filePath } = api.fileOperator.pathCombinator('private', '', folderName);
+  if (!fs.existsSync(filePath) || !fs.lstatSync(filePath).isDirectory()) {
+    // -> EF_RU: private folder doesn't exist
+    req.status.addExecStatus(api.Status.execErrCode.ResourcesUnexist);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  if (secret) {
+    api.secretOperator.markSecret(folderName);
+  } else {
+    api.secretOperator.removeSecret(folderName);
+  }
+
+  // -> ES: return updated secret folders
+  req.status.addExecStatus();
+  res.send({
+    ...req.status.generateReport(),
+    secret: api.secretOperator.secret
+  });
+  return;
+});
+
 module.exports = router;

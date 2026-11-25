@@ -610,6 +610,29 @@ const FileExplorer = (props) => {
     }
   }, [context, folderName, handleProprocessFile]);
 
+  // secret folders
+  const handleSecret = React.useCallback(() => {
+    const secret = !context.secret.includes(folderName);
+    toast.promise(new Promise((resolve, reject) => {
+      request("POST/file/secret", {
+        folderName: folderName,
+        secret: secret
+      }, undefined, reject)
+        .then((data) => {
+          context.setSecret(data.secret);
+          resolve();
+        });
+    }), {
+      loading: context.languagePicker("modal.toast.plain.generalReconfirm"),
+      success: secret
+        ? context.languagePicker("modal.toast.success.markSecret")
+          .format(folderName)
+        : context.languagePicker("modal.toast.success.removeSecret")
+          .format(folderName),
+      error: (data) => data
+    });
+  }, [context, folderName]);
+
   // paste (original)
   const handlePaste = React.useCallback(() => {
     const originType = clipboard.path[0];
@@ -1021,6 +1044,17 @@ const FileExplorer = (props) => {
                         {context.languagePicker("main.folder.addMenu.newFile")}
                       </MenuItem>
                       <ListDivider />
+                      {type === "private"
+                        && folderName.length > 0
+                        && !folderName.includes("/")
+                        && !context.isTempPass
+                        && (
+                          <MenuItem onClick={handleSecret}>
+                            {context.secret.includes(folderName)
+                              ? context.languagePicker("main.folder.addMenu.removeSecret")
+                              : context.languagePicker("main.folder.addMenu.markSecret")}
+                          </MenuItem>
+                        )}
                       <MenuItem
                         onClick={handlePaste}
                         disabled={

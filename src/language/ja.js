@@ -442,6 +442,8 @@ const ja = {
         newMarkdown: "ニューマークダウン",
         newCard: "ニューカード",
         newFile: "ファイルのアップロード",
+        markSecret: "シークレット上げ",
+        removeSecret: "シークレット下げ",
         paste: "ペースト"
       },
       previewUnavailable: "プレビューできません",
@@ -583,6 +585,8 @@ const ja = {
         itemsUpload: "すべてのアイテムがファイルにアップロードされました。",
         files: "すべてのファイル",
         paste: "{0} が {1} にペーストされました。",
+        markSecret: "{0} のシークレットレベルが引き上げられました。",
+        removeSecret: "{0} のシークレットレベルが引き下げられました。",
         rename: "{0} が {1} にリネームされました。",
         relink: "リンクがモディファイされました。",
         copy: "{0} がクリップボードにコピーされました。",

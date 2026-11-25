@@ -442,6 +442,8 @@ const zhHans = {
         newMarkdown: "新 Markdown",
         newCard: "新卡片",
         newFile: "上传文件",
+        markSecret: "提升密级",
+        removeSecret: "降低密级",
         paste: "粘贴"
       },
       previewUnavailable: "无法预览"
@@ -582,6 +584,8 @@ const zhHans = {
         upload: "{0} 已上传至 {1}。",
         itemsUpload: "所有词条已上传至文件。",
         files: "所有文件",
+        markSecret: "已提升 {0} 的密级。",
+        removeSecret: "已降低 {0} 的密级。",
         paste: "{0} 已粘贴至 {1}.",
         rename: "{0} 已更名为 {1}。",
         relink: "URL 已修改。",
