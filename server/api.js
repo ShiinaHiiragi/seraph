@@ -132,7 +132,7 @@ const defaultConfig = {
     meta: {
       language: "en",
       token: {
-        full: 60,
+        full: 720,
         temp: 15
       },
       secret: {

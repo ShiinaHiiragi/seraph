@@ -41,6 +41,10 @@ export default function Passcode() {
         size="sm"
         color="neutral"
         variant="outlined"
+        sx={{
+          alignSelf: "flex-start",
+          minWidth: context.languagePicker("header.config.attrs.width")
+        }}
         loading={loading}
         onClick={handleGenerate}
         startDecorator={<KeyOutlinedIcon />}
