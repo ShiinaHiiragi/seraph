@@ -13,11 +13,14 @@ const ptyLog = (event, pid = '', detail = '') => {
 
 const wssAuth = (api, req) => {
   const cookies = cookie.parse(req.headers.cookie || '');
-  return api.configOperator.config.metadata.password.length > 0
-    && api.tokenOperator.validateUpdateSession(
-      undefined,
-      cookies[api.cookieOperator.sessionName]
-    ).auth;
+  if (api.configOperator.config.metadata.password.length === 0) {
+    return false;
+  }
+  const { auth, full } = api.tokenOperator.validateUpdateSession(
+    undefined,
+    cookies[api.cookieOperator.sessionName]
+  );
+  return auth && full;
 }
 
 const attachTerminal = (server, api) => {
