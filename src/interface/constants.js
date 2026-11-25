@@ -464,6 +464,22 @@ const settingField = {
   epub: "epub"
 };
 
+const settingDenyFields = [
+  settingField.account,
+  settingField.terminal,
+  settingField.extension
+];
+
+const settingDenyKeys = {
+  [settingField.general]: [
+    "general.reset",
+    "general.upload"
+  ],
+  [settingField.file]: [
+    "file.cipher"
+  ]
+}
+
 const alphabet = Array
   .from(Array(26))
   .map((_, index) => index + 65)
@@ -553,6 +569,8 @@ export {
   defaultSetting,
   defaultOSInfo,
   settingField,
+  settingDenyFields,
+  settingDenyKeys,
   alphabet,
   monospaceFonts,
   setValue

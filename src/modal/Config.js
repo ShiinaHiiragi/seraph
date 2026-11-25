@@ -35,6 +35,8 @@ import GlobalContext, {
   HiddenInput,
   animeDuration,
   settingField,
+  settingDenyFields,
+  settingDenyKeys,
   reactionInterval,
   alphabet,
   monospaceFonts,
@@ -2053,27 +2055,15 @@ export default function Config(props) {
     );
     if (context.isTempPass) {
       return sections
-        .filter((section) => ![
-          settingField.account,
-          settingField.terminal,
-          settingField.extension
-        ].includes(section.id))
+        .filter((section) => !settingDenyFields.includes(section.id))
         .map((section) => {
-          if (section.id === settingField.general) {
+          const denyKeys = settingDenyKeys[section.id];
+          if (denyKeys) {
             return {
               ...section,
-              items: section.items.filter((item) =>
-                item.key !== context.languagePicker("header.config.general.reset") &&
-                item.key !== context.languagePicker("header.config.general.upload")
-              )
-            };
-          }
-          if (section.id === settingField.file) {
-            return {
-              ...section,
-              items: section.items.filter((item) =>
-                item.key !== context.languagePicker("header.config.file.cipher")
-              )
+              items: section.items.filter((item) => !denyKeys.some((key) =>
+                item.key === context.languagePicker(`header.config.${key}`)
+              ))
             };
           }
           return section;
