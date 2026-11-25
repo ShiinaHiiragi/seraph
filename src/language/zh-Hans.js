@@ -34,7 +34,22 @@ const zhHans = {
           60: "1 小时",
           360: "6 小时"
         },
-        password: "更换登录密码"
+        password: "更换登录密码",
+        passcode: "授权码",
+        passcodeGenerate: "生成",
+        passcodePopup: {
+          title: "临时授权码",
+          caption: "授权码 {0} 将在 {1} 分钟后过期。此消息仅显示一次。",
+          copy: "复制"
+        },
+        codeCaption: "有效期限",
+        codeOption: {
+          1: "1 分钟",
+          5: "5 分钟",
+          10: "10 分钟",
+          15: "15 分钟",
+          30: "30 分钟",
+        }
       },
       welcome: {
         title: "主页",
@@ -589,6 +604,7 @@ const zhHans = {
         setting: "设置已保存。",
         salt: "已复制盐到剪贴板。",
         code: "已复制代码到剪贴板。",
+        passcode: "已复制授权码到剪贴板。",
         image: "已复制图片的 Markdown 元素到剪贴板。",
         import: "设置已保存；总计 {1} 条有效项目中更新了 {0} 条。",
         new: "{0} 已创建。",

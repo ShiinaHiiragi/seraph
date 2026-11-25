@@ -34,7 +34,22 @@ const en = {
           60: "1 hour",
           360: "6 hours"
         },
-        password: "Change Login Password"
+        password: "Change Login Password",
+        passcode: "Passcode",
+        passcodeGenerate: "Generate",
+        passcodePopup: {
+          title: "Temporary Passcode",
+          caption: "Passcode {0} will expire in {1} minutes. This message will only be displayed once.",
+          copy: "Copy"
+        },
+        codeCaption: "Expiry",
+        codeOption: {
+          1: "1 minute",
+          5: "5 minutes",
+          10: "10 minutes",
+          15: "15 minutes",
+          30: "30 minutes",
+        }
       },
       welcome: {
         title: "Dashboard",
@@ -589,6 +604,7 @@ const en = {
         setting: "New setting has been saved.",
         salt: "Salt has been copied to clipboard.",
         code: "Code has been copied to clipboard.",
+        passcode: "Passcode has been copied to clipboard.",
         image: "Markdown element of the image has been copied to clipboard.",
         import: "New setting has been saved, and {0} out of {1} valid entries has been updated.",
         new: "{0} has been created.",

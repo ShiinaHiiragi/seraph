@@ -30,7 +30,7 @@ import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import RestartAltOutlinedIcon from "@mui/icons-material/RestartAltOutlined";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
-import KeyOutlinedIcon from "@mui/icons-material/KeyOutlined";
+import Passcode from "./Passcode";
 import GlobalContext, {
   HiddenInput,
   animeDuration,
@@ -546,21 +546,27 @@ const SECTIONS = (
           )
         },
         {
-          key: "TEMP PASSCODE",
+          key: context.languagePicker("header.config.account.passcode"),
           value: (
-            <Button
-              size="sm"
-              color="neutral"
-              variant="outlined"
-              onClick={() => {
-                request("POST/auth/code").then((data) => {
-                  toast.message(`临时代码：${data.passcode}`, { duration: Infinity });
-                });
-              }}
-              startDecorator={<KeyOutlinedIcon />}
-            >
-              GENERATE
-            </Button>
+            <Stack spacing={1}>
+              <Passcode />
+              {LabeledLiteral(
+                context.languagePicker("header.config.account.codeCaption"),
+                context.setting.meta.secret.expire,
+                [
+                  { value: 1, label: context.languagePicker("header.config.account.codeOption.1") },
+                  { value: 5, label: context.languagePicker("header.config.account.codeOption.5") },
+                  { value: 10, label: context.languagePicker("header.config.account.codeOption.10") },
+                  { value: 15, label: context.languagePicker("header.config.account.codeOption.15") },
+                  { value: 30, label: context.languagePicker("header.config.account.codeOption.30") },
+                ],
+                "meta.secret.expire",
+                handleApply,
+                undefined,
+                undefined,
+                (value) => context.languagePicker("header.config.fallback.minutes").format(value)
+              )}
+            </Stack>
           )
         }
       ]
