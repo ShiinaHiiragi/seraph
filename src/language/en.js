@@ -30,7 +30,6 @@ const en = {
           15: "15 minutes",
           30: "30 minutes",
         },
-        codeInherit: "Inherit security level from parent directories",
         token: "Token Expiry",
         tokenTip: "Each request extends the token expiration time (excluding terminal WebSocket connections).",
         fullCaption: "Full access",

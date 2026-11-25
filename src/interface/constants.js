@@ -195,10 +195,7 @@ const defaultSetting = {
       full: 720,
       temp: 15
     },
-    secret: {
-      expire: 5,
-      inherit: true
-    }
+    secret: 5
   },
   welcome: {
     enable: {

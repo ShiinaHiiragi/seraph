@@ -75,7 +75,7 @@ export default function Passcode() {
             {context.languagePicker("header.config.account.passcodePopup.caption")
               .format(
                 passcode,
-                context.setting.meta.secret.expire
+                context.setting.meta.secret
               )}
           </Typography>
           {error && <Typography color="danger" level="body-sm">{error}</Typography>}

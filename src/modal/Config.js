@@ -512,7 +512,7 @@ const SECTIONS = (
               <Stack spacing={1}>
                 {LabeledLiteral(
                   context.languagePicker("header.config.account.codeCaption"),
-                  context.setting.meta.secret.expire,
+                  context.setting.meta.secret,
                   [
                     { value: 1, label: context.languagePicker("header.config.account.codeOption.1") },
                     { value: 5, label: context.languagePicker("header.config.account.codeOption.5") },
@@ -520,17 +520,11 @@ const SECTIONS = (
                     { value: 15, label: context.languagePicker("header.config.account.codeOption.15") },
                     { value: 30, label: context.languagePicker("header.config.account.codeOption.30") },
                   ],
-                  "meta.secret.expire",
+                  "meta.secret",
                   handleApply,
                   undefined,
                   undefined,
                   (value) => context.languagePicker("header.config.fallback.minutes").format(value)
-                )}
-                {Bool(
-                  context.languagePicker("header.config.account.codeInherit"),
-                  context.setting.meta.secret.inherit,
-                  "meta.secret.inherit",
-                  handleApply
                 )}
               </Stack>
             </Stack>

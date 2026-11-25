@@ -135,10 +135,7 @@ const defaultConfig = {
         full: 720,
         temp: 15
       },
-      secret: {
-        expire: 5,
-        inherit: true
-      }
+      secret: 5
     },
     welcome: {
       enable: {
@@ -373,8 +370,7 @@ const defaultConfig = {
 const tempBlackList = [
   'meta.token.full',
   'meta.token.temp',
-  'meta.secret.expire',
-  'meta.secret.inherit',
+  'meta.secret',
   'extension.python.*',
   'extension.pandoc.*',
   'terminal.*'
@@ -933,7 +929,7 @@ const configOperator = {
       {
         code: `${salt}:${hash}`,
         timestamp: Date.now()
-          + configOperator.config.setting.meta.secret.expire * 60 * 1000
+          + configOperator.config.setting.meta.secret * 60 * 1000
       }
     ]);
     return code;

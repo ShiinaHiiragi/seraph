@@ -347,7 +347,6 @@ router.post('/paste', (req, res, next) => {
       && newFolderIsRoot
       && directory
       && sourceSecret
-      && api.configOperator.config.setting.meta.secret.inherit
   ) {
     api.secretOperator.markSecret(filename);
   }

@@ -30,7 +30,6 @@ const ja = {
           15: "15 分",
           30: "30 分",
         },
-        codeInherit: "Inherit security level from parent directories",
         token: "トークンの有効期間",
         tokenTip: "リクエストごとにトークンの有効期限がアップデートされます（ターミナルのウェブソケットのコネクションを除く）",
         fullCaption: "フルアクセス",

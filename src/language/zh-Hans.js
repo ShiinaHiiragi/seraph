@@ -30,7 +30,6 @@ const zhHans = {
           15: "15 分钟",
           30: "30 分钟",
         },
-        codeInherit: "Inherit security level from parent directories",
         token: "令牌有效期限",
         tokenTip: "每次发起请求都将更新令牌有效期限（终端 WebSocket 传输除外）",
         fullCaption: "完整权限",
