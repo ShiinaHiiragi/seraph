@@ -195,6 +195,10 @@ const defaultSetting = {
       full: 720,
       temp: 15
     },
+    session: {
+      full: false,
+      temp: true
+    },
     secret: 5
   },
   welcome: {

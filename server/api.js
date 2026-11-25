@@ -135,6 +135,10 @@ const defaultConfig = {
         full: 720,
         temp: 15
       },
+      session: {
+        full: false,
+        temp: true
+      },
       secret: 5
     },
     welcome: {
@@ -1129,7 +1133,11 @@ const cookieOperator = {
       httpOnly: true,
       secure: !isDev,
       sameSite: "lax",
-      maxAge: expiredPeriod(temp)
+      ...(
+        configOperator.config.setting.meta.session[temp ? 'temp' : 'full']
+          ? {}
+          : { maxAge: expiredPeriod(temp) }
+      )
     }
   ),
 
