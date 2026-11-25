@@ -10,22 +10,27 @@ router.post('/set', (req, res, next) => {
   }
 
   const { key, value } = req.body;
-  const currentValue = api.configOperator.getValue(api.configOperator.config.setting, key);
-  const defaultValue = api.configOperator.getValue(api.defaultConfig.setting, key);
-  const nonLeaf = [currentValue, defaultValue].some((item) =>
-    item !== null
-      && typeof item === 'object'
-  );
-  const blocked = req.status.authTempPass()
-    && api.tempBlackList.some((pattern) =>
+
+  if (
+    req.status.authTempPass() && api.tempBlackList.some((pattern) =>
       pattern.endsWith('.*')
         ? key.startsWith(pattern.slice(0, -1))
         : key === pattern
-  );
-
-  if (nonLeaf || blocked) {
-    // -> EF_PD: only leaf keys are allowed; temporary authorization has a blacklist
+    )
+  ) {
+    // -> EF_PD: temporary authorization cannot change blacklisted keys
     req.status.addExecStatus(api.Status.execErrCode.PermissionDenied);
+    res.send(req.status.generateReport());
+    return;
+  }
+
+  const currentValue = api.configOperator.getValue(api.configOperator.config.setting, key);
+  const defaultValue = api.configOperator.getValue(api.defaultConfig.setting, key);
+  if ([currentValue, defaultValue].some((item) =>
+    item !== null && typeof item === 'object'
+  )) {
+    // -> EF_TCF: only leaf keys are allowed
+    req.status.addExecStatus(api.Status.execErrCode.TypeCheckFailed);
     res.send(req.status.generateReport());
     return;
   }
