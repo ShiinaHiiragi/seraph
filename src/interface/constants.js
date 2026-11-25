@@ -191,7 +191,14 @@ const defaultClipboard = {
 const defaultSetting = {
   meta: {
     language: "en",
-    token: 60
+    token: {
+      full: 60,
+      temp: 15
+    },
+    secret: {
+      expire: 5,
+      inherit: true
+    }
   },
   welcome: {
     enable: {

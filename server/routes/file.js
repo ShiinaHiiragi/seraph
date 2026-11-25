@@ -230,7 +230,10 @@ router.post('/paste', (req, res, next) => {
 
   const [type, folderName, filename] = path;
   const { type: newType, folderName: newFolderName } = req.body;
-  const { filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
+  const {
+    filePath,
+    isRoot
+  } = api.fileOperator.pathCombinator(type, folderName, filename);
   const {
     folderPath: newFolderPath,
     filePath: newFilePath,
@@ -283,10 +286,25 @@ router.post('/paste', (req, res, next) => {
     return;
   }
 
-  // -> ES: return new file info
+  const sourceSecret = api.secretOperator.isSecret(filePath);
+  if (!permanent && type === 'private' && isRoot && sourceSecret) {
+    api.secretOperator.removeSecret(filename);
+  }
+  if (
+    newType === 'private'
+      && newFolderIsRoot
+      && directory
+      && sourceSecret
+      && api.configOperator.config.setting.meta.secret.inherit
+  ) {
+    api.secretOperator.markSecret(filename);
+  }
+
+  // -> ES: return new file and secret info
   req.status.addExecStatus();
   res.send({
     ...req.status.generateReport(),
+    secret: req.status.authTempPass() ? [] : api.secretOperator.secret,
     ...api.fileOperator.readFileInfo(newFolderPath, filename)
   });
   return;
@@ -300,8 +318,14 @@ router.post('/rename', (req, res, next) => {
   }
 
   const { type, folderName, filename, newFilename } = req.body;
-  const { folderPath, filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
-  const { filePath: newFilePath } = api.fileOperator.pathCombinator(type, folderName, newFilename);
+  const {
+    folderPath,
+    filePath,
+    isRoot
+  } = api.fileOperator.pathCombinator(type, folderName, filename);
+  const {
+    filePath: newFilePath
+  } = api.fileOperator.pathCombinator(type, folderName, newFilename);
 
   if (!fs.existsSync(filePath)) {
     // -> EF_RU: folder don't exist
@@ -326,6 +350,10 @@ router.post('/rename', (req, res, next) => {
     return;
   }
 
+  if (type === 'private' && isRoot) {
+    api.secretOperator.renameSecret(filename, newFilename);
+  }
+
   api.configOperator.renameClipboard(
     type,
     folderName,
@@ -338,6 +366,7 @@ router.post('/rename', (req, res, next) => {
   res.send({
     ...req.status.generateReport(),
     clipboard: api.configOperator.config.clipboard,
+    secret: req.status.authTempPass() ? [] : api.secretOperator.secret,
     ...api.fileOperator.readFileInfo(folderPath, newFilename)
   });
   return;
@@ -448,7 +477,10 @@ router.post('/delete', (req, res, next) => {
   }
 
   const { type, folderName, filename } = req.body;
-  const { filePath } = api.fileOperator.pathCombinator(type, folderName, filename);
+  const {
+    filePath,
+    isRoot
+  } = api.fileOperator.pathCombinator(type, folderName, filename);
 
   if (!fs.existsSync(filePath)) {
     // -> EF_RU: folder don't exist
@@ -466,13 +498,21 @@ router.post('/delete', (req, res, next) => {
     return;
   }
 
+  if (
+    type === 'private'
+      && isRoot
+      && api.secretOperator.secret.includes(filename)
+  ) {
+    api.secretOperator.removeSecret(filename);
+  }
   const deleteClipboard = api.configOperator.deleteClipboard();
 
   // -> ES: return clipboard info
   req.status.addExecStatus();
   res.send({
     ...req.status.generateReport(),
-    clear: deleteClipboard
+    clear: deleteClipboard,
+    secret: req.status.authTempPass() ? [] : api.secretOperator.secret
   });
   return;
 });

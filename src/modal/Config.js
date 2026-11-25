@@ -497,7 +497,7 @@ const SECTIONS = (
           key: context.languagePicker("header.config.account.token"),
           tip: context.languagePicker("header.config.account.tokenTip"),
           value: Literal(
-            context.setting.meta.token,
+            context.setting.meta.token.full,
             [
               { value: 15, label: context.languagePicker("header.config.account.tokenOption.15") },
               { value: 60, label: context.languagePicker("header.config.account.tokenOption.60") },
@@ -505,7 +505,7 @@ const SECTIONS = (
               { value: 1440, label: context.languagePicker("header.config.account.tokenOption.1440") },
               { value: 2880, label: context.languagePicker("header.config.account.tokenOption.2880") }
             ],
-            "meta.token",
+            "meta.token.full",
             handleApply,
             undefined,
             undefined,

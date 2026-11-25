@@ -135,6 +135,7 @@ export default function RowMenu(props) {
           if (data.clear) {
             setClipboard({ ...defaultClipboard });
           }
+          context.setSecret(data.secret);
 
           if (pathEqual(`/${type}/${folderName}`)) {
             setFilesList((filesList) => filesList.filter(

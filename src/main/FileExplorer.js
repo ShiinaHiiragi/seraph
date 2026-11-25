@@ -645,7 +645,8 @@ const FileExplorer = (props) => {
         [Status.execErrCode.ResourcesUnexist]: () => setClipboard({ ...defaultClipboard })
       }, reject)
         .then((data) => {
-          const { statusCode, errorCode, ...newInfo } = data;
+          const { statusCode, errorCode, secret, ...newInfo } = data;
+          context.setSecret(secret);
           if (pathStartWith(`/${type}/${folderName}`)) {
             setFilesList((filesList) => [
               ...filesList,
@@ -679,7 +680,7 @@ const FileExplorer = (props) => {
             )
           }
 
-          if (!clipboard.permanent && folderName.length === 0) {
+          if (folderName.length === 0) {
             (type === "private" ? setPrivateFolders : setPublicFolders)(
               (folders) => [...folders, data.name]
             )
@@ -741,7 +742,8 @@ const FileExplorer = (props) => {
         reject
       )
         .then((data) => {
-          const { statusCode, errorCode, clipboard, ...newInfo } = data;
+          const { statusCode, errorCode, clipboard, secret, ...newInfo } = data;
+          context.setSecret(secret);
           setClipboard(clipboard);
 
           if (pathStartWith(`/${type}/${folderName}`)) {

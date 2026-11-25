@@ -131,7 +131,14 @@ const defaultConfig = {
   setting: {
     meta: {
       language: "en",
-      token: 60
+      token: {
+        full: 60,
+        temp: 15
+      },
+      secret: {
+        expire: 5,
+        inherit: true
+      }
     },
     welcome: {
       enable: {
@@ -907,14 +914,14 @@ const configOperator = {
     }
     assert(typeof code === 'string' && /^[0-9]{6}$/.test(code));
 
-    // TEMP: new passcode valid in 15 min
     const salt = crypto.randomBytes(16).toString('hex');
     const hash = crypto.scryptSync(code, salt, 64).toString('hex');
     configOperator.setConfigMetadata("passcode", [
       ...configOperator.config.metadata.passcode,
       {
         code: `${salt}:${hash}`,
-        timestamp: Date.now() + 15 * 60 * 1000
+        timestamp: Date.now()
+          + configOperator.config.setting.meta.secret.expire * 60 * 1000
       }
     ]);
     return code;
@@ -1102,17 +1109,19 @@ configOperator.setConfig((config) => checkConfig(config, defaultConfig));
 exports.configOperator = configOperator;
 exports.checkConfig = checkConfig;
 
-const expiredPeriod = () => configOperator.config.setting.meta.token * 60 * 1000;
+const expiredPeriod = (temp = false) =>
+  configOperator.config.setting.meta.token[temp ? 'temp' : 'full'] * 60 * 1000;
+
 const cookieOperator = {
   sessionName: "seraph_auth",
-  setSessionCookie: (res, session) => res.cookie(
+  setSessionCookie: (res, session, temp = false) => res.cookie(
     cookieOperator.sessionName,
     session,
     {
       httpOnly: true,
       secure: !isDev,
       sameSite: "lax",
-      maxAge: expiredPeriod()
+      maxAge: expiredPeriod(temp)
     }
   ),
 
@@ -1131,11 +1140,11 @@ const tokenOperator = {
 
   addNewSession: (res, full = true) => {
     const session = crypto.randomBytes(32).toString('hex');
-    cookieOperator.setSessionCookie(res, session);
+    cookieOperator.setSessionCookie(res, session, !full);
     tokenOperator.setToken((token) => [...token, {
       session: session,
       full: full,
-      timestamp: Date.now() + expiredPeriod()
+      timestamp: Date.now() + expiredPeriod(!full)
     }]);
     return session;
   },
@@ -1156,13 +1165,20 @@ const tokenOperator = {
     };
     __clearExpiredSessions();
 
-    let sessionIndex = tokenOperator.token.findIndex((item) => item.session === session)
+    let sessionIndex = tokenOperator.token.findIndex(
+      (item) => item.session === session
+    )
     if (sessionIndex >= 0) {
       // res is undefined when wssAuth() called
       if (res !== undefined && !isAuto) {
-        cookieOperator.setSessionCookie(res, session);
+        cookieOperator.setSessionCookie(
+          res,
+          session,
+          !tokenOperator.token[sessionIndex].full
+        );
         tokenOperator.setToken((token) => {
-          token[sessionIndex].timestamp = Date.now() + expiredPeriod();
+          token[sessionIndex].timestamp = Date.now()
+            + expiredPeriod(!token[sessionIndex].full);
           return token;
         });
       }
