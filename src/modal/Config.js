@@ -496,6 +496,47 @@ const SECTIONS = (
       label: context.languagePicker("header.config.account.title"),
       items: [
         {
+          key: context.languagePicker("header.config.account.password"),
+          value: (
+            <Password
+              context={context}
+              query="POST/auth/reset"
+            />
+          )
+        },
+        {
+          key: context.languagePicker("header.config.account.passcode"),
+          value: (
+            <Stack spacing={2}>
+              <Passcode />
+              <Stack spacing={1}>
+                {LabeledLiteral(
+                  context.languagePicker("header.config.account.codeCaption"),
+                  context.setting.meta.secret.expire,
+                  [
+                    { value: 1, label: context.languagePicker("header.config.account.codeOption.1") },
+                    { value: 5, label: context.languagePicker("header.config.account.codeOption.5") },
+                    { value: 10, label: context.languagePicker("header.config.account.codeOption.10") },
+                    { value: 15, label: context.languagePicker("header.config.account.codeOption.15") },
+                    { value: 30, label: context.languagePicker("header.config.account.codeOption.30") },
+                  ],
+                  "meta.secret.expire",
+                  handleApply,
+                  undefined,
+                  undefined,
+                  (value) => context.languagePicker("header.config.fallback.minutes").format(value)
+                )}
+                {Bool(
+                  context.languagePicker("header.config.account.codeInherit"),
+                  context.setting.meta.secret.inherit,
+                  "meta.secret.inherit",
+                  handleApply
+                )}
+              </Stack>
+            </Stack>
+          )
+        },
+        {
           key: context.languagePicker("header.config.account.token"),
           tip: context.languagePicker("header.config.account.tokenTip"),
           value:
@@ -535,39 +576,6 @@ const SECTIONS = (
               (value) => context.languagePicker("header.config.fallback.minutes").format(value)
             )}
           </Stack>
-        },
-        {
-          key: context.languagePicker("header.config.account.password"),
-          value: (
-            <Password
-              context={context}
-              query="POST/auth/reset"
-            />
-          )
-        },
-        {
-          key: context.languagePicker("header.config.account.passcode"),
-          value: (
-            <Stack spacing={1}>
-              <Passcode />
-              {LabeledLiteral(
-                context.languagePicker("header.config.account.codeCaption"),
-                context.setting.meta.secret.expire,
-                [
-                  { value: 1, label: context.languagePicker("header.config.account.codeOption.1") },
-                  { value: 5, label: context.languagePicker("header.config.account.codeOption.5") },
-                  { value: 10, label: context.languagePicker("header.config.account.codeOption.10") },
-                  { value: 15, label: context.languagePicker("header.config.account.codeOption.15") },
-                  { value: 30, label: context.languagePicker("header.config.account.codeOption.30") },
-                ],
-                "meta.secret.expire",
-                handleApply,
-                undefined,
-                undefined,
-                (value) => context.languagePicker("header.config.fallback.minutes").format(value)
-              )}
-            </Stack>
-          )
         }
       ]
     },

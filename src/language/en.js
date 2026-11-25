@@ -14,6 +14,23 @@ const en = {
       },
       account: {
         title: "Account",
+        password: "Change Login Password",
+        passcode: "Temporary Passcode",
+        passcodeGenerate: "Generate",
+        passcodePopup: {
+          title: "Passcode",
+          caption: "Passcode {0} will expire in {1} minutes. This message will only be displayed once.",
+          copy: "Copy"
+        },
+        codeCaption: "Expiry",
+        codeOption: {
+          1: "1 minute",
+          5: "5 minutes",
+          10: "10 minutes",
+          15: "15 minutes",
+          30: "30 minutes",
+        },
+        codeInherit: "Inherit security level from parent directories",
         token: "Token Expiry",
         tokenTip: "Each request extends the token expiration time (excluding terminal WebSocket connections).",
         fullCaption: "Full access",
@@ -33,22 +50,6 @@ const en = {
           45: "45 minutes",
           60: "1 hour",
           360: "6 hours"
-        },
-        password: "Change Login Password",
-        passcode: "Passcode",
-        passcodeGenerate: "Generate",
-        passcodePopup: {
-          title: "Temporary Passcode",
-          caption: "Passcode {0} will expire in {1} minutes. This message will only be displayed once.",
-          copy: "Copy"
-        },
-        codeCaption: "Expiry",
-        codeOption: {
-          1: "1 minute",
-          5: "5 minutes",
-          10: "10 minutes",
-          15: "15 minutes",
-          30: "30 minutes",
         }
       },
       welcome: {

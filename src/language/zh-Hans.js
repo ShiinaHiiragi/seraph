@@ -14,6 +14,23 @@ const zhHans = {
       },
       account: {
         title: "账号",
+        password: "更换登录密码",
+        passcode: "临时授权码",
+        passcodeGenerate: "生成",
+        passcodePopup: {
+          title: "授权码",
+          caption: "授权码 {0} 将在 {1} 分钟后过期。此消息仅显示一次。",
+          copy: "复制"
+        },
+        codeCaption: "有效期限",
+        codeOption: {
+          1: "1 分钟",
+          5: "5 分钟",
+          10: "10 分钟",
+          15: "15 分钟",
+          30: "30 分钟",
+        },
+        codeInherit: "Inherit security level from parent directories",
         token: "令牌有效期限",
         tokenTip: "每次发起请求都将更新令牌有效期限（终端 WebSocket 传输除外）",
         fullCaption: "完整权限",
@@ -33,22 +50,6 @@ const zhHans = {
           45: "45 分钟",
           60: "1 小时",
           360: "6 小时"
-        },
-        password: "更换登录密码",
-        passcode: "授权码",
-        passcodeGenerate: "生成",
-        passcodePopup: {
-          title: "临时授权码",
-          caption: "授权码 {0} 将在 {1} 分钟后过期。此消息仅显示一次。",
-          copy: "复制"
-        },
-        codeCaption: "有效期限",
-        codeOption: {
-          1: "1 分钟",
-          5: "5 分钟",
-          10: "10 分钟",
-          15: "15 分钟",
-          30: "30 分钟",
         }
       },
       welcome: {

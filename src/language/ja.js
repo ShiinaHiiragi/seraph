@@ -14,6 +14,23 @@ const ja = {
       },
       account: {
         title: "アカウント",
+        password: "ログインパスワードを変更",
+        passcode: "テンポラリーパスコード",
+        passcodeGenerate: "ジェネレート",
+        passcodePopup: {
+          title: "パスコード",
+          caption: "パスコード {0} は {1} 分後に有効期限が切れます。このメッセージは一度だけ表示されます。",
+          copy: "コピー"
+        },
+        codeCaption: "有効期間",
+        codeOption: {
+          1: "1 分",
+          5: "5 分",
+          10: "10 分",
+          15: "15 分",
+          30: "30 分",
+        },
+        codeInherit: "Inherit security level from parent directories",
         token: "トークンの有効期間",
         tokenTip: "リクエストごとにトークンの有効期限がアップデートされます（ターミナルのウェブソケットのコネクションを除く）",
         fullCaption: "フルアクセス",
@@ -33,22 +50,6 @@ const ja = {
           45: "45 分",
           60: "1 時間",
           360: "6 時間"
-        },
-        password: "ログインパスワードを変更",
-        passcode: "パスコード",
-        passcodeGenerate: "ジェネレート",
-        passcodePopup: {
-          title: "テンポラリーパスコード",
-          caption: "パスコード {0} は {1} 分後に有効期限が切れます。このメッセージは一度だけ表示されます。",
-          copy: "コピー"
-        },
-        codeCaption: "有効期間",
-        codeOption: {
-          1: "1 分",
-          5: "5 分",
-          10: "10 分",
-          15: "15 分",
-          30: "30 分",
         }
       },
       welcome: {
