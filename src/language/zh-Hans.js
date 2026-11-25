@@ -49,7 +49,9 @@ const zhHans = {
           45: "45 分钟",
           60: "1 小时",
           360: "6 小时"
-        }
+        },
+        fullSession: "为完整权限启用 Session Cookie",
+        tempSession: "为临时权限启用 Session Cookie"
       },
       welcome: {
         title: "主页",

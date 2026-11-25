@@ -49,7 +49,9 @@ const en = {
           45: "45 minutes",
           60: "1 hour",
           360: "6 hours"
-        }
+        },
+        fullSession: "Adopt session cookie for full access",
+        tempSession: "Adopt session cookie for temporary access"
       },
       welcome: {
         title: "Dashboard",
