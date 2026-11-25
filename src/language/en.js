@@ -137,6 +137,7 @@ const en = {
         feature: "Features",
         featureBlockEdit: "Enable block edit",
         featureToolbar: "Enable toolbar",
+        featureTOC: "Enable TOC",
         featureStat: "Enable word count",
         featureSpellCheck: "Enable spell check",
         code: "Code Mirror",

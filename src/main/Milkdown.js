@@ -1644,6 +1644,7 @@ const CrepeEditor = () => {
             height: "1.8rem"
           }}
         >
+          {context.setting.crepe.feature.toc && (
           <ClickAwayListener onClickAway={() => setOutlineOpen(false)}>
             <Box sx={{ height: "100%", minWidth: 0, maxWidth: "max(25%, 200px)", mr: "auto" }}>
               <Box
@@ -1754,7 +1755,7 @@ const CrepeEditor = () => {
                 </Box>
               </Popper>
             </Box>
-          </ClickAwayListener>
+          </ClickAwayListener>)}
           {context.setting.crepe.feature.stat && (
           <ClickAwayListener onClickAway={() => setWordCountOpen(false)}>
             <Box sx={{ height: "100%", flexShrink: 0 }}>

@@ -137,6 +137,7 @@ const zhHans = {
         feature: "功能",
         featureBlockEdit: "启用块编辑",
         featureToolbar: "启用工具栏",
+        featureTOC: "启用 TOC",
         featureStat: "启用字数统计",
         featureSpellCheck: "启用拼写检查",
         code: "Code Mirror",

@@ -1017,6 +1017,12 @@ const SECTIONS = (
                 handleApply
               )}
               {Bool(
+                context.languagePicker("header.config.crepe.featureTOC"),
+                context.setting.crepe.feature.toc,
+                "crepe.feature.toc",
+                handleApply
+              )}
+              {Bool(
                 context.languagePicker("header.config.crepe.featureStat"),
                 context.setting.crepe.feature.stat,
                 "crepe.feature.stat",
