@@ -191,6 +191,7 @@
 
 ## Log
 
+- 12/01/2026  ver 1.6.1: Fix CORS and CSRF defense
 - 11/30/2026  ver 1.6.0: Add pass code for temporary access
 - 11/29/2026  ver 1.5.8: Add configs for grading
 - 11/28/2026  ver 1.5.7: Add statistics popup for Card
