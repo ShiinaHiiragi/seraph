@@ -34,7 +34,7 @@ router.get('/*/:filename', (req, res, next) => {
     return;
   }
 
-  // res.setHeader('Content-Security-Policy', 'sandbox');
+  res.setHeader('Content-Security-Policy', 'sandbox allow-scripts');
   if (thumbnail === '1') {
     return api.fileOperator.sendThumbnail(res, filePath);
   }

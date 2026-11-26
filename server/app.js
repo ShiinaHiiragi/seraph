@@ -19,6 +19,8 @@ let hareRouter = require('./routes/hare');
 let todoRouter = require('./routes/todo');
 
 let api = require('./api');
+const { createOriginPolicy } = require('./origin');
+const originPolicy = createOriginPolicy();
 let app = express();
 
 // find real IP under nginx forwarding
@@ -40,20 +42,15 @@ app.use(express.static(api.dataPath.buildDirPath, {
 }));
 app.use(cookieParser());
 
-// reinforce setting
-const originURL = [process.env.PORT, process.env.REACT_APP_NPORT]
-  .filter((item) => item !== undefined)
-  .map((item) => RegExp(`https?://${process.env.REACT_APP_HOSTNAME}:${item}`))
-
-if (originURL.length > 0) {
-  app.use(cors({
-    origin: originURL,
-    methods: ["GET", "POST"],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin'],
-    exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
-    credentials: true,
-  }));
-}
+// reject unsafe browser requests
+app.use(originPolicy.requireTrustedOrigin);
+app.use(cors({
+  origin: (origin, callback) => callback(null, originPolicy.isAllowedOrigin(origin)),
+  methods: ["GET", "POST"],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin'],
+  exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
+  credentials: true,
+}));
 
 // unified authenticator
 app.use((req, res, next) => {

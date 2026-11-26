@@ -4,6 +4,7 @@ const cookie = require('cookie');
 
 const ws = require('ws');
 const { spawn } = require('node-pty');
+const { createOriginPolicy } = require('./origin');
 
 const ptyLog = (event, pid = '', detail = '') => {
   const pidFormatted = pid ? ` ${pid}` : '';
@@ -24,7 +25,16 @@ const wssAuth = (api, req) => {
 }
 
 const attachTerminal = (server, api) => {
-  const wss = new ws.WebSocketServer({ server, path: '/pty' });
+  const { isAllowedOrigin } = createOriginPolicy();
+  const wss = new ws.WebSocketServer({
+    server,
+    path: '/pty',
+    verifyClient: ({ req }, done) => done(
+      isAllowedOrigin(req.headers.origin),
+      403,
+      'untrusted origin'
+    )
+  });
 
   wss.on('connection', (ws, req) => {
     const terminalSetting = api.configOperator.config.setting.terminal;
@@ -147,6 +157,7 @@ const attachTerminal = (server, api) => {
     ws.on('close', () => cleanup('exited'));
     ws.on('error', (err) => cleanup(`error: ${err.message}`));
   });
+  return wss;
 }
 
 exports.attachTerminal = attachTerminal;
