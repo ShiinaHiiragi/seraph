@@ -467,18 +467,16 @@ const settingField = {
 };
 
 const settingDenyFields = [
-  settingField.account,
-  settingField.terminal,
-  settingField.extension
+  settingField.terminal
 ];
 
 const settingDenyKeys = {
   [settingField.general]: [
-    "general.reset",
-    "general.upload"
+    // "general.reset",
+    // "general.upload"
   ],
   [settingField.file]: [
-    "file.cipher"
+    // "file.cipher"
   ]
 }
 

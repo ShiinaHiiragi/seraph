@@ -225,7 +225,7 @@ const StringInput = (props) => {
 };
 
 const Password = (props) => {
-  const { context, query, reconfirmCaption, callback } = props;
+  const { context, query, reconfirmCaption, callback, disabled } = props;
 
   const [password, setPassword] = React.useState("");
   const [inputType, setInputType] = React.useState("password");
@@ -278,6 +278,7 @@ const Password = (props) => {
                 : <VisibilityOffIcon />}
             </IconButton>
           }
+          disabled={disabled}
         />
         {password.length > 0
           && <IconButton
@@ -453,6 +454,7 @@ const SECTIONS = (
               onClick={handleReset}
               loading={resetButtonLoading}
               startDecorator={<RestartAltOutlinedIcon />}
+              disabled={context.isTempPass}
             >
               {context.languagePicker("header.config.general.resetButton")}
             </Button>
@@ -468,6 +470,7 @@ const SECTIONS = (
               component="label"
               sx={{ minWidth: context.languagePicker("header.config.attrs.width") }}
               startDecorator={<FileUploadOutlinedIcon />}
+              disabled={context.isTempPass}
             >
               {context.languagePicker("header.config.general.uploadButton")}
               <HiddenInput type="file" onChange={handleUpload} />
@@ -501,6 +504,7 @@ const SECTIONS = (
             <Password
               context={context}
               query="POST/auth/reset"
+              disabled={context.isTempPass}
             />
           )
         },
@@ -522,7 +526,7 @@ const SECTIONS = (
                   ],
                   "meta.secret",
                   handleApply,
-                  undefined,
+                  context.isTempPass,
                   undefined,
                   (value) => context.languagePicker("header.config.fallback.minutes").format(value)
                 )}
@@ -549,7 +553,7 @@ const SECTIONS = (
                 ],
                 "meta.token.full",
                 handleApply,
-                undefined,
+                context.isTempPass,
                 undefined,
                 (value) => context.languagePicker("header.config.fallback.minutes").format(value)
               )}
@@ -566,7 +570,7 @@ const SECTIONS = (
                 ],
                 "meta.token.temp",
                 handleApply,
-                undefined,
+                context.isTempPass,
                 undefined,
                 (value) => context.languagePicker("header.config.fallback.minutes").format(value)
               )}
@@ -576,13 +580,15 @@ const SECTIONS = (
                 context.languagePicker("header.config.account.fullSession"),
                 context.setting.meta.session.full,
                 "meta.session.full",
-                handleApply
+                handleApply,
+                context.isTempPass
               )}
               {Bool(
                 context.languagePicker("header.config.account.tempSession"),
                 context.setting.meta.session.temp,
                 "meta.session.temp",
-                handleApply
+                handleApply,
+                context.isTempPass
               )}
             </Stack>
           </Stack>
@@ -944,6 +950,7 @@ const SECTIONS = (
                 ...metadata,
                 salt: data.salt
               }))}
+              disabled={context.isTempPass}
             />
           )
         }
@@ -1678,6 +1685,7 @@ const SECTIONS = (
                 handleCheck={(value) => value.length > 0}
                 handleApply={handleApply}
                 code={true}
+                disabled={context.isTempPass}
               />
               <StringInput
                 caption={context.languagePicker("header.config.extension.pythonWin32")}
@@ -1688,6 +1696,7 @@ const SECTIONS = (
                 handleCheck={(value) => value.length > 0}
                 handleApply={handleApply}
                 code={true}
+                disabled={context.isTempPass}
               />
             </Stack>
           )
@@ -1705,6 +1714,7 @@ const SECTIONS = (
                 handleCheck={(value) => value.length > 0}
                 handleApply={handleApply}
                 code={true}
+                disabled={context.isTempPass}
               />
               <StringInput
                 caption={context.languagePicker("header.config.extension.pandocWin32")}
@@ -1715,6 +1725,7 @@ const SECTIONS = (
                 handleCheck={(value) => value.length > 0}
                 handleApply={handleApply}
                 code={true}
+                disabled={context.isTempPass}
               />
             </Stack>
           )

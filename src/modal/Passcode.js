@@ -33,7 +33,7 @@ export default function Passcode() {
   const handleCopy = React.useCallback(() => {
     navigator.clipboard.writeText(String(passcode))
       .then(() => toast.success(context.languagePicker("modal.toast.success.passcode")));
-  }, [passcode]);
+  }, [context, passcode]);
 
   return (
     <React.Fragment>
@@ -48,6 +48,7 @@ export default function Passcode() {
         loading={loading}
         onClick={handleGenerate}
         startDecorator={<KeyOutlinedIcon />}
+        disabled={context.isTempPass}
       >
         {context.languagePicker("header.config.account.passcodeGenerate")}
       </Button>
